@@ -1,0 +1,83 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Playfair Display', serif;
+
+    /* Real KT brand colors from official logo */
+    --color-kt-blue: #2d6fa3;        /* "Krousar Thmey" text + butterfly outline */
+    --color-kt-blue-light: #3a82bb;
+    --color-kt-blue-dark: #1d4e7a;   /* footer / dark section backgrounds */
+    --color-kt-olive: #8da83a;       /* Khmer script + butterfly wings */
+    --color-kt-olive-light: #a3c04a;
+    --color-kt-bg: #f8f9fc;
+}
+
+@layer base {
+    html { scroll-behavior: smooth; }
+    body { @apply font-sans antialiased; }
+}
+
+@layer components {
+    .btn-primary {
+        @apply inline-flex items-center gap-2 px-6 py-3 bg-[#8da83a] text-white font-semibold rounded-full
+               hover:bg-[#a3c04a] transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5;
+    }
+
+    .btn-outline {
+        @apply inline-flex items-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-full
+               hover:bg-white hover:text-[#2d6fa3] transition-all duration-300;
+    }
+
+    .btn-blue {
+        @apply inline-flex items-center gap-2 px-6 py-3 bg-[#2d6fa3] text-white font-semibold rounded-full
+               hover:bg-[#3a82bb] transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5;
+    }
+
+    .section-title {
+        @apply text-3xl md:text-4xl font-bold text-[#2d6fa3] leading-tight;
+    }
+
+    .section-subtitle {
+        @apply text-lg text-gray-500 mt-3 max-w-2xl;
+    }
+
+    .card {
+        @apply bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden
+               hover:shadow-xl transition-all duration-300 hover:-translate-y-1;
+    }
+
+    .nav-link {
+        @apply text-gray-700 hover:text-[#2d6fa3] font-medium transition-colors duration-200 relative
+               after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#8da83a]
+               after:transition-all after:duration-300 hover:after:w-full;
+    }
+
+    .dropdown-item {
+        @apply block px-4 py-2.5 text-sm text-gray-700 hover:bg-[#f8f9fc] hover:text-[#2d6fa3]
+               transition-colors duration-150;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.6s ease forwards;
+    }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Carousel transitions */
+.carousel-item { transition: opacity 0.7s ease-in-out; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #2d6fa3; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a82bb; }
