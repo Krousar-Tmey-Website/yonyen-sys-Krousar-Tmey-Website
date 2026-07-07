@@ -9,6 +9,8 @@ use App\Models\Partner;
 use App\Models\Award;
 use App\Models\Slide;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 
 // ──────────────────────────────────────────────
 // Public pages
@@ -53,14 +55,23 @@ Route::post('/admin/logout', [Admin\AuthController::class, 'logout'])->name('adm
 // ──────────────────────────────────────────────
 
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+    // Dashboard
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('news',     Admin\NewsController::class);
+    // News - use resource with explicit names
+    Route::resource('news', Admin\NewsController::class);
+
+    // Categories - use resource with explicit names
+    Route::resource('categories', CategoryController::class)->except(['show']);
+
+    // Programs
     Route::resource('programs', Admin\ProgramController::class)->only(['index', 'edit', 'update']);
 
+    // Home Settings
     Route::get('home',  [Admin\HomeSettingController::class, 'index'])->name('home.index');
     Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
 
+    // Partners, Awards, Slides
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create', 'edit']);
     Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
     Route::resource('slides',   Admin\SlideController::class)->except(['show']);

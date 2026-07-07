@@ -1,5 +1,7 @@
 @extends('admin.layouts.app')
 
+@php use Illuminate\Support\Str; @endphp
+
 @section('title', 'Edit Article')
 @section('page-title', 'Edit Article')
 @section('breadcrumb', 'News → ' . Str::limit($news->title, 40))
@@ -561,12 +563,17 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label class="form-label">Category <span class="required">*</span></label>
-                        <select name="category" class="form-control">
-                            @foreach(['general'=>'General', 'program-update'=>'Program Update', 'event'=>'Event', 'announcement'=>'Announcement', 'success-story'=>'Success Story'] as $val => $label)
-                            <option value="{{ $val }}" {{ old('category', $news->category) === $val ? 'selected' : '' }}>{{ $label }}</option>
+                        <select name="category" required
+                                class="form-control @error('category') error @enderror">
+                            <option value="">Select a category</option>
+                            @foreach($categories as $category)
+<option value="{{ $category->CategoryName }}" {{ old('category', $news->category_name) == $category->CategoryName ? 'selected' : '' }}>
+    {{ $category->CategoryName }}
+</option>
                             @endforeach
                         </select>
                         @error('category')<div class="form-error">{{ $message }}</div>@enderror
+                        <div class="form-helper">Select from created categories, or <a href="{{ route('admin.categories.create') }}" target="_blank">create a new one</a>.</div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Tags <span class="optional">(comma separated)</span></label>
@@ -908,7 +915,5 @@ function escapeHtml(text) {
 }
 
 </script>
-
-@php use Illuminate\Support\Str; @endphp
 
 @endsection

@@ -596,7 +596,7 @@
                     <td>
                         <span class="category-tag">
                             <span class="dot"></span>
-                            {{ str_replace('-', ' ', $article->category) }}
+                            {{ $article->category_name }}
                         </span>
                     </td>
                     <td>

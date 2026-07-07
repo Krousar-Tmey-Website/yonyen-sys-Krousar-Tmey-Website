@@ -82,4 +82,16 @@ class News extends Model
         
         return (array) $value;
     }
+
+    // Get the category from the relationship
+    public function categoryRelation()
+    {
+        return $this->belongsTo(Category::class, 'category', 'CategoryName');
+    }
+
+    // Accessor for category name - returns the stored category name directly
+    public function getCategoryNameAttribute(): string
+    {
+        return $this->category ?? '';
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -17,7 +18,8 @@ class NewsController extends Controller
 
     public function create()
     {
-        return view('admin.news.create');
+        $categories = Category::orderBy('CategoryName')->get();
+        return view('admin.news.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -26,7 +28,7 @@ class NewsController extends Controller
             'title'        => ['required', 'string', 'max:255'],
             'excerpt'      => ['nullable', 'string'],
             'content'      => ['nullable', 'string'],
-            'category'     => ['required', 'string'],
+            'category'     => ['required', 'string', 'exists:categories,CategoryName'],
             'is_published' => ['nullable', 'boolean'],
             'image'        => ['nullable', 'image', 'max:2048'],
             'links'        => ['nullable', 'json'],
@@ -67,7 +69,8 @@ class NewsController extends Controller
 
     public function edit(News $news)
     {
-        return view('admin.news.edit', compact('news'));
+        $categories = Category::orderBy('CategoryName')->get();
+        return view('admin.news.edit', compact('news', 'categories'));
     }
 
     public function update(Request $request, News $news)
@@ -76,7 +79,7 @@ class NewsController extends Controller
             'title'        => ['required', 'string', 'max:255'],
             'excerpt'      => ['nullable', 'string'],
             'content'      => ['nullable', 'string'],
-            'category'     => ['required', 'string'],
+            'category'     => ['required', 'string', 'exists:categories,CategoryName'],
             'is_published' => ['nullable', 'boolean'],
             'image'        => ['nullable', 'image', 'max:2048'],
             'links'        => ['nullable', 'json'],
