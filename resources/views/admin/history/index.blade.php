@@ -215,16 +215,20 @@
     }
 
     .action-btn {
-        padding: 6px 10px;
+        width: 32px;
+        height: 32px;
         border-radius: 8px;
         border: none;
         background: transparent;
         color: #94a3b8;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
     }
     .action-btn:hover {
-        background: #f1f4f9;
         color: #475569;
     }
     .action-btn.edit:hover {
