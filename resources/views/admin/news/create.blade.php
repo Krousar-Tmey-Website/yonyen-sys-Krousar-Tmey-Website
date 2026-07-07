@@ -570,8 +570,8 @@
                 <div class="form-group">
                     <label class="form-label">Add a Link</label>
                     <div class="link-input-group">
-                        <input type="text" id="linkTitle" class="form-control" placeholder="Link title (e.g. Krousar Thmey)" value="Krousar Thmey">
-                        <input type="url" id="linkUrl" class="form-control" placeholder="https://example.com" value="https://www.krousar-thmey.org/author/krousar-thmey/">
+                        <input type="text" id="linkTitle" class="form-control" placeholder="Link title (e.g. Krousar Thmey)">
+                        <input type="url" id="linkUrl" class="form-control" placeholder="https://example.com">
                         <button type="button" class="btn-add-link" onclick="addLink()">Add Link</button>
                     </div>
                     <div class="form-helper">Add related links that will appear in the article.</div>
@@ -657,29 +657,64 @@
 </div>
 
 <script>
-// Image upload preview
-document.getElementById('imageInput').addEventListener('change', function(e) {
-    const preview = document.getElementById('imagePreview');
-    const placeholder = document.getElementById('imagePlaceholder');
-    const file = e.target.files[0];
+document.addEventListener('DOMContentLoaded', function() {
+    // Image upload preview
+    const imageInput = document.getElementById('imageInput');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            const preview = document.getElementById('imagePreview');
+            const placeholder = document.getElementById('imagePlaceholder');
+            const file = e.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    placeholder.classList.add('hidden');
+                    preview.classList.remove('hidden');
+                    preview.innerHTML = `
+                        <div class="image-preview-wrapper">
+                            <img src="${e.target.result}" alt="Preview">
+                            <button type="button" class="remove-btn" 
+                                    onclick="document.getElementById('imageInput').value=''; preview.innerHTML=''; preview.classList.add('hidden'); placeholder.classList.remove('hidden');">
+                                ×
+                            </button>
+                            <div class="file-info">${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
     
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            placeholder.classList.add('hidden');
-            preview.classList.remove('hidden');
-            preview.innerHTML = `
-                <div class="image-preview-wrapper">
-                    <img src="${e.target.result}" alt="Preview">
-                    <button type="button" class="remove-btn" 
-                            onclick="document.getElementById('imageInput').value=''; preview.innerHTML=''; preview.classList.add('hidden'); placeholder.classList.remove('hidden');">
-                        ×
-                    </button>
-                    <div class="file-info">${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
-                </div>
-            `;
-        };
-        reader.readAsDataURL(file);
+    // Enter key support for adding links
+    const linkUrl = document.getElementById('linkUrl');
+    const linkTitle = document.getElementById('linkTitle');
+    
+    if (linkUrl) {
+        linkUrl.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addLink();
+            }
+        });
+    }
+    
+    if (linkTitle) {
+        linkTitle.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('linkUrl').focus();
+            }
+        });
+    }
+    
+    // Form submission - ensure links are saved
+    const articleForm = document.getElementById('articleForm');
+    if (articleForm) {
+        articleForm.addEventListener('submit', function(e) {
+            document.getElementById('linksInput').value = JSON.stringify(links);
+        });
     }
 });
 
@@ -687,19 +722,12 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
 
 let links = [];
 
-// Add pre-populated link
-document.addEventListener('DOMContentLoaded', function() {
-    // Pre-populate with the link from the example
-    addLink('Krousar Thmey', 'https://www.krousar-thmey.org/author/krousar-thmey/');
-});
-
-function addLink(title, url) {
+function addLink() {
     const titleInput = document.getElementById('linkTitle');
     const urlInput = document.getElementById('linkUrl');
     
-    // Use passed values or get from inputs
-    const linkTitle = title || titleInput.value.trim();
-    const linkUrl = url || urlInput.value.trim();
+    const linkTitle = titleInput.value.trim();
+    const linkUrl = urlInput.value.trim();
     
     if (!linkUrl) {
         alert('Please enter a URL.');
@@ -732,8 +760,8 @@ function addLink(title, url) {
     renderLinks();
     
     // Clear inputs
-    if (!title) titleInput.value = '';
-    if (!url) urlInput.value = '';
+    titleInput.value = '';
+    urlInput.value = '';
     titleInput.focus();
 }
 
@@ -786,28 +814,6 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
-
-// Enter key support for adding links
-document.getElementById('linkUrl').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        addLink();
-    }
-});
-
-document.getElementById('linkTitle').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        document.getElementById('linkUrl').focus();
-    }
-});
-
-// Form submission - ensure links are saved
-document.getElementById('articleForm').addEventListener('submit', function(e) {
-    // Links are already in the hidden input via renderLinks()
-    // Just make sure the input is up to date
-    document.getElementById('linksInput').value = JSON.stringify(links);
-});
 </script>
 
 @endsection

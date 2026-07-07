@@ -29,13 +29,31 @@ class NewsController extends Controller
             'category'     => ['required', 'string'],
             'is_published' => ['nullable', 'boolean'],
             'image'        => ['nullable', 'image', 'max:2048'],
+            'links'        => ['nullable', 'json'],
+            'tags'         => ['nullable', 'string'],
         ]);
 
-        $data['slug']         = Str::slug($data['title']);
         $data['is_published'] = $request->boolean('is_published');
+
+        // Generate slug with uniqueness check
+        $baseSlug = Str::slug($data['title']);
+        $slug = $baseSlug;
+        $counter = 1;
+        
+        while (News::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+        
+        $data['slug'] = $slug;
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('news', 'public');
+        }
+
+        // Handle links
+        if ($request->has('links') && !empty($request->input('links'))) {
+            $data['links'] = $request->input('links');
         }
 
         if ($data['is_published']) {
@@ -61,12 +79,37 @@ class NewsController extends Controller
             'category'     => ['required', 'string'],
             'is_published' => ['nullable', 'boolean'],
             'image'        => ['nullable', 'image', 'max:2048'],
+            'links'        => ['nullable', 'json'],
+            'tags'         => ['nullable', 'string'],
         ]);
 
         $data['is_published'] = $request->boolean('is_published');
 
+        // Only update slug if title changed
+        if ($news->title !== $data['title']) {
+            $baseSlug = Str::slug($data['title']);
+            $slug = $baseSlug;
+            $counter = 1;
+            
+            while (News::where('slug', $slug)->where('id', '!=', $news->id)->exists()) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+            
+            $data['slug'] = $slug;
+        }
+
         if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($news->image) {
+                \Storage::disk('public')->delete($news->image);
+            }
             $data['image'] = $request->file('image')->store('news', 'public');
+        }
+
+        // Handle links
+        if ($request->has('links') && !empty($request->input('links'))) {
+            $data['links'] = $request->input('links');
         }
 
         if ($data['is_published'] && !$news->published_at) {
@@ -80,6 +123,11 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
+        // Delete image if exists
+        if ($news->image) {
+            \Storage::disk('public')->delete($news->image);
+        }
+        
         $news->delete();
         return redirect()->route('admin.news.index')->with('success', 'Article deleted.');
     }

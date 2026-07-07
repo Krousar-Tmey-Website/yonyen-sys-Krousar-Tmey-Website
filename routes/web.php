@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\NewsController;
 use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
@@ -30,10 +31,8 @@ Route::get('/our-programs', fn() => view('programs'))->name('programs');
 
 Route::get('/get-involved', fn() => view('involved'))->name('involved');
 
-Route::get('/news', function () {
-    $articles = News::published()->latest('published_at')->get();
-    return view('news', compact('articles'));
-})->name('news');
+Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::get('/resources', fn() => view('resources'))->name('resources');
 Route::get('/contact',   fn() => view('contact'))->name('contact');

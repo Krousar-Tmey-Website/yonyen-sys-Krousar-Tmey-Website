@@ -57,27 +57,29 @@ $categories = $articles->pluck('category')->unique()->sort()->values();
         @else
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" x-data="{ active: 'all' }">
             @foreach($articles as $article)
-            <article class="card group flex flex-col"
-                     x-show="active === 'all' || active === '{{ $article->category }}'"
-                     x-transition>
-                <div class="relative overflow-hidden h-52">
-                    <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#1a3c6e] text-xs font-semibold px-3 py-1 rounded-full capitalize">{{ str_replace('-', ' ', $article->category) }}</span>
-                </div>
-                <div class="p-6 flex flex-col flex-1">
-                    <time class="text-gray-400 text-xs mb-3 flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        {{ $article->published_at?->format('F Y') ?? $article->created_at->format('F Y') }}
-                    </time>
-                    <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug group-hover:text-[#1a3c6e] transition-colors flex-1">{{ $article->title }}</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-5">{{ $article->excerpt }}</p>
-                    <span class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 mt-auto">
-                        Read More
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </span>
-                </div>
-            </article>
+            <a href="{{ route('news.show', $article->slug) }}" class="block">
+                <article class="card group flex flex-col"
+                         x-show="active === 'all' || active === '{{ $article->category }}'"
+                         x-transition>
+                    <div class="relative overflow-hidden h-52">
+                        <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#1a3c6e] text-xs font-semibold px-3 py-1 rounded-full capitalize">{{ str_replace('-', ' ', $article->category) }}</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-1">
+                        <time class="text-gray-400 text-xs mb-3 flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            {{ $article->published_at?->format('F Y') ?? $article->created_at->format('F Y') }}
+                        </time>
+                        <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug group-hover:text-[#1a3c6e] transition-colors flex-1">{{ $article->title }}</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed mb-5">{{ $article->excerpt }}</p>
+                        <span class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 mt-auto">
+                            Read More
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </span>
+                    </div>
+                </article>
+            </a>
             @endforeach
         </div>
         @endif

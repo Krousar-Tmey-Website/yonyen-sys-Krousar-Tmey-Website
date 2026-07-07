@@ -46,6 +46,7 @@
     .card-header .icon.blue { background: #e3f0ff; color: #1a73e8; }
     .card-header .icon.purple { background: #f0e6ff; color: #7c3aed; }
     .card-header .icon.green { background: #e3f5e3; color: #16a34a; }
+    .card-header .icon.orange { background: #fef3e2; color: #ea580c; }
 
     .card-header .icon svg {
         width: 16px;
@@ -434,10 +435,106 @@
         padding-right: 36px;
         cursor: pointer;
     }
+
+    /* Link Management */
+    .link-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        transition: all 0.2s;
+    }
+    .link-item:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+    .link-item .link-url {
+        flex: 1;
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 13px;
+        word-break: break-all;
+    }
+    .link-item .link-url:hover {
+        text-decoration: underline;
+    }
+    .link-item .link-title {
+        font-weight: 500;
+        color: #1e293b;
+        font-size: 13px;
+        min-width: 120px;
+    }
+    .link-item .remove-link {
+        background: none;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: all 0.2s;
+        font-size: 16px;
+    }
+    .link-item .remove-link:hover {
+        color: #ef4444;
+        background: #fef2f2;
+    }
+    .link-item .link-badge {
+        font-size: 10px;
+        background: #dbeafe;
+        color: #1e40af;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 500;
+    }
+    .link-input-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .link-input-group .form-control {
+        flex: 1;
+        min-width: 150px;
+    }
+    .link-input-group .btn-add-link {
+        padding: 9px 20px;
+        background: #2d6fa3;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 13px;
+        white-space: nowrap;
+        transition: all 0.2s;
+    }
+    .link-input-group .btn-add-link:hover {
+        background: #1a4a7a;
+    }
+    .links-container {
+        margin-top: 10px;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    .links-container:empty {
+        display: none;
+    }
+    .no-links {
+        color: #94a3b8;
+        font-size: 13px;
+        text-align: center;
+        padding: 16px;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px dashed #e2e8f0;
+    }
 </style>
 
 <div class="form-container">
-    <form action="{{ route('admin.news.update', $news) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.news.update', $news) }}" method="POST" enctype="multipart/form-data" id="articleForm">
         @csrf @method('PUT')
 
         {{-- Article Details --}}
@@ -508,6 +605,50 @@
             </div>
         </div>
 
+        {{-- Links Section --}}
+        <div class="form-card">
+            <div class="card-header">
+                <div class="icon orange">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                </div>
+                <h3>Related Links</h3>
+                <span class="badge">Optional</span>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Add a Link</label>
+                    <div class="link-input-group">
+                        <input type="text" id="linkTitle" class="form-control" placeholder="Link title (e.g. Krousar Thmey)">
+                        <input type="url" id="linkUrl" class="form-control" placeholder="https://example.com">
+                        <button type="button" class="btn-add-link" onclick="addLink()">Add Link</button>
+                    </div>
+                    <div class="form-helper">Add related links that will appear in the article.</div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">Added Links</label>
+                    <div class="links-container" id="linksContainer">
+                        @if(!empty($news->links))
+                            @foreach($news->links as $link)
+                            <div class="link-item">
+                                <span class="link-title">{{ $link['title'] ?? 'Link' }}</span>
+                                <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer" class="link-url">{{ $link['url'] }}</a>
+                                <span class="link-badge">Link</span>
+                                <button type="button" class="remove-link" onclick="removeLink({{ $loop->index }})" title="Remove link">×</button>
+                            </div>
+                            @endforeach
+                        @else
+                            <div class="no-links" id="noLinks">No links added yet. Add a link above.</div>
+                        @endif
+                    </div>
+                    <input type="hidden" name="links" id="linksInput" value="{{ !empty($news->links) ? json_encode($news->links) : '' }}">
+                    @error('links')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+        </div>
+
         {{-- Image & Publishing --}}
         <div class="form-card">
             <div class="card-header">
@@ -516,7 +657,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                 </div>
-                <h3>Image &amp; Publishing</h3>
+                <h3>Image & Publishing</h3>
             </div>
             <div class="card-body">
                 {{-- Current Image --}}
@@ -589,46 +730,183 @@
                 Update Article
             </button>
             <a href="{{ route('admin.news.index') }}" class="btn-cancel">Cancel</a>
-            <form action="{{ route('admin.news.destroy', $news) }}" method="POST"
-                  onsubmit="return confirm('⚠️ Permanently delete this article?\n\nThis action cannot be undone.')"
-                  class="inline">
-                @csrf @method('DELETE')
-                <button type="submit" class="btn-danger">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                    </svg>
-                    Delete Article
-                </button>
-            </form>
         </div>
     </form>
 </div>
 
+{{-- Delete Form (separate from main form) --}}
+<div class="form-actions" style="justify-content: flex-end; margin-top: 16px;">
+    <form action="{{ route('admin.news.destroy', $news) }}" method="POST"
+          onsubmit="return confirm('⚠️ Permanently delete this article?\n\nThis action cannot be undone.')"
+          class="inline delete-form">
+        @csrf @method('DELETE')
+        <button type="submit" class="btn-danger delete-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+            Delete Article
+        </button>
+    </form>
+</div>
+
 <script>
-document.getElementById('imageInput').addEventListener('change', function(e) {
-    const preview = document.getElementById('imagePreview');
-    const placeholder = document.getElementById('imagePlaceholder');
-    const file = e.target.files[0];
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('imageInput');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            const preview = document.getElementById('imagePreview');
+            const placeholder = document.getElementById('imagePlaceholder');
+            const file = e.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    placeholder.classList.add('hidden');
+                    preview.classList.remove('hidden');
+                    preview.innerHTML = `
+                        <div class="image-preview-wrapper">
+                            <img src="${e.target.result}" alt="Preview">
+                            <button type="button" class="remove-btn" 
+                                    onclick="document.getElementById('imageInput').value=''; preview.innerHTML=''; preview.classList.add('hidden'); placeholder.classList.remove('hidden');">
+                                ×
+                            </button>
+                            <div class="file-info">${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
     
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            placeholder.classList.add('hidden');
-            preview.classList.remove('hidden');
-            preview.innerHTML = `
-                <div class="image-preview-wrapper">
-                    <img src="${e.target.result}" alt="Preview">
-                    <button type="button" class="remove-btn" 
-                            onclick="document.getElementById('imageInput').value=''; preview.innerHTML=''; preview.classList.add('hidden'); placeholder.classList.remove('hidden');">
-                        ×
-                    </button>
-                    <div class="file-info">${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
-                </div>
-            `;
-        };
-        reader.readAsDataURL(file);
+    // Enter key support for adding links
+    const linkUrl = document.getElementById('linkUrl');
+    const linkTitle = document.getElementById('linkTitle');
+    
+    if (linkUrl) {
+        linkUrl.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addLink();
+            }
+        });
+    }
+    
+    if (linkTitle) {
+        linkTitle.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('linkUrl').focus();
+            }
+        });
+    }
+    
+    // Form submission - ensure links are saved
+    const articleForm = document.getElementById('articleForm');
+    if (articleForm) {
+        articleForm.addEventListener('submit', function(e) {
+            document.getElementById('linksInput').value = JSON.stringify(links);
+        });
     }
 });
+
+// ====== LINK MANAGEMENT ======
+
+let links = {!! !empty($news->links) ? json_encode($news->links) : '[]' !!};
+
+function addLink() {
+    const titleInput = document.getElementById('linkTitle');
+    const urlInput = document.getElementById('linkUrl');
+    
+    const linkTitle = titleInput.value.trim();
+    const linkUrl = urlInput.value.trim();
+    
+    if (!linkUrl) {
+        alert('Please enter a URL.');
+        return;
+    }
+    
+    if (!linkTitle) {
+        alert('Please enter a title for the link.');
+        return;
+    }
+    
+    // Validate URL
+    try {
+        new URL(linkUrl);
+    } catch (e) {
+        alert('Please enter a valid URL (including http:// or https://).');
+        return;
+    }
+    
+    // Check for duplicate
+    if (links.some(link => link.url === linkUrl)) {
+        alert('This link has already been added.');
+        return;
+    }
+    
+    // Add to links array
+    links.push({ title: linkTitle, url: linkUrl });
+    
+    // Update the UI
+    renderLinks();
+    
+    // Clear inputs
+    titleInput.value = '';
+    urlInput.value = '';
+    titleInput.focus();
+}
+
+function removeLink(index) {
+    links.splice(index, 1);
+    renderLinks();
+}
+
+function renderLinks() {
+    const container = document.getElementById('linksContainer');
+    const noLinks = document.getElementById('noLinks');
+    const linksInput = document.getElementById('linksInput');
+    
+    if (links.length === 0) {
+        if (!noLinks) {
+            const div = document.createElement('div');
+            div.className = 'no-links';
+            div.id = 'noLinks';
+            div.textContent = 'No links added yet. Add a link above.';
+            container.appendChild(div);
+        }
+        linksInput.value = '';
+        return;
+    }
+    
+    // Remove "no links" message
+    const noLinksEl = document.getElementById('noLinks');
+    if (noLinksEl) noLinksEl.remove();
+    
+    // Build HTML
+    let html = '';
+    links.forEach((link, index) => {
+        html += `
+            <div class="link-item">
+                <span class="link-title">${escapeHtml(link.title)}</span>
+                <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="link-url">${escapeHtml(link.url)}</a>
+                <span class="link-badge">Link</span>
+                <button type="button" class="remove-link" onclick="removeLink(${index})" title="Remove link">×</button>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+    
+    // Update hidden input
+    linksInput.value = JSON.stringify(links);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 </script>
 
 @php use Illuminate\Support\Str; @endphp
