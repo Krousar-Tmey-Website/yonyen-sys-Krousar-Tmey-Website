@@ -12,13 +12,9 @@ class ContactInquiryController extends Controller
     {
         $query = ContactInquiry::query();
 
-        // Search by name, email, or subject
-        if ($search = $request->input('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('Name', 'like', "%{$search}%")
-                  ->orWhere('Email', 'like', "%{$search}%")
-                  ->orWhere('Subject', 'like', "%{$search}%");
-            });
+        // Search by sender name (independent from status filter)
+        if ($name = $request->input('name')) {
+            $query->where('Name', 'like', "%{$name}%");
         }
 
         // Filter by status
