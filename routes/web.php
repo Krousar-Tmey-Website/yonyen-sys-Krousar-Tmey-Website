@@ -26,7 +26,10 @@ Route::get('/who-we-are', function () {
     return view('about', compact('partners', 'awards'));
 })->name('about');
 
-Route::get('/our-programs', fn() => view('programs'))->name('programs');
+Route::get('/our-programs', function () {
+    $programs = \App\Models\Program::active()->get();
+    return view('programs', compact('programs'));
+})->name('programs');
 
 Route::get('/get-involved', fn() => view('involved'))->name('involved');
 
@@ -57,7 +60,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('news',     Admin\NewsController::class);
-    Route::resource('programs', Admin\ProgramController::class)->only(['index', 'edit', 'update']);
+    Route::resource('programs', Admin\ProgramController::class)->except(['show']);
 
     Route::get('home',  [Admin\HomeSettingController::class, 'index'])->name('home.index');
     Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
