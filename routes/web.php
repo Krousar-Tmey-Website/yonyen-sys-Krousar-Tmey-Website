@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\NewsController;
 use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
@@ -9,6 +10,8 @@ use App\Models\Award;
 use App\Models\Program;
 use App\Models\Slide;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 
 // ──────────────────────────────────────────────
 // Public pages
@@ -38,10 +41,8 @@ Route::get('/our-programs', fn() => view('programs'))->name('programs');
 
 Route::get('/get-involved', fn() => view('involved'))->name('involved');
 
-Route::get('/news', function () {
-    $articles = News::published()->latest('published_at')->get();
-    return view('news', compact('articles'));
-})->name('news');
+Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::get('/resources', fn() => view('resources'))->name('resources');
 Route::get('/contact',   fn() => view('contact'))->name('contact');
@@ -60,18 +61,22 @@ Route::post('/admin/logout', [Admin\AuthController::class, 'logout'])->name('adm
 // ──────────────────────────────────────────────
 // Admin — Protected panel
 // ──────────────────────────────────────────────
-
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
-    Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [Admin\DashboardController::class, 'index'])
+        ->name('dashboard');
 
-    Route::resource('news',     Admin\NewsController::class);
-    Route::resource('programs', Admin\ProgramController::class)->only(['index', 'edit', 'update']);
+    Route::resource('news', Admin\NewsController::class);
+    Route::resource('programs', Admin\ProgramController::class)
+        ->only(['index', 'edit', 'update']);
 
-    Route::get('home',  [Admin\HomeSettingController::class, 'index'])->name('home.index');
-    Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
+    Route::get('home', [Admin\HomeSettingController::class, 'index'])
+        ->name('home.index');
+    Route::post('home', [Admin\HomeSettingController::class, 'update'])
+        ->name('home.update');
 
-    Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create', 'edit']);
+    Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create']);
     Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
     Route::resource('slides',   Admin\SlideController::class)->except(['show']);
     Route::resource('users',    Admin\UserController::class)->except(['show']);
+    // Partner Management
 });
