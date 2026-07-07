@@ -79,56 +79,101 @@
 
             {{-- Right: Contact Form --}}
             <div class="lg:col-span-3">
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10 relative"
+                     x-data="{ showPopup: {{ session('success') ? 'true' : 'false' }} }">
+
                     <h2 class="text-xl font-bold text-[#1a3c6e] mb-2">Send Us a Message</h2>
                     <p class="text-gray-500 text-sm mb-8">We'll get back to you within 2 business days.</p>
 
-                    <form class="space-y-5" onsubmit="return false;">
+                    {{-- Success Popup Notification --}}
+                    <div x-show="showPopup"
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 -translate-y-4 scale-95"
+                         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                         x-transition:leave-end="opacity-0 -translate-y-4 scale-95"
+                         @click.outside="showPopup = false"
+                         class="absolute top-6 left-6 right-6 z-10 bg-green-50 border-2 border-green-200 rounded-2xl p-6 shadow-xl"
+                         x-cloak>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-bold text-green-800">Message Sent Successfully!</h3>
+                                <p class="text-green-600 text-sm mt-1">We will get back to you within 2 business days.</p>
+                            </div>
+                            <button @click="showPopup = false" class="text-green-400 hover:text-green-600 transition-colors flex-shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Contact Form --}}
+                    <form method="POST" action="{{ route('contact.store') }}" class="space-y-5">
+                        @csrf
                         <div class="grid md:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">First Name *</label>
-                                <input type="text" placeholder="John"
-                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                                <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1.5">First Name *</label>
+                                <input type="text" name="first_name" id="first_name" value="{{ old('first_name') }}" required
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors @error('first_name') border-red-300 @enderror"
+                                       placeholder="John">
+                                @error('first_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Last Name *</label>
-                                <input type="text" placeholder="Doe"
-                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                                <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1.5">Last Name *</label>
+                                <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}" required
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors @error('last_name') border-red-300 @enderror"
+                                       placeholder="Doe">
+                                @error('last_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Email Address *</label>
-                            <input type="email" placeholder="john@example.com"
-                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email Address *</label>
+                            <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors @error('email') border-red-300 @enderror"
+                                   placeholder="john@example.com">
+                            @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Organisation (optional)</label>
-                            <input type="text" placeholder="Your organization"
-                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                            <label for="organisation" class="block text-sm font-medium text-gray-700 mb-1.5">Organisation (optional)</label>
+                            <input type="text" name="organisation" id="organisation" value="{{ old('organisation') }}"
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors"
+                                   placeholder="Your organization">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Subject *</label>
-                            <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors bg-white">
+                            <label for="subject" class="block text-sm font-medium text-gray-700 mb-1.5">Subject *</label>
+                            <select name="subject" id="subject" required
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors bg-white @error('subject') border-red-300 @enderror">
                                 <option value="">Select a topic</option>
-                                <option>Donation</option>
-                                <option>Partnership / Sponsorship</option>
-                                <option>Volunteering</option>
-                                <option>Job Application</option>
-                                <option>Media / Press</option>
-                                <option>General Enquiry</option>
+                                <option value="Donation" {{ old('subject') === 'Donation' ? 'selected' : '' }}>Donation</option>
+                                <option value="Partnership / Sponsorship" {{ old('subject') === 'Partnership / Sponsorship' ? 'selected' : '' }}>Partnership / Sponsorship</option>
+                                <option value="Volunteering" {{ old('subject') === 'Volunteering' ? 'selected' : '' }}>Volunteering</option>
+                                <option value="Job Application" {{ old('subject') === 'Job Application' ? 'selected' : '' }}>Job Application</option>
+                                <option value="Media / Press" {{ old('subject') === 'Media / Press' ? 'selected' : '' }}>Media / Press</option>
+                                <option value="General Enquiry" {{ old('subject') === 'General Enquiry' ? 'selected' : '' }}>General Enquiry</option>
                             </select>
+                            @error('subject') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Message *</label>
-                            <textarea rows="5" placeholder="Your message..."
-                                      class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors resize-none"></textarea>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1.5">Message *</label>
+                            <textarea name="message" id="message" rows="5" required
+                                      class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors resize-none @error('message') border-red-300 @enderror"
+                                      placeholder="Your message...">{{ old('message') }}</textarea>
+                            @error('message') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div class="flex items-start gap-3">
-                            <input type="checkbox" id="consent" class="mt-0.5 rounded accent-[#1a3c6e]">
+                            <input type="checkbox" name="consent" id="consent" value="1" class="mt-0.5 rounded accent-[#1a3c6e]" {{ old('consent') ? 'checked' : '' }}>
                             <label for="consent" class="text-gray-500 text-xs leading-relaxed">
                                 I agree to Krousar Thmey storing my contact information to respond to my enquiry, in accordance with their privacy policy.
                             </label>
                         </div>
+                        @error('consent') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         <button type="submit" class="btn-blue w-full justify-center py-4 rounded-xl text-base">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                             Send Message
