@@ -52,17 +52,26 @@ Route::post('/admin/logout', [Admin\AuthController::class, 'logout'])->name('adm
 // ──────────────────────────────────────────────
 // Admin — Protected panel
 // ──────────────────────────────────────────────
-
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
-    Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [Admin\DashboardController::class, 'index'])
+        ->name('dashboard');
 
-    Route::resource('news',     Admin\NewsController::class);
-    Route::resource('programs', Admin\ProgramController::class)->only(['index', 'edit', 'update']);
+    Route::resource('news', Admin\NewsController::class);
+    Route::resource('programs', Admin\ProgramController::class)
+        ->only(['index', 'edit', 'update']);
 
-    Route::get('home',  [Admin\HomeSettingController::class, 'index'])->name('home.index');
-    Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
+    Route::get('home', [Admin\HomeSettingController::class, 'index'])
+        ->name('home.index');
+    Route::post('home', [Admin\HomeSettingController::class, 'update'])
+        ->name('home.update');
 
-    Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create', 'edit']);
-    Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
-    Route::resource('slides',   Admin\SlideController::class)->except(['show']);
+    // Partner Management
+    Route::resource('partners', Admin\PartnerController::class)
+        ->except(['show', 'create']);
+
+    Route::resource('awards', Admin\AwardController::class)
+        ->except(['show', 'create', 'edit']);
+
+    Route::resource('slides', Admin\SlideController::class)
+        ->except(['show']);
 });
