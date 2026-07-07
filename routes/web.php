@@ -6,6 +6,7 @@ use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Award;
+use App\Models\Program;
 use App\Models\Slide;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +18,14 @@ Route::get('/', function () {
     $settings   = HomeSetting::allKeyed();
     $latestNews = News::published()->latest('published_at')->take(3)->get();
     $slides     = Slide::active()->get();
-    return view('home', compact('settings', 'latestNews', 'slides'));
+
+    // Homepage programs are static: only the two main program cards should appear.
+    $programs = Program::whereIn('slug', ['child-welfare', 'special-education'])
+        ->where('is_active', true)
+        ->orderByRaw("FIELD(slug, 'child-welfare','special-education')")
+        ->get();
+
+    return view('home', compact('settings', 'latestNews', 'slides', 'programs'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -65,4 +73,5 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create', 'edit']);
     Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
     Route::resource('slides',   Admin\SlideController::class)->except(['show']);
+    Route::resource('users',    Admin\UserController::class)->except(['show']);
 });

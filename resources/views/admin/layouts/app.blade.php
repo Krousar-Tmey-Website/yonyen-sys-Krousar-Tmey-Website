@@ -126,6 +126,7 @@
                             ['route' => 'admin.website.index', 'label' => 'Website Settings'],
                             ['route' => 'admin.seo.index', 'label' => 'SEO Settings'],
                             ['route' => 'admin.media.library', 'label' => 'Media Library'],
+                            ['route' => 'admin.users.index', 'label' => 'Admin Users'],
                         ],
                     ],
                     'reports' => [

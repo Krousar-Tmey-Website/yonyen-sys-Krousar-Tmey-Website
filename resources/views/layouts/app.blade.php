@@ -279,9 +279,15 @@
                         </button>
                     </form>
                     <div class="mt-6 space-y-1.5">
-                        <p class="text-white/30 text-xs uppercase tracking-wider font-medium">Offices</p>
-                        <p class="text-white/50 text-xs">🇰🇭 Cambodia · 🇫🇷 France</p>
-                        <p class="text-white/50 text-xs">🇨🇭 Switzerland · 🇸🇬 Singapore</p>
+                        <p class="text-white/30 text-xs uppercase tracking-wider font-medium">Contact</p>
+                        @php
+                            $footerAddress = data_get($settings, 'footer_address', '#58, Street 478, Phnom Penh, Cambodia');
+                            $footerPhone = data_get($settings, 'footer_phone', '+855 (0)23 211 955');
+                            $footerEmail = data_get($settings, 'footer_email', 'info@krousar-thmey.org');
+                        @endphp
+                        <p class="text-white/50 text-xs">{{ $footerAddress }}</p>
+                        <p class="text-white/50 text-xs">{{ $footerPhone }}</p>
+                        <p class="text-white/50 text-xs">{{ $footerEmail }}</p>
                     </div>
                 </div>
             </div>
