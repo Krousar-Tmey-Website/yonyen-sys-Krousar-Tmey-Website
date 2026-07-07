@@ -10,8 +10,13 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        $programs = Program::orderBy('sort_order')->get();
+        $programs = Program::latest()->orderBy('sort_order')->get();
         return view('admin.programs.index', compact('programs'));
+    }
+
+    public function show(Program $program)
+    {
+        return view('admin.programs.show', compact('program'));
     }
 
     public function edit(Program $program)

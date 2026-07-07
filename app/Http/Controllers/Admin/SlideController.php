@@ -10,8 +10,13 @@ class SlideController extends Controller
 {
     public function index()
     {
-        $slides = Slide::orderBy('sort_order')->orderBy('id')->get();
+        $slides = Slide::latest()->orderBy('sort_order')->get();
         return view('admin.slides.index', compact('slides'));
+    }
+
+    public function show(Slide $slide)
+    {
+        return view('admin.slides.show', compact('slide'));
     }
 
     public function create()

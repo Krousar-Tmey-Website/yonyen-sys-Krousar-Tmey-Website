@@ -63,6 +63,10 @@
                 </div>
             </div>
             <div class="flex items-center gap-3 flex-shrink-0">
+                <a href="{{ route('admin.slides.show', $slide) }}"
+                   class="text-emerald-600 hover:text-emerald-700 text-xs font-medium px-3 py-1.5 border border-emerald-200 rounded-lg hover:bg-emerald-50 transition-colors">
+                    View
+                </a>
                 <a href="{{ route('admin.slides.edit', $slide) }}"
                    class="text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium px-3 py-1.5 border border-[#2d6fa3]/30 rounded-lg hover:bg-[#2d6fa3]/5 transition-colors">
                     Edit

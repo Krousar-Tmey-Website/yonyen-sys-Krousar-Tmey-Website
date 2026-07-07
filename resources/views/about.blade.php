@@ -365,18 +365,28 @@
             </div>
         </div>
 
-        {{-- Partner lists from DB --}}
-        @foreach(['authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-3', 'text' => 'text-sm'], 'organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-3', 'text' => 'text-sm'], 'companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-4', 'text' => 'text-xs']] as $cat => $meta)
+        {{-- Partner lists from DB with logos --}}
+        @foreach(['authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]'], 'organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]'], 'companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]']] as $cat => $meta)
         @if(isset($partners[$cat]) && $partners[$cat]->count())
         <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
              x-show="category === 'all' || category === '{{ $cat }}'">
             <h3 class="text-lg font-bold text-[#2d6fa3] mb-6">{{ $meta['title'] }}</h3>
-            <div class="grid {{ $meta['cols'] }} gap-2">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 @foreach($partners[$cat] as $partner)
                 @php $ps = json_encode(strtolower($partner->name)); @endphp
-                <div class="flex items-center gap-2 {{ $meta['text'] }} text-gray-600 py-1.5 border-b border-gray-50"
+                <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#f8f9fc] hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
                      x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
-                    <span class="w-1.5 h-1.5 rounded-full {{ $meta['dot'] }} flex-shrink-0"></span>{{ $partner->name }}
+                    @if($partner->logo)
+                    <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->name }}"
+                             class="max-w-full max-h-full object-contain p-2">
+                    </div>
+                    @else
+                    <div class="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                        <span class="text-lg font-bold text-blue-500">{{ Str::substr($partner->name, 0, 1) }}</span>
+                    </div>
+                    @endif
+                    <span class="text-sm font-medium text-gray-700 leading-tight">{{ $partner->name }}</span>
                 </div>
                 @endforeach
             </div>
@@ -384,16 +394,28 @@
         @endif
         @endforeach
 
-        {{-- Towns & Municipalities --}}
+        {{-- Towns & Municipalities with logo display --}}
         @if(isset($partners['towns']) && $partners['towns']->count())
         <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-10"
              x-show="category === 'all' || category === 'towns'">
             <h3 class="text-lg font-bold text-[#2d6fa3] mb-6">🇨🇭 Towns and Municipalities — Switzerland</h3>
-            <div class="flex flex-wrap gap-3">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 @foreach($partners['towns'] as $partner)
                 @php $ps = json_encode(strtolower($partner->name)); @endphp
-                <span class="bg-[#2d6fa3]/10 text-[#2d6fa3] px-4 py-2 rounded-full text-sm font-medium"
-                      x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">{{ $partner->name }}</span>
+                <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#2d6fa3]/5 hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
+                     x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
+                    @if($partner->logo)
+                    <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->name }}"
+                             class="max-w-full max-h-full object-contain p-2">
+                    </div>
+                    @else
+                    <span class="w-12 h-12 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] flex items-center justify-center text-base font-bold flex-shrink-0">
+                        {{ Str::substr($partner->name, 0, 1) }}
+                    </span>
+                    @endif
+                    <span class="text-sm font-medium text-[#2d6fa3]">{{ $partner->name }}</span>
+                </div>
                 @endforeach
             </div>
         </div>

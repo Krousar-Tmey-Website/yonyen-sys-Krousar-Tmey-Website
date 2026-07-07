@@ -39,14 +39,37 @@ class PartnerController extends Controller
                 $query->where('category', $filters['category']);
             })
             ->orderBy('category')
-            ->orderBy('sort_order')
-            ->orderBy('name')
+            ->latest()
             ->get()
             ->groupBy('category');
 
-        return view('admin.partners.index', [
+        $viewData = [
             'partners' => $partners,
             'filters' => $filters,
+            'categories' => self::CATEGORIES,
+        ];
+
+        if ($request->ajax()) {
+            $html = view('admin.partners._results', $viewData)->render();
+
+            return response()->json([
+                'html' => $html,
+                'total' => collect($partners)->sum(fn($g) => $g->count()),
+                'hasSearch' => filled($filters['search']),
+                'hasCategory' => filled($filters['category']),
+            ]);
+        }
+
+        return view('admin.partners.index', $viewData);
+    }
+
+    /**
+     * Display partner details
+     */
+    public function show(Partner $partner)
+    {
+        return view('admin.partners.show', [
+            'partner' => $partner,
             'categories' => self::CATEGORIES,
         ]);
     }

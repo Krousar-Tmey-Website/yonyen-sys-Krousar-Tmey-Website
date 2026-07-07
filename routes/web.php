@@ -7,6 +7,7 @@ use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Award;
+use App\Models\Program;
 use App\Models\Slide;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
@@ -24,12 +25,15 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/who-we-are', function () {
-    $partners = Partner::active()->get()->groupBy('category');
+    $partners = Partner::where('is_active', true)->latest()->get()->groupBy('category');
     $awards   = Award::ordered()->get();
     return view('about', compact('partners', 'awards'));
 })->name('about');
 
-Route::get('/our-programs', fn() => view('programs'))->name('programs');
+Route::get('/our-programs', function () {
+    $programs = Program::active()->get();
+    return view('programs', compact('programs'));
+})->name('programs');
 
 Route::get('/get-involved', fn() => view('involved'))->name('involved');
 
@@ -59,20 +63,22 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     Route::resource('news', Admin\NewsController::class);
     Route::resource('programs', Admin\ProgramController::class)
-        ->only(['index', 'edit', 'update']);
+        ->except(['create', 'store', 'destroy']);
 
     Route::get('home', [Admin\HomeSettingController::class, 'index'])
         ->name('home.index');
     Route::post('home', [Admin\HomeSettingController::class, 'update'])
         ->name('home.update');
 
+    // Categories
+    Route::resource('categories', CategoryController::class);
+
     // Partner Management
     Route::resource('partners', Admin\PartnerController::class)
-        ->except(['show', 'create']);
+        ->except(['create',]);
 
     Route::resource('awards', Admin\AwardController::class)
-        ->except(['show', 'create', 'edit']);
+        ->except(['create', 'edit']);
 
-    Route::resource('slides', Admin\SlideController::class)
-        ->except(['show']);
+    Route::resource('slides', Admin\SlideController::class);
 });

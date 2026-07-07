@@ -22,6 +22,12 @@ class NewsController extends Controller
         return view('admin.news.create', compact('categories'));
     }
 
+    public function show(News $news)
+    {
+        $categories = Category::orderBy('CategoryName')->get();
+        return view('admin.news.show', compact('news', 'categories'));
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

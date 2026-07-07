@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('article_categories', function (Blueprint $table) {
             $table->string('ArticleID', 50);
-            $table->string('CategoryID', 50);
+            // categories table uses the default `id` (unsigned big integer),
+            // so use an unsignedBigInteger here to match the FK type.
+            $table->unsignedBigInteger('CategoryID');
 
             $table->primary(['ArticleID', 'CategoryID']);
 
             $table->foreign('ArticleID')->references('ArticleID')->on('news_stories');
-            $table->foreign('CategoryID')->references('CategoryID')->on('categories');
+            // reference categories.id
+            $table->foreign('CategoryID')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 
