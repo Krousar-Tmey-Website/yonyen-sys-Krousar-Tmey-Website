@@ -96,4 +96,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('page-sections', Admin\PageSectionController::class)
         ->except(['show']);
     // Partner Management
+
+    Route::get('website', [Admin\WebsiteController::class, 'index'])
+        ->name('website.index');
+    Route::post('website', [Admin\WebsiteController::class, 'update'])
+        ->name('website.update');
 });

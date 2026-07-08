@@ -2,7 +2,7 @@
 
 @section('title', 'Home Settings')
 @section('page-title', 'Home Page Settings')
-@section('breadcrumb', 'Manage homepage text content in website order')
+@section('breadcrumb', 'Customise the text and content that appears on your homepage')
 
 @section('content')
 
@@ -10,25 +10,28 @@
     @csrf
 
     @php
-    $order = ['stats', 'programs', 'structure', 'news', 'cta', 'footer'];
+    $order = ['stats', 'programs', 'structure', 'news', 'cta'];
     $labels = [
         'stats'     => ['📊', 'Stats & Data'],
         'programs'  => ['🧩', 'Programs Overview'],
         'structure' => ['🗺️', 'Structure Map'],
         'news'      => ['📰', 'Latest News Section'],
         'cta'       => ['🚀', 'Call to Action'],
-        'footer'    => ['📍', 'Footer Contact Info'],
     ];
     @endphp
 
     @foreach($order as $group)
     @if(!isset($settings[$group])) @continue @endif
     @php $items = $settings[$group]; @endphp
-    <div class="bg-white rounded-2xl border border-gray-100 p-6">
-        <h3 class="font-bold text-gray-700 mb-5 capitalize flex items-center gap-2">
-            <span class="text-lg">{{ $labels[$group][0] }}</span> {{ $labels[$group][1] }}
-        </h3>
-        <div class="space-y-4">
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center gap-3 mb-4">
+            <span class="text-xl">{{ $labels[$group][0] }}</span>
+            <h3 class="font-bold text-gray-800 text-base">{{ $labels[$group][1] }}</h3>
+        </div>
+
+        <hr class="mb-5 border-gray-100">
+
+        <div class="space-y-5">
             @foreach($items as $setting)
             @php
                 $allowedStats = ['stat_children', 'stat_employees', 'stat_budget', 'stat_provinces'];
@@ -37,11 +40,12 @@
             @if($group === 'stats' && !in_array($k, $allowedStats))
                 @continue
             @endif
-            @if($group === 'programs' && $k === 'programs_heading')
+            @if($group === 'programs' && in_array($k, ['programs_heading', 'programs_subtitle']))
                 @continue
             @endif
             <div>
-                <label class="block text-sm font-medium text-gray-600 mb-1.5">{{ $setting->label ?? $setting->key }}</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $setting->label ?? $setting->key }}</label>
+
                 @if(str_contains($k, 'text') || str_contains($k, 'subtitle') || str_contains($k, 'items'))
                     <textarea name="settings[{{ $k }}]" rows="2"
                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('settings.'.$k, $setting->value) }}</textarea>
@@ -55,8 +59,13 @@
                 @elseif($k === 'stat_budget')
                     <input type="text" name="settings[{{ $k }}]"
                            value="{{ old('settings.'.$k, $setting->value) }}"
-                           placeholder="Enter amount or use K shorthand (e.g. 950K or 950000)"
+                           placeholder="e.g. 950000 or 950K"
                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+
+                @elseif(in_array($k, ['cta_primary_url', 'cta_secondary_url', 'structure_image']))
+                    <input type="text" name="settings[{{ $k }}]"
+                           value="{{ old('settings.'.$k, $setting->value) }}"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
 
                 @else
                     <input type="text" name="settings[{{ $k }}]"
@@ -70,9 +79,9 @@
     </div>
     @endforeach
 
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3 pt-2">
         <button type="submit" class="btn-primary">Save Settings</button>
-        <a href="{{ route('admin.dashboard') }}" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</a>
+        <a href="{{ route('admin.dashboard') }}" class="text-gray-400 hover:text-gray-600 text-sm transition-colors">Cancel</a>
     </div>
 </form>
 

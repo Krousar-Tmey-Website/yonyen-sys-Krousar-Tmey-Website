@@ -12,7 +12,8 @@
     {{-- Logo --}}
     <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center bg-white rounded-2xl p-4 shadow-xl mb-5">
-            <img src="{{ asset('images/logo.png') }}" alt="Krousar Thmey" class="h-16 w-auto"
+            @php $loginLogoPath = data_get($settings ?? [], 'site_logo', 'images/logo.png'); @endphp
+            <img src="{{ str_starts_with($loginLogoPath, 'http') ? $loginLogoPath : (str_starts_with($loginLogoPath, 'logos/') ? asset('storage/' . $loginLogoPath) : asset($loginLogoPath)) }}" alt="{{ data_get($settings ?? [], 'site_name', 'Krousar Thmey') }}" class="h-16 w-auto"
                  onerror="this.parentElement.innerHTML='<span class=\'text-[#2d6fa3] font-black text-2xl\'>KT</span>'">
         </div>
         <h1 class="text-white font-bold text-2xl">Krousar Thmey</h1>

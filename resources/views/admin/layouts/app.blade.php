@@ -16,11 +16,12 @@
         {{-- Logo --}}
         <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
             <div class="bg-white rounded-xl px-3 py-1.5 flex-shrink-0">
-                <img src="{{ asset('images/logo.png') }}" alt="KT" class="h-8 w-auto"
+                @php $adminLogoPath = data_get($settings ?? [], 'site_logo', 'images/logo.png'); @endphp
+                <img src="{{ $adminLogoPath ? (str_starts_with($adminLogoPath, 'http') ? $adminLogoPath : (str_starts_with($adminLogoPath, 'logos/') ? asset('storage/' . $adminLogoPath) : asset($adminLogoPath))) : asset('images/logo.png') }}" alt="KT" class="h-8 w-auto"
                      onerror="this.parentElement.innerHTML='<span class=\'text-[#2d6fa3] font-black text-sm\'>KT</span>'">
             </div>
             <div>
-                <p class="text-white font-bold text-sm leading-tight">Krousar Thmey</p>
+                <p class="text-white font-bold text-sm leading-tight">{{ data_get($settings ?? [], 'site_name', 'Krousar Thmey') }}</p>
                 <p class="text-white text-xs">Admin Panel</p>
             </div>
         </div>
