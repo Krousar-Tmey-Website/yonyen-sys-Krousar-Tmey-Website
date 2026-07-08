@@ -3,12 +3,14 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\VolunteerController;
 use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Award;
 use App\Models\Slide;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 // ──────────────────────────────────────────────
@@ -46,6 +48,9 @@ Route::post('/volunteer', [VolunteerController::class, 'store'])->name('voluntee
 
 Route::get('/donate',  [DonationController::class, 'show'])->name('donate');
 Route::post('/donate', [DonationController::class, 'send'])->name('donate.send');
+
+Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
+Route::get('/newsletter/unsubscribe/{email}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
 // ──────────────────────────────────────────────
 // Admin — Auth (no middleware)
@@ -85,4 +90,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::patch('{contactInquiry}/status', [Admin\ContactInquiryController::class, 'updateStatus'])->name('status');
         Route::delete('{contactInquiry}',       [Admin\ContactInquiryController::class, 'destroy'])->name('destroy');
     });
+
+    Route::prefix('newsletter')->name('newsletter.')->group(function () {
+        Route::get('/',                    [Admin\NewsletterController::class, 'index'])->name('index');
+        Route::get('export',               [Admin\NewsletterController::class, 'export'])->name('export');
+        Route::delete('{newsletterSubscriber}', [Admin\NewsletterController::class, 'destroy'])->name('destroy');
+    });
 });
+

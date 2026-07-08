@@ -84,17 +84,4 @@ $categories = $articles->pluck('category')->unique()->sort()->values();
     </div>
 </section>
 
-{{-- Newsletter CTA --}}
-<section class="py-16 bg-white border-t border-gray-100">
-    <div class="max-w-2xl mx-auto px-6 text-center">
-        <h2 class="text-2xl font-bold text-[#1a3c6e] mb-3">Stay Updated</h2>
-        <p class="text-gray-500 mb-8">Subscribe to our newsletter for the latest stories and updates from Cambodia.</p>
-        <form class="flex gap-3 max-w-md mx-auto" onsubmit="return false;">
-            <input type="email" placeholder="Enter your email address"
-                   class="flex-1 px-5 py-3 rounded-full border border-gray-200 focus:outline-none focus:border-[#1a3c6e] text-sm transition-colors">
-            <button type="submit" class="btn-blue flex-shrink-0 rounded-full">Subscribe</button>
-        </form>
-    </div>
-</section>
-
 @endsection

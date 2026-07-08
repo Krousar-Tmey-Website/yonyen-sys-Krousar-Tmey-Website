@@ -259,23 +259,41 @@
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Programs</h4>
                     <ul class="space-y-3">
                         <li><a href="{{ route('programs') }}#welfare"   class="text-white/50 hover:text-white text-sm transition-colors">Child Welfare</a></li>
-                        <li><a href="{{ route('programs') }}#education" class="text-white/50 hover:text-white text-sm transition-colors">Education for Deaf &amp; Blind</a></li>
+                        <li><a href="{{ route('programs') }}#education" class="text-white/50 hover:text-white text-sm transition-colors">Education for Deaf & Blind</a></li>
                         <li><a href="{{ route('programs') }}#culture"   class="text-white/50 hover:text-white text-sm transition-colors">Cultural Development</a></li>
                         <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">Volunteering</a></li>
                         <li><a href="{{ route('donate') }}"             class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>
                     </ul>
                 </div>
 
-                {{-- Newsletter --}}
+                {{-- Offices --}}
                 <div>
-                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Stay Connected</h4>
-                    <p class="text-white/50 text-sm mb-4">Subscribe for updates on our work in Cambodia.</p>
-                    <form class="flex gap-2" onsubmit="return false;">
-                        <input type="email" placeholder="Your email"
+                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Offices</h4>
+                    <ul class="space-y-3">
+                        <li class="text-white/50 text-sm">🇰🇭 Cambodia</li>
+                        <li class="text-white/50 text-sm">🇫🇷 France</li>
+                        <li class="text-white/50 text-sm">🇨🇭 Switzerland</li>
+                        <li class="text-white/50 text-sm">🇸🇬 Singapore</li>
+                    </ul>
+                </div>
+                    @if(session('info'))
+                        <div class="bg-blue-500/20 border border-blue-500/30 text-blue-300 text-xs px-3 py-2 rounded-lg mb-3">
+                            {{ session('info') }}
+                        </div>
+                    @endif
+                    @if($errors->has('email'))
+                        <div class="bg-red-500/20 border border-red-500/30 text-red-300 text-xs px-3 py-2 rounded-lg mb-3">
+                            {{ $errors->first('email') }}
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('newsletter.store') }}" class="flex gap-2">
+                        @csrf
+                        <input type="email" name="email" placeholder="Your email"
                                class="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#8da83a] transition-colors">
                         <button type="submit"
                                 class="px-4 py-2 bg-[#8da83a] rounded-lg text-white text-sm font-medium hover:bg-[#a3c04a] transition-colors flex-shrink-0">
-                            OK
+                            Subscribe
                         </button>
                     </form>
                     <div class="mt-6 space-y-1.5">
