@@ -7,6 +7,7 @@ use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Award;
+use App\Models\PageSection;
 use App\Models\Program;
 use App\Models\Slide;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +29,12 @@ Route::get('/', function () {
         ->orderByRaw("FIELD(slug, 'child-welfare','special-education')")
         ->get();
 
-    return view('home', compact('settings', 'latestNews', 'slides', 'programs'));
+    $pageSections = PageSection::with(['images', 'links'])
+        ->where('active', true)
+        ->orderBy('order')
+        ->get();
+
+    return view('home', compact('settings', 'latestNews', 'slides', 'programs', 'pageSections'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -46,6 +52,15 @@ Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::get('/resources', fn() => view('resources'))->name('resources');
 Route::get('/contact',   fn() => view('contact'))->name('contact');
+
+Route::get('/partners', function () {
+    $partners = Partner::active()
+        ->where('category', 'organizations')
+        ->orderBy('sort_order')
+        ->orderBy('name')
+        ->get();
+    return view('partners', compact('partners'));
+})->name('partners');
 
 Route::get('/donate',  [DonationController::class, 'show'])->name('donate');
 Route::post('/donate', [DonationController::class, 'send'])->name('donate.send');
@@ -78,5 +93,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
     Route::resource('slides',   Admin\SlideController::class)->except(['show']);
     Route::resource('users',    Admin\UserController::class)->except(['show']);
+    Route::resource('page-sections', Admin\PageSectionController::class)
+        ->except(['show']);
     // Partner Management
 });

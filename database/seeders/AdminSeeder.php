@@ -63,6 +63,20 @@ class AdminSeeder extends Seeder
             ['key' => 'cta_primary_url',     'label' => 'CTA Primary Button URL',   'group' => 'cta', 'value' => '/donate'],
             ['key' => 'cta_secondary_text',  'label' => 'CTA Secondary Button Text', 'group' => 'cta', 'value' => 'Get Involved'],
             ['key' => 'cta_secondary_url',   'label' => 'CTA Secondary Button URL', 'group' => 'cta', 'value' => '/get-involved'],
+            // Structure map
+            ['key' => 'structure_heading',       'label' => 'Structure Map — Heading',            'group' => 'structure', 'value' => "KROUSAR THMEY'S STRUCTURES"],
+            ['key' => 'structure_welfare_title', 'label' => 'Structure Map — Child Welfare Title', 'group' => 'structure', 'value' => 'Child Welfare Program'],
+            ['key' => 'structure_welfare_items', 'label' => 'Structure Map — Child Welfare Items', 'group' => 'structure', 'value' => "2 Temporary Protection Centers\n2 Long-term Protection Centers\n2 Family Houses\nOutside Cases"],
+            ['key' => 'structure_education_title','label' => 'Structure Map — Education Title',    'group' => 'structure', 'value' => 'Education for Deaf or Blind Children Program'],
+            ['key' => 'structure_education_items','label' => 'Structure Map — Education Items',    'group' => 'structure', 'value' => "5 Special Education High Schools"],
+            ['key' => 'structure_image',         'label' => 'Structure Map — Image URL',           'group' => 'structure', 'value' => asset('images/cambodia-map.png')],
+            // Programs section
+            ['key' => 'programs_badge',  'label' => 'Programs — Badge Text', 'group' => 'programs', 'value' => 'WHAT WE DO'],
+            ['key' => 'programs_heading','label' => 'Programs — Heading',     'group' => 'programs', 'value' => 'Two Programs, One Mission'],
+            ['key' => 'programs_cta',    'label' => 'Programs — CTA Button',  'group' => 'programs', 'value' => 'View All Programs'],
+            ['key' => 'programs_learn_btn', 'label' => 'Programs — Card Learn More Button', 'group' => 'programs', 'value' => 'Learn More'],
+            // Partners section
+            ['key' => 'partners_heading', 'label' => 'Partners — Section Heading', 'group' => 'partners', 'value' => 'Supported by Our Partners Worldwide'],
             // Footer contact
             ['key' => 'footer_address', 'label' => 'Footer Address', 'group' => 'footer', 'value' => '#58, Street 478, Phnom Penh, Cambodia'],
             ['key' => 'footer_phone',   'label' => 'Footer Phone',   'group' => 'footer', 'value' => '+855 (0)23 211 955'],

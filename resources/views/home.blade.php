@@ -59,7 +59,7 @@
                     @endphp
 
                     @if($heroPrimaryText || $heroSecondaryText)
-                    <div class="flex flex-wrap gap-4">
+                    <div class="flex flex-wrap gap-6">
                         @if($heroPrimaryText)
                         <a href="{{ $heroPrimaryUrl }}" class="btn-primary">{{ $heroPrimaryText }}</a>
                         @endif
@@ -83,7 +83,7 @@
 
     {{-- Dot controls (only shown when multiple slides) --}}
     @if($slides->count() > 1)
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3">
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-6">
         <template x-for="i in total" :key="i">
             <button @click="go(i - 1)"
                 class="transition-all duration-300 rounded-full"
@@ -223,6 +223,29 @@
             observer.observe(counter);
         });
 
+
+        // ── Scroll animation for PageSections ──────────────
+        const sectionBlocks = document.querySelectorAll(".animate-section");
+
+        const sectionObserver = new IntersectionObserver(entries => {
+
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-visible");
+                    sectionObserver.unobserve(entry.target);
+                }
+            });
+
+        }, {
+            threshold: 0.15
+        });
+
+
+        sectionBlocks.forEach(el => {
+            sectionObserver.observe(el);
+        });
+
+
     });
 </script>
 
@@ -268,14 +291,29 @@
     .animate-fade-up {
         animation: fadeUp .8s ease forwards;
     }
+
+
+    .animate-section {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+
+    .animate-section.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
 </style>
+
 
 {{-- ===== PROGRAMS ===== --}}
 <section class="py-20 lg:py-28 bg-[#f8f9fc]">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14">
-            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">WHAT WE DO</span>
-            <h2 class="section-title mt-3 mx-auto">Two Programs, One Mission</h2>
+            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">{{ $settings['programs_badge'] ?? 'WHAT WE DO' }}</span>
+            <h2 class="section-title mt-3 mx-auto">{{ $settings['programs_heading'] ?? 'Two Programs, One Mission' }}</h2>
         </div>
         <p class="section-subtitle mx-auto text-center">{{ $settings['programs_subtitle'] ?? 'Krousar Thmey operates 2 programs and 2 cross-cutting projects in 15 Cambodian provinces ' }}</p>
 
@@ -300,15 +338,6 @@
                 </div>
 
 
-                <!-- {{-- Stats --}}
-                @if(!empty($program->stats[0]['value']))
-                <span class="absolute top-5 left-5 
-            bg-[#e8a020] text-white text-xs font-bold 
-            px-4 py-2 rounded-full shadow-lg z-10">
-                    {{ $program->stats[0]['value'] }}
-                    {{ $program->stats[0]['label'] ?? '' }}
-                </span>
-                @endif -->
 
 
                 {{-- Content --}}
@@ -344,7 +373,7 @@
                     hover:bg-white hover:text-[#0b3b73]
                     transition-all duration-300">
 
-                            Learn More
+                            {{ $settings['programs_learn_btn'] ?? 'Learn More' }}
 
                             <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform"
                                 fill="none"
@@ -372,11 +401,15 @@
         </div>
 
         <div class="text-center mt-12">
-            <a href="{{ route('programs') }}" class="btn-blue">View All Programs</a>
+            <a href="{{ route('programs') }}" class="btn-blue">{{ $settings['programs_cta'] ?? 'View All Programs' }}</a>
         </div>
     </div>
 </section>
 {{-- ===== PROGRAM STRUCTURE MAP SECTION ===== --}}
+@php
+$structureWelfareItems = array_filter(explode("\n", $settings['structure_welfare_items'] ?? "2 Temporary Protection Centers\n2 Long-term Protection Centers\n2 Family Houses\nOutside Cases"));
+$structureEducationItems = array_filter(explode("\n", $settings['structure_education_items'] ?? "5 Special Education High Schools"));
+@endphp
 <section class="py-16 lg:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-6">
 
@@ -385,7 +418,7 @@
             {{-- Left Side - Map --}}
             <div class="flex justify-center">
                 <img
-                    src="{{ asset('images/cambodia-map.png') }}"
+                    src="{{ $settings['structure_image'] ?? asset('images/cambodia-map.png') }}"
                     alt="Cambodia Program Map"
                     class="w-full max-w-2xl object-contain">
             </div>
@@ -394,45 +427,150 @@
             <div>
 
                 <h2 class="text-3xl font-bold text-[#1a3c6e] mb-8">
-                    KROUSAR THMEY'S STRUCTURES
+                    {{ $settings['structure_heading'] ?? "KROUSAR THMEY'S STRUCTURES" }}
                 </h2>
 
                 {{-- Child Welfare --}}
+                @if(!empty($structureWelfareItems))
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">
-                        • Child Welfare Program
+                        • {{ $settings['structure_welfare_title'] ?? 'Child Welfare Program' }}
                     </h3>
 
                     <ul class="space-y-2 ml-8 text-gray-600">
-                        <li>– 2 Temporary Protection Centers</li>
-                        <li>– 2 Long-term Protection Centers</li>
-                        <li>– 2 Family Houses</li>
-                        <li>– Outside Cases</li>
+                        @foreach($structureWelfareItems as $item)
+                        <li>– {{ $item }}</li>
+                        @endforeach
                     </ul>
                 </div>
+                @endif
 
                 {{-- Education --}}
+                @if(!empty($structureEducationItems))
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">
-                        • Education for Deaf or Blind Children Program
+                        • {{ $settings['structure_education_title'] ?? 'Education for Deaf or Blind Children Program' }}
                     </h3>
 
                     <ul class="space-y-2 ml-8 text-gray-600">
-                        <li>– 5 Special Education High Schools</li>
+                        @foreach($structureEducationItems as $item)
+                        <li>– {{ $item }}</li>
+                        @endforeach
                     </ul>
                 </div>
+                @endif
             </div>
 
         </div>
 
     </div>
 </section>
+{{-- ===== PAGE SECTIONS (Focus / Video / etc.) ===== --}}
+@if($pageSections->isNotEmpty())
+@foreach($pageSections as $index => $section)
+@php
+    $isReversed = $index % 2 !== 0;
+    $sectionImage = $section->images->first();
+    $sectionLinks = $section->links->where('active', true)->sortBy('order');
+@endphp
+<section class="py-20 lg:py-28 {{ $isReversed ? 'bg-[#f8f9fc]' : 'bg-white' }} overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+            {{-- Image side --}}
+            <div class="{{ $isReversed ? 'lg:order-2' : '' }}">
+                <div class="relative group">
+                    {{-- Decorative accent --}}
+                    <div class="absolute -top-4 -left-4 w-24 h-24 rounded-2xl {{ $isReversed ? 'bg-[#8da83a]/10' : 'bg-[#2d6fa3]/10' }} -z-10"></div>
+                    <div class="absolute -bottom-4 -right-4 w-32 h-32 rounded-2xl {{ $isReversed ? 'bg-[#2d6fa3]/10' : 'bg-[#8da83a]/10' }} -z-10"></div>
+
+                    @if($sectionImage)
+                    <img src="{{ str_starts_with($sectionImage->path, 'http') ? $sectionImage->path : asset('storage/' . $sectionImage->path) }}"
+                         alt="{{ $sectionImage->alt ?? $section->title }}"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                         class="w-full h-[340px] lg:h-[420px] object-cover rounded-2xl shadow-xl
+                                group-hover:shadow-2xl transition-all duration-700
+                                group-hover:scale-[1.02]">
+                    @endif
+                    {{-- Placeholder (shown when no image or image fails to load) --}}
+                    <div class="w-full h-[340px] lg:h-[420px] rounded-2xl shadow-xl
+                                bg-gradient-to-br from-[#2d6fa3]/5 to-[#8da83a]/5
+                                border-2 border-dashed border-gray-200
+                                flex flex-col items-center justify-center text-gray-300
+                                group-hover:border-[#2d6fa3]/30 group-hover:shadow-2xl transition-all duration-500
+                                {{ $sectionImage ? 'hidden' : '' }}">
+                        <svg class="w-16 h-16 mb-4 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <p class="text-sm font-medium">Image placeholder</p>
+                        <p class="text-xs mt-1">Upload via admin panel</p>
+                    </div>
+
+                    {{-- Floating badge --}}
+                    <div class="absolute -bottom-3 -right-3 bg-white rounded-xl shadow-lg px-4 py-2 border border-gray-100">
+                        <span class="text-xs font-bold text-[#2d6fa3] uppercase tracking-wider">{{ $section->section_name }}</span>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Content side --}}
+            <div class="{{ $isReversed ? 'lg:order-1' : '' }} animate-section">
+                {{-- Section label --}}
+                <div class="flex items-center gap-6 mb-4">
+                    <span class="h-px w-8 bg-[#e8a020]"></span>
+                    <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-[0.2em]">
+                        {{ str_replace('-', ' ', $section->section_name) }}
+                    </span>
+                </div>
+
+                {{-- Title --}}
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 leading-tight mb-6">
+                    {{ $section->title }}
+                </h2>
+
+                {{-- Description --}}
+                @if($section->description)
+                <div class="text-gray-600 leading-relaxed space-y-4 mb-8">
+                    @foreach(explode("\n\n", $section->description) as $paragraph)
+                    <p>{{ $paragraph }}</p>
+                    @endforeach
+                </div>
+                @endif
+
+                {{-- CTA Buttons --}}
+                @if($sectionLinks->isNotEmpty())
+                <div class="flex flex-wrap gap-6">
+                    @foreach($sectionLinks as $link)
+                    <a href="{{ $link->url }}"
+                       target="{{ $link->target ?? '_self' }}"
+                       class="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300
+                              {{ $loop->first
+                                  ? 'bg-[#2d6fa3] text-white hover:bg-[#1d4e7a] shadow-md hover:shadow-lg'
+                                  : 'bg-white text-[#2d6fa3] border-2 border-[#2d6fa3]/20 hover:border-[#2d6fa3] hover:bg-[#2d6fa3]/5'
+                              }}">
+                        <span>{{ $link->text }}</span>
+                        <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+                    @endforeach
+                </div>
+                @endif
+            </div>
+
+        </div>
+    </div>
+</section>
+@endforeach
+@endif
+
 
 
 {{-- ===== NEWS ===== --}}
 <section class="py-20 lg:py-28 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-14 gap-4">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-14 gap-6">
             <div>
                 <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">{{ $settings['news_title'] ?? 'Latest Updates' }}</span>
                 <h2 class="section-title mt-3">{{ $settings['news_title'] ?? 'News & Stories' }}</h2>
@@ -493,7 +631,7 @@
         <p class="text-white/80 text-lg leading-relaxed mb-10">
             {{ $settings['cta_subtitle'] ?? 'We guarantee that 100% of your donation is used to support children across Cambodia. Every contribution, big or small, changes a life.' }}
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="flex flex-col sm:flex-row gap-6 justify-center">
             <a href="{{ $settings['cta_primary_url'] ?? route('donate') }}" class="btn-primary text-base">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -509,18 +647,83 @@
 </section>
 
 {{-- ===== PARTNERS ===== --}}
-<section class="py-14 bg-[#f8f9fc] border-t border-gray-100">
-    <div class="max-w-7xl mx-auto px-6 text-center">
-        <p class="text-gray-400 text-sm uppercase tracking-wider mb-8 font-medium">Supported by our partners worldwide</p>
-        @php
-        $partners = array_filter(array_map('trim', explode(',', $settings['partners_logos'] ?? 'UNICEF, USAID, AFD, Handicap International, European Union, Aide et Action')));
-        @endphp
-        <div class="flex flex-wrap items-center justify-center gap-8 lg:gap-14 opacity-60">
-            @foreach($partners as $partner)
-            <span class="text-gray-500 font-bold text-sm tracking-wide">{{ $partner }}</span>
-            @endforeach
+@php
+$homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo', '!=', '')->get();
+@endphp
+
+@if($homePartners->isNotEmpty())
+<section class="py-16 bg-[#f8f9fc] border-t border-gray-100 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+
+        {{-- Header --}}
+        <div class="text-center mb-10">
+            <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-[0.2em]">OUR NETWORK</span>
+            <h2 class="section-title mt-2">{{ $settings['partners_heading'] ?? 'Supported by Our Partners Worldwide' }}</h2>
+            <p class="text-gray-400 text-sm mt-2 max-w-xl mx-auto">
+                We are grateful for the trust and collaboration of {{ $homePartners->count() }} partner organisations across the globe.
+            </p>
         </div>
+
+        {{-- Infinite seamless marquee --}}
+        <div class="relative"
+             x-data="{ paused: false }"
+             x-init="$nextTick(() => { setTimeout(() => $el.querySelector('.marquee-track').style.animationPlayState = 'running', 600) })"
+             @mouseenter="paused = true"
+             @mouseleave="paused = false">
+
+            {{-- Gradient fade edges --}}
+            <div class="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#f8f9fc] to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none"></div>
+
+            <div class="overflow-hidden">
+                <div class="flex marquee-track"
+                     :style="{ animationPlayState: paused ? 'paused' : 'running' }">
+                    {{-- Set 1 --}}
+                    @foreach($homePartners as $partner)
+                    <div class="flex items-center justify-center w-52 h-20 bg-white rounded-lg shadow-sm border border-gray-100 mx-3
+                                hover:shadow-md hover:border-[#2d6fa3]/20 transition-all duration-300 flex-shrink-0">
+                        <img src="{{ asset('storage/' . $partner->logo) }}"
+                             alt="{{ $partner->name }}"
+                             class="w-full h-full object-contain p-4 transition-all duration-500">
+                    </div>
+                    @endforeach
+                    {{-- Duplicate set for seamless loop --}}
+                    @foreach($homePartners as $partner)
+                    <div class="flex items-center justify-center w-52 h-20 bg-white rounded-lg shadow-sm border border-gray-100 mx-3
+                                hover:shadow-md hover:border-[#2d6fa3]/20 transition-all duration-300 flex-shrink-0">
+                        <img src="{{ asset('storage/' . $partner->logo) }}"
+                             alt="{{ $partner->name }}"
+                             class="w-full h-full object-contain p-4 transition-all duration-500">
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        {{-- Bottom CTA --}}
+        <div class="text-center mt-10">
+            <a href="{{ route('partners') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#2d6fa3] hover:text-[#1d4e7a] transition-colors group">
+                View All Partners
+                <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
+        </div>
+
     </div>
 </section>
+
+{{-- Marquee keyframes --}}
+<style>
+    @keyframes marqueeScroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+    .marquee-track {
+        animation: marqueeScroll 18s linear infinite;
+        animation-play-state: paused;
+    }
+</style>
+@endif
 
 @endsection
