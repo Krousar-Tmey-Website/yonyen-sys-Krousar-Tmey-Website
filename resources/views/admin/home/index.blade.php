@@ -6,7 +6,7 @@
 
 @section('content')
 
-<form action="{{ route('admin.home.update') }}" method="POST" class="space-y-6 max-w-3xl">
+<form action="{{ route('admin.home.update') }}" method="POST" class="space-y-6 max-w-3xl mx-auto">
     @csrf
 
     @php
