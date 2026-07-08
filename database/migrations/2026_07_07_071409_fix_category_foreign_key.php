@@ -19,85 +19,17 @@ return new class extends Migration
             AND REFERENCED_TABLE_NAME IS NOT NULL
         ");
         
-        if (!empty($foreignKeys)) {
-            // Start a transaction
-            DB::beginTransaction();
-            
-            try {
-                // 1. Drop the foreign key constraint from article_categories
-                Schema::table('article_categories', function (Blueprint $table) {
-                    $table->dropForeign(['CategoryID']);
-                });
-                
-                // 2. Drop the primary key from categories
-                Schema::table('categories', function (Blueprint $table) {
-                    $table->dropPrimary('CategoryID');
-                });
-                
-                // 3. Modify CategoryID to auto-increment
-                Schema::table('categories', function (Blueprint $table) {
-                    $table->integer('CategoryID')->autoIncrement()->change();
-                });
-                
-                // 4. Set the primary key back
-                Schema::table('categories', function (Blueprint $table) {
-                    $table->primary('CategoryID');
-                });
-                
-                // 5. Re-add the foreign key constraint
-                Schema::table('article_categories', function (Blueprint $table) {
-                    $table->foreign('CategoryID')
-                          ->references('CategoryID')
-                          ->on('categories')
-                          ->onDelete('cascade');
-                });
-                
-                DB::commit();
-            } catch (\Exception $e) {
-                DB::rollBack();
-                throw $e;
-            }
-        }
-        // If foreign key doesn't exist, skip this migration silently
+        // No-op: categories and article_categories schema is managed by later
+        // migrations that standardize the primary key to `CategoryID`/`id` and
+        // the join table types. Running complex ALTER statements here caused
+        // issues on some environments (conflicting auto-increment columns),
+        // and the subsequent migrations already correct the structure.
+        return;
     }
 
     public function down(): void
     {
-        DB::beginTransaction();
-        
-        try {
-            // Drop foreign key
-            Schema::table('article_categories', function (Blueprint $table) {
-                $table->dropForeign(['CategoryID']);
-            });
-            
-            // Drop primary key
-            Schema::table('categories', function (Blueprint $table) {
-                $table->dropPrimary('CategoryID');
-            });
-            
-            // Change back to regular integer
-            Schema::table('categories', function (Blueprint $table) {
-                $table->integer('CategoryID')->change();
-            });
-            
-            // Re-add primary key
-            Schema::table('categories', function (Blueprint $table) {
-                $table->primary('CategoryID');
-            });
-            
-            // Re-add foreign key
-            Schema::table('article_categories', function (Blueprint $table) {
-                $table->foreign('CategoryID')
-                      ->references('CategoryID')
-                      ->on('categories')
-                      ->onDelete('cascade');
-            });
-            
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
+        // No-op reverse: nothing to rollback here.
+        return;
     }
 };

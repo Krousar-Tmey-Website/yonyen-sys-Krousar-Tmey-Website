@@ -11,14 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // If a partial/incorrect table exists (from a failed run), remove it first so
+        // the migration can create a clean, correctly-typed table.
+        Schema::dropIfExists('article_categories');
+
         Schema::create('article_categories', function (Blueprint $table) {
             $table->string('ArticleID', 50);
-            $table->string('CategoryID', 50);
+            // categories table uses the default big-integer `id` column, so use
+            // an unsignedBigInteger here to match types for the foreign key.
+            $table->unsignedBigInteger('CategoryID');
 
             $table->primary(['ArticleID', 'CategoryID']);
 
-            $table->foreign('ArticleID')->references('ArticleID')->on('news_stories');
-            $table->foreign('CategoryID')->references('CategoryID')->on('categories');
+            $table->foreign('ArticleID')
+                ->references('ArticleID')
+                ->on('news_stories')
+                ->onDelete('cascade');
+
+            $table->foreign('CategoryID')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
         });
     }
 
