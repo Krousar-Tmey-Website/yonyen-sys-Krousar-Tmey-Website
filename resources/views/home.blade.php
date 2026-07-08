@@ -667,7 +667,6 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
         {{-- Infinite seamless marquee --}}
         <div class="relative"
              x-data="{ paused: false }"
-             x-init="$nextTick(() => { setTimeout(() => $el.querySelector('.marquee-track').style.animationPlayState = 'running', 600) })"
              @mouseenter="paused = true"
              @mouseleave="paused = false">
 
@@ -716,12 +715,12 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
 {{-- Marquee keyframes --}}
 <style>
     @keyframes marqueeScroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
+        0% { transform: translate3d(0, 0, 0); }
+        100% { transform: translate3d(-50%, 0, 0); }
     }
     .marquee-track {
-        animation: marqueeScroll 18s linear infinite;
-        animation-play-state: paused;
+        will-change: transform;
+        animation: marqueeScroll 30s linear infinite;
     }
 </style>
 @endif

@@ -10,14 +10,13 @@
     @csrf
 
     @php
-    $order = ['stats', 'programs', 'structure', 'news', 'cta', 'partners', 'footer'];
+    $order = ['stats', 'programs', 'structure', 'news', 'cta', 'footer'];
     $labels = [
         'stats'     => ['📊', 'Stats & Data'],
         'programs'  => ['🧩', 'Programs Overview'],
         'structure' => ['🗺️', 'Structure Map'],
         'news'      => ['📰', 'Latest News Section'],
         'cta'       => ['🚀', 'Call to Action'],
-        'partners'  => ['🤝', 'Partners Section'],
         'footer'    => ['📍', 'Footer Contact Info'],
     ];
     @endphp
@@ -36,6 +35,9 @@
                 $k = $setting->key;
             @endphp
             @if($group === 'stats' && !in_array($k, $allowedStats))
+                @continue
+            @endif
+            @if($group === 'programs' && $k === 'programs_heading')
                 @continue
             @endif
             <div>

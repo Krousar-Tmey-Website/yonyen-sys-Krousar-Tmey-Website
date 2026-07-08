@@ -103,7 +103,6 @@
                 </div>
             </div>
 
-            {{── Links ──}}
             <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="linkManager()">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
