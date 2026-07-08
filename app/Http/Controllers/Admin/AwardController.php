@@ -15,6 +15,11 @@ class AwardController extends Controller
         return view('admin.awards.index', compact('awards'));
     }
 
+    public function create()
+    {
+        return view('admin.awards.create');
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -42,6 +47,11 @@ class AwardController extends Controller
         return redirect()->route('admin.awards.index')->with('success', 'Award added.');
     }
 
+    public function edit(Award $award)
+    {
+        return view('admin.awards.edit', compact('award'));
+    }
+
     public function update(Request $request, Award $award)
     {
         $data = $request->validate([
@@ -58,6 +68,12 @@ class AwardController extends Controller
         ]);
 
         $data['icon'] = $data['icon'] ?? '🏆';
+
+        // Handle image removal
+        if ($request->has('remove_image') && $award->image) {
+            Storage::disk('public')->delete($award->image);
+            $data['image'] = null;
+        }
 
         if ($request->hasFile('image')) {
             if ($award->image) {
