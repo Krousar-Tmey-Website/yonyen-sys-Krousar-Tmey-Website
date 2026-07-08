@@ -6,6 +6,7 @@ use App\Http\Controllers\NewsController;
 use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
+use App\Models\PartnerCategory;
 use App\Models\Award;
 use App\Models\Program;
 use App\Models\Slide;
@@ -25,9 +26,11 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/who-we-are', function () {
-    $partners = Partner::where('is_active', true)->latest()->get()->groupBy('category');
+    $partnerCategories = PartnerCategory::with(['partners' => function ($query) {
+        $query->active();
+    }])->orderBy('name')->get();
     $awards   = Award::ordered()->get();
-    return view('about', compact('partners', 'awards'));
+    return view('about', compact('partnerCategories', 'awards'));
 })->name('about');
 
 Route::get('/our-programs', function () {
@@ -74,8 +77,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('categories', CategoryController::class);
 
     // Partner Management
-    Route::resource('partners', Admin\PartnerController::class)
-        ->except(['create',]);
+    Route::resource('partners', Admin\PartnerController::class);
 
     Route::resource('awards', Admin\AwardController::class)
         ->except(['create', 'edit']);

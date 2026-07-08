@@ -21,20 +21,21 @@
             @endif
             <div>
                 <h2 class="text-xl font-bold text-gray-800">{{ $partner->name }}</h2>
-                <p class="text-sm text-gray-400">
-                    {{ $partner->country ?? 'No country specified' }}
-                </p>
+                @if ($partner->partnerCategory)
+                    <p class="text-sm text-gray-400 flex items-center gap-1.5 mt-0.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                        {{ $partner->partnerCategory->name }}
+                    </p>
+                @endif
             </div>
         </div>
 
         {{-- Details --}}
         <div class="p-6 space-y-5">
             <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Category</p>
-                    <p class="text-sm font-medium text-gray-800">{{ $categories[$partner->category] ?? $partner->category }}</p>
-                </div>
-
                 <div>
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Status</p>
                     @if ($partner->is_active)
@@ -46,16 +47,6 @@
                             Hidden
                         </span>
                     @endif
-                </div>
-
-                <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Country</p>
-                    <p class="text-sm font-medium text-gray-800">{{ $partner->country ?? '—' }}</p>
-                </div>
-
-                <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Sort Order</p>
-                    <p class="text-sm font-medium text-gray-800">{{ $partner->sort_order ?? 0 }}</p>
                 </div>
 
                 <div>
