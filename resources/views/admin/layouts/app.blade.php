@@ -218,7 +218,7 @@
                     @csrf
                     <button type="button" title="Sign Out"
                             @click="logoutForm = $refs.logoutForm; logoutModal = true"
-                            class="text-white/40 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10">
+                            class="text-white hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                     </button>
                 </form>
