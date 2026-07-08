@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin') — Krousar Thmey</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/css/admin-news.css', 'resources/js/app.js'])
     <style>[x-cloak] { display: none !important; }</style>
 </head>
 <body class="h-full" x-data="{ sidebarOpen: false }">
