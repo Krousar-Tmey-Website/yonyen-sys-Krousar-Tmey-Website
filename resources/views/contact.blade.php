@@ -30,20 +30,15 @@
             <div class="lg:col-span-2">
                     <h2 class="text-xl font-bold text-[#1a3c6e] mb-6">Our Offices</h2>
                 <div class="space-y-3">
-                    @foreach([
-                        ['id' => 'cambodia', 'flag' => '🇰🇭', 'country' => 'Cambodia', 'city' => '',
-                         'address' => "Krousar Thmey Cambodia\n#145 street 132, Toeuk Laâk I, Toul Kork\nPhnom Penh - PO Box 1393",
-                         'phone' => '+855 (0)23 880 502', 'email' => 'communication@krousar-thmey.org'],
-                        ['id' => 'france', 'flag' => '🇫🇷', 'country' => 'France', 'city' => '',
-                         'address' => "Krousar Thmey France\n62 rue Greneta\n75002 Paris",
-                         'phone' => '01 40 13 06 30', 'email' => 'france@krousar-thmey.org'],
-                        ['id' => 'singapore', 'flag' => '🇸🇬', 'country' => 'Singapore', 'city' => '',
-                         'address' => "Krousar Thmey Singapore\n29 Leonie Hill, Horizon Towers West\nApt 13-04\nSingapore",
-                         'phone' => '+65 98 506 438', 'email' => 'singapore@krousar-thmey.org'],
-                        ['id' => 'switzerland', 'flag' => '🇨🇭', 'country' => 'Switzerland', 'city' => '',
-                         'address' => "Krousar Thmey Switzerland\nc/o Mme Sylvie Bédat\nRoute de Florissant 89 A\n1206 Geneva",
-                         'phone' => '+41 79 203 70 82', 'email' => 'switzerland@krousar-thmey.org'],
-                    ] as $loc)
+                    @php
+                    $countries = [
+                        ['id' => 'cambodia',    'flag' => '🇰🇭', 'country' => 'Cambodia',    'city' => ''],
+                        ['id' => 'france',      'flag' => '🇫🇷', 'country' => 'France',      'city' => ''],
+                        ['id' => 'singapore',   'flag' => '🇸🇬', 'country' => 'Singapore',   'city' => ''],
+                        ['id' => 'switzerland','flag' => '🇨🇭', 'country' => 'Switzerland', 'city' => ''],
+                    ];
+                    @endphp
+                    @foreach($countries as $loc)
                     <button @click="office = '{{ $loc['id'] }}'"
                             :class="office === '{{ $loc['id'] }}' ? 'border-[#1a3c6e] bg-white shadow-md' : 'border-gray-100 bg-white hover:border-gray-200'"
                             class="w-full text-left p-5 rounded-2xl border-2 transition-all duration-200">
@@ -59,17 +54,22 @@
                         </div>
 
                         <div x-show="office === '{{ $loc['id'] }}'" class="mt-4 space-y-2 pt-4 border-t border-gray-100">
+                            @php
+                                $cAddr = $settings['contact_'.$loc['id'].'_address'] ?? $loc['address'] ?? '';
+                                $cPhone = $settings['contact_'.$loc['id'].'_phone'] ?? $loc['phone'] ?? '';
+                                $cEmail = $settings['contact_'.$loc['id'].'_email'] ?? $loc['email'] ?? '';
+                            @endphp
                             <p class="text-gray-600 text-xs flex items-start gap-2">
                                 <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                {{ $loc['address'] }}
+                                {!! nl2br(e($cAddr)) !!}
                             </p>
                             <p class="text-gray-600 text-xs flex items-center gap-2">
                                 <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                {{ $loc['phone'] }}
+                                {{ $cPhone }}
                             </p>
                             <p class="text-gray-600 text-xs flex items-center gap-2">
                                 <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                {{ $loc['email'] }}
+                                {{ $cEmail }}
                             </p>
                         </div>
                     </button>
@@ -79,41 +79,44 @@
 
             {{-- Right: Contact Form --}}
             <div class="lg:col-span-3">
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10 relative"
-                     x-data="{ showPopup: {{ session('success') ? 'true' : 'false' }} }"
-                     x-init="if (showPopup) { setTimeout(() => showPopup = false, 5000) }">
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10 relative">
+
+                    @php
+                        $successMsg = session('success');
+                        if ($successMsg === true || $successMsg === '1' || $successMsg === 1) {
+                            $successMsg = 'Your message has been received. We will get back to you soon.';
+                        }
+                        $errorMsg = session('error');
+                        $notifMsg = $successMsg ?: $errorMsg;
+                        $notifType = $successMsg ? 'success' : ($errorMsg ? 'error' : null);
+                    @endphp
+                    @if($notifType)
+                    <div x-data="{ show: true }"
+                         x-init="setTimeout(() => show = false, 4000)"
+                         x-show="show"
+                         x-transition:enter="transition ease-out duration-400"
+                         x-transition:enter-start="opacity-0 -translate-y-3"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-300"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 -translate-y-3"
+                         class="flex items-center gap-3 px-5 py-3.5 rounded-xl text-sm font-medium shadow-lg mb-6
+                                {{ $notifType === 'success' ? 'bg-[#2d6fa3] text-white' : 'bg-red-500 text-white' }}">
+                        @if($notifType === 'success')
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        @else
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        @endif
+                        <span>{{ $notifMsg }}</span>
+                    </div>
+                    @endif
 
                     <h2 class="text-xl font-bold text-[#1a3c6e] mb-2">Send Us a Message</h2>
                     <p class="text-gray-500 text-sm mb-8">We'll get back to you within 2 business days.</p>
-
-                    {{-- Success Popup Notification --}}
-                    <div x-show="showPopup"
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 -translate-y-2 scale-95"
-                         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                         x-transition:leave="transition ease-in duration-200"
-                         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                         x-transition:leave-end="opacity-0 -translate-y-2 scale-95"
-                         @click.outside="showPopup = false"
-                         class="fixed right-4 top-4 z-50 w-[calc(100%-2rem)] max-w-sm rounded-xl border border-green-200 bg-white/95 p-3 shadow-lg backdrop-blur"
-                         x-cloak>
-                        <div class="flex items-start gap-3">
-                            <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100">
-                                <svg class="h-4 w-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <h3 class="text-sm font-semibold text-green-900">Thank you for reaching out!</h3>
-                                <p class="mt-0.5 text-xs text-green-700">Your message has been received and our team will reply soon.</p>
-                            </div>
-                            <button @click="showPopup = false" class="flex-shrink-0 text-green-500 transition-colors hover:text-green-700">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
 
                     {{-- Contact Form --}}
                     <form method="POST" action="{{ route('contact.store') }}" class="space-y-5">
