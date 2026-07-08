@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\HomeSetting;
+use App\Models\SocialLink;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,8 +22,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Share home settings with all views so social links (and other settings)
-        // are available everywhere — including the layout.
+        // Share home settings with all views for homepage stats, hero text, etc.
         view()->share('settings', HomeSetting::allKeyed());
+
+        // Share active social links with all views (top bar, footer).
+        // Check table exists first so artisan commands (migrate, route:list) work
+        // before the migration has run.
+        $socialLinks = Schema::hasTable('social_links')
+            ? SocialLink::active()->ordered()->get()
+            : collect();
+
+        view()->share('socialLinks', $socialLinks);
     }
 }

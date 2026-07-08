@@ -10,11 +10,11 @@
     @csrf
 
     @foreach($settings as $group => $items)
+        @if($group === 'social') @continue @endif
     <div class="bg-white rounded-2xl border border-gray-100 p-6">
         <h3 class="font-bold text-gray-700 mb-5 capitalize flex items-center gap-2">
             @if($group === 'stats')   <span class="text-lg">📊</span> Key Statistics
             @elseif($group === 'hero') <span class="text-lg">🖼️</span> Hero Slides
-            @elseif($group === 'social') <span class="text-lg">🔗</span> Social Media Links
             @else <span class="text-lg">📝</span> {{ ucfirst($group) }}
             @endif
         </h3>

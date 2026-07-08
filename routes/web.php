@@ -13,6 +13,7 @@ use App\Models\HistoryEvent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\HistoryController;
+use App\Http\Controllers\Admin\SocialLinkController;
 
 // ──────────────────────────────────────────────
 // Public pages
@@ -86,6 +87,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Slides
     Route::resource('slides', Admin\SlideController::class)
+        ->except(['show']);
+
+    // Social Links
+    Route::resource('social-links', SocialLinkController::class)
         ->except(['show']);
 
     // History

@@ -132,6 +132,7 @@
                             ['route' => 'admin.website.index', 'label' => 'Website Settings'],
                             ['route' => 'admin.seo.index', 'label' => 'SEO Settings'],
                             ['route' => 'admin.media.library', 'label' => 'Media Library'],
+                            ['route' => 'admin.social-links.index', 'label' => 'Social Links'],
                         ],
                     ],
                     'reports' => [
