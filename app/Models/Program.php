@@ -9,6 +9,7 @@ class Program extends Model
     protected $fillable = [
         'title', 'slug', 'description', 'full_description',
         'image', 'stats', 'sort_order', 'is_active', 'Status',
+        'testimony_name', 'testimony_story', 'testimony_image',
     ];
 
     protected function casts(): array
@@ -22,6 +23,11 @@ class Program extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true)->orderBy('sort_order');
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
     }
 
     public function getImageUrlAttribute(): string

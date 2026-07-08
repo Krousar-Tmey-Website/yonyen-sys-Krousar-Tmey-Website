@@ -22,7 +22,7 @@ class ProgramController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'            => ['required', 'string', 'max:255'],
+            'title'            => ['required', 'string', 'max:255', 'unique:programs,title'],
             'description'      => ['nullable', 'string'],
             'full_description' => ['nullable', 'string'],
             'image'            => ['nullable', 'image', 'max:2048'],
@@ -33,6 +33,10 @@ class ProgramController extends Controller
             'stats'            => ['nullable', 'array'],
             'stats.*.value'    => ['nullable', 'string'],
             'stats.*.label'    => ['nullable', 'string'],
+            'testimony_name'   => ['nullable', 'string', 'max:255'],
+            'testimony_story'  => ['nullable', 'string'],
+            'testimony_image'  => ['nullable', 'image', 'max:2048'],
+            'testimony_image_url' => ['nullable', 'url', 'max:2048'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
@@ -53,6 +57,17 @@ class ProgramController extends Controller
             $data['image'] = $imageUrl;
         }
 
+        $testimonyImageUrl = $request->input('testimony_image_url');
+        unset($data['testimony_image_url']);
+
+        if ($request->hasFile('testimony_image')) {
+            $data['testimony_image'] = $request->file('testimony_image')->store('programs/testimonials', 'public');
+        } elseif (!empty($testimonyImageUrl)) {
+            $data['testimony_image'] = $testimonyImageUrl;
+        } elseif (empty($data['testimony_image'])) {
+            unset($data['testimony_image']);
+        }
+
         Program::create($data);
 
         return redirect()->route('admin.programs.index')->with('success', 'Program created successfully.');
@@ -66,7 +81,7 @@ class ProgramController extends Controller
     public function update(Request $request, Program $program)
     {
         $data = $request->validate([
-            'title'            => ['required', 'string', 'max:255'],
+            'title'            => ['required', 'string', 'max:255', 'unique:programs,title,' . $program->id],
             'description'      => ['nullable', 'string'],
             'full_description' => ['nullable', 'string'],
             'image'            => ['nullable', 'image', 'max:2048'],
@@ -77,6 +92,10 @@ class ProgramController extends Controller
             'stats'            => ['nullable', 'array'],
             'stats.*.value'    => ['nullable', 'string'],
             'stats.*.label'    => ['nullable', 'string'],
+            'testimony_name'   => ['nullable', 'string', 'max:255'],
+            'testimony_story'  => ['nullable', 'string'],
+            'testimony_image'  => ['nullable', 'image', 'max:2048'],
+            'testimony_image_url' => ['nullable', 'url', 'max:2048'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
@@ -106,6 +125,23 @@ class ProgramController extends Controller
         } else {
             // Keep existing image
             unset($data['image']);
+        }
+
+        $testimonyImageUrl = $request->input('testimony_image_url');
+        unset($data['testimony_image_url']);
+
+        if ($request->hasFile('testimony_image')) {
+            if ($program->testimony_image && !str_starts_with($program->testimony_image, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($program->testimony_image);
+            }
+            $data['testimony_image'] = $request->file('testimony_image')->store('programs/testimonials', 'public');
+        } elseif (!empty($testimonyImageUrl)) {
+            if ($program->testimony_image && !str_starts_with($program->testimony_image, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($program->testimony_image);
+            }
+            $data['testimony_image'] = $testimonyImageUrl;
+        } else {
+            unset($data['testimony_image']);
         }
 
         $program->update($data);

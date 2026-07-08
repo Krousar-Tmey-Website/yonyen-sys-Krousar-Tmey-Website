@@ -61,6 +61,40 @@
                 </div>
             </div>
 
+            {{-- Testimony Settings --}}
+            <div class="pt-4 mt-2 border-t border-gray-100">
+                <h3 class="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wider">Testimony</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Name & Subtitle</label>
+                        <input type="text" name="testimony_name" value="{{ old('testimony_name') }}" placeholder="e.g. Davann, 17, welcomed in Siem Reap..."
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div x-data="{ testImage: 'upload' }">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="block text-sm font-medium text-gray-700">Testimony Image</label>
+                            <div class="flex items-center gap-1 bg-gray-100 p-0.5 rounded flex-shrink-0">
+                                <button type="button" @click="testImage = 'upload'" :class="testImage === 'upload' ? 'bg-white shadow-sm text-[#2d6fa3]' : 'text-gray-500 hover:text-gray-700'" class="px-2 py-1 text-[10px] font-medium rounded transition-all">File</button>
+                                <button type="button" @click="testImage = 'url'" :class="testImage === 'url' ? 'bg-white shadow-sm text-[#2d6fa3]' : 'text-gray-500 hover:text-gray-700'" class="px-2 py-1 text-[10px] font-medium rounded transition-all">URL</button>
+                            </div>
+                        </div>
+                        <div x-show="testImage === 'upload'">
+                            <input type="file" name="testimony_image" accept="image/*"
+                                   class="w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[#2d6fa3]/10 file:text-[#2d6fa3] hover:file:bg-[#2d6fa3]/20 border border-gray-200 rounded-xl p-1">
+                        </div>
+                        <div x-show="testImage === 'url'" style="display: none;">
+                            <input type="url" name="testimony_image_url" placeholder="https://example.com/image.jpg"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Story Content</label>
+                    <textarea name="testimony_story" rows="4" placeholder="Enter testimony story text here..."
+                              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('testimony_story') }}</textarea>
+                </div>
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Sort Order</label>

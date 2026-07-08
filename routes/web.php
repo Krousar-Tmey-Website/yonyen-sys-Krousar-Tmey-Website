@@ -31,10 +31,17 @@ Route::get('/who-we-are', function () {
 })->name('about');
 
 Route::get('/our-programs', function () {
-    $programs      = \App\Models\Program::active()->get();
-    $testimonials  = \App\Models\Testimonial::active()->get();
-    return view('programs', compact('programs', 'testimonials'));
+    $programs       = \App\Models\Program::active()->get();
+    $bannerTitle    = \App\Models\HomeSetting::getValue('programs_banner_title',   'Our Programs');
+    $bannerSubtitle = \App\Models\HomeSetting::getValue('programs_banner_subtitle', 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.');
+    $bannerImage    = \App\Models\HomeSetting::getValue('programs_banner_image',   '');
+    return view('programs', compact('programs', 'bannerTitle', 'bannerSubtitle', 'bannerImage'));
 })->name('programs');
+
+Route::get('/projects/{project}', function (\App\Models\Project $project) {
+    if (!$project->is_active) return abort(404);
+    return view('project', compact('project'));
+})->name('projects.show');
 
 Route::get('/get-involved', fn() => view('involved'))->name('involved');
 
@@ -72,6 +79,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     Route::get('home',  [Admin\HomeSettingController::class, 'index'])->name('home.index');
     Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
+
+    Route::get('programs-banner',  [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
+    Route::post('programs-banner', [Admin\ProgramsBannerController::class, 'update'])->name('programs-banner.update');
 
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create', 'edit']);
     Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
