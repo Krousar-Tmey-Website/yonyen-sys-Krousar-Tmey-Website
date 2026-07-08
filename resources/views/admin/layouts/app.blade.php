@@ -5,9 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin') — Krousar Thmey</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>[x-cloak] { display: none !important; }</style>
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .htmx-indicator { opacity: 0; transition: opacity 200ms ease-in;}
+        .htmx-request .htmx-indicator { opacity: 1; }
+        .htmx-request.htmx-indicator { opacity: 1; }
+        /* Smooth fade between pages */
+        body { transition: opacity 150ms ease-out; }
+        body.htmx-request { opacity: 0.6; }
+    </style>
 </head>
-<body class="h-full" x-data="{ sidebarOpen: false }">
+<body class="h-full" x-data="{ sidebarOpen: false }" hx-boost="true">
 
 <div class="flex h-full">
 
@@ -33,14 +42,19 @@
 
                 $groupActive = function($children) use ($currentRoute) {
                     foreach ($children as $child) {
+                        if (isset($child['is_active']) && $child['is_active']) return true;
                         $r = $child['route'] ?? '';
-                        if ($currentRoute && ($currentRoute === $r || str_starts_with($currentRoute, $r.'.'))) return true;
+                        if (!$r) continue;
+                        $baseRoute = str_ends_with($r, '.index') ? substr($r, 0, -6) : $r;
+                        if ($currentRoute && ($currentRoute === $r || str_starts_with($currentRoute, $baseRoute . '.'))) return true;
                     }
                     return false;
                 };
 
                 $childActive = function($route) use ($currentRoute) {
-                    return $currentRoute && ($currentRoute === $route || str_starts_with($currentRoute, $route.'.'));
+                    if (!$route) return false;
+                    $baseRoute = str_ends_with($route, '.index') ? substr($route, 0, -6) : $route;
+                    return $currentRoute && ($currentRoute === $route || str_starts_with($currentRoute, $baseRoute . '.'));
                 };
 
                 $navGroups = [
@@ -56,6 +70,9 @@
                         'children' => [
                             ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
                             ['route' => 'admin.home.index', 'label' => 'Home Settings'],
+                            ['route' => 'admin.projects.index', 'label' => 'Projects'],
+                            ['route' => 'admin.gallery.index', 'label' => 'Gallery'],
+                            ['route' => 'admin.testimonials.index', 'label' => 'Testimonials'],
                             ['route' => 'admin.impact.index', 'label' => 'Impact Statistics'],
                             ['route' => 'admin.stories.index', 'label' => 'Success Stories'],
                         ],
@@ -74,12 +91,16 @@
                     'programs' => [
                         'label' => 'Our Programs',
                         'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
-                        'children' => [
-                            ['route' => 'admin.programs.index', 'label' => 'Programs'],
-                            ['route' => 'admin.projects.index', 'label' => 'Projects'],
-                            ['route' => 'admin.gallery.index', 'label' => 'Gallery'],
-                            ['route' => 'admin.testimonials.index', 'label' => 'Testimonials'],
-                        ],
+                        'children' => array_merge(
+                            [['route' => 'admin.programs.index', 'label' => 'All Programs']],
+                            \App\Models\Program::orderBy('sort_order')->take(3)->get()->map(function($p) {
+                                return [
+                                    'url' => route('admin.programs.edit', $p),
+                                    'label' => $p->title,
+                                    'is_active' => request()->is('admin/programs/'.$p->id.'/edit')
+                                ];
+                            })->toArray()
+                        ),
                     ],
                     'news' => [
                         'label' => 'News & Resources',
@@ -178,13 +199,26 @@
                              class="space-y-0.5 mt-0.5 pl-2"
                              x-cloak>
                             @foreach($group['children'] as $child)
-                                @php $exists = $routeExists($child['route']); @endphp
-                                <a href="{{ $exists ? route($child['route']) : '#' }}"
+                                @php 
+                                    $linkUrl = '#';
+                                    $isActive = false;
+                                    $exists = true;
+
+                                    if(isset($child['url'])) {
+                                        $linkUrl = $child['url'];
+                                        $isActive = $child['is_active'] ?? false;
+                                    } elseif(isset($child['route'])) {
+                                        $exists = $routeExists($child['route']);
+                                        $linkUrl = $exists ? route($child['route']) : '#';
+                                        $isActive = $childActive($child['route']);
+                                    }
+                                @endphp
+                                <a href="{{ $linkUrl }}"
                                    {{ !$exists ? 'onclick="return false;"' : '' }}
                                    class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all
-                                          {{ $childActive($child['route']) ? 'bg-white/10 text-white font-medium' : 'text-white hover:bg-white/10' }}
+                                          {{ $isActive ? 'bg-white/10 text-white font-medium' : 'text-white hover:bg-white/10' }}
                                           {{ !$exists ? 'opacity-40 cursor-default' : '' }}">
-                                    <span class="w-1 h-1 rounded-full flex-shrink-0 {{ $childActive($child['route']) ? 'bg-white' : 'bg-white/50' }}"></span>
+                                    <span class="w-1 h-1 rounded-full flex-shrink-0 {{ $isActive ? 'bg-white' : 'bg-white/50' }}"></span>
                                     <span>{{ $child['label'] }}</span>
                                     @if(!$exists)
                                         <span class="ml-auto text-[10px] text-white/60">soon</span>

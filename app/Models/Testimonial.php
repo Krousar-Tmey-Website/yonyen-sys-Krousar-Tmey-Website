@@ -1,20 +1,16 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 
-class Program extends Model
+class Testimonial extends Model
 {
     protected $fillable = [
-        'title', 'slug', 'description', 'full_description',
-        'image', 'stats', 'sort_order', 'is_active', 'Status',
+        'name', 'label', 'role', 'content', 'story', 'image', 'is_active', 'sort_order',
     ];
 
     protected function casts(): array
     {
         return [
-            'stats'     => 'array',
             'is_active' => 'boolean',
         ];
     }
@@ -27,7 +23,7 @@ class Program extends Model
     public function getImageUrlAttribute(): string
     {
         if (!$this->image) {
-            return asset('images/program.jpg');
+            return asset('images/person-placeholder.jpg');
         }
         return str_starts_with($this->image, 'http')
             ? $this->image

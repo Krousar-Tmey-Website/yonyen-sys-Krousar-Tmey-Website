@@ -187,93 +187,39 @@
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
-
-            {{-- Program 1 --}}
+            @foreach($programs as $program)
             <div class="card group">
                 <div class="relative overflow-hidden h-56">
-                    <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80"
-                         alt="Child Welfare Program"
+                    <img src="{{ $program->image_url }}"
+                         alt="{{ $program->title }}"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>
-                    <span class="absolute top-4 left-4 bg-[#e8a020] text-white text-xs font-bold px-3 py-1 rounded-full">240 Children</span>
+                    @if($program->stats && count($program->stats) > 0)
+                    <span class="absolute top-4 left-4 bg-[#e8a020] text-white text-xs font-bold px-3 py-1 rounded-full">{{ $program->stats[0]['value'] }} {{ $program->stats[0]['label'] }}</span>
+                    @endif
                 </div>
                 <div class="p-7">
                     <div class="w-12 h-12 rounded-xl bg-[#1a3c6e]/10 flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-[#1a3c6e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                     </div>
-                    <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">Child Welfare Program</h3>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-5">
-                        Temporary protection centers, long-term facilities, family houses, and outreach to vulnerable street children and trafficking victims across Cambodia.
+                    <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $program->title }}</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-5 line-clamp-3">
+                        {{ $program->description }}
                     </p>
                     <ul class="space-y-1.5 mb-6">
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>2 temporary protection centers</li>
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>2 long-term centers</li>
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>2 family houses</li>
+                        @if($program->stats && count($program->stats) > 1)
+                            @foreach(array_slice($program->stats, 1, 3) as $stat)
+                            <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>{{ $stat['value'] }} {{ strtolower($stat['label']) }}</li>
+                            @endforeach
+                        @endif
                     </ul>
-                    <a href="{{ route('programs') }}#welfare" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
+                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
                         Learn More
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
                 </div>
             </div>
-
-            {{-- Program 2 --}}
-            <div class="card group">
-                <div class="relative overflow-hidden h-56">
-                    <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=600&q=80"
-                         alt="Special Education"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>
-                    <span class="absolute top-4 left-4 bg-[#e8a020] text-white text-xs font-bold px-3 py-1 rounded-full">768 Students</span>
-                </div>
-                <div class="p-7">
-                    <div class="w-12 h-12 rounded-xl bg-[#1a3c6e]/10 flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-[#1a3c6e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">Education for Deaf &amp; Blind</h3>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-5">
-                        Five specialized high schools across Cambodia provide full curricula for deaf and blind students, ensuring equal access to quality education.
-                    </p>
-                    <ul class="space-y-1.5 mb-6">
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>5 specialized high schools</li>
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>Sign language instruction</li>
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>Braille & assistive resources</li>
-                    </ul>
-                    <a href="{{ route('programs') }}#education" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
-                        Learn More
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </a>
-                </div>
-            </div>
-
-            {{-- Program 3 --}}
-            <div class="card group">
-                <div class="relative overflow-hidden h-56">
-                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80"
-                         alt="Cultural Development"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>
-                    <span class="absolute top-4 left-4 bg-[#e8a020] text-white text-xs font-bold px-3 py-1 rounded-full">1,088 Students</span>
-                </div>
-                <div class="p-7">
-                    <div class="w-12 h-12 rounded-xl bg-[#1a3c6e]/10 flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-[#1a3c6e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">Cultural &amp; Artistic Development</h3>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-5">
-                        The School of Khmer Arts and Culture preserves Cambodia's rich heritage by teaching traditional dance, music, and visual arts to the next generation.
-                    </p>
-                    <ul class="space-y-1.5 mb-6">
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>Traditional Khmer dance</li>
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>Classical music & shadow puppetry</li>
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>Visual arts & crafts</li>
-                    </ul>
-                    <a href="{{ route('programs') }}#culture" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
-                        Learn More
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </a>
-                </div>
-            </div>
+            @endforeach
         </div>
 
         <div class="text-center mt-12">
@@ -281,6 +227,53 @@
         </div>
     </div>
 </section>
+
+{{-- ===== PROJECTS ===== --}}
+@if($projects->count())
+<section class="py-16 lg:py-24 bg-white border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-14">
+            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Our Projects</span>
+            <h2 class="section-title mt-3 mx-auto">Cross-cutting Initiatives</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+            @foreach($projects as $project)
+            <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 hover:shadow-lg transition-shadow group">
+                @if($project->image)
+                <img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset('storage/' . $project->image) }}" class="w-full h-40 object-cover rounded-xl mb-5 group-hover:opacity-90 transition-opacity">
+                @endif
+                <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $project->title }}</h3>
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3">{{ $project->description }}</p>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+{{-- ===== GALLERY ===== --}}
+@if($galleries->count())
+<section class="py-16 lg:py-24 bg-[#1a3c6e]">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">In Pictures</span>
+            <h2 class="text-3xl font-bold text-white mt-3">A Glimpse Into Our Work</h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            @foreach($galleries as $photo)
+            <div class="group relative overflow-hidden rounded-xl aspect-square bg-white/5">
+                @if($photo->image)
+                <img src="{{ str_starts_with($photo->image, 'http') ? $photo->image : asset('storage/' . $photo->image) }}" alt="{{ $photo->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                @endif
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                    <p class="text-white font-medium text-sm">{{ $photo->title }}</p>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
 
 {{-- ===== NEWS ===== --}}
 <section class="py-20 lg:py-28 bg-white">
@@ -326,6 +319,37 @@
         </div>
     </div>
 </section>
+
+{{-- ===== TESTIMONIALS ===== --}}
+@if($testimonials->count())
+<section class="py-20 lg:py-28 bg-[#f8f9fc]">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-14">
+            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Voices</span>
+            <h2 class="section-title mt-3 mx-auto">What People Say</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+            @foreach($testimonials as $testimony)
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative">
+                <svg class="w-10 h-10 text-[#e8a020]/20 absolute top-6 right-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" /></svg>
+                <div class="flex items-center gap-4 mb-6 relative z-10">
+                    @if($testimony->image)
+                    <img src="{{ str_starts_with($testimony->image, 'http') ? $testimony->image : asset('storage/' . $testimony->image) }}" alt="{{ $testimony->name }}" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md">
+                    @else
+                    <div class="w-14 h-14 rounded-full bg-[#1a3c6e]/10 flex items-center justify-center text-[#1a3c6e] font-bold text-xl">{{ substr($testimony->name, 0, 1) }}</div>
+                    @endif
+                    <div>
+                        <h4 class="font-bold text-gray-800">{{ $testimony->name }}</h4>
+                        <p class="text-xs text-gray-500">{{ $testimony->role }}</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed text-sm italic line-clamp-4 relative z-10">"{{ $testimony->content }}"</p>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
 
 {{-- ===== CALL TO ACTION ===== --}}
 <section class="relative py-24 overflow-hidden">

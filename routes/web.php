@@ -14,10 +14,14 @@ use Illuminate\Support\Facades\Route;
 // ──────────────────────────────────────────────
 
 Route::get('/', function () {
-    $settings   = HomeSetting::allKeyed();
-    $latestNews = News::published()->latest('published_at')->take(3)->get();
-    $slides     = Slide::active()->get();
-    return view('home', compact('settings', 'latestNews', 'slides'));
+    $settings     = HomeSetting::allKeyed();
+    $latestNews   = News::published()->latest('published_at')->take(3)->get();
+    $slides       = Slide::active()->get();
+    $projects     = \App\Models\Project::where('is_active', true)->take(3)->get();
+    $testimonials = \App\Models\Testimonial::where('is_active', true)->take(3)->get();
+    $galleries    = \App\Models\Gallery::where('is_active', true)->latest()->take(6)->get();
+    $programs     = \App\Models\Program::active()->take(3)->get();
+    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -27,8 +31,9 @@ Route::get('/who-we-are', function () {
 })->name('about');
 
 Route::get('/our-programs', function () {
-    $programs = \App\Models\Program::active()->get();
-    return view('programs', compact('programs'));
+    $programs      = \App\Models\Program::active()->get();
+    $testimonials  = \App\Models\Testimonial::active()->get();
+    return view('programs', compact('programs', 'testimonials'));
 })->name('programs');
 
 Route::get('/get-involved', fn() => view('involved'))->name('involved');
@@ -61,6 +66,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     Route::resource('news',     Admin\NewsController::class);
     Route::resource('programs', Admin\ProgramController::class)->except(['show']);
+    Route::resource('projects', Admin\ProjectController::class)->except(['show']);
+    Route::resource('gallery', Admin\GalleryController::class)->except(['show']);
+    Route::resource('testimonials', Admin\TestimonialController::class)->except(['show']);
 
     Route::get('home',  [Admin\HomeSettingController::class, 'index'])->name('home.index');
     Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');

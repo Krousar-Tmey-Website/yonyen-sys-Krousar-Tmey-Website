@@ -26,15 +26,31 @@ class ProgramController extends Controller
             'description'      => ['nullable', 'string'],
             'full_description' => ['nullable', 'string'],
             'image'            => ['nullable', 'image', 'max:2048'],
+            'image_url'        => ['nullable', 'url', 'max:2048'],
             'sort_order'       => ['nullable', 'integer'],
             'is_active'        => ['nullable', 'boolean'],
+            'Status'           => ['nullable', 'string', 'max:255'],
+            'stats'            => ['nullable', 'array'],
+            'stats.*.value'    => ['nullable', 'string'],
+            'stats.*.label'    => ['nullable', 'string'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
         $data['slug'] = \Illuminate\Support\Str::slug($data['title']);
 
+        // Clean & encode stats
+        $rawStats = $request->input('stats', []);
+        $data['stats'] = collect($rawStats)
+            ->filter(fn($s) => !empty($s['value']) || !empty($s['label']))
+            ->values()->toArray();
+
+        $imageUrl = $data['image_url'] ?? null;
+        unset($data['image_url']);
+
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('programs', 'public');
+        } elseif (!empty($imageUrl)) {
+            $data['image'] = $imageUrl;
         }
 
         Program::create($data);
@@ -54,15 +70,42 @@ class ProgramController extends Controller
             'description'      => ['nullable', 'string'],
             'full_description' => ['nullable', 'string'],
             'image'            => ['nullable', 'image', 'max:2048'],
+            'image_url'        => ['nullable', 'url', 'max:2048'],
             'sort_order'       => ['nullable', 'integer'],
             'is_active'        => ['nullable', 'boolean'],
+            'Status'           => ['nullable', 'string', 'max:255'],
+            'stats'            => ['nullable', 'array'],
+            'stats.*.value'    => ['nullable', 'string'],
+            'stats.*.label'    => ['nullable', 'string'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
         $data['slug'] = \Illuminate\Support\Str::slug($data['title']);
 
+        // Clean & encode stats
+        $rawStats = $request->input('stats', []);
+        $data['stats'] = collect($rawStats)
+            ->filter(fn($s) => !empty($s['value']) || !empty($s['label']))
+            ->values()->toArray();
+
+        $imageUrl = $data['image_url'] ?? null;
+        unset($data['image_url']);
+
         if ($request->hasFile('image')) {
+            // Delete old image from storage
+            if ($program->image && !str_starts_with($program->image, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($program->image);
+            }
             $data['image'] = $request->file('image')->store('programs', 'public');
+        } elseif (!empty($imageUrl)) {
+            // Delete old image if switching to URL
+            if ($program->image && !str_starts_with($program->image, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($program->image);
+            }
+            $data['image'] = $imageUrl;
+        } else {
+            // Keep existing image
+            unset($data['image']);
         }
 
         $program->update($data);
