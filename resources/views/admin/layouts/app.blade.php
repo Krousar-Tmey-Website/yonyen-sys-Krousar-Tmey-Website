@@ -56,20 +56,86 @@
             @endforeach
         </nav>
 
-        {{-- User --}}
-        <div class="px-4 py-4 border-t border-white/10">
+        {{-- User + Logout Modal --}}
+        <div class="px-4 py-4 border-t border-white/10"
+             x-data="{ logoutModal: false, logoutForm: null }"
+             @keydown.window.escape="logoutModal = false">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-white text-xs font-medium truncate max-w-[120px]">{{ auth()->user()->name }}</p>
                     <p class="text-white/40 text-xs truncate max-w-[120px]">{{ auth()->user()->email }}</p>
                 </div>
-                <form action="{{ route('admin.logout') }}" method="POST">
+
+                {{-- Logout trigger button --}}
+                <form action="{{ route('admin.logout') }}" method="POST" x-ref="logoutForm">
                     @csrf
-                    <button type="submit" title="Logout"
+                    <button type="button" title="Sign Out"
+                            @click="logoutForm = $refs.logoutForm; logoutModal = true"
                             class="text-white/40 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                     </button>
                 </form>
+            </div>
+
+            {{-- Logout Confirmation Modal --}}
+            <div x-show="logoutModal"
+                 x-cloak
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+                 @click.self="logoutModal = false">
+
+                <div x-show="logoutModal"
+                     x-cloak
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                     x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+                     @click.away="logoutModal = false"
+                     class="relative bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 w-full max-w-sm text-center">
+
+                    {{-- Close button --}}
+                    <button type="button" @click="logoutModal = false"
+                        class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-400 hover:text-gray-600 flex items-center justify-center transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    {{-- Icon --}}
+                    <div class="mx-auto w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                        <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </div>
+
+                    {{-- Title --}}
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Sign Out</h3>
+
+                    {{-- Message --}}
+                    <p class="text-sm text-gray-500 mb-6">
+                        Are you sure you want to sign out?
+                    </p>
+
+                    {{-- Buttons --}}
+                    <div class="flex items-center gap-3">
+                        <button type="button" @click="logoutModal = false"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition">
+                            Cancel
+                        </button>
+                        <button type="button" @click="logoutForm.submit()"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded-xl transition shadow-sm">
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </aside>
