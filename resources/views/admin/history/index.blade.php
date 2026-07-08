@@ -58,7 +58,7 @@
                         @foreach($events as $event)
                         <tr>
                             <td>
-                                <span class="font-bold text-[#2d6fa3]">{{ $event->year }}</span>
+                                <span class="history-year">{{ $event->year }}</span>
                             </td>
                             <td>
                                 <span class="text-sm text-gray-600">{{ $event->side == 'left' ? 'Left' : 'Right' }}</span>
