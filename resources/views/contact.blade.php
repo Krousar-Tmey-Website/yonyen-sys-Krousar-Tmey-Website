@@ -79,40 +79,10 @@
 
             {{-- Right: Contact Form --}}
             <div class="lg:col-span-3">
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10 relative"
-                     x-data="{ showPopup: {{ session('success') ? 'true' : 'false' }} }">
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10 relative">
 
                     <h2 class="text-xl font-bold text-[#1a3c6e] mb-2">Send Us a Message</h2>
                     <p class="text-gray-500 text-sm mb-8">We'll get back to you within 2 business days.</p>
-
-                    {{-- Success Popup Notification --}}
-                    <div x-show="showPopup"
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 -translate-y-4 scale-95"
-                         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                         x-transition:leave="transition ease-in duration-200"
-                         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                         x-transition:leave-end="opacity-0 -translate-y-4 scale-95"
-                         @click.outside="showPopup = false"
-                         class="absolute top-6 left-6 right-6 z-10 bg-green-50 border-2 border-green-200 rounded-2xl p-6 shadow-xl"
-                         x-cloak>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <h3 class="font-bold text-green-800">Message Sent Successfully!</h3>
-                                <p class="text-green-600 text-sm mt-1">We will get back to you within 2 business days.</p>
-                            </div>
-                            <button @click="showPopup = false" class="text-green-400 hover:text-green-600 transition-colors flex-shrink-0">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
 
                     {{-- Contact Form --}}
                     <form method="POST" action="{{ route('contact.store') }}" class="space-y-5">
