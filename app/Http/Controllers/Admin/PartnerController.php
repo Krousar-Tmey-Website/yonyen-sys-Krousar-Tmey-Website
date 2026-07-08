@@ -10,7 +10,7 @@ class PartnerController extends Controller
 {
     public function index()
     {
-        $partners = Partner::orderBy('category')->orderBy('sort_order')->orderBy('name')->get()->groupBy('category');
+        $partners = Partner::orderBy('category')->orderBy('sort_order')->orderBy('name')->get()->groupBy('category', false);
         return view('admin.partners.index', compact('partners'));
     }
 
@@ -47,7 +47,7 @@ class PartnerController extends Controller
 
     public function destroy(Partner $partner)
     {
-        $partner->delete();
+        $partner->delete(['*']);
         return redirect()->route('admin.partners.index')->with('success', 'Partner removed.');
     }
 }

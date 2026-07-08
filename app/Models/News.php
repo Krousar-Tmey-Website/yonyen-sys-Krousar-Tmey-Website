@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -32,7 +33,7 @@ class News extends Model
                 $slug = $baseSlug;
                 $counter = 1;
                 
-                while (static::where('slug', $slug)->exists()) {
+                while (static::where('slug', $slug, '=', true)->exists()) {
                     $slug = $baseSlug . '-' . $counter;
                     $counter++;
                 }
@@ -53,7 +54,7 @@ class News extends Model
         });
     }
 
-    public function scopePublished($query)
+    public function scopePublished(Builder $query)
     {
         return $query->where('is_published', true);
     }
@@ -69,7 +70,7 @@ class News extends Model
     }
 
     // Ensure links is always returned as an array
-    public function getLinksAttribute($value)
+    public function getLinksAttribute(mixed $value)
     {
         if (is_null($value) || $value === '') {
             return [];
