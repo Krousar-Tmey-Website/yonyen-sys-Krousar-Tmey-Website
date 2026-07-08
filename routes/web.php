@@ -9,9 +9,10 @@ use App\Models\Partner;
 use App\Models\Award;
 use App\Models\Program;
 use App\Models\Slide;
+use App\Models\HistoryEvent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\Admin\HistoryController;
 
 // ──────────────────────────────────────────────
 // Public pages
@@ -25,9 +26,11 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/who-we-are', function () {
+    $history  = HistoryEvent::orderBy('year', 'desc')->get();
     $partners = Partner::where('is_active', true)->latest()->get()->groupBy('category');
     $awards   = Award::ordered()->get();
-    return view('about', compact('partners', 'awards'));
+
+    return view('about', compact('history', 'partners', 'awards'));
 })->name('about');
 
 Route::get('/our-programs', function () {
@@ -73,12 +76,19 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Categories
     Route::resource('categories', CategoryController::class);
 
-    // Partner Management
+    // Partners
     Route::resource('partners', Admin\PartnerController::class)
-        ->except(['create',]);
+        ->except(['create']);
 
+    // Awards
     Route::resource('awards', Admin\AwardController::class)
         ->except(['create', 'edit']);
 
-    Route::resource('slides', Admin\SlideController::class);
+    // Slides
+    Route::resource('slides', Admin\SlideController::class)
+        ->except(['show']);
+
+    // History
+    Route::resource('history', HistoryController::class)
+        ->except(['show']);
 });
