@@ -28,21 +28,21 @@
 
             {{-- Left: Offices --}}
             <div class="lg:col-span-2">
-                <h2 class="text-xl font-bold text-[#1a3c6e] mb-6">Our Offices</h2>
+                    <h2 class="text-xl font-bold text-[#1a3c6e] mb-6">Our Offices</h2>
                 <div class="space-y-3">
                     @foreach([
-                        ['id' => 'cambodia', 'flag' => '🇰🇭', 'country' => 'Cambodia', 'city' => 'Phnom Penh (HQ)',
-                         'address' => '#58, Street 478, Phnom Penh, Cambodia',
-                         'phone' => '+855 (0)23 211 955', 'email' => 'info@krousar-thmey.org'],
-                        ['id' => 'france', 'flag' => '🇫🇷', 'country' => 'France', 'city' => 'Paris',
-                         'address' => '75, rue de la Roquette, 75011 Paris, France',
-                         'phone' => '+33 (0)1 43 14 84 84', 'email' => 'france@krousar-thmey.org'],
-                        ['id' => 'switzerland', 'flag' => '🇨🇭', 'country' => 'Switzerland', 'city' => 'Geneva',
-                         'address' => 'Case Postale 3018, 1211 Geneva 3, Switzerland',
-                         'phone' => '+41 (0)79 456 78 90', 'email' => 'suisse@krousar-thmey.org'],
-                        ['id' => 'singapore', 'flag' => '🇸🇬', 'country' => 'Singapore', 'city' => 'Singapore',
-                         'address' => '10 Anson Road, #27-15, Singapore 079903',
-                         'phone' => '+65 6123 4567', 'email' => 'singapore@krousar-thmey.org'],
+                        ['id' => 'cambodia', 'flag' => '🇰🇭', 'country' => 'Cambodia', 'city' => '',
+                         'address' => "Krousar Thmey Cambodia\n#145 street 132, Toeuk Laâk I, Toul Kork\nPhnom Penh - PO Box 1393",
+                         'phone' => '+855 (0)23 880 502', 'email' => 'communication@krousar-thmey.org'],
+                        ['id' => 'france', 'flag' => '🇫🇷', 'country' => 'France', 'city' => '',
+                         'address' => "Krousar Thmey France\n62 rue Greneta\n75002 Paris",
+                         'phone' => '01 40 13 06 30', 'email' => 'france@krousar-thmey.org'],
+                        ['id' => 'singapore', 'flag' => '🇸🇬', 'country' => 'Singapore', 'city' => '',
+                         'address' => "Krousar Thmey Singapore\n29 Leonie Hill, Horizon Towers West\nApt 13-04\nSingapore",
+                         'phone' => '+65 98 506 438', 'email' => 'singapore@krousar-thmey.org'],
+                        ['id' => 'switzerland', 'flag' => '🇨🇭', 'country' => 'Switzerland', 'city' => '',
+                         'address' => "Krousar Thmey Switzerland\nc/o Mme Sylvie Bédat\nRoute de Florissant 89 A\n1206 Geneva",
+                         'phone' => '+41 79 203 70 82', 'email' => 'switzerland@krousar-thmey.org'],
                     ] as $loc)
                     <button @click="office = '{{ $loc['id'] }}'"
                             :class="office === '{{ $loc['id'] }}' ? 'border-[#1a3c6e] bg-white shadow-md' : 'border-gray-100 bg-white hover:border-gray-200'"
@@ -80,7 +80,8 @@
             {{-- Right: Contact Form --}}
             <div class="lg:col-span-3">
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10 relative"
-                     x-data="{ showPopup: {{ session('success') ? 'true' : 'false' }} }">
+                     x-data="{ showPopup: {{ session('success') ? 'true' : 'false' }} }"
+                     x-init="if (showPopup) { setTimeout(() => showPopup = false, 5000) }">
 
                     <h2 class="text-xl font-bold text-[#1a3c6e] mb-2">Send Us a Message</h2>
                     <p class="text-gray-500 text-sm mb-8">We'll get back to you within 2 business days.</p>
@@ -88,26 +89,26 @@
                     {{-- Success Popup Notification --}}
                     <div x-show="showPopup"
                          x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 -translate-y-4 scale-95"
+                         x-transition:enter-start="opacity-0 -translate-y-2 scale-95"
                          x-transition:enter-end="opacity-100 translate-y-0 scale-100"
                          x-transition:leave="transition ease-in duration-200"
                          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                         x-transition:leave-end="opacity-0 -translate-y-4 scale-95"
+                         x-transition:leave-end="opacity-0 -translate-y-2 scale-95"
                          @click.outside="showPopup = false"
-                         class="absolute top-6 left-6 right-6 z-10 bg-green-50 border-2 border-green-200 rounded-2xl p-6 shadow-xl"
+                         class="fixed right-4 top-4 z-50 w-[calc(100%-2rem)] max-w-sm rounded-xl border border-green-200 bg-white/95 p-3 shadow-lg backdrop-blur"
                          x-cloak>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-start gap-3">
+                            <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100">
+                                <svg class="h-4 w-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
                             </div>
-                            <div class="flex-1 min-w-0">
-                                <h3 class="font-bold text-green-800">Message Sent Successfully!</h3>
-                                <p class="text-green-600 text-sm mt-1">We will get back to you within 2 business days.</p>
+                            <div class="min-w-0 flex-1">
+                                <h3 class="text-sm font-semibold text-green-900">Thank you for reaching out!</h3>
+                                <p class="mt-0.5 text-xs text-green-700">Your message has been received and our team will reply soon.</p>
                             </div>
-                            <button @click="showPopup = false" class="text-green-400 hover:text-green-600 transition-colors flex-shrink-0">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button @click="showPopup = false" class="flex-shrink-0 text-green-500 transition-colors hover:text-green-700">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                             </button>

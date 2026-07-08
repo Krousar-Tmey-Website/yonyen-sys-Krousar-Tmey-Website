@@ -27,7 +27,7 @@ class ContactInquiryController extends Controller
             $query->where('TargetEntity', $entity);
         }
 
-        $inquiries = $query->latest('ReceivedDate')->paginate(15);
+        $inquiries = $query->latest('ReceivedDate')->paginate(8);
 
         return view('admin.contacts.index', compact('inquiries'));
     }
