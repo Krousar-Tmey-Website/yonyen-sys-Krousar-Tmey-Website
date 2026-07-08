@@ -115,9 +115,11 @@
                              x-transition:leave-start="opacity-100 translate-y-0"
                              x-transition:leave-end="opacity-0 translate-y-1"
                              class="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                             @php $navProgramsList = \App\Models\Program::active()->take(3)->get(); @endphp
+                             @php 
+                                 $navProgramsList = \App\Models\Program::active()->take(3)->get(); 
+                             @endphp
                              @foreach($navProgramsList as $index => $navProg)
-                             <a href="{{ route('programs') }}#{{ $navProg->slug }}" class="dropdown-item {{ $index === 0 ? 'rounded-t-xl' : '' }} {{ $index === count($navProgramsList) - 1 ? 'rounded-b-xl' : '' }}">{{ $navProg->title }}</a>
+                             <a href="{{ route('programs.show', $navProg->slug) }}" class="dropdown-item {{ $index === 0 ? 'rounded-t-xl' : '' }} {{ $index === count($navProgramsList) - 1 ? 'rounded-b-xl' : '' }}">{{ $navProg->title }}</a>
                              @endforeach
                         </div>
                     </div>

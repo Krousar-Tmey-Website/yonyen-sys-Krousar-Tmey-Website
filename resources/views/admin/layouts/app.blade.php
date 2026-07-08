@@ -104,7 +104,8 @@
                             })->toArray(),
                             [
                                 ['route' => 'admin.projects.index', 'label' => 'All Projects'],
-                                ['route' => 'admin.projects.create', 'label' => 'Add Project']
+                                ['route' => 'admin.projects.create', 'label' => 'Add Project'],
+                                ['route' => 'admin.program-pages.index', 'label' => 'Additional Pages'],
                             ]
                         ),
                     ],

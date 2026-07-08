@@ -35,12 +35,23 @@ Route::get('/who-we-are', function () {
 })->name('about');
 
 Route::get('/our-programs', function () {
-    $programs       = Program::active()->get();
+    $programs       = Program::active()->with(['projects' => function($q){ $q->where('is_active', true)->orderBy('id'); }])->get();
     $bannerTitle    = HomeSetting::getValue('programs_banner_title',   'Our Programs');
     $bannerSubtitle = HomeSetting::getValue('programs_banner_subtitle', 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.');
     $bannerImage    = HomeSetting::getValue('programs_banner_image',   '');
     return view('programs', compact('programs', 'bannerTitle', 'bannerSubtitle', 'bannerImage'));
 })->name('programs');
+
+Route::get('/our-programs/{slug}', function ($slug) {
+    $program = Program::where('slug', $slug)->firstOrFail();
+    return redirect()->route('programs', ['#' . $program->slug]);
+})->name('programs.show');
+
+Route::get('/programs/item/{id}', function ($id) {
+    $item = App\Models\ProgramPageItem::findOrFail($id);
+    abort_if(!$item->is_active, 404);
+    return view('program_page_item', compact('item'));
+})->name('program-page-items.show');
 
 Route::get('/projects/{project}', function (Project $project) {
     if (!$project->is_active) return abort(404);
@@ -77,6 +88,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     Route::resource('news',     Admin\NewsController::class);
     Route::resource('programs', Admin\ProgramController::class)->except(['show']);
+    Route::resource('program-pages', Admin\ProgramPageController::class)->parameters(['program-pages' => 'item']);
+    
     Route::resource('projects', Admin\ProjectController::class)->except(['show']);
     Route::resource('gallery', Admin\GalleryController::class)->except(['show']);
     Route::resource('testimonials', Admin\TestimonialController::class)->except(['show']);

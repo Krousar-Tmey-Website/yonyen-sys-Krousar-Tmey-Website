@@ -11,19 +11,22 @@
         ? 'background-image: linear-gradient(to right, rgba(26,60,110,0.90) 50%, rgba(26,60,110,0.65)), url(' . (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) . '); background-size: cover; background-position: center;'
         : '';
 @endphp
-<div class="bg-[#1a3c6e] pt-16 pb-20 relative overflow-hidden" style="{{ $bannerBgStyle }}">
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
-    </div>
+<div class="bg-[#1a3c6e] pt-16 pb-24 relative overflow-hidden" style="{{ $bannerBgStyle }}">
+    <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/3"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#2d6fa3]/30 translate-y-1/2 -translate-x-1/4"></div>
     <div class="relative max-w-7xl mx-auto px-6">
-        <nav class="flex items-center gap-2 text-sm text-white/60 mb-8">
+        <nav class="flex items-center gap-2 text-sm text-white/50 mb-10 flex-wrap">
             <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-white">Our Programs</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span class="text-white/80">Our Programs</span>
         </nav>
-        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ $bannerTitle }}</h1>
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-5">
+            <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
+            <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">Krousar Thmey</span>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-black text-white mb-5 uppercase tracking-wide">{{ $bannerTitle }}</h1>
         @if($bannerSubtitle)
-        <p class="text-white/70 text-lg max-w-2xl">{{ $bannerSubtitle }}</p>
+        <p class="text-white/60 text-lg max-w-2xl leading-relaxed">{{ $bannerSubtitle }}</p>
         @endif
     </div>
 </div>
@@ -35,11 +38,16 @@
         <div class="grid md:grid-cols-{{ $progCount }} gap-6 {{ $progCount < 3 ? 'max-w-4xl mx-auto' : '' }}">
             @php $colors = ['bg-[#1a3c6e]', 'bg-[#e8a020]', 'bg-[#2d6fa3]']; @endphp
             @foreach($programs->take(3) as $index => $prog)
-            <a href="#{{ $prog->slug }}" class="{{ $colors[$index % 3] }} rounded-2xl p-7 text-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[140px] group">
-                <div class="text-2xl font-bold mb-1">
-                    {{ $prog->Status ?: '&nbsp;' }}
+            <a href="#{{ $prog->slug }}" class="{{ $colors[$index % 3] }} rounded-2xl p-7 text-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[160px] group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2"></div>
+                <div class="text-3xl font-black mb-2 relative">{{ $prog->Status ?: '&nbsp;' }}</div>
+                <div class="relative">
+                    <div class="font-bold text-white/80 group-hover:text-white transition-colors text-sm uppercase tracking-wide">{{ $prog->title }}</div>
+                    <div class="mt-3 flex items-center gap-1.5 text-white/50 group-hover:text-white/80 transition-colors text-xs font-semibold">
+                        View program
+                        <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </div>
                 </div>
-                <div class="font-semibold text-white/80 group-hover:text-white transition-colors mt-auto">{{ $prog->title }}</div>
             </a>
             @endforeach
         </div>
@@ -155,29 +163,36 @@
 
         {{-- Projects specific to this program --}}
         @if($program->projects && $program->projects->count() > 0)
-        <div id="projects-{{ $program->slug }}" class="mt-20 border-t border-gray-200 pt-16">
-            <h3 class="text-[#1a3c6e] font-black text-lg uppercase tracking-wider mb-10 text-left">DISCOVER THE PROJECTS OF THIS PROGRAM</h3>
+        <div id="projects-{{ $program->slug }}" class="mt-20 pt-16 border-t border-gray-200">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="w-1.5 h-8 bg-[#d32f2f] rounded-full"></div>
+                <span class="text-xs font-bold text-[#1a3c6e] uppercase tracking-widest">Discover the Projects</span>
+                <div class="flex-1 h-px bg-gray-100"></div>
+            </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($program->projects as $project)
-                <div class="card flex flex-col group shadow-sm">
-                    <div class="overflow-hidden h-44 relative">
+                <a href="{{ route('projects.show', $project) }}" class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                    <div class="overflow-hidden h-44 relative bg-[#1a3c6e]/5">
                         <img src="{{ $project->image_url }}" alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#1a3c6e]/50 to-transparent"></div>
                     </div>
-                    <div class="p-6 flex flex-col flex-1 items-center text-center px-4">
-                        <h4 class="text-xs font-bold text-gray-800 uppercase tracking-wide mb-4 leading-relaxed min-h-[36px] flex items-center justify-center">{{ $project->title }}</h4>
-                        <p class="text-gray-500 text-xs leading-relaxed mb-6 flex-1 w-full">{{ $project->description }}</p>
-                        
-                        <div class="w-full space-y-2 mt-auto">
-                            <a href="{{ route('donate') }}" class="flex items-center justify-center gap-2 w-full py-2 border-2 border-[#d32f2f] text-[#d32f2f] hover:bg-red-50 transition-colors text-xs font-bold bg-white rounded-full">
-                                <span class="text-[#d32f2f]">↗</span> DONATE NOW
-                            </a>
-                            <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center justify-center gap-2 w-full py-2 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white transition-colors text-xs font-bold rounded-full mt-1">
-                                Read More Detail
+                    <div class="p-5 flex flex-col flex-1">
+                        <h4 class="text-xs font-bold text-[#1a3c6e] uppercase tracking-wide mb-2 leading-relaxed group-hover:text-[#2d6fa3] transition-colors">{{ $project->title }}</h4>
+                        @if($project->description)
+                        <p class="text-gray-500 text-xs leading-relaxed flex-1 mb-4">{{ Str::limit($project->description, 100) }}</p>
+                        @endif
+                        <div class="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
+                            <span class="inline-flex items-center gap-1 text-[#2d6fa3] text-xs font-semibold group-hover:gap-2 transition-all">
+                                Read More
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            </span>
+                            <a href="{{ route('donate') }}" onclick="event.stopPropagation()"
+                               class="text-xs font-bold text-[#d32f2f] hover:text-red-700 transition-colors">
+                                Donate ↗
                             </a>
                         </div>
                     </div>
-                </div>
+                </a>
                 @endforeach
             </div>
         </div>
@@ -186,27 +201,31 @@
 </section>
 @endforeach
 
-{{-- Additional Projects --}}
+{{-- Additional Programs (4th+) --}}
 @if($programs->count() > 3)
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14">
-            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Cross-cutting Work</span>
-            <h2 class="section-title mt-3 mx-auto">Additional Projects</h2>
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/10 border border-[#e8a020]/20 mb-4">
+                <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
+                <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">Cross-cutting Work</span>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide">Additional Programs</h2>
+            <div class="w-16 h-1 bg-[#d32f2f] mx-auto mt-4 rounded-full"></div>
         </div>
         <div class="grid md:grid-cols-2 gap-6">
-            @php $colors = ['bg-[#1a3c6e]', 'bg-[#e8a020]']; @endphp
+            @php $extraColors = ['bg-[#1a3c6e]', 'bg-[#2d6fa3]']; @endphp
             @foreach($programs->skip(3) as $index => $program)
-            <div class="bg-[#f8f9fc] rounded-2xl p-8 border border-gray-100">
-                <div class="w-12 h-12 rounded-xl {{ $colors[$index % 2] }} flex items-center justify-center mb-5">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <div class="bg-[#f8f9fc] rounded-2xl p-8 border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl {{ $extraColors[$index % 2] }} flex items-center justify-center mb-5">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 </div>
                 @if($program->Status)
-                <div class="text-[#e8a020] font-semibold text-sm mb-2">
-                    {{ $program->Status }}
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e8a020]/10 border border-[#e8a020]/20 mb-3">
+                    <span class="text-[#e8a020] font-semibold text-xs">{{ $program->Status }}</span>
                 </div>
                 @endif
-                <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $program->title }}</h3>
+                <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-wide mb-3">{{ $program->title }}</h3>
                 <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{{ $program->description }}</p>
             </div>
             @endforeach
@@ -215,13 +234,76 @@
 </section>
 @endif
 
+{{-- Additional Pages --}}
+@php $additionalItems = \App\Models\ProgramPageItem::active()->orderBy('sort_order')->get(); @endphp
+@if($additionalItems->count() > 0)
+<section class="py-20 bg-[#f8f9fc]">
+    <div class="max-w-7xl mx-auto px-6">
+
+        {{-- Section Header --}}
+        <div class="text-center mb-14">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/10 border border-[#e8a020]/20 mb-4">
+                <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
+                <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">Learn More</span>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide">Additional Information</h2>
+            <div class="w-16 h-1 bg-[#d32f2f] mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach($additionalItems as $item)
+            <a href="{{ route('program-page-items.show', $item->id) }}"
+               class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full hover:-translate-y-1">
+
+                {{-- Image --}}
+                @if($item->image)
+                <div class="h-52 overflow-hidden relative bg-[#1a3c6e]/5">
+                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#1a3c6e]/50 to-transparent"></div>
+                </div>
+                @else
+                <div class="h-32 bg-gradient-to-br from-[#1a3c6e] to-[#2d6fa3] flex items-center justify-center">
+                    <svg class="w-10 h-10 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+                @endif
+
+                {{-- Body --}}
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="text-base font-bold text-[#1a3c6e] mb-2 leading-snug group-hover:text-[#2d6fa3] transition-colors">{{ $item->title }}</h3>
+                    @if($item->short_content)
+                    <p class="text-gray-500 text-sm leading-relaxed flex-1 mb-5">{{ Str::limit($item->short_content, 130) }}</p>
+                    @endif
+
+                    {{-- Footer --}}
+                    <div class="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <span class="inline-flex items-center gap-1.5 text-[#2d6fa3] text-xs font-semibold group-hover:gap-2.5 transition-all">
+                            Read More
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </span>
+                        <span class="w-7 h-7 rounded-full bg-[#2d6fa3]/10 group-hover:bg-[#2d6fa3] flex items-center justify-center transition-colors">
+                            <svg class="w-3.5 h-3.5 text-[#2d6fa3] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        </span>
+                    </div>
+                </div>
+            </a>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 {{-- CTA --}}
-<section class="relative py-20 overflow-hidden">
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80')] bg-cover bg-center"></div>
-    <div class="absolute inset-0 bg-[#1a3c6e]/90"></div>
-    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Support Our Programs</h2>
-        <p class="text-white/70 mb-8">Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.</p>
+<section class="relative py-20 overflow-hidden bg-[#1a3c6e]">
+    <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#2d6fa3]/20 -translate-y-1/2 translate-x-1/4"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a]/10 translate-y-1/2 -translate-x-1/4"></div>
+    <div class="relative max-w-4xl mx-auto px-6 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8da83a]/20 border border-[#8da83a]/30 mb-6">
+            <div class="w-1.5 h-1.5 rounded-full bg-[#8da83a]"></div>
+            <span class="text-[#8da83a] font-semibold text-xs uppercase tracking-widest">Support Our Mission</span>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-wide mb-4">Help Children in Cambodia</h2>
+        <p class="text-white/60 text-base mb-10 max-w-xl mx-auto leading-relaxed">Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="{{ route('donate') }}" class="btn-primary">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
