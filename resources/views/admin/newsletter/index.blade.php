@@ -5,13 +5,10 @@
 @section('breadcrumb', 'Manage email subscribers for newsletter communications')
 
 @section('content')
-
-    {{-- Stats Card --}}
-    
     {{-- Top actions --}}
     <div class="flex items-center justify-end mb-6">
         <a href="{{ route('admin.newsletter.export') }}"
-           class="inline-flex items-center gap-1 px-3 py-1.5 bg-[#8da83a] text-white text-xs font-medium rounded-lg hover:bg-[#a3c04a] transition-all">
+            class="inline-flex items-center gap-1 px-3 py-1.5 bg-[#8da83a] text-white text-xs font-medium rounded-lg hover:bg-[#a3c04a] transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -19,42 +16,45 @@
             Export CSV
         </a>
     </div>
-    <div class="bg-white rounded-2xl border border-gray-100 p-5 mb-6">
-        <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-[#2d6fa3]/10 flex items-center justify-center flex-shrink-0">
-                <svg class="w-6 h-6 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="flex flex-col lg:flex-row gap-4 mb-6">
+    {{-- Total Subscribers --}}
+    <div class="w-full lg:w-1/2 bg-white border border-gray-100 rounded-xl p-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-[#2d6fa3]/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
             </div>
             <div>
                 <p class="text-2xl font-bold text-gray-800">{{ $totalCount }}</p>
-                <p class="text-xs text-gray-400">Total Subscribers</p>
+                <p class="text-sm text-gray-500">Total Subscribers</p>
             </div>
         </div>
     </div>
     {{-- Search --}}
-    <div class="bg-white rounded-2xl border border-gray-100 p-5 mb-6">
+    <div class="w-full lg:w-1/2 bg-white border border-gray-100 rounded-xl p-4">
         <form method="GET" action="{{ route('admin.newsletter.index') }}" id="searchForm">
-            <div class="flex flex-col sm:flex-row items-start sm:items-end gap-4">
-                {{-- Search by Email --}}
-                <div class="flex-[2] w-full">
-                    <label for="email" class="block text-xs font-medium text-gray-500 mb-1">Search by Email</label>
-                    <input type="text" name="email" id="email" value="{{ request('email') }}"
-                        placeholder="Search email..." autocomplete="off"
-                        class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/20 transition-all text-sm"
-                        oninput="debouncedSearch(this)">
-                </div>
+            <div class="flex flex-col gap-3">
+                <label for="searchEmail" class="text-sm text-gray-500">Search by email</label>
+                <div class="flex items-center gap-3">
+                    <input
+                        id="searchEmail"
+                        type="text"
+                        name="email"
+                        value="{{ request('email') }}"
+                        placeholder="Search by email..."
+                        autocomplete="off"
+                        oninput="debouncedSearch(this)"
+                        class="flex-1 px-4 py-2 text-sm border border-gray-200 rounded-lg focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/20">
 
-                {{-- Action Buttons --}}
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    @if (request('email'))
+                    <button type="submit"
+                        class="px-4 py-2 text-sm font-medium text-white bg-[#2d6fa3] rounded-lg hover:bg-[#245a87] transition-all">
+                        Search
+                    </button>
+                    @if(request('email'))
                         <a href="{{ route('admin.newsletter.index') }}"
-                            class="inline-flex items-center gap-1 px-3 py-1.5 border border-gray-200 text-gray-500 text-xs font-medium rounded-lg hover:bg-gray-50 transition-all">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
+                            class="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50">
                             Reset
                         </a>
                     @endif
@@ -62,7 +62,7 @@
             </div>
         </form>
     </div>
-
+</div>
     <script>
         let searchTimeout;
 
@@ -118,8 +118,7 @@
                                     {{ $subscriber->subscribed_at?->format('d M Y') ?? '—' }}
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <form method="POST" action="{{ route('admin.newsletter.destroy', $subscriber) }}"
-                                        onsubmit="return confirm('Delete this subscriber?');">
+                                    <form method="POST" action="{{ route('admin.newsletter.destroy', $subscriber) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"

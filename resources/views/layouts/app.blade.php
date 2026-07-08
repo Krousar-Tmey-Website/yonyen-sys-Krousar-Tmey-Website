@@ -270,8 +270,10 @@
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Stay Connected</h4>
                     <p class="text-white/50 text-sm mb-4">Subscribe for updates on our work in Cambodia.</p>
-                    <form class="flex gap-2" onsubmit="return false;">
-                        <input type="email" placeholder="Your email"
+                    <form method="POST" action="{{ route('newsletter.store') }}" class="flex gap-2">
+                        @csrf
+                        <input name="email" type="email" placeholder="Your email"
+                               required
                                class="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#8da83a] transition-colors">
                         <button type="submit"
                                 class="px-4 py-2 bg-[#8da83a] rounded-lg text-white text-sm font-medium hover:bg-[#a3c04a] transition-colors flex-shrink-0">
@@ -300,5 +302,33 @@
         </div>
     </footer>
 
-</body>
+    @if($msg = (session('success') ?? session('info')))
+        <div x-data="{ show: true }"
+             x-show="show"
+             x-init="setTimeout(() => show = false, 5000)"
+             x-cloak
+             class="fixed top-5 left-5 z-50"
+             role="status" aria-live="polite">
+            <div
+                class="max-w-md w-full bg-white rounded-lg shadow-lg border border-gray-100 text-gray-700">
+                <div class="p-4 flex items-start gap-3">
+                    <div class="flex-shrink-0 mt-0.5">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <div class="flex-1 text-sm">
+                        {{ is_string($msg) ? $msg : 'Action completed successfully.' }}
+                    </div>
+                    <button @click="show = false" class="text-gray-400 hover:text-gray-600 ml-2">
+                        <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    </body>
 </html>
