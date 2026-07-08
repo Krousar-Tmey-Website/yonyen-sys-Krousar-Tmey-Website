@@ -56,7 +56,7 @@
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 0;">
+                <div class="form-group form-group--no-margin">
                     <label class="form-label">Excerpt <span class="optional">(optional)</span></label>
                     <textarea name="excerpt" rows="3" class="form-control textarea"
                               placeholder="Short summary for article cards...">{{ old('excerpt', $news->excerpt) }}</textarea>
@@ -77,7 +77,7 @@
                 <h3>Content</h3>
             </div>
             <div class="card-body">
-                <div class="form-group" style="margin-bottom: 0;">
+                <div class="form-group form-group--no-margin">
                     <textarea name="content" rows="16" class="form-control content"
                               placeholder="Write your article content here...">{{ old('content', $news->content) }}</textarea>
                     @error('content')<div class="form-error">{{ $message }}</div>@enderror
@@ -107,7 +107,7 @@
                     <div class="form-helper">Add related links that will appear in the article.</div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 0;">
+                <div class="form-group form-group--no-margin">
                     <label class="form-label">Added Links</label>
                     <div class="links-container" id="linksContainer">
                         @if(!empty($news->links))
@@ -148,7 +148,7 @@
                         <img src="{{ $news->image_url }}" alt="Current image">
                         <div class="image-info">
                             <strong>Current cover image</strong>
-                            <div style="font-size:12px; color:#94a3b8; margin-top:2px;">Replace below if needed</div>
+                            <div class="text-small-info">Replace below if needed</div>
                         </div>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
                 </div>
 
                 {{-- Publishing Options --}}
-                <div class="form-group" style="margin-bottom: 0;">
+                <div class="form-group form-group--no-margin">
                     <div class="form-grid">
                         <div class="publish-option">
                             <input type="checkbox" name="is_published" id="is_published" value="1" 
@@ -190,7 +190,7 @@
                                 <div class="info-title">Draft vs Published</div>
                                 <div class="info-desc">Drafts are only visible to admins.</div>
                                 @if($news->published_at)
-                                <div style="font-size:11px; color:#3b82f6; opacity:0.6; margin-top:2px;">
+                                <div class="text-published-date">
                                     Published since {{ $news->published_at->format('d M Y') }}
                                 </div>
                                 @endif
@@ -215,7 +215,7 @@
 </div>
 
 {{-- Delete Form (separate from main form) --}}
-<div class="form-actions" style="justify-content: flex-end; margin-top: 16px;">
+<div class="form-actions form-actions--delete">
     <form action="{{ route('admin.news.destroy', $news) }}" method="POST"
           onsubmit="return confirm('⚠️ Permanently delete this article?\n\nThis action cannot be undone.')"
           class="inline delete-form">

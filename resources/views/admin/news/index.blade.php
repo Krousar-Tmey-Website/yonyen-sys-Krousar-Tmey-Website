@@ -74,11 +74,11 @@
         <table class="table-custom">
             <thead>
                 <tr>
-                    <th style="width: 40%;">Article</th>
-                    <th style="width: 15%;">Category</th>
-                    <th style="width: 13%;">Status</th>
-                    <th style="width: 17%;">Published</th>
-                    <th style="width: 15%; text-align: right;">Actions</th>
+                    <th class="th-width-40">Article</th>
+                    <th class="th-width-15">Category</th>
+                    <th class="th-width-13">Status</th>
+                    <th class="th-width-17">Published</th>
+                    <th class="th-width-15 th-text-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
