@@ -10,16 +10,17 @@
 
 <body class="min-h-screen bg-[#1d4e7a] flex items-center justify-center p-4">
 
-    <div class="w-full max-w-sm">
-        {{-- Logo --}}
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center bg-white rounded-2xl p-4 shadow-xl mb-5">
-                <img src="{{ asset('images/logo.png') }}" alt="Krousar Thmey" class="h-16 w-auto"
-                    onerror="this.parentElement.innerHTML='<span class=\'text-[#2d6fa3] font-black text-2xl\'>KT</span>'">
-            </div>
-            <h1 class="text-white font-bold text-2xl">Krousar Thmey</h1>
-            <p class="text-white/50 text-sm mt-1">Admin Panel</p>
+<div class="w-full max-w-sm">
+    {{-- Logo --}}
+    <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center bg-white rounded-2xl p-4 shadow-xl mb-5">
+            @php $loginLogoPath = data_get($settings ?? [], 'site_logo', 'images/logo.png'); @endphp
+            <img src="{{ str_starts_with($loginLogoPath, 'http') ? $loginLogoPath : (str_starts_with($loginLogoPath, 'logos/') ? asset('storage/' . $loginLogoPath) : asset($loginLogoPath)) }}" alt="{{ data_get($settings ?? [], 'site_name', 'Krousar Thmey') }}" class="h-16 w-auto"
+                 onerror="this.parentElement.innerHTML='<span class=\'text-[#2d6fa3] font-black text-2xl\'>KT</span>'">
         </div>
+        <h1 class="text-white font-bold text-2xl">Krousar Thmey</h1>
+        <p class="text-white/50 text-sm mt-1">Admin Panel</p>
+    </div>
 
         {{-- Card --}}
         <div class="bg-white rounded-3xl shadow-2xl p-8">

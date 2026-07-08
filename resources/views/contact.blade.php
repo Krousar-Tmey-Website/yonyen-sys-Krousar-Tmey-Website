@@ -28,22 +28,17 @@
 
             {{-- Left: Offices --}}
             <div class="lg:col-span-2">
-                <h2 class="text-xl font-bold text-[#1a3c6e] mb-6">Our Offices</h2>
+                    <h2 class="text-xl font-bold text-[#1a3c6e] mb-6">Our Offices</h2>
                 <div class="space-y-3">
-                    @foreach([
-                        ['id' => 'cambodia', 'flag' => '🇰🇭', 'country' => 'Cambodia', 'city' => 'Phnom Penh (HQ)',
-                         'address' => '#58, Street 478, Phnom Penh, Cambodia',
-                         'phone' => '+855 (0)23 211 955', 'email' => 'info@krousar-thmey.org'],
-                        ['id' => 'france', 'flag' => '🇫🇷', 'country' => 'France', 'city' => 'Paris',
-                         'address' => '75, rue de la Roquette, 75011 Paris, France',
-                         'phone' => '+33 (0)1 43 14 84 84', 'email' => 'france@krousar-thmey.org'],
-                        ['id' => 'switzerland', 'flag' => '🇨🇭', 'country' => 'Switzerland', 'city' => 'Geneva',
-                         'address' => 'Case Postale 3018, 1211 Geneva 3, Switzerland',
-                         'phone' => '+41 (0)79 456 78 90', 'email' => 'suisse@krousar-thmey.org'],
-                        ['id' => 'singapore', 'flag' => '🇸🇬', 'country' => 'Singapore', 'city' => 'Singapore',
-                         'address' => '10 Anson Road, #27-15, Singapore 079903',
-                         'phone' => '+65 6123 4567', 'email' => 'singapore@krousar-thmey.org'],
-                    ] as $loc)
+                    @php
+                    $countries = [
+                        ['id' => 'cambodia',    'flag' => '🇰🇭', 'country' => 'Cambodia',    'city' => ''],
+                        ['id' => 'france',      'flag' => '🇫🇷', 'country' => 'France',      'city' => ''],
+                        ['id' => 'singapore',   'flag' => '🇸🇬', 'country' => 'Singapore',   'city' => ''],
+                        ['id' => 'switzerland','flag' => '🇨🇭', 'country' => 'Switzerland', 'city' => ''],
+                    ];
+                    @endphp
+                    @foreach($countries as $loc)
                     <button @click="office = '{{ $loc['id'] }}'"
                             :class="office === '{{ $loc['id'] }}' ? 'border-[#1a3c6e] bg-white shadow-md' : 'border-gray-100 bg-white hover:border-gray-200'"
                             class="w-full text-left p-5 rounded-2xl border-2 transition-all duration-200">
@@ -59,17 +54,22 @@
                         </div>
 
                         <div x-show="office === '{{ $loc['id'] }}'" class="mt-4 space-y-2 pt-4 border-t border-gray-100">
+                            @php
+                                $cAddr = $settings['contact_'.$loc['id'].'_address'] ?? $loc['address'] ?? '';
+                                $cPhone = $settings['contact_'.$loc['id'].'_phone'] ?? $loc['phone'] ?? '';
+                                $cEmail = $settings['contact_'.$loc['id'].'_email'] ?? $loc['email'] ?? '';
+                            @endphp
                             <p class="text-gray-600 text-xs flex items-start gap-2">
                                 <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                {{ $loc['address'] }}
+                                {!! nl2br(e($cAddr)) !!}
                             </p>
                             <p class="text-gray-600 text-xs flex items-center gap-2">
                                 <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                {{ $loc['phone'] }}
+                                {{ $cPhone }}
                             </p>
                             <p class="text-gray-600 text-xs flex items-center gap-2">
                                 <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                {{ $loc['email'] }}
+                                {{ $cEmail }}
                             </p>
                         </div>
                     </button>
@@ -79,56 +79,105 @@
 
             {{-- Right: Contact Form --}}
             <div class="lg:col-span-3">
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10 relative">
+
+                    @php
+                        $successMsg = session('success');
+                        if ($successMsg === true || $successMsg === '1' || $successMsg === 1) {
+                            $successMsg = 'Your message has been received. We will get back to you soon.';
+                        }
+                        $errorMsg = session('error');
+                        $notifMsg = $successMsg ?: $errorMsg;
+                        $notifType = $successMsg ? 'success' : ($errorMsg ? 'error' : null);
+                    @endphp
+                    @if($notifType)
+                    <div x-data="{ show: true }"
+                         x-init="setTimeout(() => show = false, 4000)"
+                         x-show="show"
+                         x-transition:enter="transition ease-out duration-400"
+                         x-transition:enter-start="opacity-0 -translate-y-3"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-300"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 -translate-y-3"
+                         class="flex items-center gap-3 px-5 py-3.5 rounded-xl text-sm font-medium shadow-lg mb-6
+                                {{ $notifType === 'success' ? 'bg-[#2d6fa3] text-white' : 'bg-red-500 text-white' }}">
+                        @if($notifType === 'success')
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        @else
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        @endif
+                        <span>{{ $notifMsg }}</span>
+                    </div>
+                    @endif
+
                     <h2 class="text-xl font-bold text-[#1a3c6e] mb-2">Send Us a Message</h2>
                     <p class="text-gray-500 text-sm mb-8">We'll get back to you within 2 business days.</p>
 
-                    <form class="space-y-5" onsubmit="return false;">
+                    {{-- Contact Form --}}
+                    <form method="POST" action="{{ route('contact.store') }}" class="space-y-5">
+                        @csrf
                         <div class="grid md:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">First Name *</label>
-                                <input type="text" placeholder="John"
-                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                                <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1.5">First Name *</label>
+                                <input type="text" name="first_name" id="first_name" value="{{ old('first_name') }}" required
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors @error('first_name') border-red-300 @enderror"
+                                       placeholder="John">
+                                @error('first_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Last Name *</label>
-                                <input type="text" placeholder="Doe"
-                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                                <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1.5">Last Name *</label>
+                                <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}" required
+                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors @error('last_name') border-red-300 @enderror"
+                                       placeholder="Doe">
+                                @error('last_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Email Address *</label>
-                            <input type="email" placeholder="john@example.com"
-                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email Address *</label>
+                            <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors @error('email') border-red-300 @enderror"
+                                   placeholder="john@example.com">
+                            @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Organisation (optional)</label>
-                            <input type="text" placeholder="Your organization"
-                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                            <label for="organisation" class="block text-sm font-medium text-gray-700 mb-1.5">Organisation (optional)</label>
+                            <input type="text" name="organisation" id="organisation" value="{{ old('organisation') }}"
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors"
+                                   placeholder="Your organization">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Subject *</label>
-                            <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors bg-white">
+                            <label for="subject" class="block text-sm font-medium text-gray-700 mb-1.5">Subject *</label>
+                            <select name="subject" id="subject" required
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors bg-white @error('subject') border-red-300 @enderror">
                                 <option value="">Select a topic</option>
-                                <option>Donation</option>
-                                <option>Partnership / Sponsorship</option>
-                                <option>Volunteering</option>
-                                <option>Job Application</option>
-                                <option>Media / Press</option>
-                                <option>General Enquiry</option>
+                                <option value="Donation" {{ old('subject') === 'Donation' ? 'selected' : '' }}>Donation</option>
+                                <option value="Partnership / Sponsorship" {{ old('subject') === 'Partnership / Sponsorship' ? 'selected' : '' }}>Partnership / Sponsorship</option>
+                                <option value="Volunteering" {{ old('subject') === 'Volunteering' ? 'selected' : '' }}>Volunteering</option>
+                                <option value="Job Application" {{ old('subject') === 'Job Application' ? 'selected' : '' }}>Job Application</option>
+                                <option value="Media / Press" {{ old('subject') === 'Media / Press' ? 'selected' : '' }}>Media / Press</option>
+                                <option value="General Enquiry" {{ old('subject') === 'General Enquiry' ? 'selected' : '' }}>General Enquiry</option>
                             </select>
+                            @error('subject') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Message *</label>
-                            <textarea rows="5" placeholder="Your message..."
-                                      class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors resize-none"></textarea>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1.5">Message *</label>
+                            <textarea name="message" id="message" rows="5" required
+                                      class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors resize-none @error('message') border-red-300 @enderror"
+                                      placeholder="Your message...">{{ old('message') }}</textarea>
+                            @error('message') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div class="flex items-start gap-3">
-                            <input type="checkbox" id="consent" class="mt-0.5 rounded accent-[#1a3c6e]">
+                            <input type="checkbox" name="consent" id="consent" value="1" class="mt-0.5 rounded accent-[#1a3c6e]" {{ old('consent') ? 'checked' : '' }}>
                             <label for="consent" class="text-gray-500 text-xs leading-relaxed">
                                 I agree to Krousar Thmey storing my contact information to respond to my enquiry, in accordance with their privacy policy.
                             </label>
                         </div>
+                        @error('consent') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         <button type="submit" class="btn-blue w-full justify-center py-4 rounded-xl text-base">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                             Send Message

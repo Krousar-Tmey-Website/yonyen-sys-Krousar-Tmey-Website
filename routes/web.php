@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\VolunteerController;
 use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Award;
+use App\Models\PageSection;
+use App\Models\Program;
 use App\Models\Slide;
 use App\Models\HistoryEvent;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +26,19 @@ Route::get('/', function () {
     $settings   = HomeSetting::allKeyed();
     $latestNews = News::published()->latest('published_at')->take(3)->get();
     $slides     = Slide::active()->get();
-    return view('home', compact('settings', 'latestNews', 'slides'));
+
+    // Homepage programs are static: only the two main program cards should appear.
+    $programs = Program::whereIn('slug', ['child-welfare', 'special-education'])
+        ->where('is_active', true)
+        ->orderByRaw("FIELD(slug, 'child-welfare','special-education')")
+        ->get();
+
+    $pageSections = PageSection::with(['images', 'links'])
+        ->where('active', true)
+        ->orderBy('order')
+        ->get();
+
+    return view('home', compact('settings', 'latestNews', 'slides', 'programs', 'pageSections'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -40,7 +56,20 @@ Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::get('/resources', fn() => view('resources'))->name('resources');
-Route::get('/contact',   fn() => view('contact'))->name('contact');
+Route::get('/contact',  [ContactController::class, 'show'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+Route::get('/volunteer',  [VolunteerController::class, 'show'])->name('volunteer');
+Route::post('/volunteer', [VolunteerController::class, 'store'])->name('volunteer.store');
+
+Route::get('/partners', function () {
+    $partners = Partner::active()
+        ->where('category', 'organizations')
+        ->orderBy('sort_order')
+        ->orderBy('name')
+        ->get();
+    return view('partners', compact('partners'));
+})->name('partners');
 
 Route::get('/donate',  [DonationController::class, 'show'])->name('donate');
 Route::post('/donate', [DonationController::class, 'send'])->name('donate.send');
@@ -56,29 +85,43 @@ Route::post('/admin/logout', [Admin\AuthController::class, 'logout'])->name('adm
 // ──────────────────────────────────────────────
 // Admin — Protected panel
 // ──────────────────────────────────────────────
-
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
-    // Dashboard
-    Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [Admin\DashboardController::class, 'index'])
+        ->name('dashboard');
 
-    // News - use resource with explicit names
     Route::resource('news', Admin\NewsController::class);
+    Route::resource('programs', Admin\ProgramController::class)
+        ->only(['index', 'edit', 'update']);
 
-    // Categories - use resource with explicit names
-    Route::resource('categories', CategoryController::class)->except(['show']);
+    Route::get('home', [Admin\HomeSettingController::class, 'index'])
+        ->name('home.index');
+    Route::post('home', [Admin\HomeSettingController::class, 'update'])
+        ->name('home.update');
 
-    // Programs
-    Route::resource('programs', Admin\ProgramController::class)->only(['index', 'edit', 'update']);
-
-    // Home Settings
-    Route::get('home',  [Admin\HomeSettingController::class, 'index'])->name('home.index');
-    Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
-
-    // Partners, Awards, Slides
-    Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create', 'edit']);
+    Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create']);
     Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
     Route::resource('slides',   Admin\SlideController::class)->except(['show']);
+    Route::resource('users',    Admin\UserController::class)->except(['show']);
+    Route::resource('page-sections', Admin\PageSectionController::class)
+        ->except(['show']);
+    // Partner Management
 
-    // History
-    Route::resource('history', HistoryController::class)->except(['show']);
+    Route::get('website', [Admin\WebsiteController::class, 'index'])
+        ->name('website.index');
+    Route::post('website', [Admin\WebsiteController::class, 'update'])
+        ->name('website.update');
+
+    Route::prefix('volunteers')->name('volunteers.')->group(function () {
+        Route::get('/',           [Admin\VolunteerController::class, 'index'])->name('index');
+        Route::get('{volunteer}', [Admin\VolunteerController::class, 'show'])->name('show');
+        Route::patch('{volunteer}/status', [Admin\VolunteerController::class, 'updateStatus'])->name('status');
+        Route::delete('{volunteer}',       [Admin\VolunteerController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('contacts')->name('contacts.')->group(function () {
+        Route::get('/',                      [Admin\ContactInquiryController::class, 'index'])->name('index');
+        Route::get('{contactInquiry}',       [Admin\ContactInquiryController::class, 'show'])->name('show');
+        Route::patch('{contactInquiry}/status', [Admin\ContactInquiryController::class, 'updateStatus'])->name('status');
+        Route::delete('{contactInquiry}',       [Admin\ContactInquiryController::class, 'destroy'])->name('destroy');
+    });
 });
