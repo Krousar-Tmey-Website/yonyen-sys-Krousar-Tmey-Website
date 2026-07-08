@@ -10,7 +10,7 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        $programs = Program::orderBy('sort_order')->get();
+        $programs = Program::orderBy('id')->get();
         return view('admin.programs.index', compact('programs'));
     }
 
@@ -27,26 +27,22 @@ class ProgramController extends Controller
             'full_description' => ['nullable', 'string'],
             'image'            => ['nullable', 'image', 'max:2048'],
             'image_url'        => ['nullable', 'url', 'max:2048'],
-            'sort_order'       => ['nullable', 'integer'],
+            'sort_order'       => ['prohibited'],
             'is_active'        => ['nullable', 'boolean'],
             'Status'           => ['nullable', 'string', 'max:255'],
-            'stats'            => ['nullable', 'array'],
-            'stats.*.value'    => ['nullable', 'string'],
-            'stats.*.label'    => ['nullable', 'string'],
             'testimony_name'   => ['nullable', 'string', 'max:255'],
             'testimony_story'  => ['nullable', 'string'],
             'testimony_image'  => ['nullable', 'image', 'max:2048'],
             'testimony_image_url' => ['nullable', 'url', 'max:2048'],
+            'facebook_url'     => ['nullable', 'url', 'max:2048'],
+            'linkedin_url'     => ['nullable', 'url', 'max:2048'],
+            'instagram_url'    => ['nullable', 'url', 'max:2048'],
+            'telegram_url'     => ['nullable', 'url', 'max:2048'],
+            'youtube_url'      => ['nullable', 'url', 'max:2048'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
         $data['slug'] = \Illuminate\Support\Str::slug($data['title']);
-
-        // Clean & encode stats
-        $rawStats = $request->input('stats', []);
-        $data['stats'] = collect($rawStats)
-            ->filter(fn($s) => !empty($s['value']) || !empty($s['label']))
-            ->values()->toArray();
 
         $imageUrl = $data['image_url'] ?? null;
         unset($data['image_url']);
@@ -86,26 +82,22 @@ class ProgramController extends Controller
             'full_description' => ['nullable', 'string'],
             'image'            => ['nullable', 'image', 'max:2048'],
             'image_url'        => ['nullable', 'url', 'max:2048'],
-            'sort_order'       => ['nullable', 'integer'],
+            'sort_order'       => ['prohibited'],
             'is_active'        => ['nullable', 'boolean'],
             'Status'           => ['nullable', 'string', 'max:255'],
-            'stats'            => ['nullable', 'array'],
-            'stats.*.value'    => ['nullable', 'string'],
-            'stats.*.label'    => ['nullable', 'string'],
             'testimony_name'   => ['nullable', 'string', 'max:255'],
             'testimony_story'  => ['nullable', 'string'],
             'testimony_image'  => ['nullable', 'image', 'max:2048'],
             'testimony_image_url' => ['nullable', 'url', 'max:2048'],
+            'facebook_url'     => ['nullable', 'url', 'max:2048'],
+            'linkedin_url'     => ['nullable', 'url', 'max:2048'],
+            'instagram_url'    => ['nullable', 'url', 'max:2048'],
+            'telegram_url'     => ['nullable', 'url', 'max:2048'],
+            'youtube_url'      => ['nullable', 'url', 'max:2048'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
         $data['slug'] = \Illuminate\Support\Str::slug($data['title']);
-
-        // Clean & encode stats
-        $rawStats = $request->input('stats', []);
-        $data['stats'] = collect($rawStats)
-            ->filter(fn($s) => !empty($s['value']) || !empty($s['label']))
-            ->values()->toArray();
 
         $imageUrl = $data['image_url'] ?? null;
         unset($data['image_url']);

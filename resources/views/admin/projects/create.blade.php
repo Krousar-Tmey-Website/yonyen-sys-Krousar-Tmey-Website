@@ -4,7 +4,7 @@
 @section('breadcrumb', 'Add a new sub-page under a program')
 
 @section('content')
-<div class="max-w-3xl space-y-5">
+<div class="max-w-3xl mx-auto space-y-5">
 
     @if($errors->any())
     <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">

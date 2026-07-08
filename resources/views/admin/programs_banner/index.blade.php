@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div class="max-w-3xl space-y-6">
+<div class="max-w-3xl mx-auto space-y-6">
 
     {{-- Live Preview --}}
     @php

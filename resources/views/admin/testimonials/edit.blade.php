@@ -3,7 +3,7 @@
 @section('page-title', 'Edit Testimonial')
 
 @section('content')
-<div class="max-w-2xl">
+<div class="max-w-2xl mx-auto">
     <form action="{{ route('admin.testimonials.update', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf @method('PUT')
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">

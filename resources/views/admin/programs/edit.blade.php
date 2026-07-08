@@ -6,8 +6,22 @@
 
 @section('content')
 
-<div class="max-w-3xl">
-    <form action="{{ route('admin.programs.update', $program) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+<div class="max-w-3xl mx-auto space-y-5">
+
+    {{-- Header bar --}}
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-base font-bold text-gray-800">{{ $program->title }}</h2>
+            <p class="text-xs text-gray-400 mt-0.5">{{ $program->is_active ? 'Currently active on site' : 'Currently hidden from site' }}</p>
+        </div>
+        <a href="{{ route('programs') }}#{{ $program->slug }}" target="_blank"
+           class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#2d6fa3] border border-[#2d6fa3]/30 bg-[#2d6fa3]/5 hover:bg-[#2d6fa3]/10 rounded-xl transition-colors">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            View Live Page
+        </a>
+    </div>
+
+    <form action="{{ route('admin.programs.update', $program) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
         @csrf @method('PUT')
 
         @if($errors->any())
@@ -50,30 +64,6 @@
                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('full_description', $program->full_description) }}</textarea>
             </div>
 
-            {{-- Stats Editor --}}
-            <div x-data="{
-                stats: {{ json_encode($program->stats ?? [['value'=>'','label'=>'']]) }},
-                addStat() { this.stats.push({value:'',label:''}); },
-                removeStat(i) { this.stats.splice(i,1); }
-            }">
-                <div class="flex items-center justify-between mb-2">
-                    <label class="block text-sm font-medium text-gray-700">Statistics (shown as badges & bullet points)</label>
-                    <button type="button" @click="addStat()" class="text-xs text-[#2d6fa3] hover:underline">+ Add Stat</button>
-                </div>
-                <div class="space-y-2">
-                    <template x-for="(stat, i) in stats" :key="i">
-                        <div class="flex items-center gap-2">
-                            <input type="text" :name="'stats['+i+'][value]'" x-model="stat.value" placeholder="Value (e.g. 240)"
-                                   class="w-28 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                            <input type="text" :name="'stats['+i+'][label]'" x-model="stat.label" placeholder="Label (e.g. Children)"
-                                   class="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                            <button type="button" @click="removeStat(i)" class="text-red-400 hover:text-red-600 p-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                            </button>
-                        </div>
-                    </template>
-                </div>
-            </div>
 
             {{-- Testimony Settings --}}
             <div class="pt-4 mt-2 border-t border-gray-100">
@@ -124,20 +114,43 @@
                 </div>
             </div>
 
-            {{-- Sort Order & Active --}}
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Sort Order</label>
-                    <input type="number" name="sort_order" value="{{ old('sort_order', $program->sort_order) }}"
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                </div>
-                <div class="flex items-end pb-1">
-                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl w-full">
-                        <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $program->is_active) ? 'checked' : '' }}
-                               class="rounded border-gray-300 text-[#2d6fa3] w-4 h-4">
-                        <label for="is_active" class="text-sm font-medium text-gray-700">Active (visible on site)</label>
+            {{-- Social Media Links --}}
+            <div class="pt-4 mt-2 border-t border-gray-100">
+                <h3 class="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wider">Social Media Links</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Facebook URL</label>
+                        <input type="url" name="facebook_url" value="{{ old('facebook_url', $program->facebook_url) }}" placeholder="https://facebook.com/..."
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">LinkedIn URL</label>
+                        <input type="url" name="linkedin_url" value="{{ old('linkedin_url', $program->linkedin_url) }}" placeholder="https://linkedin.com/company/..."
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Instagram URL</label>
+                        <input type="url" name="instagram_url" value="{{ old('instagram_url', $program->instagram_url) }}" placeholder="https://instagram.com/..."
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Telegram URL</label>
+                        <input type="url" name="telegram_url" value="{{ old('telegram_url', $program->telegram_url) }}" placeholder="https://t.me/..."
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">YouTube URL</label>
+                        <input type="url" name="youtube_url" value="{{ old('youtube_url', $program->youtube_url) }}" placeholder="https://youtube.com/..."
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
                 </div>
+            </div>
+
+            {{-- Active toggle --}}
+            <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $program->is_active) ? 'checked' : '' }}
+                       class="rounded border-gray-300 text-[#2d6fa3] w-4 h-4">
+                <label for="is_active" class="text-sm font-medium text-gray-700">Active (visible on site)</label>
             </div>
 
             {{-- Current Image --}}
@@ -175,8 +188,14 @@
         <div class="flex items-center gap-3">
             <button type="submit" class="px-6 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-medium rounded-xl transition-colors">Save Changes</button>
             <a href="{{ route('admin.programs.index') }}" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</a>
+            <a href="{{ route('programs') }}#{{ $program->slug }}" target="_blank"
+               class="ml-auto flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                View live on Our Programs
+            </a>
         </div>
     </form>
 </div>
+
 
 @endsection

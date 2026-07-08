@@ -3,7 +3,7 @@
 @section('page-title', 'Create Testimonial')
 
 @section('content')
-<div class="max-w-2xl">
+<div class="max-w-2xl mx-auto">
     <form action="{{ route('admin.testimonials.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">

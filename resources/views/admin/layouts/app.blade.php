@@ -95,7 +95,7 @@
                                 ['route' => 'admin.programs.index',  'label' => 'All Programs'],
                                 ['route' => 'admin.programs-banner.index', 'label' => 'Page Banner'],
                             ],
-                            \App\Models\Program::orderBy('sort_order')->take(3)->get()->map(function($p) {
+                            \App\Models\Program::orderBy('id')->take(3)->get()->map(function($p) {
                                 return [
                                     'url' => route('admin.programs.edit', $p),
                                     'label' => $p->title,

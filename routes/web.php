@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\DonationController;
+use App\Models\Award;
+use App\Models\Gallery;
 use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
-use App\Models\Award;
+use App\Models\Program;
+use App\Models\Project;
 use App\Models\Slide;
+use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
 
 // ──────────────────────────────────────────────
@@ -17,10 +21,10 @@ Route::get('/', function () {
     $settings     = HomeSetting::allKeyed();
     $latestNews   = News::published()->latest('published_at')->take(3)->get();
     $slides       = Slide::active()->get();
-    $projects     = \App\Models\Project::where('is_active', true)->take(3)->get();
-    $testimonials = \App\Models\Testimonial::where('is_active', true)->take(3)->get();
-    $galleries    = \App\Models\Gallery::where('is_active', true)->latest()->take(6)->get();
-    $programs     = \App\Models\Program::active()->take(3)->get();
+    $projects     = Project::where('is_active', true)->take(3)->get();
+    $testimonials = Testimonial::where('is_active', true)->take(3)->get();
+    $galleries    = Gallery::where('is_active', true)->latest()->take(6)->get();
+    $programs     = Program::active()->take(3)->get();
     return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs'));
 })->name('home');
 
@@ -31,14 +35,14 @@ Route::get('/who-we-are', function () {
 })->name('about');
 
 Route::get('/our-programs', function () {
-    $programs       = \App\Models\Program::active()->get();
-    $bannerTitle    = \App\Models\HomeSetting::getValue('programs_banner_title',   'Our Programs');
-    $bannerSubtitle = \App\Models\HomeSetting::getValue('programs_banner_subtitle', 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.');
-    $bannerImage    = \App\Models\HomeSetting::getValue('programs_banner_image',   '');
+    $programs       = Program::active()->get();
+    $bannerTitle    = HomeSetting::getValue('programs_banner_title',   'Our Programs');
+    $bannerSubtitle = HomeSetting::getValue('programs_banner_subtitle', 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.');
+    $bannerImage    = HomeSetting::getValue('programs_banner_image',   '');
     return view('programs', compact('programs', 'bannerTitle', 'bannerSubtitle', 'bannerImage'));
 })->name('programs');
 
-Route::get('/projects/{project}', function (\App\Models\Project $project) {
+Route::get('/projects/{project}', function (Project $project) {
     if (!$project->is_active) return abort(404);
     return view('project', compact('project'));
 })->name('projects.show');

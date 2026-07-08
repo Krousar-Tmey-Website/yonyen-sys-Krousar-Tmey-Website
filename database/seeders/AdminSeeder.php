@@ -56,11 +56,11 @@ class AdminSeeder extends Seeder
 
         // ── Programs ──────────────────────────────────────────
         $programs = [
-            ['title' => 'Child Welfare',                       'slug' => 'child-welfare',     'image' => 'children.jpg',  'sort_order' => 1, 'description' => 'Providing safe family-based care for vulnerable and orphaned children.', 'stats' => [['label' => 'Children', 'value' => '240']]],
-            ['title' => 'Education for Deaf or Blind Children', 'slug' => 'special-education', 'image' => 'special-ed.jpg','sort_order' => 2, 'description' => 'Specialised schooling and integration into mainstream education.', 'stats' => [['label' => 'Students', 'value' => '768']]],
-            ['title' => 'Cultural and Artistic Development',    'slug' => 'cultural-arts',     'image' => 'cultural.jpg',  'sort_order' => 3, 'description' => 'Reconnecting children with Khmer traditions through arts and shadow theatre.', 'stats' => [['label' => 'Students', 'value' => '1,088']]],
-            ['title' => 'Academic and Career Counseling',       'slug' => 'career-counseling', 'image' => 'program.jpg',   'sort_order' => 4, 'description' => 'Supporting access to higher education, training, and employment.', 'stats' => [['label' => 'Students', 'value' => '357']]],
-            ['title' => 'Health and Hygiene',                   'slug' => 'health-hygiene',    'image' => 'hygiene.jpg',   'sort_order' => 5, 'description' => 'Promoting health education and sanitation practices.', 'stats' => []],
+            ['title' => 'Child Welfare',                       'slug' => 'child-welfare',     'image' => 'children.jpg',  'description' => 'Providing safe family-based care for vulnerable and orphaned children.', 'stats' => [['label' => 'Children', 'value' => '240']]],
+            ['title' => 'Education for Deaf or Blind Children', 'slug' => 'special-education', 'image' => 'special-ed.jpg','description' => 'Specialised schooling and integration into mainstream education.', 'stats' => [['label' => 'Students', 'value' => '768']]],
+            ['title' => 'Cultural and Artistic Development',    'slug' => 'cultural-arts',     'image' => 'cultural.jpg',  'description' => 'Reconnecting children with Khmer traditions through arts and shadow theatre.', 'stats' => [['label' => 'Students', 'value' => '1,088']]],
+            ['title' => 'Academic and Career Counseling',       'slug' => 'career-counseling', 'image' => 'program.jpg',   'description' => 'Supporting access to higher education, training, and employment.', 'stats' => [['label' => 'Students', 'value' => '357']]],
+            ['title' => 'Health and Hygiene',                   'slug' => 'health-hygiene',    'image' => 'hygiene.jpg',   'description' => 'Promoting health education and sanitation practices.', 'stats' => []],
         ];
 
         foreach ($programs as $prog) {
