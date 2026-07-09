@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,6 +13,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="bg-white text-gray-800" x-data>
 
     {{-- Top bar --}}
@@ -44,7 +46,7 @@
                     </a>
                 </div>
                 <a href="{{ route('donate') }}"
-                   class="bg-[#8da83a] text-white px-4 py-1 rounded-full font-semibold hover:bg-[#a3c04a] transition-colors text-xs">
+                    class="bg-[#8da83a] text-white px-4 py-1 rounded-full font-semibold hover:bg-[#a3c04a] transition-colors text-xs">
                     Donate
                 </a>
             </div>
@@ -53,7 +55,7 @@
 
     {{-- Main Navbar --}}
     <nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100"
-         x-data="{ open: false }">
+        x-data="{ open: false }">
 
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex items-center justify-between h-16 lg:h-20">
@@ -87,89 +89,101 @@
 
                     {{-- Who We Are --}}
                     <div class="relative" x-data="{ open: false }"
-                         @mouseenter="open = true" @mouseleave="open = false">
+                        @mouseenter="open = true" @mouseleave="open = false">
                         <button class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
                             Who We Are
                             <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
-                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
                         </button>
                         <div x-show="open"
-                             x-transition:enter="transition ease-out duration-150"
-                             x-transition:enter-start="opacity-0 translate-y-1"
-                             x-transition:enter-end="opacity-100 translate-y-0"
-                             x-transition:leave="transition ease-in duration-100"
-                             x-transition:leave-start="opacity-100 translate-y-0"
-                             x-transition:leave-end="opacity-0 translate-y-1"
-                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('about') }}"            class="dropdown-item rounded-t-xl">Presentation</a>
-                            <a href="{{ route('about') }}#history"    class="dropdown-item">History</a>
-                            <a href="{{ route('about') }}#values"     class="dropdown-item">Our Values</a>
-                            <a href="{{ route('about') }}#partners"   class="dropdown-item">Partners</a>
+                            x-transition:enter="transition ease-out duration-150"
+                            x-transition:enter-start="opacity-0 translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-100"
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 translate-y-1"
+                            class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
+                            <a href="{{ route('about') }}" class="dropdown-item rounded-t-xl">Presentation</a>
+                            <a href="{{ route('about') }}#history" class="dropdown-item">History</a>
+                            <a href="{{ route('about') }}#values" class="dropdown-item">Our Values</a>
+                            <a href="{{ route('about') }}#partners" class="dropdown-item">Partners</a>
                             <a href="{{ route('about') }}#transparency" class="dropdown-item rounded-b-xl">Transparency</a>
                         </div>
                     </div>
 
                     {{-- Our Programs --}}
                     <div class="relative" x-data="{ open: false }"
-                         @mouseenter="open = true" @mouseleave="open = false">
+                        @mouseenter="open = true" @mouseleave="open = false">
                         <button class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
                             Our Programs
                             <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
-                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
                         </button>
                         <div x-show="open"
-                             x-transition:enter="transition ease-out duration-150"
-                             x-transition:enter-start="opacity-0 translate-y-1"
-                             x-transition:enter-end="opacity-100 translate-y-0"
-                             x-transition:leave="transition ease-in duration-100"
-                             x-transition:leave-start="opacity-100 translate-y-0"
-                             x-transition:leave-end="opacity-0 translate-y-1"
-                             class="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('programs') }}#welfare"   class="dropdown-item rounded-t-xl">Child Welfare</a>
+                            x-transition:enter="transition ease-out duration-150"
+                            x-transition:enter-start="opacity-0 translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-100"
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 translate-y-1"
+                            class="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
+                            <a href="{{ route('programs') }}#welfare" class="dropdown-item rounded-t-xl">Child Welfare</a>
                             <a href="{{ route('programs') }}#education" class="dropdown-item">Education for Deaf &amp; Blind</a>
-                            <a href="{{ route('programs') }}#culture"   class="dropdown-item rounded-b-xl">Cultural Development</a>
+                            <a href="{{ route('programs') }}#culture" class="dropdown-item rounded-b-xl">Cultural Development</a>
                         </div>
                     </div>
 
                     {{-- Get Involved --}}
                     <div class="relative" x-data="{ open: false }"
-                         @mouseenter="open = true" @mouseleave="open = false">
+                        @mouseenter="open = true" @mouseleave="open = false">
                         <button class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
                             Get Involved
                             <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
-                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
                         </button>
                         <div x-show="open"
-                             x-transition:enter="transition ease-out duration-150"
-                             x-transition:enter-start="opacity-0 translate-y-1"
-                             x-transition:enter-end="opacity-100 translate-y-0"
-                             x-transition:leave="transition ease-in duration-100"
-                             x-transition:leave-start="opacity-100 translate-y-0"
-                             x-transition:leave-end="opacity-0 translate-y-1"
-                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('involved') }}#partner"  class="dropdown-item rounded-t-xl">Partnerships</a>
+                            x-transition:enter="transition ease-out duration-150"
+                            x-transition:enter-start="opacity-0 translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-100"
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 translate-y-1"
+                            class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
+                            <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">Partnerships</a>
                             <a href="{{ route('involved') }}#volunteer" class="dropdown-item">Volunteering</a>
-                            <a href="{{ route('involved') }}#jobs"     class="dropdown-item">Job Opportunities</a>
-                            <a href="{{ route('involved') }}#donate"   class="dropdown-item rounded-b-xl">Donate</a>
+                            <a href="{{ route('involved') }}#jobs" class="dropdown-item">Job Opportunities</a>
+                            <a href="{{ route('involved') }}#donate" class="dropdown-item rounded-b-xl">Donate</a>
                         </div>
                     </div>
 
-                    <a href="{{ route('news') }}"      class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">News</a>
+                    <a href="{{ route('news') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">News</a>
                     <a href="{{ route('resources') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">Resources</a>
-                    <a href="{{ route('contact') }}"   class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">Contact</a>
+                    <a href="{{ route('contact') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">Contact</a>
                 </div>
 
                 {{-- CTA + Mobile toggle --}}
                 <div class="flex items-center gap-3">
                     <a href="{{ route('donate') }}" class="btn-primary text-sm hidden sm:inline-flex">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
                         Donate
                     </a>
                     <button @click="open = !open"
-                            class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
-                            aria-label="Toggle menu">
-                        <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                        <svg x-show="open"  class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+                        aria-label="Toggle menu">
+                        <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -177,23 +191,25 @@
 
         {{-- Mobile Menu --}}
         <div x-show="open"
-             x-transition:enter="transition ease-out duration-200"
-             x-transition:enter-start="opacity-0 -translate-y-2"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             x-transition:leave="transition ease-in duration-150"
-             x-transition:leave-start="opacity-100 translate-y-0"
-             x-transition:leave-end="opacity-0 -translate-y-2"
-             class="lg:hidden border-t border-gray-100 bg-white">
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 -translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-2"
+            class="lg:hidden border-t border-gray-100 bg-white">
             <div class="max-w-7xl mx-auto px-6 py-4 space-y-1">
-                <a href="{{ route('about') }}"    class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Who We Are</a>
+                <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Who We Are</a>
                 <a href="{{ route('programs') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Our Programs</a>
                 <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Get Involved</a>
-                <a href="{{ route('news') }}"     class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">News</a>
-                <a href="{{ route('resources') }}"class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Resources</a>
-                <a href="{{ route('contact') }}"  class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Contact</a>
+                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">News</a>
+                <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Resources</a>
+                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Contact</a>
                 <div class="pt-3 pb-1">
                     <a href="{{ route('donate') }}" class="btn-primary w-full justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
                         Donate Now
                     </a>
                 </div>
@@ -215,7 +231,9 @@
                     <p class="text-white/80 mt-1 text-sm">100% of your donation directly supports children in Cambodia.</p>
                 </div>
                 <a href="{{ route('donate') }}" class="btn-outline flex-shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
                     Donate Now
                 </a>
             </div>
@@ -249,22 +267,23 @@
                         @endphp
                         @foreach($socialLinks as $social)
                         <a href="{{ $social['href'] }}" target="_blank" rel="noopener" aria-label="{{ $social['label'] }}"
-                           class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-[#8da83a] transition-colors">
+                            class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-[#8da83a] transition-colors">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">{!! $social['svg'] !!}</svg>
                         </a>
                         @endforeach
                     </div>
+
                 </div>
 
                 {{-- Organization --}}
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Organization</h4>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('about') }}"    class="text-white/50 hover:text-white text-sm transition-colors">Who We Are</a></li>
+                        <li><a href="{{ route('about') }}" class="text-white/50 hover:text-white text-sm transition-colors">Who We Are</a></li>
                         <li><a href="{{ route('programs') }}" class="text-white/50 hover:text-white text-sm transition-colors">Our Programs</a></li>
-                        <li><a href="{{ route('news') }}"     class="text-white/50 hover:text-white text-sm transition-colors">News</a></li>
-                        <li><a href="{{ route('resources') }}"class="text-white/50 hover:text-white text-sm transition-colors">Resources</a></li>
-                        <li><a href="{{ route('contact') }}"  class="text-white/50 hover:text-white text-sm transition-colors">Contact</a></li>
+                        <li><a href="{{ route('news') }}" class="text-white/50 hover:text-white text-sm transition-colors">News</a></li>
+                        <li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">Resources</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-white/50 hover:text-white text-sm transition-colors">Contact</a></li>
                     </ul>
                 </div>
 
@@ -272,12 +291,13 @@
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Programs</h4>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('programs') }}#welfare"   class="text-white/50 hover:text-white text-sm transition-colors">Child Welfare</a></li>
+                        <li><a href="{{ route('programs') }}#welfare" class="text-white/50 hover:text-white text-sm transition-colors">Child Welfare</a></li>
                         <li><a href="{{ route('programs') }}#education" class="text-white/50 hover:text-white text-sm transition-colors">Education for Deaf &amp; Blind</a></li>
-                        <li><a href="{{ route('programs') }}#culture"   class="text-white/50 hover:text-white text-sm transition-colors">Cultural Development</a></li>
+                        <li><a href="{{ route('programs') }}#culture" class="text-white/50 hover:text-white text-sm transition-colors">Cultural Development</a></li>
                         <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">Volunteering</a></li>
-                        <li><a href="{{ route('donate') }}"             class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>
+                        <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>
                     </ul>
+
                 </div>
 
                 {{-- Newsletter --}}
@@ -286,9 +306,9 @@
                     <p class="text-white/50 text-sm mb-4">Subscribe for updates on our work in Cambodia.</p>
                     <form class="flex gap-2" onsubmit="return false;">
                         <input type="email" placeholder="Your email"
-                               class="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#8da83a] transition-colors">
+                            class="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#8da83a] transition-colors">
                         <button type="submit"
-                                class="px-4 py-2 bg-[#8da83a] rounded-lg text-white text-sm font-medium hover:bg-[#a3c04a] transition-colors flex-shrink-0">
+                            class="px-4 py-2 bg-[#8da83a] rounded-lg text-white text-sm font-medium hover:bg-[#a3c04a] transition-colors flex-shrink-0">
                             OK
                         </button>
                     </form>
@@ -302,6 +322,23 @@
                         <p class="text-white/50 text-xs">{{ $footerAddress }}</p>
                         <p class="text-white/50 text-xs">{{ $footerPhone }}</p>
                         <p class="text-white/50 text-xs">{{ $footerEmail }}</p>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-white/10">
+                        <p class="text-white/30 text-xs uppercase tracking-wider font-medium mb-3">
+                            Administration
+                        </p>
+
+                        <a href="{{ url('/admin/login') }}"
+                            class="inline-flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border border-white/15 bg-white/5 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all duration-300">
+
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15.75 9V5.25A3.75 3.75 0 008.25 5.25V9m-.75 0h9a1.5 1.5 0 011.5 1.5v7.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 016 18v-7.5A1.5 1.5 0 017.5 9z" />
+                            </svg>
+                            Admin Login
+                        </a>
                     </div>
                 </div>
             </div>
@@ -320,4 +357,5 @@
     </footer>
 
 </body>
+
 </html>
