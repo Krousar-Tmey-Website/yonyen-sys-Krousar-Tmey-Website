@@ -317,87 +317,39 @@
         </div>
         <p class="section-subtitle mx-auto text-center">{{ $settings['programs_subtitle'] ?? 'Krousar Thmey operates 2 programs and 2 cross-cutting projects in 15 Cambodian provinces ' }}</p>
 
-        <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-8 justify-center">
-            @forelse($programs as $program)
-            <a href="{{ route('programs') }}#{{ $program->slug }}"
-                class="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-500 h-80">
-
-                {{-- Image --}}
-                <img src="{{ $program->image_url }}"
-                    alt="{{ $program->title }}"
-                    class="absolute inset-0 w-full h-full object-cover 
-            group-hover:scale-110 transition-transform duration-700">
-
-
-                {{-- Dark Blue Overlay --}}
-                <div class="absolute inset-0 
-            bg-gradient-to-t from-[#06264d] via-[#0b3b73]/60 to-transparent
-            transition-all duration-500
-            group-hover:from-[#06264d] 
-            group-hover:via-[#0b3b73]/80">
+        <div class="grid lg:grid-cols-3 gap-8">
+            @foreach($programs as $program)
+            <div class="card group flex flex-col">
+                <div class="relative overflow-hidden h-56">
+                    <img src="{{ $program->image_url }}"
+                         alt="{{ $program->title }}"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>
+                    @if($program->stats && count($program->stats) > 0)
+                    <span class="absolute top-4 left-4 bg-[#e8a020] text-white text-xs font-bold px-3 py-1 rounded-full">{{ $program->stats[0]['value'] }} {{ $program->stats[0]['label'] }}</span>
+                    @endif
                 </div>
-
-
-
 
                 {{-- Content --}}
-                <div class="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
-
-
-                    {{-- Title --}}
-                    <h3 class="text-2xl font-bold 
-                drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)]
-                transition-all duration-500
-                group-hover:-translate-y-2">
-                        {{ $program->title }}
-                    </h3>
-
-
-                    {{-- Description --}}
-                    <div class="mt-3 
-                opacity-0 translate-y-5
-                group-hover:opacity-100
-                group-hover:translate-y-0
-                transition-all duration-500">
-
-                        <p class="text-sm leading-relaxed text-white 
-                    drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                            {{ $program->description }}
-                        </p>
-
-
-                        {{-- Button --}}
-                        <div class="mt-5 inline-flex items-center gap-2
-                    bg-[#e8a020] px-5 py-2 rounded-full
-                    font-semibold text-sm
-                    hover:bg-white hover:text-[#0b3b73]
-                    transition-all duration-300">
-
-                            {{ $settings['programs_learn_btn'] ?? 'Learn More' }}
-
-                            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-
-                        </div>
-
-                    </div>
-
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $program->title }}</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-5 line-clamp-3">
+                        {{ $program->description }}
+                    </p>
+                    <ul class="space-y-1.5 mb-6">
+                        @if($program->stats && count($program->stats) > 1)
+                            @foreach(array_slice($program->stats, 1, 3) as $stat)
+                            <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>{{ $stat['value'] }} {{ strtolower($stat['label']) }}</li>
+                            @endforeach
+                        @endif
+                    </ul>
+                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="mt-auto text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
+                        {{ $settings['programs_learn_btn'] ?? 'Learn More' }}
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
                 </div>
-
-            </a>
-
-            @empty
-            <div class="col-span-3 py-12 text-center text-gray-400">
-                No programs are available yet.
             </div>
-            @endforelse
+            @endforeach
         </div>
 
         <div class="text-center mt-12">
@@ -567,6 +519,57 @@ $structureEducationItems = array_filter(explode("\n", $settings['structure_educa
 
 
 
+{{-- ===== PROJECTS ===== --}}
+@if($projects->count())
+<section class="py-16 lg:py-24 bg-white border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-14">
+            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Our Projects</span>
+            <h2 class="section-title mt-3 mx-auto">Cross-cutting Initiatives</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+            @foreach($projects as $project)
+            <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 hover:shadow-lg transition-shadow group">
+                @if($project->image)
+                <img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset('storage/' . $project->image) }}" class="w-full h-40 object-cover rounded-xl mb-5 group-hover:opacity-90 transition-opacity">
+                @endif
+                <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $project->title }}</h3>
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5">{{ $project->description }}</p>
+                <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300" style="color: #e8a020; font-weight: bold;">
+                    Read More Detail
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+{{-- ===== GALLERY ===== --}}
+@if($galleries->count())
+<section class="py-16 lg:py-24 bg-[#1a3c6e]">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12">
+            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">In Pictures</span>
+            <h2 class="text-3xl font-bold text-white mt-3">A Glimpse Into Our Work</h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            @foreach($galleries as $photo)
+            <div class="group relative overflow-hidden rounded-xl aspect-square bg-white/5">
+                @if($photo->image)
+                <img src="{{ str_starts_with($photo->image, 'http') ? $photo->image : asset('storage/' . $photo->image) }}" alt="{{ $photo->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                @endif
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                    <p class="text-white font-medium text-sm">{{ $photo->title }}</p>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 {{-- ===== NEWS ===== --}}
 <section class="py-20 lg:py-28 bg-white">
     <div class="max-w-7xl mx-auto px-6">
@@ -618,6 +621,37 @@ $structureEducationItems = array_filter(explode("\n", $settings['structure_educa
         </div>
     </div>
 </section>
+
+{{-- ===== TESTIMONIALS ===== --}}
+@if($testimonials->count())
+<section class="py-20 lg:py-28 bg-[#f8f9fc]">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-14">
+            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Voices</span>
+            <h2 class="section-title mt-3 mx-auto">What People Say</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+            @foreach($testimonials as $testimony)
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative">
+                <svg class="w-10 h-10 text-[#e8a020]/20 absolute top-6 right-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" /></svg>
+                <div class="flex items-center gap-4 mb-6 relative z-10">
+                    @if($testimony->image)
+                    <img src="{{ str_starts_with($testimony->image, 'http') ? $testimony->image : asset('storage/' . $testimony->image) }}" alt="{{ $testimony->name }}" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md">
+                    @else
+                    <div class="w-14 h-14 rounded-full bg-[#1a3c6e]/10 flex items-center justify-center text-[#1a3c6e] font-bold text-xl">{{ substr($testimony->name, 0, 1) }}</div>
+                    @endif
+                    <div>
+                        <h4 class="font-bold text-gray-800">{{ $testimony->name }}</h4>
+                        <p class="text-xs text-gray-500">{{ $testimony->role }}</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed text-sm italic line-clamp-4 relative z-10">"{{ $testimony->content }}"</p>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
 
 {{-- ===== CALL TO ACTION ===== --}}
 <section class="relative py-24 overflow-hidden">
