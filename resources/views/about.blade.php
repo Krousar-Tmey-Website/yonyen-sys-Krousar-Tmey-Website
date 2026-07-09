@@ -24,7 +24,7 @@
 
         {{-- In-page navigation --}}
         <div class="flex flex-wrap gap-3 mt-10">
-            @foreach(['presentation'=>'Presentation','history'=>'Our History','awards'=>'Awards','partners'=>'Partners','transparency'=>'Transparency'] as $id => $label)
+            @foreach(['presentation'=>'Presentation','values'=>'Our Values','history'=>'Our History','awards'=>'Awards','partners'=>'Partners','transparency'=>'Transparency'] as $id => $label)
             <a href="#{{ $id }}"
                class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
                 {{ $label }}
@@ -52,19 +52,17 @@
         </div>
 
         {{-- Values --}}
-        <div class="grid md:grid-cols-3 gap-6 mb-20">
-            @foreach([
-                ['title'=>'Identity',    'icon'=>'🏛️', 'desc'=>'Every child can reconnect with their roots and traditions.'],
-                ['title'=>'Integration', 'icon'=>'🤝', 'desc'=>'Every child is fully integrated into Cambodian society.'],
-                ['title'=>'Dignity',     'icon'=>'⭐', 'desc'=>'Every child is respected and can build the future they deserve.'],
-            ] as $value)
+        <div id="values" class="grid md:grid-cols-3 gap-6 mb-20 scroll-mt-20">
+            @forelse($coreValues as $value)
             <div class="group relative bg-[#f8f9fc] rounded-3xl p-8 border border-gray-100 hover:border-[#2d6fa3]/30 hover:shadow-lg transition-all duration-300 text-center overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-[#8da83a] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-t-3xl"></div>
-                <div class="text-5xl mb-5">{{ $value['icon'] }}</div>
-                <h3 class="text-xl font-bold text-[#2d6fa3] mb-3">{{ $value['title'] }}</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">{{ $value['desc'] }}</p>
+                <div class="text-5xl mb-5">{{ $value->icon }}</div>
+                <h3 class="text-xl font-bold text-[#2d6fa3] mb-3">{{ $value->title }}</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">{{ $value->description }}</p>
             </div>
-            @endforeach
+            @empty
+            <p class="text-gray-400 text-center py-8 md:col-span-3">No values listed yet.</p>
+            @endforelse
         </div>
 
         {{-- Mission text --}}
@@ -230,32 +228,6 @@
                             </div>
                         </div>
                         @else
-                        {{-- Empty left column to maintain grid --}}
-                        <div></div>
-                        @endif
-
-                        {{-- Right events --}}
-                        @if($hasRight)
-                        <div class="relative md:pl-16 mt-8 md:mt-0">
-                            {{-- Connector line to center --}}
-                            <div class="hidden md:block absolute top-1/2 left-0 w-16 h-0.5 bg-gradient-to-r from-[#8da83a] to-transparent"></div>
-                            {{-- Timeline dot --}}
-                            <div class="hidden md:block absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#8da83a] border-4 border-white shadow-md z-10"></div>
-
-                            <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 relative overflow-hidden group">
-                                {{-- Right accent bar --}}
-                                <div class="absolute top-0 right-0 w-1 h-full bg-[#8da83a]"></div>
-
-                                <div class="space-y-4">
-                                    @foreach($rightEvents as $event)
-                                        <div class="pr-4">
-                                            <p class="text-gray-700 leading-relaxed">{!! $event->event !!}</p>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                        @else
                         {{-- Empty right column to maintain grid --}}
                         <div></div>
                         @endif
@@ -266,7 +238,6 @@
                 @endforelse
             </div>
         </div>
-        @endif
     </div>
 </section>
 
