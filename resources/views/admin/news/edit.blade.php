@@ -8,8 +8,8 @@
 
 @section('content')
 
-<div class="form-container">
-    <form action="{{ route('admin.news.update', $news) }}" method="POST" enctype="multipart/form-data" id="articleForm">
+<div class="max-w-3xl mx-auto">
+    <form action="{{ route('admin.news.update', $news) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf @method('PUT')
 
         {{-- Article Details --}}

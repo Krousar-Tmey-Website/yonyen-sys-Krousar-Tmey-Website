@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div class="grid lg:grid-cols-3 gap-6">
+<div class="max-w-5xl mx-auto grid lg:grid-cols-3 gap-6">
 
     {{-- Form --}}
     <div class="lg:col-span-2">

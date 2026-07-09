@@ -65,27 +65,77 @@
             </div>
             <div class="divide-y divide-gray-50">
                 @foreach($awards as $award)
-                <div class="flex items-start justify-between px-5 py-4 hover:bg-gray-50/50">
-                    <div class="flex items-start gap-3 min-w-0">
-                        <span class="text-2xl flex-shrink-0 mt-0.5">{{ $award->icon }}</span>
-                        <div class="min-w-0">
-                            <p class="font-semibold text-gray-700 text-sm">{{ $award->title }}</p>
-                            <p class="text-[#2d6fa3] text-xs">{{ $award->organization }}</p>
-                            @if($award->recipient)
-                            <p class="text-gray-400 text-xs">{{ $award->recipient }}</p>
-                            @endif
-                            @if($award->description)
-                            <p class="text-gray-400 text-xs mt-1 line-clamp-2">{{ $award->description }}</p>
-                            @endif
+                <div x-data="{ editing: false }">
+                    {{-- View row --}}
+                    <div class="flex items-start justify-between px-5 py-4 hover:bg-gray-50/50" x-show="!editing">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <span class="text-2xl flex-shrink-0 mt-0.5">{{ $award->icon }}</span>
+                            <div class="min-w-0">
+                                <p class="font-semibold text-gray-700 text-sm">{{ $award->title }}</p>
+                                <p class="text-[#2d6fa3] text-xs">{{ $award->organization }}</p>
+                                @if($award->recipient)
+                                <p class="text-gray-400 text-xs">{{ $award->recipient }}</p>
+                                @endif
+                                @if($award->description)
+                                <p class="text-gray-400 text-xs mt-1 line-clamp-2">{{ $award->description }}</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0 ml-3">
+                            <button @click="editing = true" class="text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium p-1">Edit</button>
+                            <form action="{{ route('admin.awards.destroy', $award) }}" method="POST"
+                                  onsubmit="return confirm('Remove this award?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="text-red-300 hover:text-red-500 transition-colors p-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </form>
                         </div>
                     </div>
-                    <form action="{{ route('admin.awards.destroy', $award) }}" method="POST" class="flex-shrink-0 ml-3"
-                          onsubmit="return confirm('Remove this award?')">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="text-red-300 hover:text-red-500 transition-colors p-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                        </button>
-                    </form>
+                    {{-- Edit form --}}
+                    <div class="px-5 py-4 bg-gray-50 border-t border-gray-100" x-show="editing" x-cloak>
+                        <form action="{{ route('admin.awards.update', $award) }}" method="POST" class="space-y-3">
+                            @csrf @method('PUT')
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
+                                    <input type="text" name="title" value="{{ $award->title }}" required
+                                           class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 mb-1">Organization</label>
+                                    <input type="text" name="organization" value="{{ $award->organization }}" required
+                                           class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Recipient</label>
+                                <input type="text" name="recipient" value="{{ $award->recipient }}"
+                                       class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
+                                <textarea name="description" rows="2"
+                                          class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $award->description }}</textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 mb-1">Icon</label>
+                                    <input type="text" name="icon" value="{{ $award->icon }}"
+                                           class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] text-center text-lg">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
+                                    <input type="number" name="sort_order" value="{{ $award->sort_order }}"
+                                           class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit" class="btn-primary text-xs px-4 py-2">Save</button>
+                                <button type="button" @click="editing = false" class="text-gray-400 hover:text-gray-600 text-xs px-4 py-2">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 @endforeach
             </div>

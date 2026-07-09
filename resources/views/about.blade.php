@@ -139,13 +139,16 @@
         <div class="bg-[#1d4e7a] rounded-3xl p-10 mb-20">
             <h3 class="text-white font-bold text-2xl text-center mb-10 uppercase tracking-wider">Key Figures</h3>
             <div class="grid grid-cols-2 lg:grid-cols-5 gap-6 text-center">
-                @foreach([
-                    ['n'=>'4,079', 'label'=>'Children supported'],
-                    ['n'=>'240',   'label'=>'In Child Welfare'],
-                    ['n'=>'768',   'label'=>'Special Ed students'],
-                    ['n'=>'1,088', 'label'=>'Arts & Culture students'],
-                    ['n'=>'357',   'label'=>'Career counseling'],
-                ] as $fig)
+                @php
+                $figures = [
+                    ['n' => $settings['stat_children']   ?? '4,079', 'label' => 'Children supported'],
+                    ['n' => $settings['stat_welfare']    ?? '240',   'label' => 'In Child Welfare'],
+                    ['n' => $settings['stat_special_ed'] ?? '768',   'label' => 'Special Ed students'],
+                    ['n' => $settings['stat_arts']       ?? '1,088', 'label' => 'Arts & Culture students'],
+                    ['n' => $settings['stat_counseling'] ?? '357',   'label' => 'Career counseling'],
+                ];
+                @endphp
+                @foreach($figures as $fig)
                 <div class="text-white">
                     <div class="text-3xl lg:text-4xl font-black text-[#8da83a] mb-2">{{ $fig['n'] }}</div>
                     <div class="text-white/70 text-xs leading-snug">{{ $fig['label'] }}</div>
@@ -154,23 +157,19 @@
             </div>
         </div>
 
-        {{-- Worldwide --}}
+        {{-- Worldwide — from DB offices (excluding Cambodia HQ) --}}
         <div>
             <h3 class="text-2xl font-bold text-[#2d6fa3] mb-3">Krousar Thmey Worldwide</h3>
             <p class="text-gray-500 mb-8 text-sm leading-relaxed max-w-3xl">
                 Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.
             </p>
             <div class="grid md:grid-cols-3 gap-5">
-                @foreach([
-                    ['flag'=>'🇫🇷','name'=>'Krousar Thmey France',      'city'=>'Paris, France'],
-                    ['flag'=>'🇨🇭','name'=>'Krousar Thmey Switzerland',  'city'=>'Geneva, Switzerland'],
-                    ['flag'=>'🇸🇬','name'=>'Krousar Thmey Singapore',    'city'=>'Singapore'],
-                ] as $office)
+                @foreach($offices->where('country', '!=', 'Cambodia') as $woffice)
                 <div class="bg-[#f8f9fc] border border-gray-100 rounded-2xl p-6 flex items-center gap-4 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all">
-                    <span class="text-4xl">{{ $office['flag'] }}</span>
+                    <span class="text-4xl">{{ $woffice->flag }}</span>
                     <div>
-                        <p class="font-bold text-[#2d6fa3] text-sm">{{ $office['name'] }}</p>
-                        <p class="text-gray-400 text-xs">{{ $office['city'] }}</p>
+                        <p class="font-bold text-[#2d6fa3] text-sm">Krousar Thmey {{ $woffice->country }}</p>
+                        <p class="text-gray-400 text-xs">{{ $woffice->city }}, {{ $woffice->country }}</p>
                     </div>
                 </div>
                 @endforeach
@@ -195,64 +194,39 @@
             <p class="text-gray-500 max-w-2xl mx-auto text-lg">Discover the milestones that have shaped Krousar Thmey since its founding in 1991</p>
         </div>
 
-        @if($history->isEmpty())
-        <div class="text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm">
-            <div class="text-6xl mb-4">📅</div>
-            <p class="text-gray-400 text-lg">No history events have been added yet.</p>
-        </div>
-        @else
-        @php
-            $eventsByYear = $history->sortByDesc('year')->groupBy('year');
-        @endphp
         <div class="relative">
             {{-- Vertical timeline line - centered --}}
             <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2d6fa3] via-[#8da83a] to-[#2d6fa3] hidden md:block"></div>
 
-            <div class="space-y-16">
-                @foreach($eventsByYear as $year => $yearEvents)
+            <div class="space-y-8">
+                @forelse($historyEvents as $event)
                 <div class="relative">
-                    {{-- Year badge - centered on timeline --}}
-                    <div class="flex justify-center mb-10">
-                        <div class="relative z-20 bg-white border-2 border-[#2d6fa3] text-[#2d6fa3] font-bold text-xl px-8 py-3 rounded-full shadow-lg ring-4 ring-white">
-                            {{ $year }}
+                    {{-- Year badge --}}
+                    <div class="flex justify-center mb-4">
+                        <div class="relative z-10 bg-[#2d6fa3] text-white font-bold text-sm px-5 py-2 rounded-full shadow-lg ring-4 ring-[#f8f9fc]">
+                            {{ $event->year }}
                         </div>
                     </div>
 
-                    @php
-                        $leftEvents = $yearEvents->where('side', 'left');
-                        $rightEvents = $yearEvents->where('side', 'right');
-                        $hasLeft = $leftEvents->count() > 0;
-                        $hasRight = $rightEvents->count() > 0;
-                    @endphp
-
-                    <div class="md:grid md:grid-cols-2 md:gap-16">
-                        {{-- Left events --}}
-                        @if($hasLeft)
-                        <div class="relative md:pr-16">
-                            {{-- Connector line to center --}}
-                            <div class="hidden md:block absolute top-1/2 right-0 w-16 h-0.5 bg-gradient-to-l from-[#2d6fa3] to-transparent"></div>
-                            {{-- Timeline dot --}}
-                            <div class="hidden md:block absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#2d6fa3] border-4 border-white shadow-md z-10"></div>
-
-                            <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 relative overflow-hidden group">
-                                {{-- Left accent bar --}}
-                                <div class="absolute top-0 left-0 w-1 h-full bg-[#2d6fa3]"></div>
-
-                                @foreach($leftEvents as $event)
-                                    @if($event->image)
-                                    <div class="mb-5 overflow-hidden rounded-xl">
-                                        <img src="{{ asset('storage/' . $event->image) }}" alt="History image {{ $year }}"
-                                             class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-700">
-                                    </div>
-                                    @endif
-                                @endforeach
-                                <div class="space-y-4">
-                                    @foreach($leftEvents as $event)
-                                        <div class="pl-4">
-                                            <p class="text-gray-700 leading-relaxed">{!! $event->event !!}</p>
-                                        </div>
-                                    @endforeach
+                    <div class="md:grid md:grid-cols-2 md:gap-8">
+                        {{-- Left event --}}
+                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-[#2d6fa3]/20 transition-all md:text-right mb-4 md:mb-0">
+                            <div class="flex items-start gap-3 md:flex-row-reverse">
+                                <div class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 flex items-center justify-center flex-shrink-0">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-[#2d6fa3]"></div>
                                 </div>
+                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event->left_text }}</p>
+                            </div>
+                        </div>
+
+                        {{-- Right event --}}
+                        @if($event->right_text)
+                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-[#8da83a]/30 transition-all">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-full bg-[#8da83a]/10 flex items-center justify-center flex-shrink-0">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-[#8da83a]"></div>
+                                </div>
+                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event->right_text }}</p>
                             </div>
                         </div>
                         @else
@@ -287,7 +261,9 @@
                         @endif
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <p class="text-gray-400 text-center py-8">No history events yet.</p>
+                @endforelse
             </div>
         </div>
         @endif
@@ -490,18 +466,21 @@
                 </h3>
                 <p class="text-gray-500 text-sm mb-6">Audited statements are available for download. Our French and Swiss organisations' accounts are also audited annually.</p>
                 <div class="space-y-3">
-                    @foreach([2021, 2020, 2019, 2018, 2017, 2016] as $year)
-                    <a href="{{ route('resources') }}"
+                    @forelse($reports as $report)
+                    <a href="{{ $report->download_url }}"
+                       {{ $report->download_url !== '#' ? 'target="_blank"' : '' }}
                        class="flex items-center justify-between bg-[#f8f9fc] border border-gray-100 rounded-xl px-5 py-4 hover:border-[#2d6fa3]/30 hover:shadow-sm transition-all group">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-lg bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             </div>
-                            <span class="text-gray-700 font-medium text-sm">Audited Financial Statement {{ $year }}</span>
+                            <span class="text-gray-700 font-medium text-sm">{{ $report->title }}</span>
                         </div>
                         <svg class="w-4 h-4 text-gray-300 group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     </a>
-                    @endforeach
+                    @empty
+                    <p class="text-gray-400 text-sm">No reports available yet. <a href="{{ route('resources') }}" class="text-[#2d6fa3] hover:underline">View resources page</a>.</p>
+                    @endforelse
                 </div>
             </div>
         </div>

@@ -14,13 +14,13 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'news_total'         => News::count(),
-            'news_published'     => News::published()->count(),
-            'programs'           => Program::count(),
-            'partners'           => Partner::count(),
-            'awards'             => Award::count(),
-            'volunteers'         => Volunteer::count(),
-            'volunteers_pending' => Volunteer::pending()->count(),
+            'news_total'     => News::count(),
+            'news_published' => News::published()->count(),
+            'programs'       => Program::count(),
+            'projects'       => Project::count(),
+            'partners'       => Partner::count(),
+            'awards'         => Award::count(),
+            'page_items'     => ProgramPageItem::count(),
         ];
 
         $recentNews = News::latest()->take(5)->get();

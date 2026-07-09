@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+/**
+ * Class News
+ * 
+ * @method static \Illuminate\Database\Eloquent\Builder latest(string $column = 'created_at')
+ * @method static \Illuminate\Contracts\Pagination\LengthAwarePaginator paginate(int $perPage = 15)
+ * @method static \Illuminate\Database\Eloquent\Builder published()
+ * @method bool delete()
+ * @method static News find(int $id)
+ * @method static News create(array $attributes = [])
+ */
 class News extends Model
 {
     protected $fillable = [

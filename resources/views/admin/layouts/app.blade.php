@@ -4,10 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin') — Krousar Thmey</title>
-    @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/css/admin-news.css', 'resources/css/admin-history.css', 'resources/js/app.js'])
-    <style>[x-cloak] { display: none !important; }</style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .htmx-indicator { opacity: 0; transition: opacity 200ms ease-in;}
+        .htmx-request .htmx-indicator { opacity: 1; }
+        .htmx-request.htmx-indicator { opacity: 1; }
+        /* Smooth fade between pages */
+        body { transition: opacity 150ms ease-out; }
+        body.htmx-request { opacity: 0.6; }
+    </style>
 </head>
-<body class="h-full" x-data="{ sidebarOpen: false }">
+<body class="h-full" x-data="{ sidebarOpen: false }" hx-boost="true">
 
 <div class="flex h-full">
 
@@ -34,14 +43,19 @@
 
                 $groupActive = function($children) use ($currentRoute) {
                     foreach ($children as $child) {
+                        if (isset($child['is_active']) && $child['is_active']) return true;
                         $r = $child['route'] ?? '';
-                        if ($currentRoute && ($currentRoute === $r || str_starts_with($currentRoute, $r.'.'))) return true;
+                        if (!$r) continue;
+                        $baseRoute = str_ends_with($r, '.index') ? substr($r, 0, -6) : $r;
+                        if ($currentRoute && ($currentRoute === $r || str_starts_with($currentRoute, $baseRoute . '.'))) return true;
                     }
                     return false;
                 };
 
                 $childActive = function($route) use ($currentRoute) {
-                    return $currentRoute && ($currentRoute === $route || str_starts_with($currentRoute, $route.'.'));
+                    if (!$route) return false;
+                    $baseRoute = str_ends_with($route, '.index') ? substr($route, 0, -6) : $route;
+                    return $currentRoute && ($currentRoute === $route || str_starts_with($currentRoute, $baseRoute . '.'));
                 };
 
                 $navGroups = [
@@ -55,94 +69,71 @@
                         'label' => 'Homepage',
                         'icon' => 'M10.707 2.293a1 1 0 00-1.414 0l-7 7A1 1 0 002 10h.5v8a2 2 0 002 2h15a2 2 0 002-2v-8h.5a1 1 0 00.707-1.707l-7-7z',
                         'children' => [
-                            ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
-                            ['route' => 'admin.home.index', 'label' => 'Home Settings'],
-                            ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
-                            ['route' => 'admin.impact.index', 'label' => 'Impact Statistics'],
-                            ['route' => 'admin.stories.index', 'label' => 'Success Stories'],
+                            ['route' => 'admin.slides.index',       'label' => 'Slideshow'],
+                            ['route' => 'admin.home.index',         'label' => 'Home Settings'],
+                            ['route' => 'admin.gallery.index',      'label' => 'Gallery'],
+                            ['route' => 'admin.testimonials.index', 'label' => 'Testimonials'],
                         ],
                     ],
                     'about' => [
                         'label' => 'Who We Are',
                         'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
                         'children' => [
-                            ['route' => 'admin.presentation.index', 'label' => 'Presentation'],
-                            ['route' => 'admin.history.index', 'label' => 'Our History'],
-                            ['route' => 'admin.awards.index', 'label' => 'Awards'],
-                            ['route' => 'admin.partners.index', 'label' => 'Partners'],
-                            ['route' => 'admin.transparency.index', 'label' => 'Transparency'],
+                            ['route' => 'admin.awards.index',          'label' => 'Awards'],
+                            ['route' => 'admin.partners.index',        'label' => 'Partners'],
+                            ['route' => 'admin.history-events.index',  'label' => 'History Timeline'],
                         ],
                     ],
                     'programs' => [
                         'label' => 'Our Programs',
                         'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
-                        'children' => [
-                            ['route' => 'admin.programs.index', 'label' => 'Programs'],
-                            ['route' => 'admin.projects.index', 'label' => 'Projects'],
-                            ['route' => 'admin.gallery.index', 'label' => 'Gallery'],
-                            ['route' => 'admin.testimonials.index', 'label' => 'Testimonials'],
-                        ],
+                        'children' => array_merge(
+                            [
+                                ['route' => 'admin.programs.index',  'label' => 'All Programs'],
+                                ['route' => 'admin.programs-banner.index', 'label' => 'Page Banner'],
+                            ],
+                            \App\Models\Program::orderBy('id')->take(3)->get()->map(function($p) {
+                                return [
+                                    'url' => route('admin.programs.edit', $p),
+                                    'label' => $p->title,
+                                    'is_active' => request()->is('admin/programs/'.$p->id.'/edit')
+                                ];
+                            })->toArray(),
+                            [
+                                ['route' => 'admin.projects.index', 'label' => 'All Projects'],
+                                ['route' => 'admin.program-pages.index', 'label' => 'Additional Pages'],
+                            ]
+                        ),
                     ],
+
                     'news' => [
                         'label' => 'News',
                         'icon' => 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z',
                         'children' => [
-                            ['route' => 'admin.news.index', 'label' => 'News Articles'],
-                            ['route' => 'admin.categories.index', 'label' => 'Categories'],
+                            ['route' => 'admin.news.index',           'label' => 'News Articles'],
+                            ['route' => 'admin.annual-reports.index', 'label' => 'Annual Reports'],
                         ],
                     ],
-                    'resources' => [
-                        'label' => 'Resources',
-                        'icon' => 'M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z',
+                    'contact' => [
+                        'label' => 'Contact',
+                        'icon' => 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
                         'children' => [
-                            ['route' => 'admin.reports.index', 'label' => 'Annual Reports'],
-                            ['route' => 'admin.media.index', 'label' => 'Media'],
-                            ['route' => 'admin.wap.index', 'label' => 'Words and Pictures Application'],
+                            ['route' => 'admin.offices.index', 'label' => 'Office Locations'],
                         ],
                     ],
                     'involved' => [
                         'label' => 'Get Involved',
                         'icon' => 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
                         'children' => [
-                            ['route' => 'admin.volunteers.index', 'label' => 'Volunteer Applications'],
-                            ['route' => 'admin.jobs.index', 'label' => 'Job Opportunities'],
-                            ['route' => 'admin.books.index', 'label' => 'Books for Sale'],
-                        ],
-                    ],
-                    'donations' => [
-                        'label' => 'Donations',
-                        'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-                        'children' => [
-                            ['route' => 'admin.donations.index', 'label' => 'Donations'],
-                            ['route' => 'admin.campaigns.index', 'label' => 'Donation Campaigns'],
-                            ['route' => 'admin.payments.index', 'label' => 'Payment Methods'],
-                            ['route' => 'admin.donations.reports', 'label' => 'Donation Reports'],
-                        ],
-                    ],
-                    'communication' => [
-                        'label' => 'Communication',
-                        'icon' => 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
-                        'children' => [
-                            ['route' => 'admin.contacts.index', 'label' => 'Contact Messages'],
-                            ['route' => 'admin.newsletter.index', 'label' => 'Newsletter Subscribers'],
+                            ['route' => 'admin.home.index', 'label' => 'Donation Tiers (Home Settings)'],
                         ],
                     ],
                     'settings' => [
                         'label' => 'Website Management',
                         'icon' => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z',
                         'children' => [
-                            ['route' => 'admin.website.index', 'label' => 'Website Settings'],
-                            ['route' => 'admin.seo.index', 'label' => 'SEO Settings'],
-                            ['route' => 'admin.media.library', 'label' => 'Media Library'],
-                            ['route' => 'admin.users.index', 'label' => 'Admin Users'],
-                        ],
-                    ],
-                    'reports' => [
-                        'label' => 'Reports',
-                        'icon' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
-                        'children' => [
-                            ['route' => 'admin.analytics.index', 'label' => 'Analytics'],
-                            ['route' => 'admin.activity.index', 'label' => 'Activity Logs'],
+                            ['route' => 'admin.home.index', 'label' => 'Home Settings'],
+                            ['route' => 'admin.programs-banner.index', 'label' => 'Programs Banner'],
                         ],
                     ],
                 ];
@@ -187,13 +178,26 @@
                              class="space-y-0.5 mt-0.5 pl-2"
                              x-cloak>
                             @foreach($group['children'] as $child)
-                                @php $exists = $routeExists($child['route']); @endphp
-                                <a href="{{ $exists ? route($child['route']) : '#' }}"
+                                @php 
+                                    $linkUrl = '#';
+                                    $isActive = false;
+                                    $exists = true;
+
+                                    if(isset($child['url'])) {
+                                        $linkUrl = $child['url'];
+                                        $isActive = $child['is_active'] ?? false;
+                                    } elseif(isset($child['route'])) {
+                                        $exists = $routeExists($child['route']);
+                                        $linkUrl = $exists ? route($child['route']) : '#';
+                                        $isActive = $childActive($child['route']);
+                                    }
+                                @endphp
+                                <a href="{{ $linkUrl }}"
                                    {{ !$exists ? 'onclick="return false;"' : '' }}
                                    class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all
-                                          {{ $childActive($child['route']) ? 'bg-white/10 text-white font-medium' : 'text-white hover:bg-white/10' }}
+                                          {{ $isActive ? 'bg-white/10 text-white font-medium' : 'text-white hover:bg-white/10' }}
                                           {{ !$exists ? 'opacity-40 cursor-default' : '' }}">
-                                    <span class="w-1 h-1 rounded-full flex-shrink-0 {{ $childActive($child['route']) ? 'bg-white' : 'bg-white/50' }}"></span>
+                                    <span class="w-1 h-1 rounded-full flex-shrink-0 {{ $isActive ? 'bg-white' : 'bg-white/50' }}"></span>
                                     <span>{{ $child['label'] }}</span>
                                     @if(!$exists)
                                         <span class="ml-auto text-[10px] text-white/60">soon</span>
