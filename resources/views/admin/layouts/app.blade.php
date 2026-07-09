@@ -16,11 +16,12 @@
         {{-- Logo --}}
         <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
             <div class="bg-white rounded-xl px-3 py-1.5 flex-shrink-0">
-                <img src="{{ asset('images/logo.png') }}" alt="KT" class="h-8 w-auto"
+                @php $adminLogoPath = data_get($settings ?? [], 'site_logo', 'images/logo.png'); @endphp
+                <img src="{{ $adminLogoPath ? (str_starts_with($adminLogoPath, 'http') ? $adminLogoPath : (str_starts_with($adminLogoPath, 'logos/') ? asset('storage/' . $adminLogoPath) : asset($adminLogoPath))) : asset('images/logo.png') }}" alt="KT" class="h-8 w-auto"
                      onerror="this.parentElement.innerHTML='<span class=\'text-[#2d6fa3] font-black text-sm\'>KT</span>'">
             </div>
             <div>
-                <p class="text-white font-bold text-sm leading-tight">Krousar Thmey</p>
+                <p class="text-white font-bold text-sm leading-tight">{{ data_get($settings ?? [], 'site_name', 'Krousar Thmey') }}</p>
                 <p class="text-white text-xs">Admin Panel</p>
             </div>
         </div>
@@ -56,6 +57,7 @@
                         'children' => [
                             ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
                             ['route' => 'admin.home.index', 'label' => 'Home Settings'],
+                            ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
                             ['route' => 'admin.impact.index', 'label' => 'Impact Statistics'],
                             ['route' => 'admin.stories.index', 'label' => 'Success Stories'],
                         ],
@@ -121,7 +123,7 @@
                         'label' => 'Communication',
                         'icon' => 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
                         'children' => [
-                            ['route' => 'admin.messages.index', 'label' => 'Contact Messages'],
+                            ['route' => 'admin.contacts.index', 'label' => 'Contact Messages'],
                             ['route' => 'admin.newsletter.index', 'label' => 'Newsletter Subscribers'],
                         ],
                     ],
@@ -132,6 +134,7 @@
                             ['route' => 'admin.website.index', 'label' => 'Website Settings'],
                             ['route' => 'admin.seo.index', 'label' => 'SEO Settings'],
                             ['route' => 'admin.media.library', 'label' => 'Media Library'],
+                            ['route' => 'admin.users.index', 'label' => 'Admin Users'],
                         ],
                     ],
                     'reports' => [
@@ -203,20 +206,86 @@
             @endforeach
         </nav>
 
-        {{-- User --}}
-        <div class="px-4 py-4 border-t border-white/10">
+        {{-- User + Logout Modal --}}
+        <div class="px-4 py-4 border-t border-white/10"
+             x-data="{ logoutModal: false, logoutForm: null }"
+             @keydown.window.escape="logoutModal = false">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-white text-xs font-medium truncate max-w-[120px]">{{ auth()->user()->name }}</p>
                     <p class="text-white text-xs truncate max-w-[120px]">{{ auth()->user()->email }}</p>
                 </div>
-                <form action="{{ route('admin.logout') }}" method="POST">
+
+                {{-- Logout trigger button --}}
+                <form action="{{ route('admin.logout') }}" method="POST" x-ref="logoutForm">
                     @csrf
-                    <button type="submit" title="Logout"
-                            class="text-white hover:text-white/80 transition-colors p-1.5 rounded-lg hover:bg-white/10">
+                    <button type="button" title="Sign Out"
+                            @click="logoutForm = $refs.logoutForm; logoutModal = true"
+                            class="text-white hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                     </button>
                 </form>
+            </div>
+
+            {{-- Logout Confirmation Modal --}}
+            <div x-show="logoutModal"
+                 x-cloak
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+                 @click.self="logoutModal = false">
+
+                <div x-show="logoutModal"
+                     x-cloak
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                     x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+                     @click.away="logoutModal = false"
+                     class="relative bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 w-full max-w-sm text-center">
+
+                    {{-- Close button --}}
+                    <button type="button" @click="logoutModal = false"
+                        class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-400 hover:text-gray-600 flex items-center justify-center transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    {{-- Icon --}}
+                    <div class="mx-auto w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                        <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </div>
+
+                    {{-- Title --}}
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">Sign Out</h3>
+
+                    {{-- Message --}}
+                    <p class="text-sm text-gray-500 mb-6">
+                        Are you sure you want to sign out?
+                    </p>
+
+                    {{-- Buttons --}}
+                    <div class="flex items-center gap-3">
+                        <button type="button" @click="logoutModal = false"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition">
+                            Cancel
+                        </button>
+                        <button type="button" @click="logoutForm.submit()"
+                            class="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded-xl transition shadow-sm">
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </aside>
@@ -243,15 +312,33 @@
 
         {{-- Flash messages --}}
         @if(session('success'))
-        <div class="mx-6 mt-4 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
+        <div class="mx-6 mt-4 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2"
+             x-data="{ show: true }"
+             x-init="setTimeout(() => show = false, 5000)"
+             x-show="show"
+             x-transition:leave="transition ease-in duration-300"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-2">
             <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            {{ session('success') }}
+            <span class="flex-1">{{ session('success') }}</span>
+            <button @click="show = false" class="text-green-500 hover:text-green-700 transition-colors flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
         </div>
         @endif
         @if(session('error'))
-        <div class="mx-6 mt-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
+        <div class="mx-6 mt-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2"
+             x-data="{ show: true }"
+             x-init="setTimeout(() => show = false, 5000)"
+             x-show="show"
+             x-transition:leave="transition ease-in duration-300"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-2">
             <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            {{ session('error') }}
+            <span class="flex-1">{{ session('error') }}</span>
+            <button @click="show = false" class="text-red-500 hover:text-red-700 transition-colors flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
         </div>
         @endif
 
