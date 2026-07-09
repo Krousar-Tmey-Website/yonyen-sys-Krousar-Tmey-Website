@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\NewsController;
 use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\Gallery;
@@ -10,15 +10,13 @@ use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Office;
+use App\Models\PageSection;
 use App\Models\Partner;
 use App\Models\Program;
 use App\Models\Project;
 use App\Models\Slide;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\NewsController as AdminNewsController;
-use App\Http\Controllers\Admin\HistoryController;
 
 // ──────────────────────────────────────────────
 // Public pages
@@ -32,7 +30,8 @@ Route::get('/', function () {
     $testimonials = Testimonial::where('is_active', true)->take(3)->get();
     $galleries    = Gallery::where('is_active', true)->latest()->take(6)->get();
     $programs     = Program::active()->take(3)->get();
-    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs'));
+    $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
+    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -46,10 +45,10 @@ Route::get('/who-we-are', function () {
 })->name('about');
 
 Route::get('/our-programs', function () {
-    $programs       = Program::active()->with(['projects' => function($q){ $q->where('is_active', true)->orderBy('id'); }])->get();
-    $bannerTitle    = HomeSetting::getValue('programs_banner_title',   'Our Programs');
+    $programs       = Program::active()->with(['projects' => function ($q) { $q->where('is_active', true)->orderBy('id'); }])->get();
+    $bannerTitle    = HomeSetting::getValue('programs_banner_title',    'Our Programs');
     $bannerSubtitle = HomeSetting::getValue('programs_banner_subtitle', 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.');
-    $bannerImage    = HomeSetting::getValue('programs_banner_image',   '');
+    $bannerImage    = HomeSetting::getValue('programs_banner_image',    '');
     return view('programs', compact('programs', 'bannerTitle', 'bannerSubtitle', 'bannerImage'));
 })->name('programs');
 
@@ -65,7 +64,7 @@ Route::get('/programs/item/{id}', function ($id) {
 })->name('program-page-items.show');
 
 Route::get('/projects/{project}', function (Project $project) {
-    if (!$project->is_active) return abort(404);
+    if (!$project->is_active) abort(404);
     $project->load('grants');
     return view('project', compact('project'));
 })->name('projects.show');
@@ -75,7 +74,7 @@ Route::get('/get-involved', function () {
     return view('involved', compact('settings'));
 })->name('involved');
 
-Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::get('/news',        [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::get('/resources', function () {
@@ -87,6 +86,8 @@ Route::get('/contact', function () {
     $offices = Office::active()->get();
     return view('contact', compact('offices'));
 })->name('contact');
+
+Route::get('/partners', fn () => redirect()->route('about'))->name('partners');
 
 Route::get('/donate',  [DonationController::class, 'show'])->name('donate');
 Route::post('/donate', [DonationController::class, 'send'])->name('donate.send');
@@ -102,33 +103,47 @@ Route::post('/admin/logout', [Admin\AuthController::class, 'logout'])->name('adm
 // ──────────────────────────────────────────────
 // Admin — Protected panel
 // ──────────────────────────────────────────────
+
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
-    Route::get('/', [Admin\DashboardController::class, 'index'])
-        ->name('dashboard');
 
-    Route::resource('news',     Admin\NewsController::class);
-    Route::resource('programs', Admin\ProgramController::class)->except(['show']);
+    Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // News & Categories
+    Route::resource('news',       Admin\NewsController::class);
+    Route::resource('categories', Admin\CategoryController::class)->except(['show']);
+
+    // Programs & Projects
+    Route::resource('programs',      Admin\ProgramController::class)->except(['show']);
     Route::resource('program-pages', Admin\ProgramPageController::class)->parameters(['program-pages' => 'item']);
-    
-    Route::resource('projects', Admin\ProjectController::class)->except(['show']);
-    Route::post('projects/{project}/grants',                Admin\ProjectGrantController::class . '@store')->name('projects.grants.store');
-    Route::put('projects/{project}/grants/{grant}',         Admin\ProjectGrantController::class . '@update')->name('projects.grants.update');
-    Route::delete('projects/{project}/grants/{grant}',      Admin\ProjectGrantController::class . '@destroy')->name('projects.grants.destroy');
-    Route::resource('gallery', Admin\GalleryController::class)->except(['show']);
-    Route::resource('testimonials', Admin\TestimonialController::class)->except(['show']);
+    Route::resource('projects',      Admin\ProjectController::class)->except(['show']);
 
-    Route::get('home', [Admin\HomeSettingController::class, 'index'])
-        ->name('home.index');
-    Route::post('home', [Admin\HomeSettingController::class, 'update'])
-        ->name('home.update');
+    // Project Grants (nested)
+    Route::post(  'projects/{project}/grants',         [Admin\ProjectGrantController::class, 'store'])->name('projects.grants.store');
+    Route::put(   'projects/{project}/grants/{grant}', [Admin\ProjectGrantController::class, 'update'])->name('projects.grants.update');
+    Route::delete('projects/{project}/grants/{grant}', [Admin\ProjectGrantController::class, 'destroy'])->name('projects.grants.destroy');
 
-    Route::get('programs-banner',  [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
+    // Homepage
+    Route::get( 'home', [Admin\HomeSettingController::class, 'index'])->name('home.index');
+    Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
+    Route::resource('page-sections', Admin\PageSectionController::class)->except(['show']);
+    Route::resource('slides',        Admin\SlideController::class)->except(['show']);
+
+    // Programs banner
+    Route::get( 'programs-banner', [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
     Route::post('programs-banner', [Admin\ProgramsBannerController::class, 'update'])->name('programs-banner.update');
 
+    // Who We Are
     Route::resource('partners',       Admin\PartnerController::class)->except(['show', 'create', 'edit']);
     Route::resource('awards',         Admin\AwardController::class)->except(['show', 'create', 'edit']);
-    Route::resource('slides',         Admin\SlideController::class)->except(['show']);
-    Route::resource('offices',        Admin\OfficeController::class)->except(['show', 'create', 'edit']);
+    Route::resource('history-events', Admin\HistoryEventController::class)
+        ->except(['show', 'create', 'edit'])
+        ->parameters(['history-events' => 'historyEvent']);
+
+    // Media & Content
+    Route::resource('gallery',        Admin\GalleryController::class)->except(['show']);
+    Route::resource('testimonials',   Admin\TestimonialController::class)->except(['show']);
     Route::resource('annual-reports', Admin\AnnualReportController::class)->except(['show', 'create', 'edit']);
-    Route::resource('history-events', Admin\HistoryEventController::class)->except(['show', 'create', 'edit'])->parameters(['history-events' => 'historyEvent']);
+
+    // Contact
+    Route::resource('offices', Admin\OfficeController::class)->except(['show', 'create', 'edit']);
 });
