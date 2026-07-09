@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NewsletterController;
 use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\Gallery;
@@ -92,6 +93,9 @@ Route::get('/partners', fn () => redirect()->route('about'))->name('partners');
 Route::get('/donate',  [DonationController::class, 'show'])->name('donate');
 Route::post('/donate', [DonationController::class, 'send'])->name('donate.send');
 
+Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
+Route::get('/newsletter/unsubscribe/{email}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+
 // ──────────────────────────────────────────────
 // Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
@@ -139,11 +143,17 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->except(['show', 'create', 'edit'])
         ->parameters(['history-events' => 'historyEvent']);
 
-    // Media & Content
-    Route::resource('gallery',        Admin\GalleryController::class)->except(['show']);
-    Route::resource('testimonials',   Admin\TestimonialController::class)->except(['show']);
-    Route::resource('annual-reports', Admin\AnnualReportController::class)->except(['show', 'create', 'edit']);
+    Route::prefix('contacts')->name('contacts.')->group(function () {
+        Route::get('/',                      [Admin\ContactInquiryController::class, 'index'])->name('index');
+        Route::get('{contactInquiry}',       [Admin\ContactInquiryController::class, 'show'])->name('show');
+        Route::patch('{contactInquiry}/status', [Admin\ContactInquiryController::class, 'updateStatus'])->name('status');
+        Route::delete('{contactInquiry}',       [Admin\ContactInquiryController::class, 'destroy'])->name('destroy');
+    });
 
-    // Contact
-    Route::resource('offices', Admin\OfficeController::class)->except(['show', 'create', 'edit']);
+    Route::prefix('newsletter')->name('newsletter.')->group(function () {
+        Route::get('/',                    [Admin\NewsletterController::class, 'index'])->name('index');
+        Route::get('export',               [Admin\NewsletterController::class, 'export'])->name('export');
+        Route::delete('{newsletterSubscriber}', [Admin\NewsletterController::class, 'destroy'])->name('destroy');
+    });
 });
+
