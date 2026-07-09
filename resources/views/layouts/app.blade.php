@@ -16,6 +16,41 @@
 
 <body class="bg-white text-gray-800" x-data>
 
+    {{-- Flash Message Popup --}}
+    @if(session('success') || session('info'))
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40"
+         @click.self="show = false">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center relative">
+            <button @click="show = false" class="absolute top-4 right-4 text-gray-300 hover:text-gray-500 transition-colors" aria-label="Close">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            @if(session('success'))
+            <div class="w-16 h-16 rounded-full bg-[#8da83a]/15 flex items-center justify-center mx-auto mb-5">
+                <svg class="w-8 h-8 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Success!</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">{{ session('success') }}</p>
+            @else
+            <div class="w-16 h-16 rounded-full bg-[#2d6fa3]/15 flex items-center justify-center mx-auto mb-5">
+                <svg class="w-8 h-8 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Heads Up</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">{{ session('info') }}</p>
+            @endif
+
+            <button @click="show = false" class="btn-blue w-full justify-center mt-6">Got It</button>
+        </div>
+    </div>
+    @endif
+
     {{-- Top bar --}}
     <div class="hidden lg:block bg-[#1d4e7a] text-white text-sm">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-9">
@@ -298,14 +333,16 @@
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Stay Connected</h4>
                     <p class="text-white/50 text-sm mb-4">Subscribe for updates on our work in Cambodia.</p>
-                    <form class="flex gap-2" onsubmit="return false;">
-                        <input type="email" placeholder="Your email"
+                    <form class="flex gap-2" method="POST" action="{{ route('newsletter.store') }}">
+                        @csrf
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Your email" required
                             class="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#8da83a] transition-colors">
                         <button type="submit"
                             class="px-4 py-2 bg-[#8da83a] rounded-lg text-white text-sm font-medium hover:bg-[#a3c04a] transition-colors flex-shrink-0">
                             OK
                         </button>
                     </form>
+                    @error('email') <p class="text-red-300 text-xs mt-2">{{ $message }}</p> @enderror
                     <div class="mt-6 space-y-1.5">
                         <p class="text-white/30 text-xs uppercase tracking-wider font-medium">Contact</p>
                         @php
