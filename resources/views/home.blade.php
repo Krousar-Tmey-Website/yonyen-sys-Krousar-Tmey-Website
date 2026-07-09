@@ -319,7 +319,7 @@
 
         <div class="grid lg:grid-cols-3 gap-8">
             @foreach($programs as $program)
-            <div class="card group">
+            <div class="card group flex flex-col">
                 <div class="relative overflow-hidden h-56">
                     <img src="{{ $program->image_url }}"
                          alt="{{ $program->title }}"
@@ -330,57 +330,8 @@
                     @endif
                 </div>
 
-
-
-
                 {{-- Content --}}
-                <div class="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
-
-
-                    {{-- Title --}}
-                    <h3 class="text-2xl font-bold 
-                drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)]
-                transition-all duration-500
-                group-hover:-translate-y-2">
-                        {{ $program->title }}
-                    </h3>
-
-
-                    {{-- Description --}}
-                    <div class="mt-3 
-                opacity-0 translate-y-5
-                group-hover:opacity-100
-                group-hover:translate-y-0
-                transition-all duration-500">
-
-                        <p class="text-sm leading-relaxed text-white 
-                    drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                            {{ $program->description }}
-                        </p>
-
-
-                        {{-- Button --}}
-                        <div class="mt-5 inline-flex items-center gap-2
-                    bg-[#e8a020] px-5 py-2 rounded-full
-                    font-semibold text-sm
-                    hover:bg-white hover:text-[#0b3b73]
-                    transition-all duration-300">
-
-                            {{ $settings['programs_learn_btn'] ?? 'Learn More' }}
-
-                            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-
-                        </div>
-
-                    </div>
+                <div class="p-6 flex flex-col flex-1">
                     <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $program->title }}</h3>
                     <p class="text-gray-600 text-sm leading-relaxed mb-5 line-clamp-3">
                         {{ $program->description }}
@@ -392,8 +343,8 @@
                             @endforeach
                         @endif
                     </ul>
-                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
-                        Learn More
+                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="mt-auto text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
+                        {{ $settings['programs_learn_btn'] ?? 'Learn More' }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
                 </div>
