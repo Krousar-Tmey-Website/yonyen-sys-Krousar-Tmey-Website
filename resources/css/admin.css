@@ -48,11 +48,7 @@
     justify-content: center;
     flex-shrink: 0;
 }
-.card-header .icon.blue { background: #e3f0ff; color: #1a73e8; }
-.card-header .icon.purple { background: #f0e6ff; color: #7c3aed; }
-.card-header .icon.green { background: #e3f5e3; color: #16a34a; }
-.card-header .icon.orange { background: #fef3e2; color: #ea580c; }
-.card-header .icon.red { background: #fee2e2; color: #dc2626; }
+
 .card-header .icon svg { width: 16px; height: 16px; }
 .card-header h3 {
     font-size: 14px;
@@ -182,7 +178,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
+    gap: 50px;
     padding: 16px 24px;
     background: #fafbfc;
     border-top: 1px solid #e9ecef;
@@ -636,52 +632,77 @@ select.form-control {
     color: #1e293b;
 }
 
-/* Action Buttons */
+/* Action Buttons - Professional Circular Buttons */
 .action-btn {
     width: 32px;
     height: 32px;
-    border-radius: 8px;
-    border: none;
-    background: #f1f5f9;
-    color: #64748b;
-    cursor: pointer;
+    border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid;
+    cursor: pointer;
     text-decoration: none;
+    position: relative;
 }
-.action-btn.edit {
-    background: #eff6ff;
-    color: #2563eb;
+.action-btn svg {
+    width: 14px;
+    height: 14px;
 }
-.action-btn.delete {
-    background: #fef2f2;
-    color: #ef4444;
-}
+
+/* View Button - Light Green with border */
 .action-btn.btn-view {
-    background: #eff6ff;
-    color: #2563eb;
+    background-color: #e8f5e9;
+    border: 1px solid #4ade80;
+    color: #1b5e20;
 }
+.action-btn.btn-view svg {
+    stroke: #1b5e20;
+}
+
+/* Edit Button - Blue */
 .action-btn.btn-edit {
-    background: #eff6ff;
-    color: #2563eb;
+    background-color: #e8eaf6;
+    border-color: #c5cae9;
+    color: #1a237e;
 }
+
+/* Delete Button - Red */
 .action-btn.btn-delete {
-    background: #fef2f2;
-    color: #ef4444;
+    background-color: #ffebee;
+    border-color: #ffcdd2;
+    color: #b71c1c;
 }
+
+/* Tooltip */
 .action-btn .tooltip {
     position: absolute;
-    background: #1e293b;
-    color: #fff;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    background: #0f172a;
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 6px;
     font-size: 11px;
-    padding: 4px 8px;
-    border-radius: 4px;
+    font-weight: 500;
+    white-space: nowrap;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s;
-    margin-left: 8px;
-    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+.action-btn .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #0f172a;
+}
+.action-btn:hover .tooltip {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
 }
 
 /* Empty State */

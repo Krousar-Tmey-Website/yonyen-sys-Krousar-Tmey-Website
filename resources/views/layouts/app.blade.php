@@ -11,22 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/css/award.css', 'resources/js/app.js'])
-```
-<arg_key>task_progress</arg_key>
-<arg_value>- [x] Investigate public awards page issue
-- [x] Check .env configuration
-- [x] Fix about.blade.php to show images and links
-- [x] Verify the fix works
-- [x] Improve styling and add detail view
-- [x] Update about.blade.php with professional styling
-- [x] Enhance admin awards page with professional styling
-- [x] Create admin awards create page
-- [x] Create admin awards edit page
-- [x] Update AwardController to handle remove_image
-- [x] Fix routes to include create and edit
-- [x] Verify all features work
-- [x] Create separate award.css file
-- [x] Update vite.config.js to include award.css
 </head>
 <body class="bg-white text-gray-800" x-data>
 
@@ -132,7 +116,7 @@
                              x-transition:leave-end="opacity-0 translate-y-1"
                              class="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
                             <a href="{{ route('programs') }}#welfare"   class="dropdown-item rounded-t-xl">Child Welfare</a>
-                            <a href="{{ route('programs') }}#education" class="dropdown-item">Education for Deaf &amp; Blind</a>
+                            <a href="{{ route('programs') }}#education" class="dropdown-item">Education for Deaf & Blind</a>
                             <a href="{{ route('programs') }}#culture"   class="dropdown-item rounded-b-xl">Cultural Development</a>
                         </div>
                     </div>
@@ -275,7 +259,7 @@
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Programs</h4>
                     <ul class="space-y-3">
                         <li><a href="{{ route('programs') }}#welfare"   class="text-white/50 hover:text-white text-sm transition-colors">Child Welfare</a></li>
-                        <li><a href="{{ route('programs') }}#education" class="text-white/50 hover:text-white text-sm transition-colors">Education for Deaf &amp; Blind</a></li>
+                        <li><a href="{{ route('programs') }}#education" class="text-white/50 hover:text-white text-sm transition-colors">Education for Deaf & Blind</a></li>
                         <li><a href="{{ route('programs') }}#culture"   class="text-white/50 hover:text-white text-sm transition-colors">Cultural Development</a></li>
                         <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">Volunteering</a></li>
                         <li><a href="{{ route('donate') }}"             class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>

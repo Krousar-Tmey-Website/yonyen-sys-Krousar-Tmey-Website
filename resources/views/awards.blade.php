@@ -44,7 +44,7 @@
                         <div class="w-24 h-24 rounded-2xl overflow-hidden mx-auto group-hover:scale-110 transition-transform duration-500 shadow-lg">
                             <img src="{{ $award->image_url }}" alt="{{ $award->title }}" class="w-full h-full object-cover">
                         </div>
-                        <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-[#8da83a] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-[#8da83a] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-2 border-[#4ade80]">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z"/></svg>
                         </div>
                         @else
