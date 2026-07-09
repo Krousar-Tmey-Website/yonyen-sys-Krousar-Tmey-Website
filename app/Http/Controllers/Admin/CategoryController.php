@@ -35,6 +35,12 @@ class CategoryController extends Controller
             ->with('success', 'Category created successfully.');
     }
 
+    public function show($id)
+    {
+        $category = Category::findOrFail($id);
+        return view('admin.categories.show', compact('category'));
+    }
+
     public function edit($id)
     {
         $category = Category::findOrFail($id);

@@ -91,6 +91,12 @@ class AdminSeeder extends Seeder
             // Mission group
             ['key' => 'mission_title', 'label' => 'Mission Title', 'group' => 'mission', 'value' => 'Our Mission'],
             ['key' => 'mission_text',  'label' => 'Mission Text',  'group' => 'mission', 'value' => 'Since 1991, Krousar Thmey has been dedicated to the development of disadvantaged children in Cambodia, ensuring they grow with identity, integration, and dignity.'],
+            // Social Links group
+            ['key' => 'social_facebook',  'label' => 'Facebook URL',  'group' => 'social', 'value' => 'https://www.facebook.com/share/1LC1ZVXgen/?mibextid=wwXIfr'],
+            ['key' => 'social_youtube',   'label' => 'YouTube URL',   'group' => 'social', 'value' => 'https://www.youtube.com/@krousarthmeyvideos'],
+            ['key' => 'social_instagram', 'label' => 'Instagram URL', 'group' => 'social', 'value' => 'https://www.instagram.com/krousar_thmey_foundation?igsh=MWJpZXQ4YXZraDAyNg=='],
+            ['key' => 'social_telegram',  'label' => 'Telegram URL',  'group' => 'social', 'value' => 'https://t.me/krousarthmey'],
+            ['key' => 'social_linkedin',  'label' => 'LinkedIn URL',  'group' => 'social', 'value' => 'https://www.linkedin.com/company/krousar-thmey/'],
         ];
 
         foreach ($homeSettings as $setting) {

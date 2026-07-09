@@ -10,8 +10,13 @@ class AwardController extends Controller
 {
     public function index()
     {
-        $awards = Award::ordered()->get();
+        $awards = Award::ordered()->latest()->get();
         return view('admin.awards.index', compact('awards'));
+    }
+
+    public function show(Award $award)
+    {
+        return view('admin.awards.show', compact('award'));
     }
 
     public function store(Request $request)

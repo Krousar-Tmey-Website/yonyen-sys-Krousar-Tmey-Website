@@ -8,6 +8,7 @@ use App\Http\Controllers\VolunteerController;
 use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
+use App\Models\PartnerCategory;
 use App\Models\Award;
 use App\Models\PageSection;
 use App\Models\Program;
@@ -40,12 +41,17 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/who-we-are', function () {
-    $partners = Partner::active()->get()->groupBy('category');
+    $partnerCategories = PartnerCategory::with(['partners' => function ($query) {
+        $query->active();
+    }])->orderBy('name')->get();
     $awards   = Award::ordered()->get();
-    return view('about', compact('partners', 'awards'));
+    return view('about', compact('partnerCategories', 'awards'));
 })->name('about');
 
-Route::get('/our-programs', fn() => view('programs'))->name('programs');
+Route::get('/our-programs', function () {
+    $programs = Program::active()->get();
+    return view('programs', compact('programs'));
+})->name('programs');
 
 Route::get('/get-involved', fn() => view('involved'))->name('involved');
 
@@ -88,7 +94,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     Route::resource('news', Admin\NewsController::class);
     Route::resource('programs', Admin\ProgramController::class)
-        ->only(['index', 'edit', 'update']);
+        ->except(['create', 'store', 'destroy']);
 
     Route::get('home', [Admin\HomeSettingController::class, 'index'])
         ->name('home.index');
@@ -121,4 +127,14 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::patch('{contactInquiry}/status', [Admin\ContactInquiryController::class, 'updateStatus'])->name('status');
         Route::delete('{contactInquiry}',       [Admin\ContactInquiryController::class, 'destroy'])->name('destroy');
     });
+    // Categories
+    Route::resource('categories', CategoryController::class);
+
+    // Partner Management
+    Route::resource('partners', Admin\PartnerController::class);
+
+    Route::resource('awards', Admin\AwardController::class)
+        ->except(['create', 'edit']);
+
+    Route::resource('slides', Admin\SlideController::class);
 });

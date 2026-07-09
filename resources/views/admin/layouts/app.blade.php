@@ -91,6 +91,15 @@
                             ['route' => 'admin.categories.index', 'label' => 'Categories'],
                         ],
                     ],
+                    'resources' => [
+                        'label' => 'Resources',
+                        'icon' => 'M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z',
+                        'children' => [
+                            ['route' => 'admin.reports.index', 'label' => 'Annual Reports'],
+                            ['route' => 'admin.media.index', 'label' => 'Media'],
+                            ['route' => 'admin.wap.index', 'label' => 'Words and Pictures Application'],
+                        ],
+                    ],
                     'involved' => [
                         'label' => 'Get Involved',
                         'icon' => 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
@@ -275,5 +284,6 @@
 
 </div>
 
+@stack('scripts')
 </body>
 </html>
