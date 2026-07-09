@@ -14,6 +14,41 @@
 </head>
 <body class="bg-white text-gray-800" x-data>
 
+    {{-- Flash Message Popup --}}
+    @if(session('success') || session('info'))
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40"
+         @click.self="show = false">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center relative">
+            <button @click="show = false" class="absolute top-4 right-4 text-gray-300 hover:text-gray-500 transition-colors" aria-label="Close">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            @if(session('success'))
+            <div class="w-16 h-16 rounded-full bg-[#8da83a]/15 flex items-center justify-center mx-auto mb-5">
+                <svg class="w-8 h-8 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Success!</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">{{ session('success') }}</p>
+            @else
+            <div class="w-16 h-16 rounded-full bg-[#2d6fa3]/15 flex items-center justify-center mx-auto mb-5">
+                <svg class="w-8 h-8 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Heads Up</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">{{ session('info') }}</p>
+            @endif
+
+            <button @click="show = false" class="btn-blue w-full justify-center mt-6">Got It</button>
+        </div>
+    </div>
+    @endif
+
     {{-- Top bar --}}
     <div class="hidden lg:block bg-[#1d4e7a] text-white text-sm">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-9">
@@ -28,7 +63,7 @@
                     </a>
                     <a href="https://www.instagram.com/krousarthmey/" target="_blank" rel="noopener" aria-label="Instagram"
                        class="text-white/50 hover:text-[#8da83a] transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>'></svg>
                     </a>
                     <a href="https://www.linkedin.com/company/krousar-thmey/" target="_blank" rel="noopener" aria-label="LinkedIn"
                        class="text-white/50 hover:text-[#8da83a] transition-colors">
@@ -270,14 +305,16 @@
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Stay Connected</h4>
                     <p class="text-white/50 text-sm mb-4">Subscribe for updates on our work in Cambodia.</p>
-                    <form class="flex gap-2" onsubmit="return false;">
-                        <input type="email" placeholder="Your email"
-                               class="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#8da83a] transition-colors">
+                    <form class="flex gap-2" method="POST" action="{{ route('newsletter.store') }}">
+                        @csrf
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Your email" required
+                            class="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#8da83a] transition-colors">
                         <button type="submit"
                                 class="px-4 py-2 bg-[#8da83a] rounded-lg text-white text-sm font-medium hover:bg-[#a3c04a] transition-colors flex-shrink-0">
                             OK
                         </button>
                     </form>
+                    @error('email') <p class="text-red-300 text-xs mt-2">{{ $message }}</p> @enderror
                     <div class="mt-6 space-y-1.5">
                         <p class="text-white/30 text-xs uppercase tracking-wider font-medium">Offices</p>
                         <p class="text-white/50 text-xs">🇰🇭 Cambodia · 🇫🇷 France</p>

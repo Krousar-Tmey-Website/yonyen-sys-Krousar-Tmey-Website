@@ -80,35 +80,36 @@
             {{-- Right: Contact Form --}}
             <div class="lg:col-span-3">
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
-                    <h2 class="text-xl font-bold text-[#1a3c6e] mb-2">Send Us a Message</h2>
-                    <p class="text-gray-500 text-sm mb-8">We'll get back to you within 2 business days.</p>
-
-                    <form class="space-y-5" onsubmit="return false;">
+                    <form class="space-y-5" method="POST" action="{{ route('contact.store') }}">
+                        @csrf
                         <div class="grid md:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">First Name *</label>
-                                <input type="text" placeholder="John"
-                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                                <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">First Name <span class="text-[#d32f2f]">*</span></label>
+                                <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="John"
+                                       class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/10 text-sm transition-colors">
+                                @error('first_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Last Name *</label>
-                                <input type="text" placeholder="Doe"
-                                       class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                                <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Last Name <span class="text-[#d32f2f]">*</span></label>
+                                <input type="text" name="last_name" value="{{ old('last_name') }}" placeholder="Doe"
+                                       class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/10 text-sm transition-colors">
+                                @error('last_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Email Address *</label>
-                            <input type="email" placeholder="john@example.com"
-                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Email Address <span class="text-[#d32f2f]">*</span></label>
+                            <input type="email" name="email" value="{{ old('email') }}" placeholder="john@example.com"
+                                   class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/10 text-sm transition-colors">
+                            @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Organisation (optional)</label>
-                            <input type="text" placeholder="Your organization"
-                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Organisation <span class="text-gray-400 font-normal normal-case">(optional)</span></label>
+                            <input type="text" name="organisation" value="{{ old('organisation') }}" placeholder="Your organization"
+                                   class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/10 text-sm transition-colors">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Subject *</label>
-                            <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors bg-white">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Subject <span class="text-[#d32f2f]">*</span></label>
+                            <select name="subject" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/10 text-sm transition-colors bg-white text-gray-700">
                                 <option value="">Select a topic</option>
                                 <option>Donation</option>
                                 <option>Partnership / Sponsorship</option>
@@ -119,13 +120,14 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Message *</label>
-                            <textarea rows="5" placeholder="Your message..."
-                                      class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#1a3c6e] focus:ring-2 focus:ring-[#1a3c6e]/10 text-sm transition-colors resize-none"></textarea>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Message <span class="text-[#d32f2f]">*</span></label>
+                            <textarea rows="5" name="message" placeholder="Your message..."
+                                      class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/10 text-sm transition-colors resize-none">{{ old('message') }}</textarea>
+                            @error('message') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
-                        <div class="flex items-start gap-3">
-                            <input type="checkbox" id="consent" class="mt-0.5 rounded accent-[#1a3c6e]">
-                            <label for="consent" class="text-gray-500 text-xs leading-relaxed">
+                        <div class="flex items-start gap-3 bg-[#f8f9fc] rounded-xl p-4 border border-gray-100">
+                            <input type="checkbox" id="consent" name="consent" value="1" {{ old('consent') ? 'checked' : '' }} class="mt-0.5 rounded accent-[#2d6fa3] w-4 h-4 flex-shrink-0">
+                            <label for="consent" class="text-gray-500 text-xs leading-relaxed cursor-pointer">
                                 I agree to Krousar Thmey storing my contact information to respond to my enquiry, in accordance with their privacy policy.
                             </label>
                         </div>

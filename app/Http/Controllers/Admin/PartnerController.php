@@ -5,13 +5,46 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PartnerController extends Controller
 {
-    public function index()
+    public const CATEGORIES = [
+        'authorities'   => 'Authorities',
+        'organizations' => 'Organizations',
+        'companies'     => 'Companies',
+        'towns'         => 'Towns',
+    ];
+
+    public function index(Request $request)
     {
-        $partners = Partner::orderBy('category')->orderBy('sort_order')->orderBy('name')->get()->groupBy('category');
-        return view('admin.partners.index', compact('partners'));
+        $filters = [
+            'search' => trim((string) $request->query('search', '')),
+            'category' => (string) $request->query('category', ''),
+        ];
+
+        if (! array_key_exists($filters['category'], self::CATEGORIES)) {
+            $filters['category'] = '';
+        }
+
+        $partners = Partner::query()
+            ->when($filters['search'] !== '', function ($query) use ($filters) {
+                $query->where('name', 'like', '%' . $filters['search'] . '%');
+            })
+            ->when($filters['category'] !== '', function ($query) use ($filters) {
+                $query->where('category', $filters['category']);
+            })
+            ->orderBy('category')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get()
+            ->groupBy('category');
+
+        return view('admin.partners.index', [
+            'partners' => $partners,
+            'filters' => $filters,
+            'categories' => self::CATEGORIES,
+        ]);
     }
 
     public function store(Request $request)
@@ -47,7 +80,12 @@ class PartnerController extends Controller
 
     public function destroy(Partner $partner)
     {
+        if ($partner->logo) {
+            Storage::disk('public')->delete($partner->logo);
+        }
+
         $partner->delete();
-        return redirect()->route('admin.partners.index')->with('success', 'Partner removed.');
+
+        return redirect()->route('admin.partners.index')->with('success', 'Partner removed successfully.');
     }
 }

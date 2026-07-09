@@ -31,20 +31,24 @@
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach([2024, 2023, 2022, 2021, 2020, 2019] as $year)
+            @forelse($reports ?? [] as $report)
             <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 hover:shadow-md transition-shadow group flex items-center gap-5">
                 <div class="w-14 h-14 rounded-xl bg-[#1a3c6e] flex items-center justify-center flex-shrink-0">
                     <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 </div>
                 <div class="flex-1">
-                    <div class="font-bold text-[#1a3c6e]">Annual Report {{ $year }}</div>
+                    <div class="font-bold text-[#1a3c6e]">{{ $report->title ?? 'Annual Report ' . $report->year }}</div>
                     <div class="text-gray-400 text-xs mt-0.5">PDF · Full Report</div>
                 </div>
-                <a href="#" class="text-gray-400 hover:text-[#e8a020] transition-colors p-2 rounded-lg hover:bg-white">
+                <a href="{{ $report->file_path ? asset('storage/' . $report->file_path) : '#' }}" class="text-gray-400 hover:text-[#e8a020] transition-colors p-2 rounded-lg hover:bg-white" @if(!$report->file_path) onclick="return false;" @endif>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                 </a>
             </div>
-            @endforeach
+            @empty
+            <div class="col-span-3 text-center py-12 text-gray-500">
+                <p>No annual reports available at the moment. Please check back later.</p>
+            </div>
+            @endforelse
         </div>
     </div>
 </section>

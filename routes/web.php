@@ -1,14 +1,18 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NewsletterController;
 use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Award;
 use App\Models\Slide;
 use App\Models\HistoryEvent;
+use App\Models\AnnualReport;
+use App\Models\Office;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
@@ -40,11 +44,24 @@ Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::get('/awards', fn() => view('awards', ['awards' => Award::ordered()->get()]))->name('awards');
-Route::get('/resources', fn() => view('resources'))->name('resources');
-Route::get('/contact',   fn() => view('contact'))->name('contact');
+Route::get('/resources', function () {
+    $reports = AnnualReport::active()->get();
+    return view('resources', compact('reports'));
+})->name('resources');
+
+Route::get('/contact', function () {
+    $offices = Office::active()->get();
+    return view('contact', compact('offices'));
+})->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+Route::get('/partners', fn () => redirect()->route('about'))->name('partners');
 
 Route::get('/donate',  [DonationController::class, 'show'])->name('donate');
 Route::post('/donate', [DonationController::class, 'send'])->name('donate.send');
+
+// Newsletter subscription
+Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
 
 // ──────────────────────────────────────────────
 // Admin — Auth (no middleware)
@@ -78,7 +95,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Partners, Awards, Slides
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create', 'edit']);
     Route::resource('awards',   Admin\AwardController::class)->except(['show']);
-Route::get('awards/{award}', [Admin\AwardController::class, 'show'])->name('awards.show');
+    Route::get('awards/{award}', [Admin\AwardController::class, 'show'])->name('awards.show');
     Route::resource('slides',   Admin\SlideController::class)->except(['show']);
 
     // History
