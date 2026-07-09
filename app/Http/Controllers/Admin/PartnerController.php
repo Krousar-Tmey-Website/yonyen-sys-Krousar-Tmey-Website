@@ -22,10 +22,6 @@ class PartnerController extends Controller
      */
     public function index(Request $request)
     {
-<<<<<<< HEAD
-        $partners = Partner::orderBy('category')->orderBy('sort_order')->orderBy('name')->get()->groupBy('category', false);
-        return view('admin.partners.index', compact('partners'));
-=======
         $filters = [
             'search' => trim((string) $request->query('search', '')),
             'category' => (string) $request->query('category', ''),
@@ -53,7 +49,6 @@ class PartnerController extends Controller
             'filters' => $filters,
             'categories' => self::CATEGORIES,
         ]);
->>>>>>> 184c6e2477c85bc89711a44c4d113990aa2e6159
     }
 
     /**
@@ -138,10 +133,6 @@ class PartnerController extends Controller
      */
     public function destroy(Partner $partner)
     {
-<<<<<<< HEAD
-        $partner->delete(['*']);
-        return redirect()->route('admin.partners.index')->with('success', 'Partner removed.');
-=======
         if ($partner->logo) {
             Storage::disk('public')->delete($partner->logo);
         }
@@ -149,6 +140,5 @@ class PartnerController extends Controller
         $partner->delete();
 
         return redirect()->route('admin.partners.index')->with('success', 'Partner removed successfully.');
->>>>>>> 184c6e2477c85bc89711a44c4d113990aa2e6159
     }
 }

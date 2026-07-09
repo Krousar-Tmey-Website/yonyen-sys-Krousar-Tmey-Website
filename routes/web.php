@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
@@ -87,6 +88,7 @@ Route::get('/contact', function () {
     $offices = Office::active()->get();
     return view('contact', compact('offices'));
 })->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/partners', fn () => redirect()->route('about'))->name('partners');
 
