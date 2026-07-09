@@ -10,7 +10,10 @@ class HomeSettingController extends Controller
 {
     public function index()
     {
-        $settings = HomeSetting::orderBy('group')->orderBy('id')->get()->groupBy('group');
+        $settings = HomeSetting::orderBy('group')->orderBy('id')
+            ->where('group', '!=', 'programs_banner')
+            ->get()
+            ->groupBy('group');
         return view('admin.home.index', compact('settings'));
     }
 
@@ -22,6 +25,8 @@ class HomeSettingController extends Controller
         ]);
 
         foreach ($data['settings'] as $key => $value) {
+            // programs_banner keys are managed by ProgramsBannerController — skip here
+            if (str_starts_with($key, 'programs_banner_')) continue;
             HomeSetting::setValue($key, $value ?? '');
         }
 

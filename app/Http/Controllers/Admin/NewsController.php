@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -17,7 +18,8 @@ class NewsController extends Controller
 
     public function create()
     {
-        return view('admin.news.create');
+        $categories = Category::orderBy('CategoryName')->get();
+        return view('admin.news.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -26,16 +28,34 @@ class NewsController extends Controller
             'title'        => ['required', 'string', 'max:255'],
             'excerpt'      => ['nullable', 'string'],
             'content'      => ['nullable', 'string'],
-            'category'     => ['required', 'string'],
+            'category'     => ['required', 'string', 'exists:categories,CategoryName'],
             'is_published' => ['nullable', 'boolean'],
             'image'        => ['nullable', 'image', 'max:2048'],
+            'links'        => ['nullable', 'json'],
+            'tags'         => ['nullable', 'string'],
         ]);
 
-        $data['slug']         = Str::slug($data['title']);
         $data['is_published'] = $request->boolean('is_published');
+
+        // Generate slug with uniqueness check
+        $baseSlug = Str::slug($data['title']);
+        $slug = $baseSlug;
+        $counter = 1;
+        
+        while (News::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+        
+        $data['slug'] = $slug;
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('news', 'public');
+        }
+
+        // Handle links
+        if ($request->has('links') && !empty($request->input('links'))) {
+            $data['links'] = $request->input('links');
         }
 
         if ($data['is_published']) {
@@ -49,7 +69,8 @@ class NewsController extends Controller
 
     public function edit(News $news)
     {
-        return view('admin.news.edit', compact('news'));
+        $categories = Category::orderBy('CategoryName')->get();
+        return view('admin.news.edit', compact('news', 'categories'));
     }
 
     public function update(Request $request, News $news)
@@ -58,15 +79,40 @@ class NewsController extends Controller
             'title'        => ['required', 'string', 'max:255'],
             'excerpt'      => ['nullable', 'string'],
             'content'      => ['nullable', 'string'],
-            'category'     => ['required', 'string'],
+            'category'     => ['required', 'string', 'exists:categories,CategoryName'],
             'is_published' => ['nullable', 'boolean'],
             'image'        => ['nullable', 'image', 'max:2048'],
+            'links'        => ['nullable', 'json'],
+            'tags'         => ['nullable', 'string'],
         ]);
 
         $data['is_published'] = $request->boolean('is_published');
 
+        // Only update slug if title changed
+        if ($news->title !== $data['title']) {
+            $baseSlug = Str::slug($data['title']);
+            $slug = $baseSlug;
+            $counter = 1;
+            
+            while (News::where('slug', $slug)->where('id', '!=', $news->id)->exists()) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+            
+            $data['slug'] = $slug;
+        }
+
         if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($news->image) {
+                \Storage::disk('public')->delete($news->image);
+            }
             $data['image'] = $request->file('image')->store('news', 'public');
+        }
+
+        // Handle links
+        if ($request->has('links') && !empty($request->input('links'))) {
+            $data['links'] = $request->input('links');
         }
 
         if ($data['is_published'] && !$news->published_at) {
@@ -80,6 +126,11 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
+        // Delete image if exists
+        if ($news->image) {
+            \Storage::disk('public')->delete($news->image);
+        }
+        
         $news->delete();
         return redirect()->route('admin.news.index')->with('success', 'Article deleted.');
     }

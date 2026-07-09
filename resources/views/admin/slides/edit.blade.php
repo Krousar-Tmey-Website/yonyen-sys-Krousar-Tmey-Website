@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div class="grid lg:grid-cols-3 gap-6">
+<div class="max-w-5xl mx-auto grid lg:grid-cols-3 gap-6">
 
     {{-- Form --}}
     <div class="lg:col-span-2">
@@ -119,12 +119,13 @@
             <div class="flex items-center gap-3">
                 <button type="submit" class="btn-primary">Save Changes</button>
                 <a href="{{ route('admin.slides.index') }}" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</a>
-                <form action="{{ route('admin.slides.destroy', $slide) }}" method="POST" class="ml-auto"
-                      onsubmit="return confirm('Delete this slide permanently?')">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="text-red-400 hover:text-red-600 text-sm">Delete Slide</button>
-                </form>
+                <button type="submit" form="delete-slide-form" class="text-red-400 hover:text-red-600 text-sm ml-auto">Delete Slide</button>
             </div>
+        </form>
+
+        <form id="delete-slide-form" action="{{ route('admin.slides.destroy', $slide) }}" method="POST" class="hidden"
+              onsubmit="return confirm('Delete this slide permanently?')">
+            @csrf @method('DELETE')
         </form>
     </div>
 

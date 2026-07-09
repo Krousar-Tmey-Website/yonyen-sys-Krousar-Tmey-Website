@@ -1,0 +1,307 @@
+:root {
+    --cambodia-map-radius: 28px;
+    --cambodia-map-shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
+}
+
+.cambodia-map-card {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.cambodia-map__stage {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--cambodia-map-radius);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(238,247,250,0.96) 100%);
+    min-height: 500px;
+    transform-origin: center center;
+    transition: transform 0.35s ease;
+}
+
+.cambodia-map__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--cambodia-map-radius);
+    filter: drop-shadow(0 16px 35px rgba(15, 23, 42, 0.08));
+}
+
+.cambodia-map__markers {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.map-marker {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    transform: translate(-50%, -100%) scale(1);
+    border-radius: 9999px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.map-marker:hover,
+.map-marker.is-active {
+    transform: translate(-50%, -100%) scale(1.28);
+    box-shadow: 0 0 0 14px rgba(56, 178, 130, 0.12);
+}
+
+.map-marker__ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.05);
+}
+
+.map-marker__pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    animation: cambodia-marker-pulse 2.4s infinite ease-out;
+    opacity: 0.35;
+}
+
+.map-marker__pin {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: white;
+    z-index: 2;
+    position: relative;
+    box-shadow: 0 10px 18px rgba(15, 23, 42, 0.18);
+}
+
+.map-marker--child_welfare {
+    background: #2d6fa3;
+}
+
+.map-marker--outside_cases {
+    background: #16a085;
+}
+
+.map-marker--deaf_blind_school {
+    background: #38a169;
+}
+
+.map-marker--arts_culture_school {
+    background: #d53f8c;
+}
+
+.map-marker--child_welfare .map-marker__pulse {
+    background: rgba(45, 111, 163, 0.24);
+}
+
+.map-marker--outside_cases .map-marker__pulse {
+    background: rgba(22, 160, 133, 0.24);
+}
+
+.map-marker--deaf_blind_school .map-marker__pulse {
+    background: rgba(56, 161, 105, 0.24);
+}
+
+.map-marker--arts_culture_school .map-marker__pulse {
+    background: rgba(213, 63, 140, 0.24);
+}
+
+@keyframes cambodia-marker-pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.45;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+.cambodia-map__tooltip {
+    position: absolute;
+    min-width: 240px;
+    max-width: 280px;
+    padding: 18px 20px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    box-shadow: 0 24px 80px rgba(15, 23, 42, 0.14);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -115%) scale(0.96);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 30;
+}
+
+.cambodia-map__tooltip.is-visible {
+    opacity: 1;
+    transform: translate(-50%, -115%) scale(1);
+}
+
+.cambodia-map__tooltip h4 {
+    margin: 0 0 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.cambodia-map__tooltip p {
+    margin: 0;
+    color: #475569;
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.cambodia-map__tooltip .tooltip-meta {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.cambodia-map__tooltip .tooltip-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 9999px;
+    background: #eff6ff;
+    color: #0f172a;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.cambodia-map__tooltip .tooltip-children {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.cambodia-map__legend-button {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid #dbeafe;
+    background: #ffffff;
+    color: #0f172a;
+    text-align: left;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.cambodia-map__legend-button:hover {
+    transform: translateY(-1px);
+    background: #f8fbff;
+}
+
+.cambodia-map__legend-button[data-active="true"] {
+    background: #eff6ff;
+    border-color: #7dd3fc;
+}
+
+.cambodia-map__legend-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    background: #f8fafc;
+    font-size: 1.1rem;
+}
+
+.cambodia-map__location-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.cambodia-map__location-item:hover {
+    transform: translateY(-1px);
+    border-color: #94a3b8;
+    background: #ffffff;
+}
+
+.cambodia-map__location-item span {
+    display: block;
+}
+
+.cambodia-map__location-name {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.cambodia-map__location-category {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.cambodia-map__location-pill {
+    padding: 6px 10px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.cambodia-map__location-pill.child_welfare {
+    background: rgba(45, 111, 163, 0.12);
+    color: #1d4e7a;
+}
+
+.cambodia-map__location-pill.outside_cases {
+    background: rgba(22, 160, 133, 0.12);
+    color: #0f766e;
+}
+
+.cambodia-map__location-pill.deaf_blind_school {
+    background: rgba(56, 161, 105, 0.12);
+    color: #166534;
+}
+
+.cambodia-map__location-pill.arts_culture_school {
+    background: rgba(213, 63, 140, 0.12);
+    color: #831843;
+}
+
+@media (max-width: 1024px) {
+    .cambodia-map-card {
+        border-radius: 24px;
+    }
+
+    .cambodia-map__stage {
+        min-height: 380px;
+    }
+}
+
+@media (max-width: 768px) {
+    .cambodia-map__stage {
+        min-height: 360px;
+    }
+
+    .cambodia-map__tooltip {
+        left: 50% !important;
+        top: 24px !important;
+        max-width: calc(100vw - 48px);
+        transform: translate(-50%, 0) scale(0.96);
+    }
+
+    .cambodia-map-card {
+        border-radius: 20px;
+    }
+}

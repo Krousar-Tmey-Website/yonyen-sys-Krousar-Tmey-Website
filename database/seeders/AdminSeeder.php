@@ -29,12 +29,59 @@ class AdminSeeder extends Seeder
         $homeSettings = [
             // Stats group
             ['key' => 'stat_children',   'label' => 'Children Supported',        'group' => 'stats', 'value' => '4,079'],
-            ['key' => 'stat_welfare',    'label' => 'In Child Welfare',           'group' => 'stats', 'value' => '240'],
-            ['key' => 'stat_special_ed', 'label' => 'Special Ed Students',        'group' => 'stats', 'value' => '768'],
-            ['key' => 'stat_arts',       'label' => 'Arts & Culture Students',    'group' => 'stats', 'value' => '1,088'],
-            ['key' => 'stat_counseling', 'label' => 'Career Counseling',          'group' => 'stats', 'value' => '357'],
+            ['key' => 'stat_employees',  'label' => 'Employees',                  'group' => 'stats', 'value' => '70'],
+            ['key' => 'stat_budget',     'label' => 'USD Annual Budget',          'group' => 'stats', 'value' => '950000'],
             ['key' => 'stat_provinces',  'label' => 'Provinces',                  'group' => 'stats', 'value' => '15'],
             // Hero group
+            ['key' => 'hero_banner_text',           'label' => 'Hero Banner Text',           'group' => 'hero', 'value' => 'Krousar Thmey is Cambodia’s first organization helping disadvantaged children through child welfare, special education, and cultural development.'],
+            ['key' => 'hero_button_primary_text',   'label' => 'Hero Primary Button Text',   'group' => 'hero', 'value' => 'Donate Now'],
+            ['key' => 'hero_button_primary_url',    'label' => 'Hero Primary Button URL',    'group' => 'hero', 'value' => '/donate'],
+            ['key' => 'hero_button_secondary_text', 'label' => 'Hero Secondary Button Text', 'group' => 'hero', 'value' => 'Learn More'],
+            ['key' => 'hero_button_secondary_url',  'label' => 'Hero Secondary Button URL', 'group' => 'hero', 'value' => '/our-programs'],
+            // About section
+            ['key' => 'about_section_label', 'label' => 'About Section Label', 'group' => 'about', 'value' => 'Our Mission'],
+            ['key' => 'about_title',         'label' => 'About Section Title', 'group' => 'about', 'value' => 'The First Cambodian Organization for Disadvantaged Children'],
+            ['key' => 'about_text',          'label' => 'About Section Text', 'group' => 'about', 'value' => 'Born in 1991 in the Site II refugee camp in Thailand, Krousar Thmey — meaning "New Family" in Khmer — was established with a single vision: that every disadvantaged child in Cambodia deserves safety, education, and a sense of cultural identity.'],
+            ['key' => 'about_subtext',       'label' => 'About Section Subtext', 'group' => 'about', 'value' => 'We believe in development led by Cambodians, for Cambodians. With three core programs spanning child welfare, special education, and cultural arts, we reach children across all 15 provinces of Cambodia.'],
+            ['key' => 'about_image',         'label' => 'About Section Image', 'group' => 'about', 'value' => 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=700&q=80'],
+            // Programs section
+            ['key' => 'programs_title',    'label' => 'Programs Section Title',    'group' => 'programs', 'value' => 'What We Do'],
+            ['key' => 'programs_subtitle', 'label' => 'Programs Section Subtitle', 'group' => 'programs', 'value' => 'Operating across 15 Cambodian provinces, our programs address the most pressing needs of vulnerable children.'],
+            ['key' => 'programs_featured', 'label' => 'Featured Programs (comma separated slugs)', 'group' => 'programs', 'value' => 'child-welfare,special-education'],
+            // News section
+            ['key' => 'news_title',    'label' => 'News Section Title',    'group' => 'news', 'value' => 'Latest Updates'],
+            ['key' => 'news_subtitle', 'label' => 'News Section Subtitle', 'group' => 'news', 'value' => 'News and stories about our impact, events, and community progress.'],
+            // Partners section
+            ['key' => 'partners_title',    'label' => 'Partners Section Title',    'group' => 'partners', 'value' => 'Supported by our partners worldwide'],
+            ['key' => 'partners_subtitle', 'label' => 'Partners Section Subtitle', 'group' => 'partners', 'value' => 'Together we reach communities across Cambodia.'],
+            ['key' => 'partners_logos',    'label' => 'Partner Logos List',       'group' => 'partners', 'value' => 'UNICEF, USAID, AFD, Handicap International, European Union, Aide et Action'],
+            // Call to action
+            ['key' => 'cta_label',           'label' => 'CTA Label',           'group' => 'cta', 'value' => 'Support Our Work'],
+            ['key' => 'cta_title',           'label' => 'CTA Title',           'group' => 'cta', 'value' => 'Help a Child Build Their Future'],
+            ['key' => 'cta_subtitle',        'label' => 'CTA Subtitle',        'group' => 'cta', 'value' => 'We guarantee that 100% of your donation is used to support children across Cambodia. Every contribution, big or small, changes a life.' ],
+            ['key' => 'cta_primary_text',    'label' => 'CTA Primary Button Text',   'group' => 'cta', 'value' => 'Donate Now'],
+            ['key' => 'cta_primary_url',     'label' => 'CTA Primary Button URL',   'group' => 'cta', 'value' => '/donate'],
+            ['key' => 'cta_secondary_text',  'label' => 'CTA Secondary Button Text', 'group' => 'cta', 'value' => 'Get Involved'],
+            ['key' => 'cta_secondary_url',   'label' => 'CTA Secondary Button URL', 'group' => 'cta', 'value' => '/get-involved'],
+            // Structure map
+            ['key' => 'structure_heading',       'label' => 'Structure Map — Heading',            'group' => 'structure', 'value' => "KROUSAR THMEY'S STRUCTURES"],
+            ['key' => 'structure_welfare_title', 'label' => 'Structure Map — Child Welfare Title', 'group' => 'structure', 'value' => 'Child Welfare Program'],
+            ['key' => 'structure_welfare_items', 'label' => 'Structure Map — Child Welfare Items', 'group' => 'structure', 'value' => "2 Temporary Protection Centers\n2 Long-term Protection Centers\n2 Family Houses\nOutside Cases"],
+            ['key' => 'structure_education_title','label' => 'Structure Map — Education Title',    'group' => 'structure', 'value' => 'Education for Deaf or Blind Children Program'],
+            ['key' => 'structure_education_items','label' => 'Structure Map — Education Items',    'group' => 'structure', 'value' => "5 Special Education High Schools"],
+            ['key' => 'structure_image',         'label' => 'Structure Map — Image URL',           'group' => 'structure', 'value' => asset('images/cambodia-map.png')],
+            // Programs section
+            ['key' => 'programs_badge',  'label' => 'Programs — Badge Text', 'group' => 'programs', 'value' => 'WHAT WE DO'],
+            ['key' => 'programs_heading','label' => 'Programs — Heading',     'group' => 'programs', 'value' => 'Two Programs, One Mission'],
+            ['key' => 'programs_cta',    'label' => 'Programs — CTA Button',  'group' => 'programs', 'value' => 'View All Programs'],
+            ['key' => 'programs_learn_btn', 'label' => 'Programs — Card Learn More Button', 'group' => 'programs', 'value' => 'Learn More'],
+            // Partners section
+            ['key' => 'partners_heading', 'label' => 'Partners — Section Heading', 'group' => 'partners', 'value' => 'Supported by Our Partners Worldwide'],
+            // Footer contact
+            ['key' => 'footer_address', 'label' => 'Footer Address', 'group' => 'footer', 'value' => '#58, Street 478, Phnom Penh, Cambodia'],
+            ['key' => 'footer_phone',   'label' => 'Footer Phone',   'group' => 'footer', 'value' => '+855 (0)23 211 955'],
+            ['key' => 'footer_email',   'label' => 'Footer Email',   'group' => 'footer', 'value' => 'info@krousar-thmey.org'],
+            // Hero slides (models still control the carousel)
             ['key' => 'hero_slide_1_title',    'label' => 'Slide 1 — Title',    'group' => 'hero', 'value' => 'Education Without Borders'],
             ['key' => 'hero_slide_1_subtitle', 'label' => 'Slide 1 — Subtitle', 'group' => 'hero', 'value' => 'Krousar Thmey supports 4,079 disadvantaged children across 15 Cambodian provinces'],
             ['key' => 'hero_slide_2_title',    'label' => 'Slide 2 — Title',    'group' => 'hero', 'value' => 'Culture & Identity'],
@@ -44,6 +91,26 @@ class AdminSeeder extends Seeder
             // Mission group
             ['key' => 'mission_title', 'label' => 'Mission Title', 'group' => 'mission', 'value' => 'Our Mission'],
             ['key' => 'mission_text',  'label' => 'Mission Text',  'group' => 'mission', 'value' => 'Since 1991, Krousar Thmey has been dedicated to the development of disadvantaged children in Cambodia, ensuring they grow with identity, integration, and dignity.'],
+            // Programs Banner group
+            ['key' => 'programs_banner_title',    'label' => 'Banner Title',    'group' => 'programs_banner', 'value' => 'Our Programs'],
+            ['key' => 'programs_banner_subtitle',  'label' => 'Banner Subtitle', 'group' => 'programs_banner', 'value' => 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.'],
+            ['key' => 'programs_banner_image',     'label' => 'Banner Background Image (URL or upload path)', 'group' => 'programs_banner', 'value' => ''],
+            // Donation tiers group
+            ['key' => 'donation_tier_1_amount', 'label' => 'Tier 1 — Amount',      'group' => 'donation_tiers', 'value' => '€15'],
+            ['key' => 'donation_tier_1_desc',   'label' => 'Tier 1 — Description', 'group' => 'donation_tiers', 'value' => 'School supplies for one student / month'],
+            ['key' => 'donation_tier_1_icon',   'label' => 'Tier 1 — Icon (emoji)','group' => 'donation_tiers', 'value' => '📚'],
+            ['key' => 'donation_tier_2_amount', 'label' => 'Tier 2 — Amount',      'group' => 'donation_tiers', 'value' => '€30'],
+            ['key' => 'donation_tier_2_desc',   'label' => 'Tier 2 — Description', 'group' => 'donation_tiers', 'value' => 'Food for a child in our care / month'],
+            ['key' => 'donation_tier_2_icon',   'label' => 'Tier 2 — Icon (emoji)','group' => 'donation_tiers', 'value' => '🍚'],
+            ['key' => 'donation_tier_3_amount', 'label' => 'Tier 3 — Amount',      'group' => 'donation_tiers', 'value' => '€60'],
+            ['key' => 'donation_tier_3_desc',   'label' => 'Tier 3 — Description', 'group' => 'donation_tiers', 'value' => "Deaf student's education / month"],
+            ['key' => 'donation_tier_3_icon',   'label' => 'Tier 3 — Icon (emoji)','group' => 'donation_tiers', 'value' => '👂'],
+            ['key' => 'donation_tier_4_amount', 'label' => 'Tier 4 — Amount',      'group' => 'donation_tiers', 'value' => '€100'],
+            ['key' => 'donation_tier_4_desc',   'label' => 'Tier 4 — Description', 'group' => 'donation_tiers', 'value' => 'Vocational training for a young adult'],
+            ['key' => 'donation_tier_4_icon',   'label' => 'Tier 4 — Icon (emoji)','group' => 'donation_tiers', 'value' => '🎓'],
+            // About page
+            ['key' => 'about_worldwide_title', 'label' => 'Worldwide Section Title', 'group' => 'about', 'value' => 'Krousar Thmey Worldwide'],
+            ['key' => 'about_worldwide_desc',  'label' => 'Worldwide Section Description', 'group' => 'about', 'value' => 'Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.'],
         ];
 
         foreach ($homeSettings as $setting) {
@@ -52,11 +119,11 @@ class AdminSeeder extends Seeder
 
         // ── Programs ──────────────────────────────────────────
         $programs = [
-            ['title' => 'Child Welfare',                       'slug' => 'child-welfare',     'image' => 'children.jpg',  'sort_order' => 1, 'description' => 'Providing safe family-based care for vulnerable and orphaned children.', 'stats' => [['label' => 'Children', 'value' => '240']]],
-            ['title' => 'Education for Deaf or Blind Children', 'slug' => 'special-education', 'image' => 'special-ed.jpg','sort_order' => 2, 'description' => 'Specialised schooling and integration into mainstream education.', 'stats' => [['label' => 'Students', 'value' => '768']]],
-            ['title' => 'Cultural and Artistic Development',    'slug' => 'cultural-arts',     'image' => 'cultural.jpg',  'sort_order' => 3, 'description' => 'Reconnecting children with Khmer traditions through arts and shadow theatre.', 'stats' => [['label' => 'Students', 'value' => '1,088']]],
-            ['title' => 'Academic and Career Counseling',       'slug' => 'career-counseling', 'image' => 'program.jpg',   'sort_order' => 4, 'description' => 'Supporting access to higher education, training, and employment.', 'stats' => [['label' => 'Students', 'value' => '357']]],
-            ['title' => 'Health and Hygiene',                   'slug' => 'health-hygiene',    'image' => 'hygiene.jpg',   'sort_order' => 5, 'description' => 'Promoting health education and sanitation practices.', 'stats' => []],
+            ['title' => 'Child Welfare',                       'slug' => 'child-welfare',     'image' => 'children.jpg',  'description' => 'Providing safe family-based care for vulnerable and orphaned children.'],
+            ['title' => 'Education for Deaf or Blind Children', 'slug' => 'special-education', 'image' => 'special-ed.jpg','description' => 'Specialised schooling and integration into mainstream education.'],
+            ['title' => 'Cultural and Artistic Development',    'slug' => 'cultural-arts',     'image' => 'cultural.jpg',  'description' => 'Reconnecting children with Khmer traditions through arts and shadow theatre.'],
+            ['title' => 'Academic and Career Counseling',       'slug' => 'career-counseling', 'image' => 'program.jpg',   'description' => 'Supporting access to higher education, training, and employment.'],
+            ['title' => 'Health and Hygiene',                   'slug' => 'health-hygiene',    'image' => 'hygiene.jpg',   'description' => 'Promoting health education and sanitation practices.'],
         ];
 
         foreach ($programs as $prog) {

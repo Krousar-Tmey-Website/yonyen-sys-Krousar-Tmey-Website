@@ -56,9 +56,6 @@
             <form method="POST" action="{{ route('volunteer.store') }}" enctype="multipart/form-data" class="space-y-8">
                 @csrf
 
-                {{-- ════════════════════════════════════════════ --}}
-                {{── Section 1: Personal Information ──}}
-                {{-- ════════════════════════════════════════════ --}}
                 <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-8 h-8 rounded-lg bg-[#2d6fa3] flex items-center justify-center">
@@ -136,10 +133,6 @@
                         </div>
                     </div>
                 </div>
-
-                {{-- ════════════════════════════════════════════ --}}
-                {{── Section 2: Volunteer Information ──}}
-                {{-- ════════════════════════════════════════════ --}}
                 <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-8 h-8 rounded-lg bg-[#2d6fa3] flex items-center justify-center">
@@ -197,10 +190,6 @@
                         @error('availability') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
-
-                {{-- ════════════════════════════════════════════ --}}
-                {{── Section 3: Additional Information ──}}
-                {{-- ════════════════════════════════════════════ --}}
                 <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-8 h-8 rounded-lg bg-[#2d6fa3] flex items-center justify-center">

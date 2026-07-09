@@ -8,20 +8,26 @@ class Program extends Model
 {
     protected $fillable = [
         'title', 'slug', 'description', 'full_description',
-        'image', 'stats', 'sort_order', 'is_active',
+        'image', 'is_active', 'Status',
+        'testimony_name', 'testimony_story', 'testimony_image',
+        'facebook_url', 'linkedin_url', 'instagram_url', 'telegram_url', 'youtube_url',
     ];
 
     protected function casts(): array
     {
         return [
-            'stats'     => 'array',
             'is_active' => 'boolean',
         ];
     }
 
     public function scopeActive($query)
     {
-        return $query->where('is_active', true)->orderBy('sort_order');
+        return $query->where('is_active', true)->orderBy('id');
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
     }
 
     public function getImageUrlAttribute(): string
