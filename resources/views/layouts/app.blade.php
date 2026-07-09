@@ -287,19 +287,6 @@
                     </ul>
                 </div>
 
-                {{-- Programs --}}
-                <div>
-                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Programs</h4>
-                    <ul class="space-y-3">
-                        <li><a href="{{ route('programs') }}#welfare" class="text-white/50 hover:text-white text-sm transition-colors">Child Welfare</a></li>
-                        <li><a href="{{ route('programs') }}#education" class="text-white/50 hover:text-white text-sm transition-colors">Education for Deaf &amp; Blind</a></li>
-                        <li><a href="{{ route('programs') }}#culture" class="text-white/50 hover:text-white text-sm transition-colors">Cultural Development</a></li>
-                        <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">Volunteering</a></li>
-                        <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>
-                    </ul>
-
-                </div>
-
                 {{-- Newsletter --}}
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Stay Connected</h4>
@@ -323,23 +310,20 @@
                         <p class="text-white/50 text-xs">{{ $footerPhone }}</p>
                         <p class="text-white/50 text-xs">{{ $footerEmail }}</p>
                     </div>
-                    <div class="mt-8 pt-6 border-t border-white/10">
-                        <p class="text-white/30 text-xs uppercase tracking-wider font-medium mb-3">
-                            Administration
-                        </p>
+                </div>
+                <div class="mt-8 pt-6 border-t border-white/10">
 
-                        <a href="{{ url('/admin/login') }}"
-                            class="inline-flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border border-white/15 bg-white/5 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all duration-300">
+                    <a href="{{ url('/admin/login') }}"
+                        class="inline-flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border border-white/15 bg-white/5 text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all duration-300">
 
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24" stroke-width="2">
-                                <path stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M15.75 9V5.25A3.75 3.75 0 008.25 5.25V9m-.75 0h9a1.5 1.5 0 011.5 1.5v7.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 016 18v-7.5A1.5 1.5 0 017.5 9z" />
-                            </svg>
-                            Admin Login
-                        </a>
-                    </div>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M15.75 9V5.25A3.75 3.75 0 008.25 5.25V9m-.75 0h9a1.5 1.5 0 011.5 1.5v7.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 016 18v-7.5A1.5 1.5 0 017.5 9z" />
+                        </svg>
+                        Admin Login
+                    </a>
                 </div>
             </div>
         </div>

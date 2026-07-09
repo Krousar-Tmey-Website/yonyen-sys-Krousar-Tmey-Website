@@ -93,8 +93,8 @@
             </div>
 
             {{-- Right: Map & Contact Form --}}
-            <div class="lg:col-span-3 space-y-8">
-                {{-- Dynamic Google Maps Embed --}}
+            <div class="lg:col-span-3 ">
+                <!-- {{-- Dynamic Google Maps Embed --}}
                 @if($offices->isNotEmpty())
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="aspect-video w-full relative">
@@ -112,7 +112,7 @@
                         @endforeach
                     </div>
                 </div>
-                @endif
+                @endif -->
 
                 {{-- Contact Form --}}
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10 relative">
