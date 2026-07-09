@@ -134,11 +134,262 @@
                     </div>
                     @endforeach
                 </div>
-                <a href="{{ route('contact') }}" class="btn-blue">Apply to Volunteer</a>
+                <button type="button" id="openVolunteerModal" class="btn-blue">Apply to Volunteer</button>
             </div>
         </div>
     </div>
 </section>
+
+{{-- Volunteer Modal --}}
+<div id="volunteerModal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+
+    {{-- Background Overlay --}}
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm close-volunteer-modal"></div>
+
+    {{-- Modal Content --}}
+    <div
+        class="relative w-full max-w-lg max-h-[85vh] bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
+
+        {{-- Sticky Header --}}
+        <div class="flex-shrink-0 border-b border-slate-200 px-4 py-2 bg-white sticky top-0 z-10">
+            <div class="flex items-center justify-between gap-2">
+                <div class="min-w-0">
+                    <h2 class="text-sm font-bold text-slate-900 truncate">
+                        Volunteer Application
+                    </h2>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                    <button type="button"
+                        class="close-volunteer-modal flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700 transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Scrollable Form Body --}}
+        <div class="flex-1 overflow-y-auto p-3 scrollbar-thin">
+
+            <form method="POST"
+                action="{{ route('volunteer.store') }}"
+                enctype="multipart/form-data"
+                class="space-y-2">
+
+                @csrf
+
+                {{-- Personal Information - 2 columns --}}
+                <div class="grid sm:grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
+                            Full Name <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text"
+                            name="full_name"
+                            value="{{ old('full_name') }}"
+                            required
+                            placeholder="John Doe"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
+                        @error('full_name')
+                            <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
+                            Email <span class="text-red-500">*</span>
+                        </label>
+                        <input type="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            required
+                            placeholder="you@example.com"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
+                        @error('email')
+                            <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
+                            Phone <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text"
+                            name="phone"
+                            value="{{ old('phone') }}"
+                            required
+                            placeholder="+855 12 345 678"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
+                        @error('phone')
+                            <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
+                            Country <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text"
+                            name="country"
+                            value="{{ old('country') }}"
+                            required
+                            placeholder="Cambodia"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
+                        @error('country')
+                            <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
+                            Availability
+                        </label>
+                        <select name="availability"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
+                            <option value="">Select...</option>
+                            <option value="Weekdays">Weekdays</option>
+                            <option value="Weekends">Weekends</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Flexible">Flexible</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
+                            Interested Program
+                        </label>
+                        <select name="interested_program"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
+                            <option value="">Select...</option>
+                            <option value="Education">Education</option>
+                            <option value="Environment">Environment</option>
+                            <option value="Community Development">Community Development</option>
+                            <option value="Events">Events</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Fundraising">Fundraising</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
+                        Skills <span class="text-red-500">*</span>
+                    </label>
+                    <textarea name="skills"
+                        rows="1"
+                        required
+                        placeholder="e.g. Teaching, fundraising, content writing..."
+                        class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all resize-none">{{ old('skills') }}</textarea>
+                    @error('skills')
+                        <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
+                        Motivation <span class="text-red-500">*</span>
+                    </label>
+                    <textarea name="motivation"
+                        rows="1"
+                        required
+                        placeholder="Why do you want to volunteer?"
+                        class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all resize-none">{{ old('motivation') }}</textarea>
+                    @error('motivation')
+                        <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
+                        Previous Experience
+                    </label>
+                    <textarea name="previous_experience"
+                        rows="1"
+                        placeholder="Any relevant experience..."
+                        class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all resize-none">{{ old('previous_experience') }}</textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
+                        Upload CV / Resume
+                    </label>
+                    <input type="file"
+                        name="resume"
+                        accept=".pdf,.doc,.docx"
+                        class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm file:mr-2 file:py-0.5 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[#2d6fa3]/10 file:text-[#2d6fa3] hover:file:bg-[#2d6fa3]/20 file:transition-all transition-all focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none">
+                </div>
+
+                {{-- Terms --}}
+                <div class="flex items-start gap-2 bg-slate-50 border border-slate-200 p-2.5 rounded-xl">
+                    <input type="checkbox"
+                        name="agreed_to_terms"
+                        value="1"
+                        class="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#2d6fa3] accent-[#2d6fa3] focus:ring-[#2d6fa3]/30 flex-shrink-0"
+                        {{ old('agreed_to_terms') ? 'checked' : '' }}>
+                    <label class="text-xs text-slate-500 leading-relaxed">
+                        I agree to the volunteer terms and conditions and confirm the information is accurate. <span class="text-red-500">*</span>
+                    </label>
+                </div>
+                @error('agreed_to_terms')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+
+                <div class="flex items-center gap-2">
+                    <button type="submit"
+                        class="flex-1 bg-[#2d6fa3] text-white px-4 py-1.5 rounded-xl font-semibold text-sm hover:bg-[#245b87] active:bg-[#1d4e7a] transition-all">
+                        Submit
+                    </button>
+                    <button type="button"
+                        class="close-volunteer-modal flex-1 border border-slate-300 px-4 py-1.5 rounded-xl font-semibold text-sm text-slate-600 hover:bg-slate-100 active:bg-slate-200 transition-all">
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{{-- Success Modal --}}
+<div id="volunteerSuccessModal"
+    class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+
+    {{-- Background Overlay --}}
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm close-success-modal"></div>
+
+    {{-- Modal Content --}}
+    <div
+        class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl border border-green-200 flex flex-col overflow-hidden animate-fade-in">
+
+        <div class="px-6 py-8 text-center">
+            {{-- Success checkmark --}}
+            <div class="mx-auto mb-4 w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+
+            <h3 class="text-xl font-bold text-slate-800 mb-2">Thank You!</h3>
+            <p class="text-sm text-slate-500 leading-relaxed">
+                Your volunteer application has been submitted successfully.
+            </p>
+            <p class="text-xs text-slate-400 mt-3">
+                We will review your application and get back to you soon.
+            </p>
+
+            <button type="button"
+                class="close-success-modal mt-6 w-full bg-gradient-to-r from-green-500 to-green-600 text-blue px-5 py-2.5 rounded-xl font-semibold text-sm hover:from-green-600 hover:to-green-700 active:scale-[0.98] transition-all shadow-sm">
+                Got it!
+            </button>
+        </div>
+    </div>
+</div>
 
 {{-- Jobs --}}
 <section id="jobs" class="py-20 bg-white">
@@ -160,4 +411,124 @@
     </div>
 </section>
 
+<style>
+    #volunteerModal .scrollbar-thin::-webkit-scrollbar {
+        width: 3px;
+    }
+    #volunteerModal .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    #volunteerModal .scrollbar-thin::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 999px;
+    }
+    #volunteerModal .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+    #volunteerModal .scrollbar-thin {
+        scrollbar-width: thin;
+        scrollbar-color: #cbd5e1 transparent;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95) translateY(10px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-out;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ── Volunteer Modal ──
+    const volunteerModal = document.getElementById('volunteerModal');
+    const openButton = document.getElementById('openVolunteerModal');
+    const closeButtons = document.querySelectorAll('.close-volunteer-modal');
+    const volunteerModalContent = volunteerModal?.querySelector('.relative');
+
+    function openVolunteerModalFn() {
+        if (!volunteerModal) return;
+        volunteerModal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        const scrollContainer = volunteerModal.querySelector('.overflow-y-auto');
+        if (scrollContainer) scrollContainer.scrollTop = 0;
+    }
+
+    function closeVolunteerModalFn() {
+        if (!volunteerModal) return;
+        volunteerModal.classList.add('hidden');
+        // Only remove body scroll lock if success modal is also hidden
+        const successModal = document.getElementById('volunteerSuccessModal');
+        if (successModal?.classList.contains('hidden')) {
+            document.body.classList.remove('overflow-hidden');
+        }
+    }
+
+    if (openButton) {
+        openButton.addEventListener('click', openVolunteerModalFn);
+    }
+
+    closeButtons.forEach(function(button) {
+        button.addEventListener('click', closeVolunteerModalFn);
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !volunteerModal?.classList.contains('hidden')) {
+            closeVolunteerModalFn();
+        }
+    });
+
+    if (volunteerModalContent) {
+        volunteerModalContent.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+
+    // ── Success Modal ──
+    const successModal = document.getElementById('volunteerSuccessModal');
+    const successCloseButtons = document.querySelectorAll('.close-success-modal');
+    const successModalContent = successModal?.querySelector('.relative');
+
+    function openSuccessModalFn() {
+        if (!successModal) return;
+        // Close volunteer modal first
+        closeVolunteerModalFn();
+        // Show success modal
+        successModal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function closeSuccessModalFn() {
+        if (!successModal) return;
+        successModal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    successCloseButtons.forEach(function(button) {
+        button.addEventListener('click', closeSuccessModalFn);
+    });
+
+    if (successModalContent) {
+        successModalContent.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !successModal?.classList.contains('hidden')) {
+            closeSuccessModalFn();
+        }
+    });
+
+    // ── Auto-open on flash / errors ──
+    @if(session('success'))
+        openSuccessModalFn();
+    @elseif($errors->any())
+        openVolunteerModalFn();
+    @endif
+
+});
+</script>
 @endsection
