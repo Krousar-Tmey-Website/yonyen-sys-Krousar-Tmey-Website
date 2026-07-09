@@ -44,8 +44,9 @@ Route::get('/who-we-are', function () {
     $partnerCategories = PartnerCategory::with(['partners' => function ($query) {
         $query->active();
     }])->orderBy('name')->get();
-    $awards   = Award::ordered()->get();
-    return view('about', compact('partnerCategories', 'awards'));
+    $awards  = Award::ordered()->get();
+    $offices = \App\Models\Office::active()->ordered()->get();
+    return view('about', compact('partnerCategories', 'awards', 'offices'));
 })->name('about');
 
 Route::get('/our-programs', function () {
@@ -137,4 +138,6 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->except(['create', 'edit']);
 
     Route::resource('slides', Admin\SlideController::class);
+
+    Route::resource('offices', Admin\OfficeController::class);
 });

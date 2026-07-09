@@ -161,19 +161,21 @@
                 Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.
             </p>
             <div class="grid md:grid-cols-3 gap-5">
-                @foreach([
-                    ['flag'=>'🇫🇷','name'=>'Krousar Thmey France',      'city'=>'Paris, France'],
-                    ['flag'=>'🇨🇭','name'=>'Krousar Thmey Switzerland',  'city'=>'Geneva, Switzerland'],
-                    ['flag'=>'🇸🇬','name'=>'Krousar Thmey Singapore',    'city'=>'Singapore'],
-                ] as $office)
+                @forelse($offices as $office)
                 <div class="bg-[#f8f9fc] border border-gray-100 rounded-2xl p-6 flex items-center gap-4 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all">
-                    <span class="text-4xl">{{ $office['flag'] }}</span>
+                    <span class="text-4xl">{{ $office->flag ?? '🏢' }}</span>
                     <div>
-                        <p class="font-bold text-[#2d6fa3] text-sm">{{ $office['name'] }}</p>
-                        <p class="text-gray-400 text-xs">{{ $office['city'] }}</p>
+                        <p class="font-bold text-[#2d6fa3] text-sm">{{ $office->name }}</p>
+                        @if($office->country)
+                        <p class="text-gray-400 text-xs">{{ $office->country }}</p>
+                        @endif
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="col-span-3 text-center text-gray-400 text-sm py-8">
+                    Office information coming soon.
+                </div>
+                @endforelse
             </div>
         </div>
     </div>

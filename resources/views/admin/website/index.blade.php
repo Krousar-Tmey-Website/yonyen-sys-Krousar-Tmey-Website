@@ -17,12 +17,6 @@
         'footer'  => ['📍', 'Footer Settings'],
     ];
 
-    $countries = [
-        'cambodia'    => ['flag' => '🇰🇭', 'name' => 'Cambodia'],
-        'france'      => ['flag' => '🇫🇷', 'name' => 'France'],
-        'singapore'   => ['flag' => '🇸🇬', 'name' => 'Singapore'],
-        'switzerland' => ['flag' => '🇨🇭', 'name' => 'Switzerland'],
-    ];
     @endphp
 
     @foreach($order as $group)
@@ -37,68 +31,42 @@
         <hr class="mb-5 border-gray-100">
 
         @if($group === 'contact')
-            {{-- ====== Per-country office cards ====== --}}
-            <div class="space-y-6">
-                @foreach($countries as $id => $info)
-                @php
-                    $countryAddress = $items->firstWhere('key', "contact_{$id}_address");
-                    $countryPhone   = $items->firstWhere('key', "contact_{$id}_phone");
-                    $countryEmail   = $items->firstWhere('key', "contact_{$id}_email");
-                @endphp
-                <div class="bg-gray-50 rounded-xl border border-gray-100 p-5">
-                    <h4 class="font-bold text-gray-800 text-sm mb-4 flex items-center gap-2">
-                        <span class="text-lg">{{ $info['flag'] }}</span>
-                        {{ $info['name'] }} Office
-                    </h4>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">Address</label>
-                            <textarea name="settings[contact_{{ $id }}_address]" rows="3"
-                                      class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('settings.contact_'.$id.'_address', $countryAddress->value ?? '') }}</textarea>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1">Phone</label>
-                                <input type="text" name="settings[contact_{{ $id }}_phone]"
-                                       value="{{ old('settings.contact_'.$id.'_phone', $countryPhone->value ?? '') }}"
-                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1">Email</label>
-                                <input type="text" name="settings[contact_{{ $id }}_email]"
-                                       value="{{ old('settings.contact_'.$id.'_email', $countryEmail->value ?? '') }}"
-                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-
-                {{-- ====== General footer contact info ====== --}}
-                @php
-                    $generalKeys = ['footer_address', 'footer_phone', 'footer_email'];
-                    $generalItems = $items->whereIn('key', $generalKeys);
-                @endphp
-                @if($generalItems->isNotEmpty())
-                <div class="pt-2">
-                    <h4 class="font-bold text-gray-800 text-sm mb-4 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        General Contact (Footer)
-                    </h4>
-                    <div class="space-y-4">
-                        @foreach($generalItems as $setting)
-                        @php $k = $setting->key; @endphp
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">{{ $setting->label ?? $setting->key }}</label>
-                            <input type="text" name="settings[{{ $k }}]"
-                                   value="{{ old('settings.'.$k, $setting->value) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
+            {{-- ====== Offices are now managed via the Offices CRUD ====== --}}
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center">
+                <div class="text-3xl mb-3">🏢</div>
+                <h4 class="font-bold text-gray-800 text-sm mb-2">Office Locations</h4>
+                <p class="text-gray-500 text-xs mb-4">Office locations are now managed from the dedicated <strong>Offices</strong> page, where you can add, edit, delete offices, set Google Maps links, and update office hours.</p>
+                <a href="{{ route('admin.offices.index') }}"
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-[#2d6fa3] text-white text-sm font-medium rounded-xl hover:bg-[#1d4e7a] transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Manage Offices
+                </a>
             </div>
+
+            {{-- ====== General footer contact info ====== --}}
+            @php
+                $generalKeys = ['footer_address', 'footer_phone', 'footer_email'];
+                $generalItems = $items->whereIn('key', $generalKeys);
+            @endphp
+            @if($generalItems->isNotEmpty())
+            <div class="pt-2">
+                <h4 class="font-bold text-gray-800 text-sm mb-4 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    General Contact (Footer)
+                </h4>
+                <div class="space-y-4">
+                    @foreach($generalItems as $setting)
+                    @php $k = $setting->key; @endphp
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">{{ $setting->label ?? $setting->key }}</label>
+                        <input type="text" name="settings[{{ $k }}]"
+                               value="{{ old('settings.'.$k, $setting->value) }}"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
 
         @else
             {{-- ====== Standard field rendering ====== --}}

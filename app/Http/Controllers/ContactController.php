@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactInquiry;
+use App\Models\Office;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
     public function show()
     {
-        return view('contact');
+        $offices = Office::active()->ordered()->get();
+        return view('contact', compact('offices'));
     }
 
     public function store(Request $request)

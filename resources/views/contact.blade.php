@@ -22,63 +22,99 @@
 </div>
 
 {{-- Office Tabs + Contact Form --}}
-<section class="py-20 bg-[#f8f9fc]" x-data="{ office: 'cambodia' }">
+@php
+    $firstOfficeId = $offices->first()?->id ?? 0;
+@endphp
+<section class="py-20 bg-[#f8f9fc]"
+         x-data="{ office: {{ $firstOfficeId }} }">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-5 gap-12">
 
             {{-- Left: Offices --}}
             <div class="lg:col-span-2">
-                    <h2 class="text-xl font-bold text-[#1a3c6e] mb-6">Our Offices</h2>
+                <h2 class="text-xl font-bold text-[#1a3c6e] mb-6">Our Offices</h2>
                 <div class="space-y-3">
-                    @php
-                    $countries = [
-                        ['id' => 'cambodia',    'flag' => '🇰🇭', 'country' => 'Cambodia',    'city' => ''],
-                        ['id' => 'france',      'flag' => '🇫🇷', 'country' => 'France',      'city' => ''],
-                        ['id' => 'singapore',   'flag' => '🇸🇬', 'country' => 'Singapore',   'city' => ''],
-                        ['id' => 'switzerland','flag' => '🇨🇭', 'country' => 'Switzerland', 'city' => ''],
-                    ];
-                    @endphp
-                    @foreach($countries as $loc)
-                    <button @click="office = '{{ $loc['id'] }}'"
-                            :class="office === '{{ $loc['id'] }}' ? 'border-[#1a3c6e] bg-white shadow-md' : 'border-gray-100 bg-white hover:border-gray-200'"
+                    @foreach($offices as $loc)
+                    <button @click="office = {{ $loc->id }}"
+                            :class="office === {{ $loc->id }} ? 'border-[#1a3c6e] bg-white shadow-md' : 'border-gray-100 bg-white hover:border-gray-200'"
                             class="w-full text-left p-5 rounded-2xl border-2 transition-all duration-200">
                         <div class="flex items-center gap-3">
-                            <span class="text-2xl">{{ $loc['flag'] }}</span>
+                            <span class="text-2xl">{{ $loc->flag ?? '🏢' }}</span>
                             <div>
-                                <div class="font-bold text-gray-800 text-sm">{{ $loc['country'] }}</div>
-                                <div class="text-gray-400 text-xs">{{ $loc['city'] }}</div>
+                                <div class="font-bold text-gray-800 text-sm">{{ $loc->name }}</div>
+                                @if($loc->country)
+                                <div class="text-gray-400 text-xs">{{ $loc->country }}</div>
+                                @endif
                             </div>
                             <svg class="w-4 h-4 text-[#1a3c6e] ml-auto opacity-0 transition-opacity duration-200"
-                                 :class="office === '{{ $loc['id'] }}' ? 'opacity-100' : ''"
+                                 :class="office === {{ $loc->id }} ? 'opacity-100' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </div>
 
-                        <div x-show="office === '{{ $loc['id'] }}'" class="mt-4 space-y-2 pt-4 border-t border-gray-100">
-                            @php
-                                $cAddr = $settings['contact_'.$loc['id'].'_address'] ?? $loc['address'] ?? '';
-                                $cPhone = $settings['contact_'.$loc['id'].'_phone'] ?? $loc['phone'] ?? '';
-                                $cEmail = $settings['contact_'.$loc['id'].'_email'] ?? $loc['email'] ?? '';
-                            @endphp
+                        <div x-show="office === {{ $loc->id }}" class="mt-4 space-y-2 pt-4 border-t border-gray-100">
+                            @if($loc->address)
                             <p class="text-gray-600 text-xs flex items-start gap-2">
                                 <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                {!! nl2br(e($cAddr)) !!}
+                                {!! nl2br(e($loc->address)) !!}
                             </p>
+                            @endif
+                            @if($loc->google_maps_link)
+                            <p class="text-xs">
+                                <a href="{{ $loc->google_maps_link }}" target="_blank" rel="noopener"
+                                   class="inline-flex items-center gap-1.5 text-[#2d6fa3] hover:text-[#1a3c6e] transition-colors font-medium">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                    View on Google Maps
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                </a>
+                            </p>
+                            @endif
+                            @if($loc->phone)
                             <p class="text-gray-600 text-xs flex items-center gap-2">
                                 <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                {{ $cPhone }}
+                                {{ $loc->phone }}
                             </p>
+                            @endif
+                            @if($loc->email)
                             <p class="text-gray-600 text-xs flex items-center gap-2">
                                 <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                {{ $cEmail }}
+                                <a href="mailto:{{ $loc->email }}" class="hover:text-[#1a3c6e] transition-colors">{{ $loc->email }}</a>
                             </p>
+                            @endif
+                            @if($loc->office_hours)
+                            <p class="text-gray-600 text-xs flex items-center gap-2">
+                                <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                {{ $loc->office_hours }}
+                            </p>
+                            @endif
                         </div>
                     </button>
                     @endforeach
                 </div>
             </div>
 
-            {{-- Right: Contact Form --}}
-            <div class="lg:col-span-3">
+            {{-- Right: Map & Contact Form --}}
+            <div class="lg:col-span-3 space-y-8">
+                {{-- Dynamic Google Maps Embed --}}
+                @if($offices->isNotEmpty())
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="aspect-video w-full relative">
+                        @foreach($offices as $loc)
+                        <template x-if="office === {{ $loc->id }}">
+                            <iframe
+                                x-if="office === {{ $loc->id }}"
+                                src="{{ $loc->google_maps_link ?: 'about:blank' }}"
+                                width="100%" height="100%" style="border:0; position:absolute; top:0; left:0;"
+                                allowfullscreen loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                :title="'{{ $loc->name }} location map'">
+                            </iframe>
+                        </template>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                {{-- Contact Form --}}
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10 relative">
 
                     @php
