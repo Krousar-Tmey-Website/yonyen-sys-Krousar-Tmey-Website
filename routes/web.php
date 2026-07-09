@@ -39,6 +39,7 @@ Route::get('/get-involved', fn() => view('involved'))->name('involved');
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
+Route::get('/awards', fn() => view('awards', ['awards' => Award::ordered()->get()]))->name('awards');
 Route::get('/resources', fn() => view('resources'))->name('resources');
 Route::get('/contact',   fn() => view('contact'))->name('contact');
 
@@ -76,7 +77,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Partners, Awards, Slides
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create', 'edit']);
-    Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
+    Route::resource('awards',   Admin\AwardController::class)->except(['show']);
+Route::get('awards/{award}', [Admin\AwardController::class, 'show'])->name('awards.show');
     Route::resource('slides',   Admin\SlideController::class)->except(['show']);
 
     // History
