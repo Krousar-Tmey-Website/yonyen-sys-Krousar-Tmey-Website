@@ -13,9 +13,11 @@ use App\Models\Award;
 use App\Models\PageSection;
 use App\Models\Program;
 use App\Models\Slide;
+use App\Models\HistoryEvent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\Admin\HistoryController;
+use App\Http\Controllers\Admin\SocialLinkController;
 
 // ──────────────────────────────────────────────
 // Public pages
@@ -44,9 +46,13 @@ Route::get('/who-we-are', function () {
     $partnerCategories = PartnerCategory::with(['partners' => function ($query) {
         $query->active();
     }])->orderBy('name')->get();
-    $awards  = Award::ordered()->get();
     $offices = \App\Models\Office::active()->ordered()->get();
     return view('about', compact('partnerCategories', 'awards', 'offices'));
+    $history  = HistoryEvent::orderBy('year', 'desc')->get();
+    $partners = Partner::where('is_active', true)->latest()->get()->groupBy('category');
+    $awards   = Award::ordered()->get();
+
+    return view('about', compact('history', 'partners', 'awards'));
 })->name('about');
 
 Route::get('/our-programs', function () {
@@ -134,10 +140,22 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Partner Management
     Route::resource('partners', Admin\PartnerController::class);
 
+    // Awards
     Route::resource('awards', Admin\AwardController::class)
         ->except(['create', 'edit']);
 
     Route::resource('slides', Admin\SlideController::class);
 
     Route::resource('offices', Admin\OfficeController::class);
+    // Slides
+    Route::resource('slides', Admin\SlideController::class)
+        ->except(['show']);
+
+    // Social Links
+    Route::resource('social-links', SocialLinkController::class)
+        ->except(['show']);
+
+    // History
+    Route::resource('history', HistoryController::class)
+        ->except(['show']);
 });

@@ -11,6 +11,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::latest()->paginate(12);
+
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -22,12 +23,9 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'CategoryName' => ['required', 'string', 'max:255', 'unique:categories,CategoryName'],
-            'Description' => ['nullable', 'string'],
+            'CategoryName' => 'required|string|max:255|unique:categories,CategoryName',
+            'Description' => 'nullable|string',
         ]);
-
-        // Remove CategoryStatus - don't set it
-        // $data['CategoryStatus'] = 1;
 
         Category::create($data);
 
@@ -35,25 +33,21 @@ class CategoryController extends Controller
             ->with('success', 'Category created successfully.');
     }
 
-    public function show($id)
+    public function show(Category $category)
     {
-        $category = Category::findOrFail($id);
         return view('admin.categories.show', compact('category'));
     }
 
-    public function edit($id)
+    public function edit(Category $category)
     {
-        $category = Category::findOrFail($id);
         return view('admin.categories.edit', compact('category'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        $category = Category::findOrFail($id);
-
         $data = $request->validate([
-            'CategoryName' => ['required', 'string', 'max:255', 'unique:categories,CategoryName,' . $id . ',CategoryID'],
-            'Description' => ['nullable', 'string'],
+            'CategoryName' => 'required|string|max:255|unique:categories,CategoryName,' . $category->id . ',id',
+            'Description' => 'nullable|string',
         ]);
 
         $category->update($data);
@@ -62,9 +56,8 @@ class CategoryController extends Controller
             ->with('success', 'Category updated successfully.');
     }
 
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
         $category->delete();
 
         return redirect()->route('admin.categories.index')

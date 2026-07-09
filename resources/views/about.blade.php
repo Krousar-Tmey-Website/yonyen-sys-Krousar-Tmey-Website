@@ -184,87 +184,115 @@
 {{-- ========================================================
      OUR HISTORY
      ======================================================== --}}
-<section id="history" class="py-20 bg-[#f8f9fc] scroll-mt-20">
-    <div class="max-w-5xl mx-auto px-6">
+<section id="history" class="py-20 bg-gradient-to-b from-white to-[#f8f9fc] scroll-mt-20">
+    <div class="max-w-6xl mx-auto px-6">
+        {{-- Header --}}
         <div class="text-center mb-16">
-            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Timeline</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Our History</h2>
+            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
+                <span class="w-8 h-0.5 bg-[#8da83a]"></span>
+                Our Journey
+                <span class="w-8 h-0.5 bg-[#8da83a]"></span>
+            </p>
+            <h2 class="text-4xl md:text-5xl font-bold text-[#2d6fa3] mb-4">Our History</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto text-lg">Discover the milestones that have shaped Krousar Thmey since its founding in 1991</p>
         </div>
 
+        @if($history->isEmpty())
+        <div class="text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm">
+            <div class="text-6xl mb-4">📅</div>
+            <p class="text-gray-400 text-lg">No history events have been added yet.</p>
+        </div>
+        @else
         @php
-        $events = [
-            ['year'=>'1991','left'=>'Birth of Krousar Thmey with the opening of the orphanage of Dangrek, followed by the orphanage of O\'Bok in Site II.',
-                            'right'=>null],
-            ['year'=>'1993','left'=>'Repatriation of 154 children to Cambodia: a first permanent protection centre opens in Siem Reap.',
-                            'right'=>null],
-            ['year'=>'1994','left'=>'The first temporary street children centre opens in Phnom Penh.',
-                            'right'=>'The first school for blind children opens in Phnom Penh.'],
-            ['year'=>'1998','left'=>'Seamanship training starts for street children using trawlers in Sihanoukville.',
-                            'right'=>'Opening of the school of arts in Serey Sophon and rebirth of shadow theatre which had disappeared under the Khmer Rouge Regime.'],
-            ['year'=>'2000','left'=>'Construction and opening of the first family house in TukThlaa, in the suburb of Phnom Penh.',
-                            'right'=>null],
-            ['year'=>'2001','left'=>'Construction of the first school for deaf children in Chbar Ampov, in the suburb of Phnom Penh.',
-                            'right'=>'The first campaign for the prevention of child trafficking and prostitution is launched.'],
-            ['year'=>'2003','left'=>'First enrollment of blind student in public school.',
-                            'right'=>'First hearing aids for hearing-impaired children thanks to ENT doctors and hearing aid specialists of the organisation Enfants Sourds du Cambodge based in Toulon, France.'],
-            ['year'=>'2005','left'=>'First translation of national television news in Sign Language.',
-                            'right'=>'Beginning of the awareness-raising campaigns on education for children with disabilities.'],
-            ['year'=>'2008','left'=>'First deaf students awarded the baccalaureate.',
-                            'right'=>'A career and academic counselling department is created to facilitate access to higher education, professional training and employment.'],
-            ['year'=>'2011','left'=>'First blind students graduated from university.',
-                            'right'=>'All the teaching staff is registered as civil servant by the Ministry of Education.'],
-            ['year'=>'2013','left'=>'First deaf students go to university.',
-                            'right'=>'The Ministry of Education, Youth and Sports takes the financial responsibility of the Braille workshop and sign language committee.'],
-            ['year'=>'2016','left'=>'Signature of the agreement related to the transfer of the 5 special schools to the Cambodian Ministry of Education, Youth and Sport in the presence of His Majesty King Norodom Sihamoni on the occasion of the 25th anniversary of Krousar Thmey.',
-                            'right'=>'Creation of the first Resource center for deaf or blind students in Battambang.'],
-            ['year'=>'2019','left'=>'Official ceremony of the transfer of the 5 special schools to the ministry of Education, Youth and Sports (MoEYS).',
-                            'right'=>null],
-        ];
+            $eventsByYear = $history->sortByDesc('year')->groupBy('year');
         @endphp
-
         <div class="relative">
-            {{-- Vertical line --}}
-            <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-[#2d6fa3]/20 hidden md:block"></div>
+            {{-- Vertical timeline line - centered --}}
+            <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2d6fa3] via-[#8da83a] to-[#2d6fa3] hidden md:block"></div>
 
-            <div class="space-y-8">
-                @foreach($events as $i => $event)
+            <div class="space-y-16">
+                @foreach($eventsByYear as $year => $yearEvents)
                 <div class="relative">
-                    {{-- Year badge --}}
-                    <div class="flex justify-center mb-4">
-                        <div class="relative z-10 bg-[#2d6fa3] text-white font-bold text-sm px-5 py-2 rounded-full shadow-lg ring-4 ring-[#f8f9fc]">
-                            {{ $event['year'] }}
+                    {{-- Year badge - centered on timeline --}}
+                    <div class="flex justify-center mb-10">
+                        <div class="relative z-20 bg-white border-2 border-[#2d6fa3] text-[#2d6fa3] font-bold text-xl px-8 py-3 rounded-full shadow-lg ring-4 ring-white">
+                            {{ $year }}
                         </div>
                     </div>
 
-                    <div class="md:grid md:grid-cols-2 md:gap-8">
-                        {{-- Left event --}}
-                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-[#2d6fa3]/20 transition-all md:text-right mb-4 md:mb-0">
-                            <div class="flex items-start gap-3 md:flex-row-reverse">
-                                <div class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 flex items-center justify-center flex-shrink-0">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-[#2d6fa3]"></div>
-                                </div>
-                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event['left'] }}</p>
-                            </div>
-                        </div>
+                    @php
+                        $leftEvents = $yearEvents->where('side', 'left');
+                        $rightEvents = $yearEvents->where('side', 'right');
+                        $hasLeft = $leftEvents->count() > 0;
+                        $hasRight = $rightEvents->count() > 0;
+                    @endphp
 
-                        {{-- Right event --}}
-                        @if($event['right'])
-                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-[#8da83a]/30 transition-all">
-                            <div class="flex items-start gap-3">
-                                <div class="w-8 h-8 rounded-full bg-[#8da83a]/10 flex items-center justify-center flex-shrink-0">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-[#8da83a]"></div>
+                    <div class="md:grid md:grid-cols-2 md:gap-16">
+                        {{-- Left events --}}
+                        @if($hasLeft)
+                        <div class="relative md:pr-16">
+                            {{-- Connector line to center --}}
+                            <div class="hidden md:block absolute top-1/2 right-0 w-16 h-0.5 bg-gradient-to-l from-[#2d6fa3] to-transparent"></div>
+                            {{-- Timeline dot --}}
+                            <div class="hidden md:block absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#2d6fa3] border-4 border-white shadow-md z-10"></div>
+
+                            <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 relative overflow-hidden group">
+                                {{-- Left accent bar --}}
+                                <div class="absolute top-0 left-0 w-1 h-full bg-[#2d6fa3]"></div>
+
+                                @foreach($leftEvents as $event)
+                                    @if($event->image)
+                                    <div class="mb-5 overflow-hidden rounded-xl">
+                                        <img src="{{ asset('storage/' . $event->image) }}" alt="History image {{ $year }}"
+                                             class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-700">
+                                    </div>
+                                    @endif
+                                @endforeach
+                                <div class="space-y-4">
+                                    @foreach($leftEvents as $event)
+                                        <div class="pl-4">
+                                            <p class="text-gray-700 leading-relaxed">{!! $event->event !!}</p>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event['right'] }}</p>
                             </div>
                         </div>
                         @else
-                        <div class="hidden md:block"></div>
+                        {{-- Empty left column to maintain grid --}}
+                        <div></div>
+                        @endif
+
+                        {{-- Right events --}}
+                        @if($hasRight)
+                        <div class="relative md:pl-16 mt-8 md:mt-0">
+                            {{-- Connector line to center --}}
+                            <div class="hidden md:block absolute top-1/2 left-0 w-16 h-0.5 bg-gradient-to-r from-[#8da83a] to-transparent"></div>
+                            {{-- Timeline dot --}}
+                            <div class="hidden md:block absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#8da83a] border-4 border-white shadow-md z-10"></div>
+
+                            <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 relative overflow-hidden group">
+                                {{-- Right accent bar --}}
+                                <div class="absolute top-0 right-0 w-1 h-full bg-[#8da83a]"></div>
+
+                                <div class="space-y-4">
+                                    @foreach($rightEvents as $event)
+                                        <div class="pr-4">
+                                            <p class="text-gray-700 leading-relaxed">{!! $event->event !!}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                        {{-- Empty right column to maintain grid --}}
+                        <div></div>
                         @endif
                     </div>
                 </div>
                 @endforeach
             </div>
         </div>
+        @endif
     </div>
 </section>
 
@@ -420,7 +448,7 @@
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Accountability</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Transparency &amp; Accountability</h2>
+            <h2 class="text-4xl font-bold text-[#2d6fa3]">Transparency & Accountability</h2>
         </div>
 
         <div class="grid lg:grid-cols-2 gap-12 mb-16">
