@@ -6,6 +6,7 @@ use App\Models\Award;
 use App\Models\HomeSetting;
 use App\Models\Partner;
 use App\Models\Program;
+use App\Models\Project;
 use App\Models\Slide;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -128,6 +129,44 @@ class AdminSeeder extends Seeder
 
         foreach ($programs as $prog) {
             Program::updateOrCreate(['slug' => $prog['slug']], array_merge($prog, ['is_active' => true]));
+        }
+
+        // ── Child Welfare — full content, testimony & projects ─
+        $childWelfare = Program::where('slug', 'child-welfare')->first();
+
+        if ($childWelfare) {
+            $childWelfare->update([
+                'description' => 'Facilitate the reintegration of marginalized children into their families and society through emotional, educational and material support.',
+                'full_description' => "Victims of neglect, poverty, trafficking or difficult family situations, street children constitute a vulnerable, out-of-school, often traumatized and marginalized population. The Child Welfare program, which helps children and their families by providing emotional, educational and material support, aims to create the necessary conditions for them to build a better future.\n\nKrousar Thmey has three types of structures adapted to the child's needs, age and family situation: temporary protection centers, long-term protection centers and family houses. Family reintegration is always favored whenever possible.",
+                'testimony_name'  => 'Davann, 17, welcomed in Siem Reap protection center',
+                'testimony_story' => 'Davann arrived in Siem Reap long-term protection center in March 2017, following the closure of NGO Homeland Cambodia in Battambang Province. After her parents divorced, her mother emigrated to Thailand to find work and Davann was separated from her family. "I feel happy about living in the center. If not for Krousar Thmey, I think I wouldn\'t have had the chance to go to school and have access to so many things. I feel luckier than other children." A serious student, Davann is already looking forward to passing Grade 12 exams and accessing higher education. "I would like to study at university and become a lawyer because I want to help others."',
+            ]);
+
+            $childWelfareProjects = [
+                [
+                    'title'       => 'Temporary Protection Centers',
+                    'description' => 'To offer a stable and reassuring accommodation solution to the child before considering reintegration into their family.',
+                ],
+                [
+                    'title'       => 'Long-term Protection Centers',
+                    'description' => 'To ensure a stable environment for the child and provide them with access to education, in order to facilitate their integration into Cambodian society.',
+                ],
+                [
+                    'title'       => 'Family Houses',
+                    'description' => 'To welcome children into a safe and caring environment, tailored to their needs.',
+                ],
+                [
+                    'title'       => 'Academic and Career Counseling',
+                    'description' => 'To support young Cambodians in building their future by facilitating access to higher education, vocational training and employment.',
+                ],
+            ];
+
+            foreach ($childWelfareProjects as $proj) {
+                Project::updateOrCreate(
+                    ['title' => $proj['title'], 'program_id' => $childWelfare->id],
+                    array_merge($proj, ['is_active' => true])
+                );
+            }
         }
 
         // ── Partners ──────────────────────────────────────────
