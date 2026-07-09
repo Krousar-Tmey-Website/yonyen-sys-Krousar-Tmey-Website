@@ -77,7 +77,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Partners, Awards, Slides
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create', 'edit']);
-    Route::resource('awards',   Admin\AwardController::class);
+    Route::resource('awards',   Admin\AwardController::class)->except(['show']);
+Route::get('awards/{award}', [Admin\AwardController::class, 'show'])->name('awards.show');
     Route::resource('slides',   Admin\SlideController::class)->except(['show']);
 
     // History

@@ -15,6 +15,11 @@ class AwardController extends Controller
         return view('admin.awards.index', compact('awards'));
     }
 
+    public function show(Award $award)
+    {
+        return view('admin.awards.show', compact('award'));
+    }
+
     public function create()
     {
         return view('admin.awards.create');

@@ -192,6 +192,29 @@ function closeAwardModal() {
     }, 300);
 }
 
+// Auto-open modal if award ID is in URL
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const awardId = urlParams.get('view');
+    if (awardId) {
+        const award = @json($awards->keyBy('id'));
+        if (award[awardId]) {
+            openAwardModal(
+                award[awardId].id,
+                award[awardId].title,
+                award[awardId].organization,
+                award[awardId].recipient || '',
+                award[awardId].description || '',
+                award[awardId].image_url,
+                award[awardId].icon,
+                award[awardId].link_url || '',
+                award[awardId].link_type || '',
+                award[awardId].link_text || ''
+            );
+        }
+    }
+});
+
 // Close modal on escape key or click outside
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
