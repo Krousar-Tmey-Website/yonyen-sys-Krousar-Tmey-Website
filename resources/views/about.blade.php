@@ -181,16 +181,22 @@
 {{-- ========================================================
      OUR HISTORY
      ======================================================== --}}
-<section id="history" class="py-20 bg-[#f8f9fc] scroll-mt-20">
-    <div class="max-w-5xl mx-auto px-6">
+<section id="history" class="py-20 bg-gradient-to-b from-white to-[#f8f9fc] scroll-mt-20">
+    <div class="max-w-6xl mx-auto px-6">
+        {{-- Header --}}
         <div class="text-center mb-16">
-            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Timeline</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Our History</h2>
+            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
+                <span class="w-8 h-0.5 bg-[#8da83a]"></span>
+                Our Journey
+                <span class="w-8 h-0.5 bg-[#8da83a]"></span>
+            </p>
+            <h2 class="text-4xl md:text-5xl font-bold text-[#2d6fa3] mb-4">Our History</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto text-lg">Discover the milestones that have shaped Krousar Thmey since its founding in 1991</p>
         </div>
 
         <div class="relative">
-            {{-- Vertical line --}}
-            <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-[#2d6fa3]/20 hidden md:block"></div>
+            {{-- Vertical timeline line - centered --}}
+            <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2d6fa3] via-[#8da83a] to-[#2d6fa3] hidden md:block"></div>
 
             <div class="space-y-8">
                 @forelse($historyEvents as $event)
@@ -224,7 +230,34 @@
                             </div>
                         </div>
                         @else
-                        <div class="hidden md:block"></div>
+                        {{-- Empty left column to maintain grid --}}
+                        <div></div>
+                        @endif
+
+                        {{-- Right events --}}
+                        @if($hasRight)
+                        <div class="relative md:pl-16 mt-8 md:mt-0">
+                            {{-- Connector line to center --}}
+                            <div class="hidden md:block absolute top-1/2 left-0 w-16 h-0.5 bg-gradient-to-r from-[#8da83a] to-transparent"></div>
+                            {{-- Timeline dot --}}
+                            <div class="hidden md:block absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#8da83a] border-4 border-white shadow-md z-10"></div>
+
+                            <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 relative overflow-hidden group">
+                                {{-- Right accent bar --}}
+                                <div class="absolute top-0 right-0 w-1 h-full bg-[#8da83a]"></div>
+
+                                <div class="space-y-4">
+                                    @foreach($rightEvents as $event)
+                                        <div class="pr-4">
+                                            <p class="text-gray-700 leading-relaxed">{!! $event->event !!}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                        {{-- Empty right column to maintain grid --}}
+                        <div></div>
                         @endif
                     </div>
                 </div>
@@ -233,6 +266,7 @@
                 @endforelse
             </div>
         </div>
+        @endif
     </div>
 </section>
 
@@ -272,9 +306,10 @@
 {{-- ========================================================
      PARTNERS
      ======================================================== --}}
-<section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20">
+<section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20"
+         x-data="{ category: 'all', search: '' }">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
+        <div class="text-center mb-12">
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support</p>
             <h2 class="text-4xl font-bold text-[#2d6fa3]">Partners</h2>
             <p class="text-gray-500 mt-4 max-w-3xl mx-auto text-sm leading-relaxed">
@@ -282,8 +317,35 @@
             </p>
         </div>
 
+        {{-- Search & Filter Controls --}}
+        <div class="mb-10 max-w-2xl mx-auto space-y-4">
+            <div class="relative">
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" x-model="search" placeholder="Search partners..."
+                       class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/20 transition-all outline-none text-sm bg-white">
+            </div>
+            <div class="flex flex-wrap justify-center gap-2">
+                <button @click="category = 'all'"
+                        :class="category === 'all' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
+                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">All Partners</button>
+                <button @click="category = 'authorities'"
+                        :class="category === 'authorities' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
+                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Authorities</button>
+                <button @click="category = 'organizations'"
+                        :class="category === 'organizations' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
+                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Organizations</button>
+                <button @click="category = 'companies'"
+                        :class="category === 'companies' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
+                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Companies</button>
+                <button @click="category = 'towns'"
+                        :class="category === 'towns' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
+                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Towns</button>
+            </div>
+        </div>
+
         {{-- Partnerships with Cambodian Authorities --}}
-        <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8">
+        <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8"
+             x-show="category === 'all' || category === 'authorities'">
             <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
                 <span class="text-2xl">🇰🇭</span> Partnerships with the Cambodian Authorities
             </h3>
@@ -310,11 +372,14 @@
         {{-- Partner lists from DB --}}
         @foreach(['authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-3', 'text' => 'text-sm'], 'organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-3', 'text' => 'text-sm'], 'companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-4', 'text' => 'text-xs']] as $cat => $meta)
         @if(isset($partners[$cat]) && $partners[$cat]->count())
-        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-8">
+        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
+             x-show="category === 'all' || category === '{{ $cat }}'">
             <h3 class="text-lg font-bold text-[#2d6fa3] mb-6">{{ $meta['title'] }}</h3>
             <div class="grid {{ $meta['cols'] }} gap-2">
                 @foreach($partners[$cat] as $partner)
-                <div class="flex items-center gap-2 {{ $meta['text'] }} text-gray-600 py-1.5 border-b border-gray-50">
+                @php $ps = json_encode(strtolower($partner->name)); @endphp
+                <div class="flex items-center gap-2 {{ $meta['text'] }} text-gray-600 py-1.5 border-b border-gray-50"
+                     x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
                     <span class="w-1.5 h-1.5 rounded-full {{ $meta['dot'] }} flex-shrink-0"></span>{{ $partner->name }}
                 </div>
                 @endforeach
@@ -325,11 +390,14 @@
 
         {{-- Towns & Municipalities --}}
         @if(isset($partners['towns']) && $partners['towns']->count())
-        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-10">
+        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-10"
+             x-show="category === 'all' || category === 'towns'">
             <h3 class="text-lg font-bold text-[#2d6fa3] mb-6">🇨🇭 Towns and Municipalities — Switzerland</h3>
             <div class="flex flex-wrap gap-3">
                 @foreach($partners['towns'] as $partner)
-                <span class="bg-[#2d6fa3]/10 text-[#2d6fa3] px-4 py-2 rounded-full text-sm font-medium">{{ $partner->name }}</span>
+                @php $ps = json_encode(strtolower($partner->name)); @endphp
+                <span class="bg-[#2d6fa3]/10 text-[#2d6fa3] px-4 py-2 rounded-full text-sm font-medium"
+                      x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">{{ $partner->name }}</span>
                 @endforeach
             </div>
         </div>
@@ -351,7 +419,7 @@
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Accountability</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Transparency &amp; Accountability</h2>
+            <h2 class="text-4xl font-bold text-[#2d6fa3]">Transparency & Accountability</h2>
         </div>
 
         <div class="grid lg:grid-cols-2 gap-12 mb-16">

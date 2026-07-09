@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Models\AnnualReport;
 use App\Models\Award;
@@ -15,6 +16,9 @@ use App\Models\Project;
 use App\Models\Slide;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\Admin\HistoryController;
 
 // ──────────────────────────────────────────────
 // Public pages
@@ -71,10 +75,8 @@ Route::get('/get-involved', function () {
     return view('involved', compact('settings'));
 })->name('involved');
 
-Route::get('/news', function () {
-    $articles = News::published()->latest('published_at')->get();
-    return view('news', compact('articles'));
-})->name('news');
+Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
@@ -100,9 +102,9 @@ Route::post('/admin/logout', [Admin\AuthController::class, 'logout'])->name('adm
 // ──────────────────────────────────────────────
 // Admin — Protected panel
 // ──────────────────────────────────────────────
-
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
-    Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [Admin\DashboardController::class, 'index'])
+        ->name('dashboard');
 
     Route::resource('news',     Admin\NewsController::class);
     Route::resource('programs', Admin\ProgramController::class)->except(['show']);
@@ -115,8 +117,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('gallery', Admin\GalleryController::class)->except(['show']);
     Route::resource('testimonials', Admin\TestimonialController::class)->except(['show']);
 
-    Route::get('home',  [Admin\HomeSettingController::class, 'index'])->name('home.index');
-    Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
+    Route::get('home', [Admin\HomeSettingController::class, 'index'])
+        ->name('home.index');
+    Route::post('home', [Admin\HomeSettingController::class, 'update'])
+        ->name('home.update');
 
     Route::get('programs-banner',  [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
     Route::post('programs-banner', [Admin\ProgramsBannerController::class, 'update'])->name('programs-banner.update');

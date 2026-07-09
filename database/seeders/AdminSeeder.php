@@ -29,12 +29,59 @@ class AdminSeeder extends Seeder
         $homeSettings = [
             // Stats group
             ['key' => 'stat_children',   'label' => 'Children Supported',        'group' => 'stats', 'value' => '4,079'],
-            ['key' => 'stat_welfare',    'label' => 'In Child Welfare',           'group' => 'stats', 'value' => '240'],
-            ['key' => 'stat_special_ed', 'label' => 'Special Ed Students',        'group' => 'stats', 'value' => '768'],
-            ['key' => 'stat_arts',       'label' => 'Arts & Culture Students',    'group' => 'stats', 'value' => '1,088'],
-            ['key' => 'stat_counseling', 'label' => 'Career Counseling',          'group' => 'stats', 'value' => '357'],
+            ['key' => 'stat_employees',  'label' => 'Employees',                  'group' => 'stats', 'value' => '70'],
+            ['key' => 'stat_budget',     'label' => 'USD Annual Budget',          'group' => 'stats', 'value' => '950000'],
             ['key' => 'stat_provinces',  'label' => 'Provinces',                  'group' => 'stats', 'value' => '15'],
             // Hero group
+            ['key' => 'hero_banner_text',           'label' => 'Hero Banner Text',           'group' => 'hero', 'value' => 'Krousar Thmey is Cambodia’s first organization helping disadvantaged children through child welfare, special education, and cultural development.'],
+            ['key' => 'hero_button_primary_text',   'label' => 'Hero Primary Button Text',   'group' => 'hero', 'value' => 'Donate Now'],
+            ['key' => 'hero_button_primary_url',    'label' => 'Hero Primary Button URL',    'group' => 'hero', 'value' => '/donate'],
+            ['key' => 'hero_button_secondary_text', 'label' => 'Hero Secondary Button Text', 'group' => 'hero', 'value' => 'Learn More'],
+            ['key' => 'hero_button_secondary_url',  'label' => 'Hero Secondary Button URL', 'group' => 'hero', 'value' => '/our-programs'],
+            // About section
+            ['key' => 'about_section_label', 'label' => 'About Section Label', 'group' => 'about', 'value' => 'Our Mission'],
+            ['key' => 'about_title',         'label' => 'About Section Title', 'group' => 'about', 'value' => 'The First Cambodian Organization for Disadvantaged Children'],
+            ['key' => 'about_text',          'label' => 'About Section Text', 'group' => 'about', 'value' => 'Born in 1991 in the Site II refugee camp in Thailand, Krousar Thmey — meaning "New Family" in Khmer — was established with a single vision: that every disadvantaged child in Cambodia deserves safety, education, and a sense of cultural identity.'],
+            ['key' => 'about_subtext',       'label' => 'About Section Subtext', 'group' => 'about', 'value' => 'We believe in development led by Cambodians, for Cambodians. With three core programs spanning child welfare, special education, and cultural arts, we reach children across all 15 provinces of Cambodia.'],
+            ['key' => 'about_image',         'label' => 'About Section Image', 'group' => 'about', 'value' => 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=700&q=80'],
+            // Programs section
+            ['key' => 'programs_title',    'label' => 'Programs Section Title',    'group' => 'programs', 'value' => 'What We Do'],
+            ['key' => 'programs_subtitle', 'label' => 'Programs Section Subtitle', 'group' => 'programs', 'value' => 'Operating across 15 Cambodian provinces, our programs address the most pressing needs of vulnerable children.'],
+            ['key' => 'programs_featured', 'label' => 'Featured Programs (comma separated slugs)', 'group' => 'programs', 'value' => 'child-welfare,special-education'],
+            // News section
+            ['key' => 'news_title',    'label' => 'News Section Title',    'group' => 'news', 'value' => 'Latest Updates'],
+            ['key' => 'news_subtitle', 'label' => 'News Section Subtitle', 'group' => 'news', 'value' => 'News and stories about our impact, events, and community progress.'],
+            // Partners section
+            ['key' => 'partners_title',    'label' => 'Partners Section Title',    'group' => 'partners', 'value' => 'Supported by our partners worldwide'],
+            ['key' => 'partners_subtitle', 'label' => 'Partners Section Subtitle', 'group' => 'partners', 'value' => 'Together we reach communities across Cambodia.'],
+            ['key' => 'partners_logos',    'label' => 'Partner Logos List',       'group' => 'partners', 'value' => 'UNICEF, USAID, AFD, Handicap International, European Union, Aide et Action'],
+            // Call to action
+            ['key' => 'cta_label',           'label' => 'CTA Label',           'group' => 'cta', 'value' => 'Support Our Work'],
+            ['key' => 'cta_title',           'label' => 'CTA Title',           'group' => 'cta', 'value' => 'Help a Child Build Their Future'],
+            ['key' => 'cta_subtitle',        'label' => 'CTA Subtitle',        'group' => 'cta', 'value' => 'We guarantee that 100% of your donation is used to support children across Cambodia. Every contribution, big or small, changes a life.' ],
+            ['key' => 'cta_primary_text',    'label' => 'CTA Primary Button Text',   'group' => 'cta', 'value' => 'Donate Now'],
+            ['key' => 'cta_primary_url',     'label' => 'CTA Primary Button URL',   'group' => 'cta', 'value' => '/donate'],
+            ['key' => 'cta_secondary_text',  'label' => 'CTA Secondary Button Text', 'group' => 'cta', 'value' => 'Get Involved'],
+            ['key' => 'cta_secondary_url',   'label' => 'CTA Secondary Button URL', 'group' => 'cta', 'value' => '/get-involved'],
+            // Structure map
+            ['key' => 'structure_heading',       'label' => 'Structure Map — Heading',            'group' => 'structure', 'value' => "KROUSAR THMEY'S STRUCTURES"],
+            ['key' => 'structure_welfare_title', 'label' => 'Structure Map — Child Welfare Title', 'group' => 'structure', 'value' => 'Child Welfare Program'],
+            ['key' => 'structure_welfare_items', 'label' => 'Structure Map — Child Welfare Items', 'group' => 'structure', 'value' => "2 Temporary Protection Centers\n2 Long-term Protection Centers\n2 Family Houses\nOutside Cases"],
+            ['key' => 'structure_education_title','label' => 'Structure Map — Education Title',    'group' => 'structure', 'value' => 'Education for Deaf or Blind Children Program'],
+            ['key' => 'structure_education_items','label' => 'Structure Map — Education Items',    'group' => 'structure', 'value' => "5 Special Education High Schools"],
+            ['key' => 'structure_image',         'label' => 'Structure Map — Image URL',           'group' => 'structure', 'value' => asset('images/cambodia-map.png')],
+            // Programs section
+            ['key' => 'programs_badge',  'label' => 'Programs — Badge Text', 'group' => 'programs', 'value' => 'WHAT WE DO'],
+            ['key' => 'programs_heading','label' => 'Programs — Heading',     'group' => 'programs', 'value' => 'Two Programs, One Mission'],
+            ['key' => 'programs_cta',    'label' => 'Programs — CTA Button',  'group' => 'programs', 'value' => 'View All Programs'],
+            ['key' => 'programs_learn_btn', 'label' => 'Programs — Card Learn More Button', 'group' => 'programs', 'value' => 'Learn More'],
+            // Partners section
+            ['key' => 'partners_heading', 'label' => 'Partners — Section Heading', 'group' => 'partners', 'value' => 'Supported by Our Partners Worldwide'],
+            // Footer contact
+            ['key' => 'footer_address', 'label' => 'Footer Address', 'group' => 'footer', 'value' => '#58, Street 478, Phnom Penh, Cambodia'],
+            ['key' => 'footer_phone',   'label' => 'Footer Phone',   'group' => 'footer', 'value' => '+855 (0)23 211 955'],
+            ['key' => 'footer_email',   'label' => 'Footer Email',   'group' => 'footer', 'value' => 'info@krousar-thmey.org'],
+            // Hero slides (models still control the carousel)
             ['key' => 'hero_slide_1_title',    'label' => 'Slide 1 — Title',    'group' => 'hero', 'value' => 'Education Without Borders'],
             ['key' => 'hero_slide_1_subtitle', 'label' => 'Slide 1 — Subtitle', 'group' => 'hero', 'value' => 'Krousar Thmey supports 4,079 disadvantaged children across 15 Cambodian provinces'],
             ['key' => 'hero_slide_2_title',    'label' => 'Slide 2 — Title',    'group' => 'hero', 'value' => 'Culture & Identity'],

@@ -209,13 +209,14 @@
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Subject <span class="text-[#d32f2f]">*</span></label>
                             <select class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/10 text-sm transition-colors bg-white text-gray-700">
                                 <option value="">Select a topic</option>
-                                <option>Donation</option>
-                                <option>Partnership / Sponsorship</option>
-                                <option>Volunteering</option>
-                                <option>Job Application</option>
-                                <option>Media / Press</option>
-                                <option>General Enquiry</option>
+                                <option value="Donation" {{ old('subject') === 'Donation' ? 'selected' : '' }}>Donation</option>
+                                <option value="Partnership / Sponsorship" {{ old('subject') === 'Partnership / Sponsorship' ? 'selected' : '' }}>Partnership / Sponsorship</option>
+                                <option value="Volunteering" {{ old('subject') === 'Volunteering' ? 'selected' : '' }}>Volunteering</option>
+                                <option value="Job Application" {{ old('subject') === 'Job Application' ? 'selected' : '' }}>Job Application</option>
+                                <option value="Media / Press" {{ old('subject') === 'Media / Press' ? 'selected' : '' }}>Media / Press</option>
+                                <option value="General Enquiry" {{ old('subject') === 'General Enquiry' ? 'selected' : '' }}>General Enquiry</option>
                             </select>
+                            @error('subject') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Message <span class="text-[#d32f2f]">*</span></label>
@@ -228,6 +229,7 @@
                                 I agree to Krousar Thmey storing my contact information to respond to my enquiry, in accordance with their privacy policy.
                             </label>
                         </div>
+                        @error('consent') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         <button type="submit" class="btn-blue w-full justify-center py-4 rounded-xl text-base">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                             Send Message

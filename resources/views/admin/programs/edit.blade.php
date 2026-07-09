@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Edit Program')
-@section('page-title', 'Edit Program')
+@section('page-title', 'Edit Program: ' . $program->title)
 @section('breadcrumb', 'Programs → ' . $program->title)
 
 @section('content')
