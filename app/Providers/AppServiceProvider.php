@@ -24,7 +24,11 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $data = $view->getData();
             if (!array_key_exists('settings', $data)) {
-                $view->with('settings', HomeSetting::allKeyed());
+                try {
+                    $view->with('settings', HomeSetting::allKeyed());
+                } catch (\Throwable $e) {
+                    $view->with('settings', []);
+                }
             }
         });
     }

@@ -99,6 +99,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->name('home.update');
 
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create']);
+    Route::resource('reports', Admin\AnnualReportController::class)->except(['show']);
     Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
     Route::resource('slides',   Admin\SlideController::class)->except(['show']);
     Route::resource('users',    Admin\UserController::class)->except(['show']);
