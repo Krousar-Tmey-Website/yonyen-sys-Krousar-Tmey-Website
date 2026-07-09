@@ -16,9 +16,9 @@
         : '';
 @endphp
 
-<div class="bg-[#1a3c6e] pt-16 pb-24 relative overflow-hidden" style="{{ $bannerStyle }}">
+<div class="bg-[#2d6fa3] pt-16 pb-20 relative overflow-hidden" style="{{ $bannerStyle }}">
     <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/3"></div>
-    <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#2d6fa3]/30 translate-y-1/2 -translate-x-1/4"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a]/40 translate-y-1/2 -translate-x-1/4"></div>
 
     <div class="relative max-w-7xl mx-auto px-6">
         {{-- Breadcrumb --}}
@@ -42,92 +42,110 @@
             </span>
         </div>
 
-        <h1 class="text-4xl md:text-5xl font-black text-white mb-5 max-w-3xl leading-tight uppercase tracking-wide">{{ $project->title }}</h1>
-
-        @if($project->description)
-        <p class="text-white/60 text-lg max-w-2xl leading-relaxed">{{ $project->description }}</p>
-        @endif
+        <h1 class="text-3xl md:text-4xl font-black text-white mb-0 max-w-3xl leading-tight uppercase tracking-wide">{{ $project->title }}</h1>
     </div>
 </div>
 
 {{-- ── Main Content ─────────────────────────────────────────────── --}}
-<section class="bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-
-        {{-- Hero image overlapping header --}}
-        @if($project->image)
-        <div class="-mt-12 mb-14 relative z-10">
-            <div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
-                <img src="{{ $project->image_url }}" alt="{{ $project->title }}" class="w-full max-h-[520px] object-cover">
-            </div>
-        </div>
-        @else
-        <div class="pt-14"></div>
-        @endif
+<section class="bg-white py-12">
+    <div class="max-w-6xl mx-auto px-6">
 
         {{-- Two-column layout: content + sidebar --}}
-        <div class="grid lg:grid-cols-[1fr_320px] gap-12 items-start pb-20">
+        <div class="grid lg:grid-cols-3 gap-10 items-start">
 
-            {{-- Left: text content --}}
-            <div class="space-y-10">
+            {{-- Left: text content (2/3) --}}
+            <div class="lg:col-span-2 space-y-8">
+
+                {{-- Hero image — medium, contained --}}
+                @if($project->image)
+                <div class="rounded-2xl overflow-hidden shadow-lg ring-1 ring-gray-200">
+                    <img src="{{ $project->image_url }}" alt="{{ $project->title }}"
+                         class="w-full h-64 md:h-80 object-cover object-center">
+                </div>
+                @endif
+
+                @if($project->description)
+                <blockquote class="border-l-4 border-[#8da83a] pl-5 py-3 pr-4 bg-[#8da83a]/5 rounded-r-xl">
+                    <p class="text-gray-700 text-sm leading-relaxed italic">{{ $project->description }}</p>
+                </blockquote>
+                @endif
 
                 @if($project->objective)
                 <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-1.5 h-6 bg-[#d32f2f] rounded-full"></div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-1 h-6 bg-[#d32f2f] rounded-full"></div>
                         <span class="text-xs font-bold text-[#1a3c6e] uppercase tracking-widest">Objective</span>
                         <div class="flex-1 h-px bg-gray-100"></div>
                     </div>
-                    <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ $project->objective }}</p>
+                    <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{{ $project->objective }}</p>
                 </div>
                 @endif
 
                 @if($project->content)
                 <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-1.5 h-6 bg-[#2d6fa3] rounded-full"></div>
-                        <span class="text-xs font-bold text-[#1a3c6e] uppercase tracking-widest">Project</span>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-1 h-6 bg-[#2d6fa3] rounded-full"></div>
+                        <span class="text-xs font-bold text-[#1a3c6e] uppercase tracking-widest">Project Details</span>
                         <div class="flex-1 h-px bg-gray-100"></div>
                     </div>
-                    <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ $project->content }}</p>
+                    <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{{ $project->content }}</p>
                 </div>
                 @endif
 
                 @if($project->activities)
                 <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-1.5 h-6 bg-[#8da83a] rounded-full"></div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-1 h-6 bg-[#8da83a] rounded-full"></div>
                         <span class="text-xs font-bold text-[#1a3c6e] uppercase tracking-widest">Activities</span>
                         <div class="flex-1 h-px bg-gray-100"></div>
                     </div>
-                    <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ $project->activities }}</p>
+                    <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{{ $project->activities }}</p>
                 </div>
                 @endif
 
                 @if($project->make_difference_text)
                 <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-1.5 h-6 bg-[#e8a020] rounded-full"></div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-1 h-6 bg-[#e8a020] rounded-full"></div>
                         <span class="text-xs font-bold text-[#1a3c6e] uppercase tracking-widest">Make a Difference</span>
                         <div class="flex-1 h-px bg-gray-100"></div>
                     </div>
-                    <p class="text-gray-600 leading-relaxed whitespace-pre-line mb-6">{{ $project->make_difference_text }}</p>
+                    <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{{ $project->make_difference_text }}</p>
                 </div>
                 @endif
 
+                @if($project->grants->isNotEmpty())
+                @foreach($project->grants as $grant)
+                <div class="rounded-2xl border border-[#8da83a]/30 bg-[#8da83a]/5 p-5 flex items-center gap-5">
+                    <div class="w-12 h-12 rounded-xl bg-[#8da83a] flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#8da83a] uppercase tracking-widest mb-0.5">{{ $grant->title ?: 'Income Generation' }}</p>
+                        <p class="text-2xl font-black text-[#1a3c6e]">${{ number_format($grant->amount, 2) }}</p>
+                        <p class="text-xs text-gray-500 mt-0.5">
+                            @if($grant->label){{ $grant->label }}@endif
+                            @if($grant->label && $grant->recipient) &middot; @endif
+                            @if($grant->recipient){{ $grant->recipient }}@endif
+                        </p>
+                    </div>
+                </div>
+                @endforeach
+                @endif
+
                 {{-- Action buttons --}}
-                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <div class="flex flex-col sm:flex-row gap-3 pt-2 border-t border-gray-100">
                     <a href="{{ route('donate') }}" class="btn-primary justify-center">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                         Donate Now
                     </a>
                     <a href="{{ route('contact') }}" class="btn-blue justify-center">
-                        Contact Us About This Project
+                        Contact Us
                     </a>
                 </div>
             </div>
 
-            {{-- Right: sidebar --}}
+            {{-- Right: sidebar (1/3) --}}
             <div class="space-y-5 lg:sticky lg:top-24">
 
                 {{-- Project info card --}}
@@ -187,7 +205,7 @@
         {{-- Testimony --}}
         @if($project->testimony_name && $project->testimony_story)
         @php $cleanName = preg_replace('/^testimony\s*:?\s*/i', '', $project->testimony_name); @endphp
-        <div class="border-t border-gray-100 pt-16 pb-20">
+        <div class="border-t border-gray-100 mt-10 pt-12 pb-16">
             <div class="max-w-4xl mx-auto bg-[#1a3c6e]/5 border border-[#1a3c6e]/10 p-8 md:p-12 rounded-3xl text-center shadow-sm">
                 <div class="relative inline-block mb-4">
                     @if($project->testimony_image)
@@ -223,7 +241,7 @@
 </section>
 
 {{-- ── Back bar ─────────────────────────────────────────────────── --}}
-<div class="bg-[#f8f9fc] border-t border-gray-100 py-10">
+<div class="bg-[#f8f9fc] border-t border-gray-100 py-8">
     <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         @if($project->program)
         <a href="{{ route('programs') }}#projects-{{ $project->program->slug }}"
@@ -250,7 +268,7 @@
 </div>
 
 {{-- ── CTA Banner ───────────────────────────────────────────────── --}}
-<section class="relative py-20 overflow-hidden bg-[#1a3c6e]">
+<section class="relative py-16 overflow-hidden bg-[#1a3c6e]">
     <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#2d6fa3]/20 -translate-y-1/2 translate-x-1/4"></div>
     <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a]/10 translate-y-1/2 -translate-x-1/4"></div>
     <div class="relative max-w-4xl mx-auto px-6 text-center">
@@ -258,8 +276,8 @@
             <div class="w-1.5 h-1.5 rounded-full bg-[#8da83a]"></div>
             <span class="text-[#8da83a] font-semibold text-xs uppercase tracking-widest">Support Our Mission</span>
         </div>
-        <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-wide mb-4">Help Children in Cambodia</h2>
-        <p class="text-white/60 text-base mb-10 max-w-xl mx-auto leading-relaxed">Your support helps us continue providing education, protection, and opportunities for disadvantaged children.</p>
+        <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-wide mb-3">Help Children in Cambodia</h2>
+        <p class="text-white/60 text-sm mb-8 max-w-xl mx-auto leading-relaxed">Your support helps us continue providing education, protection, and opportunities for disadvantaged children.</p>
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="{{ route('donate') }}" class="btn-primary">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>

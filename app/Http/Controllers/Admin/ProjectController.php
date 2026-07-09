@@ -27,6 +27,9 @@ class ProjectController extends Controller {
             'duration'    => 'nullable|string',
             'location'    => 'nullable|string',
             'beneficiaries' => 'nullable|string',
+            'grant_label'     => 'nullable|string|max:255',
+            'grant_amount'    => 'nullable|numeric|min:0',
+            'grant_recipient' => 'nullable|string|max:255',
             'testimony_name' => 'nullable|string',
             'testimony_story' => 'nullable|string',
             'testimony_image' => 'nullable|image|max:2048',
@@ -71,7 +74,8 @@ class ProjectController extends Controller {
     public function edit(Project $project) {
         $item = $project;
         $programs = Program::all();
-        return view('admin.projects.edit', compact('item', 'programs'));
+        $grants = $project->grants()->get();
+        return view('admin.projects.edit', compact('item', 'programs', 'grants'));
     }
     public function update(Request $request, Project $project) {
         $data = $request->validate([
@@ -85,6 +89,9 @@ class ProjectController extends Controller {
             'duration'    => 'nullable|string',
             'location'    => 'nullable|string',
             'beneficiaries' => 'nullable|string',
+            'grant_label'     => 'nullable|string|max:255',
+            'grant_amount'    => 'nullable|numeric|min:0',
+            'grant_recipient' => 'nullable|string|max:255',
             'testimony_name' => 'nullable|string',
             'testimony_story' => 'nullable|string',
             'testimony_image' => 'nullable|image|max:2048',

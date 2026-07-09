@@ -5,8 +5,6 @@
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-5">
-
-    @if($errors->any())
     <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
         <ul class="list-disc list-inside space-y-1">
             @foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach
@@ -174,6 +172,12 @@
                 <textarea name="make_difference_text" rows="3" placeholder="e.g. $50 - food expenses per child per month"
                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('make_difference_text') }}</textarea>
             </div>
+        </div>
+
+        {{-- Income Generation Grants --}}
+        <div class="bg-[#8da83a]/5 rounded-2xl border border-[#8da83a]/20 p-5 flex items-start gap-3">
+            <svg class="w-5 h-5 text-[#8da83a] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p class="text-xs text-gray-500"><span class="font-semibold text-[#8da83a]">Income Generation Grants</span> can be added after you create the project. Save first, then open the project to manage grants.</p>
         </div>
 
         {{-- Actions --}}

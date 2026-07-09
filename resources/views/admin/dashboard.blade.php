@@ -7,11 +7,13 @@
 @section('content')
 
 {{-- Stat cards --}}
-<div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
     @foreach([
         ['label' => 'Total Articles',   'value' => $stats['news_total'],     'color' => 'bg-[#2d6fa3]', 'route' => 'admin.news.index'],
         ['label' => 'Published',        'value' => $stats['news_published'], 'color' => 'bg-[#8da83a]', 'route' => 'admin.news.index'],
         ['label' => 'Programs',         'value' => $stats['programs'],       'color' => 'bg-[#1d4e7a]', 'route' => 'admin.programs.index'],
+        ['label' => 'Projects',         'value' => $stats['projects'],       'color' => 'bg-[#2d6fa3]', 'route' => 'admin.projects.index'],
+        ['label' => 'Additional Pages', 'value' => $stats['page_items'],     'color' => 'bg-[#e8a020]', 'route' => 'admin.program-pages.index'],
         ['label' => 'Partners',         'value' => $stats['partners'],       'color' => 'bg-[#2d6fa3]', 'route' => 'admin.partners.index'],
         ['label' => 'Awards',           'value' => $stats['awards'],         'color' => 'bg-[#8da83a]', 'route' => 'admin.awards.index'],
     ] as $card)

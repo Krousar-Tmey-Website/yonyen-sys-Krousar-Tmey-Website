@@ -2,6 +2,7 @@
 @section('title', 'Edit Project — ' . $item->title)
 @section('page-title', 'Edit Project')
 @section('breadcrumb', $item->title)
+@php use Illuminate\Support\Str; @endphp
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
@@ -262,5 +263,135 @@
             </a>
         </div>
     </form>
+
+    {{-- ── Income Generation Grants (outside project form — nested forms are invalid HTML) ── --}}
+    <div class="bg-[#8da83a]/5 rounded-2xl border border-[#8da83a]/20 p-6 space-y-4">
+        <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-[#8da83a] uppercase tracking-wider">Income Generation Grants</h3>
+            <span class="text-xs text-gray-400">{{ $grants->count() }} {{ Str::plural('grant', $grants->count()) }}</span>
+        </div>
+
+        @if(session('success') && str_contains(session('success'), 'rant'))
+        <div class="bg-green-50 border border-green-200 text-green-700 text-xs px-3 py-2 rounded-lg flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            {{ session('success') }}
+        </div>
+        @endif
+
+        {{-- Existing grants --}}
+        @forelse($grants as $grant)
+        <div class="bg-white rounded-xl border border-[#8da83a]/20 p-4" x-data="{ editing: false }">
+            {{-- View row --}}
+            <div x-show="!editing" class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-lg bg-[#8da83a] flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    @if($grant->title)<p class="text-xs font-bold text-[#1a3c6e] uppercase tracking-wide">{{ $grant->title }}</p>@endif
+                    <p class="text-lg font-black text-[#1a3c6e]">${{ number_format($grant->amount, 2) }}</p>
+                    <p class="text-xs text-gray-500">
+                        @if($grant->label){{ $grant->label }}@endif
+                        @if($grant->label && $grant->recipient) &middot; @endif
+                        @if($grant->recipient){{ $grant->recipient }}@endif
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <button type="button" @click="editing = true"
+                            class="px-3 py-1.5 text-xs font-medium text-[#2d6fa3] border border-[#2d6fa3]/30 rounded-lg hover:bg-[#2d6fa3]/5 transition-colors">
+                        Edit
+                    </button>
+                    <form action="{{ route('admin.projects.grants.destroy', [$item, $grant]) }}" method="POST"
+                          onsubmit="return confirm('Delete this grant?')">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="px-3 py-1.5 text-xs font-medium text-red-500 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">Delete</button>
+                    </form>
+                </div>
+            </div>
+
+            {{-- Edit row --}}
+            <div x-show="editing" style="display:none">
+                <form action="{{ route('admin.projects.grants.update', [$item, $grant]) }}" method="POST" class="space-y-3">
+                    @csrf @method('PUT')
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Section Title <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <input type="text" name="title" value="{{ $grant->title }}"
+                                   placeholder="e.g. Income Generation"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Amount (USD) <span class="text-red-400">*</span></label>
+                            <input type="number" name="amount" value="{{ $grant->amount }}" step="0.01" min="0" required
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Label</label>
+                            <input type="text" name="label" value="{{ $grant->label }}"
+                                   placeholder="e.g. Initial grant"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Recipient</label>
+                            <input type="text" name="recipient" value="{{ $grant->recipient }}"
+                                   placeholder="e.g. Mrs. Huot Khatna"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="submit" class="px-4 py-1.5 bg-[#8da83a] hover:bg-[#7a9232] text-white text-xs font-semibold rounded-lg transition-colors">Save</button>
+                        <button type="button" @click="editing = false" class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @empty
+        <p class="text-xs text-gray-400 text-center py-3">No grants yet. Add one below.</p>
+        @endforelse
+
+        {{-- Add new grant --}}
+        <div x-data="{ open: {{ $grants->isEmpty() ? 'true' : 'false' }} }">
+            <button type="button" @click="open = !open"
+                    class="w-full flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-dashed border-[#8da83a]/40 hover:border-[#8da83a] text-[#8da83a] text-xs font-semibold rounded-xl transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Add Grant
+            </button>
+            <div x-show="open" style="display:none" class="mt-3 bg-white rounded-xl border border-[#8da83a]/20 p-4">
+                <form action="{{ route('admin.projects.grants.store', $item) }}" method="POST" class="space-y-3">
+                    @csrf
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Section Title <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <input type="text" name="title" value="{{ old('title') }}"
+                                   placeholder="e.g. Income Generation"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Amount (USD) <span class="text-red-400">*</span></label>
+                            <input type="number" name="amount" value="{{ old('amount') }}" step="0.01" min="0" required
+                                   placeholder="e.g. 779.50"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Label</label>
+                            <input type="text" name="label" value="{{ old('label') }}"
+                                   placeholder="e.g. Initial grant"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Recipient</label>
+                            <input type="text" name="recipient" value="{{ old('recipient') }}"
+                                   placeholder="e.g. Mrs. Huot Khatna"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="submit" class="px-4 py-1.5 bg-[#8da83a] hover:bg-[#7a9232] text-white text-xs font-semibold rounded-lg transition-colors">Add Grant</button>
+                        <button type="button" @click="open = false" class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection

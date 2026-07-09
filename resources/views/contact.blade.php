@@ -77,52 +77,49 @@
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach([
-                ['flag' => '🇰🇭', 'country' => 'Cambodia', 'badge' => 'Headquarters', 'badge_color' => 'bg-[#2d6fa3] text-white',
-                 'city' => 'Phnom Penh', 'address' => '#58, Street 478, Phnom Penh, Cambodia',
-                 'phone' => '+855 (0)23 211 955', 'email' => 'info@krousar-thmey.org', 'accent' => 'border-[#2d6fa3]'],
-                ['flag' => '🇫🇷', 'country' => 'France', 'badge' => 'Europe', 'badge_color' => 'bg-[#8da83a] text-white',
-                 'city' => 'Paris', 'address' => '75, rue de la Roquette, 75011 Paris, France',
-                 'phone' => '+33 (0)1 43 14 84 84', 'email' => 'france@krousar-thmey.org', 'accent' => 'border-[#8da83a]'],
-                ['flag' => '🇨🇭', 'country' => 'Switzerland', 'badge' => 'Europe', 'badge_color' => 'bg-[#8da83a] text-white',
-                 'city' => 'Geneva', 'address' => 'Case Postale 3018, 1211 Geneva 3, Switzerland',
-                 'phone' => '+41 (0)79 456 78 90', 'email' => 'suisse@krousar-thmey.org', 'accent' => 'border-[#8da83a]'],
-                ['flag' => '🇸🇬', 'country' => 'Singapore', 'badge' => 'Asia', 'badge_color' => 'bg-[#e8a020] text-white',
-                 'city' => 'Singapore', 'address' => '10 Anson Road, #27-15, Singapore 079903',
-                 'phone' => '+65 6123 4567', 'email' => 'singapore@krousar-thmey.org', 'accent' => 'border-[#e8a020]'],
-            ] as $loc)
-            <div class="bg-[#f8f9fc] rounded-3xl border-2 {{ $loc['accent'] }}/30 hover:border-opacity-100 hover:shadow-lg transition-all duration-300 overflow-hidden group">
+            @forelse($offices as $loc)
+            <div class="bg-[#f8f9fc] rounded-3xl border-2 {{ $loc->accent_color }}/30 hover:border-opacity-100 hover:shadow-lg transition-all duration-300 overflow-hidden group">
                 <div class="p-6">
                     <div class="flex items-start justify-between mb-4">
-                        <span class="text-4xl">{{ $loc['flag'] }}</span>
-                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full {{ $loc['badge_color'] }}">{{ $loc['badge'] }}</span>
+                        <span class="text-4xl">{{ $loc->flag }}</span>
+                        @if($loc->badge)
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full {{ $loc->badge_color }}">{{ $loc->badge }}</span>
+                        @endif
                     </div>
-                    <h3 class="text-lg font-black text-[#2d6fa3] uppercase tracking-wide">{{ $loc['country'] }}</h3>
-                    <p class="text-[#8da83a] text-xs font-semibold mb-4">{{ $loc['city'] }}</p>
+                    <h3 class="text-lg font-black text-[#2d6fa3] uppercase tracking-wide">{{ $loc->country }}</h3>
+                    <p class="text-[#8da83a] text-xs font-semibold mb-4">{{ $loc->city }}</p>
 
                     <div class="space-y-3">
                         <div class="flex items-start gap-2.5">
                             <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <p class="text-gray-500 text-xs leading-relaxed">{{ $loc['address'] }}</p>
+                            <p class="text-gray-500 text-xs leading-relaxed">{{ $loc->address }}</p>
                         </div>
-                        <a href="tel:{{ preg_replace('/[^+0-9]/', '', $loc['phone']) }}" class="flex items-center gap-2.5 group/link">
+                        @if($loc->phone)
+                        <a href="tel:{{ preg_replace('/[^+0-9]/', '', $loc->phone) }}" class="flex items-center gap-2.5 group/link">
                             <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                            <span class="text-gray-500 text-xs group-hover/link:text-[#2d6fa3] transition-colors">{{ $loc['phone'] }}</span>
+                            <span class="text-gray-500 text-xs group-hover/link:text-[#2d6fa3] transition-colors">{{ $loc->phone }}</span>
                         </a>
-                        <a href="mailto:{{ $loc['email'] }}" class="flex items-center gap-2.5 group/link">
+                        @endif
+                        @if($loc->email)
+                        <a href="mailto:{{ $loc->email }}" class="flex items-center gap-2.5 group/link">
                             <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            <span class="text-gray-500 text-xs group-hover/link:text-[#2d6fa3] transition-colors break-all">{{ $loc['email'] }}</span>
+                            <span class="text-gray-500 text-xs group-hover/link:text-[#2d6fa3] transition-colors break-all">{{ $loc->email }}</span>
                         </a>
+                        @endif
                     </div>
                 </div>
+                @if($loc->email)
                 <div class="px-6 pb-5">
-                    <a href="mailto:{{ $loc['email'] }}" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#2d6fa3]/10 text-[#2d6fa3] text-xs font-semibold hover:bg-[#2d6fa3] hover:text-white transition-all duration-200">
+                    <a href="mailto:{{ $loc->email }}" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#2d6fa3]/10 text-[#2d6fa3] text-xs font-semibold hover:bg-[#2d6fa3] hover:text-white transition-all duration-200">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         Send Email
                     </a>
                 </div>
+                @endif
             </div>
-            @endforeach
+            @empty
+            <div class="col-span-4 py-12 text-center text-gray-400 text-sm">No offices configured yet.</div>
+            @endforelse
         </div>
     </div>
 </section>

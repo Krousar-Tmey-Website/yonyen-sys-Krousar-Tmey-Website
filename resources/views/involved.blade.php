@@ -87,12 +87,15 @@
                     <div class="absolute top-4 right-4 bg-[#8da83a] text-white text-xs font-bold px-3 py-1.5 rounded-full">100% reaches children</div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    @foreach([
-                        ['amount' => '€15',  'desc' => 'School supplies for one student / month', 'icon' => '📚'],
-                        ['amount' => '€30',  'desc' => 'Food for a child in our care / month',    'icon' => '🍚'],
-                        ['amount' => '€60',  'desc' => "Deaf student's education / month",        'icon' => '👂'],
-                        ['amount' => '€100', 'desc' => 'Vocational training for a young adult',   'icon' => '🎓'],
-                    ] as $tier)
+                    @php
+                    $tiers = [
+                        ['amount' => $settings['donation_tier_1_amount'] ?? '€15',  'desc' => $settings['donation_tier_1_desc'] ?? 'School supplies for one student / month', 'icon' => $settings['donation_tier_1_icon'] ?? '📚'],
+                        ['amount' => $settings['donation_tier_2_amount'] ?? '€30',  'desc' => $settings['donation_tier_2_desc'] ?? 'Food for a child in our care / month',    'icon' => $settings['donation_tier_2_icon'] ?? '🍚'],
+                        ['amount' => $settings['donation_tier_3_amount'] ?? '€60',  'desc' => $settings['donation_tier_3_desc'] ?? "Deaf student's education / month",        'icon' => $settings['donation_tier_3_icon'] ?? '👂'],
+                        ['amount' => $settings['donation_tier_4_amount'] ?? '€100', 'desc' => $settings['donation_tier_4_desc'] ?? 'Vocational training for a young adult',   'icon' => $settings['donation_tier_4_icon'] ?? '🎓'],
+                    ];
+                    @endphp
+                    @foreach($tiers as $tier)
                     <div class="bg-white/10 border border-white/20 rounded-2xl p-5 text-center hover:bg-white/20 transition-colors">
                         <div class="text-xl mb-1">{{ $tier['icon'] }}</div>
                         <div class="text-2xl font-black text-[#e8a020] mb-1">{{ $tier['amount'] }}</div>

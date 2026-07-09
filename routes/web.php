@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\DonationController;
+use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\Gallery;
+use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
 use App\Models\News;
+use App\Models\Office;
 use App\Models\Partner;
 use App\Models\Program;
 use App\Models\Project;
@@ -29,9 +32,13 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/who-we-are', function () {
-    $partners = Partner::active()->get()->groupBy('category');
-    $awards   = Award::ordered()->get();
-    return view('about', compact('partners', 'awards'));
+    $partners      = Partner::active()->get()->groupBy('category');
+    $awards        = Award::ordered()->get();
+    $offices       = Office::active()->get();
+    $historyEvents = HistoryEvent::active()->get();
+    $reports       = AnnualReport::active()->get();
+    $settings      = HomeSetting::allKeyed();
+    return view('about', compact('partners', 'awards', 'offices', 'historyEvents', 'reports', 'settings'));
 })->name('about');
 
 Route::get('/our-programs', function () {
@@ -55,18 +62,29 @@ Route::get('/programs/item/{id}', function ($id) {
 
 Route::get('/projects/{project}', function (Project $project) {
     if (!$project->is_active) return abort(404);
+    $project->load('grants');
     return view('project', compact('project'));
 })->name('projects.show');
 
-Route::get('/get-involved', fn() => view('involved'))->name('involved');
+Route::get('/get-involved', function () {
+    $settings = HomeSetting::allKeyed();
+    return view('involved', compact('settings'));
+})->name('involved');
 
 Route::get('/news', function () {
     $articles = News::published()->latest('published_at')->get();
     return view('news', compact('articles'));
 })->name('news');
 
-Route::get('/resources', fn() => view('resources'))->name('resources');
-Route::get('/contact',   fn() => view('contact'))->name('contact');
+Route::get('/resources', function () {
+    $reports = AnnualReport::active()->get();
+    return view('resources', compact('reports'));
+})->name('resources');
+
+Route::get('/contact', function () {
+    $offices = Office::active()->get();
+    return view('contact', compact('offices'));
+})->name('contact');
 
 Route::get('/donate',  [DonationController::class, 'show'])->name('donate');
 Route::post('/donate', [DonationController::class, 'send'])->name('donate.send');
@@ -91,6 +109,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('program-pages', Admin\ProgramPageController::class)->parameters(['program-pages' => 'item']);
     
     Route::resource('projects', Admin\ProjectController::class)->except(['show']);
+    Route::post('projects/{project}/grants',                Admin\ProjectGrantController::class . '@store')->name('projects.grants.store');
+    Route::put('projects/{project}/grants/{grant}',         Admin\ProjectGrantController::class . '@update')->name('projects.grants.update');
+    Route::delete('projects/{project}/grants/{grant}',      Admin\ProjectGrantController::class . '@destroy')->name('projects.grants.destroy');
     Route::resource('gallery', Admin\GalleryController::class)->except(['show']);
     Route::resource('testimonials', Admin\TestimonialController::class)->except(['show']);
 
@@ -100,7 +121,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('programs-banner',  [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
     Route::post('programs-banner', [Admin\ProgramsBannerController::class, 'update'])->name('programs-banner.update');
 
-    Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create', 'edit']);
-    Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
-    Route::resource('slides',   Admin\SlideController::class)->except(['show']);
+    Route::resource('partners',       Admin\PartnerController::class)->except(['show', 'create', 'edit']);
+    Route::resource('awards',         Admin\AwardController::class)->except(['show', 'create', 'edit']);
+    Route::resource('slides',         Admin\SlideController::class)->except(['show']);
+    Route::resource('offices',        Admin\OfficeController::class)->except(['show', 'create', 'edit']);
+    Route::resource('annual-reports', Admin\AnnualReportController::class)->except(['show', 'create', 'edit']);
+    Route::resource('history-events', Admin\HistoryEventController::class)->except(['show', 'create', 'edit'])->parameters(['history-events' => 'historyEvent']);
 });

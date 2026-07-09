@@ -48,6 +48,22 @@ class AdminSeeder extends Seeder
             ['key' => 'programs_banner_title',    'label' => 'Banner Title',    'group' => 'programs_banner', 'value' => 'Our Programs'],
             ['key' => 'programs_banner_subtitle',  'label' => 'Banner Subtitle', 'group' => 'programs_banner', 'value' => 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.'],
             ['key' => 'programs_banner_image',     'label' => 'Banner Background Image (URL or upload path)', 'group' => 'programs_banner', 'value' => ''],
+            // Donation tiers group
+            ['key' => 'donation_tier_1_amount', 'label' => 'Tier 1 — Amount',      'group' => 'donation_tiers', 'value' => '€15'],
+            ['key' => 'donation_tier_1_desc',   'label' => 'Tier 1 — Description', 'group' => 'donation_tiers', 'value' => 'School supplies for one student / month'],
+            ['key' => 'donation_tier_1_icon',   'label' => 'Tier 1 — Icon (emoji)','group' => 'donation_tiers', 'value' => '📚'],
+            ['key' => 'donation_tier_2_amount', 'label' => 'Tier 2 — Amount',      'group' => 'donation_tiers', 'value' => '€30'],
+            ['key' => 'donation_tier_2_desc',   'label' => 'Tier 2 — Description', 'group' => 'donation_tiers', 'value' => 'Food for a child in our care / month'],
+            ['key' => 'donation_tier_2_icon',   'label' => 'Tier 2 — Icon (emoji)','group' => 'donation_tiers', 'value' => '🍚'],
+            ['key' => 'donation_tier_3_amount', 'label' => 'Tier 3 — Amount',      'group' => 'donation_tiers', 'value' => '€60'],
+            ['key' => 'donation_tier_3_desc',   'label' => 'Tier 3 — Description', 'group' => 'donation_tiers', 'value' => "Deaf student's education / month"],
+            ['key' => 'donation_tier_3_icon',   'label' => 'Tier 3 — Icon (emoji)','group' => 'donation_tiers', 'value' => '👂'],
+            ['key' => 'donation_tier_4_amount', 'label' => 'Tier 4 — Amount',      'group' => 'donation_tiers', 'value' => '€100'],
+            ['key' => 'donation_tier_4_desc',   'label' => 'Tier 4 — Description', 'group' => 'donation_tiers', 'value' => 'Vocational training for a young adult'],
+            ['key' => 'donation_tier_4_icon',   'label' => 'Tier 4 — Icon (emoji)','group' => 'donation_tiers', 'value' => '🎓'],
+            // About page
+            ['key' => 'about_worldwide_title', 'label' => 'Worldwide Section Title', 'group' => 'about', 'value' => 'Krousar Thmey Worldwide'],
+            ['key' => 'about_worldwide_desc',  'label' => 'Worldwide Section Description', 'group' => 'about', 'value' => 'Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.'],
         ];
 
         foreach ($homeSettings as $setting) {

@@ -10,6 +10,11 @@ class Project extends Model
         return $this->belongsTo(Program::class);
     }
 
+    public function grants()
+    {
+        return $this->hasMany(ProjectGrant::class)->orderBy('sort_order');
+    }
+
     public function getImageUrlAttribute()
     {
         if (!$this->image) {
