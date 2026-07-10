@@ -16,6 +16,41 @@
 
 <body class="bg-white text-gray-800" x-data>
 
+    {{-- Flash Message Popup --}}
+    @if(session('success') || session('info'))
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40"
+         @click.self="show = false">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center relative">
+            <button @click="show = false" class="absolute top-4 right-4 text-gray-300 hover:text-gray-500 transition-colors" aria-label="Close">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            @if(session('success'))
+            <div class="w-16 h-16 rounded-full bg-[#8da83a]/15 flex items-center justify-center mx-auto mb-5">
+                <svg class="w-8 h-8 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Success!</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">{{ session('success') }}</p>
+            @else
+            <div class="w-16 h-16 rounded-full bg-[#2d6fa3]/15 flex items-center justify-center mx-auto mb-5">
+                <svg class="w-8 h-8 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Heads Up</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">{{ session('info') }}</p>
+            @endif
+
+            <button @click="show = false" class="btn-blue w-full justify-center mt-6">Got It</button>
+        </div>
+    </div>
+    @endif
+
     {{-- Top bar --}}
     <div class="hidden lg:block bg-[#1d4e7a] text-white text-sm">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-9">
@@ -85,14 +120,12 @@
 
                     {{-- Who We Are --}}
                     <div class="relative" x-data="{ open: false }"
-                        @mouseenter="open = true" @mouseleave="open = false">
-                        <button class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                         @mouseenter="open = true" @mouseleave="open = false">
+                        <a href="{{ route('about') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
                             Who We Are
                             <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </a>
                         <div x-show="open"
                             x-transition:enter="transition ease-out duration-150"
                             x-transition:enter-start="opacity-0 translate-y-1"
@@ -111,38 +144,37 @@
 
                     {{-- Our Programs --}}
                     <div class="relative" x-data="{ open: false }"
-                        @mouseenter="open = true" @mouseleave="open = false">
-                        <button class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                         @mouseenter="open = true" @mouseleave="open = false">
+                        <a href="{{ route('programs') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
                             Our Programs
                             <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </a>
                         <div x-show="open"
-                            x-transition:enter="transition ease-out duration-150"
-                            x-transition:enter-start="opacity-0 translate-y-1"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            x-transition:leave="transition ease-in duration-100"
-                            x-transition:leave-start="opacity-100 translate-y-0"
-                            x-transition:leave-end="opacity-0 translate-y-1"
-                            class="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('programs') }}#welfare" class="dropdown-item rounded-t-xl">Child Welfare</a>
-                            <a href="{{ route('programs') }}#education" class="dropdown-item">Education for Deaf &amp; Blind</a>
-                            <a href="{{ route('programs') }}#culture" class="dropdown-item rounded-b-xl">Cultural Development</a>
+                             x-transition:enter="transition ease-out duration-150"
+                             x-transition:enter-start="opacity-0 translate-y-1"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-100"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 translate-y-1"
+                             class="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
+                             @php 
+                                 $navProgramsList = \App\Models\Program::active()->take(3)->get(); 
+                             @endphp
+                             @foreach($navProgramsList as $index => $navProg)
+                             <a href="{{ route('programs.show', $navProg->slug) }}" class="dropdown-item {{ $index === 0 ? 'rounded-t-xl' : '' }} {{ $index === count($navProgramsList) - 1 ? 'rounded-b-xl' : '' }}">{{ $navProg->title }}</a>
+                             @endforeach
                         </div>
                     </div>
 
                     {{-- Get Involved --}}
                     <div class="relative" x-data="{ open: false }"
-                        @mouseenter="open = true" @mouseleave="open = false">
-                        <button class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                         @mouseenter="open = true" @mouseleave="open = false">
+                        <a href="{{ route('involved') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
                             Get Involved
                             <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </a>
                         <div x-show="open"
                             x-transition:enter="transition ease-out duration-150"
                             x-transition:enter-start="opacity-0 translate-y-1"
@@ -287,9 +319,10 @@
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Programs</h4>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('programs') }}#welfare" class="text-white/50 hover:text-white text-sm transition-colors">Child Welfare</a></li>
-                        <li><a href="{{ route('programs') }}#education" class="text-white/50 hover:text-white text-sm transition-colors">Education for Deaf &amp; Blind</a></li>
-                        <li><a href="{{ route('programs') }}#culture" class="text-white/50 hover:text-white text-sm transition-colors">Cultural Development</a></li>
+                        @php $footerPrograms = \App\Models\Program::active()->take(3)->get(); @endphp
+                        @foreach($footerPrograms as $footerProg)
+                        <li><a href="{{ route('programs') }}#{{ $footerProg->slug }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ $footerProg->title }}</a></li>
+                        @endforeach
                         <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">Volunteering</a></li>
                         <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>
                     </ul>
@@ -300,14 +333,16 @@
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Stay Connected</h4>
                     <p class="text-white/50 text-sm mb-4">Subscribe for updates on our work in Cambodia.</p>
-                    <form class="flex gap-2" onsubmit="return false;">
-                        <input type="email" placeholder="Your email"
+                    <form class="flex gap-2" method="POST" action="{{ route('newsletter.store') }}">
+                        @csrf
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Your email" required
                             class="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#8da83a] transition-colors">
                         <button type="submit"
                             class="px-4 py-2 bg-[#8da83a] rounded-lg text-white text-sm font-medium hover:bg-[#a3c04a] transition-colors flex-shrink-0">
                             OK
                         </button>
                     </form>
+                    @error('email') <p class="text-red-300 text-xs mt-2">{{ $message }}</p> @enderror
                     <div class="mt-6 space-y-1.5">
                         <p class="text-white/30 text-xs uppercase tracking-wider font-medium">Contact</p>
                         @php

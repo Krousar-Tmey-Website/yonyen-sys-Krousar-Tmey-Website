@@ -40,8 +40,8 @@
             <p class="text-sm font-semibold text-blue-800">Uploaded PDF</p>
             @if ($report->has_pdf_file)
                 <div class="mt-3 flex flex-wrap gap-3">
-                    <a href="{{ $report->file_url }}" target="_blank" rel="noopener noreferrer" class="rounded-xl bg-[#1d4e7a] px-4 py-2 text-sm font-semibold text-white hover:bg-[#173e63]">View PDF</a>
-                    <a href="{{ $report->file_url }}" download="{{ $report->original_filename ?? $report->title . '.pdf' }}" class="rounded-xl border border-[#1d4e7a] px-4 py-2 text-sm font-semibold text-[#1d4e7a] hover:bg-[#1d4e7a] hover:text-white">Download PDF</a>
+                    <a href="{{ route('reports.view', $report) }}" target="_blank" rel="noopener noreferrer" class="rounded-xl bg-[#1d4e7a] px-4 py-2 text-sm font-semibold text-white hover:bg-[#173e63]">View PDF</a>
+                    <a href="{{ route('reports.download', $report) }}" class="rounded-xl border border-[#1d4e7a] px-4 py-2 text-sm font-semibold text-[#1d4e7a] hover:bg-[#1d4e7a] hover:text-white">Download PDF</a>
                 </div>
             @else
                 <p class="mt-3 text-sm text-gray-600">No PDF file available.</p>

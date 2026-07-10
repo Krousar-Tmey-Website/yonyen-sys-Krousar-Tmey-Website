@@ -16,13 +16,14 @@ class AnnualReportController extends Controller
         $reports = AnnualReport::query()
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('title', 'like', '%' . $search . '%')
-                      ->orWhere('year', 'like', '%' . $search . '%');
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('year', 'like', "%{$search}%");
                 });
             })
-            ->latest('created_at')
-            ->paginate(10)
-            ->appends($request->only('search'));
+            ->orderByDesc('year')
+            ->orderByDesc('created_at')
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.reports.index', compact('reports', 'search'));
     }
@@ -32,30 +33,28 @@ class AnnualReportController extends Controller
         return view('admin.reports.create');
     }
 
-    public function show(AnnualReport $report)
-    {
-        return view('admin.reports.show', compact('report'));
-    }
-
     public function store(Request $request)
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'year' => ['required', 'integer', 'min:1900', 'max:2100'],
-            'file' => ['required', 'file', 'mimes:pdf', 'max:10240'],
-        ], [
-            'file.required' => 'Please upload a PDF report file.',
-            'file.mimes' => 'Only PDF files are allowed.',
-            'file.max' => 'The PDF file must not exceed 10MB.',
+            'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
+            'file'  => ['required', 'file', 'mimes:pdf', 'max:20480'],
         ]);
 
         $file = $request->file('file');
-        $data['file_path'] = $file->store('annual-reports', 'public');
+        $data['file_path'] = $file->store('reports', 'public');
         $data['original_filename'] = $file->getClientOriginalName();
+        $data['is_active'] = true;
 
         AnnualReport::create($data);
 
-        return redirect()->route('admin.reports.index')->with('success', 'Annual report added successfully.');
+        return redirect()->route('admin.reports.index')
+            ->with('success', 'Report created successfully.');
+    }
+
+    public function show(AnnualReport $report)
+    {
+        return view('admin.reports.show', compact('report'));
     }
 
     public function edit(AnnualReport $report)
@@ -67,26 +66,23 @@ class AnnualReportController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'year' => ['required', 'integer', 'min:1900', 'max:2100'],
-            'file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-        ], [
-            'file.mimes' => 'Only PDF files are allowed.',
-            'file.max' => 'The PDF file must not exceed 10MB.',
+            'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
+            'file'  => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
         ]);
 
         if ($request->hasFile('file')) {
             if ($report->file_path) {
                 Storage::disk('public')->delete($report->file_path);
             }
-
             $file = $request->file('file');
-            $data['file_path'] = $file->store('annual-reports', 'public');
+            $data['file_path'] = $file->store('reports', 'public');
             $data['original_filename'] = $file->getClientOriginalName();
         }
 
         $report->update($data);
 
-        return redirect()->route('admin.reports.index')->with('success', 'Annual report updated successfully.');
+        return redirect()->route('admin.reports.index')
+            ->with('success', 'Report updated successfully.');
     }
 
     public function destroy(AnnualReport $report)
@@ -94,9 +90,9 @@ class AnnualReportController extends Controller
         if ($report->file_path) {
             Storage::disk('public')->delete($report->file_path);
         }
+        $report->delete();
 
-        AnnualReport::destroy($report->id);
-
-        return redirect()->route('admin.reports.index')->with('success', 'Annual report deleted successfully.');
+        return redirect()->route('admin.reports.index')
+            ->with('success', 'Report deleted successfully.');
     }
 }

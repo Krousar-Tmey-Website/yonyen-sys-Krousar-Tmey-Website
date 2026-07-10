@@ -8,7 +8,7 @@ class Partner extends Model
 {
     protected $fillable = [
         'name',
-        'category',
+        'category_id',
         'country',
         'logo',
         'sort_order',
