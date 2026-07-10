@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
 
+@push('styles')
+    @vite(['resources/css/admin.css'])
+@endpush
+
 @php use Illuminate\Support\Str; @endphp
 
 @section('title', 'Edit Category')

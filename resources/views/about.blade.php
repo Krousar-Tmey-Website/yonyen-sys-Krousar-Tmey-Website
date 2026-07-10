@@ -52,17 +52,30 @@
         </div>
 
         {{-- Values --}}
-        <div class="grid md:grid-cols-3 gap-6 mb-20">
-            @foreach([
-                ['title'=>'Identity',    'icon'=>'🏛️', 'desc'=>'Every child can reconnect with their roots and traditions.'],
-                ['title'=>'Integration', 'icon'=>'🤝', 'desc'=>'Every child is fully integrated into Cambodian society.'],
-                ['title'=>'Dignity',     'icon'=>'⭐', 'desc'=>'Every child is respected and can build the future they deserve.'],
-            ] as $value)
-            <div class="group relative bg-[#f8f9fc] rounded-3xl p-8 border border-gray-100 hover:border-[#2d6fa3]/30 hover:shadow-lg transition-all duration-300 text-center overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-[#8da83a] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-t-3xl"></div>
-                <div class="text-5xl mb-5">{{ $value['icon'] }}</div>
-                <h3 class="text-xl font-bold text-[#2d6fa3] mb-3">{{ $value['title'] }}</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">{{ $value['desc'] }}</p>
+        @php $valueAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
+        <div id="values" class="grid md:grid-cols-3 gap-7 mb-20 scroll-mt-20">
+            @forelse($coreValues as $i => $value)
+            @php
+                $accent = $valueAccents[$i % count($valueAccents)];
+                $valueFallbackStyle = "background: linear-gradient(135deg, {$accent}, #1a3c6e)";
+                $valueAccentBarStyle = "background: {$accent}";
+            @endphp
+            <div class="group bg-white rounded-[28px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+                <div class="relative h-44 overflow-hidden">
+                    @if($value->image_url)
+                    <img src="{{ $value->image_url }}" alt="{{ $value->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    @else
+                    <div class="w-full h-full flex items-center justify-center text-6xl drop-shadow-md" style="{{ $valueFallbackStyle }}">{{ $value->icon }}</div>
+                    @endif
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 px-6 py-4">
+                        <h3 class="text-white font-bold text-lg drop-shadow-sm">{{ $value->title }}</h3>
+                    </div>
+                </div>
+                <div class="p-6 text-center">
+                    <div class="w-10 h-1 rounded-full mx-auto mb-4 group-hover:w-16 transition-all duration-300" style="{{ $valueAccentBarStyle }}"></div>
+                    <p class="text-gray-500 text-sm leading-relaxed">{{ $value->description }}</p>
+                </div>
             </div>
             @endforeach
         </div>
@@ -306,35 +319,36 @@
 
         {{-- Awards from DB --}}
         @if($awards->isNotEmpty())
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            @foreach($awards as $award)
-            <div class="bg-[#f8f9fc] rounded-3xl p-6 border border-gray-100 hover:shadow-lg transition-shadow text-center flex flex-col h-full">
-                @if($award->image)
-                <img src="{{ $award->image_url }}" alt="{{ $award->title }}" class="w-16 h-16 rounded-xl object-cover mb-4 mx-auto">
-                @else
-                <div class="text-4xl mb-4">{{ $award->icon }}</div>
-                @endif
-                @if($award->recipient)
-                <span class="text-[#8da83a] text-xs font-bold uppercase tracking-wider block mb-1">{{ $award->recipient }}</span>
-                @endif
-                <h3 class="text-sm font-bold text-[#2d6fa3] mb-2 leading-snug">{{ $award->title }}</h3>
-                <p class="text-[#8da83a] text-xs font-semibold mb-2">{{ $award->organization }}</p>
-                @if($award->description)
-                <p class="text-gray-400 text-xs leading-relaxed mb-3 flex-grow">{{ $award->description }}</p>
-                @endif
-                @if($award->link_url)
-                <a href="{{ $award->link_url }}" target="_blank" rel="noopener"
-                   class="inline-flex items-center justify-center gap-1 bg-[#2d6fa3] text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-[#1a3c6e] transition-colors mt-auto">
-                    @if($award->link_type === 'website')
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-8m0-6V6a2 2 0 112 2h-6m-6 0l6 6m-6-6l6-6"/></svg>
-                    @elseif($award->link_type === 'article')
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13S12 1.253 12 6.253c0 0 0 5 6 6v8c0 0-6 1-6 6s6-6 6-6v-8c0-5-6-6-6-6z"/></svg>
-                    @elseif($award->link_type === 'video')
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l1.252-1.252L12 5.5l-4 4.414L5.252 9.916l1.252 1.252L12 16.5l2.752-5.332z"/></svg>
+        @php $awardAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach($awards as $i => $award)
+            @php
+                $accent = $awardAccents[$i % count($awardAccents)];
+                $awardFallbackStyle = "background: linear-gradient(135deg, {$accent}, #1a3c6e)";
+                $awardAccentBarStyle = "background: {$accent}";
+            @endphp
+            <div class="group bg-white rounded-[24px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+                <div class="relative h-32 overflow-hidden">
+                    @if($award->image_url)
+                    <img src="{{ $award->image_url }}" alt="{{ $award->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    @else
+                    <div class="w-full h-full flex items-center justify-center text-4xl drop-shadow-md" style="{{ $awardFallbackStyle }}">🏆</div>
                     @endif
-                    {{ $award->link_text ?? ucfirst($award->link_type) }}
-                </a>
-                @endif
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 px-4 py-3">
+                        <p class="text-white font-bold text-sm leading-snug drop-shadow-sm">{{ $award->title }}</p>
+                    </div>
+                </div>
+                <div class="p-5 text-center">
+                    <div class="w-8 h-1 rounded-full mx-auto mb-3 group-hover:w-12 transition-all duration-300" style="{{ $awardAccentBarStyle }}"></div>
+                    @if($award->recipient)
+                    <span class="text-[#8da83a] text-xs font-bold uppercase tracking-wider block mb-1">{{ $award->recipient }}</span>
+                    @endif
+                    <p class="text-[#8da83a] text-xs font-semibold mb-2">{{ $award->organization }}</p>
+                    @if($award->description)
+                    <p class="text-gray-400 text-xs leading-relaxed">{{ $award->description }}</p>
+                    @endif
+                </div>
             </div>
             @endforeach
         </div>
@@ -467,7 +481,7 @@
             <div>
                 <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-[#8da83a] flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2 2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     </div>
                     Audited Financial Statements
                 </h3>
@@ -478,7 +492,7 @@
                        class="flex items-center justify-between bg-[#f8f9fc] border border-gray-100 rounded-xl px-5 py-4 hover:border-[#2d6fa3]/30 hover:shadow-sm transition-all group">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-lg bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2 2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             </div>
                             <span class="text-gray-700 font-medium text-sm">Audited Financial Statement {{ $year }}</span>
                         </div>

@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
 
+@push('styles')
+    @vite(['resources/css/admin.css', 'resources/css/admin-news.css'])
+@endpush
+
 @section('title', 'New Article')
 @section('page-title', 'Create New Article')
 @section('breadcrumb', 'News → Create')

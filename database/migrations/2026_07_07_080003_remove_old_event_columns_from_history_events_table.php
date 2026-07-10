@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('history_events', function (Blueprint $table) {
-            $table->dropColumn(['left_event', 'right_event']);
-        });
+        // Check if columns exist before dropping
+        if (Schema::hasColumn('history_events', 'left_event') && Schema::hasColumn('history_events', 'right_event')) {
+            Schema::table('history_events', function (Blueprint $table) {
+                $table->dropColumn(['left_event', 'right_event']);
+            });
+        }
+        // If columns don't exist, skip silently
     }
 
     /**

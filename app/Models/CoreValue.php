@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Award extends Model
+class CoreValue extends Model
 {
-    protected $fillable = ['title', 'recipient', 'organization', 'description', 'image', 'sort_order'];
+    protected $fillable = ['title', 'icon', 'image', 'description', 'sort_order'];
 
-    public function scopeOrdered($query)
+    public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('sort_order')->orderBy('id');
     }

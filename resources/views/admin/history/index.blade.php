@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
 
+@push('styles')
+    @vite(['resources/css/admin.css', 'resources/css/admin-history.css'])
+@endpush
+
 @php use Illuminate\Support\Str; @endphp
 
 @section('title', 'History')

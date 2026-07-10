@@ -4,6 +4,23 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP TABLE IF EXISTS `annual_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `annual_reports` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `year` int(11) NOT NULL,
+  `file_path` varchar(255) DEFAULT NULL,
+  `file_url` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `article_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -12,8 +29,7 @@ CREATE TABLE `article_categories` (
   `CategoryID` varchar(50) NOT NULL,
   PRIMARY KEY (`ArticleID`,`CategoryID`),
   KEY `article_categories_categoryid_foreign` (`CategoryID`),
-  CONSTRAINT `article_categories_articleid_foreign` FOREIGN KEY (`ArticleID`) REFERENCES `news_stories` (`ArticleID`),
-  CONSTRAINT `article_categories_categoryid_foreign` FOREIGN KEY (`CategoryID`) REFERENCES `categories` (`CategoryID`)
+  CONSTRAINT `article_categories_articleid_foreign` FOREIGN KEY (`ArticleID`) REFERENCES `news_stories` (`ArticleID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `article_programs`;
@@ -84,8 +100,10 @@ DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `categories` (
-  `CategoryID` varchar(50) NOT NULL,
+  `CategoryID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `CategoryName` varchar(255) NOT NULL,
+  `Description` text DEFAULT NULL,
+  `CategoryStatus` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`CategoryID`)
@@ -128,6 +146,20 @@ CREATE TABLE `contact_inquiries` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `Phone` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`InquiryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `core_values`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `core_values` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `icon` varchar(255) NOT NULL DEFAULT '⭐',
+  `description` text DEFAULT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `donations`;
@@ -206,6 +238,34 @@ CREATE TABLE `failed_jobs` (
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `galleries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `galleries` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `history_events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `history_events` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `year` varchar(10) NOT NULL,
+  `left_text` text NOT NULL,
+  `right_text` text DEFAULT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `home_settings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -213,12 +273,30 @@ CREATE TABLE `home_settings` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(255) NOT NULL,
   `value` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `link` varchar(255) DEFAULT NULL,
   `label` varchar(255) DEFAULT NULL,
   `group` varchar(255) NOT NULL DEFAULT 'general',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `home_settings_key_unique` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `images`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `images` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `section_id` bigint(20) unsigned NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `alt` varchar(255) DEFAULT NULL,
+  `order` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `images_section_id_foreign` (`section_id`),
+  CONSTRAINT `images_section_id_foreign` FOREIGN KEY (`section_id`) REFERENCES `page_sections` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `job_batches`;
@@ -251,6 +329,25 @@ CREATE TABLE `jobs` (
   `created_at` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `jobs_queue_index` (`queue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `links`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `links` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `section_id` bigint(20) unsigned NOT NULL,
+  `text` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `type` enum('button','text','video','external') NOT NULL DEFAULT 'button',
+  `target` varchar(255) NOT NULL DEFAULT '_self',
+  `order` int(11) NOT NULL DEFAULT 0,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `links_section_id_foreign` (`section_id`),
+  CONSTRAINT `links_section_id_foreign` FOREIGN KEY (`section_id`) REFERENCES `page_sections` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `locations`;
@@ -291,6 +388,8 @@ CREATE TABLE `news` (
   `category` varchar(255) NOT NULL DEFAULT 'general',
   `is_published` tinyint(1) NOT NULL DEFAULT 0,
   `published_at` timestamp NULL DEFAULT NULL,
+  `links` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`links`)),
+  `tags` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -318,6 +417,55 @@ CREATE TABLE `news_stories` (
   UNIQUE KEY `news_stories_slug_unique` (`Slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `newsletter_subscribers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `newsletter_subscribers` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `subscribed_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `newsletter_subscribers_email_unique` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `offices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `offices` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `country` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `flag` varchar(255) NOT NULL DEFAULT '?',
+  `badge` varchar(255) DEFAULT NULL,
+  `address` varchar(255) NOT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `accent_color` varchar(255) NOT NULL DEFAULT 'border-[#2d6fa3]',
+  `badge_color` varchar(255) NOT NULL DEFAULT 'bg-[#2d6fa3] text-white',
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `page_sections`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `page_sections` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `section_name` varchar(255) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `description` longtext DEFAULT NULL,
+  `order` int(11) NOT NULL DEFAULT 0,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `partner_programs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -337,8 +485,10 @@ DROP TABLE IF EXISTS `partners`;
 CREATE TABLE `partners` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `picture` varchar(255) DEFAULT NULL,
   `category` varchar(255) NOT NULL,
   `country` varchar(255) DEFAULT NULL,
+  `logo` varchar(255) DEFAULT NULL,
   `sort_order` int(11) NOT NULL DEFAULT 0,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -382,6 +532,24 @@ CREATE TABLE `program_locations` (
   CONSTRAINT `program_locations_programid_foreign` FOREIGN KEY (`ProgramID`) REFERENCES `programs` (`ProgramID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `program_page_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `program_page_items` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `short_content` text DEFAULT NULL,
+  `detail_content` longtext DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `image_2` varchar(255) DEFAULT NULL,
+  `image_3` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `programs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -392,8 +560,6 @@ CREATE TABLE `programs` (
   `description` text DEFAULT NULL,
   `full_description` text DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
-  `stats` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`stats`)),
-  `sort_order` int(11) NOT NULL DEFAULT 0,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -404,9 +570,67 @@ CREATE TABLE `programs` (
   `Budget` decimal(12,2) DEFAULT NULL,
   `Province` varchar(255) DEFAULT NULL,
   `Status` varchar(255) DEFAULT NULL,
+  `testimony_name` varchar(255) DEFAULT NULL,
+  `testimony_story` text DEFAULT NULL,
+  `testimony_image` varchar(255) DEFAULT NULL,
+  `facebook_url` varchar(255) DEFAULT NULL,
+  `linkedin_url` varchar(255) DEFAULT NULL,
+  `instagram_url` varchar(255) DEFAULT NULL,
+  `telegram_url` varchar(255) DEFAULT NULL,
+  `youtube_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `programs_slug_unique` (`slug`),
   UNIQUE KEY `programs_programid_unique` (`ProgramID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `project_grants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_grants` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` bigint(20) unsigned NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `label` varchar(255) DEFAULT NULL,
+  `recipient` varchar(255) DEFAULT NULL,
+  `sort_order` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `project_grants_project_id_foreign` (`project_id`),
+  CONSTRAINT `project_grants_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `projects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projects` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `banner_image` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `program_id` bigint(20) unsigned DEFAULT NULL,
+  `objective` text DEFAULT NULL,
+  `content` text DEFAULT NULL,
+  `activities` text DEFAULT NULL,
+  `testimony_name` varchar(255) DEFAULT NULL,
+  `testimony_story` text DEFAULT NULL,
+  `testimony_image` varchar(255) DEFAULT NULL,
+  `make_difference_text` text DEFAULT NULL,
+  `grant_label` varchar(255) DEFAULT NULL,
+  `grant_amount` decimal(10,2) DEFAULT NULL,
+  `grant_recipient` varchar(255) DEFAULT NULL,
+  `area_of_work` varchar(255) DEFAULT NULL,
+  `duration` varchar(255) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `beneficiaries` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `projects_program_id_foreign` (`program_id`),
+  CONSTRAINT `projects_program_id_foreign` FOREIGN KEY (`program_id`) REFERENCES `programs` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `sessions`;
@@ -422,6 +646,20 @@ CREATE TABLE `sessions` (
   PRIMARY KEY (`id`),
   KEY `sessions_user_id_index` (`user_id`),
   KEY `sessions_last_activity_index` (`last_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `site_notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `site_notifications` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(255) NOT NULL DEFAULT 'general',
+  `title` varchar(255) NOT NULL,
+  `excerpt` text DEFAULT NULL,
+  `link` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `site_settings`;
@@ -465,6 +703,21 @@ CREATE TABLE `slides` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `testimonials`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `testimonials` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL,
+  `content` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -484,6 +737,32 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
   UNIQUE KEY `users_adminid_unique` (`AdminID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `volunteers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `volunteers` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `full_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `gender` varchar(255) DEFAULT NULL,
+  `country` varchar(255) NOT NULL,
+  `address` text DEFAULT NULL,
+  `availability` varchar(255) DEFAULT NULL,
+  `skills` text NOT NULL,
+  `motivation` text NOT NULL,
+  `interested_program` varchar(255) DEFAULT NULL,
+  `previous_experience` text DEFAULT NULL,
+  `resume` varchar(255) DEFAULT NULL,
+  `emergency_contact` varchar(255) DEFAULT NULL,
+  `agreed_to_terms` tinyint(1) NOT NULL DEFAULT 0,
+  `status` enum('Pending','Under Review','Interview Scheduled','Approved','Rejected') DEFAULT 'Pending',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -528,3 +807,46 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (33,'2026_07_07_005
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (34,'2026_07_07_005336_add_er_fields_to_donations_table',2);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (35,'2026_07_07_005337_add_er_fields_to_news_stories_table',2);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (36,'2026_07_07_005338_add_er_fields_to_contact_inquiries_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (37,'2026_07_07_060516_create_projects_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (38,'2026_07_07_005329_add_links_to_news_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (39,'2026_07_07_005329_create_volunteers_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (40,'2026_07_07_005330_add_tags_to_news_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (41,'2026_07_07_010000_update_volunteers_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (42,'2026_07_07_020000_add_fields_to_volunteers_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (43,'2026_07_07_020531_add_logo_to_partners_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (44,'2026_07_07_070729_add_description_to_categories_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (45,'2026_07_07_070849_add_category_status_to_categories_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (46,'2026_07_07_071409_fix_category_foreign_key',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (47,'2026_07_07_071524_add_description_to_categories_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (48,'2026_07_07_080000_create_history_events_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (49,'2026_07_07_080003_remove_old_event_columns_from_history_events_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (50,'2026_07_07_090029_add_image_to_home_settings_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (51,'2026_07_07_105221_add_picture_to_partners_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (52,'2026_07_07_120345_add_category_to_programs_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (53,'2026_07_08_000001_create_newsletter_subscribers_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (54,'2026_07_08_000002_create_site_notifications_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (55,'2026_07_08_005245_create_page_sections_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (56,'2026_07_08_005249_create_images_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (57,'2026_07_08_005250_create_links_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (58,'2026_07_08_012817_add_testimony_fields_to_programs_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (59,'2026_07_08_013742_add_program_id_to_projects_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (60,'2026_07_08_020554_add_details_to_projects_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (61,'2026_07_08_022520_add_extra_details_to_projects_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (62,'2026_07_08_040432_add_banner_image_to_projects_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (63,'2026_07_08_052418_drop_sort_order_from_programs_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (64,'2026_07_08_053432_add_website_settings_to_home_settings_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (65,'2026_07_08_080909_add_social_links_to_programs_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (66,'2026_07_08_082707_drop_stats_from_programs_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (67,'2026_07_08_095842_add_per_country_contact_to_home_settings_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (68,'2026_07_08_112528_fix_categories_table_structure',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (69,'2026_07_08_112624_fix_categories_categoryid_column',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (70,'2026_07_08_122947_create_program_pages_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (71,'2026_07_08_123832_add_short_content_to_program_pages_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (72,'2026_07_08_124509_create_program_page_items_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (73,'2026_07_08_133142_drop_program_pages_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (74,'2026_07_09_000001_create_offices_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (75,'2026_07_09_000002_create_annual_reports_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (76,'2026_07_09_000004_alter_history_events_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (77,'2026_07_09_014424_add_grant_fields_to_projects_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (78,'2026_07_09_014754_create_project_grants_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (79,'2026_07_09_130543_create_core_values_table',5);
