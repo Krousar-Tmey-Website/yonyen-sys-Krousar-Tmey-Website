@@ -57,6 +57,18 @@
                        class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
                        placeholder="info@krousar-thmey.org">
             </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Google Maps Link</label>
+                <input type="url" name="google_maps_link" value="{{ old('google_maps_link') }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                       placeholder="https://maps.google.com/?q=...">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Office Hours</label>
+                <input type="text" name="office_hours" value="{{ old('office_hours') }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                       placeholder="Mon–Fri: 8:00 AM – 5:00 PM">
+            </div>
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Accent Color (Tailwind)</label>
@@ -151,6 +163,18 @@
                             <input type="email" name="email" value="{{ $office->email }}"
                                    class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
                         </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Google Maps Link</label>
+                        <input type="url" name="google_maps_link" value="{{ $office->google_maps_link }}"
+                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                               placeholder="https://maps.google.com/?q=...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Office Hours</label>
+                        <input type="text" name="office_hours" value="{{ $office->office_hours }}"
+                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                               placeholder="Mon–Fri: 8:00 AM – 5:00 PM">
                     </div>
                     <div class="grid grid-cols-3 gap-3">
                         <div>

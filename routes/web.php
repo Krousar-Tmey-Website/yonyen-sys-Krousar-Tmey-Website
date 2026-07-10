@@ -154,6 +154,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->except(['show', 'create', 'edit'])
         ->parameters(['core-values' => 'coreValue']);
 
+    Route::resource('offices', Admin\OfficeController::class)->only(['index', 'store', 'update', 'destroy']);
+
     Route::prefix('contacts')->name('contacts.')->group(function () {
         Route::get('/',                      [Admin\ContactInquiryController::class, 'index'])->name('index');
         Route::get('{contactInquiry}',       [Admin\ContactInquiryController::class, 'show'])->name('show');

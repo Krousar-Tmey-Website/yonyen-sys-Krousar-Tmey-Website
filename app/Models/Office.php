@@ -8,7 +8,8 @@ class Office extends Model
 {
     protected $fillable = [
         'country', 'city', 'flag', 'badge', 'address',
-        'phone', 'email', 'accent_color', 'badge_color',
+        'phone', 'email', 'google_maps_link', 'office_hours',
+        'accent_color', 'badge_color',
         'sort_order', 'is_active',
     ];
 
