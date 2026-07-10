@@ -41,7 +41,7 @@
 
 {{-- Image strip --}}
 <div class="grid grid-cols-3 h-56 -mt-1">
-    <div class="relative overflow-hidden">
+    <div class="relative overflow-hidden" data-reveal="scale">
         <img src="{{ asset('images/children.jpg') }}" alt="Children at Krousar Thmey"
              class="w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-700">
         <div class="absolute inset-0 bg-[#2d6fa3]/30"></div>
@@ -49,7 +49,7 @@
             <span class="bg-white/90 text-[#2d6fa3] text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">Cambodia HQ</span>
         </div>
     </div>
-    <div class="relative overflow-hidden">
+    <div class="relative overflow-hidden" data-reveal="scale" style="--reveal-delay: 100">
         <img src="{{ asset('images/cultural.jpg') }}" alt="Cultural programs"
              class="w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-700">
         <div class="absolute inset-0 bg-[#1d4e7a]/30"></div>
@@ -57,7 +57,7 @@
             <span class="bg-white/90 text-[#2d6fa3] text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">Our Programs</span>
         </div>
     </div>
-    <div class="relative overflow-hidden">
+    <div class="relative overflow-hidden" data-reveal="scale" style="--reveal-delay: 200">
         <img src="{{ asset('images/special-ed.jpg') }}" alt="Special education"
              class="w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-700">
         <div class="absolute inset-0 bg-[#8da83a]/30"></div>
@@ -70,7 +70,7 @@
 {{-- Our Offices --}}
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-14">
+        <div class="text-center mb-14" data-reveal>
             <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Our Offices</span>
             <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-[#2d6fa3]">Find Us Around the World</h2>
             <div class="w-16 h-1 bg-[#d32f2f] rounded-full mx-auto mt-4"></div>
@@ -78,7 +78,8 @@
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @forelse($offices as $loc)
-            <div class="bg-[#f8f9fc] rounded-3xl border-2 {{ $loc->accent_color }}/30 hover:border-opacity-100 hover:shadow-lg transition-all duration-300 overflow-hidden group">
+            <div class="bg-[#f8f9fc] rounded-3xl border-2 {{ $loc->accent_color }}/30 hover:border-opacity-100 hover:shadow-lg transition-all duration-300 overflow-hidden group"
+                 data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
                 <div class="p-6">
                     <div class="flex items-start justify-between mb-4">
                         <span class="text-4xl">{{ $loc->flag }}</span>
@@ -130,7 +131,7 @@
         <div class="grid lg:grid-cols-5 gap-12 items-start">
 
             {{-- Left: Info sidebar --}}
-            <div class="lg:col-span-2 space-y-6">
+            <div class="lg:col-span-2 space-y-6" data-reveal="left">
                 <div>
                     <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Write to Us</span>
                     <h2 class="text-3xl font-black uppercase tracking-wide text-[#2d6fa3] mt-4 mb-2">Send Us a Message</h2>
@@ -180,7 +181,7 @@
             </div>
 
             {{-- Right: Form --}}
-            <div class="lg:col-span-3">
+            <div class="lg:col-span-3" data-reveal="right">
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
                     <form class="space-y-5" method="POST" action="{{ route('contact.store') }}">
                         @csrf
@@ -252,7 +253,7 @@
         <div class="absolute top-0 right-0 w-72 h-72 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[#2d6fa3] translate-y-1/2 -translate-x-1/3"></div>
     </div>
-    <div class="relative max-w-4xl mx-auto px-6 text-center">
+    <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
         <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support Our Work</p>
         <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">Make a Difference Today</h2>
         <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.</p>
