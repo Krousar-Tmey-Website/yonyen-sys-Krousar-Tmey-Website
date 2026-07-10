@@ -12,7 +12,15 @@ class WebsiteController extends Controller
     public function index()
     {
         $settings = HomeSetting::orderBy('group')->orderBy('id')->get()->groupBy('group');
-        return view('admin.website.index', compact('settings'));
+
+        $countries = [
+            'cambodia'    => ['flag' => '🇰🇭', 'name' => 'Cambodia'],
+            'france'      => ['flag' => '🇫🇷', 'name' => 'France'],
+            'singapore'   => ['flag' => '🇸🇬', 'name' => 'Singapore'],
+            'switzerland' => ['flag' => '🇨🇭', 'name' => 'Switzerland'],
+        ];
+
+        return view('admin.website.index', compact('settings', 'countries'));
     }
 
     public function update(Request $request)

@@ -65,6 +65,9 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
 </div>
 
 {{-- Program Overview --}}
+@php
+    $programColours = ['bg-[#1a3c6e]', 'bg-[#e8a020]', 'bg-[#2554a0]'];
+@endphp
 <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         @php $progCount = $programs->take(3)->count(); @endphp
