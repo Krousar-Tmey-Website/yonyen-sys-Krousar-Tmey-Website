@@ -130,6 +130,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::put(   'projects/{project}/grants/{grant}', [Admin\ProjectGrantController::class, 'update'])->name('projects.grants.update');
     Route::delete('projects/{project}/grants/{grant}', [Admin\ProjectGrantController::class, 'destroy'])->name('projects.grants.destroy');
 
+    // Website Settings
+    Route::get( 'website', [Admin\WebsiteController::class, 'index'])->name('website.index');
+    Route::post('website', [Admin\WebsiteController::class, 'update'])->name('website.update');
+
     // Homepage
     Route::get( 'home', [Admin\HomeSettingController::class, 'index'])->name('home.index');
     Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
