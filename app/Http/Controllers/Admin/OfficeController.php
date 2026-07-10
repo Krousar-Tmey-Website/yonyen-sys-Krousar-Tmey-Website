@@ -17,16 +17,18 @@ class OfficeController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'country'      => ['required', 'string', 'max:100'],
-            'city'         => ['required', 'string', 'max:100'],
-            'flag'         => ['nullable', 'string', 'max:10'],
-            'badge'        => ['nullable', 'string', 'max:50'],
-            'address'      => ['required', 'string', 'max:255'],
-            'phone'        => ['nullable', 'string', 'max:50'],
-            'email'        => ['nullable', 'email', 'max:100'],
-            'accent_color' => ['nullable', 'string', 'max:100'],
-            'badge_color'  => ['nullable', 'string', 'max:100'],
-            'sort_order'   => ['nullable', 'integer'],
+            'country'         => ['required', 'string', 'max:100'],
+            'city'            => ['required', 'string', 'max:100'],
+            'flag'            => ['nullable', 'string', 'max:10'],
+            'badge'           => ['nullable', 'string', 'max:50'],
+            'address'         => ['required', 'string', 'max:255'],
+            'phone'           => ['nullable', 'string', 'max:50'],
+            'email'           => ['nullable', 'email', 'max:100'],
+            'google_maps_link' => ['nullable', 'url', 'max:500'],
+            'office_hours'    => ['nullable', 'string', 'max:255'],
+            'accent_color'    => ['nullable', 'string', 'max:100'],
+            'badge_color'     => ['nullable', 'string', 'max:100'],
+            'sort_order'      => ['nullable', 'integer'],
         ]);
 
         $data['flag']         = $data['flag'] ?? '🌍';
@@ -41,17 +43,19 @@ class OfficeController extends Controller
     public function update(Request $request, Office $office)
     {
         $data = $request->validate([
-            'country'      => ['required', 'string', 'max:100'],
-            'city'         => ['required', 'string', 'max:100'],
-            'flag'         => ['nullable', 'string', 'max:10'],
-            'badge'        => ['nullable', 'string', 'max:50'],
-            'address'      => ['required', 'string', 'max:255'],
-            'phone'        => ['nullable', 'string', 'max:50'],
-            'email'        => ['nullable', 'email', 'max:100'],
-            'accent_color' => ['nullable', 'string', 'max:100'],
-            'badge_color'  => ['nullable', 'string', 'max:100'],
-            'sort_order'   => ['nullable', 'integer'],
-            'is_active'    => ['nullable', 'boolean'],
+            'country'         => ['required', 'string', 'max:100'],
+            'city'            => ['required', 'string', 'max:100'],
+            'flag'            => ['nullable', 'string', 'max:10'],
+            'badge'           => ['nullable', 'string', 'max:50'],
+            'address'         => ['required', 'string', 'max:255'],
+            'phone'           => ['nullable', 'string', 'max:50'],
+            'email'           => ['nullable', 'email', 'max:100'],
+            'google_maps_link' => ['nullable', 'url', 'max:500'],
+            'office_hours'    => ['nullable', 'string', 'max:255'],
+            'accent_color'    => ['nullable', 'string', 'max:100'],
+            'badge_color'     => ['nullable', 'string', 'max:100'],
+            'sort_order'      => ['nullable', 'integer'],
+            'is_active'       => ['nullable', 'boolean'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
