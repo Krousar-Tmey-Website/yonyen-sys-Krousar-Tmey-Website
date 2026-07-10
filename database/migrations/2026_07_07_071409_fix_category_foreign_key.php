@@ -9,22 +9,40 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Check if the foreign key exists before trying to drop it
-        $foreignKeys = DB::select("
-            SELECT CONSTRAINT_NAME 
-            FROM information_schema.KEY_COLUMN_USAGE 
-            WHERE TABLE_SCHEMA = DATABASE() 
-            AND TABLE_NAME = 'article_categories' 
-            AND COLUMN_NAME = 'CategoryID' 
-            AND REFERENCED_TABLE_NAME IS NOT NULL
-        ");
-        
-        // No-op: categories and article_categories schema is managed by later
-        // migrations that standardize the primary key to `CategoryID`/`id` and
-        // the join table types. Running complex ALTER statements here caused
-        // issues on some environments (conflicting auto-increment columns),
-        // and the subsequent migrations already correct the structure.
-        return;
+        DB::beginTransaction();
+
+        try {
+            // 1. Drop the foreign key constraint from article_categories, if one exists.
+            try {
+                Schema::table('article_categories', function (Blueprint $table) {
+                    $table->dropForeign(['CategoryID']);
+                });
+            } catch (\Throwable $e) {
+                // No matching foreign key — nothing to fix, skip the rest silently.
+                DB::rollBack();
+                return;
+            }
+
+            // 2-4. Drop the primary key and re-add it with AUTO_INCREMENT in a single
+            // statement. MySQL requires an AUTO_INCREMENT column to already be a key,
+            // so doing this as separate ALTER statements (drop primary, then set
+            // auto-increment) fails with "there can be only one auto column and it
+            // must be defined as a key" — it has to happen atomically.
+            DB::statement('ALTER TABLE categories DROP PRIMARY KEY, ADD PRIMARY KEY (CategoryID), MODIFY COLUMN CategoryID INT NOT NULL AUTO_INCREMENT');
+
+            // 5. Re-add the foreign key constraint
+            Schema::table('article_categories', function (Blueprint $table) {
+                $table->foreign('CategoryID')
+                      ->references('CategoryID')
+                      ->on('categories')
+                      ->onDelete('cascade');
+            });
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     public function down(): void

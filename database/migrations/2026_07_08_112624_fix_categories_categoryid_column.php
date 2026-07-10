@@ -10,10 +10,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // No-op: avoid ALTERs that may conflict with existing auto-increment
-        // columns. The categories table is normalized by other migrations and
-        // manual fixes should be applied if necessary.
-        return;
+        // Drop the primary key if one exists; nothing to do otherwise.
+        try {
+            DB::statement('ALTER TABLE categories DROP PRIMARY KEY');
+        } catch (\Throwable $e) {
+            // No existing primary key on categories.
+        }
+
+        // Remove any existing auto-increment from other columns first
+        DB::statement('ALTER TABLE categories MODIFY COLUMN CategoryID BIGINT UNSIGNED NOT NULL');
+
+        // Now set it as primary key with auto-increment in one statement
+        DB::statement('ALTER TABLE categories ADD PRIMARY KEY (CategoryID), MODIFY COLUMN CategoryID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT');
     }
 
     /**
