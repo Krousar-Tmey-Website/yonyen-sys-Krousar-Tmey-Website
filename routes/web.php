@@ -75,8 +75,14 @@ Route::get('/projects/{project}', function (Project $project) {
 
 Route::get('/get-involved', function () {
     $settings = HomeSetting::allKeyed();
-    return view('involved', compact('settings'));
+    $jobs = \App\Models\JobOpportunity::active()->ordered()->get();
+    return view('involved', compact('settings', 'jobs'));
 })->name('involved');
+
+Route::get('/jobs/{jobOpportunity}', function (\App\Models\JobOpportunity $jobOpportunity) {
+    if (!$jobOpportunity->is_active) abort(404);
+    return view('jobs.show', compact('jobOpportunity'));
+})->name('jobs.show');
 
 Route::get('/news',        [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
@@ -153,6 +159,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('core-values',    Admin\CoreValueController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['core-values' => 'coreValue']);
+
+    // Get Involved
+    Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
 
     Route::prefix('contacts')->name('contacts.')->group(function () {
         Route::get('/',                      [Admin\ContactInquiryController::class, 'index'])->name('index');
