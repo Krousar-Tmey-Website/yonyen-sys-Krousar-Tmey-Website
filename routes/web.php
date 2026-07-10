@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\VolunteerController;
 use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\CoreValue;
@@ -100,6 +101,10 @@ Route::post('/donate', [DonationController::class, 'send'])->name('donate.send')
 Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
 Route::get('/newsletter/unsubscribe/{email}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
+// Volunteer
+Route::get('/volunteer',  [VolunteerController::class, 'show'])->name('volunteer');
+Route::post('/volunteer', [VolunteerController::class, 'store'])->name('volunteer.store');
+
 // ──────────────────────────────────────────────
 // Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
@@ -161,6 +166,14 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('/',                    [Admin\NewsletterController::class, 'index'])->name('index');
         Route::get('export',               [Admin\NewsletterController::class, 'export'])->name('export');
         Route::delete('{newsletterSubscriber}', [Admin\NewsletterController::class, 'destroy'])->name('destroy');
+    });
+
+    // Volunteer Applications
+    Route::prefix('volunteers')->name('volunteers.')->group(function () {
+        Route::get('/',                          [Admin\VolunteerController::class, 'index'])->name('index');
+        Route::get('{volunteer}',                [Admin\VolunteerController::class, 'show'])->name('show');
+        Route::patch('{volunteer}/status',       [Admin\VolunteerController::class, 'updateStatus'])->name('status');
+        Route::delete('{volunteer}',             [Admin\VolunteerController::class, 'destroy'])->name('destroy');
     });
 });
 

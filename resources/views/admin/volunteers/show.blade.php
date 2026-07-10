@@ -166,24 +166,6 @@
                 </div>
             </div>
 
-            {{-- Submission Info --}}
-            <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-50">
-                    <h3 class="font-bold text-gray-800">Submission Info</h3>
-                </div>
-                <div class="px-6 py-5 grid grid-cols-2 gap-5">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Applied</label>
-                        <p class="text-gray-700 text-sm">{{ $volunteer->created_at->format('F j, Y \a\t g:i A') }}</p>
-                    </div>
-                    @if($volunteer->updated_at !== $volunteer->created_at)
-                    <div>
-                        <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Last Updated</label>
-                        <p class="text-gray-700 text-sm">{{ $volunteer->updated_at->format('F j, Y \a\t g:i A') }}</p>
-                    </div>
-                    @endif
-                </div>
-            </div>
         </div>
 
         {{-- Sidebar Actions --}}
@@ -234,25 +216,6 @@
                 </div>
             </div>
 
-            {{-- Contact Applicant --}}
-            <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-50">
-                    <h3 class="font-bold text-gray-800">Contact Applicant</h3>
-                </div>
-                <div class="px-6 py-5 space-y-3">
-                    <a href="mailto:{{ $volunteer->email }}?subject=Volunteer Application - {{ $volunteer->full_name }}"
-                       class="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium bg-[#2d6fa3] text-white hover:bg-[#1d4e7a] transition-all">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                        Send Email
-                    </a>
-                    <a href="tel:{{ $volunteer->phone }}"
-                       class="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                        Call {{ $volunteer->phone }}
-                    </a>
-                </div>
-            </div>
-
             {{-- Danger Zone --}}
             <div class="bg-white rounded-2xl border border-red-100 overflow-hidden">
                 <div class="px-6 py-4 border-b border-red-50 bg-red-50/30">
@@ -260,15 +223,34 @@
                 </div>
                 <div class="px-6 py-5">
                     <p class="text-gray-400 text-xs mb-4">Permanently delete this application and all uploaded documents.</p>
-                    <form method="POST" action="{{ route('admin.volunteers.destroy', $volunteer) }}" class="delete-model-form">
+                    <form method="POST" action="{{ route('admin.volunteers.destroy', $volunteer) }}">
                         @csrf
                         @method('DELETE')
-                        <button type="button"
-                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 text-sm font-medium rounded-xl hover:bg-red-100 transition-all delete-volunteer-button">
+                        <button type="submit"
+                                class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 text-sm font-medium rounded-xl hover:bg-red-100 transition-all">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             Delete Application
                         </button>
                     </form>
+                </div>
+            </div>
+
+            {{-- Submission Info --}}
+            <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-50">
+                    <h3 class="font-bold text-gray-800">Submission Info</h3>
+                </div>
+                <div class="px-6 py-5 space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Applied</label>
+                        <p class="text-gray-700 text-sm">{{ $volunteer->created_at->format('F j, Y \a\t g:i A') }}</p>
+                    </div>
+                    @if($volunteer->updated_at !== $volunteer->created_at)
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Last Updated</label>
+                        <p class="text-gray-700 text-sm">{{ $volunteer->updated_at->format('F j, Y \a\t g:i A') }}</p>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -277,57 +259,6 @@
 
 </div>
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteModalId = 'volunteerDeleteModal';
-    if (!document.getElementById(deleteModalId)) {
-        const modal = document.createElement('div');
-        modal.id = deleteModalId;
-        modal.className = 'delete-modal hidden fixed inset-0 z-50 flex items-center justify-center px-4 py-6';
-        modal.innerHTML = `
-            <div class="delete-modal-backdrop absolute inset-0 bg-black/40"></div>
-            <div class="delete-modal-card relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
-                <button type="button" class="delete-modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-600"><span aria-hidden="true">×</span></button>
-                <div class="text-center">
-                    <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-red-600">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-slate-900">Delete volunteer application?</h3>
-                    <p class="mt-2 text-sm text-slate-500">Are you sure you want to delete this application? This action cannot be undone.</p>
-                </div>
-                <div class="mt-6 flex justify-end gap-3">
-                    <button type="button" class="delete-modal-close btn-cancel">Cancel</button>
-                    <button type="button" id="confirmVolunteerDelete" class="btn-danger">Delete</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
 
-        const deleteModal = document.getElementById(deleteModalId);
-        const deleteModalClose = deleteModal.querySelectorAll('.delete-modal-close');
-        const deleteButtons = document.querySelectorAll('.delete-volunteer-button');
-        const confirmDeleteButton = document.getElementById('confirmVolunteerDelete');
-        let currentForm = null;
-
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                currentForm = this.closest('.delete-model-form');
-                deleteModal.classList.remove('hidden');
-            });
-        });
-
-        deleteModalClose.forEach(btn => btn.addEventListener('click', function() {
-            deleteModal.classList.add('hidden');
-            currentForm = null;
-        }));
-
-        confirmDeleteButton.addEventListener('click', function() {
-            if (currentForm) currentForm.submit();
-        });
-    }
-});
-</script>
-@endpush
 
 @endsection

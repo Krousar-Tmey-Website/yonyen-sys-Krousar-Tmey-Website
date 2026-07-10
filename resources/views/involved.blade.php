@@ -194,210 +194,227 @@
 
 {{-- Volunteer Modal --}}
 <div id="volunteerModal"
-    class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
 
     {{-- Background Overlay --}}
     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm close-volunteer-modal"></div>
 
     {{-- Modal Content --}}
     <div
-        class="relative w-full max-w-lg max-h-[85vh] bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
+        class="relative w-full max-w-lg bg-white rounded-2xl shadow-xl border border-slate-200 flex flex-col"
+        style="max-height: 90vh;">
 
-        {{-- Sticky Header --}}
-        <div class="flex-shrink-0 border-b border-slate-200 px-4 py-2 bg-white sticky top-0 z-10">
-            <div class="flex items-center justify-between gap-2">
-                <div class="min-w-0">
-                    <h2 class="text-sm font-bold text-slate-900 truncate">
-                        Volunteer Application
-                    </h2>
+        {{-- Header --}}
+        <div class="flex-shrink-0 flex items-center justify-between px-5 py-3 border-b border-slate-100 bg-white">
+            <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-[#2d6fa3]/10 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
                 </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                    <button type="button"
-                        class="close-volunteer-modal flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700 transition-all">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
+                <div>
+                    <h2 class="text-sm font-bold text-slate-900">Apply to Volunteer</h2>
+                    <p class="text-[10px] text-slate-400">Join our mission to help children in Cambodia</p>
                 </div>
             </div>
+            <button type="button"
+                class="close-volunteer-modal flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-all flex-shrink-0">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
         </div>
 
         {{-- Scrollable Form Body --}}
-        <div class="flex-1 overflow-y-auto p-3 scrollbar-thin">
+        <div class="flex-1 overflow-y-auto p-5 scroll-smooth"
+             style="scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent;">
 
             <form method="POST"
                 action="{{ route('volunteer.store') }}"
                 enctype="multipart/form-data"
-                class="space-y-2">
+                class="space-y-4">
 
                 @csrf
 
-                {{-- Personal Information - 2 columns --}}
-                <div class="grid sm:grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
-                            Full Name <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text"
-                            name="full_name"
-                            value="{{ old('full_name') }}"
-                            required
-                            placeholder="John Doe"
-                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
-                        @error('full_name')
-                            <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
-                        @enderror
+                {{-- Section 1: Personal Details --}}
+                <div class="border border-slate-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-2xl">
+                        <div class="w-6 h-6 rounded-full bg-[#2d6fa3] flex items-center justify-center">
+                            <span class="text-white text-[10px] font-bold">1</span>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-800">Personal Details</span>
+                        <span class="text-[10px] text-slate-400 ml-auto">Your basic info</span>
                     </div>
-
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
-                            Email <span class="text-red-500">*</span>
-                        </label>
-                        <input type="email"
-                            name="email"
-                            value="{{ old('email') }}"
-                            required
-                            placeholder="you@example.com"
-                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
-                        @error('email')
-                            <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
-                            Phone <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text"
-                            name="phone"
-                            value="{{ old('phone') }}"
-                            required
-                            placeholder="+855 12 345 678"
-                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
-                        @error('phone')
-                            <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
-                            Country <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text"
-                            name="country"
-                            value="{{ old('country') }}"
-                            required
-                            placeholder="Cambodia"
-                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
-                        @error('country')
-                            <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
-                        @enderror
+                    <div class="p-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-xs font-medium text-slate-600 mb-1">Full Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="full_name" value="{{ old('full_name') }}" required placeholder="John Doe"
+                                    class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all bg-white hover:border-slate-300">
+                                @error('full_name')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-xs font-medium text-slate-600 mb-1">Email <span class="text-red-500">*</span></label>
+                                <input type="email" name="email" value="{{ old('email') }}" required placeholder="you@example.com"
+                                    class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all bg-white hover:border-slate-300">
+                                @error('email')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-xs font-medium text-slate-600 mb-1">Phone <span class="text-red-500">*</span></label>
+                                <input type="text" name="phone" value="{{ old('phone') }}" required placeholder="+855 12 345 678"
+                                    class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all bg-white hover:border-slate-300">
+                                @error('phone')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-xs font-medium text-slate-600 mb-1">Country <span class="text-red-500">*</span></label>
+                                <input type="text" name="country" value="{{ old('country') }}" required placeholder="Cambodia"
+                                    class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all bg-white hover:border-slate-300">
+                                @error('country')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-xs font-medium text-slate-600 mb-1">Date of Birth <span class="text-slate-400">(opt)</span></label>
+                                <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}"
+                                    class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all bg-white hover:border-slate-300">
+                                @error('date_of_birth')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-xs font-medium text-slate-600 mb-1">Gender <span class="text-slate-400">(opt)</span></label>
+                                <select name="gender"
+                                    class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all bg-white hover:border-slate-300">
+                                    <option value="">Select...</option>
+                                    <option value="Male" {{ old('gender') === 'Male' ? 'selected' : '' }}>Male</option>
+                                    <option value="Female" {{ old('gender') === 'Female' ? 'selected' : '' }}>Female</option>
+                                    <option value="Other" {{ old('gender') === 'Other' ? 'selected' : '' }}>Other</option>
+                                    <option value="Prefer not to say" {{ old('gender') === 'Prefer not to say' ? 'selected' : '' }}>Prefer not to say</option>
+                                </select>
+                                @error('gender')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid sm:grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
-                            Availability
-                        </label>
-                        <select name="availability"
-                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
-                            <option value="">Select...</option>
-                            <option value="Weekdays">Weekdays</option>
-                            <option value="Weekends">Weekends</option>
-                            <option value="Full-time">Full-time</option>
-                            <option value="Part-time">Part-time</option>
-                            <option value="Flexible">Flexible</option>
-                        </select>
+                {{-- Section 2: Volunteer Details --}}
+                <div class="border border-slate-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-2xl">
+                        <div class="w-6 h-6 rounded-full bg-[#2d6fa3] flex items-center justify-center">
+                            <span class="text-white text-[10px] font-bold">2</span>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-800">Volunteer Details</span>
+                        <span class="text-[10px] text-slate-400 ml-auto">Your preferences</span>
                     </div>
-
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
-                            Interested Program
-                        </label>
-                        <select name="interested_program"
-                            class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all">
-                            <option value="">Select...</option>
-                            <option value="Education">Education</option>
-                            <option value="Environment">Environment</option>
-                            <option value="Community Development">Community Development</option>
-                            <option value="Events">Events</option>
-                            <option value="Healthcare">Healthcare</option>
-                            <option value="Fundraising">Fundraising</option>
-                        </select>
+                    <div class="p-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-xs font-medium text-slate-600 mb-1">Availability</label>
+                                <select name="availability"
+                                    class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all bg-white hover:border-slate-300">
+                                    <option value="">Select...</option>
+                                    <option value="Weekdays">Weekdays</option>
+                                    <option value="Weekends">Weekends</option>
+                                    <option value="Full-time">Full-time</option>
+                                    <option value="Part-time">Part-time</option>
+                                    <option value="Flexible">Flexible</option>
+                                </select>
+                            </div>
+                            <div class="col-span-2 sm:col-span-1">
+                                <label class="block text-xs font-medium text-slate-600 mb-1">Interested Program</label>
+                                <select name="interested_program"
+                                    class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all bg-white hover:border-slate-300">
+                                    <option value="">Select...</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Environment">Environment</option>
+                                    <option value="Community Development">Community Development</option>
+                                    <option value="Events">Events</option>
+                                    <option value="Healthcare">Healthcare</option>
+                                    <option value="Fundraising">Fundraising</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
-                        Skills <span class="text-red-500">*</span>
-                    </label>
-                    <textarea name="skills"
-                        rows="1"
-                        required
-                        placeholder="e.g. Teaching, fundraising, content writing..."
-                        class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all resize-none">{{ old('skills') }}</textarea>
-                    @error('skills')
-                        <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
-                    @enderror
+                {{-- Section 3: Experience & Skills --}}
+                <div class="border border-slate-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-2xl">
+                        <div class="w-6 h-6 rounded-full bg-[#2d6fa3] flex items-center justify-center">
+                            <span class="text-white text-[10px] font-bold">3</span>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-800">Experience &amp; Skills</span>
+                        <span class="text-[10px] text-slate-400 ml-auto">Your background</span>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Skills <span class="text-red-500">*</span></label>
+                            <input type="text" name="skills" value="{{ old('skills') }}" required placeholder="e.g. Teaching, fundraising, content writing..."
+                                class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all bg-white hover:border-slate-300">
+                            @error('skills')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Motivation <span class="text-red-500">*</span></label>
+                            <textarea name="motivation" rows="2" required placeholder="Why do you want to volunteer with Krousar Thmey?"
+                                class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all resize-none bg-white hover:border-slate-300">{{ old('motivation') }}</textarea>
+                            @error('motivation')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1">Previous Experience <span class="text-slate-400">(opt)</span></label>
+                            <input type="text" name="previous_experience" value="{{ old('previous_experience') }}" placeholder="Any relevant experience..."
+                                class="w-full rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all bg-white hover:border-slate-300">
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
-                        Motivation <span class="text-red-500">*</span>
-                    </label>
-                    <textarea name="motivation"
-                        rows="1"
-                        required
-                        placeholder="Why do you want to volunteer?"
-                        class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all resize-none">{{ old('motivation') }}</textarea>
-                    @error('motivation')
-                        <p class="text-red-500 text-xs mt-0.5">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
-                        Previous Experience
-                    </label>
-                    <textarea name="previous_experience"
-                        rows="1"
-                        placeholder="Any relevant experience..."
-                        class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none transition-all resize-none">{{ old('previous_experience') }}</textarea>
-                </div>
-
-                <div>
-                    <label class="block text-[11px] font-medium text-slate-600 mb-0.5">
-                        Upload CV / Resume
-                    </label>
-                    <input type="file"
-                        name="resume"
-                        accept=".pdf,.doc,.docx"
-                        class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm file:mr-2 file:py-0.5 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-[#2d6fa3]/10 file:text-[#2d6fa3] hover:file:bg-[#2d6fa3]/20 file:transition-all transition-all focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] focus:outline-none">
+                {{-- Section 4: Documents --}}
+                <div class="border border-slate-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-2xl">
+                        <div class="w-6 h-6 rounded-full bg-[#2d6fa3] flex items-center justify-center">
+                            <span class="text-white text-[10px] font-bold">4</span>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-800">Documents</span>
+                        <span class="text-[10px] text-slate-400 ml-auto">Optional files</span>
+                    </div>
+                    <div class="p-4">
+                        <div id="resumeUploadZone"
+                            class="border-2 border-dashed border-slate-200 rounded-2xl p-5 text-center hover:border-[#2d6fa3]/30 hover:bg-[#2d6fa3]/5 transition-all cursor-pointer group">
+                            <div class="mb-2 group-hover:scale-105 transition-transform">
+                                <svg class="w-8 h-8 text-slate-300 mx-auto group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                </svg>
+                            </div>
+                            <label class="block text-xs font-medium text-slate-600 mb-1 group-hover:text-[#2d6fa3] transition-colors">CV / Resume <span class="text-slate-400">(opt)</span></label>
+                            <p class="text-[10px] text-slate-400 mb-2">PDF, DOC or DOCX (max 5MB)</p>
+                            <input type="file" id="resumeInput" name="resume" accept=".pdf,.doc,.docx"
+                                class="hidden">
+                            <div id="resumeFileName" class="text-xs text-[#2d6fa3] font-medium hidden"></div>
+                            <div class="inline-flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg group-hover:bg-white group-hover:border-[#2d6fa3]/30 group-hover:text-[#2d6fa3] transition-all">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                <span id="resumeBtnLabel">Choose file</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {{-- Terms --}}
-                <div class="flex items-start gap-2 bg-slate-50 border border-slate-200 p-2.5 rounded-xl">
-                    <input type="checkbox"
-                        name="agreed_to_terms"
-                        value="1"
+                <div class="flex items-start gap-3 bg-gradient-to-r from-slate-50 to-white border border-slate-200 p-4 rounded-2xl">
+                    <input type="checkbox" name="agreed_to_terms" value="1"
                         class="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#2d6fa3] accent-[#2d6fa3] focus:ring-[#2d6fa3]/30 flex-shrink-0"
                         {{ old('agreed_to_terms') ? 'checked' : '' }}>
                     <label class="text-xs text-slate-500 leading-relaxed">
-                        I agree to the volunteer terms and conditions and confirm the information is accurate. <span class="text-red-500">*</span>
+                        I agree to the volunteer terms and conditions and confirm that the information provided is accurate. <span class="text-red-500">*</span>
                     </label>
                 </div>
-                @error('agreed_to_terms')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+                @error('agreed_to_terms')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
 
-                <div class="flex items-center gap-2">
+                {{-- Buttons --}}
+                <div class="flex items-center gap-3 pt-1">
                     <button type="submit"
-                        class="flex-1 bg-[#2d6fa3] text-white px-4 py-1.5 rounded-xl font-semibold text-sm hover:bg-[#245b87] active:bg-[#1d4e7a] transition-all">
-                        Submit
+                        class="flex-1 bg-[#2d6fa3] text-white px-5 py-3 rounded-2xl font-semibold text-sm hover:bg-[#245b87] transition-all shadow-sm hover:shadow-md active:scale-[0.98]">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Submit Application
+                        </span>
                     </button>
                     <button type="button"
-                        class="close-volunteer-modal flex-1 border border-slate-300 px-4 py-1.5 rounded-xl font-semibold text-sm text-slate-600 hover:bg-slate-100 active:bg-slate-200 transition-all">
+                        class="close-volunteer-modal flex-1 border-2 border-slate-200 px-5 py-3 rounded-2xl font-semibold text-sm text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all active:scale-[0.98]">
                         Cancel
                     </button>
                 </div>
@@ -436,7 +453,7 @@
             </p>
 
             <button type="button"
-                class="close-success-modal mt-6 w-full bg-gradient-to-r from-green-500 to-green-600 text-blue px-5 py-2.5 rounded-xl font-semibold text-sm hover:from-green-600 hover:to-green-700 active:scale-[0.98] transition-all shadow-sm">
+                class="close-success-modal mt-6 w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:from-green-600 hover:to-green-700 active:scale-[0.98] transition-all shadow-sm">
                 Got it!
             </button>
         </div>
@@ -503,5 +520,126 @@
         </div>
     </div>
 </section>
+
+{{-- Modal JavaScript --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    'use strict';
+
+    const volunteerModal = document.getElementById('volunteerModal');
+    const successModal = document.getElementById('volunteerSuccessModal');
+    const openBtn = document.getElementById('openVolunteerModal');
+    const body = document.body;
+
+    /** Lock/unlock body scroll */
+    function lockScroll() {
+        body.style.overflow = 'hidden';
+    }
+
+    function unlockScroll() {
+        body.style.overflow = '';
+    }
+
+    /** Show a modal (remove 'hidden') */
+    function showModal(modal) {
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        lockScroll();
+    }
+
+    /** Hide a modal (add 'hidden') */
+    function hideModal(modal) {
+        if (!modal) return;
+        modal.classList.add('hidden');
+        unlockScroll();
+    }
+
+    // ── Open volunteer modal ──
+    if (openBtn && volunteerModal) {
+        openBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showModal(volunteerModal);
+        });
+    }
+
+    // ── Close volunteer modal ──
+    if (volunteerModal) {
+        // Close on overlay, X button, or Cancel click
+        volunteerModal.addEventListener('click', function(e) {
+            if (e.target.closest('.close-volunteer-modal')) {
+                hideModal(volunteerModal);
+            }
+        });
+    }
+
+    // ── Show success modal if form was submitted successfully ──
+    @if(session('volunteer_success'))
+        if (successModal) {
+            showModal(successModal);
+        }
+    @endif
+
+    // ── Auto-open volunteer modal on validation errors ──
+    @if($errors->any())
+        if (volunteerModal) {
+            showModal(volunteerModal);
+        }
+    @endif
+
+    // ── Resume upload: click zone triggers hidden file input ──
+    const uploadZone = document.getElementById('resumeUploadZone');
+    const resumeInput = document.getElementById('resumeInput');
+    const resumeFileName = document.getElementById('resumeFileName');
+
+    if (uploadZone && resumeInput) {
+        uploadZone.addEventListener('click', function(e) {
+            // Don't trigger if the user clicks the actual file input (it's hidden anyway)
+            if (e.target !== resumeInput) {
+                resumeInput.click();
+            }
+        });
+
+        resumeInput.addEventListener('change', function() {
+            if (resumeInput.files && resumeInput.files.length > 0) {
+                const name = resumeInput.files[0].name;
+                if (resumeFileName) {
+                    resumeFileName.textContent = 'Selected: ' + name;
+                    resumeFileName.classList.remove('hidden');
+                }
+                // Update the "Choose file" label
+                const btnLabel = document.getElementById('resumeBtnLabel');
+                if (btnLabel) {
+                    btnLabel.textContent = 'Change file';
+                }
+            }
+        });
+    }
+
+    // ── Close success modal ──
+    if (successModal) {
+        successModal.addEventListener('click', function(e) {
+            if (e.target.classList.contains('close-success-modal')) {
+                hideModal(successModal);
+            }
+        });
+    }
+
+    // ── Escape key closes any open modal ──
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            if (successModal && !successModal.classList.contains('hidden')) {
+                hideModal(successModal);
+            } else if (volunteerModal && !volunteerModal.classList.contains('hidden')) {
+                hideModal(volunteerModal);
+            }
+        }
+    });
+
+    // ── Clean up body scroll on page unload (just in case) ──
+    window.addEventListener('beforeunload', function() {
+        unlockScroll();
+    });
+});
+</script>
 
 @endsection
