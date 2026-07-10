@@ -159,10 +159,6 @@
                 <img src="{{ asset('images/special-ed.jpg') }}" alt="Special education volunteering"
                      class="rounded-3xl shadow-2xl w-full h-[420px] object-cover object-center">
                 <div class="absolute inset-0 rounded-3xl bg-gradient-to-t from-[#1d4e7a]/40 to-transparent"></div>
-                <div class="absolute -bottom-5 -right-5 bg-[#8da83a] rounded-2xl p-5 shadow-xl">
-                    <p class="text-white font-black text-2xl">3 mo</p>
-                    <p class="text-white/80 text-xs">Minimum commitment</p>
-                </div>
                 <div class="absolute top-5 left-5 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2.5 shadow-lg">
                     <p class="text-[#2d6fa3] font-bold text-xs uppercase tracking-wide">Hands-on Impact</p>
                     <p class="text-gray-500 text-[11px]">Work directly with children</p>
@@ -205,7 +201,7 @@
         style="max-height: 90vh;">
 
         {{-- Header --}}
-        <div class="flex-shrink-0 flex items-center justify-between px-5 py-3 border-b border-slate-100 bg-white">
+        <div class="flex-shrink-0 flex items-center justify-between px-5 py-3 border-b border-slate-100 bg-white rounded-t-2xl">
             <div class="flex items-center gap-2.5">
                 <div class="w-7 h-7 rounded-lg bg-[#2d6fa3]/10 flex items-center justify-center">
                     <svg class="w-4 h-4 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -237,8 +233,8 @@
                 @csrf
 
                 {{-- Section 1: Personal Details --}}
-                <div class="border border-slate-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-2xl">
+                <div class="border border-slate-200 rounded-none bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-none">
                         <div class="w-6 h-6 rounded-full bg-[#2d6fa3] flex items-center justify-center">
                             <span class="text-white text-[10px] font-bold">1</span>
                         </div>
@@ -294,8 +290,8 @@
                 </div>
 
                 {{-- Section 2: Volunteer Details --}}
-                <div class="border border-slate-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-2xl">
+                <div class="border border-slate-200 rounded-none bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-none">
                         <div class="w-6 h-6 rounded-full bg-[#2d6fa3] flex items-center justify-center">
                             <span class="text-white text-[10px] font-bold">2</span>
                         </div>
@@ -334,8 +330,8 @@
                 </div>
 
                 {{-- Section 3: Experience & Skills --}}
-                <div class="border border-slate-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-2xl">
+                <div class="border border-slate-200 rounded-none bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-none">
                         <div class="w-6 h-6 rounded-full bg-[#2d6fa3] flex items-center justify-center">
                             <span class="text-white text-[10px] font-bold">3</span>
                         </div>
@@ -364,8 +360,8 @@
                 </div>
 
                 {{-- Section 4: Documents --}}
-                <div class="border border-slate-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-2xl">
+                <div class="border border-slate-200 rounded-none bg-white shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-[#2d6fa3]/5 to-transparent rounded-t-none">
                         <div class="w-6 h-6 rounded-full bg-[#2d6fa3] flex items-center justify-center">
                             <span class="text-white text-[10px] font-bold">4</span>
                         </div>
@@ -374,7 +370,7 @@
                     </div>
                     <div class="p-4">
                         <div id="resumeUploadZone"
-                            class="border-2 border-dashed border-slate-200 rounded-2xl p-5 text-center hover:border-[#2d6fa3]/30 hover:bg-[#2d6fa3]/5 transition-all cursor-pointer group">
+                            class="border-2 border-dashed border-slate-200 rounded-none p-5 text-center hover:border-[#2d6fa3]/30 hover:bg-[#2d6fa3]/5 transition-all cursor-pointer group">
                             <div class="mb-2 group-hover:scale-105 transition-transform">
                                 <svg class="w-8 h-8 text-slate-300 mx-auto group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
@@ -394,7 +390,7 @@
                 </div>
 
                 {{-- Terms --}}
-                <div class="flex items-start gap-3 bg-gradient-to-r from-slate-50 to-white border border-slate-200 p-4 rounded-2xl">
+                <div class="flex items-start gap-3 bg-gradient-to-r from-slate-50 to-white border border-slate-200 p-4 rounded-none">
                     <input type="checkbox" name="agreed_to_terms" value="1"
                         class="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#2d6fa3] accent-[#2d6fa3] focus:ring-[#2d6fa3]/30 flex-shrink-0"
                         {{ old('agreed_to_terms') ? 'checked' : '' }}>
