@@ -6,6 +6,16 @@
 
 @section('content')
 
+<div class="max-w-3xl mx-auto mb-6">
+    <a href="{{ route('admin.page-sections.index') }}"
+       class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] text-white rounded-xl hover:bg-[#1d4e7a] transition-all text-sm font-medium shadow-sm hover:shadow-md">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+        </svg>
+        Manage Page Sections
+    </a>
+</div>
+
 <form action="{{ route('admin.home.update') }}" method="POST" class="space-y-6 max-w-3xl mx-auto">
     @csrf
 
