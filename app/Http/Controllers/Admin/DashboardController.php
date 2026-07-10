@@ -7,20 +7,21 @@ use App\Models\Award;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Program;
-use App\Models\Volunteer;
+use App\Models\Project;
+use App\Models\ProgramPageItem;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         $stats = [
-            'news_total'         => News::count(),
-            'news_published'     => News::published()->count(),
-            'programs'           => Program::count(),
-            'partners'           => Partner::count(),
-            'awards'             => Award::count(),
-            'volunteers'         => Volunteer::count(),
-            'volunteers_pending' => Volunteer::pending()->count(),
+            'news_total'     => News::count(),
+            'news_published' => News::published()->count(),
+            'programs'       => Program::count(),
+            'projects'       => Project::count(),
+            'partners'       => Partner::count(),
+            'awards'         => Award::count(),
+            'page_items'     => ProgramPageItem::count(),
         ];
 
         $recentNews = News::latest()->take(5)->get();

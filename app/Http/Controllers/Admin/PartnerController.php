@@ -49,28 +49,43 @@ class PartnerController extends Controller
             ]);
         }
 
-        return view('admin.partners.index', $viewData);
-    }
+        $partners = Partner::query()
+            ->when($filters['search'] !== '', function ($query) use ($filters) {
+                $term = '%' . strtolower($filters['search']) . '%';
+                $query->where(function ($q) use ($term) {
+                    $q->whereRaw('LOWER(name) LIKE ?', [$term])
+                      ->orWhereRaw('LOWER(country) LIKE ?', [$term]);
+                });
+            })
+            ->when($filters['category'] !== '', function ($query) use ($filters) {
+                $query->where('category', $filters['category']);
+            })
+            ->orderBy('category')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get()
+            ->groupBy('category');
 
-    /**
-     * Show create form.
-     */
-    public function create()
-    {
-        $categories = PartnerCategory::orderBy('name')->get();
+        $activeFilters = ($filters['search'] !== '' ? 1 : 0) + ($filters['category'] !== '' ? 1 : 0);
+        $total = $partners->sum(fn ($group) => $group->count());
 
-        return view('admin.partners.create', compact('categories'));
-    }
+        if ($request->wantsJson()) {
+            return response()->json([
+                'html' => view('admin.partners._results', [
+                    'partners' => $partners,
+                    'filters' => $filters,
+                ])->render(),
+                'total' => $total,
+                'activeFilters' => $activeFilters,
+            ]);
+        }
 
-    /**
-     * Display partner details.
-     */
-    public function show(Partner $partner)
-    {
-        $partner->load('partnerCategory');
-
-        return view('admin.partners.show', [
-            'partner' => $partner,
+        return view('admin.partners.index', [
+            'partners' => $partners,
+            'filters' => $filters,
+            'categories' => self::CATEGORIES,
+            'totalPartners' => $total,
+            'activeCount' => $activeFilters,
         ]);
     }
 
@@ -104,9 +119,16 @@ class PartnerController extends Controller
     {
         $categories = PartnerCategory::orderBy('name')->get();
 
-        return view('admin.partners.edit', [
-            'partner'    => $partner,
-            'categories' => $categories,
+        return view('admin.partners.index', [
+            'partners' => $partners,
+            'editPartner' => $partner,
+            'filters' => [
+                'search' => '',
+                'category' => '',
+            ],
+            'categories' => self::CATEGORIES,
+            'totalPartners' => $partners->sum(fn ($group) => $group->count()),
+            'activeCount' => 0,
         ]);
     }
 

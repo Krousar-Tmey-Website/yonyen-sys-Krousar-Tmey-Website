@@ -2,9 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+/**
+ * Class News
+ * 
+ * @method static \Illuminate\Database\Eloquent\Builder latest(string $column = 'created_at')
+ * @method static \Illuminate\Contracts\Pagination\LengthAwarePaginator paginate(int $perPage = 15)
+ * @method static \Illuminate\Database\Eloquent\Builder published()
+ * @method bool delete()
+ * @method static News find(int $id)
+ * @method static News create(array $attributes = [])
+ */
 class News extends Model
 {
     protected $fillable = [
@@ -32,7 +43,7 @@ class News extends Model
                 $slug = $baseSlug;
                 $counter = 1;
                 
-                while (static::where('slug', $slug)->exists()) {
+                while (static::where('slug', $slug, '=', true)->exists()) {
                     $slug = $baseSlug . '-' . $counter;
                     $counter++;
                 }
@@ -53,7 +64,7 @@ class News extends Model
         });
     }
 
-    public function scopePublished($query)
+    public function scopePublished(Builder $query)
     {
         return $query->where('is_published', true);
     }
@@ -69,7 +80,7 @@ class News extends Model
     }
 
     // Ensure links is always returned as an array
-    public function getLinksAttribute($value)
+    public function getLinksAttribute(mixed $value)
     {
         if (is_null($value) || $value === '') {
             return [];

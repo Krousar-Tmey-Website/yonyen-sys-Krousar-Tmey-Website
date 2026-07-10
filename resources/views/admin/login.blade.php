@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login — Krousar Thmey</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="min-h-screen bg-[#1d4e7a] flex items-center justify-center p-4">
 
 <div class="w-full max-w-sm">
@@ -20,55 +22,81 @@
         <p class="text-white/50 text-sm mt-1">Admin Panel</p>
     </div>
 
-    {{-- Card --}}
-    <div class="bg-white rounded-3xl shadow-2xl p-8">
-        <h2 class="text-xl font-bold text-gray-800 mb-6">Sign in</h2>
+        {{-- Card --}}
+        <div class="bg-white rounded-3xl shadow-2xl p-8">
+            <h2 class="text-xl font-bold text-gray-800 mb-6">Sign in</h2>
 
-        @if($errors->any())
-        <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">
-            {{ $errors->first() }}
-        </div>
-        @endif
-
-        @if(session('success'))
-        <div class="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl mb-5">
-            {{ session('success') }}
-        </div>
-        @endif
-
-        <form method="POST" action="{{ route('admin.login.post') }}" class="space-y-4">
-            @csrf
-
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
-                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
-                       class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-colors @error('email') border-red-300 @enderror"
-                       placeholder="admin@krousar-thmey.org">
+            @if($errors->any())
+            <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-5">
+                {{ $errors->first() }}
             </div>
+            @endif
 
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
-                <input id="password" type="password" name="password" required
-                       class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-colors"
-                       placeholder="••••••••">
+            @if(session('success'))
+            <div class="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl mb-5">
+                {{ session('success') }}
             </div>
+            @endif
 
-            <div class="flex items-center gap-2">
-                <input id="remember" type="checkbox" name="remember" class="rounded border-gray-300 text-[#2d6fa3]">
-                <label for="remember" class="text-sm text-gray-500">Remember me</label>
-            </div>
+            <form method="POST" action="{{ route('admin.login.post') }}" class="space-y-4">
+                @csrf
 
-            <button type="submit"
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
+                    <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        required
+                        autofocus
+                        placeholder="admin@krousar-thmey.org"
+                        class="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm text-gray-800 placeholder:text-gray-400 shadow-sm transition-all duration-200 focus:border-[#2d6fa3] focus:bg-white focus:ring-4 focus:ring-[#2d6fa3]/10 focus:outline-none @error('email') border-red-400 ring-2 ring-red-100 @enderror">
+                </div>
+
+                <div class="mb-6">
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">
+                        Password
+                    </label>
+
+                    <div class="space-y-3">
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            autocomplete="current-password"
+                            placeholder="Enter your password"
+                            class="w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm text-gray-800 placeholder:text-gray-400 shadow-sm transition-all duration-200 focus:border-[#2d6fa3] focus:bg-white focus:ring-4 focus:ring-[#2d6fa3]/10 focus:outline-none">
+                        <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer select-none">
+                            <input
+                                type="checkbox"
+                                id="showPassword"
+                                class="h-4 w-4 rounded border-gray-300 text-[#2d6fa3] focus:ring-[#2d6fa3]">
+                            Show password
+                        </label>
+                    </div>
+
+                </div>
+
+                <button type="submit"
                     class="w-full bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white font-semibold py-3 rounded-xl transition-colors text-sm">
-                Sign In
-            </button>
-        </form>
+                    Sign In
+                </button>
+            </form>
+        </div>
+
+        <p class="text-center text-white/30 text-xs mt-6">
+            <a href="{{ route('home') }}" class="hover:text-white/60 transition-colors">← Back to website</a>
+        </p>
     </div>
 
-    <p class="text-center text-white/30 text-xs mt-6">
-        <a href="{{ route('home') }}" class="hover:text-white/60 transition-colors">← Back to website</a>
-    </p>
-</div>
-
+    <script>
+        document.getElementById('showPassword').addEventListener('change', function() {
+            const password = document.getElementById('password');
+            password.type = this.checked ? 'text' : 'password';
+        });
+    </script>
 </body>
+
 </html>

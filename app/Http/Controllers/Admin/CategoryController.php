@@ -35,24 +35,15 @@ class CategoryController extends Controller
             ->with('success', 'Category created successfully.');
     }
 
-    public function show($id)
+    public function edit(Category $category)
     {
-        $category = Category::findOrFail($id);
-        return view('admin.categories.show', compact('category'));
-    }
-
-    public function edit($id)
-    {
-        $category = Category::findOrFail($id);
         return view('admin.categories.edit', compact('category'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        $category = Category::findOrFail($id);
-
         $data = $request->validate([
-            'CategoryName' => ['required', 'string', 'max:255', 'unique:categories,CategoryName,' . $id . ',CategoryID'],
+            'CategoryName' => ['required', 'string', 'max:255', 'unique:categories,CategoryName,' . $category->CategoryID . ',CategoryID'],
             'Description' => ['nullable', 'string'],
         ]);
 
@@ -62,9 +53,8 @@ class CategoryController extends Controller
             ->with('success', 'Category updated successfully.');
     }
 
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
         $category->delete();
 
         return redirect()->route('admin.categories.index')

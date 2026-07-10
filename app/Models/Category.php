@@ -14,6 +14,7 @@ class Category extends Model
     protected $fillable = [
         'CategoryName',
         'Description',
+        'CategoryStatus',
     ];
 
     public $timestamps = true;

@@ -6,6 +6,7 @@ use App\Models\Award;
 use App\Models\HomeSetting;
 use App\Models\Partner;
 use App\Models\Program;
+use App\Models\Project;
 use App\Models\Slide;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -91,12 +92,26 @@ class AdminSeeder extends Seeder
             // Mission group
             ['key' => 'mission_title', 'label' => 'Mission Title', 'group' => 'mission', 'value' => 'Our Mission'],
             ['key' => 'mission_text',  'label' => 'Mission Text',  'group' => 'mission', 'value' => 'Since 1991, Krousar Thmey has been dedicated to the development of disadvantaged children in Cambodia, ensuring they grow with identity, integration, and dignity.'],
-            // Social Links group
-            ['key' => 'social_facebook',  'label' => 'Facebook URL',  'group' => 'social', 'value' => 'https://www.facebook.com/share/1LC1ZVXgen/?mibextid=wwXIfr'],
-            ['key' => 'social_youtube',   'label' => 'YouTube URL',   'group' => 'social', 'value' => 'https://www.youtube.com/@krousarthmeyvideos'],
-            ['key' => 'social_instagram', 'label' => 'Instagram URL', 'group' => 'social', 'value' => 'https://www.instagram.com/krousar_thmey_foundation?igsh=MWJpZXQ4YXZraDAyNg=='],
-            ['key' => 'social_telegram',  'label' => 'Telegram URL',  'group' => 'social', 'value' => 'https://t.me/krousarthmey'],
-            ['key' => 'social_linkedin',  'label' => 'LinkedIn URL',  'group' => 'social', 'value' => 'https://www.linkedin.com/company/krousar-thmey/'],
+            // Programs Banner group
+            ['key' => 'programs_banner_title',    'label' => 'Banner Title',    'group' => 'programs_banner', 'value' => 'Our Programs'],
+            ['key' => 'programs_banner_subtitle',  'label' => 'Banner Subtitle', 'group' => 'programs_banner', 'value' => 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.'],
+            ['key' => 'programs_banner_image',     'label' => 'Banner Background Image (URL or upload path)', 'group' => 'programs_banner', 'value' => ''],
+            // Donation tiers group
+            ['key' => 'donation_tier_1_amount', 'label' => 'Tier 1 — Amount',      'group' => 'donation_tiers', 'value' => '€15'],
+            ['key' => 'donation_tier_1_desc',   'label' => 'Tier 1 — Description', 'group' => 'donation_tiers', 'value' => 'School supplies for one student / month'],
+            ['key' => 'donation_tier_1_icon',   'label' => 'Tier 1 — Icon (emoji)','group' => 'donation_tiers', 'value' => '📚'],
+            ['key' => 'donation_tier_2_amount', 'label' => 'Tier 2 — Amount',      'group' => 'donation_tiers', 'value' => '€30'],
+            ['key' => 'donation_tier_2_desc',   'label' => 'Tier 2 — Description', 'group' => 'donation_tiers', 'value' => 'Food for a child in our care / month'],
+            ['key' => 'donation_tier_2_icon',   'label' => 'Tier 2 — Icon (emoji)','group' => 'donation_tiers', 'value' => '🍚'],
+            ['key' => 'donation_tier_3_amount', 'label' => 'Tier 3 — Amount',      'group' => 'donation_tiers', 'value' => '€60'],
+            ['key' => 'donation_tier_3_desc',   'label' => 'Tier 3 — Description', 'group' => 'donation_tiers', 'value' => "Deaf student's education / month"],
+            ['key' => 'donation_tier_3_icon',   'label' => 'Tier 3 — Icon (emoji)','group' => 'donation_tiers', 'value' => '👂'],
+            ['key' => 'donation_tier_4_amount', 'label' => 'Tier 4 — Amount',      'group' => 'donation_tiers', 'value' => '€100'],
+            ['key' => 'donation_tier_4_desc',   'label' => 'Tier 4 — Description', 'group' => 'donation_tiers', 'value' => 'Vocational training for a young adult'],
+            ['key' => 'donation_tier_4_icon',   'label' => 'Tier 4 — Icon (emoji)','group' => 'donation_tiers', 'value' => '🎓'],
+            // About page
+            ['key' => 'about_worldwide_title', 'label' => 'Worldwide Section Title', 'group' => 'about', 'value' => 'Krousar Thmey Worldwide'],
+            ['key' => 'about_worldwide_desc',  'label' => 'Worldwide Section Description', 'group' => 'about', 'value' => 'Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.'],
         ];
 
         foreach ($homeSettings as $setting) {
@@ -105,15 +120,53 @@ class AdminSeeder extends Seeder
 
         // ── Programs ──────────────────────────────────────────
         $programs = [
-            ['title' => 'Child Welfare',                       'slug' => 'child-welfare',     'image' => 'children.jpg',  'sort_order' => 1, 'description' => 'Providing safe family-based care for vulnerable and orphaned children.', 'stats' => [['label' => 'Children', 'value' => '240']]],
-            ['title' => 'Education for Deaf or Blind Children', 'slug' => 'special-education', 'image' => 'special-ed.jpg','sort_order' => 2, 'description' => 'Specialised schooling and integration into mainstream education.', 'stats' => [['label' => 'Students', 'value' => '768']]],
-            ['title' => 'Cultural and Artistic Development',    'slug' => 'cultural-arts',     'image' => 'cultural.jpg',  'sort_order' => 3, 'description' => 'Reconnecting children with Khmer traditions through arts and shadow theatre.', 'stats' => [['label' => 'Students', 'value' => '1,088']]],
-            ['title' => 'Academic and Career Counseling',       'slug' => 'career-counseling', 'image' => 'program.jpg',   'sort_order' => 4, 'description' => 'Supporting access to higher education, training, and employment.', 'stats' => [['label' => 'Students', 'value' => '357']]],
-            ['title' => 'Health and Hygiene',                   'slug' => 'health-hygiene',    'image' => 'hygiene.jpg',   'sort_order' => 5, 'description' => 'Promoting health education and sanitation practices.', 'stats' => []],
+            ['title' => 'Child Welfare',                       'slug' => 'child-welfare',     'image' => 'children.jpg',  'description' => 'Providing safe family-based care for vulnerable and orphaned children.'],
+            ['title' => 'Education for Deaf or Blind Children', 'slug' => 'special-education', 'image' => 'special-ed.jpg','description' => 'Specialised schooling and integration into mainstream education.'],
+            ['title' => 'Cultural and Artistic Development',    'slug' => 'cultural-arts',     'image' => 'cultural.jpg',  'description' => 'Reconnecting children with Khmer traditions through arts and shadow theatre.'],
+            ['title' => 'Academic and Career Counseling',       'slug' => 'career-counseling', 'image' => 'program.jpg',   'description' => 'Supporting access to higher education, training, and employment.'],
+            ['title' => 'Health and Hygiene',                   'slug' => 'health-hygiene',    'image' => 'hygiene.jpg',   'description' => 'Promoting health education and sanitation practices.'],
         ];
 
         foreach ($programs as $prog) {
             Program::updateOrCreate(['slug' => $prog['slug']], array_merge($prog, ['is_active' => true]));
+        }
+
+        // ── Child Welfare — full content, testimony & projects ─
+        $childWelfare = Program::where('slug', 'child-welfare')->first();
+
+        if ($childWelfare) {
+            $childWelfare->update([
+                'description' => 'Facilitate the reintegration of marginalized children into their families and society through emotional, educational and material support.',
+                'full_description' => "Victims of neglect, poverty, trafficking or difficult family situations, street children constitute a vulnerable, out-of-school, often traumatized and marginalized population. The Child Welfare program, which helps children and their families by providing emotional, educational and material support, aims to create the necessary conditions for them to build a better future.\n\nKrousar Thmey has three types of structures adapted to the child's needs, age and family situation: temporary protection centers, long-term protection centers and family houses. Family reintegration is always favored whenever possible.",
+                'testimony_name'  => 'Davann, 17, welcomed in Siem Reap protection center',
+                'testimony_story' => 'Davann arrived in Siem Reap long-term protection center in March 2017, following the closure of NGO Homeland Cambodia in Battambang Province. After her parents divorced, her mother emigrated to Thailand to find work and Davann was separated from her family. "I feel happy about living in the center. If not for Krousar Thmey, I think I wouldn\'t have had the chance to go to school and have access to so many things. I feel luckier than other children." A serious student, Davann is already looking forward to passing Grade 12 exams and accessing higher education. "I would like to study at university and become a lawyer because I want to help others."',
+            ]);
+
+            $childWelfareProjects = [
+                [
+                    'title'       => 'Temporary Protection Centers',
+                    'description' => 'To offer a stable and reassuring accommodation solution to the child before considering reintegration into their family.',
+                ],
+                [
+                    'title'       => 'Long-term Protection Centers',
+                    'description' => 'To ensure a stable environment for the child and provide them with access to education, in order to facilitate their integration into Cambodian society.',
+                ],
+                [
+                    'title'       => 'Family Houses',
+                    'description' => 'To welcome children into a safe and caring environment, tailored to their needs.',
+                ],
+                [
+                    'title'       => 'Academic and Career Counseling',
+                    'description' => 'To support young Cambodians in building their future by facilitating access to higher education, vocational training and employment.',
+                ],
+            ];
+
+            foreach ($childWelfareProjects as $proj) {
+                Project::updateOrCreate(
+                    ['title' => $proj['title'], 'program_id' => $childWelfare->id],
+                    array_merge($proj, ['is_active' => true])
+                );
+            }
         }
 
         // ── Partners ──────────────────────────────────────────

@@ -7,30 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Office extends Model
 {
     protected $fillable = [
-        'name',
-        'country',
-        'flag',
-        'address',
-        'google_maps_link',
-        'phone',
-        'email',
-        'office_hours',
-        'sort_order',
-        'is_active',
+        'country', 'city', 'flag', 'badge', 'address',
+        'phone', 'email', 'accent_color', 'badge_color',
+        'sort_order', 'is_active',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-        'sort_order' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return ['is_active' => 'boolean'];
+    }
 
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
-    }
-
-    public function scopeOrdered($query)
-    {
-        return $query->orderBy('sort_order')->orderBy('name');
+        return $query->where('is_active', true)->orderBy('sort_order')->orderBy('id');
     }
 }

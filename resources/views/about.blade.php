@@ -24,7 +24,7 @@
 
         {{-- In-page navigation --}}
         <div class="flex flex-wrap gap-3 mt-10">
-            @foreach(['presentation'=>'Presentation','history'=>'Our History','awards'=>'Awards','partners'=>'Partners','transparency'=>'Transparency'] as $id => $label)
+            @foreach(['presentation'=>'Presentation','values'=>'Our Values','history'=>'Our History','awards'=>'Awards','partners'=>'Partners','transparency'=>'Transparency'] as $id => $label)
             <a href="#{{ $id }}"
                class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
                 {{ $label }}
@@ -52,19 +52,17 @@
         </div>
 
         {{-- Values --}}
-        <div class="grid md:grid-cols-3 gap-6 mb-20">
-            @foreach([
-                ['title'=>'Identity',    'icon'=>'🏛️', 'desc'=>'Every child can reconnect with their roots and traditions.'],
-                ['title'=>'Integration', 'icon'=>'🤝', 'desc'=>'Every child is fully integrated into Cambodian society.'],
-                ['title'=>'Dignity',     'icon'=>'⭐', 'desc'=>'Every child is respected and can build the future they deserve.'],
-            ] as $value)
+        <div id="values" class="grid md:grid-cols-3 gap-6 mb-20 scroll-mt-20">
+            @forelse($coreValues as $value)
             <div class="group relative bg-[#f8f9fc] rounded-3xl p-8 border border-gray-100 hover:border-[#2d6fa3]/30 hover:shadow-lg transition-all duration-300 text-center overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-[#8da83a] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-t-3xl"></div>
-                <div class="text-5xl mb-5">{{ $value['icon'] }}</div>
-                <h3 class="text-xl font-bold text-[#2d6fa3] mb-3">{{ $value['title'] }}</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">{{ $value['desc'] }}</p>
+                <div class="text-5xl mb-5">{{ $value->icon }}</div>
+                <h3 class="text-xl font-bold text-[#2d6fa3] mb-3">{{ $value->title }}</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">{{ $value->description }}</p>
             </div>
-            @endforeach
+            @empty
+            <p class="text-gray-400 text-center py-8 md:col-span-3">No values listed yet.</p>
+            @endforelse
         </div>
 
         {{-- Mission text --}}
@@ -139,13 +137,16 @@
         <div class="bg-[#1d4e7a] rounded-3xl p-10 mb-20">
             <h3 class="text-white font-bold text-2xl text-center mb-10 uppercase tracking-wider">Key Figures</h3>
             <div class="grid grid-cols-2 lg:grid-cols-5 gap-6 text-center">
-                @foreach([
-                    ['n'=>'4,079', 'label'=>'Children supported'],
-                    ['n'=>'240',   'label'=>'In Child Welfare'],
-                    ['n'=>'768',   'label'=>'Special Ed students'],
-                    ['n'=>'1,088', 'label'=>'Arts & Culture students'],
-                    ['n'=>'357',   'label'=>'Career counseling'],
-                ] as $fig)
+                @php
+                $figures = [
+                    ['n' => $settings['stat_children']   ?? '4,079', 'label' => 'Children supported'],
+                    ['n' => $settings['stat_welfare']    ?? '240',   'label' => 'In Child Welfare'],
+                    ['n' => $settings['stat_special_ed'] ?? '768',   'label' => 'Special Ed students'],
+                    ['n' => $settings['stat_arts']       ?? '1,088', 'label' => 'Arts & Culture students'],
+                    ['n' => $settings['stat_counseling'] ?? '357',   'label' => 'Career counseling'],
+                ];
+                @endphp
+                @foreach($figures as $fig)
                 <div class="text-white">
                     <div class="text-3xl lg:text-4xl font-black text-[#8da83a] mb-2">{{ $fig['n'] }}</div>
                     <div class="text-white/70 text-xs leading-snug">{{ $fig['label'] }}</div>
@@ -154,21 +155,19 @@
             </div>
         </div>
 
-        {{-- Worldwide --}}
+        {{-- Worldwide — from DB offices (excluding Cambodia HQ) --}}
         <div>
             <h3 class="text-2xl font-bold text-[#2d6fa3] mb-3">Krousar Thmey Worldwide</h3>
             <p class="text-gray-500 mb-8 text-sm leading-relaxed max-w-3xl">
                 Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.
             </p>
             <div class="grid md:grid-cols-3 gap-5">
-                @forelse($offices as $office)
+                @foreach($offices->where('country', '!=', 'Cambodia') as $woffice)
                 <div class="bg-[#f8f9fc] border border-gray-100 rounded-2xl p-6 flex items-center gap-4 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all">
-                    <span class="text-4xl">{{ $office->flag ?? '🏢' }}</span>
+                    <span class="text-4xl">{{ $woffice->flag }}</span>
                     <div>
-                        <p class="font-bold text-[#2d6fa3] text-sm">{{ $office->name }}</p>
-                        @if($office->country)
-                        <p class="text-gray-400 text-xs">{{ $office->country }}</p>
-                        @endif
+                        <p class="font-bold text-[#2d6fa3] text-sm">Krousar Thmey {{ $woffice->country }}</p>
+                        <p class="text-gray-400 text-xs">{{ $woffice->city }}, {{ $woffice->country }}</p>
                     </div>
                 </div>
                 @empty
@@ -184,55 +183,30 @@
 {{-- ========================================================
      OUR HISTORY
      ======================================================== --}}
-<section id="history" class="py-20 bg-[#f8f9fc] scroll-mt-20">
-    <div class="max-w-5xl mx-auto px-6">
+<section id="history" class="py-20 bg-gradient-to-b from-white to-[#f8f9fc] scroll-mt-20">
+    <div class="max-w-6xl mx-auto px-6">
+        {{-- Header --}}
         <div class="text-center mb-16">
-            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Timeline</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Our History</h2>
+            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
+                <span class="w-8 h-0.5 bg-[#8da83a]"></span>
+                Our Journey
+                <span class="w-8 h-0.5 bg-[#8da83a]"></span>
+            </p>
+            <h2 class="text-4xl md:text-5xl font-bold text-[#2d6fa3] mb-4">Our History</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto text-lg">Discover the milestones that have shaped Krousar Thmey since its founding in 1991</p>
         </div>
 
-        @php
-        $events = [
-            ['year'=>'1991','left'=>'Birth of Krousar Thmey with the opening of the orphanage of Dangrek, followed by the orphanage of O\'Bok in Site II.',
-                            'right'=>null],
-            ['year'=>'1993','left'=>'Repatriation of 154 children to Cambodia: a first permanent protection centre opens in Siem Reap.',
-                            'right'=>null],
-            ['year'=>'1994','left'=>'The first temporary street children centre opens in Phnom Penh.',
-                            'right'=>'The first school for blind children opens in Phnom Penh.'],
-            ['year'=>'1998','left'=>'Seamanship training starts for street children using trawlers in Sihanoukville.',
-                            'right'=>'Opening of the school of arts in Serey Sophon and rebirth of shadow theatre which had disappeared under the Khmer Rouge Regime.'],
-            ['year'=>'2000','left'=>'Construction and opening of the first family house in TukThlaa, in the suburb of Phnom Penh.',
-                            'right'=>null],
-            ['year'=>'2001','left'=>'Construction of the first school for deaf children in Chbar Ampov, in the suburb of Phnom Penh.',
-                            'right'=>'The first campaign for the prevention of child trafficking and prostitution is launched.'],
-            ['year'=>'2003','left'=>'First enrollment of blind student in public school.',
-                            'right'=>'First hearing aids for hearing-impaired children thanks to ENT doctors and hearing aid specialists of the organisation Enfants Sourds du Cambodge based in Toulon, France.'],
-            ['year'=>'2005','left'=>'First translation of national television news in Sign Language.',
-                            'right'=>'Beginning of the awareness-raising campaigns on education for children with disabilities.'],
-            ['year'=>'2008','left'=>'First deaf students awarded the baccalaureate.',
-                            'right'=>'A career and academic counselling department is created to facilitate access to higher education, professional training and employment.'],
-            ['year'=>'2011','left'=>'First blind students graduated from university.',
-                            'right'=>'All the teaching staff is registered as civil servant by the Ministry of Education.'],
-            ['year'=>'2013','left'=>'First deaf students go to university.',
-                            'right'=>'The Ministry of Education, Youth and Sports takes the financial responsibility of the Braille workshop and sign language committee.'],
-            ['year'=>'2016','left'=>'Signature of the agreement related to the transfer of the 5 special schools to the Cambodian Ministry of Education, Youth and Sport in the presence of His Majesty King Norodom Sihamoni on the occasion of the 25th anniversary of Krousar Thmey.',
-                            'right'=>'Creation of the first Resource center for deaf or blind students in Battambang.'],
-            ['year'=>'2019','left'=>'Official ceremony of the transfer of the 5 special schools to the ministry of Education, Youth and Sports (MoEYS).',
-                            'right'=>null],
-        ];
-        @endphp
-
         <div class="relative">
-            {{-- Vertical line --}}
-            <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-[#2d6fa3]/20 hidden md:block"></div>
+            {{-- Vertical timeline line - centered --}}
+            <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2d6fa3] via-[#8da83a] to-[#2d6fa3] hidden md:block"></div>
 
             <div class="space-y-8">
-                @foreach($events as $i => $event)
+                @forelse($historyEvents as $event)
                 <div class="relative">
                     {{-- Year badge --}}
                     <div class="flex justify-center mb-4">
                         <div class="relative z-10 bg-[#2d6fa3] text-white font-bold text-sm px-5 py-2 rounded-full shadow-lg ring-4 ring-[#f8f9fc]">
-                            {{ $event['year'] }}
+                            {{ $event->year }}
                         </div>
                     </div>
 
@@ -243,26 +217,29 @@
                                 <div class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 flex items-center justify-center flex-shrink-0">
                                     <div class="w-2.5 h-2.5 rounded-full bg-[#2d6fa3]"></div>
                                 </div>
-                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event['left'] }}</p>
+                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event->left_text }}</p>
                             </div>
                         </div>
 
                         {{-- Right event --}}
-                        @if($event['right'])
+                        @if($event->right_text)
                         <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-[#8da83a]/30 transition-all">
                             <div class="flex items-start gap-3">
                                 <div class="w-8 h-8 rounded-full bg-[#8da83a]/10 flex items-center justify-center flex-shrink-0">
                                     <div class="w-2.5 h-2.5 rounded-full bg-[#8da83a]"></div>
                                 </div>
-                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event['right'] }}</p>
+                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event->right_text }}</p>
                             </div>
                         </div>
                         @else
-                        <div class="hidden md:block"></div>
+                        {{-- Empty right column to maintain grid --}}
+                        <div></div>
                         @endif
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <p class="text-gray-400 text-center py-8">No history events yet.</p>
+                @endforelse
             </div>
         </div>
     </div>
@@ -420,7 +397,7 @@
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Accountability</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Transparency &amp; Accountability</h2>
+            <h2 class="text-4xl font-bold text-[#2d6fa3]">Transparency & Accountability</h2>
         </div>
 
         <div class="grid lg:grid-cols-2 gap-12 mb-16">
@@ -467,18 +444,21 @@
                 </h3>
                 <p class="text-gray-500 text-sm mb-6">Audited statements are available for download. Our French and Swiss organisations' accounts are also audited annually.</p>
                 <div class="space-y-3">
-                    @foreach([2021, 2020, 2019, 2018, 2017, 2016] as $year)
-                    <a href="{{ route('resources') }}"
+                    @forelse($reports as $report)
+                    <a href="{{ $report->download_url }}"
+                       {{ $report->download_url !== '#' ? 'target="_blank"' : '' }}
                        class="flex items-center justify-between bg-[#f8f9fc] border border-gray-100 rounded-xl px-5 py-4 hover:border-[#2d6fa3]/30 hover:shadow-sm transition-all group">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-lg bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             </div>
-                            <span class="text-gray-700 font-medium text-sm">Audited Financial Statement {{ $year }}</span>
+                            <span class="text-gray-700 font-medium text-sm">{{ $report->title }}</span>
                         </div>
                         <svg class="w-4 h-4 text-gray-300 group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     </a>
-                    @endforeach
+                    @empty
+                    <p class="text-gray-400 text-sm">No reports available yet. <a href="{{ route('resources') }}" class="text-[#2d6fa3] hover:underline">View resources page</a>.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
