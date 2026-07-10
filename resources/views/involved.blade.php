@@ -32,8 +32,9 @@
                 ['icon' => '🤝', 'title' => 'Partner',      'desc' => 'Formalize a CSR or institutional partnership with us.',         'anchor' => 'partner',   'color' => 'hover:border-[#2d6fa3]/40'],
                 ['icon' => '✋', 'title' => 'Volunteer',    'desc' => 'Contribute your skills for a minimum of 3 months.',             'anchor' => 'volunteer', 'color' => 'hover:border-[#8da83a]/40'],
                 ['icon' => '💼', 'title' => 'Work With Us', 'desc' => 'Join our Cambodian team across social, education & comms.',     'anchor' => 'jobs',      'color' => 'hover:border-[#e8a020]/40'],
-            ] as $way)
-            <a href="#{{ $way['anchor'] }}" class="group bg-[#f8f9fc] rounded-2xl p-7 border-2 border-gray-100 {{ $way['color'] }} hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            ] as $index => $way)
+            <a href="#{{ $way['anchor'] }}" class="group bg-[#f8f9fc] rounded-2xl p-7 border-2 border-gray-100 {{ $way['color'] }} hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+               data-reveal="up" style="--reveal-delay: {{ $index * 100 }}">
                 <div class="text-4xl mb-4">{{ $way['icon'] }}</div>
                 <div class="font-black text-[#2d6fa3] uppercase tracking-wide text-sm mb-2 group-hover:text-[#e8a020] transition-colors">{{ $way['title'] }}</div>
                 <p class="text-gray-400 text-xs leading-relaxed mb-4">{{ $way['desc'] }}</p>
@@ -54,7 +55,7 @@
     </div>
     <div class="relative max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <div data-reveal="left">
                 <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">Make a Difference</span>
                 <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-2">Donate to Krousar Thmey</h2>
                 <div class="w-12 h-1 bg-[#d32f2f] rounded-full mb-6"></div>
@@ -75,7 +76,7 @@
                     <a href="{{ route('about') }}#transparency" class="btn-outline text-base">View Our Audits</a>
                 </div>
             </div>
-            <div class="space-y-5">
+            <div class="space-y-5" data-reveal="right">
                 <div class="relative rounded-3xl overflow-hidden h-52 shadow-2xl">
                     <img src="{{ asset('images/children.jpg') }}" alt="Children supported by Krousar Thmey"
                          class="w-full h-full object-cover">
@@ -96,7 +97,8 @@
                     ];
                     @endphp
                     @foreach($tiers as $tier)
-                    <div class="bg-white/10 border border-white/20 rounded-2xl p-5 text-center hover:bg-white/20 transition-colors">
+                    <div class="bg-white/10 border border-white/20 rounded-2xl p-5 text-center hover:bg-white/20 transition-colors"
+                         data-reveal="scale" style="--reveal-delay: {{ $loop->index * 90 }}">
                         <div class="text-xl mb-1">{{ $tier['icon'] }}</div>
                         <div class="text-2xl font-black text-[#e8a020] mb-1">{{ $tier['amount'] }}</div>
                         <p class="text-white/60 text-[11px] leading-relaxed">{{ $tier['desc'] }}</p>
@@ -112,7 +114,7 @@
 <section id="partner" class="py-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <div data-reveal="left">
                 <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">Institutional Support</span>
                 <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-[#2d6fa3] mb-2">Partner With Us</h2>
                 <div class="w-12 h-1 bg-[#d32f2f] rounded-full mb-6"></div>
@@ -134,7 +136,7 @@
                 </div>
                 <a href="{{ route('contact') }}" class="btn-blue">Contact Us to Partner</a>
             </div>
-            <div class="relative">
+            <div class="relative" data-reveal="right">
                 <img src="{{ asset('images/cultural.jpg') }}" alt="Cultural partnership programs"
                      class="rounded-3xl shadow-2xl w-full h-[420px] object-cover object-center">
                 <div class="absolute inset-0 rounded-3xl bg-gradient-to-t from-[#1d4e7a]/50 to-transparent"></div>
@@ -155,7 +157,7 @@
 <section id="volunteer" class="py-20 bg-[#f8f9fc] scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <div class="relative order-2 lg:order-1">
+            <div class="relative order-2 lg:order-1" data-reveal="left">
                 <img src="{{ asset('images/special-ed.jpg') }}" alt="Special education volunteering"
                      class="rounded-3xl shadow-2xl w-full h-[420px] object-cover object-center">
                 <div class="absolute inset-0 rounded-3xl bg-gradient-to-t from-[#1d4e7a]/40 to-transparent"></div>
@@ -164,7 +166,7 @@
                     <p class="text-gray-500 text-[11px]">Work directly with children</p>
                 </div>
             </div>
-            <div class="order-1 lg:order-2">
+            <div class="order-1 lg:order-2" data-reveal="right">
                 <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">Give Your Time</span>
                 <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-[#2d6fa3] mb-2">Volunteer With Us</h2>
                 <div class="w-12 h-1 bg-[#d32f2f] rounded-full mb-6"></div>
@@ -459,7 +461,7 @@
 {{-- Jobs --}}
 <section id="jobs" class="py-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-14">
+        <div class="text-center mb-14" data-reveal>
             <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Career Opportunities</span>
             <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-[#2d6fa3] mt-4 mb-2">Work With Us</h2>
             <div class="w-12 h-1 bg-[#d32f2f] rounded-full mx-auto mb-5"></div>
@@ -472,7 +474,8 @@
                 ['icon' => '📢', 'title' => 'Communications', 'desc' => 'Content, social media, and donor relations roles.',               'img' => 'cultural.jpg'],
                 ['icon' => '🤲', 'title' => 'Social Work',    'desc' => 'Child welfare officers and community outreach staff.',            'img' => 'children.jpg'],
             ] as $dept)
-            <div class="bg-[#f8f9fc] rounded-2xl overflow-hidden border border-gray-100 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all group">
+            <div class="bg-[#f8f9fc] rounded-2xl overflow-hidden border border-gray-100 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all group"
+                 data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
                 <div class="relative h-32 overflow-hidden">
                     <img src="{{ asset('images/'.$dept['img']) }}" alt="{{ $dept['title'] }}"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -489,7 +492,7 @@
             @endforeach
         </div>
 
-        <div class="bg-[#f8f9fc] rounded-3xl p-10 text-center border border-gray-100">
+        <div class="bg-[#f8f9fc] rounded-3xl p-10 text-center border border-gray-100" data-reveal="scale">
             <div class="w-16 h-16 rounded-2xl bg-[#2d6fa3]/10 flex items-center justify-center mx-auto mb-5">
                 <svg class="w-8 h-8 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </div>
@@ -506,7 +509,7 @@
         <div class="absolute top-0 right-0 w-72 h-72 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[#2d6fa3] translate-y-1/2 -translate-x-1/3"></div>
     </div>
-    <div class="relative max-w-4xl mx-auto px-6 text-center">
+    <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
         <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Ready to Help?</p>
         <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">Every Action Counts</h2>
         <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">Whether you donate, volunteer, or partner with us — you are helping build a better future for Cambodia's children.</p>

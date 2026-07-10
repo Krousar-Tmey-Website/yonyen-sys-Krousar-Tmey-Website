@@ -74,7 +74,8 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
         <div class="grid md:grid-cols-{{ $progCount }} gap-6 {{ $progCount < 3 ? 'max-w-4xl mx-auto' : '' }}">
             @php $colors = ['bg-[#1a3c6e]', 'bg-[#e8a020]', 'bg-[#2d6fa3]']; @endphp
             @foreach($programs->take(3) as $index => $prog)
-            <a href="#{{ $prog->slug }}" class="{{ $colors[$index % 3] }} rounded-2xl p-7 text-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[170px] group relative overflow-hidden">
+            <a href="#{{ $prog->slug }}" class="{{ $colors[$index % 3] }} rounded-2xl p-7 text-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[170px] group relative overflow-hidden"
+               data-reveal="up" style="--reveal-delay: {{ $index * 100 }}">
                 <div class="absolute top-0 right-0 w-32 h-32 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2"></div>
                 <div class="relative flex items-center justify-between">
                     <div class="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center group-hover:bg-white/25 group-hover:scale-110 transition-all duration-300">
@@ -103,7 +104,7 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
 <section id="{{ $program->slug }}" class="py-20 {{ $isEven ? 'bg-white' : 'bg-[#f8f9fc]' }}">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-16 items-start">
-            <div class="{{ $isEven ? 'order-1 lg:order-2' : '' }}">
+            <div class="{{ $isEven ? 'order-1 lg:order-2' : '' }}" data-reveal="{{ $isEven ? 'right' : 'left' }}">
                 <div class="flex items-center gap-4 mb-8">
                     <div class="w-12 h-12 rounded-xl bg-[#1a3c6e]/8 flex items-center justify-center text-[#1a3c6e] flex-shrink-0">
                         {!! $programIconFor($program->title) !!}
@@ -144,7 +145,7 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
                     </a>
                 </div>
             </div>
-            <div class="{{ $isEven ? 'order-2 lg:order-1 space-y-8' : 'space-y-8' }}">
+            <div class="{{ $isEven ? 'order-2 lg:order-1 space-y-8' : 'space-y-8' }}" data-reveal="{{ $isEven ? 'left' : 'right' }}">
                 <div class="relative">
                     <img src="{{ $program->image_url }}" alt="{{ $program->title }}" class="w-full h-auto object-cover rounded-3xl border-4 border-white shadow-2xl">
                     <div class="absolute -top-3 {{ $isEven ? '-left-3' : '-right-3' }} w-16 h-16 rounded-2xl bg-[#e8a020]/15 -z-10 hidden lg:block"></div>
@@ -191,7 +192,7 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
         @php
             $cleanTestimonyName = preg_replace('/^testimony\s*:?\s*/i', '', $program->testimony_name);
         @endphp
-        <div class="mt-16 relative bg-[#1a3c6e]/5 border border-[#1a3c6e]/10 p-8 md:p-12 rounded-3xl text-center max-w-4xl mx-auto shadow-sm overflow-hidden">
+        <div class="mt-16 relative bg-[#1a3c6e]/5 border border-[#1a3c6e]/10 p-8 md:p-12 rounded-3xl text-center max-w-4xl mx-auto shadow-sm overflow-hidden" data-reveal="scale">
             <div class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle, #1a3c6e 1px, transparent 1px); background-size: 20px 20px; opacity: 0.06; mask-image: linear-gradient(to bottom, black, transparent 75%); -webkit-mask-image: linear-gradient(to bottom, black, transparent 75%);"></div>
             <div class="relative">
                 <div class="relative inline-block mb-4">
@@ -240,7 +241,8 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($program->projects as $project)
-                <a href="{{ route('projects.show', $project) }}" class="group bg-white rounded-2xl border border-gray-100 hover:border-[#2d6fa3]/30 overflow-hidden hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col">
+                <a href="{{ route('projects.show', $project) }}" class="group bg-white rounded-2xl border border-gray-100 hover:border-[#2d6fa3]/30 overflow-hidden hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col"
+                   data-reveal="up" style="--reveal-delay: {{ $loop->index * 90 }}">
                     <div class="overflow-hidden h-48 relative bg-[#1a3c6e]/5">
                         <img src="{{ $project->image_url }}" alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#1a3c6e]/55 via-[#1a3c6e]/5 to-transparent"></div>
@@ -275,7 +277,7 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
 @if($programs->count() > 3)
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-14">
+        <div class="text-center mb-14" data-reveal>
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/10 border border-[#e8a020]/20 mb-4">
                 <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
                 <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">Cross-cutting Work</span>
@@ -286,7 +288,8 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
         <div class="grid md:grid-cols-2 gap-6">
             @php $extraColors = ['bg-[#1a3c6e]', 'bg-[#2d6fa3]']; @endphp
             @foreach($programs->skip(3) as $index => $program)
-            <div class="group bg-[#f8f9fc] rounded-2xl p-8 border border-gray-100 hover:border-[#2d6fa3]/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="group bg-[#f8f9fc] rounded-2xl p-8 border border-gray-100 hover:border-[#2d6fa3]/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                 data-reveal="up" style="--reveal-delay: {{ $index * 100 }}">
                 <div class="w-12 h-12 rounded-xl {{ $extraColors[$index % 2] }} flex items-center justify-center mb-5 text-white group-hover:scale-110 transition-transform duration-300">
                     {!! $programIconFor($program->title, 'w-6 h-6') !!}
                 </div>
@@ -311,7 +314,7 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
     <div class="max-w-7xl mx-auto px-6">
 
         {{-- Section Header --}}
-        <div class="text-center mb-14">
+        <div class="text-center mb-14" data-reveal>
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/10 border border-[#e8a020]/20 mb-4">
                 <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
                 <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">Learn More</span>
@@ -323,7 +326,8 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($additionalItems as $item)
             <a href="{{ route('program-page-items.show', $item->id) }}"
-               class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full hover:-translate-y-1">
+               class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full hover:-translate-y-1"
+               data-reveal="up" style="--reveal-delay: {{ min($loop->index * 90, 360) }}">
 
                 {{-- Image --}}
                 @if($item->image)
@@ -367,7 +371,7 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
 <section class="relative py-20 overflow-hidden bg-[#1a3c6e]">
     <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-[#2d6fa3]/20 -translate-y-1/2 translate-x-1/4"></div>
     <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a]/10 translate-y-1/2 -translate-x-1/4"></div>
-    <div class="relative max-w-4xl mx-auto px-6 text-center">
+    <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8da83a]/20 border border-[#8da83a]/30 mb-6">
             <div class="w-1.5 h-1.5 rounded-full bg-[#8da83a]"></div>
             <span class="text-[#8da83a] font-semibold text-xs uppercase tracking-widest">Support Our Mission</span>
