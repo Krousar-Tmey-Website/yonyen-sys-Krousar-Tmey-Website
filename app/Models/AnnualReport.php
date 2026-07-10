@@ -18,8 +18,13 @@ class AnnualReport extends Model
         'year' => 'integer',
     ];
 
+    public function getHasPdfFileAttribute(): bool
+    {
+        return !empty($this->file_path) && Storage::disk('public')->exists($this->file_path);
+    }
+
     public function getFileUrlAttribute(): string
     {
-        return $this->file_path ? asset('storage/' . ltrim($this->file_path, '/')) : '';
+        return $this->has_pdf_file ? Storage::disk('public')->url($this->file_path) : '';
     }
 }

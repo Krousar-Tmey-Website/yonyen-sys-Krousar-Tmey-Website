@@ -32,6 +32,11 @@ class AnnualReportController extends Controller
         return view('admin.reports.create');
     }
 
+    public function show(AnnualReport $report)
+    {
+        return view('admin.reports.show', compact('report'));
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

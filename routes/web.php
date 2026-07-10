@@ -13,6 +13,7 @@ use App\Models\PageSection;
 use App\Models\Program;
 use App\Models\Slide;
 use App\Models\HistoryEvent;
+use App\Models\AnnualReport;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
@@ -55,7 +56,11 @@ Route::get('/get-involved', fn() => view('involved'))->name('involved');
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
-Route::get('/resources', fn() => view('resources'))->name('resources');
+Route::get('/resources', function () {
+    $reports = AnnualReport::latest('created_at')->get();
+
+    return view('resources', compact('reports'));
+})->name('resources');
 Route::get('/contact',  [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
@@ -99,7 +104,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->name('home.update');
 
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create']);
-    Route::resource('reports', Admin\AnnualReportController::class)->except(['show']);
+    Route::resource('reports', Admin\AnnualReportController::class);
     Route::resource('awards',   Admin\AwardController::class)->except(['show', 'create', 'edit']);
     Route::resource('slides',   Admin\SlideController::class)->except(['show']);
     Route::resource('users',    Admin\UserController::class)->except(['show']);
