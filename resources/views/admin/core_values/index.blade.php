@@ -10,7 +10,7 @@
     {{-- Add value form --}}
     <div class="bg-white rounded-2xl border border-gray-100 p-6">
         <h3 class="font-bold text-gray-700 mb-4 text-sm">Add New Value</h3>
-        <form action="{{ route('admin.core-values.store') }}" method="POST" class="space-y-3">
+        <form action="{{ route('admin.core-values.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
             @csrf
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Title <span class="text-red-400">*</span></label>
@@ -36,6 +36,16 @@
                            class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                 </div>
             </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Image (optional, overrides icon)</label>
+                <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                       class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                <input type="url" name="image_url" value="{{ old('image_url') }}"
+                       class="w-full mt-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                       placeholder="...or paste an image URL">
+                @error('image')<p class="text-red-400 text-xs mt-1">{{ $message }}</p>@enderror
+                @error('image_url')<p class="text-red-400 text-xs mt-1">{{ $message }}</p>@enderror
+            </div>
             <button type="submit" class="w-full btn-primary text-sm py-2.5">Add Value</button>
         </form>
     </div>
@@ -57,7 +67,11 @@
                     {{-- View row --}}
                     <div class="flex items-start justify-between px-5 py-4 hover:bg-gray-50/50" x-show="!editing">
                         <div class="flex items-start gap-3 min-w-0">
+                            @if($value->image_url)
+                            <img src="{{ $value->image_url }}" alt="" class="w-8 h-8 object-cover flex-shrink-0 mt-0.5 rounded-lg">
+                            @else
                             <span class="text-2xl flex-shrink-0 mt-0.5">{{ $value->icon }}</span>
+                            @endif
                             <div class="min-w-0">
                                 <p class="font-semibold text-gray-700 text-sm">{{ $value->title }}</p>
                                 @if($value->description)
@@ -78,7 +92,7 @@
                     </div>
                     {{-- Edit form --}}
                     <div class="px-5 py-4 bg-gray-50 border-t border-gray-100" x-show="editing" x-cloak>
-                        <form action="{{ route('admin.core-values.update', $value) }}" method="POST" class="space-y-3">
+                        <form action="{{ route('admin.core-values.update', $value) }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                             @csrf @method('PUT')
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
@@ -101,6 +115,23 @@
                                     <input type="number" name="sort_order" value="{{ $value->sort_order }}"
                                            class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
                                 </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Image (optional, overrides icon)</label>
+                                @if($value->image_url)
+                                <div class="flex items-center gap-2 mb-2">
+                                    <img src="{{ $value->image_url }}" alt="" class="w-10 h-10 object-cover rounded-lg border border-gray-200">
+                                    <label class="flex items-center gap-1.5 text-xs text-gray-500">
+                                        <input type="checkbox" name="remove_image" value="1" class="rounded border-gray-300">
+                                        Remove current image
+                                    </label>
+                                </div>
+                                @endif
+                                <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                                       class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-[#2d6fa3]">
+                                <input type="url" name="image_url"
+                                       class="w-full mt-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                                       placeholder="...or paste an image URL">
                             </div>
                             <div class="flex gap-2">
                                 <button type="submit" class="btn-primary text-xs px-4 py-2">Save</button>
