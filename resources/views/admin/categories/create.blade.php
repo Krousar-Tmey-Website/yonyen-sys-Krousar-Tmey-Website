@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
 
+@push('styles')
+    @vite(['resources/css/admin.css'])
+@endpush
+
 @section('title', 'New Category')
 @section('page-title', 'Create Category')
 @section('breadcrumb', 'Categories → Create')
