@@ -17,28 +17,28 @@ class PartnerController extends Controller
      */
     public function index(Request $request)
     {
-        $search     = trim((string) $request->query('search', ''));
-        $categoryId = $request->query('category_id');
+        $search  = trim((string) $request->query('search', ''));
+        $category = $request->query('category');
 
         $partnerCategoryModels = PartnerCategory::orderBy('name')->get();
 
-        $partners = Partner::with('partnerCategory')
+        $partners = Partner::query()
             ->when($search !== '', function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%');
             })
-            ->when(filled($categoryId), function ($query) use ($categoryId) {
-                $query->where('category_id', $categoryId);
+            ->when(filled($category), function ($query) use ($category) {
+                $query->where('category', $category);
             })
             ->latest()
             ->get()
-            ->groupBy(fn ($p) => $p->partnerCategory ? strtolower($p->partnerCategory->name) : 'unknown');
+            ->groupBy(fn ($p) => $p->category ?? 'unknown');
 
-        $activeFilters = (filled($search) ? 1 : 0) + (filled($categoryId) ? 1 : 0);
+        $activeFilters = (filled($search) ? 1 : 0) + (filled($category) ? 1 : 0);
         $totalPartners = $partners->sum(fn ($group) => $group->count());
 
         $viewData = [
             'partners'      => $partners,
-            'filters'       => ['search' => $search, 'category' => $categoryId ?? ''],
+            'filters'       => ['search' => $search, 'category' => $category ?? ''],
             'categories'    => $partnerCategoryModels,
             'totalPartners' => $totalPartners,
             'activeCount'   => $activeFilters,
@@ -87,10 +87,9 @@ class PartnerController extends Controller
     {
         $partnerCategoryModels = PartnerCategory::orderBy('name')->get();
 
-        $partners = Partner::with('partnerCategory')
-            ->latest()
+        $partners = Partner::latest()
             ->get()
-            ->groupBy(fn ($p) => $p->partnerCategory ? strtolower($p->partnerCategory->name) : 'unknown');
+            ->groupBy(fn ($p) => $p->category ?? 'unknown');
 
         $totalPartners = $partners->sum(fn ($group) => $group->count());
 

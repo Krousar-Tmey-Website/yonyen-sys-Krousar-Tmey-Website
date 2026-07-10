@@ -306,7 +306,31 @@
                     @endif
                     <p class="text-[#8da83a] text-xs font-semibold mb-2">{{ $award->organization }}</p>
                     @if($award->description)
-                    <p class="text-gray-400 text-xs leading-relaxed">{{ $award->description }}</p>
+                    <p class="text-gray-400 text-xs leading-relaxed mb-3">{{ $award->description }}</p>
+                    @endif
+                    
+                    {{-- Link Buttons --}}
+                    @if($award->website_url || $award->article_url || $award->video_url)
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        @if($award->website_url)
+                        <a href="{{ $award->website_url }}" target="_blank" 
+                           class="px-3 py-1.5 bg-[#2d6fa3] text-white text-xs font-medium rounded-lg hover:bg-[#1d4e7a] transition-colors">
+                            Visit Website
+                        </a>
+                        @endif
+                        @if($award->article_url)
+                        <a href="{{ $award->article_url }}" target="_blank"
+                           class="px-3 py-1.5 bg-[#8da83a] text-white text-xs font-medium rounded-lg hover:bg-[#6b8a2b] transition-colors">
+                            Read Article
+                        </a>
+                        @endif
+                        @if($award->video_url)
+                        <a href="{{ $award->video_url }}" target="_blank"
+                           class="px-3 py-1.5 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 transition-colors">
+                            Watch Video
+                        </a>
+                        @endif
+                    </div>
                     @endif
                 </div>
             </div>
@@ -343,18 +367,17 @@
                 <button @click="category = 'all'"
                         :class="category === 'all' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
                         class="px-5 py-2 rounded-full text-sm font-medium transition-all">All Partners</button>
-                @foreach ($partnerCategories as $cat)
-                    <button @click="category = 'cat_{{ $cat->id }}'"
-                            :class="category === 'cat_{{ $cat->id }}' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                            class="px-5 py-2 rounded-full text-sm font-medium transition-all">{{ $cat->name }}</button>
+                @foreach ($partnersByCategory as $cat => $partners)
+                    <button @click="category = 'cat_{{ $cat }}'"
+                            :class="category === 'cat_{{ $cat }}' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
+                            class="px-5 py-2 rounded-full text-sm font-medium transition-all">{{ $cat }}</button>
                 @endforeach
             </div>
         </div>
 
         {{-- Partnerships with Cambodian Authorities --}}
         <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8"
-             x-show="category === 'all' || category === 'cat_{{ $partnerCategories->firstWhere('name', 'Authorities')?->id }}"
-             data-reveal>
+             x-show="category === 'all' || category === 'cat_Authorities'">
             <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
                 <span class="text-2xl">🇰🇭</span> Partnerships with the Cambodian Authorities
             </h3>
@@ -388,26 +411,25 @@
             ];
         @endphp
 
-        @foreach ($partnerCategories as $cat)
-            @if ($cat->partners->isNotEmpty())
-                @php $config = $categoryDisplayConfig[$cat->name] ?? ['title' => $cat->name, 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white']; @endphp
+        @foreach ($partnersByCategory as $cat => $partners)
+            @if ($partners->isNotEmpty())
+                @php $config = $categoryDisplayConfig[$cat] ?? ['title' => $cat, 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white']; @endphp
                 <div class="{{ $config['bgClass'] }} rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
-                     x-show="category === 'all' || category === 'cat_{{ $cat->id }}'"
-                     data-reveal style="--reveal-delay: {{ min($loop->index * 80, 320) }}">
+                     x-show="category === 'all' || category === 'cat_{{ $cat }}'">
                     <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
-                        @if ($cat->name === 'Towns')
+                        @if ($cat === 'Towns')
                             <span>🇨🇭</span>
                         @endif
                         {{ $config['title'] }}
                     </h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                        @foreach ($cat->partners as $partner)
+                        @foreach ($partners as $partner)
                             @php $ps = json_encode(strtolower($partner->name)); @endphp
                             <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#f8f9fc] hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
                                  x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
-                                @if ($partner->logo)
+                                @if ($partner->logo_url)
                                     <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
-                                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->name }}"
+                                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}"
                                              class="max-w-full max-h-full object-contain p-2">
                                     </div>
                                 @else

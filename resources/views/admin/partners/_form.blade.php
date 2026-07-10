@@ -1,7 +1,7 @@
 @php
     $isEdit = isset($partner);
     $partnerName = $isEdit ? $partner->name : old('name');
-    $selectedCategoryId = old('category_id', $isEdit ? $partner->category_id : '');
+    $selectedCategory = old('category', $isEdit ? $partner->category : '');
 @endphp
 
 {{-- PARTNER NAME --}}
@@ -23,7 +23,7 @@
     </div>
     @error('name')
         <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
             {{ $message }}
         </p>
     @enderror
@@ -31,7 +31,7 @@
 
 {{-- CATEGORY --}}
 <div>
-    <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-1.5">
+    <label for="category" class="block text-sm font-semibold text-gray-700 mb-1.5">
         Category <span class="text-red-400">*</span>
     </label>
     <div class="relative">
@@ -40,12 +40,12 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
         </svg>
-        <select id="category_id" name="category_id" required
+        <select id="category" name="category" required
             class="w-full pl-11 pr-10 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none appearance-none cursor-pointer
-                {{ $errors->has('category_id') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}">
-            <option value="" disabled {{ $selectedCategoryId === '' ? 'selected' : '' }}>Select a category</option>
+                {{ $errors->has('category') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}">
+            <option value="" disabled {{ $selectedCategory === '' ? 'selected' : '' }}>Select a category</option>
             @foreach ($categories as $cat)
-                <option value="{{ $cat->id }}" {{ $selectedCategoryId == $cat->id ? 'selected' : '' }}>
+                <option value="{{ $cat->name }}" {{ $selectedCategory == $cat->name ? 'selected' : '' }}>
                     {{ $cat->name }}
                 </option>
             @endforeach
@@ -56,9 +56,9 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
     </div>
-    @error('category_id')
+    @error('category')
         <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
             {{ $message }}
         </p>
     @enderror
@@ -81,11 +81,11 @@
          x-transition:enter-end="opacity-100 translate-y-0"
          class="mt-4">
 
-        @if ($isEdit && $partner->logo)
+        @if ($isEdit && $partner->logo_url)
             {{-- Current Logo Preview --}}
             <div class="mb-4 p-4 bg-gray-50/80 border-2 border-gray-200 rounded-xl flex items-center gap-4">
                 <div class="w-20 h-20 bg-white rounded-xl border-2 border-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                    <img src="{{ asset('storage/' . $partner->logo) }}"
+                    <img src="{{ $partner->logo_url }}"
                         alt="{{ $partner->name }}"
                         class="max-w-full max-h-full object-contain p-2">
                 </div>
@@ -96,6 +96,7 @@
                 </div>
             </div>
         @endif
+```
 
         {{-- Upload Box --}}
         <label for="logo" id="logo-dropzone"
@@ -146,7 +147,7 @@
 
         @error('logo')
             <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-                <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
                 {{ $message }}
             </p>
         @enderror

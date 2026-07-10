@@ -9,15 +9,55 @@ use Illuminate\Support\Facades\Storage;
 
 class AwardController extends Controller
 {
-    public function index()
+    /**
+     * Display award list with optional search.
+     */
+    public function index(Request $request)
     {
-        $awards = Award::ordered()->latest()->get();
-        return view('admin.awards.index', compact('awards'));
+        $search = trim((string) $request->query('search', ''));
+
+        $awards = Award::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                      ->orWhere('organization', 'like', '%' . $search . '%');
+            })
+            ->latest()
+            ->get();
+
+        $totalAwards = $awards->count();
+
+        $viewData = [
+            'awards'      => $awards,
+            'filters'     => ['search' => $search],
+            'totalAwards' => $totalAwards,
+        ];
+
+        if ($request->ajax() || $request->wantsJson()) {
+            $html = view('admin.awards._results', $viewData)->render();
+
+            return response()->json([
+                'html'  => $html,
+                'total' => $totalAwards,
+            ]);
+        }
+
+        return view('admin.awards.index', $viewData);
     }
 
-    public function show(Award $award)
+    /**
+     * Show edit form.
+     */
+    public function edit(Award $award)
     {
-        return view('admin.awards.show', compact('award'));
+        $awards = Award::latest()->get();
+        $totalAwards = $awards->count();
+
+        return view('admin.awards.index', [
+            'awards'      => $awards,
+            'editAward'   => $award,
+            'filters'     => ['search' => ''],
+            'totalAwards' => $totalAwards,
+        ]);
     }
 
     public function store(Request $request)
@@ -29,10 +69,14 @@ class AwardController extends Controller
             'description'  => ['nullable', 'string'],
             'image'        => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
             'image_url'    => ['nullable', 'url', 'max:2048'],
+            'website_url'  => ['nullable', 'url', 'max:2048'],
+            'article_url'  => ['nullable', 'url', 'max:2048'],
+            'video_url'    => ['nullable', 'url', 'max:2048'],
             'sort_order'   => ['nullable', 'integer'],
         ]);
 
         $data['sort_order'] = $data['sort_order'] ?? 0;
+        $data['is_active']  = true;
         $data['image']      = $this->resolveImage($request, $data);
         unset($data['image_url']);
 
@@ -50,8 +94,12 @@ class AwardController extends Controller
             'description'  => ['nullable', 'string'],
             'image'        => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
             'image_url'    => ['nullable', 'url', 'max:2048'],
+            'website_url'  => ['nullable', 'url', 'max:2048'],
+            'article_url'  => ['nullable', 'url', 'max:2048'],
+            'video_url'    => ['nullable', 'url', 'max:2048'],
             'remove_image' => ['nullable', 'boolean'],
             'sort_order'   => ['nullable', 'integer'],
+            'is_active'    => ['nullable', 'boolean'],
         ]);
 
         if ($request->boolean('remove_image')) {

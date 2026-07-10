@@ -40,14 +40,19 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/who-we-are', function () {
-    $partnerCategories = PartnerCategory::with(['partners' => fn ($q) => $q->active()])->orderBy('name')->get();
-    $awards           = Award::ordered()->get();
+    $partnerCategories = PartnerCategory::orderBy('name')->get();
+    $partnersByCategory = Partner::where('is_active', true)
+        ->orderBy('sort_order')
+        ->orderBy('name')
+        ->get()
+        ->groupBy('category');
+    $awards           = Award::active()->ordered()->get();
     $offices          = Office::active()->get();
     $historyEvents    = HistoryEvent::active()->get();
     $reports          = AnnualReport::active()->get();
     $settings         = HomeSetting::allKeyed();
     $coreValues       = CoreValue::ordered()->get();
-    return view('about', compact('partnerCategories', 'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
+    return view('about', compact('partnerCategories', 'partnersByCategory', 'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
 })->name('about');
 
 Route::get('/our-programs', function () {
@@ -158,7 +163,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Who We Are
     Route::resource('partners',       Admin\PartnerController::class)->except(['show', 'create']);
-    Route::resource('awards',         Admin\AwardController::class)->except(['show', 'create', 'edit']);
+    Route::resource('awards',         Admin\AwardController::class)->except(['show', 'create']);
     Route::resource('history-events', Admin\HistoryEventController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['history-events' => 'historyEvent']);

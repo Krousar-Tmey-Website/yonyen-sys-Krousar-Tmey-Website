@@ -14,8 +14,12 @@ return new class extends Migration
             $table->string('recipient')->nullable();
             $table->string('organization');
             $table->text('description')->nullable();
-            $table->string('icon')->default('🏆');
+            $table->string('image')->nullable();
             $table->integer('sort_order')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->string('website_url')->nullable();
+            $table->string('article_url')->nullable();
+            $table->string('video_url')->nullable();
             $table->timestamps();
         });
     }
