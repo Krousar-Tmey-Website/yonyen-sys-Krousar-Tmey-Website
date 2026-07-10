@@ -1,11 +1,26 @@
+
+{{-- Category icons --}}
+@php
+    $catIcons = [
+        'authorities' => '🇰🇭',
+        'organizations' => '🏛️',
+        'companies' => '🏢',
+        'towns' => '🏙️',
+    ];
+@endphp
+
 {{-- Grouped tables --}}
-@foreach(['authorities' => '🇰🇭 Cambodian Authorities', 'organizations' => '🏛️ Organizations & Foundations', 'companies' => '🏢 Companies', 'towns' => '🏙️ Towns & Municipalities'] as $cat => $catLabel)
-@if(isset($partners[$cat]) && $partners[$cat]->count())
+@foreach($partners as $cat => $catPartners)
+@if($catPartners->count())
+@php
+    $displayName = $catPartners->first()->partnerCategory?->name ?? ucfirst($cat);
+    $icon = $catIcons[$cat] ?? '🤝';
+@endphp
 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-5">
     <div class="px-6 py-4 bg-gray-50 flex justify-between items-center">
-        <h4 class="font-semibold text-gray-700 text-sm">{{ $catLabel }}</h4>
+        <h4 class="font-semibold text-gray-700 text-sm">{{ $icon }} {{ $displayName }}</h4>
         <span class="px-3 py-1 bg-white rounded-full text-xs text-gray-400 border border-gray-100">
-            {{ $partners[$cat]->count() }}
+            {{ $catPartners->count() }}
         </span>
     </div>
     <table class="w-full text-sm">
@@ -18,7 +33,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($partners[$cat] as $partner)
+            @foreach($catPartners as $partner)
             <tr class="border-t border-gray-50 hover:bg-gray-50/60 transition">
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">

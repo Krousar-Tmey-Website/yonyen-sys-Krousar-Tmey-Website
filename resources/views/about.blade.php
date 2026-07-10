@@ -41,7 +41,7 @@
     <div class="max-w-7xl mx-auto px-6">
 
         {{-- Hero statement --}}
-        <div class="text-center mb-16 max-w-4xl mx-auto">
+        <div class="text-center mb-16 max-w-4xl mx-auto" data-reveal>
             <p class="text-[#2d6fa3] font-bold text-sm uppercase tracking-widest mb-4">Our Mission</p>
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
                 Krousar Thmey,<br>
@@ -60,7 +60,8 @@
                 $valueFallbackStyle = "background: linear-gradient(135deg, {$accent}, #1a3c6e)";
                 $valueAccentBarStyle = "background: {$accent}";
             @endphp
-            <div class="group bg-white rounded-[28px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+            <div class="group bg-white rounded-[28px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden"
+                 data-reveal="scale" style="--reveal-delay: {{ $i * 100 }}">
                 <div class="relative h-44 overflow-hidden">
                     @if($value->image_url)
                     <img src="{{ $value->image_url }}" alt="{{ $value->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
@@ -84,7 +85,7 @@
 
         {{-- Mission text --}}
         <div class="grid lg:grid-cols-2 gap-14 items-center mb-20">
-            <div>
+            <div data-reveal="left">
                 <p class="text-gray-600 leading-relaxed text-lg mb-6">
                     Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting <strong class="text-[#2d6fa3]">4,079 children</strong> in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene.
                 </p>
@@ -100,7 +101,7 @@
                     Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.
                 </p>
             </div>
-            <div>
+            <div data-reveal="right">
                 <img src="{{ asset('images/children.jpg') }}" alt="Children at Krousar Thmey"
                      class="rounded-3xl shadow-2xl w-full h-[420px] object-cover">
             </div>
@@ -108,7 +109,7 @@
 
         {{-- 3 Programs + 2 Projects --}}
         <div class="mb-20">
-            <div class="text-center mb-10">
+            <div class="text-center mb-10" data-reveal>
                 <div class="inline-block bg-[#2d6fa3] text-white font-bold text-lg px-6 py-3 rounded-2xl mb-4">
                     Krousar Thmey operates 3 programs and 2 cross-cutting projects in 15 Cambodian provinces
                 </div>
@@ -119,7 +120,8 @@
                     ['title'=>'Education for Deaf or Blind Children','img'=>'special-ed.jpg',  'color'=>'bg-[#1d4e7a]',  'href'=>route('programs').'#education'],
                     ['title'=>'Cultural and Artistic Development',   'img'=>'cultural.jpg',    'color'=>'bg-[#8da83a]',  'href'=>route('programs').'#culture'],
                 ] as $prog)
-                <a href="{{ $prog['href'] }}" class="group block rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <a href="{{ $prog['href'] }}" class="group block rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                   data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
                     <div class="relative h-44 overflow-hidden">
                         <img src="{{ asset('images/'.$prog['img']) }}" alt="{{ $prog['title'] }}"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -136,7 +138,8 @@
                     ['title'=>'Academic and Career Counseling', 'img'=>'program.jpg',  'href'=>route('programs')],
                     ['title'=>'Health and Hygiene',             'img'=>'hygiene.jpg',  'href'=>route('programs')],
                 ] as $proj)
-                <a href="{{ $proj['href'] }}" class="group block rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <a href="{{ $proj['href'] }}" class="group block rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                   data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
                     <div class="relative h-36 overflow-hidden">
                         <img src="{{ asset('images/'.$proj['img']) }}" alt="{{ $proj['title'] }}"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -151,7 +154,7 @@
         </div>
 
         {{-- Key Figures --}}
-        <div class="bg-[#1d4e7a] rounded-3xl p-10 mb-20">
+        <div class="bg-[#1d4e7a] rounded-3xl p-10 mb-20" data-reveal="scale">
             <h3 class="text-white font-bold text-2xl text-center mb-10 uppercase tracking-wider">Key Figures</h3>
             <div class="grid grid-cols-2 lg:grid-cols-5 gap-6 text-center">
                 @php
@@ -174,20 +177,25 @@
 
         {{-- Worldwide — from DB offices (excluding Cambodia HQ) --}}
         <div>
-            <h3 class="text-2xl font-bold text-[#2d6fa3] mb-3">Krousar Thmey Worldwide</h3>
-            <p class="text-gray-500 mb-8 text-sm leading-relaxed max-w-3xl">
+            <h3 class="text-2xl font-bold text-[#2d6fa3] mb-3" data-reveal>Krousar Thmey Worldwide</h3>
+            <p class="text-gray-500 mb-8 text-sm leading-relaxed max-w-3xl" data-reveal>
                 Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.
             </p>
             <div class="grid md:grid-cols-3 gap-5">
-                @foreach($offices->where('country', '!=', 'Cambodia') as $woffice)
-                <div class="bg-[#f8f9fc] border border-gray-100 rounded-2xl p-6 flex items-center gap-4 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all">
+                @forelse($offices->where('country', '!=', 'Cambodia') as $woffice)
+                <div class="bg-[#f8f9fc] border border-gray-100 rounded-2xl p-6 flex items-center gap-4 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all"
+                     data-reveal="up" style="--reveal-delay: {{ $loop->index * 90 }}">
                     <span class="text-4xl">{{ $woffice->flag }}</span>
                     <div>
                         <p class="font-bold text-[#2d6fa3] text-sm">Krousar Thmey {{ $woffice->country }}</p>
                         <p class="text-gray-400 text-xs">{{ $woffice->city }}, {{ $woffice->country }}</p>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="col-span-3 text-center text-gray-400 text-sm py-8">
+                    Office information coming soon.
+                </div>
+                @endforelse
             </div>
         </div>
     </div>
@@ -199,7 +207,7 @@
 <section id="history" class="py-20 bg-gradient-to-b from-white to-[#f8f9fc] scroll-mt-20">
     <div class="max-w-6xl mx-auto px-6">
         {{-- Header --}}
-        <div class="text-center mb-16">
+        <div class="text-center mb-16" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
                 <span class="w-8 h-0.5 bg-[#8da83a]"></span>
                 Our Journey
@@ -215,7 +223,7 @@
 
             <div class="space-y-8">
                 @forelse($historyEvents as $event)
-                <div class="relative">
+                <div class="relative" data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 70, 350) }}">
                     {{-- Year badge --}}
                     <div class="flex justify-center mb-4">
                         <div class="relative z-10 bg-[#2d6fa3] text-white font-bold text-sm px-5 py-2 rounded-full shadow-lg ring-4 ring-[#f8f9fc]">
@@ -263,7 +271,7 @@
      ======================================================== --}}
 <section id="awards" class="py-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
+        <div class="text-center mb-16" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Recognition</p>
             <h2 class="text-4xl font-bold text-[#2d6fa3]">Awards</h2>
         </div>
@@ -278,7 +286,8 @@
                 $awardFallbackStyle = "background: linear-gradient(135deg, {$accent}, #1a3c6e)";
                 $awardAccentBarStyle = "background: {$accent}";
             @endphp
-            <div class="group bg-white rounded-[24px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+            <div class="group bg-white rounded-[24px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden"
+                 data-reveal="scale" style="--reveal-delay: {{ min($i * 90, 360) }}">
                 <div class="relative h-32 overflow-hidden">
                     @if($award->image_url)
                     <img src="{{ $award->image_url }}" alt="{{ $award->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
@@ -315,7 +324,7 @@
 <section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20"
          x-data="{ category: 'all', search: '' }">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-12">
+        <div class="text-center mb-12" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support</p>
             <h2 class="text-4xl font-bold text-[#2d6fa3]">Partners</h2>
             <p class="text-gray-500 mt-4 max-w-3xl mx-auto text-sm leading-relaxed">
@@ -334,24 +343,18 @@
                 <button @click="category = 'all'"
                         :class="category === 'all' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
                         class="px-5 py-2 rounded-full text-sm font-medium transition-all">All Partners</button>
-                <button @click="category = 'authorities'"
-                        :class="category === 'authorities' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Authorities</button>
-                <button @click="category = 'organizations'"
-                        :class="category === 'organizations' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Organizations</button>
-                <button @click="category = 'companies'"
-                        :class="category === 'companies' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Companies</button>
-                <button @click="category = 'towns'"
-                        :class="category === 'towns' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Towns</button>
+                @foreach ($partnerCategories as $cat)
+                    <button @click="category = 'cat_{{ $cat->id }}'"
+                            :class="category === 'cat_{{ $cat->id }}' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
+                            class="px-5 py-2 rounded-full text-sm font-medium transition-all">{{ $cat->name }}</button>
+                @endforeach
             </div>
         </div>
 
         {{-- Partnerships with Cambodian Authorities --}}
         <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8"
-             x-show="category === 'all' || category === 'authorities'">
+             x-show="category === 'all' || category === 'cat_{{ $partnerCategories->firstWhere('name', 'Authorities')?->id }}"
+             data-reveal>
             <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
                 <span class="text-2xl">🇰🇭</span> Partnerships with the Cambodian Authorities
             </h3>
@@ -375,42 +378,53 @@
             </div>
         </div>
 
-        {{-- Partner lists from DB --}}
-        @foreach(['authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-3', 'text' => 'text-sm'], 'organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-3', 'text' => 'text-sm'], 'companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-4', 'text' => 'text-xs']] as $cat => $meta)
-        @if(isset($partners[$cat]) && $partners[$cat]->count())
-        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
-             x-show="category === 'all' || category === '{{ $cat }}'">
-            <h3 class="text-lg font-bold text-[#2d6fa3] mb-6">{{ $meta['title'] }}</h3>
-            <div class="grid {{ $meta['cols'] }} gap-2">
-                @foreach($partners[$cat] as $partner)
-                @php $ps = json_encode(strtolower($partner->name)); @endphp
-                <div class="flex items-center gap-2 {{ $meta['text'] }} text-gray-600 py-1.5 border-b border-gray-50"
-                     x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
-                    <span class="w-1.5 h-1.5 rounded-full {{ $meta['dot'] }} flex-shrink-0"></span>{{ $partner->name }}
+        {{-- Dynamic partner category sections from DB --}}
+        @php
+            $categoryDisplayConfig = [
+                'Authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
+                'Organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
+                'Companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'bgClass' => 'bg-white'],
+                'Towns' => ['title' => 'Towns and Municipalities — Switzerland', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-[#2d6fa3]/5'],
+            ];
+        @endphp
+
+        @foreach ($partnerCategories as $cat)
+            @if ($cat->partners->isNotEmpty())
+                @php $config = $categoryDisplayConfig[$cat->name] ?? ['title' => $cat->name, 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white']; @endphp
+                <div class="{{ $config['bgClass'] }} rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
+                     x-show="category === 'all' || category === 'cat_{{ $cat->id }}'"
+                     data-reveal style="--reveal-delay: {{ min($loop->index * 80, 320) }}">
+                    <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
+                        @if ($cat->name === 'Towns')
+                            <span>🇨🇭</span>
+                        @endif
+                        {{ $config['title'] }}
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                        @foreach ($cat->partners as $partner)
+                            @php $ps = json_encode(strtolower($partner->name)); @endphp
+                            <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#f8f9fc] hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
+                                 x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
+                                @if ($partner->logo)
+                                    <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->name }}"
+                                             class="max-w-full max-h-full object-contain p-2">
+                                    </div>
+                                @else
+                                    <div class="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                                        <span class="text-lg font-bold text-blue-500">{{ Str::substr($partner->name, 0, 1) }}</span>
+                                    </div>
+                                @endif
+                                <span class="text-sm font-medium text-gray-700 leading-tight">{{ $partner->name }}</span>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
-                @endforeach
-            </div>
-        </div>
-        @endif
+            @endif
         @endforeach
 
-        {{-- Towns & Municipalities --}}
-        @if(isset($partners['towns']) && $partners['towns']->count())
-        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-10"
-             x-show="category === 'all' || category === 'towns'">
-            <h3 class="text-lg font-bold text-[#2d6fa3] mb-6">🇨🇭 Towns and Municipalities — Switzerland</h3>
-            <div class="flex flex-wrap gap-3">
-                @foreach($partners['towns'] as $partner)
-                @php $ps = json_encode(strtolower($partner->name)); @endphp
-                <span class="bg-[#2d6fa3]/10 text-[#2d6fa3] px-4 py-2 rounded-full text-sm font-medium"
-                      x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">{{ $partner->name }}</span>
-                @endforeach
-            </div>
-        </div>
-        @endif
-
         {{-- CTA --}}
-        <div class="text-center bg-[#2d6fa3] rounded-3xl p-10">
+        <div class="text-center bg-[#2d6fa3] rounded-3xl p-10" data-reveal="scale">
             <p class="text-white/80 text-lg mb-2">Many thanks to all our partners for their support!</p>
             <h3 class="text-white font-bold text-2xl mb-6">Do you wish to get involved with Krousar Thmey?</h3>
             <a href="{{ route('involved') }}" class="btn-primary text-base">Learn More</a>
@@ -423,7 +437,7 @@
      ======================================================== --}}
 <section id="transparency" class="py-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
+        <div class="text-center mb-16" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Accountability</p>
             <h2 class="text-4xl font-bold text-[#2d6fa3]">Transparency & Accountability</h2>
         </div>
@@ -431,7 +445,7 @@
         <div class="grid lg:grid-cols-2 gap-12 mb-16">
 
             {{-- Financial Transparency --}}
-            <div>
+            <div data-reveal="left">
                 <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M9 14h.01M12 14h.01M15 14h.01M3 6a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6z"/></svg>
@@ -463,7 +477,7 @@
             </div>
 
             {{-- Audited Statements --}}
-            <div>
+            <div data-reveal="right">
                 <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-[#8da83a] flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -492,7 +506,7 @@
         </div>
 
         {{-- Origins of Funds --}}
-        <div class="bg-[#f8f9fc] rounded-3xl p-8 lg:p-10 border border-gray-100">
+        <div class="bg-[#f8f9fc] rounded-3xl p-8 lg:p-10 border border-gray-100" data-reveal>
             <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-[#1d4e7a] flex items-center justify-center flex-shrink-0">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>

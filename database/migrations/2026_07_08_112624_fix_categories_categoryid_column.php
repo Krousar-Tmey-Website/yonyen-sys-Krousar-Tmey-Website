@@ -29,13 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Drop primary key
-        DB::statement('ALTER TABLE categories DROP PRIMARY KEY');
-
-        // Remove auto-increment
-        DB::statement('ALTER TABLE categories MODIFY COLUMN CategoryID VARCHAR(50) NOT NULL FIRST');
-
-        // Add primary key back
-        DB::statement('ALTER TABLE categories ADD PRIMARY KEY (CategoryID)');
+        // No-op reverse: nothing to rollback here.
+        return;
     }
 };

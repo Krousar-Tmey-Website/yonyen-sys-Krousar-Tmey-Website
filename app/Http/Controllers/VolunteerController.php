@@ -40,6 +40,6 @@ class VolunteerController extends Controller
 
         Volunteer::create($data);
 
-        return back()->with('success', true);
+        return back()->with('volunteer_success', true);
     }
 }

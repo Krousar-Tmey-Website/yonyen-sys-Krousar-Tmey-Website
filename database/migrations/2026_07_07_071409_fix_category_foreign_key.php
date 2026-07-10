@@ -47,41 +47,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::beginTransaction();
-        
-        try {
-            // Drop foreign key
-            Schema::table('article_categories', function (Blueprint $table) {
-                $table->dropForeign(['CategoryID']);
-            });
-            
-            // Drop primary key
-            Schema::table('categories', function (Blueprint $table) {
-                $table->dropPrimary('CategoryID');
-            });
-            
-            // Change back to regular integer
-            Schema::table('categories', function (Blueprint $table) {
-                $table->integer('CategoryID')->change();
-            });
-            
-            // Re-add primary key
-            Schema::table('categories', function (Blueprint $table) {
-                $table->primary('CategoryID');
-            });
-            
-            // Re-add foreign key
-            Schema::table('article_categories', function (Blueprint $table) {
-                $table->foreign('CategoryID')
-                      ->references('CategoryID')
-                      ->on('categories')
-                      ->onDelete('cascade');
-            });
-            
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
+        // No-op reverse: nothing to rollback here.
+        return;
     }
 };

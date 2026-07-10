@@ -8,15 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('news', function (Blueprint $table) {
-            $table->json('links')->nullable()->after('published_at');
-        });
+        // Only add the column if it doesn't already exist (protects against
+        // partial/previous runs that left the column in place).
+        if (! Schema::hasColumn('news', 'links')) {
+            Schema::table('news', function (Blueprint $table) {
+                $table->json('links')->nullable()->after('published_at');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('news', function (Blueprint $table) {
-            $table->dropColumn('links');
-        });
+        if (Schema::hasColumn('news', 'links')) {
+            Schema::table('news', function (Blueprint $table) {
+                $table->dropColumn('links');
+            });
+        }
     }
 };

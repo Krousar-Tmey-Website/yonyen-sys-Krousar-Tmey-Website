@@ -37,15 +37,16 @@
 
             {{-- CATEGORY --}}
             <div>
-                <label for="category" class="form-label">
+                <label for="category_id" class="form-label">
                     Category <span class="text-red-400 font-normal">*</span>
                 </label>
                 <div class="relative">
-                    <select id="category" name="category"
-                            class="form-input appearance-none pr-9 cursor-pointer {{ $errors->has('category') ? 'form-input-error' : '' }}">
-                        @foreach($categories as $value => $label)
-                            <option value="{{ $value }}" {{ old('category', $editPartner->category ?? '') == $value ? 'selected' : '' }}>
-                                {{ $label }}
+                    <select id="category_id" name="category_id"
+                            class="form-input appearance-none pr-9 cursor-pointer {{ $errors->has('category_id') ? 'form-input-error' : '' }}">
+                        <option value="">Select a category</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->id }}" {{ old('category_id', $editPartner->category_id ?? '') == $cat->id ? 'selected' : '' }}>
+                                {{ $cat->name }}
                             </option>
                         @endforeach
                     </select>
@@ -53,7 +54,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </div>
-                @error('category')
+                @error('category_id')
                     <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
                 @enderror
             </div>
@@ -155,7 +156,7 @@
     <div class="lg:col-span-2 space-y-5"
          x-data="{
             search: @js($filters['search'] ?? ''),
-            category: @js($filters['category'] ?? ''),
+            categoryId: @js($filters['category'] ?? ''),
             total: @js($totalPartners),
             activeFilters: @js($activeCount),
             loading: false,
@@ -163,7 +164,7 @@
                 this.loading = true;
                 const params = new URLSearchParams();
                 if (this.search) params.set('search', this.search);
-                if (this.category) params.set('category', this.category);
+                if (this.categoryId) params.set('category_id', this.categoryId);
                 const url = '{{ route('admin.partners.index') }}' + (params.toString() ? '?' + params.toString() : '');
                 fetch(url, { headers: { 'Accept': 'application/json' } })
                     .then(r => r.json())
@@ -178,11 +179,11 @@
             },
             resetFilters() {
                 this.search = '';
-                this.category = '';
+                this.categoryId = '';
                 this.applyFilters();
             }
          }"
-         x-init="$watch('search', () => applyFilters()); $watch('category', () => applyFilters())">
+         x-init="$watch('search', () => applyFilters()); $watch('categoryId', () => applyFilters())">
 
         {{-- Toolbar: title, count, search + category filter --}}
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
@@ -212,12 +213,12 @@
                 </div>
 
                 <div class="relative">
-                    <select name="category" x-model="category"
+                    <select name="category_id" x-model="categoryId"
                             class="pl-4 pr-9 py-2.5 rounded-full border border-gray-300 text-sm font-medium text-gray-600 bg-white appearance-none cursor-pointer transition-all duration-150 hover:border-gray-400 focus:outline-none focus:border-[#2d6fa3] focus:ring-4 focus:ring-[#2d6fa3]/15">
                         <option value="">All Categories</option>
-                        @foreach($categories as $value => $label)
-                            <option value="{{ $value }}" {{ ($filters['category'] ?? '') == $value ? 'selected' : '' }}>
-                                {{ $label }}
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->id }}" {{ ($filters['category'] ?? '') == $cat->id ? 'selected' : '' }}>
+                                {{ $cat->name }}
                             </option>
                         @endforeach
                     </select>
