@@ -52,13 +52,30 @@
         </div>
 
         {{-- Values --}}
-        <div id="values" class="grid md:grid-cols-3 gap-6 mb-20 scroll-mt-20">
-            @forelse($coreValues as $value)
-            <div class="group relative bg-[#f8f9fc] rounded-3xl p-8 border border-gray-100 hover:border-[#2d6fa3]/30 hover:shadow-lg transition-all duration-300 text-center overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-[#8da83a] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-t-3xl"></div>
-                <div class="text-5xl mb-5">{{ $value->icon }}</div>
-                <h3 class="text-xl font-bold text-[#2d6fa3] mb-3">{{ $value->title }}</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">{{ $value->description }}</p>
+        @php $valueAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
+        <div id="values" class="grid md:grid-cols-3 gap-7 mb-20 scroll-mt-20">
+            @forelse($coreValues as $i => $value)
+            @php
+                $accent = $valueAccents[$i % count($valueAccents)];
+                $valueFallbackStyle = "background: linear-gradient(135deg, {$accent}, #1a3c6e)";
+                $valueAccentBarStyle = "background: {$accent}";
+            @endphp
+            <div class="group bg-white rounded-[28px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+                <div class="relative h-44 overflow-hidden">
+                    @if($value->image_url)
+                    <img src="{{ $value->image_url }}" alt="{{ $value->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    @else
+                    <div class="w-full h-full flex items-center justify-center text-6xl drop-shadow-md" style="{{ $valueFallbackStyle }}">{{ $value->icon }}</div>
+                    @endif
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 px-6 py-4">
+                        <h3 class="text-white font-bold text-lg drop-shadow-sm">{{ $value->title }}</h3>
+                    </div>
+                </div>
+                <div class="p-6 text-center">
+                    <div class="w-10 h-1 rounded-full mx-auto mb-4 group-hover:w-16 transition-all duration-300" style="{{ $valueAccentBarStyle }}"></div>
+                    <p class="text-gray-500 text-sm leading-relaxed">{{ $value->description }}</p>
+                </div>
             </div>
             @empty
             <p class="text-gray-400 text-center py-8 md:col-span-3">No values listed yet.</p>
@@ -253,18 +270,36 @@
 
         {{-- Awards from DB --}}
         @if($awards->isNotEmpty())
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            @foreach($awards as $award)
-            <div class="bg-[#f8f9fc] rounded-3xl p-6 border border-gray-100 hover:shadow-lg transition-shadow text-center">
-                <div class="text-4xl mb-4">{{ $award->icon }}</div>
-                @if($award->recipient)
-                <span class="text-[#8da83a] text-xs font-bold uppercase tracking-wider block mb-1">{{ $award->recipient }}</span>
-                @endif
-                <h3 class="text-sm font-bold text-[#2d6fa3] mb-2 leading-snug">{{ $award->title }}</h3>
-                <p class="text-[#8da83a] text-xs font-semibold mb-2">{{ $award->organization }}</p>
-                @if($award->description)
-                <p class="text-gray-400 text-xs leading-relaxed">{{ $award->description }}</p>
-                @endif
+        @php $awardAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach($awards as $i => $award)
+            @php
+                $accent = $awardAccents[$i % count($awardAccents)];
+                $awardFallbackStyle = "background: linear-gradient(135deg, {$accent}, #1a3c6e)";
+                $awardAccentBarStyle = "background: {$accent}";
+            @endphp
+            <div class="group bg-white rounded-[24px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+                <div class="relative h-32 overflow-hidden">
+                    @if($award->image_url)
+                    <img src="{{ $award->image_url }}" alt="{{ $award->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                    @else
+                    <div class="w-full h-full flex items-center justify-center text-4xl drop-shadow-md" style="{{ $awardFallbackStyle }}">🏆</div>
+                    @endif
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 px-4 py-3">
+                        <p class="text-white font-bold text-sm leading-snug drop-shadow-sm">{{ $award->title }}</p>
+                    </div>
+                </div>
+                <div class="p-5 text-center">
+                    <div class="w-8 h-1 rounded-full mx-auto mb-3 group-hover:w-12 transition-all duration-300" style="{{ $awardAccentBarStyle }}"></div>
+                    @if($award->recipient)
+                    <span class="text-[#8da83a] text-xs font-bold uppercase tracking-wider block mb-1">{{ $award->recipient }}</span>
+                    @endif
+                    <p class="text-[#8da83a] text-xs font-semibold mb-2">{{ $award->organization }}</p>
+                    @if($award->description)
+                    <p class="text-gray-400 text-xs leading-relaxed">{{ $award->description }}</p>
+                    @endif
+                </div>
             </div>
             @endforeach
         </div>
