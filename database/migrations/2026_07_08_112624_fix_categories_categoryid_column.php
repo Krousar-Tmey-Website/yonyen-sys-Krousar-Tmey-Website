@@ -10,17 +10,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // First, drop the primary key if it exists
-        $primaryKey = DB::select("
-            SELECT CONSTRAINT_NAME 
-            FROM information_schema.TABLE_CONSTRAINTS 
-            WHERE TABLE_SCHEMA = DATABASE() 
-            AND TABLE_NAME = 'categories' 
-            AND CONSTRAINT_TYPE = 'PRIMARY KEY'
-        ");
-
-        if (!empty($primaryKey)) {
+        // Drop the primary key if one exists; nothing to do otherwise.
+        try {
             DB::statement('ALTER TABLE categories DROP PRIMARY KEY');
+        } catch (\Throwable $e) {
+            // No existing primary key on categories.
         }
 
         // Remove any existing auto-increment from other columns first
