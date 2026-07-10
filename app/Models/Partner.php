@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Partner extends Model
 {
     protected $fillable = [
         'name',
-        'category_id',
+        'category',
         'logo',
+        'country',
         'sort_order',
         'is_active',
     ];
@@ -24,14 +24,6 @@ class Partner extends Model
     }
 
     /**
-     * The partner category this partner belongs to.
-     */
-    public function partnerCategory(): BelongsTo
-    {
-        return $this->belongsTo(PartnerCategory::class, 'category_id');
-    }
-
-    /**
      * Scope: only active partners, ordered by sort_order then name.
      */
     public function scopeActive($query)
@@ -40,5 +32,18 @@ class Partner extends Model
             ->where('is_active', true)
             ->orderBy('sort_order')
             ->orderBy('name');
+    }
+
+    /**
+     * Get the logo URL attribute.
+     */
+    public function getLogoUrlAttribute(): ?string
+    {
+        if (!$this->logo) {
+            return null;
+        }
+        return str_starts_with($this->logo, 'http')
+            ? $this->logo
+            : asset('storage/' . $this->logo);
     }
 }
