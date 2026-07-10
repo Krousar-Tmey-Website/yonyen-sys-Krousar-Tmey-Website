@@ -33,7 +33,11 @@ class PartnerController extends Controller
 
         $partners = Partner::query()
             ->when($filters['search'] !== '', function ($query) use ($filters) {
-                $query->where('name', 'like', '%' . $filters['search'] . '%');
+                $term = '%' . strtolower($filters['search']) . '%';
+                $query->where(function ($q) use ($term) {
+                    $q->whereRaw('LOWER(name) LIKE ?', [$term])
+                      ->orWhereRaw('LOWER(country) LIKE ?', [$term]);
+                });
             })
             ->when($filters['category'] !== '', function ($query) use ($filters) {
                 $query->where('category', $filters['category']);
@@ -44,10 +48,26 @@ class PartnerController extends Controller
             ->get()
             ->groupBy('category');
 
+        $activeFilters = ($filters['search'] !== '' ? 1 : 0) + ($filters['category'] !== '' ? 1 : 0);
+        $total = $partners->sum(fn ($group) => $group->count());
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'html' => view('admin.partners._results', [
+                    'partners' => $partners,
+                    'filters' => $filters,
+                ])->render(),
+                'total' => $total,
+                'activeFilters' => $activeFilters,
+            ]);
+        }
+
         return view('admin.partners.index', [
             'partners' => $partners,
             'filters' => $filters,
             'categories' => self::CATEGORIES,
+            'totalPartners' => $total,
+            'activeCount' => $activeFilters,
         ]);
     }
 
@@ -95,6 +115,8 @@ class PartnerController extends Controller
                 'category' => '',
             ],
             'categories' => self::CATEGORIES,
+            'totalPartners' => $partners->sum(fn ($group) => $group->count()),
+            'activeCount' => 0,
         ]);
     }
 

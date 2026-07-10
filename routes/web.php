@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
 use App\Models\AnnualReport;
 use App\Models\Award;
+use App\Models\CoreValue;
 use App\Models\Gallery;
 use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
@@ -42,7 +44,8 @@ Route::get('/who-we-are', function () {
     $historyEvents = HistoryEvent::active()->get();
     $reports       = AnnualReport::active()->get();
     $settings      = HomeSetting::allKeyed();
-    return view('about', compact('partners', 'awards', 'offices', 'historyEvents', 'reports', 'settings'));
+    $coreValues    = CoreValue::ordered()->get();
+    return view('about', compact('partners', 'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
 })->name('about');
 
 Route::get('/our-programs', function () {
@@ -87,6 +90,7 @@ Route::get('/contact', function () {
     $offices = Office::active()->get();
     return view('contact', compact('offices'));
 })->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/partners', fn () => redirect()->route('about'))->name('partners');
 
@@ -137,11 +141,14 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('programs-banner', [Admin\ProgramsBannerController::class, 'update'])->name('programs-banner.update');
 
     // Who We Are
-    Route::resource('partners',       Admin\PartnerController::class)->except(['show', 'create', 'edit']);
+    Route::resource('partners',       Admin\PartnerController::class)->except(['show', 'create']);
     Route::resource('awards',         Admin\AwardController::class)->except(['show', 'create', 'edit']);
     Route::resource('history-events', Admin\HistoryEventController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['history-events' => 'historyEvent']);
+    Route::resource('core-values',    Admin\CoreValueController::class)
+        ->except(['show', 'create', 'edit'])
+        ->parameters(['core-values' => 'coreValue']);
 
     Route::prefix('contacts')->name('contacts.')->group(function () {
         Route::get('/',                      [Admin\ContactInquiryController::class, 'index'])->name('index');

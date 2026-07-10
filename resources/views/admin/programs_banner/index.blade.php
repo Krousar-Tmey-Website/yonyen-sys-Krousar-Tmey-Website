@@ -16,7 +16,7 @@
         $isUrlImage      = str_starts_with($previewImage, 'http');
         $previewImgSrc   = $previewImage ? ($isUrlImage ? $previewImage : asset('storage/' . $previewImage)) : '';
         $previewBgStyle  = $previewImgSrc
-            ? 'background-image: linear-gradient(to right, rgba(26,60,110,0.88) 50%, rgba(26,60,110,0.65)), url(' . $previewImgSrc . '); background-size: cover; background-position: center;'
+            ? 'background-image: linear-gradient(to right, rgba(26,60,110,0.85) 30%, rgba(26,60,110,0.55) 60%, rgba(26,60,110,0.25) 100%), url(' . $previewImgSrc . '); background-size: cover; background-position: center;'
             : '';
         $currentImage    = $previewImage;
         $currentImageUrl = $previewImgSrc ?: null;
@@ -29,9 +29,11 @@
             Live Preview
         </div>
         <div id="banner-preview" class="bg-[#1a3c6e] pt-10 pb-12 px-8 relative overflow-hidden" style="{{ $previewBgStyle }}">
+            @if(!$previewImgSrc)
             <div class="absolute inset-0 opacity-10">
                 <div class="absolute top-0 right-0 w-64 h-64 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
             </div>
+            @endif
             <div class="relative">
                 <nav class="flex items-center gap-2 text-xs text-white/50 mb-5">
                     <span>Home</span>
