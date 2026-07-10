@@ -8,11 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // No-op: `tags` column already exists on `news` (created in create_news_table).
+        Schema::create('partner_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
     }
 
     public function down(): void
     {
-        // No-op
+        Schema::dropIfExists('partner_categories');
     }
 };

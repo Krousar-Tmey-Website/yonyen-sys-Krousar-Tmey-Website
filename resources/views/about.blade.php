@@ -179,7 +179,7 @@
                 Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.
             </p>
             <div class="grid md:grid-cols-3 gap-5">
-                @foreach($offices->where('country', '!=', 'Cambodia') as $woffice)
+                @forelse($offices->where('country', '!=', 'Cambodia') as $woffice)
                 <div class="bg-[#f8f9fc] border border-gray-100 rounded-2xl p-6 flex items-center gap-4 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all">
                     <span class="text-4xl">{{ $woffice->flag }}</span>
                     <div>
@@ -187,7 +187,11 @@
                         <p class="text-gray-400 text-xs">{{ $woffice->city }}, {{ $woffice->country }}</p>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="col-span-3 text-center text-gray-400 text-sm py-8">
+                    Office information coming soon.
+                </div>
+                @endforelse
             </div>
         </div>
     </div>
@@ -334,24 +338,17 @@
                 <button @click="category = 'all'"
                         :class="category === 'all' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
                         class="px-5 py-2 rounded-full text-sm font-medium transition-all">All Partners</button>
-                <button @click="category = 'authorities'"
-                        :class="category === 'authorities' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Authorities</button>
-                <button @click="category = 'organizations'"
-                        :class="category === 'organizations' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Organizations</button>
-                <button @click="category = 'companies'"
-                        :class="category === 'companies' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Companies</button>
-                <button @click="category = 'towns'"
-                        :class="category === 'towns' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">Towns</button>
+                @foreach ($partnerCategories as $cat)
+                    <button @click="category = 'cat_{{ $cat->id }}'"
+                            :class="category === 'cat_{{ $cat->id }}' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
+                            class="px-5 py-2 rounded-full text-sm font-medium transition-all">{{ $cat->name }}</button>
+                @endforeach
             </div>
         </div>
 
         {{-- Partnerships with Cambodian Authorities --}}
         <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8"
-             x-show="category === 'all' || category === 'authorities'">
+             x-show="category === 'all' || category === 'cat_{{ $partnerCategories->firstWhere('name', 'Authorities')?->id }}">
             <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
                 <span class="text-2xl">🇰🇭</span> Partnerships with the Cambodian Authorities
             </h3>
@@ -375,39 +372,49 @@
             </div>
         </div>
 
-        {{-- Partner lists from DB --}}
-        @foreach(['authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-3', 'text' => 'text-sm'], 'organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-3', 'text' => 'text-sm'], 'companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-4', 'text' => 'text-xs']] as $cat => $meta)
-        @if(isset($partners[$cat]) && $partners[$cat]->count())
-        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
-             x-show="category === 'all' || category === '{{ $cat }}'">
-            <h3 class="text-lg font-bold text-[#2d6fa3] mb-6">{{ $meta['title'] }}</h3>
-            <div class="grid {{ $meta['cols'] }} gap-2">
-                @foreach($partners[$cat] as $partner)
-                @php $ps = json_encode(strtolower($partner->name)); @endphp
-                <div class="flex items-center gap-2 {{ $meta['text'] }} text-gray-600 py-1.5 border-b border-gray-50"
-                     x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
-                    <span class="w-1.5 h-1.5 rounded-full {{ $meta['dot'] }} flex-shrink-0"></span>{{ $partner->name }}
-                </div>
-                @endforeach
-            </div>
-        </div>
-        @endif
-        @endforeach
+        {{-- Dynamic partner category sections from DB --}}
+        @php
+            $categoryDisplayConfig = [
+                'Authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
+                'Organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
+                'Companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'bgClass' => 'bg-white'],
+                'Towns' => ['title' => 'Towns and Municipalities — Switzerland', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-[#2d6fa3]/5'],
+            ];
+        @endphp
 
-        {{-- Towns & Municipalities --}}
-        @if(isset($partners['towns']) && $partners['towns']->count())
-        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-10"
-             x-show="category === 'all' || category === 'towns'">
-            <h3 class="text-lg font-bold text-[#2d6fa3] mb-6">🇨🇭 Towns and Municipalities — Switzerland</h3>
-            <div class="flex flex-wrap gap-3">
-                @foreach($partners['towns'] as $partner)
-                @php $ps = json_encode(strtolower($partner->name)); @endphp
-                <span class="bg-[#2d6fa3]/10 text-[#2d6fa3] px-4 py-2 rounded-full text-sm font-medium"
-                      x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">{{ $partner->name }}</span>
-                @endforeach
-            </div>
-        </div>
-        @endif
+        @foreach ($partnerCategories as $cat)
+            @if ($cat->partners->isNotEmpty())
+                @php $config = $categoryDisplayConfig[$cat->name] ?? ['title' => $cat->name, 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white']; @endphp
+                <div class="{{ $config['bgClass'] }} rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
+                     x-show="category === 'all' || category === 'cat_{{ $cat->id }}'">
+                    <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
+                        @if ($cat->name === 'Towns')
+                            <span>🇨🇭</span>
+                        @endif
+                        {{ $config['title'] }}
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                        @foreach ($cat->partners as $partner)
+                            @php $ps = json_encode(strtolower($partner->name)); @endphp
+                            <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#f8f9fc] hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
+                                 x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
+                                @if ($partner->logo)
+                                    <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->name }}"
+                                             class="max-w-full max-h-full object-contain p-2">
+                                    </div>
+                                @else
+                                    <div class="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                                        <span class="text-lg font-bold text-blue-500">{{ Str::substr($partner->name, 0, 1) }}</span>
+                                    </div>
+                                @endif
+                                <span class="text-sm font-medium text-gray-700 leading-tight">{{ $partner->name }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+        @endforeach
 
         {{-- CTA --}}
         <div class="text-center bg-[#2d6fa3] rounded-3xl p-10">

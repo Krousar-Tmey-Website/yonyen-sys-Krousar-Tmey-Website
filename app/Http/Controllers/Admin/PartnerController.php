@@ -3,155 +3,140 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePartnerRequest;
+use App\Http\Requests\UpdatePartnerRequest;
 use App\Models\Partner;
+use App\Models\PartnerCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class PartnerController extends Controller
 {
-    private const CATEGORIES = [
-        'authorities' => 'Cambodian Authorities',
-        'organizations' => 'Organizations / Foundations',
-        'companies' => 'Companies',
-        'towns' => 'Towns & Municipalities',
-    ];
-
     /**
-     * Display partner list
+     * Display partner list with optional search & category filter.
      */
     public function index(Request $request)
     {
-        $filters = [
-            'search' => trim((string) $request->query('search', '')),
-            'category' => (string) $request->query('category', ''),
+        $search     = trim((string) $request->query('search', ''));
+        $categoryId = $request->query('category_id');
+
+        $partnerCategoryModels = PartnerCategory::orderBy('name')->get();
+
+        $partners = Partner::with('partnerCategory')
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->when(filled($categoryId), function ($query) use ($categoryId) {
+                $query->where('category_id', $categoryId);
+            })
+            ->latest()
+            ->get()
+            ->groupBy(fn ($p) => $p->partnerCategory ? strtolower($p->partnerCategory->name) : 'unknown');
+
+        $activeFilters = (filled($search) ? 1 : 0) + (filled($categoryId) ? 1 : 0);
+        $totalPartners = $partners->sum(fn ($group) => $group->count());
+
+        $viewData = [
+            'partners'      => $partners,
+            'filters'       => ['search' => $search, 'category' => $categoryId ?? ''],
+            'categories'    => $partnerCategoryModels,
+            'totalPartners' => $totalPartners,
+            'activeCount'   => $activeFilters,
         ];
 
-        if (! array_key_exists($filters['category'], self::CATEGORIES)) {
-            $filters['category'] = '';
-        }
+        if ($request->ajax() || $request->wantsJson()) {
+            $html = view('admin.partners._results', $viewData)->render();
 
-        $partners = Partner::query()
-            ->when($filters['search'] !== '', function ($query) use ($filters) {
-                $term = '%' . strtolower($filters['search']) . '%';
-                $query->where(function ($q) use ($term) {
-                    $q->whereRaw('LOWER(name) LIKE ?', [$term])
-                      ->orWhereRaw('LOWER(country) LIKE ?', [$term]);
-                });
-            })
-            ->when($filters['category'] !== '', function ($query) use ($filters) {
-                $query->where('category', $filters['category']);
-            })
-            ->orderBy('category')
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get()
-            ->groupBy('category');
-
-        $activeFilters = ($filters['search'] !== '' ? 1 : 0) + ($filters['category'] !== '' ? 1 : 0);
-        $total = $partners->sum(fn ($group) => $group->count());
-
-        if ($request->wantsJson()) {
             return response()->json([
-                'html' => view('admin.partners._results', [
-                    'partners' => $partners,
-                    'filters' => $filters,
-                ])->render(),
-                'total' => $total,
+                'html'          => $html,
+                'total'         => $totalPartners,
                 'activeFilters' => $activeFilters,
             ]);
         }
 
-        return view('admin.partners.index', [
-            'partners' => $partners,
-            'filters' => $filters,
-            'categories' => self::CATEGORIES,
-            'totalPartners' => $total,
-            'activeCount' => $activeFilters,
-        ]);
+        return view('admin.partners.index', $viewData);
     }
 
     /**
-     * Store new partner
+     * Store a new partner.
      */
-    public function store(Request $request)
+    public function store(StorePartnerRequest $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'category' => ['required', Rule::in(array_keys(self::CATEGORIES))],
-            'country' => ['nullable', 'string', 'max:100'],
-            'sort_order' => ['nullable', 'integer'],
-            'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
-        ]);
+        $data = $request->validated();
 
+        // Handle optional logo upload
         if ($request->hasFile('logo')) {
             $data['logo'] = $request->file('logo')->store('partners', 'public');
+        } else {
+            $data['logo'] = null;
         }
 
-        $data['sort_order'] = $data['sort_order'] ?? 0;
-        $data['is_active'] = true;
+        $data['is_active']  = true;
+        $data['sort_order'] = 0;
 
         Partner::create($data);
 
-        return redirect()->route('admin.partners.index')->with('success', 'Partner added successfully.');
+        return redirect()->route('admin.partners.index')
+            ->with('success', 'Partner created successfully.');
     }
 
     /**
-     * Show edit form
+     * Show edit form.
      */
     public function edit(Partner $partner)
     {
-        $partners = Partner::orderBy('category')
-            ->orderBy('sort_order')
-            ->orderBy('name')
+        $partnerCategoryModels = PartnerCategory::orderBy('name')->get();
+
+        $partners = Partner::with('partnerCategory')
+            ->latest()
             ->get()
-            ->groupBy('category');
+            ->groupBy(fn ($p) => $p->partnerCategory ? strtolower($p->partnerCategory->name) : 'unknown');
+
+        $totalPartners = $partners->sum(fn ($group) => $group->count());
 
         return view('admin.partners.index', [
-            'partners' => $partners,
-            'editPartner' => $partner,
-            'filters' => [
-                'search' => '',
-                'category' => '',
-            ],
-            'categories' => self::CATEGORIES,
-            'totalPartners' => $partners->sum(fn ($group) => $group->count()),
-            'activeCount' => 0,
+            'partners'      => $partners,
+            'editPartner'   => $partner,
+            'filters'       => ['search' => '', 'category' => ''],
+            'categories'    => $partnerCategoryModels,
+            'totalPartners' => $totalPartners,
+            'activeCount'   => 0,
         ]);
     }
 
     /**
-     * Update partner
+     * Update partner.
      */
-    public function update(Request $request, Partner $partner)
+    public function update(UpdatePartnerRequest $request, Partner $partner)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'category' => ['required', Rule::in(array_keys(self::CATEGORIES))],
-            'country' => ['nullable', 'string', 'max:100'],
-            'sort_order' => ['nullable', 'integer'],
-            'is_active' => ['nullable', 'boolean'],
-            'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
-        ]);
+        $data = $request->validated();
 
+        // Handle logo upload / removal
         if ($request->hasFile('logo')) {
+            // Delete old logo if it exists
             if ($partner->logo) {
                 Storage::disk('public')->delete($partner->logo);
             }
-
             $data['logo'] = $request->file('logo')->store('partners', 'public');
+        } elseif ($request->boolean('remove_logo')) {
+            // User explicitly chose to remove the logo
+            if ($partner->logo) {
+                Storage::disk('public')->delete($partner->logo);
+            }
+            $data['logo'] = null;
+        } else {
+            // Keep existing logo
+            unset($data['logo']);
         }
-
-        $data['is_active'] = $request->boolean('is_active');
-        $data['sort_order'] = $data['sort_order'] ?? 0;
 
         $partner->update($data);
 
-        return redirect()->route('admin.partners.index')->with('success', 'Partner updated successfully.');
+        return redirect()->route('admin.partners.index')
+            ->with('success', 'Partner updated successfully.');
     }
 
     /**
-     * Delete partner
+     * Delete partner.
      */
     public function destroy(Partner $partner)
     {
@@ -161,6 +146,7 @@ class PartnerController extends Controller
 
         $partner->delete();
 
-        return redirect()->route('admin.partners.index')->with('success', 'Partner removed successfully.');
+        return redirect()->route('admin.partners.index')
+            ->with('success', 'Partner removed successfully.');
     }
 }

@@ -8,15 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('news', function (Blueprint $table) {
-            $table->json('links')->nullable()->after('published_at');
-        });
+        // No-op: `links` column already exists on `news` (created in create_news_table).
     }
 
     public function down(): void
     {
-        Schema::table('news', function (Blueprint $table) {
-            $table->dropColumn('links');
-        });
+        // No-op
     }
 };

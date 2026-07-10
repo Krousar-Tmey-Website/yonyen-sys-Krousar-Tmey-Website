@@ -35,8 +35,9 @@
             <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, email, phone, or country..."
-                   class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/20 transition-all text-sm">
+            <input type="text" name="search" id="volunteerSearch" value="{{ request('search') }}" placeholder="Search by name, email, phone, or country..."
+                   class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/20 transition-all text-sm"
+                   autocomplete="off">
         </div>
 
         {{-- Filter --}}
@@ -76,11 +77,8 @@
                     <tr>
                         <th class="px-6 py-3 text-left">Name</th>
                         <th class="px-6 py-3 text-left">Email</th>
-                        <th class="px-6 py-3 text-left">Phone</th>
                         <th class="px-6 py-3 text-left">Program</th>
-                        <th class="px-6 py-3 text-left">Availability</th>
                         <th class="px-6 py-3 text-left">Status</th>
-                        <th class="px-6 py-3 text-left">Applied</th>
                         <th class="px-6 py-3 text-right">Actions</th>
                     </tr>
                 </thead>
@@ -99,16 +97,12 @@
                             <a href="mailto:{{ $volunteer->email }}" class="text-gray-500 hover:text-[#2d6fa3] transition-colors">{{ $volunteer->email }}</a>
                         </td>
                         <td class="px-6 py-4 text-gray-500">
-                            <a href="tel:{{ $volunteer->phone }}" class="hover:text-[#2d6fa3] transition-colors">{{ $volunteer->phone }}</a>
-                        </td>
-                        <td class="px-6 py-4 text-gray-500">
                             @if($volunteer->interested_program)
                                 <span class="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-medium">{{ $volunteer->interested_program }}</span>
                             @else
                                 <span class="text-gray-300">—</span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 text-gray-500 text-xs">{{ $volunteer->availability ?? '—' }}</td>
                         <td class="px-6 py-4">
                             @php
                                 $statusClasses = [
@@ -121,16 +115,26 @@
                             @endphp
                             <span class="px-2.5 py-1 rounded-full text-xs font-medium {{ $statusClasses }}">{{ $volunteer->status }}</span>
                         </td>
-                        <td class="px-6 py-4 text-gray-400 text-xs whitespace-nowrap">{{ $volunteer->created_at->format('d M Y') }}</td>
                         <td class="px-6 py-4 text-right">
-                            <a href="{{ route('admin.volunteers.show', $volunteer) }}"
-                               class="inline-flex items-center gap-1.5 text-xs font-medium text-[#2d6fa3] hover:text-[#1d4e7a] bg-[#2d6fa3]/5 hover:bg-[#2d6fa3]/10 px-3 py-1.5 rounded-lg transition-colors">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                                View
-                            </a>
+                            <div class="inline-flex items-center gap-2 justify-end">
+                                <a href="{{ route('admin.volunteers.show', $volunteer) }}" title="View"
+                                   class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 transition-all">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+
+                                <form action="{{ route('admin.volunteers.destroy', $volunteer) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" title="Delete" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition-all">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -144,5 +148,24 @@
         </div>
     @endif
 </div>
+
+
+{{-- Debounced live search: submits form 350ms after user stops typing --}}
+<script>
+(function() {
+    'use strict';
+    const input = document.getElementById('volunteerSearch');
+    if (!input) return;
+    const form = input.closest('form');
+    if (!form) return;
+    let timer;
+    input.addEventListener('input', function() {
+        clearTimeout(timer);
+        timer = setTimeout(function() {
+            form.submit();
+        }, 350);
+    });
+})();
+</script>
 
 @endsection

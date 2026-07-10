@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\VolunteerController;
 use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\CoreValue;
@@ -15,6 +16,7 @@ use App\Models\News;
 use App\Models\Office;
 use App\Models\PageSection;
 use App\Models\Partner;
+use App\Models\PartnerCategory;
 use App\Models\Program;
 use App\Models\Project;
 use App\Models\Slide;
@@ -38,14 +40,14 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/who-we-are', function () {
-    $partners      = Partner::active()->get()->groupBy('category');
-    $awards        = Award::ordered()->get();
-    $offices       = Office::active()->get();
-    $historyEvents = HistoryEvent::active()->get();
-    $reports       = AnnualReport::active()->get();
-    $settings      = HomeSetting::allKeyed();
-    $coreValues    = CoreValue::ordered()->get();
-    return view('about', compact('partners', 'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
+    $partnerCategories = PartnerCategory::with(['partners' => fn ($q) => $q->active()])->orderBy('name')->get();
+    $awards           = Award::ordered()->get();
+    $offices          = Office::active()->get();
+    $historyEvents    = HistoryEvent::active()->get();
+    $reports          = AnnualReport::active()->get();
+    $settings         = HomeSetting::allKeyed();
+    $coreValues       = CoreValue::ordered()->get();
+    return view('about', compact('partnerCategories', 'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
 })->name('about');
 
 Route::get('/our-programs', function () {
@@ -99,6 +101,10 @@ Route::post('/donate', [DonationController::class, 'send'])->name('donate.send')
 
 Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
 Route::get('/newsletter/unsubscribe/{email}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+
+// Volunteer
+Route::get('/volunteer',  [VolunteerController::class, 'show'])->name('volunteer');
+Route::post('/volunteer', [VolunteerController::class, 'store'])->name('volunteer.store');
 
 // ──────────────────────────────────────────────
 // Admin — Auth (no middleware)
@@ -167,6 +173,14 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('/',                    [Admin\NewsletterController::class, 'index'])->name('index');
         Route::get('export',               [Admin\NewsletterController::class, 'export'])->name('export');
         Route::delete('{newsletterSubscriber}', [Admin\NewsletterController::class, 'destroy'])->name('destroy');
+    });
+
+    // Volunteer Applications
+    Route::prefix('volunteers')->name('volunteers.')->group(function () {
+        Route::get('/',                          [Admin\VolunteerController::class, 'index'])->name('index');
+        Route::get('{volunteer}',                [Admin\VolunteerController::class, 'show'])->name('show');
+        Route::patch('{volunteer}/status',       [Admin\VolunteerController::class, 'updateStatus'])->name('status');
+        Route::delete('{volunteer}',             [Admin\VolunteerController::class, 'destroy'])->name('destroy');
     });
 });
 
