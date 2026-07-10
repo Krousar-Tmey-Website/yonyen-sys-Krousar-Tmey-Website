@@ -20,7 +20,7 @@ class PartnerController extends Controller
         $search     = trim((string) $request->query('search', ''));
         $categoryId = $request->query('category_id');
 
-        $categories = PartnerCategory::orderBy('name')->get();
+        $partnerCategoryModels = PartnerCategory::orderBy('name')->get();
 
         $partners = Partner::with('partnerCategory')
             ->when($search !== '', function ($query) use ($search) {
@@ -30,63 +30,31 @@ class PartnerController extends Controller
                 $query->where('category_id', $categoryId);
             })
             ->latest()
-            ->get();
+            ->get()
+            ->groupBy(fn ($p) => $p->partnerCategory ? strtolower($p->partnerCategory->name) : 'unknown');
+
+        $activeFilters = (filled($search) ? 1 : 0) + (filled($categoryId) ? 1 : 0);
+        $totalPartners = $partners->sum(fn ($group) => $group->count());
 
         $viewData = [
-            'partners'   => $partners,
-            'search'     => $search,
-            'categoryId' => $categoryId,
-            'categories' => $categories,
+            'partners'      => $partners,
+            'filters'       => ['search' => $search, 'category' => $categoryId ?? ''],
+            'categories'    => $partnerCategoryModels,
+            'totalPartners' => $totalPartners,
+            'activeCount'   => $activeFilters,
         ];
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson()) {
             $html = view('admin.partners._results', $viewData)->render();
 
             return response()->json([
-                'html'      => $html,
-                'total'     => $partners->count(),
-                'hasSearch' => filled($search),
-            ]);
-        }
-
-        $partners = Partner::query()
-            ->when($filters['search'] !== '', function ($query) use ($filters) {
-                $term = '%' . strtolower($filters['search']) . '%';
-                $query->where(function ($q) use ($term) {
-                    $q->whereRaw('LOWER(name) LIKE ?', [$term])
-                      ->orWhereRaw('LOWER(country) LIKE ?', [$term]);
-                });
-            })
-            ->when($filters['category'] !== '', function ($query) use ($filters) {
-                $query->where('category', $filters['category']);
-            })
-            ->orderBy('category')
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get()
-            ->groupBy('category');
-
-        $activeFilters = ($filters['search'] !== '' ? 1 : 0) + ($filters['category'] !== '' ? 1 : 0);
-        $total = $partners->sum(fn ($group) => $group->count());
-
-        if ($request->wantsJson()) {
-            return response()->json([
-                'html' => view('admin.partners._results', [
-                    'partners' => $partners,
-                    'filters' => $filters,
-                ])->render(),
-                'total' => $total,
+                'html'          => $html,
+                'total'         => $totalPartners,
                 'activeFilters' => $activeFilters,
             ]);
         }
 
-        return view('admin.partners.index', [
-            'partners' => $partners,
-            'filters' => $filters,
-            'categories' => self::CATEGORIES,
-            'totalPartners' => $total,
-            'activeCount' => $activeFilters,
-        ]);
+        return view('admin.partners.index', $viewData);
     }
 
     /**
@@ -117,18 +85,22 @@ class PartnerController extends Controller
      */
     public function edit(Partner $partner)
     {
-        $categories = PartnerCategory::orderBy('name')->get();
+        $partnerCategoryModels = PartnerCategory::orderBy('name')->get();
+
+        $partners = Partner::with('partnerCategory')
+            ->latest()
+            ->get()
+            ->groupBy(fn ($p) => $p->partnerCategory ? strtolower($p->partnerCategory->name) : 'unknown');
+
+        $totalPartners = $partners->sum(fn ($group) => $group->count());
 
         return view('admin.partners.index', [
-            'partners' => $partners,
-            'editPartner' => $partner,
-            'filters' => [
-                'search' => '',
-                'category' => '',
-            ],
-            'categories' => self::CATEGORIES,
-            'totalPartners' => $partners->sum(fn ($group) => $group->count()),
-            'activeCount' => 0,
+            'partners'      => $partners,
+            'editPartner'   => $partner,
+            'filters'       => ['search' => '', 'category' => ''],
+            'categories'    => $partnerCategoryModels,
+            'totalPartners' => $totalPartners,
+            'activeCount'   => 0,
         ]);
     }
 

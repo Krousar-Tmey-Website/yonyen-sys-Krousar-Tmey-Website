@@ -179,7 +179,7 @@
                 Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.
             </p>
             <div class="grid md:grid-cols-3 gap-5">
-                @foreach($offices->where('country', '!=', 'Cambodia') as $woffice)
+                @forelse($offices->where('country', '!=', 'Cambodia') as $woffice)
                 <div class="bg-[#f8f9fc] border border-gray-100 rounded-2xl p-6 flex items-center gap-4 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all">
                     <span class="text-4xl">{{ $woffice->flag }}</span>
                     <div>

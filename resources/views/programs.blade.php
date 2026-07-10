@@ -93,7 +93,6 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
                 </div>
             </a>
             @endforeach
-            @endforelse
         </div>
     </div>
 </section>

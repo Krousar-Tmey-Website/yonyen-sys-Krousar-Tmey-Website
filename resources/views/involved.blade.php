@@ -453,7 +453,7 @@
             </p>
 
             <button type="button"
-                class="close-success-modal mt-6 w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:from-green-600 hover:to-green-700 active:scale-[0.98] transition-all shadow-sm">
+                class="close-success-modal mt-6 w-full bg-gradient-to-r from-[#2d6fa3] to-[#1d4e7a] text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:from-[#1d4e7a] hover:to-[#153d63] active:scale-[0.98] transition-all shadow-sm">
                 Got it!
             </button>
         </div>

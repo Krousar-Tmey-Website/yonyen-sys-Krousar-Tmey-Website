@@ -16,6 +16,7 @@ use App\Models\News;
 use App\Models\Office;
 use App\Models\PageSection;
 use App\Models\Partner;
+use App\Models\PartnerCategory;
 use App\Models\Program;
 use App\Models\Project;
 use App\Models\Slide;
@@ -39,14 +40,14 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/who-we-are', function () {
-    $partners      = Partner::active()->get()->groupBy('category');
-    $awards        = Award::ordered()->get();
-    $offices       = Office::active()->get();
-    $historyEvents = HistoryEvent::active()->get();
-    $reports       = AnnualReport::active()->get();
-    $settings      = HomeSetting::allKeyed();
-    $coreValues    = CoreValue::ordered()->get();
-    return view('about', compact('partners', 'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
+    $partnerCategories = PartnerCategory::with(['partners' => fn ($q) => $q->active()])->orderBy('name')->get();
+    $awards           = Award::ordered()->get();
+    $offices          = Office::active()->get();
+    $historyEvents    = HistoryEvent::active()->get();
+    $reports          = AnnualReport::active()->get();
+    $settings         = HomeSetting::allKeyed();
+    $coreValues       = CoreValue::ordered()->get();
+    return view('about', compact('partnerCategories', 'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
 })->name('about');
 
 Route::get('/our-programs', function () {
