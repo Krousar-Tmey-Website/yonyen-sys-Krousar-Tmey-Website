@@ -45,26 +45,17 @@
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
                         {!! nl2br(e($slide->title)) !!}
                     </h1>
-                    @if(!empty($settings['hero_banner_text']))
-                    <p class="text-white/80 text-lg mb-8 leading-relaxed">{{ $settings['hero_banner_text'] }}</p>
-                    @elseif($slide->subtitle)
+                    @if($slide->subtitle)
                     <p class="text-white/80 text-lg mb-8 leading-relaxed">{{ $slide->subtitle }}</p>
                     @endif
 
-                    @php
-                    $heroPrimaryText = $settings['hero_button_primary_text'] ?? $slide->cta_primary_text;
-                    $heroPrimaryUrl = $settings['hero_button_primary_url'] ?? ($slide->cta_primary_url ?? '#');
-                    $heroSecondaryText = $settings['hero_button_secondary_text'] ?? $slide->cta_secondary_text;
-                    $heroSecondaryUrl = $settings['hero_button_secondary_url'] ?? ($slide->cta_secondary_url ?? route('donate'));
-                    @endphp
-
-                    @if($heroPrimaryText || $heroSecondaryText)
+                    @if($slide->cta_primary_text || $slide->cta_secondary_text)
                     <div class="flex flex-wrap gap-6">
-                        @if($heroPrimaryText)
-                        <a href="{{ $heroPrimaryUrl }}" class="btn-primary">{{ $heroPrimaryText }}</a>
+                        @if($slide->cta_primary_text)
+                        <a href="{{ $slide->cta_primary_url ?? '#' }}" class="btn-primary">{{ $slide->cta_primary_text }}</a>
                         @endif
-                        @if($heroSecondaryText)
-                        <a href="{{ $heroSecondaryUrl }}" class="btn-outline">{{ $heroSecondaryText }}</a>
+                        @if($slide->cta_secondary_text)
+                        <a href="{{ $slide->cta_secondary_url ?? route('donate') }}" class="btn-outline">{{ $slide->cta_secondary_text }}</a>
                         @endif
                     </div>
                     @endif
@@ -114,7 +105,7 @@
 
         <div class="text-center mb-10 animate-fade-up">
             <p class="text-white text-lg md:text-xl lg:text-2xl font-medium leading-relaxed max-w-4xl mx-auto">
-                {{ $settings['hero_banner_text'] ?? 'The first Cambodian organization helping disadvantaged children, building a world in which children are empowered to grow into independent and responsible adults.' }}
+                The first Cambodian organization helping disadvantaged children, building a world in which children are empowered to grow into independent and responsible adults.
             </p>
         </div>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -125,25 +116,25 @@
             [
             'number' => $statsData['children']['number'],
             'display' => $statsData['children']['display'],
-            'label' => 'CHILDREN SUPPORTED',
-            'sub' => 'SINCE 1991',
+            'label' => $settings['stat_children_label'] ?? 'CHILDREN SUPPORTED',
+            'sub' => $settings['stat_children_sub'] ?? 'SINCE 1991',
             ],
             [
             'number' => $statsData['employees']['number'],
             'display' => $statsData['employees']['display'],
-            'label' => 'EMPLOYEES',
+            'label' => $settings['stat_employees_label'] ?? 'EMPLOYEES',
             'sub' => '',
             ],
             [
             'number' => $statsData['budget']['number'],
             'display' => $statsData['budget']['display'],
-            'label' => 'USD ANNUAL BUDGET',
+            'label' => $settings['stat_budget_label'] ?? 'USD ANNUAL BUDGET',
             'sub' => '',
             ],
             [
             'number' => $statsData['provinces']['number'],
             'display' => $statsData['provinces']['display'],
-            'label' => 'PROVINCES IN CAMBODIA',
+            'label' => $settings['stat_provinces_label'] ?? 'PROVINCES IN CAMBODIA',
             'sub' => '',
             ],
             ];
@@ -315,7 +306,7 @@
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">{{ $settings['programs_badge'] ?? 'WHAT WE DO' }}</span>
             <h2 class="section-title mt-3 mx-auto">{{ $settings['programs_heading'] ?? 'Two Programs, One Mission' }}</h2>
         </div>
-        <p class="section-subtitle mx-auto text-center">{{ $settings['programs_subtitle'] ?? 'Krousar Thmey operates 2 programs and 2 cross-cutting projects in 15 Cambodian provinces ' }}</p>
+        <p class="section-subtitle mx-auto text-center">{{ $settings['programs_subtitle'] ?? 'Operating across 15 Cambodian provinces, our programs address the most pressing needs of vulnerable children.' }}</p>
 
         <div class="grid lg:grid-cols-3 gap-8">
             @foreach($programs as $program)
@@ -370,7 +361,7 @@ $structureEducationItems = array_filter(explode("\n", $settings['structure_educa
             {{-- Left Side - Map --}}
             <div class="flex justify-center">
                 <img
-                    src="{{ $settings['structure_image'] ?? asset('images/cambodia-map.png') }}"
+                    src="{{ $settings['structure_image'] ? (str_starts_with($settings['structure_image'], 'http') ? $settings['structure_image'] : asset('storage/' . $settings['structure_image'])) : asset('images/cambodia-map.png') }}"
                     alt="Cambodia Program Map"
                     class="w-full max-w-2xl object-contain">
             </div>
@@ -524,8 +515,8 @@ $structureEducationItems = array_filter(explode("\n", $settings['structure_educa
 <section class="py-16 lg:py-24 bg-white border-t border-gray-100">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14">
-            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Our Projects</span>
-            <h2 class="section-title mt-3 mx-auto">Cross-cutting Initiatives</h2>
+            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">{{ $settings['projects_badge'] ?? 'Our Projects' }}</span>
+            <h2 class="section-title mt-3 mx-auto">{{ $settings['projects_title'] ?? 'Cross-cutting Initiatives' }}</h2>
         </div>
         <div class="grid md:grid-cols-3 gap-6">
             @foreach($projects as $project)
@@ -536,7 +527,7 @@ $structureEducationItems = array_filter(explode("\n", $settings['structure_educa
                 <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $project->title }}</h3>
                 <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5">{{ $project->description }}</p>
                 <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300" style="color: #e8a020; font-weight: bold;">
-                    Read More Detail
+                    {{ $settings['projects_read_more'] ?? 'Read More Detail' }}
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </a>
             </div>
@@ -580,7 +571,7 @@ $structureEducationItems = array_filter(explode("\n", $settings['structure_educa
                 <p class="text-gray-500 mt-3 max-w-2xl">{{ $settings['news_subtitle'] ?? 'News and stories about our impact, events, and community progress.' }}</p>
             </div>
             <a href="{{ route('news') }}" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors flex-shrink-0">
-                All News
+                {{ $settings['news_view_all'] ?? 'All News' }}
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -675,7 +666,7 @@ $structureEducationItems = array_filter(explode("\n", $settings['structure_educa
             @if(!empty($settings['cta_secondary_text']))
             <a href="{{ $settings['cta_secondary_url'] ?? route('get-involved') }}" class="btn-outline text-base">{{ $settings['cta_secondary_text'] }}</a>
             @endif
-            <a href="{{ route('resources') }}" class="btn-outline text-base">Annual Report</a>
+            <a href="{{ route('resources') }}" class="btn-outline text-base">{{ $settings['cta_annual_report_text'] ?? 'Annual Report' }}</a>
         </div>
     </div>
 </section>
@@ -691,7 +682,7 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
 
         {{-- Header --}}
         <div class="text-center mb-10">
-            <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-[0.2em]">OUR NETWORK</span>
+            <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-[0.2em]">{{ $settings['partners_badge'] ?? 'OUR NETWORK' }}</span>
             <h2 class="section-title mt-2">{{ $settings['partners_heading'] ?? 'Supported by Our Partners Worldwide' }}</h2>
             <p class="text-gray-400 text-sm mt-2 max-w-xl mx-auto">
                 We are grateful for the trust and collaboration of {{ $homePartners->count() }} partner organisations across the globe.
@@ -736,7 +727,7 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
         {{-- Bottom CTA --}}
         <div class="text-center mt-10">
             <a href="{{ route('partners') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#2d6fa3] hover:text-[#1d4e7a] transition-colors group">
-                View All Partners
+                {{ $settings['partners_view_all'] ?? 'View All Partners' }}
                 <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
