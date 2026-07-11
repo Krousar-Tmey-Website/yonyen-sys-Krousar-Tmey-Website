@@ -13,9 +13,9 @@ class HomeSetting extends Model
         return static::where('key', $key)->value('value') ?? $default;
     }
 
-    public static function setValue(string $key, string $value): void
+    public static function setValue(string $key, ?string $value): void
     {
-        static::updateOrCreate(['key' => $key], ['value' => $value]);
+        static::updateOrCreate(['key' => $key], ['value' => $value ?? '']);
     }
 
     public static function allKeyed(): array

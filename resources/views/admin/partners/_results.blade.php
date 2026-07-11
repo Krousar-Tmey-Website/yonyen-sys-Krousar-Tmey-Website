@@ -1,11 +1,25 @@
+{{-- Category icons --}}
+@php
+    $catIcons = [
+        'authorities' => '🇰🇭',
+        'organizations' => '🏛️',
+        'companies' => '🏢',
+        'towns' => '🏙️',
+    ];
+@endphp
+
 {{-- Grouped tables --}}
-@foreach([1 => '🇰🇭 Cambodian Authorities', 2 => '🏛️ Organizations & Foundations', 3 => '🏢 Companies', 4 => '🏙️ Towns & Municipalities'] as $cat => $catLabel)
-@if(isset($partners[$cat]) && $partners[$cat]->count())
+@foreach($partners as $cat => $catPartners)
+@if($catPartners->count())
+@php
+    $displayName = ucfirst($cat);
+    $icon = $catIcons[$cat] ?? '🤝';
+@endphp
 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-5">
     <div class="px-6 py-4 bg-gray-50 flex justify-between items-center">
-        <h4 class="font-semibold text-gray-700 text-sm">{{ $catLabel }}</h4>
+        <h4 class="font-semibold text-gray-700 text-sm">{{ $icon }} {{ $displayName }}</h4>
         <span class="px-3 py-1 bg-white rounded-full text-xs text-gray-400 border border-gray-100">
-            {{ $partners[$cat]->count() }}
+            {{ $catPartners->count() }}
         </span>
     </div>
     <table class="w-full text-sm">
@@ -18,12 +32,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($partners[$cat] as $partner)
+            @foreach($catPartners as $partner)
             <tr class="border-t border-gray-50 hover:bg-gray-50/60 transition">
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                        @if($partner->logo)
-                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->name }}"
+                        @if($partner->logo_url)
+                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}"
                              class="w-10 h-10 rounded-full object-cover border border-gray-100 bg-white">
                         @else
                         <div class="w-10 h-10 rounded-full bg-[#2d6fa3]/10 flex items-center justify-center text-[#2d6fa3] text-xs font-semibold">
@@ -70,7 +84,7 @@
 @if($partners->isEmpty())
 <div class="bg-white rounded-2xl border border-gray-100 py-16 text-center">
     <div class="text-gray-300 text-4xl mb-3">🤝</div>
-    @if(($filters['search'] ?? '') !== '' || ($filters['category_id'] ?? 0) !== 0)
+    @if(($filters['search'] ?? '') !== '' || ($filters['category'] ?? '') !== '')
     <p class="text-gray-500 text-sm font-medium">No partners found.</p>
     <p class="text-gray-400 text-xs mt-1">Try a different search term or category.</p>
     @else
