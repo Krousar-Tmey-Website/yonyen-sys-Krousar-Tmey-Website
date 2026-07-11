@@ -64,6 +64,24 @@
     @enderror
 </div>
 
+{{-- COUNTRY --}}
+<div>
+    <label for="country" class="block text-sm font-semibold text-gray-700 mb-1.5">
+        Country <span class="text-gray-400 font-normal">(optional)</span>
+    </label>
+    <div class="relative">
+        <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
+            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
+        </svg>
+        <input type="text" id="country" name="country" autocomplete="off"
+            value="{{ old('country', $isEdit ? $partner->country : '') }}"
+            class="w-full pl-11 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none"
+            placeholder="Example: Switzerland">
+    </div>
+</div>
+
 {{-- HAS LOGO TOGGLE --}}
 <div x-data="{ hasLogo: {{ $isEdit && $partner->logo ? 'true' : 'false' }} }">
     <label class="relative inline-flex items-center cursor-pointer gap-3">
@@ -81,22 +99,21 @@
          x-transition:enter-end="opacity-100 translate-y-0"
          class="mt-4">
 
-        @if ($isEdit && $partner->logo_url)
-            {{-- Current Logo Preview --}}
-            <div class="mb-4 p-4 bg-gray-50/80 border-2 border-gray-200 rounded-xl flex items-center gap-4">
-                <div class="w-20 h-20 bg-white rounded-xl border-2 border-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                    <img src="{{ $partner->logo_url }}"
-                        alt="{{ $partner->name }}"
-                        class="max-w-full max-h-full object-contain p-2">
+                @if ($isEdit && $partner->logo_url)
+                {{-- Current Logo Preview --}}
+                <div class="mb-4 p-4 bg-gray-50/80 border-2 border-gray-200 rounded-xl flex items-center gap-4">
+                    <div class="w-20 h-20 bg-white rounded-xl border-2 border-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <img src="{{ $partner->logo_url }}"
+                             alt="{{ $partner->name }}"
+                             class="max-w-full max-h-full object-contain p-2">
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-sm font-semibold text-gray-700">Current Logo</p>
+                        <p class="text-xs text-gray-400 truncate">{{ basename($partner->logo) }}</p>
+                        <p class="text-xs text-gray-400 mt-0.5">Upload a new logo below to replace it, or uncheck "has logo" to remove it.</p>
+                    </div>
                 </div>
-                <div class="min-w-0">
-                    <p class="text-sm font-semibold text-gray-700">Current Logo</p>
-                    <p class="text-xs text-gray-400 truncate">{{ basename($partner->logo) }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">Upload a new logo below to replace it, or uncheck "has logo" to remove it.</p>
-                </div>
-            </div>
-        @endif
-```
+                @endif
 
         {{-- Upload Box --}}
         <label for="logo" id="logo-dropzone"

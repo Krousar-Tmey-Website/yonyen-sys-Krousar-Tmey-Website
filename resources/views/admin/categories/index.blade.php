@@ -61,8 +61,7 @@
                         <span class="text-gray-500 text-sm">{{ $category->Description ?? '-' }}</span>
                     </td>
                     <td>
-<<<<<<< HEAD
-                        <div class="flex items-center justify-end gap-1">
+                        <div class="flex items-center justify-end gap-1.5">
                             <a href="{{ route('admin.categories.show', ['category' => $category->CategoryID]) }}" 
                                class="action-btn view" 
                                title="View category">
@@ -71,10 +70,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                 </svg>
                             </a>
-=======
-                        <div class="flex items-center justify-end gap-1.5">
                             {{-- Edit Button --}}
->>>>>>> 01ced46837208653412f3897238fda41f0865cf3
                             <a href="{{ route('admin.categories.edit', ['category' => $category->CategoryID]) }}" 
                                class="action-btn edit" 
                                title="Edit category">
