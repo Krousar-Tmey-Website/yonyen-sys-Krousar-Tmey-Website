@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Award;
 use App\Models\HomeSetting;
 use App\Models\Partner;
+use App\Models\PartnerCategory;
 use App\Models\Program;
 use App\Models\Project;
 use App\Models\Slide;
@@ -246,10 +247,25 @@ class AdminSeeder extends Seeder
             ['name' => 'Towns of Collonge-Bellerive, Hermance and Vandoeuvres',      'category' => 'towns', 'country' => 'Switzerland', 'sort_order' => 4],
         ];
 
+        $partnerCategoryIds = PartnerCategory::query()
+            ->pluck('id', 'name')
+            ->mapWithKeys(fn ($id, $name) => [strtolower($name) => $id])
+            ->all();
+
         foreach ($partners as $partner) {
+            $categoryId = $partnerCategoryIds[$partner['category']] ?? null;
+
+            if (! $categoryId) {
+                continue;
+            }
+
+            $partnerData = $partner;
+            unset($partnerData['category']);
+            $partnerData['category_id'] = $categoryId;
+
             Partner::updateOrCreate(
-                ['name' => $partner['name'], 'category' => $partner['category']],
-                array_merge($partner, ['is_active' => true])
+                ['name' => $partner['name'], 'category_id' => $categoryId],
+                array_merge($partnerData, ['is_active' => true])
             );
         }
 

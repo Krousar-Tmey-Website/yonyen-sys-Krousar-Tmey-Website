@@ -8,18 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (! Schema::hasColumn('annual_reports', 'is_active')) {
+        if (! Schema::hasColumn('annual_reports', 'original_filename')) {
             Schema::table('annual_reports', function (Blueprint $table) {
-                $table->boolean('is_active')->default(true);
+                $table->string('original_filename')->nullable()->after('file_path');
             });
         }
     }
 
     public function down(): void
     {
-        if (Schema::hasColumn('annual_reports', 'is_active')) {
+        if (Schema::hasColumn('annual_reports', 'original_filename')) {
             Schema::table('annual_reports', function (Blueprint $table) {
-                $table->dropColumn('is_active');
+                $table->dropColumn('original_filename');
             });
         }
     }
