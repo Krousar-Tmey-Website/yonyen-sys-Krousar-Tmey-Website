@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('history_events', function (Blueprint $table) {
             $table->id();
             $table->string('year', 10);
-            $table->string('side')->default('left');
-            $table->text('event')->nullable();
+            $table->text('left_text')->nullable();
+            $table->text('right_text')->nullable();
             $table->string('image')->nullable();
             $table->integer('sort_order')->default(0);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

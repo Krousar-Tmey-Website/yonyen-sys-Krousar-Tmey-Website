@@ -140,7 +140,6 @@
                     <p class="text-xs text-gray-400">Current logo</p>
                 </div>
                 @endif
-```
             </div>
 
             <button type="submit" class="w-full btn-primary justify-center text-sm py-2.5">
