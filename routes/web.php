@@ -203,7 +203,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create']);
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
     Route::resource('history-events', Admin\HistoryEventController::class)
-        ->except(['show', 'create', 'edit'])
+        ->except(['show', 'create'])
         ->parameters(['history-events' => 'historyEvent']);
     Route::resource('core-values', Admin\CoreValueController::class)
         ->except(['show', 'create', 'edit'])
