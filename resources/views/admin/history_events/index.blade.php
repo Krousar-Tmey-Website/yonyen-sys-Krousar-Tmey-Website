@@ -7,126 +7,206 @@
 @section('content')
 <div class="grid lg:grid-cols-3 gap-6">
 
-    {{-- Add Form --}}
-    <div class="lg:col-span-1">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 class="font-bold text-gray-700 mb-5 flex items-center gap-2">
-                <span class="w-6 h-6 rounded-lg bg-[#2d6fa3] flex items-center justify-center">
-                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-                </span>
-                Add History Event
-            </h3>
-            <form action="{{ route('admin.history-events.store') }}" method="POST" class="space-y-4">
-                @csrf
+    {{-- Add / Edit History Event form --}}
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 h-fit">
+        <h3 class="font-bold text-gray-700 mb-5 text-sm">
+            {{ isset($editEvent) ? 'Edit History Event' : 'Add New History Event' }}
+        </h3>
+
+        <form action="{{ isset($editEvent) ? route('admin.history-events.update', $editEvent) : route('admin.history-events.store') }}"
+              method="POST" enctype="multipart/form-data" class="space-y-5">
+            @csrf
+            @if(isset($editEvent))
+                @method('PUT')
+            @endif
+
+            {{-- YEAR --}}
+            <div>
+                <label for="year" class="form-label">
+                    Year <span class="text-red-400 font-normal">*</span>
+                </label>
+                <input type="text" id="year" name="year" required autocomplete="off"
+                       value="{{ old('year', $editEvent->year ?? '') }}"
+                       class="form-input {{ $errors->has('year') ? 'form-input-error' : '' }}"
+                       placeholder="e.g. 1991">
+                @error('year')
+                    <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- LEFT COLUMN TEXT --}}
+            <div>
+                <label for="left_text" class="form-label">
+                    Left Column Text <span class="text-gray-400 font-normal">(optional)</span>
+                </label>
+                <textarea id="left_text" name="left_text" rows="3"
+                          class="form-input resize-none"
+                          placeholder="Main event description...">{{ old('left_text', $editEvent->left_text ?? '') }}</textarea>
+            </div>
+
+            {{-- RIGHT COLUMN TEXT --}}
+            <div>
+                <label for="right_text" class="form-label">
+                    Right Column Text <span class="text-gray-400 font-normal">(optional)</span>
+                </label>
+                <textarea id="right_text" name="right_text" rows="3"
+                          class="form-input resize-none"
+                          placeholder="Second event for same year...">{{ old('right_text', $editEvent->right_text ?? '') }}</textarea>
+                <p class="text-xs text-gray-400 mt-1.5">At least one of Left or Right Column Text is required.</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                {{-- SORT ORDER --}}
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Year <span class="text-red-400">*</span></label>
-                    <input type="text" name="year" value="{{ old('year') }}" placeholder="e.g. 1991"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <label for="sort_order" class="form-label">Order</label>
+                    <input type="number" id="sort_order" name="sort_order"
+                           value="{{ old('sort_order', $editEvent->sort_order ?? 0) }}"
+                           class="form-input">
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Left Column Text <span class="text-red-400">*</span></label>
-                    <textarea name="left_text" rows="3" placeholder="Main event description..."
-                              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('left_text') }}</textarea>
+
+                {{-- ACTIVE (edit only — new events are active by default) --}}
+                @if(isset($editEvent))
+                <div class="flex items-end pb-1.5">
+                    <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2.5 rounded-xl border border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-white transition-all duration-150 w-full">
+                        <input type="hidden" name="is_active" value="0">
+                        <input type="checkbox" name="is_active" value="1" {{ old('is_active', $editEvent->is_active) ? 'checked' : '' }}
+                               class="w-4 h-4 accent-[#2d6fa3] cursor-pointer">
+                        <span class="text-xs font-semibold text-gray-600">Active</span>
+                    </label>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Right Column Text <span class="text-gray-400 font-normal">(optional)</span></label>
-                    <textarea name="right_text" rows="3" placeholder="Second event for same year..."
-                              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('right_text') }}</textarea>
+                @endif
+            </div>
+
+            {{-- IMAGE --}}
+            <div>
+                <label class="form-label">Event Image</label>
+                <p class="text-xs text-gray-400 mb-2.5">PNG, JPG or SVG (max 2MB)</p>
+
+                <label for="image" id="image-dropzone"
+                       class="group flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer bg-gray-50 hover:bg-[#2d6fa3]/5 hover:border-[#2d6fa3] transition-all duration-200">
+                    <div class="flex flex-col items-center justify-center" id="image-placeholder">
+                        <div class="w-11 h-11 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center mb-2.5 group-hover:scale-110 group-hover:border-[#2d6fa3]/30 transition-all duration-200">
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1117.9 9H18a4 4 0 010 8h-1m-4-4l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                        </div>
+                        <p class="text-sm font-semibold text-[#2d6fa3]">Click to upload image</p>
+                        <p class="text-xs text-gray-400 mt-0.5">or drag and drop — PNG, JPG, SVG</p>
+                    </div>
+                    <div class="hidden flex-col items-center justify-center gap-1.5" id="image-selected">
+                        <div class="w-11 h-11 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <p class="text-sm font-medium text-gray-700 px-4 text-center truncate max-w-full" id="image-filename"></p>
+                        <p class="text-xs text-[#2d6fa3]">Click to choose a different file</p>
+                    </div>
+                    <input id="image" type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml" class="hidden"
+                           onchange="
+                               const f = this.files[0];
+                               if (f) {
+                                   document.getElementById('image-placeholder').classList.add('hidden');
+                                   document.getElementById('image-selected').classList.remove('hidden');
+                                   document.getElementById('image-selected').classList.add('flex');
+                                   document.getElementById('image-filename').textContent = f.name;
+                               }
+                           ">
+                </label>
+                @error('image')
+                    <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
+                @enderror
+
+                @if(isset($editEvent) && $editEvent->image_url)
+                <div class="mt-4 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl p-3">
+                    <div class="w-12 h-12 bg-white rounded-lg border border-gray-100 flex items-center justify-center">
+                        <img src="{{ $editEvent->image_url }}" class="max-w-full max-h-full object-contain p-1">
+                    </div>
+                    <p class="text-xs text-gray-400">Current image</p>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Sort Order</label>
-                    <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                <div class="mt-2">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" name="remove_image" value="1"
+                               class="w-4 h-4 accent-[#2d6fa3] cursor-pointer">
+                        <span class="text-xs text-gray-600">Remove current image</span>
+                    </label>
                 </div>
-                <button type="submit" class="w-full btn-primary justify-center">Add Event</button>
-            </form>
-        </div>
+                @endif
+            </div>
+
+            <button type="submit" class="w-full btn-primary justify-center text-sm py-2.5">
+                {{ isset($editEvent) ? 'Update Event' : 'Add Event' }}
+            </button>
+
+            @if(isset($editEvent))
+            <a href="{{ route('admin.history-events.index') }}" class="block text-center text-xs text-gray-400 hover:text-gray-600 transition-colors">Cancel edit</a>
+            @endif
+        </form>
     </div>
 
-    {{-- Events List --}}
-    <div class="lg:col-span-2 space-y-3">
-        @forelse($events as $event)
-        <div x-data="{ editing: false }" class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+    {{-- Events list --}}
+    <div class="lg:col-span-2 space-y-5"
+         x-data="{
+            search: @js($filters['search'] ?? ''),
+            total: @js($totalEvents),
+            loading: false,
+            applyFilters() {
+                this.loading = true;
+                const params = new URLSearchParams();
+                if (this.search) params.set('search', this.search);
+                const url = '{{ route('admin.history-events.index') }}' + (params.toString() ? '?' + params.toString() : '');
+                fetch(url, { headers: { 'Accept': 'application/json' } })
+                    .then(r => r.json())
+                    .then(data => {
+                        this.$refs.results.innerHTML = data.html;
+                        this.total = data.total;
+                        history.replaceState(null, '', url);
+                        this.loading = false;
+                    })
+                    .catch(() => { this.loading = false; });
+            }
+         }"
+         x-init="$watch('search', () => applyFilters())">
 
-            {{-- View row --}}
-            <div x-show="!editing" class="p-5 flex items-start gap-4">
-                <div class="w-16 h-16 rounded-xl bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
-                    <span class="text-white font-black text-sm">{{ $event->year }}</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm text-gray-700 leading-relaxed mb-1">{{ $event->left_text }}</p>
-                    @if($event->right_text)
-                    <p class="text-sm text-gray-500 leading-relaxed border-t border-gray-100 pt-1 mt-1">{{ $event->right_text }}</p>
-                    @endif
-                    <div class="flex items-center gap-3 mt-2">
-                        <span class="text-xs text-gray-400">Order: {{ $event->sort_order }}</span>
-                        @if(!$event->is_active)
-                        <span class="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full">Hidden</span>
-                        @endif
-                    </div>
-                </div>
-                <div class="flex items-center gap-2 flex-shrink-0">
-                    <button @click="editing = true"
-                            class="p-2 text-gray-400 hover:text-[#2d6fa3] hover:bg-[#2d6fa3]/5 rounded-lg transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                    </button>
-                    <form action="{{ route('admin.history-events.destroy', $event) }}" method="POST"
-                          onsubmit="return confirm('Delete this history event?')">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                        </button>
-                    </form>
+        {{-- Toolbar: title, count, search --}}
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div class="flex items-center justify-between flex-wrap gap-4 mb-4">
+                <div class="flex items-center gap-2">
+                    <h3 class="font-bold text-gray-800">All Events</h3>
+                    <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                        Showing <span x-text="total">{{ $totalEvents }}</span>
+                    </span>
                 </div>
             </div>
 
-            {{-- Edit form --}}
-            <div x-show="editing" x-cloak class="p-5 bg-[#f8f9fc] border-t border-gray-100">
-                <form action="{{ route('admin.history-events.update', $event) }}" method="POST" class="space-y-4">
-                    @csrf @method('PUT')
-                    <div class="grid sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Year</label>
-                            <input type="text" name="year" value="{{ $event->year }}"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Sort Order</label>
-                            <input type="number" name="sort_order" value="{{ $event->sort_order }}"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Left Column Text</label>
-                        <textarea name="left_text" rows="3"
-                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $event->left_text }}</textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Right Column Text</label>
-                        <textarea name="right_text" rows="3"
-                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $event->right_text }}</textarea>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="hidden" name="is_active" value="0">
-                            <input type="checkbox" name="is_active" value="1" {{ $event->is_active ? 'checked' : '' }}
-                                   class="w-4 h-4 accent-[#2d6fa3]">
-                            <span class="text-sm text-gray-600">Active (visible on site)</span>
-                        </label>
-                    </div>
-                    <div class="flex gap-3">
-                        <button type="submit" class="btn-primary text-sm">Save Changes</button>
-                        <button type="button" @click="editing = false"
-                                class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 border border-gray-200 rounded-xl hover:bg-white transition-colors">Cancel</button>
-                    </div>
-                </form>
-            </div>
+            <form method="GET" action="{{ route('admin.history-events.index') }}" class="flex flex-wrap items-center gap-3" @submit.prevent="applyFilters()">
+                <div class="relative flex-1 min-w-[220px]">
+                    <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input type="text" name="search" value="{{ $filters['search'] ?? '' }}"
+                           x-model.debounce.400ms="search"
+                           placeholder="Search by year or event..."
+                           autocomplete="off"
+                           class="w-full bg-gray-50 border border-gray-300 rounded-full pl-10 pr-4 py-2.5 text-sm text-gray-700 placeholder:text-gray-400 transition-all duration-150 hover:border-gray-400 focus:outline-none focus:bg-white focus:border-[#2d6fa3] focus:ring-4 focus:ring-[#2d6fa3]/15">
+                </div>
+
+                <button type="submit" @click.prevent="applyFilters()"
+                        class="px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors">
+                    Search
+                </button>
+
+                <a href="{{ route('admin.history-events.index') }}" @click.prevent="search = ''; applyFilters()"
+                   class="px-5 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-full text-sm font-medium transition-colors">
+                    Reset
+                </a>
+            </form>
         </div>
-        @empty
-        <div class="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-            <p class="text-gray-400 text-sm">No history events yet. Add the first one.</p>
+
+        {{-- Results --}}
+        <div x-ref="results" class="space-y-5" :class="loading ? 'opacity-50' : ''" style="transition: opacity 150ms">
+            @include('admin.history_events._results', ['events' => $events, 'filters' => $filters])
         </div>
-        @endforelse
     </div>
 </div>
 @endsection

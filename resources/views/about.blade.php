@@ -204,57 +204,100 @@
 {{-- ========================================================
      OUR HISTORY
      ======================================================== --}}
-<section id="history" class="py-20 bg-gradient-to-b from-white to-[#f8f9fc] scroll-mt-20">
+<section id="history" class="py-20 bg-white scroll-mt-20">
     <div class="max-w-6xl mx-auto px-6">
         {{-- Header --}}
         <div class="text-center mb-16" data-reveal>
-            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3 flex items-center justify-center gap-2">
-                <span class="w-8 h-0.5 bg-[#8da83a]"></span>
-                Our Journey
-                <span class="w-8 h-0.5 bg-[#8da83a]"></span>
+            <p class="text-[#a67c3d] font-semibold text-sm uppercase tracking-[0.2em] mb-4 flex items-center justify-center gap-3">
+                <span class="w-8 h-px bg-[#c9a45c]"></span>
+                Our Journey Since 1991
+                <span class="w-8 h-px bg-[#c9a45c]"></span>
             </p>
-            <h2 class="text-4xl md:text-5xl font-bold text-[#2d6fa3] mb-4">Our History</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto text-lg">Discover the milestones that have shaped Krousar Thmey since its founding in 1991</p>
+            <h2 class="font-serif text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">A Story of Hope and Resilience</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">From a single orphanage in a refugee camp to a nationwide movement for Cambodia's children — every milestone below was made possible by people who believed in a better future.</p>
         </div>
 
-        <div class="relative">
-            {{-- Vertical timeline line - centered --}}
-            <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2d6fa3] via-[#8da83a] to-[#2d6fa3] hidden md:block"></div>
+        @php
+            // Flatten each DB row into up to two timeline entries (one per filled
+            // text field), so we can alternate sides purely by position, regardless
+            // of whether the text came from the Left or Right Column Text field.
+            $timelineItems = [];
+            foreach ($historyEvents as $event) {
+                if ($event->left_text) {
+                    $timelineItems[] = ['year' => $event->year, 'text' => $event->left_text, 'image' => $event->image_url];
+                }
+                if ($event->right_text) {
+                    $timelineItems[] = ['year' => $event->year, 'text' => $event->right_text, 'image' => $event->left_text ? null : $event->image_url];
+                }
+                if (!$event->left_text && !$event->right_text && $event->image_url) {
+                    $timelineItems[] = ['year' => $event->year, 'text' => null, 'image' => $event->image_url];
+                }
+            }
+        @endphp
 
-            <div class="space-y-8">
-                @forelse($historyEvents as $event)
-                <div class="relative" data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 70, 350) }}">
-                    {{-- Year badge --}}
-                    <div class="flex justify-center mb-4">
-                        <div class="relative z-10 bg-[#2d6fa3] text-white font-bold text-sm px-5 py-2 rounded-full shadow-lg ring-4 ring-[#f8f9fc]">
-                            {{ $event->year }}
-                        </div>
+        <div class="relative">
+            {{-- Vertical timeline line - centered, soft gold --}}
+            <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#e8d7ae] via-[#c9a45c] to-[#e8d7ae] hidden md:block"></div>
+
+            {{-- Open ring marker at the very top of the line --}}
+            <div class="hidden md:flex justify-center mb-8">
+                <div class="relative z-10 w-4 h-4 rounded-full border-2 border-[#c9a45c] bg-white"></div>
+            </div>
+
+            <div class="space-y-12">
+                @forelse($timelineItems as $item)
+                @php
+                    $onLeft  = $loop->index % 2 === 0;
+                    $rotate  = $loop->index % 2 === 0 ? '-rotate-1' : 'rotate-1';
+                    $stagger = $loop->index % 2 === 1 ? 'md:mt-10' : '';
+                @endphp
+                <div class="relative {{ $stagger }}" data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 70, 350) }}">
+                    {{-- Connector dot on the center line --}}
+                    <div class="hidden md:flex justify-center absolute left-1/2 -translate-x-1/2 top-10 z-10">
+                        <div class="w-3 h-3 rounded-full bg-[#c9a45c] ring-4 ring-white shadow"></div>
                     </div>
 
-                    <div class="md:grid md:grid-cols-2 md:gap-8">
-                        {{-- Left event --}}
-                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-[#2d6fa3]/20 transition-all md:text-right mb-4 md:mb-0">
-                            <div class="flex items-start gap-3 md:flex-row-reverse">
-                                <div class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 flex items-center justify-center flex-shrink-0">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-[#2d6fa3]"></div>
+                    <div class="md:grid md:grid-cols-2 md:gap-16">
+                        @if($onLeft)
+                        <div class="relative mb-8 md:mb-0 md:pr-8">
+                            <div class="hidden md:block absolute right-8 top-12 w-8 h-px bg-[#c9a45c]/50"></div>
+                            {{-- Foundation flourish on the very first milestone --}}
+                            @if($loop->first)
+                            <p class="max-w-sm mx-auto md:mx-0 md:ml-auto text-right text-[#a67c3d] text-xs font-semibold uppercase tracking-[0.15em] mb-2">The Beginning</p>
+                            @endif
+                            <div class="max-w-sm mx-auto md:mx-0 md:ml-auto text-right">
+                                @if($item['image'])
+                                <div class="inline-block bg-white p-2 border border-[#e8d7ae] shadow-md {{ $rotate }} hover:rotate-0 transition-transform duration-300">
+                                    <img src="{{ $item['image'] }}" alt="History event image" class="w-full h-48 object-cover" style="filter: sepia(0.12) saturate(1.05);">
                                 </div>
-                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event->left_text }}</p>
+                                @endif
+                                <div class="relative {{ $item['image'] ? '-mt-5 mr-4' : '' }} inline-flex items-center justify-center min-w-[3.5rem] h-14 px-2 rounded-full bg-gradient-to-br from-[#d9b877] to-[#a67c3d] ring-4 ring-white shadow-lg">
+                                    <span class="font-serif font-bold text-black whitespace-nowrap {{ strlen((string) $item['year']) > 4 ? 'text-xs' : 'text-sm' }}">{{ $item['year'] }}</span>
+                                </div>
+                                @if($item['text'])
+                                <p class="text-gray-600 text-sm leading-relaxed mt-3">{{ $item['text'] }}</p>
+                                @endif
                             </div>
                         </div>
-
-                        {{-- Right event --}}
-                        @if($event->right_text)
-                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-[#8da83a]/30 transition-all">
-                            <div class="flex items-start gap-3">
-                                <div class="w-8 h-8 rounded-full bg-[#8da83a]/10 flex items-center justify-center flex-shrink-0">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-[#8da83a]"></div>
-                                </div>
-                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event->right_text }}</p>
-                            </div>
-                        </div>
-                        @else
-                        {{-- Empty right column to maintain grid --}}
                         <div></div>
+                        @else
+                        <div></div>
+                        <div class="relative md:pl-8">
+                            <div class="hidden md:block absolute left-8 top-12 w-8 h-px bg-[#c9a45c]/50"></div>
+                            <div class="max-w-sm mx-auto md:mx-0">
+                                @if($item['image'])
+                                <div class="inline-block bg-white p-2 border border-[#e8d7ae] shadow-md {{ $rotate }} hover:rotate-0 transition-transform duration-300">
+                                    <img src="{{ $item['image'] }}" alt="History event image" class="w-full h-48 object-cover" style="filter: sepia(0.12) saturate(1.05);">
+                                </div>
+                                @endif
+                                <div class="relative {{ $item['image'] ? '-mt-5 ml-4' : '' }} inline-flex items-center justify-center min-w-[3.5rem] h-14 px-2 rounded-full bg-gradient-to-br from-[#d9b877] to-[#a67c3d] ring-4 ring-white shadow-lg">
+                                    <span class="font-serif font-bold text-black whitespace-nowrap {{ strlen((string) $item['year']) > 4 ? 'text-xs' : 'text-sm' }}">{{ $item['year'] }}</span>
+                                </div>
+                                @if($item['text'])
+                                <p class="text-gray-600 text-sm leading-relaxed mt-3">{{ $item['text'] }}</p>
+                                @endif
+                            </div>
+                        </div>
                         @endif
                     </div>
                 </div>
@@ -262,6 +305,20 @@
                 <p class="text-gray-400 text-center py-8">No history events yet.</p>
                 @endforelse
             </div>
+
+            {{-- Present-day impact capstone --}}
+            @if(count($timelineItems) > 0)
+            <div class="relative mt-16 pt-14 border-t border-[#e8d7ae] text-center" data-reveal="scale">
+                <div class="hidden md:flex justify-center absolute left-1/2 -translate-x-1/2 -top-2.5 z-10">
+                    <div class="w-4 h-4 rounded-full border-2 border-[#c9a45c] bg-white"></div>
+                </div>
+                <p class="text-[#a67c3d] font-semibold text-xs uppercase tracking-[0.2em] mb-3">Present Day</p>
+                <h3 class="font-serif text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-4">The Story Continues</h3>
+                <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                    Today, Krousar Thmey supports <strong class="text-[#1d4e7a]">{{ $settings['stat_children'] ?? '4,079' }} children</strong> across 15 Cambodian provinces — carrying forward the same promise made in 1991: that every child deserves the chance to grow, learn, and thrive.
+                </p>
+            </div>
+            @endif
         </div>
     </div>
 </section>
