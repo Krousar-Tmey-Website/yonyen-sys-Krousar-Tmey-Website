@@ -12,21 +12,22 @@ class JobOpportunityController extends Controller
     public function index()
     {
         $jobs = JobOpportunity::ordered()->get();
+
         return view('admin.jobs.index', compact('jobs'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'location'    => ['nullable', 'string', 'max:255'],
+            'location' => ['nullable', 'string', 'max:255'],
             'posted_date' => ['nullable', 'date'],
-            'type'        => ['nullable', 'string', 'max:255'],
-            'status'      => ['required', 'string', 'max:255'],
-            'is_active'   => ['nullable', 'boolean'],
-            'sort_order'  => ['nullable', 'integer'],
-            'image'       => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
+            'type' => ['nullable', 'string', 'max:255'],
+            'status' => ['required', 'string', 'max:255'],
+            'is_active' => ['nullable', 'boolean'],
+            'sort_order' => ['nullable', 'integer'],
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
         ]);
 
         if ($request->hasFile('image')) {
@@ -44,15 +45,15 @@ class JobOpportunityController extends Controller
     public function update(Request $request, JobOpportunity $job)
     {
         $data = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'location'    => ['nullable', 'string', 'max:255'],
+            'location' => ['nullable', 'string', 'max:255'],
             'posted_date' => ['nullable', 'date'],
-            'type'        => ['nullable', 'string', 'max:255'],
-            'status'      => ['required', 'string', 'max:255'],
-            'is_active'   => ['nullable', 'boolean'],
-            'sort_order'  => ['nullable', 'integer'],
-            'image'       => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
+            'type' => ['nullable', 'string', 'max:255'],
+            'status' => ['required', 'string', 'max:255'],
+            'is_active' => ['nullable', 'boolean'],
+            'sort_order' => ['nullable', 'integer'],
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
         ]);
 
         if ($request->hasFile('image')) {

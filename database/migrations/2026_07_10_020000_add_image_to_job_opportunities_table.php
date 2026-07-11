@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('job_opportunities', function (Blueprint $table) {
-            $table->string('image')->nullable()->after('icon');
+            $table->string('image')->nullable()->after('sort_order');
         });
     }
 
