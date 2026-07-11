@@ -70,10 +70,8 @@ class OfficeAndReportSeeder extends Seeder
         // Annual Reports
         foreach ([2024, 2023, 2022, 2021, 2020, 2019] as $year) {
             AnnualReport::firstOrCreate(['year' => $year], [
-                'title'       => "Annual Report {$year}",
-                'year'        => $year,
-                'description' => 'PDF · Full Report',
-                'sort_order'  => 2030 - $year,
+                'title' => "Annual Report {$year}",
+                'year'  => $year,
             ]);
         }
 

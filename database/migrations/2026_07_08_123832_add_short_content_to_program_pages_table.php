@@ -11,9 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('program_pages', function (Blueprint $table) {
-            $table->text('short_content')->nullable()->after('title');
-        });
+        // Table no longer needed — functionality replaced by program_page_items
     }
 
     /**
@@ -21,9 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('program_pages', function (Blueprint $table) {
-            $table->dropColumn('short_content');
-        });
     }
 
 };

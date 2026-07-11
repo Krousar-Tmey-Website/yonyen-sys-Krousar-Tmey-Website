@@ -24,9 +24,10 @@ use App\Models\Project;
 use App\Models\Slide;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 // ──────────────────────────────────────────────
-// Public pages
+// Public Routes
 // ──────────────────────────────────────────────
 
 Route::get('/', function () {
@@ -116,6 +117,24 @@ Route::get('/resources', function () {
     return view('resources', compact('reports'));
 })->name('resources');
 
+// Secure PDF view/download with graceful error handling
+Route::get('/reports/{report}/view', function (App\Models\AnnualReport $report) {
+    if (!$report->has_pdf_file) {
+        return redirect()->route('resources')->with('error', 'The requested PDF file is no longer available.');
+    }
+    return response()->file(Storage::disk('public')->path($report->file_path));
+})->name('reports.view');
+
+Route::get('/reports/{report}/download', function (App\Models\AnnualReport $report) {
+    if (!$report->has_pdf_file) {
+        return redirect()->route('resources')->with('error', 'The requested PDF file is no longer available.');
+    }
+    return response()->download(
+        Storage::disk('public')->path($report->file_path),
+        $report->original_filename ?? $report->title . '.pdf'
+    );
+})->name('reports.download');
+
 Route::get('/contact', function () {
     $offices = Office::active()->get();
 
@@ -144,11 +163,12 @@ Route::post('/admin/login', [Admin\AuthController::class, 'login'])->name('admin
 Route::post('/admin/logout', [Admin\AuthController::class, 'logout'])->name('admin.logout');
 
 // ──────────────────────────────────────────────
-// Admin — Protected panel
+// Admin — Protected Panel
 // ──────────────────────────────────────────────
 
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
+    // Dashboard
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // News & Categories
@@ -189,6 +209,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->except(['show', 'create', 'edit'])
         ->parameters(['core-values' => 'coreValue']);
 
+    // Reports
+    Route::resource('reports', Admin\AnnualReportController::class);
+
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
 
@@ -201,6 +224,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::delete('{contactInquiry}', [Admin\ContactInquiryController::class, 'destroy'])->name('destroy');
     });
 
+    // Newsletter Subscribers
     Route::prefix('newsletter')->name('newsletter.')->group(function () {
         Route::get('/', [Admin\NewsletterController::class, 'index'])->name('index');
         Route::get('export', [Admin\NewsletterController::class, 'export'])->name('export');
