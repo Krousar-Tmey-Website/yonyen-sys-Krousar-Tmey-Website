@@ -492,12 +492,68 @@
             @endforeach
         </div>
 
-        <div class="bg-[#f8f9fc] rounded-3xl p-10 text-center border border-gray-100" data-reveal="scale">
-            <div class="w-16 h-16 rounded-2xl bg-[#2d6fa3]/10 flex items-center justify-center mx-auto mb-5">
-                <svg class="w-8 h-8 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        @if($jobs->isNotEmpty())
+        <div class="mb-8">
+            <h3 class="text-xl font-black text-[#2d6fa3] uppercase tracking-wide mb-6 text-center">Open Positions</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            @foreach($jobs as $job)
+            <div class="group bg-[#f8f9fc] rounded-2xl border border-gray-100 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col">
+                    @if($job->image)
+                    <div class="h-32 overflow-hidden flex-shrink-0">
+                        <img src="{{ asset('storage/' . $job->image) }}" alt="{{ $job->title }}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    @endif
+                    <div class="flex-1 p-4 flex flex-col">
+                        <div class="flex items-center gap-2 flex-wrap mb-2">
+                            <h4 class="font-black text-[#2d6fa3] uppercase tracking-wide text-xs">{{ $job->title }}</h4>
+                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full
+                                {{ $job->status === 'open' ? 'bg-green-50 text-green-700' : ($job->status === 'filled' ? 'bg-yellow-50 text-yellow-700' : ($job->status === 'closed' ? 'bg-red-50 text-red-700' : 'bg-gray-100 text-gray-600')) }}">
+                                {{ $job->status === 'filled' ? 'FILLED' : strtoupper($job->status) }}
+                            </span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-gray-500 mb-1.5">
+                            @if($job->type)
+                            <span class="flex items-center gap-0.5">
+                                <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/></svg>
+                                {{ $job->type }}
+                            </span>
+                            @endif
+                            @if($job->location)
+                            <span class="flex items-center gap-0.5">
+                                <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                {{ $job->location }}
+                            </span>
+                            @endif
+                            @if($job->posted_date)
+                            <span class="flex items-center gap-0.5">
+                                <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z"/></svg>
+                                {{ $job->posted_date->format('M d, Y') }}
+                            </span>
+                            @endif
+                        </div>
+                        @if($job->description)
+                        <p class="text-gray-500 text-xs leading-relaxed mb-3 line-clamp-2">{{ $job->description }}</p>
+                        @endif
+                        <div class="mt-auto pt-1">
+                            <a href="{{ route('jobs.show', $job) }}" class="inline-flex items-center gap-1.5 text-[#2d6fa3] text-xs font-bold group/link hover:gap-2.5 transition-all">
+                                View Details
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                        </div>
+                    </div>
             </div>
-            <h3 class="text-xl font-black text-[#2d6fa3] uppercase tracking-wide mb-3">Open Positions</h3>
-            <p class="text-gray-500 mb-8 max-w-lg mx-auto text-sm leading-relaxed">We regularly post new positions in social work, education, communications, and administration. Contact us to enquire about current openings.</p>
+            @endforeach
+            </div>
+        </div>
+        @endif
+
+        <div class="bg-[#f8f9fc] rounded-3xl p-10 text-center border border-gray-100">
+            <div class="w-16 h-16 rounded-2xl bg-[#2d6fa3]/10 flex items-center justify-center mx-auto mb-5">
+                <svg class="w-8 h-8 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <h3 class="text-xl font-black text-[#2d6fa3] uppercase tracking-wide mb-3">Don't see the right fit?</h3>
+            <p class="text-gray-500 mb-8 max-w-lg mx-auto text-sm leading-relaxed">We regularly post new positions in social work, education, communications, and administration. Contact us to enquire about current openings or send your unsolicited application.</p>
             <a href="{{ route('contact') }}" class="btn-blue">Send Your Application</a>
         </div>
     </div>
