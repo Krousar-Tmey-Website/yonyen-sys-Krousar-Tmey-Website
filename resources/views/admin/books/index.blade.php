@@ -77,7 +77,7 @@
                     </svg>
                     <input type="text" name="search" value="{{ $filters['search'] ?? '' }}"
                            x-model.debounce.400ms="search"
-                           placeholder="Search by title or author..."
+                            placeholder="Search by title..."
                            autocomplete="off"
                            class="w-full bg-gray-50 border border-gray-300 rounded-full pl-10 pr-4 py-2.5 text-sm text-gray-700 placeholder:text-gray-400 transition-all duration-150 hover:border-gray-400 focus:outline-none focus:bg-white focus:border-[#2d6fa3] focus:ring-4 focus:ring-[#2d6fa3]/15">
                 </div>

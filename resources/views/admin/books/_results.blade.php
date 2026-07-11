@@ -24,9 +24,6 @@
                         @endif
                         <div class="min-w-0">
                             <span class="font-medium text-gray-800 truncate block">{{ $book->title }}</span>
-                            @if($book->author)
-                            <span class="text-xs text-gray-400 truncate block">{{ $book->author }}</span>
-                            @endif
                         </div>
                     </div>
                 </td>

@@ -1,7 +1,6 @@
 @php
     $isEdit = isset($book);
     $bookTitle = $isEdit ? $book->title : old('title');
-    $bookAuthor = $isEdit ? $book->author : old('author');
     $bookDescription = $isEdit ? $book->description : old('description');
     $bookPrice = $isEdit ? $book->price : old('price', '');
     $bookStock = $isEdit ? $book->stock : old('stock', 0);
@@ -27,31 +26,6 @@
             placeholder="Enter book title">
     </div>
     @error('title')
-        <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-            {{ $message }}
-        </p>
-    @enderror
-</div>
-
-{{-- AUTHOR --}}
-<div>
-    <label for="author" class="block text-sm font-semibold text-gray-700 mb-1.5">
-        Author <span class="text-gray-400 font-normal">(optional)</span>
-    </label>
-    <div class="relative">
-        <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
-            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-        <input type="text" id="author" name="author" autocomplete="off"
-            value="{{ old('author', $bookAuthor ?? '') }}"
-            class="w-full pl-11 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none
-                {{ $errors->has('author') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}"
-            placeholder="Enter author name">
-    </div>
-    @error('author')
         <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
             <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
             {{ $message }}
