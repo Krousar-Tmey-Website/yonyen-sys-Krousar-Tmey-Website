@@ -23,10 +23,24 @@ use App\Models\ProgramPageItem;
 use App\Models\Project;
 use App\Models\Slide;
 use App\Models\Testimonial;
+use App\Models\Book;
 use Illuminate\Support\Facades\Route;
 
 // ──────────────────────────────────────────────
 // Public pages
+// ──────────────────────────────────────────────
+
+// Books for sale (public detail page)
+Route::get('/books/{book}', function (Book $book) {
+    if (!$book->is_available || $book->stock <= 0) {
+        abort(404);
+    }
+
+    return view('book', compact('book'));
+})->name('books.show');
+
+// ──────────────────────────────────────────────
+// Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
 
 Route::get('/', function () {
@@ -95,8 +109,9 @@ Route::get('/projects/{project}', function (Project $project) {
 Route::get('/get-involved', function () {
     $settings = HomeSetting::allKeyed();
     $jobs = JobOpportunity::active()->ordered()->get();
+    $books = Book::available()->orderBy('sort_order')->orderBy('title')->get();
 
-    return view('involved', compact('settings', 'jobs'));
+    return view('involved', compact('settings', 'jobs', 'books'));
 })->name('involved');
 
 Route::get('/jobs/{jobOpportunity}', function (JobOpportunity $jobOpportunity) {
@@ -215,6 +230,6 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::delete('{volunteer}', [Admin\VolunteerController::class, 'destroy'])->name('destroy');
     });
 
-    // Books for sale
+    // Books for sale (admin)
     Route::resource('books', Admin\BookController::class)->except(['show']);
 });
