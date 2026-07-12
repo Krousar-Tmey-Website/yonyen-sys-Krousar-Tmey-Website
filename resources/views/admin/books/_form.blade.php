@@ -1,181 +1,135 @@
 @php
     $isEdit = isset($book);
-    $bookTitle = $isEdit ? $book->title : old('title');
-    $bookDescription = $isEdit ? $book->description : old('description');
-    $bookPrice = $isEdit ? $book->price : old('price', '');
-    $bookStock = $isEdit ? $book->stock : old('stock', 0);
-    $bookSort = $isEdit ? $book->sort_order : old('sort_order', 0);
-    $bookAvailable = $isEdit ? $book->is_available : old('is_available', true);
+    $bookTitle       = $isEdit ? old('title', $book->title) : old('title');
+    $bookAuthor      = $isEdit ? old('author', $book->author) : old('author');
+    $bookDescription = $isEdit ? old('description', $book->description) : old('description');
+    $bookPrice       = $isEdit ? old('price', $book->price) : old('price');
+    $bookStock       = $isEdit ? old('stock', $book->stock) : old('stock');
+    $bookSortOrder   = $isEdit ? old('sort_order', $book->sort_order) : old('sort_order');
+    $bookAvailable   = $isEdit ? old('is_available', $book->is_available) : old('is_available', true);
 @endphp
 
-{{-- TITLE --}}
-<div>
-    <label for="title" class="block text-sm font-semibold text-gray-700 mb-1.5">
-        Title <span class="text-red-400">*</span>
-    </label>
-    <div class="relative">
-        <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
-            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-        </svg>
-        <input type="text" id="title" name="title" required autocomplete="off"
-            value="{{ old('title', $bookTitle ?? '') }}"
-            class="w-full pl-11 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none
-                {{ $errors->has('title') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}"
-            placeholder="Enter book title">
+<div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+    {{-- Title --}}
+    <div class="form-group">
+        <label class="form-label">Title <span class="required">*</span></label>
+        <input type="text" name="title" value="{{ $bookTitle }}" required
+               class="form-control @error('title') error @enderror"
+               placeholder="e.g. The Silent Patient">
+        @error('title')<div class="form-error">{{ $message }}</div>@enderror
     </div>
-    @error('title')
-        <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-            {{ $message }}
-        </p>
-    @enderror
+
+    {{-- Author --}}
+    <div class="form-group">
+        <label class="form-label">Author</label>
+        <input type="text" name="author" value="{{ $bookAuthor }}"
+               class="form-control @error('author') error @enderror"
+               placeholder="e.g. Alex Michaelides">
+        @error('author')<div class="form-error">{{ $message }}</div>@enderror
+    </div>
 </div>
 
-{{-- DESCRIPTION --}}
-<div>
-    <label for="description" class="block text-sm font-semibold text-gray-700 mb-1.5">
-        Description <span class="text-gray-400 font-normal">(optional)</span>
-    </label>
-    <textarea id="description" name="description" rows="3" autocomplete="off"
-        class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none resize-none
-            {{ $errors->has('description') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}"
-        placeholder="Short description of the book">{{ old('description', $bookDescription ?? '') }}</textarea>
-    @error('description')
-        <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-            {{ $message }}
-        </p>
-    @enderror
+{{-- Description --}}
+<div class="form-group">
+    <label class="form-label">Description</label>
+    <textarea name="description" rows="3" class="form-control content @error('description') error @enderror"
+              placeholder="Write a short description or synopsis for the book...">{{ $bookDescription }}</textarea>
+    @error('description')<div class="form-error">{{ $message }}</div>@enderror
 </div>
 
-<div class="grid grid-cols-2 gap-4">
-    {{-- PRICE --}}
-    <div>
-        <label for="price" class="block text-sm font-semibold text-gray-700 mb-1.5">
-            Price (USD) <span class="text-red-400">*</span>
-        </label>
-        <div class="relative">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">$</span>
-            <input type="number" id="price" name="price" step="0.01" min="0" required
-                value="{{ old('price', $bookPrice) }}"
-                class="w-full pl-8 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none
-                    {{ $errors->has('price') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}"
-                placeholder="0.00">
+<div class="form-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+    {{-- Price --}}
+    <div class="form-group">
+        <label class="form-label">Price (USD) <span class="required">*</span></label>
+        <input type="number" name="price" value="{{ $bookPrice }}" required step="0.01" min="0"
+               class="form-control @error('price') error @enderror"
+               placeholder="e.g. 24.99">
+        @error('price')<div class="form-error">{{ $message }}</div>@enderror
+    </div>
+
+    {{-- Stock --}}
+    <div class="form-group">
+        <label class="form-label">Stock</label>
+        <input type="number" name="stock" value="{{ $bookStock }}" min="0"
+               class="form-control @error('stock') error @enderror"
+               placeholder="0">
+        @error('stock')<div class="form-error">{{ $message }}</div>@enderror
+    </div>
+
+    {{-- Sort Order --}}
+    <div class="form-group">
+        <label class="form-label">Display Order</label>
+        <input type="number" name="sort_order" value="{{ $bookSortOrder }}" min="0"
+               class="form-control @error('sort_order') error @enderror"
+               placeholder="0">
+        @error('sort_order')<div class="form-error">{{ $message }}</div>@enderror
+    </div>
+</div>
+
+{{-- Available for purchase --}}
+<div class="form-group form-group--no-margin">
+    <div class="publish-option bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:shadow-sm transition-all">
+        <input type="checkbox" name="is_available" id="is_available" value="1"
+               class="w-5 h-5 accent-[#2d6fa3] cursor-pointer"
+               {{ $bookAvailable ? 'checked' : '' }}>
+        <div>
+            <div class="text-sm font-bold text-[#1a3c6e]">Available for purchase</div>
+            <div class="text-[11px] text-gray-400">Show on the public Books for Sale page</div>
         </div>
-        @error('price')
-            <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-                <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-                {{ $message }}
-            </p>
-        @enderror
-    </div>
-
-    {{-- STOCK --}}
-    <div>
-        <label for="stock" class="block text-sm font-semibold text-gray-700 mb-1.5">
-            Stock
-        </label>
-        <input type="number" id="stock" name="stock" min="0" step="1"
-            value="{{ old('stock', $bookStock) }}"
-            class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none
-                {{ $errors->has('stock') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}"
-            placeholder="0">
-        @error('stock')
-            <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-                <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-                {{ $message }}
-            </p>
-        @enderror
     </div>
 </div>
 
-<div class="grid grid-cols-2 gap-4">
-    {{-- SORT ORDER --}}
-    <div>
-        <label for="sort_order" class="block text-sm font-semibold text-gray-700 mb-1.5">
-            Display Order
-        </label>
-        <input type="number" id="sort_order" name="sort_order" min="0" step="1"
-            value="{{ old('sort_order', $bookSort) }}"
-            class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none"
-            placeholder="0">
-    </div>
-
-    {{-- AVAILABLE --}}
-    <div class="flex items-end pb-1.5">
-        <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2.5 rounded-xl border border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-white transition-all duration-150 w-full">
-            <input type="hidden" name="is_available" value="0">
-            <input type="checkbox" name="is_available" value="1" {{ $bookAvailable ? 'checked' : '' }}
-                   class="w-4 h-4 accent-[#2d6fa3] cursor-pointer">
-            <span class="text-xs font-semibold text-gray-600">Available for purchase</span>
-        </label>
-    </div>
-</div>
-
-{{-- COVER IMAGE --}}
-<div x-data="{ hasCover: {{ $isEdit && $book->cover_image ? 'true' : 'false' }} }">
-    <label class="block text-sm font-semibold text-gray-700 mb-1.5">
-        Cover Image <span class="text-gray-400 font-normal">(optional)</span>
-    </label>
-    <p class="text-xs text-gray-400 mb-2.5">PNG, JPG or WebP (max 2MB)</p>
-
-    @if ($isEdit && $book->cover_image_url)
-        <div class="mb-4 p-4 bg-gray-50/80 border-2 border-gray-200 rounded-xl flex items-center gap-4">
-            <div class="w-20 h-20 bg-white rounded-xl border-2 border-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                <img src="{{ $book->cover_image_url }}" alt="{{ $book->title }}" class="max-w-full max-h-full object-cover p-1">
-            </div>
-            <div class="min-w-0">
-                <p class="text-sm font-semibold text-gray-700">Current Cover</p>
-                <p class="text-xs text-gray-400 truncate">{{ basename($book->cover_image) }}</p>
-                <p class="text-xs text-gray-400 mt-0.5">Upload a new cover to replace it, or uncheck "has cover" to remove it.</p>
-            </div>
-        </div>
-    @endif
-
-    <label for="cover_image" id="cover-dropzone"
-        class="group flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50/50 hover:border-blue-400 hover:bg-blue-50/40 transition-all duration-200">
-        <div class="flex flex-col items-center justify-center" id="cover-placeholder">
-            <div class="w-14 h-14 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:shadow-md transition-all duration-200">
-                <svg class="w-6 h-6 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1117.9 9H18a4 4 0 010 8h-1m-4-4l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-            </div>
-            <p class="text-sm text-gray-600 font-medium group-hover:text-blue-600 transition-colors">Click to upload cover</p>
-            <p class="text-xs text-gray-400 mt-1">PNG, JPG or WebP (max 2MB)</p>
-        </div>
-        <div class="hidden flex-col items-center justify-center gap-2" id="cover-selected">
-            <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+{{-- Cover Image --}}
+<div class="form-group">
+    <label class="form-label">Cover Image {{ $isEdit ? '' : '(optional)' }}</label>
+    <div class="upload-area border-2 border-dashed border-[#2d6fa3]/30 hover:border-[#2d6fa3] hover:bg-[#f8fafc] transition-all rounded-2xl p-10 text-center cursor-pointer"
+         onclick="document.getElementById('coverInput').click()">
+        <input type="file" name="cover_image" id="coverInput" accept="image/*" class="hidden">
+        <div id="coverPlaceholder">
+            <svg class="w-12 h-12 text-[#2d6fa3]/40 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
-            <p class="text-sm font-medium text-gray-700 px-4 text-center truncate max-w-full" id="cover-filename"></p>
-            <p class="text-xs text-blue-500 font-medium">Click to choose a different file</p>
+            <div class="text-sm font-bold text-[#1a3c6e]">Click to upload cover image</div>
+            <div class="text-xs text-gray-400 mt-2">JPG, PNG or WebP (Max 2MB)</div>
         </div>
-        <input id="cover_image" type="file" name="cover_image" accept="image/*" class="hidden"
-            onchange="
-                const f = this.files[0];
-                if (f) {
-                    document.getElementById('cover-placeholder').classList.add('hidden');
-                    document.getElementById('cover-selected').classList.remove('hidden');
-                    document.getElementById('cover-selected').classList.add('flex');
-                    document.getElementById('cover-filename').textContent = f.name;
-                }
-            ">
-    </label>
-
-    @error('cover_image')
-        <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-            {{ $message }}
-        </p>
-    @enderror
-
-    @if ($isEdit && $book->cover_image)
-        <label class="flex items-center gap-2 mt-3 cursor-pointer select-none text-xs text-gray-500">
-            <input type="checkbox" name="remove_cover" value="1"
-                   class="w-4 h-4 accent-red-500 cursor-pointer">
-            <span>Remove current cover image</span>
-        </label>
+        <div id="coverPreview" class="hidden mt-4"></div>
+    </div>
+    @if($isEdit && $book->cover_image)
+    <div class="mt-3 flex items-center gap-3">
+        <img src="{{ $book->cover_image_url }}" alt="Cover" class="w-12 h-16 object-cover rounded-lg shadow-sm">
+        <div class="text-xs text-gray-500">Current cover: {{ $book->cover_image }}</div>
+    </div>
     @endif
+    @error('cover_image')<div class="form-error">{{ $message }}</div>@enderror
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const coverInput = document.getElementById('coverInput');
+    if (coverInput) {
+        coverInput.addEventListener('change', function(e) {
+            const preview = document.getElementById('coverPreview');
+            const placeholder = document.getElementById('coverPlaceholder');
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    placeholder.classList.add('hidden');
+                    preview.classList.remove('hidden');
+                    preview.innerHTML = `
+                        <div class="image-preview-wrapper">
+                            <img src="${e.target.result}" alt="Preview" style="height: 180px;">
+                            <button type="button" class="remove-btn"
+                                    onclick="document.getElementById('coverInput').value=''; preview.innerHTML=''; preview.classList.add('hidden'); placeholder.classList.remove('hidden');">
+                                ×
+                            </button>
+                            <div class="file-info">${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+</script>

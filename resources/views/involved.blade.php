@@ -28,10 +28,10 @@
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             @foreach([
-                ['icon' => '❤️', 'title' => 'Book for Sales', 'desc' => 'Support children directly with a one-time or monthly gift.',   'anchor' => 'donate',    'color' => 'hover:border-[#d32f2f]/40'],
                 ['icon' => '🤝', 'title' => 'Partner',      'desc' => 'Formalize a CSR or institutional partnership with us.',         'anchor' => 'partner',   'color' => 'hover:border-[#2d6fa3]/40'],
                 ['icon' => '✋', 'title' => 'Volunteer',    'desc' => 'Contribute your skills for a minimum of 3 months.',             'anchor' => 'volunteer', 'color' => 'hover:border-[#8da83a]/40'],
                 ['icon' => '💼', 'title' => 'Work With Us', 'desc' => 'Join our Cambodian team across social, education & comms.',     'anchor' => 'jobs',      'color' => 'hover:border-[#e8a020]/40'],
+                ['icon' => '📚', 'title' => 'Book for Sales', 'desc' => 'Browse our collection of books and order the titles you love.', 'anchor' => 'book-for-sales', 'color' => 'hover:border-[#d32f2f]/40'],
             ] as $index => $way)
             <a href="#{{ $way['anchor'] }}" class="group bg-[#f8f9fc] rounded-2xl p-7 border-2 border-gray-100 {{ $way['color'] }} hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                data-reveal="up" style="--reveal-delay: {{ $index * 100 }}">
@@ -49,7 +49,7 @@
 </section>
 
 {{-- Book for Sales --}}
-<section id="donate" class="py-20 bg-[#1d4e7a] scroll-mt-20 relative overflow-hidden">
+<section id="book-for-sales" class="py-20 bg-[#1d4e7a] scroll-mt-20 relative overflow-hidden">
     <div class="absolute inset-0 opacity-5">
         <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
     </div>
@@ -554,9 +554,9 @@
     <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
         <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Ready to Help?</p>
         <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">Every Action Counts</h2>
-        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">Whether you donate, volunteer, or partner with us — you are helping build a better future for Cambodia's children.</p>
+        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">Whether you buy a book, volunteer, partner with us, or send your application — you are helping build a better future for Cambodia's children.</p>
         <div class="flex flex-wrap gap-4 justify-center">
-            <a href="{{ route('involved') }}#donate" class="btn-primary text-base">Book for Sales</a>
+            <a href="{{ route('involved') }}#book-for-sales" class="btn-primary text-base">Book for Sales</a>
             <a href="{{ route('contact') }}" class="btn-outline text-base">Contact Us</a>
         </div>
     </div>

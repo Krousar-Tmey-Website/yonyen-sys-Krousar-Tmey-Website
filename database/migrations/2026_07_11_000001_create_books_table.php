@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('author')->nullable();
             $table->text('description')->nullable();
-            $table->decimal('price', 10, 2)->default(0);
+            $table->decimal('price', 10, 2)->default(0.00);
             $table->unsignedInteger('stock')->default(0);
             $table->string('cover_image')->nullable();
             $table->boolean('is_available')->default(true);

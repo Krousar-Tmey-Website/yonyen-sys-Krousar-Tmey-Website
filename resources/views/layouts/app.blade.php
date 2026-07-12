@@ -189,8 +189,7 @@
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
                             <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">Partnerships</a>
                             <a href="{{ route('involved') }}#volunteer" class="dropdown-item">Volunteering</a>
-                            <a href="{{ route('involved') }}#jobs" class="dropdown-item">Job Opportunities</a>
-                            <a href="{{ route('involved') }}#donate" class="dropdown-item rounded-b-xl">Donate</a>
+                            <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">Job Opportunities</a>
                         </div>
                     </div>
 

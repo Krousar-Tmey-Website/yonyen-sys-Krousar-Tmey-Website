@@ -8,6 +8,7 @@ class Book extends Model
 {
     protected $fillable = [
         'title',
+        'author',
         'description',
         'price',
         'stock',
@@ -40,5 +41,10 @@ class Book extends Model
         return str_starts_with($this->cover_image, 'http')
             ? $this->cover_image
             : asset('storage/' . $this->cover_image);
+    }
+
+    public function getFormattedPriceAttribute(): string
+    {
+        return '$' . number_format($this->price, 2);
     }
 }

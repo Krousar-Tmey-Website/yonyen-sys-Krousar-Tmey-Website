@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\VolunteerController;
 use App\Models\AnnualReport;
 use App\Models\Award;
+use App\Models\Book;
 use App\Models\CoreValue;
 use App\Models\Gallery;
 use App\Models\HistoryEvent;
@@ -23,22 +25,12 @@ use App\Models\ProgramPageItem;
 use App\Models\Project;
 use App\Models\Slide;
 use App\Models\Testimonial;
-use App\Models\Book;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 // ──────────────────────────────────────────────
 // Public Routes
 // ──────────────────────────────────────────────
-
-// Books for sale (public detail page)
-Route::get('/books/{book}', function (Book $book) {
-    if (!$book->is_available || $book->stock <= 0) {
-        abort(404);
-    }
-
-    return view('book', compact('book'));
-})->name('books.show');
 
 // ──────────────────────────────────────────────
 // Admin — Auth (no middleware)
@@ -114,6 +106,9 @@ Route::get('/get-involved', function () {
 
     return view('involved', compact('settings', 'jobs', 'books'));
 })->name('involved');
+
+// Books for sale (public detail page)
+Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
 Route::get('/jobs/{jobOpportunity}', function (JobOpportunity $jobOpportunity) {
     if (! $jobOpportunity->is_active) {
@@ -227,6 +222,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);
 
+    // Books for Sale
+    Route::resource('books', Admin\BookController::class)->except(['show']);
+
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
 
@@ -254,6 +252,4 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::delete('{volunteer}', [Admin\VolunteerController::class, 'destroy'])->name('destroy');
     });
 
-    // Books for sale (admin)
-    Route::resource('books', Admin\BookController::class)->except(['show']);
 });
