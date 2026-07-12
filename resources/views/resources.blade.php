@@ -32,26 +32,33 @@
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($reports as $report)
-            <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 hover:shadow-md transition-shadow group flex items-center gap-5">
-                <div class="w-14 h-14 rounded-xl bg-[#1a3c6e] flex items-center justify-center flex-shrink-0">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 hover:shadow-md transition-shadow group flex flex-col gap-5">
+                    <div class="flex items-center gap-5">
+                        <div class="w-14 h-14 rounded-xl bg-[#1a3c6e] flex items-center justify-center flex-shrink-0">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-bold text-[#1a3c6e]">{{ $report->title }}</div>
+                            <div class="text-gray-400 text-xs mt-0.5">{{ $report->year }} · PDF Report</div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        @if ($report->has_pdf_file)
+                            <a href="{{ route('reports.view', $report) }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-lg border border-[#1a3c6e] px-3 py-2 text-sm font-semibold text-[#1a3c6e] hover:bg-[#1a3c6e] hover:text-white transition-colors">
+                                View PDF
+                            </a>
+                            <a href="{{ route('reports.download', $report) }}" class="inline-flex items-center justify-center rounded-lg bg-[#e8a020] px-3 py-2 text-sm font-semibold text-white hover:bg-[#c7830d] transition-colors">
+                                Download PDF
+                            </a>
+                        @else
+                            <p class="text-sm text-gray-500">No PDF file available.</p>
+                        @endif
+                    </div>
                 </div>
-                <div class="flex-1">
-                    <div class="font-bold text-[#1a3c6e]">{{ $report->title }}</div>
-                    <div class="text-gray-400 text-xs mt-0.5">{{ $report->description ?? 'PDF · Full Report' }}</div>
-                </div>
-                @if($report->download_url)
-                <a href="{{ $report->download_url }}" target="_blank" class="text-gray-400 hover:text-[#e8a020] transition-colors p-2 rounded-lg hover:bg-white">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                </a>
-                @else
-                <span class="text-gray-200 p-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                </span>
-                @endif
-            </div>
             @empty
-            <div class="col-span-3 py-12 text-center text-gray-400 text-sm">No annual reports published yet.</div>
+                <div class="md:col-span-2 lg:col-span-3 rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-8 text-center text-gray-500">
+                    No annual reports are available yet.
+                </div>
             @endforelse
         </div>
     </div>

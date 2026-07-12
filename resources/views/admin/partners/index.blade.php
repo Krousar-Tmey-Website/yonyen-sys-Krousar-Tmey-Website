@@ -37,7 +37,7 @@
 
             {{-- CATEGORY --}}
             <div>
-                <label for="category" class="form-label">
+                <label for="category_id" class="form-label">
                     Category <span class="text-red-400 font-normal">*</span>
                 </label>
                 <div class="relative">
