@@ -427,35 +427,6 @@ $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
     });
 </script>
 
-
-{{-- ========================================================
-     OUR PRINCIPLE SECTION
-     ======================================================== --}}
-<section class="relative h-screen min-h-screen overflow-hidden">
-    <div class="absolute inset-0">
-        @php
-        $principleImage = $settings['principle_image'] ?? null;
-        $principleImageUrl = $principleImage ? (str_starts_with($principleImage, 'http') ? $principleImage : asset('storage/' . $principleImage)) : asset('images/children.jpg');
-        @endphp
-        <div class="absolute inset-0 bg-cover bg-center bg-fixed" style="background-image: url('{{ $principleImageUrl }}')"></div>
-        <div class="absolute inset-0 bg-black/60"></div>
-    </div>
-    
-    <div class="relative z-10 h-full flex items-center justify-center" data-reveal="scale">
-        <div class="max-w-4xl px-6 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-10">{{ $settings['principle_title'] ?? 'Our Principle' }}</h2>
-            
-            <div class="relative">
-                <svg class="w-16 h-16 text-[#d4af37] mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-4.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/></svg>
-                
-                <blockquote class="text-2xl md:text-3xl lg:text-4xl font-serif italic text-white leading-relaxed">
-                    "{{ $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." }}"
-                </blockquote>
-            </div>
-        </div>
-    </div>
-</section>
-
 {{-- ========================================================
      KROUSAR THMEY WORLDWIDE SECTION
      ======================================================== --}}
@@ -533,6 +504,91 @@ $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
             </div>
         </div>
     </div>
+</section>
+
+{{-- ========================================================
+     OUR PRINCIPLE SECTION
+     ======================================================== --}}
+@php
+$principleSlides = \App\Models\PrincipleSlide::active()->get();
+@endphp
+<section class="relative h-screen min-h-screen overflow-hidden"
+    x-data="{
+            current: 0,
+            total: {{ max($principleSlides->count(), 1) }},
+            timer: null,
+            start() {
+                if (this.total <= 1) return;
+                this.timer = setInterval(() => {
+                    this.current = (this.current + 1) % this.total;
+                }, 5500);
+            },
+            go(i) {
+                this.current = i;
+                clearInterval(this.timer);
+                this.start();
+            }
+         }"
+    x-init="start()">
+
+    @forelse($principleSlides as $slide)
+    {{-- Slide {{ $loop->iteration }} --}}
+    <div class="absolute inset-0 transition-opacity duration-1000"
+        :class="current === {{ $loop->index }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="absolute inset-0 bg-cover bg-center bg-fixed" style="background-image: url('{{ $slide->image_url }}')"></div>
+    </div>
+    @empty
+    {{-- Fallback static image --}}
+    <div class="absolute inset-0 transition-opacity duration-1000 opacity-100 z-10">
+        <div class="absolute inset-0 bg-black/60"></div>
+        @php
+        $principleImage = $settings['principle_image'] ?? null;
+        $principleImageUrl = $principleImage ? (str_starts_with($principleImage, 'http') ? $principleImage : asset('storage/' . $principleImage)) : asset('images/children.jpg');
+        @endphp
+        <div class="absolute inset-0 bg-cover bg-center bg-fixed" style="background-image: url('{{ $principleImageUrl }}')"></div>
+    </div>
+    @endforelse
+
+    <div class="relative z-10 h-full flex items-center justify-center" data-reveal="scale">
+        <div class="max-w-4xl px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-10">{{ $settings['principle_title'] ?? 'Our Principle' }}</h2>
+            
+            <div class="relative">
+                <svg class="w-16 h-16 text-[#d4af37] mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-4.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/></svg>
+                
+                <blockquote class="text-2xl md:text-3xl lg:text-4xl font-serif italic text-white leading-relaxed">
+                    "{{ $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." }}"
+                </blockquote>
+            </div>
+        </div>
+    </div>
+
+    {{-- Dot controls (only shown when multiple slides) --}}
+    @if($principleSlides->count() > 1)
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-6">
+        <template x-for="i in total" :key="i">
+            <button @click="go(i - 1)"
+                class="transition-all duration-300 rounded-full"
+                :class="current === i - 1 ? 'w-8 h-3 bg-[#d4af37]' : 'w-3 h-3 bg-white/50 hover:bg-white/80'"
+                :aria-label="'Go to slide ' + i">
+            </button>
+        </template>
+    </div>
+
+    <button @click="go((current - 1 + total) % total)"
+        class="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center hover:bg-white/30 transition-colors" aria-label="Previous">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+    </button>
+    <button @click="go((current + 1) % total)"
+        class="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center hover:bg-white/30 transition-colors" aria-label="Next">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </button>
+    @endif
 </section>
 
 @endsection

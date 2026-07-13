@@ -3,62 +3,66 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ImpactStatistic;
+use App\Models\PrincipleSlide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class ImpactStatisticController extends Controller
+class PrincipleSlideController extends Controller
 {
     public function index()
     {
-        $statistics = ImpactStatistic::orderBy('sort_order')->get();
-        return view('admin.impact_statistics.index', compact('statistics'));
+        $slides = PrincipleSlide::orderBy('sort_order')->get();
+        return view('admin.principle_slides.index', compact('slides'));
+    }
+
+    public function create()
+    {
+        return view('admin.principle_slides.create');
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'value' => 'required|string|max:255',
-            'label' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'title' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:2048',
             'image_url' => 'nullable|url|max:2048',
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
-            'is_featured' => 'boolean',
         ]);
 
         $data['sort_order'] = $data['sort_order'] ?? 0;
         $data['image'] = $this->resolveImage($request, $data);
         unset($data['image_url']);
 
-        ImpactStatistic::create($data);
+        PrincipleSlide::create($data);
 
-        return redirect()->route('admin.impact-statistics.index')
-            ->with('success', 'Impact statistic created successfully.');
+        return redirect()->route('admin.principle-slides.index')
+            ->with('success', 'Principle slide created successfully.');
     }
 
-    public function update(Request $request, ImpactStatistic $impactStatistic)
+    public function edit(PrincipleSlide $principleSlide)
+    {
+        return view('admin.principle_slides.edit', compact('principleSlide'));
+    }
+
+    public function update(Request $request, PrincipleSlide $principleSlide)
     {
         $data = $request->validate([
-            'value' => 'required|string|max:255',
-            'label' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'title' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:2048',
             'image_url' => 'nullable|url|max:2048',
             'remove_image' => 'nullable|boolean',
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
-            'is_featured' => 'boolean',
         ]);
 
         if ($request->boolean('remove_image')) {
-            $this->deleteStoredImage($impactStatistic->image);
+            $this->deleteStoredImage($principleSlide->image);
             $data['image'] = null;
         } else {
             $newImage = $this->resolveImage($request, $data);
             if ($newImage !== null) {
-                $this->deleteStoredImage($impactStatistic->image);
+                $this->deleteStoredImage($principleSlide->image);
                 $data['image'] = $newImage;
             } else {
                 unset($data['image']);
@@ -66,29 +70,25 @@ class ImpactStatisticController extends Controller
         }
         unset($data['image_url'], $data['remove_image']);
 
-        $impactStatistic->update($data);
+        $principleSlide->update($data);
 
-        return redirect()->route('admin.impact-statistics.index')
-            ->with('success', 'Impact statistic updated successfully.');
+        return redirect()->route('admin.principle-slides.index')
+            ->with('success', 'Principle slide updated successfully.');
     }
 
-    public function destroy(ImpactStatistic $impactStatistic)
+    public function destroy(PrincipleSlide $principleSlide)
     {
-        $this->deleteStoredImage($impactStatistic->image);
-        $impactStatistic->delete();
+        $this->deleteStoredImage($principleSlide->image);
+        $principleSlide->delete();
 
-        return redirect()->route('admin.impact-statistics.index')
-            ->with('success', 'Impact statistic deleted successfully.');
+        return redirect()->route('admin.principle-slides.index')
+            ->with('success', 'Principle slide deleted successfully.');
     }
 
-    /**
-     * Resolve the image value from an uploaded file or an image URL.
-     * Returns null when neither was provided.
-     */
     private function resolveImage(Request $request, array $data): ?string
     {
         if ($request->hasFile('image')) {
-            return $request->file('image')->store('impact-statistics', 'public');
+            return $request->file('image')->store('principle-slides', 'public');
         }
 
         if (!empty($data['image_url'])) {
@@ -98,9 +98,6 @@ class ImpactStatisticController extends Controller
         return null;
     }
 
-    /**
-     * Delete a locally stored image file, ignoring external URLs.
-     */
     private function deleteStoredImage(?string $path): void
     {
         if ($path && !str_starts_with($path, 'http')) {

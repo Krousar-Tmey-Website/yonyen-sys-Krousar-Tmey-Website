@@ -467,10 +467,13 @@
         </div>
     </div>
 
-    {{-- OUR PRINCIPLE SECTION --}}
+{{-- OUR PRINCIPLE SECTION --}}
     <div x-show="tab === 'principle'" class="space-y-6">
         <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 class="font-bold text-gray-700 mb-4 text-sm">Our Principle</h3>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-700 text-sm">Our Principle</h3>
+                <a href="{{ route('admin.principle-slides.index') }}" class="text-xs text-[#2d6fa3] hover:underline">Manage Background Slides</a>
+            </div>
             <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
                 <input type="hidden" name="section" value="principle">
@@ -488,7 +491,8 @@
                 </div>
                 
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Background Image</label>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Background Image (Fallback)</label>
+                    <p class="text-xs text-gray-400 mb-2">This image is used when no slides are configured. <a href="{{ route('admin.principle-slides.index') }}" class="text-[#2d6fa3] hover:underline">Manage slides for slideshow</a></p>
                     <div class="space-y-3">
                         @if(!empty($settings['principle_image']))
                         <div class="flex items-center gap-3">
@@ -514,7 +518,7 @@
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
                                placeholder="https://example.com/image.jpg">
                     </div>
-                    <p class="text-xs text-gray-400 mt-1">Upload an image (max 4MB) or paste an external URL. Upload takes priority.</p>
+                    <p class="text-xs text-gray-400 mt-1">Upload an image (max 4MB) or paste an external URL. Used as fallback when no slides exist.</p>
                 </div>
                 
                 <button type="submit" class="btn-primary text-sm py-2.5">Save Principle Section</button>
