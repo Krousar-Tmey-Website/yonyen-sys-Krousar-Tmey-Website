@@ -24,7 +24,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Parent Program</label>
                     <select name="program_id" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         <option value="">-- No Program --</option>
-                        @foreach($programs ?? [] as $program)
+                        @foreach($programs as $program)
                             <option value="{{ $program->id }}" {{ old('program_id') == $program->id ? 'selected' : '' }}>{{ $program->title }}</option>
                         @endforeach
                     </select>
@@ -84,12 +84,13 @@
                 <textarea name="objective" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('objective') }}</textarea>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content</label>
-                <textarea name="content" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ old('content') }}</textarea>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content (HTML Supported)</label>
+                <textarea name="content" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Full content (HTML is supported)...">{{ old('content') }}</textarea>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Activities</label>
                 <textarea name="activities" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Activity 1&#10;Activity 2">{{ old('activities') }}</textarea>
+                <p class="mt-1 text-xs text-gray-400">Each new line will be displayed as a bullet point on the public page.</p>
             </div>
         </div>
 
@@ -143,36 +144,14 @@
             </div>
         </div>
 
-        {{-- Key Info & Donations --}}
-        <div class="bg-[#e8a020]/5 rounded-2xl border border-[#e8a020]/10 p-6 space-y-4">
-            <h3 class="text-xs font-bold text-[#e8a020] uppercase tracking-wider">Project Key Info &amp; Donations</h3>
-            <div class="grid md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Area of Work</label>
-                    <input type="text" name="area_of_work" value="{{ old('area_of_work') }}"
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Duration</label>
-                    <input type="text" name="duration" value="{{ old('duration') }}"
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Location</label>
-                    <input type="text" name="location" value="{{ old('location') }}"
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Beneficiaries</label>
-                    <input type="text" name="beneficiaries" value="{{ old('beneficiaries') }}"
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                </div>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference (Donation details)</label>
-                <textarea name="make_difference_text" rows="3" placeholder="e.g. $50 - food expenses per child per month"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('make_difference_text') }}</textarea>
-            </div>
+        <div class="bg-[#e8a020]/5 rounded-2xl border border-[#e8a020]/10 p-6 space-y-3">
+            <h3 class="text-xs font-bold text-[#e8a020] uppercase tracking-wider">Public Project Page Details</h3>
+            <p class="text-sm text-gray-600">
+                After you create this project, manage its public page details from the dedicated <strong>Project Defaults</strong> page.
+            </p>
+            <p class="text-xs text-gray-500">
+                There you can choose whether this project uses shared defaults or its own specific public-page details.
+            </p>
         </div>
 
         {{-- Income Generation Grants --}}

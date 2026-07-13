@@ -46,6 +46,14 @@
                 {{ $item->program ? $item->program->title : 'No parent program' }}
             </div>
             <h3 class="font-semibold text-gray-800 text-sm leading-snug mb-1">{{ $item->title }}</h3>
+            @php
+                $usesSpecificDetails = filled($item->area_of_work) || filled($item->duration) || filled($item->location) || filled($item->beneficiaries) || filled($item->make_difference_text);
+            @endphp
+            <div class="mb-2">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium {{ $usesSpecificDetails ? 'bg-[#e8a020]/15 text-[#9d6d00]' : 'bg-gray-100 text-gray-500' }}">
+                    {{ $usesSpecificDetails ? 'Specific page details' : 'Using project defaults' }}
+                </span>
+            </div>
             @if($item->description)
             <p class="text-gray-400 text-xs leading-relaxed line-clamp-2 mb-3">{{ $item->description }}</p>
             @endif
@@ -56,6 +64,11 @@
                        class="inline-flex items-center gap-1.5 text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                         Edit
+                    </a>
+                    <a href="{{ route('admin.project-defaults.index', ['project' => $item->id]) }}"
+                       class="inline-flex items-center gap-1.5 text-[#8da83a] hover:text-[#6f872d] text-xs font-medium">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/></svg>
+                        Page Details
                     </a>
                     <form action="{{ route('admin.projects.destroy', $item) }}" method="POST"
                           onsubmit="return confirm('Delete &quot;{{ addslashes($item->title) }}&quot;? This cannot be undone.');" class="inline-block">
