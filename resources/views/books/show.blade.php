@@ -18,15 +18,17 @@
             <div>
                 <span class="text-[#e8a020] font-semibold text-base uppercase tracking-wider">Book for Sale</span>
                 <h1 class="text-4xl md:text-5xl font-bold text-[#1a3c6e] mt-4 mb-6 leading-tight">{{ $book->title }}</h1>
-                @if($book->author)
-                <p class="text-gray-500 text-lg mb-4">By {{ $book->author }}</p>
-                @endif
                 <div class="text-4xl font-bold text-[#1a3c6e] mb-8">{{ $book->formatted_price }}</div>
                 @if($book->description)
                 <div class="text-gray-600 text-lg leading-loose">
                     {!! nl2br(e($book->description)) !!}
                 </div>
                 @endif
+                <a href="{{ route('contact') }}"
+                   class="inline-flex items-center justify-center gap-2 mt-8 px-8 py-3.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white font-semibold rounded-2xl transition-colors shadow-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    Order Book
+                </a>
                 <div class="mt-10 p-6 bg-white rounded-2xl shadow-sm">
                     <p class="text-base text-gray-600">100% of proceeds go directly to supporting children in Cambodia.</p>
                 </div>

@@ -189,6 +189,7 @@
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
                             <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">Partnerships</a>
                             <a href="{{ route('involved') }}#volunteer" class="dropdown-item">Volunteering</a>
+                            <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">Book for Sales</a>
                             <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">Job Opportunities</a>
                         </div>
                     </div>
@@ -328,6 +329,7 @@
                         <li><a href="{{ route('programs') }}#{{ $footerProg->slug }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ $footerProg->title }}</a></li>
                         @endforeach
                         <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">Volunteering</a></li>
+                        <li><a href="{{ route('involved') }}#book-for-sales" class="text-white/50 hover:text-white text-sm transition-colors">Book for Sales</a></li>
                         <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>
                     </ul>
 

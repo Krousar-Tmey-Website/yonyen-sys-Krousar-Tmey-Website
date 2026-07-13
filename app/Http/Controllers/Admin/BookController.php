@@ -18,8 +18,7 @@ class BookController extends Controller
 
         $books = Book::query()
             ->when($search !== '', function ($query) use ($search) {
-                $query->where('title', 'like', '%' . $search . '%')
-                      ->orWhere('author', 'like', '%' . $search . '%');
+                $query->where('title', 'like', '%' . $search . '%');
             })
             ->when($availability === 'available', fn ($query) => $query->where('is_available', true))
             ->when($availability === 'unavailable', fn ($query) => $query->where('is_available', false))

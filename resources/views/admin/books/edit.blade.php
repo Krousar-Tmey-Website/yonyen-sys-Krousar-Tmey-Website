@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
 
+@push('styles')
+    @vite(['resources/css/admin.css', 'resources/css/admin-history.css'])
+@endpush
+
 @php use Illuminate\Support\Str; @endphp
 
 @section('title', 'Edit Book')
@@ -8,8 +12,8 @@
 
 @section('content')
 
-<div class="form-container w-full max-w-4xl mx-auto px-4 md:px-8">
-    <form action="{{ route('admin.books.update', $book) }}" method="POST" enctype="multipart/form-data" id="bookForm">
+<div class="form-container">
+    <form action="{{ route('admin.books.update', $book) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -25,8 +29,7 @@
                 <span class="badge">Required *</span>
             </div>
             <div class="card-body">
-                <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Title -->
+                <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-group">
                         <label class="form-label">Title <span class="required">*</span></label>
                         <input type="text" name="title" value="{{ old('title', $book->title) }}" required
@@ -35,7 +38,6 @@
                         @error('title')<div class="form-error">{{ $message }}</div>@enderror
                     </div>
 
-                    <!-- Price -->
                     <div class="form-group">
                         <label class="form-label">Price <span class="required">*</span></label>
                         <input type="number" name="price" value="{{ old('price', $book->price) }}" required step="0.01" min="0"
@@ -58,8 +60,8 @@
                 <h3>Description</h3>
             </div>
             <div class="card-body">
-                <div class="form-group form-group--no-margin">
-                    <textarea name="description" rows="3" class="form-control content"
+                <div class="form-group">
+                    <textarea name="description" rows="3" class="form-control textarea"
                               placeholder="Write a short description or synopsis for the book...">{{ old('description', $book->description) }}</textarea>
                     @error('description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
@@ -74,17 +76,17 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                 </div>
-                <h3>Cover Image & Publishing</h3>
+                <h3>Cover Image &amp; Publishing</h3>
             </div>
             <div class="card-body">
                 @if($book->cover_image)
-                <div class="form-group mb-8">
+                <div class="form-group">
                     <label class="form-label">Current Cover</label>
-                    <div class="flex items-center gap-6 p-4 bg-[#f8fafc] rounded-2xl border border-gray-100">
-                        <img src="{{ $book->cover_image_url }}" alt="Current cover" class="w-20 h-28 object-cover rounded-xl shadow-sm">
-                        <div>
-                            <div class="text-sm font-bold text-[#1a3c6e]">Current cover image</div>
-                            <div class="text-[11px] text-gray-400 mt-1">Uploaded to storage/{{ $book->cover_image }}</div>
+                    <div class="current-image">
+                        <img src="{{ $book->cover_image_url }}" alt="Current cover">
+                        <div class="image-info">
+                            <strong>Current cover</strong>
+                            <div class="text-small-info">Replace below if needed</div>
                         </div>
                     </div>
                 </div>
@@ -92,31 +94,27 @@
 
                 <div class="form-group">
                     <label class="form-label">Replace Cover <span class="optional">(optional)</span></label>
-                    <div class="upload-area border-2 border-dashed border-[#2d6fa3]/30 hover:border-[#2d6fa3] hover:bg-[#f8fafc] transition-all rounded-2xl p-10 text-center cursor-pointer"
-                         onclick="document.getElementById('coverInput').click()">
+                    <div class="upload-area" onclick="document.getElementById('coverInput').click()">
                         <input type="file" name="cover_image" id="coverInput" accept="image/*" class="hidden">
                         <div id="coverPlaceholder">
-                            <svg class="w-12 h-12 text-[#2d6fa3]/40 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <div class="text-sm font-bold text-[#1a3c6e]">Click to upload new cover</div>
-                            <div class="text-xs text-gray-400 mt-2">JPG, PNG or WebP (Max 2MB)</div>
+                            <div class="upload-title">Click to upload new cover</div>
+                            <div class="upload-subtitle">JPG, PNG or WebP (Max 2MB)</div>
                         </div>
-                        <div id="coverPreview" class="hidden mt-4"></div>
+                        <div id="coverPreview" class="hidden mt-3"></div>
                     </div>
                     @error('cover_image')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-group form-group--no-margin">
-                    <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="publish-option bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:shadow-sm transition-all">
-                            <input type="checkbox" name="is_available" id="is_available" value="1"
-                                   class="w-5 h-5 accent-[#2d6fa3] cursor-pointer"
-                                   {{ old('is_available', $book->is_available) ? 'checked' : '' }}>
-                            <div>
-                                <div class="text-sm font-bold text-[#1a3c6e]">Available for purchase</div>
-                                <div class="text-[11px] text-gray-400">Show on the public page</div>
-                            </div>
+                    <div class="publish-option">
+                        <input type="checkbox" name="is_available" id="is_available" value="1"
+                               {{ old('is_available', $book->is_available) ? 'checked' : '' }}>
+                        <div>
+                            <div class="label">Available for purchase</div>
+                            <div class="description">Show on the public page</div>
                         </div>
                     </div>
                 </div>
@@ -134,22 +132,21 @@
             <a href="{{ route('admin.books.index') }}" class="btn-cancel">Cancel</a>
         </div>
     </form>
-</div>
 
-{{-- Delete Form --}}
-<div class="form-actions form-actions--delete">
-    <form action="{{ route('admin.books.destroy', $book) }}" method="POST"
-          onsubmit="return confirm('⚠️ Permanently delete this book?\n\nThis action cannot be undone.')"
-          class="inline delete-form">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn-danger delete-btn">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-            Delete Book
-        </button>
-    </form>
+    {{-- Delete Form --}}
+    <div class="form-actions form-actions--delete">
+        <form action="{{ route('admin.books.destroy', $book) }}" method="POST"
+              class="inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn-danger">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                Delete Book
+            </button>
+        </form>
+    </div>
 </div>
 
 <script>
@@ -167,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     preview.classList.remove('hidden');
                     preview.innerHTML = `
                         <div class="image-preview-wrapper">
-                            <img src="${e.target.result}" alt="Preview" style="height: 180px;">
+                             <img src="${e.target.result}" alt="Preview" class="h-[180px]">
                             <button type="button" class="remove-btn"
                                     onclick="document.getElementById('coverInput').value=''; preview.innerHTML=''; preview.classList.add('hidden'); placeholder.classList.remove('hidden');">
                                 ×

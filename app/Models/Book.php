@@ -8,7 +8,6 @@ class Book extends Model
 {
     protected $fillable = [
         'title',
-        'author',
         'description',
         'price',
         'stock',
@@ -29,7 +28,7 @@ class Book extends Model
 
     public function scopeAvailable($query)
     {
-        return $query->where('is_available', true)->where('stock', '>', 0);
+        return $query->where('is_available', true);
     }
 
     public function getCoverImageUrlAttribute(): ?string
