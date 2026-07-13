@@ -24,7 +24,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Parent Program</label>
                     <select name="program_id" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         <option value="">-- No Program --</option>
-                        @foreach($programs ?? [] as $program)
+                        @foreach($programs as $program)
                             <option value="{{ $program->id }}" {{ old('program_id') == $program->id ? 'selected' : '' }}>{{ $program->title }}</option>
                         @endforeach
                     </select>
@@ -84,12 +84,13 @@
                 <textarea name="objective" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('objective') }}</textarea>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content</label>
-                <textarea name="content" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ old('content') }}</textarea>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content (HTML Supported)</label>
+                <textarea name="content" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Full content (HTML is supported)...">{{ old('content') }}</textarea>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Activities</label>
                 <textarea name="activities" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Activity 1&#10;Activity 2">{{ old('activities') }}</textarea>
+                <p class="mt-1 text-xs text-gray-400">Each new line will be displayed as a bullet point on the public page.</p>
             </div>
         </div>
 

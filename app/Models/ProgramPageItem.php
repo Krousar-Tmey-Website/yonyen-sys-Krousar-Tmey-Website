@@ -9,7 +9,9 @@ class ProgramPageItem extends Model
     protected $fillable = [
         'title',
         'short_content',
+        'objective',
         'detail_content',
+        'activities',
         'image',
         'image_2',
         'image_3',
