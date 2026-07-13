@@ -252,4 +252,12 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::delete('{volunteer}', [Admin\VolunteerController::class, 'destroy'])->name('destroy');
     });
 
+    // Donation Reports
+    Route::prefix('donations/reports')->name('donations.reports')->group(function () {
+        Route::get('/', [Admin\DonationReportController::class, 'index'])->name('');
+        Route::get('export/csv', [Admin\DonationReportController::class, 'exportCsv'])->name('.export.csv');
+        Route::get('export/excel', [Admin\DonationReportController::class, 'exportExcel'])->name('.export.excel');
+        Route::get('{donation}', [Admin\DonationReportController::class, 'show'])->name('.show');
+    });
+
 });
