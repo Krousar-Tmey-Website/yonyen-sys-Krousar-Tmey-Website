@@ -235,6 +235,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
 
+    // Donation Campaigns
+    Route::resource('campaigns', Admin\CampaignController::class)->except(['show']);
+    Route::patch('campaigns/{campaign}/toggle', [Admin\CampaignController::class, 'toggle'])->name('campaigns.toggle');
+
     Route::resource('offices', Admin\OfficeController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::prefix('contacts')->name('contacts.')->group(function () {
