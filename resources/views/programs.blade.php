@@ -30,37 +30,80 @@ $programIconFor = function (string $title, string $size = 'w-5 h-5') {
 @endphp
 
 {{-- Page Header --}}
-@php
-    $bannerBgStyle = !empty($bannerImage)
-        ? 'background-image: linear-gradient(to right, rgba(26,60,110,0.85) 30%, rgba(26,60,110,0.55) 60%, rgba(26,60,110,0.25) 100%), url(' . (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) . '); background-size: cover; background-position: center;'
-        : '';
-@endphp
-<div class="bg-[#1a3c6e] pt-20 pb-20 relative overflow-hidden" style="{{ $bannerBgStyle }}">
+<section class="bg-[#1a3c6e] relative overflow-hidden min-h-[560px] md:min-h-[620px] lg:min-h-[680px] flex items-center">
+    @if(!empty($bannerImage))
+    <div class="absolute inset-0">
+        <img
+            src="{{ str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage) }}"
+            alt=""
+            aria-hidden="true"
+            class="absolute inset-0 w-full h-full object-cover object-[center_30%] scale-110 blur-xl opacity-22 hero-media-drift"
+        >
+        <img
+            src="{{ str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage) }}"
+            alt="{{ $bannerTitle }}"
+            class="absolute inset-0 w-full h-full object-cover object-[center_30%] hero-media-drift"
+        >
+    </div>
+    @endif
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,_rgba(255,255,255,0.18),_transparent_0,_transparent_26%),radial-gradient(circle_at_12%_84%,_rgba(141,168,58,0.12),_transparent_0,_transparent_24%),linear-gradient(180deg,_rgba(255,255,255,0.04),_transparent_36%)]"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(112deg,rgba(10,29,56,0.96)_0%,rgba(16,40,74,0.92)_32%,rgba(22,55,99,0.72)_56%,rgba(45,111,163,0.18)_100%)]"></div>
     @if(empty($bannerImage))
     <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/3"></div>
     <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#2d6fa3]/30 translate-y-1/2 -translate-x-1/4"></div>
     @endif
-    <div class="relative max-w-7xl mx-auto px-6 animate-slide-up">
-        <nav class="flex items-center gap-2 text-sm text-white/50 mb-10 flex-wrap">
+    <div class="absolute inset-0 bg-gradient-to-t from-[#163763]/56 via-[#163763]/12 to-transparent"></div>
+    <div class="absolute top-16 left-[10%] hidden lg:block w-32 h-32 rounded-full border border-white/10 bg-white/[0.03] hero-float-slow"></div>
+    <div class="absolute top-24 right-[14%] hidden lg:block w-3 h-3 rounded-full bg-[#8da83a] shadow-[0_0_0_12px_rgba(141,168,58,0.12)] hero-pulse"></div>
+    <div class="absolute bottom-20 right-[8%] hidden lg:block w-44 h-44 rounded-full border border-white/8 bg-white/[0.02] hero-float-delayed"></div>
+    <div class="relative w-full max-w-7xl mx-auto px-6 py-16 md:py-20 lg:py-24">
+        <div class="max-w-[38rem]">
+        <div class="inline-flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-white/6 backdrop-blur-md border border-white/10 shadow-lg shadow-[#081a33]/20 mb-6 hero-reveal">
+            <span class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/80">
+                <span class="w-2 h-2 rounded-full bg-[#8da83a]"></span>
+                Cambodia Since 1991
+            </span>
+        </div>
+        <div class="max-w-[34rem] rounded-[1.75rem] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.035))] backdrop-blur-xl shadow-[0_24px_60px_rgba(4,18,37,0.24)] px-5 py-6 md:px-8 md:py-7 hero-reveal hero-reveal-delay-1">
+        <nav class="flex items-center gap-2 text-sm text-white/60 mb-6 flex-wrap hero-reveal hero-reveal-delay-2">
             <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-white/80">Our Programs</span>
+            <span class="text-white/90">Our Programs</span>
         </nav>
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#e8a020]/12 backdrop-blur-sm border border-[#e8a020]/25 mb-5 shadow-lg shadow-[#10284c]/10 hero-reveal hero-reveal-delay-2">
             <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
             <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">Krousar Thmey</span>
         </div>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 uppercase tracking-wide leading-[1.05]">{{ $bannerTitle }}</h1>
-        <div class="w-16 h-1.5 bg-[#8da83a] rounded-full mb-6"></div>
+        <h1 class="text-4xl md:text-6xl lg:text-[4.5rem] font-black text-white mb-5 uppercase tracking-[0.03em] leading-[0.92] drop-shadow-[0_8px_24px_rgba(8,21,41,0.28)] hero-reveal hero-reveal-delay-3">{{ $bannerTitle }}</h1>
+        <div class="flex items-center gap-4 mb-6 hero-reveal hero-reveal-delay-3">
+            <div class="w-18 md:w-20 h-1.5 bg-[#8da83a] rounded-full"></div>
+            <div class="w-10 h-px bg-white/20"></div>
+        </div>
         @if($bannerSubtitle)
-        <p class="text-white/60 text-lg max-w-2xl leading-relaxed">{{ $bannerSubtitle }}</p>
+        <p class="text-white/84 text-base md:text-[1.15rem] max-w-xl leading-relaxed hero-reveal hero-reveal-delay-4">{{ $bannerSubtitle }}</p>
         @endif
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-white/72 hero-reveal hero-reveal-delay-4">
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-sm backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1">
+                <span class="w-2 h-2 rounded-full bg-[#8da83a]"></span>
+                15 Provinces
+            </div>
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-sm backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1">
+                <span class="w-2 h-2 rounded-full bg-[#e8a020]"></span>
+                4,000+ Children
+            </div>
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-sm backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1">
+                <span class="w-2 h-2 rounded-full bg-white/70"></span>
+                Three Core Programs
+            </div>
+        </div>
+        </div>
+        </div>
     </div>
-</div>
+</section>
 {{-- Wave divider: a separate element below the banner, never overlapping banner text regardless of subtitle length --}}
-<div class="relative h-10 md:h-12 bg-[#1a3c6e] overflow-hidden" aria-hidden="true">
-    <svg class="absolute inset-0 w-full h-full text-white" viewBox="0 0 1440 48" preserveAspectRatio="none" fill="currentColor">
-        <path d="M0,48 C240,16 480,0 720,0 C960,0 1200,16 1440,48 L1440,48 L0,48 Z"></path>
+<div class="relative h-10 md:h-12 bg-transparent overflow-hidden -mt-px" aria-hidden="true">
+    <svg class="absolute inset-0 w-full h-full text-white" viewBox="0 0 1440 56" preserveAspectRatio="none" fill="currentColor">
+        <path d="M0,56 C220,30 470,14 720,14 C1000,14 1228,30 1440,56 L1440,56 L0,56 Z"></path>
     </svg>
 </div>
 

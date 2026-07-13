@@ -103,14 +103,14 @@
                 </div>
                 @endif
 
-                @if($project->make_difference_text)
+                @if($project->effective_make_difference_text)
                 <div>
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-1 h-6 bg-[#e8a020] rounded-full"></div>
                         <span class="text-xs font-bold text-[#1a3c6e] uppercase tracking-widest">Make a Difference</span>
                         <div class="flex-1 h-px bg-gray-100"></div>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{{ $project->make_difference_text }}</p>
+                    <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{{ $project->effective_make_difference_text }}</p>
                 </div>
                 @endif
 
@@ -149,32 +149,32 @@
             <div class="space-y-5 lg:sticky lg:top-24">
 
                 {{-- Project info card --}}
-                @if($project->area_of_work || $project->duration || $project->location || $project->beneficiaries)
+                @if($project->effective_area_of_work || $project->effective_duration || $project->effective_location || $project->effective_beneficiaries)
                 <div class="bg-[#1a3c6e] rounded-2xl p-6 text-white">
                     <h4 class="font-bold text-xs uppercase tracking-widest text-white/60 mb-4 pb-3 border-b border-white/10">Project Information</h4>
                     <div class="space-y-3">
-                        @if($project->area_of_work)
+                        @if($project->effective_area_of_work)
                         <div class="flex gap-3">
                             <svg class="w-4 h-4 text-[#8da83a] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                            <div><p class="text-white/50 text-xs">Area of work</p><p class="text-white text-sm font-semibold">{{ $project->area_of_work }}</p></div>
+                            <div><p class="text-white/50 text-xs">Area of work</p><p class="text-white text-sm font-semibold">{{ $project->effective_area_of_work }}</p></div>
                         </div>
                         @endif
-                        @if($project->duration)
+                        @if($project->effective_duration)
                         <div class="flex gap-3">
                             <svg class="w-4 h-4 text-[#8da83a] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                            <div><p class="text-white/50 text-xs">Duration</p><p class="text-white text-sm font-semibold">{{ $project->duration }}</p></div>
+                            <div><p class="text-white/50 text-xs">Duration</p><p class="text-white text-sm font-semibold">{{ $project->effective_duration }}</p></div>
                         </div>
                         @endif
-                        @if($project->location)
+                        @if($project->effective_location)
                         <div class="flex gap-3">
                             <svg class="w-4 h-4 text-[#8da83a] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <div><p class="text-white/50 text-xs">Location</p><p class="text-white text-sm font-semibold">{{ $project->location }}</p></div>
+                            <div><p class="text-white/50 text-xs">Location</p><p class="text-white text-sm font-semibold">{{ $project->effective_location }}</p></div>
                         </div>
                         @endif
-                        @if($project->beneficiaries)
+                        @if($project->effective_beneficiaries)
                         <div class="flex gap-3">
                             <svg class="w-4 h-4 text-[#8da83a] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <div><p class="text-white/50 text-xs">Beneficiaries</p><p class="text-white text-sm font-semibold">{{ $project->beneficiaries }}</p></div>
+                            <div><p class="text-white/50 text-xs">Beneficiaries</p><p class="text-white text-sm font-semibold">{{ $project->effective_beneficiaries }}</p></div>
                         </div>
                         @endif
                     </div>
