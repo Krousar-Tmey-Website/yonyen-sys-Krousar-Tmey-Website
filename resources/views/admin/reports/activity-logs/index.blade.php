@@ -301,69 +301,51 @@
     }
     .al-view-btn svg { width: 16px; height: 16px; }
 
-    .al-pagination {
-        padding: 14px 24px;
-        border-top: 1px solid #edf2f7;
-        background: #f8fafc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-    .al-pagination nav {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-    .al-pagination nav .hidden { display: none !important; }
-    .al-pagination nav .flex.justify-between.flex-1.sm\\:hidden,
-    .al-pagination nav .hidden.sm\\:flex-1.sm\\:flex.sm\\:items-center.sm\\:justify-between > div:first-child {
-        display: none !important;
-    }
-    .al-pagination nav > div {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-    .al-pagination nav a,
-    .al-pagination nav span[aria-current="page"] span,
-    .al-pagination nav span[aria-disabled="true"] span {
+    .al-action-btn {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        min-width: 36px;
-        height: 36px;
-        padding: 0 12px;
-        border-radius: 8px;
+        gap: 8px;
+        padding: 9px 20px;
+        border-radius: 10px;
         font-size: 13px;
-        font-weight: 500;
-        color: #64748b;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         text-decoration: none;
-        transition: all 0.15s ease;
+        white-space: nowrap;
     }
-    .al-pagination nav a:hover {
-        background: #f1f5f9;
-        color: #1e293b;
+    .al-action-btn svg {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.25s ease;
     }
-    .al-pagination nav a[rel="prev"],
-    .al-pagination nav a[rel="next"] {
-        padding: 0 16px;
-        border: 1.5px solid #e2e8f0;
-        background: #fff;
-        color: #475569;
-        gap: 6px;
-    }
-    .al-pagination nav a[rel="prev"]:hover,
-    .al-pagination nav a[rel="next"]:hover {
-        border-color: #1d4e7a;
-        color: #1d4e7a;
-        background: #f0f7ff;
-    }
-    .al-pagination nav span[aria-current="page"] span {
-        background: #1d4e7a;
+    .al-action-btn.primary {
+        background: linear-gradient(135deg, #1d4e7a 0%, #2d6fa3 100%);
         color: #fff;
-        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(29, 78, 122, 0.2);
+    }
+    .al-action-btn.primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(29, 78, 122, 0.3);
+    }
+    .al-action-btn.primary:hover svg {
+        transform: translateY(-1px);
+    }
+    .al-action-btn.primary:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(29, 78, 122, 0.2);
+    }
+    .al-action-btn.secondary {
+        background: #fff;
+        color: #1d4e7a;
+        border: 1.5px solid #dde7f0;
+    }
+    .al-action-btn.secondary:hover {
+        background: #f8fafc;
+        border-color: #1d4e7a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     }
 
     .al-empty {
@@ -399,7 +381,6 @@
         .al-table-header { flex-direction: column; align-items: flex-start; }
         .al-table thead th,
         .al-table tbody td { padding: 10px 14px; }
-        .al-pagination { flex-direction: column; text-align: center; }
     }
 </style>
 @endpush
@@ -463,15 +444,23 @@
                 </svg>
                 Activity Logs
             </h3>
-            <div class="al-stats">
-                <span class="stat-pill">
-                    <span class="dot total"></span>
-                    Total: <strong>{{ $logs->total() }}</strong>
-                </span>
-                <span class="stat-pill">
-                    <span class="dot page"></span>
-                    This page: <strong>{{ $logs->count() }}</strong>
-                </span>
+            <div class="flex items-center gap-3" style="flex-wrap:wrap;">
+                <div class="al-stats">
+                    <span class="stat-pill">
+                        <span class="dot total"></span>
+                        Total: <strong>{{ $logs->total() }}</strong>
+                    </span>
+                    <span class="stat-pill">
+                        <span class="dot page"></span>
+                        This page: <strong>{{ $logs->count() }}</strong>
+                    </span>
+                </div>
+                <a href="{{ request()->fullUrl() }}" class="al-action-btn secondary" title="Refresh current view">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Refresh
+                </a>
             </div>
         </div>
         <div class="overflow-x-auto">
@@ -547,8 +536,8 @@
             </table>
         </div>
         @if($logs->hasPages())
-            <div class="al-pagination">
-                {{ $logs->links() }}
+            <div class="border-t border-slate-100 px-6 py-4">
+                {{ $logs->links('admin.partials.pagination-pills') }}
             </div>
         @endif
     </div>
