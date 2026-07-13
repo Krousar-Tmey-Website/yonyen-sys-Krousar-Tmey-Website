@@ -38,8 +38,9 @@ Route::get('/', function () {
     $galleries = Gallery::where('is_active', true)->latest()->take(6)->get();
     $programs = Program::active()->take(3)->get();
     $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
+    $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
 
-    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections'));
+    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -65,8 +66,10 @@ Route::get('/who-we-are/presentation', function () {
     $coreValues = CoreValue::ordered()->get();
     $offices = Office::active()->where('country', '!=', 'Cambodia')->get();
     $programs = Program::active()->get();
+    $impactStatistics = \App\Models\ImpactStatistic::active()->get();
+    $worldwidePartners = \App\Models\WorldwidePartner::active()->get();
 
-    return view('presentation', compact('settings', 'coreValues', 'offices', 'programs'));
+    return view('presentation', compact('settings', 'coreValues', 'offices', 'programs', 'impactStatistics', 'worldwidePartners'));
 })->name('presentation');
 
 Route::get('/who-we-are/transparency', function () {
@@ -191,6 +194,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
     Route::resource('page-sections', Admin\PageSectionController::class)->except(['show']);
     Route::resource('slides', Admin\SlideController::class)->except(['show']);
+    Route::resource('impact-statistics', Admin\ImpactStatisticController::class)
+        ->except(['show', 'create', 'edit'])
+        ->parameters(['impact-statistics' => 'impactStatistic']);
 
     // Programs banner
     Route::get('programs-banner', [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
@@ -208,6 +214,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('core-values', Admin\CoreValueController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['core-values' => 'coreValue']);
+    
+    // Worldwide Partners
+    Route::resource('worldwide-partners', Admin\WorldwidePartnerController::class)
+        ->parameters(['worldwide-partners' => 'worldwidePartner']);
+    
     Route::resource('transparency', Admin\TransparencyController::class)
         ->except(['show', 'create'])
         ->parameters(['transparency' => 'report']);

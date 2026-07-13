@@ -49,6 +49,15 @@ class PresentationController extends Controller
             'stat_employees' => ['nullable', 'string'],
             'stat_budget' => ['nullable', 'string'],
             'stat_admin' => ['nullable', 'string'],
+            'sharing_enabled' => ['nullable', 'string'],
+            'sharing_title' => ['nullable', 'string', 'max:255'],
+            'sharing_facebook_link' => ['nullable', 'url', 'max:2048'],
+            'sharing_twitter_link' => ['nullable', 'url', 'max:2048'],
+            'sharing_linkedin_link' => ['nullable', 'url', 'max:2048'],
+            'sharing_facebook_icon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'sharing_twitter_icon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'sharing_linkedin_icon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'sharing_share_icon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
         ]);
 
         // Handle hero image upload
@@ -70,6 +79,24 @@ class PresentationController extends Controller
             $data['principle_image'] = $request->file('principle_image_file')->store('presentation', 'public');
         } elseif ($request->boolean('remove_principle_image')) {
             $data['principle_image'] = null;
+        }
+
+        // Handle sharing icon uploads
+        $iconKeys = ['sharing_facebook_icon', 'sharing_twitter_icon', 'sharing_linkedin_icon', 'sharing_share_icon'];
+        foreach ($iconKeys as $iconKey) {
+            if ($request->hasFile($iconKey)) {
+                $file = $request->file($iconKey);
+                $filename = $iconKey . '.' . $file->getClientOriginalExtension();
+                $destinationPath = public_path('images/social');
+                
+                // Create directory if it doesn't exist
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true);
+                }
+                
+                $file->move($destinationPath, $filename);
+                $data[$iconKey] = 'images/social/' . $filename;
+            }
         }
 
         // Remove the file and remove flags from data before saving

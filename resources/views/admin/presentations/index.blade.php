@@ -12,7 +12,6 @@
         <nav class="flex space-x-8 overflow-x-auto">
             <button @click="tab = 'hero'" 
                     :class="tab === 'hero' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
-                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
                 Hero Section
             </button>
             <button @click="tab = 'slideshow'" 
@@ -45,10 +44,15 @@
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
                 Our Principle
             </button>
-            <button @click="tab = 'worldwide'" 
-                    :class="tab === 'worldwide' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
-                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Worldwide Partners
+    <button @click="tab = 'worldwide'" 
+                :class="tab === 'worldwide' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Krousar Thmey Worldwide
+            </button>
+            <button @click="tab = 'sharing'" 
+                :class="tab === 'sharing' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Share our impact
             </button>
         </nav>
     </div>
@@ -429,60 +433,37 @@
     {{-- IMPACT STATISTICS SECTION --}}
     <div x-show="tab === 'impact'" class="space-y-6">
         <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 class="font-bold text-gray-700 mb-4 text-sm">Key Figures / Impact Statistics</h3>
-            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
-                @csrf
-                <input type="hidden" name="section" value="impact">
-                
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Children Supported</label>
-                        <input type="text" name="stat_children" value="{{ $settings['stat_children'] ?? '4,079' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-700 text-sm">Key Figures / Impact Statistics</h3>
+                <a href="{{ route('admin.impact-statistics.index') }}" class="text-xs text-[#2d6fa3] hover:underline">Manage All Statistics</a>
+            </div>
+            
+            @php
+            $impactStats = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
+            @endphp
+            
+            @if($impactStats->isEmpty())
+            <div class="bg-gray-50 rounded-xl py-12 text-center text-gray-400">
+                <p class="text-sm font-medium mb-2">No impact statistics configured yet.</p>
+                <a href="{{ route('admin.impact-statistics.index') }}" class="text-[#2d6fa3] text-sm underline">Add your first statistic</a>
+            </div>
+            @else
+            <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
+                @foreach($impactStats as $stat)
+                <div class="bg-gray-50 rounded-xl p-4 text-center">
+                    <div class="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center mx-auto mb-2">
+                        <img src="{{ $stat->image_url }}" alt="{{ $stat->label }}" class="w-full h-full object-cover">
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Child Welfare Program</label>
-                        <input type="text" name="stat_welfare" value="{{ $settings['stat_welfare'] ?? '240' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Special Education Students</label>
-                        <input type="text" name="stat_special_ed" value="{{ $settings['stat_special_ed'] ?? '768' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Children in 2025</label>
-                        <input type="text" name="stat_2025" value="{{ $settings['stat_2025'] ?? '3,526' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Arts & Culture Students</label>
-                        <input type="text" name="stat_arts" value="{{ $settings['stat_arts'] ?? '1,088' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Career Counseling</label>
-                        <input type="text" name="stat_counseling" value="{{ $settings['stat_counseling'] ?? '357' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Employees</label>
-                        <input type="text" name="stat_employees" value="{{ $settings['stat_employees'] ?? '68' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Annual Budget (USD)</label>
-                        <input type="text" name="stat_budget" value="{{ $settings['stat_budget'] ?? '950K' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Administrative Costs</label>
-                        <input type="text" name="stat_admin" value="{{ $settings['stat_admin'] ?? '< 4%' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
+                    <p class="text-xs font-bold text-gray-700">{{ $stat->value }}</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ $stat->label }}</p>
                 </div>
-                <button type="submit" class="btn-primary text-sm py-2.5">Save Impact Statistics</button>
-            </form>
+                @endforeach
+            </div>
+            
+            <div class="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-600">
+                <strong>Tip:</strong> Click "Manage All Statistics" to edit values, images, and reorder statistics.
+            </div>
+            @endif
         </div>
     </div>
 
@@ -544,30 +525,141 @@
     {{-- WORLDWIDE PARTNERS SECTION --}}
     <div x-show="tab === 'worldwide'" class="space-y-6">
         <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 class="font-bold text-gray-700 mb-4 text-sm">Krousar Thmey Worldwide</h3>
-            <p class="text-gray-500 text-xs mb-4">International offices are managed in the Offices section. <a href="{{ route('admin.offices.index') }}" class="text-[#2d6fa3] hover:underline">Go to Offices Management</a></p>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-700 text-sm">Krousar Thmey Worldwide</h3>
+                <a href="{{ route('admin.worldwide-partners.index') }}" class="text-xs text-[#2d6fa3] hover:underline">Manage All Countries</a>
+            </div>
             
             @php
-            $offices = \App\Models\Office::active()->where('country', '!=', 'Cambodia')->get();
+            $worldwidePartners = \App\Models\WorldwidePartner::active()->get();
             @endphp
             
-            @if($offices->isNotEmpty())
-            <div class="grid md:grid-cols-3 gap-4">
-                @foreach($offices as $office)
-                <div class="bg-gray-50 rounded-xl p-4 text-center">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center mx-auto mb-2">
-                        <span class="text-xl">{{ $office->flag }}</span>
+            @if($worldwidePartners->isEmpty())
+            <div class="bg-gray-50 rounded-xl py-12 text-center text-gray-400">
+                <p class="text-sm font-medium mb-2">No country partners yet.</p>
+                <a href="{{ route('admin.worldwide-partners.create') }}" class="text-[#2d6fa3] text-sm underline">Add your first country</a>
+            </div>
+            @else
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach($worldwidePartners as $partner)
+                <div class="bg-gray-50 rounded-xl border border-gray-100 overflow-hidden flex">
+                    {{-- Image --}}
+                    <div class="relative w-24 flex-shrink-0 hidden sm:block">
+                        <div class="aspect-video rounded-l-xl overflow-hidden">
+                            <img src="{{ $partner->image_url }}" alt="{{ $partner->country_name }}" 
+                                 class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        </div>
                     </div>
-                    <p class="text-xs font-medium text-gray-700">Krousar Thmey {{ $office->country }}</p>
-                    <p class="text-xs text-gray-500">{{ $office->city }}</p>
+
+                    {{-- Info --}}
+                    <div class="flex-1 p-4 flex items-center justify-between gap-3">
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-gray-800 text-sm mb-1 truncate">{{ $partner->country_name }}</h4>
+                            @if($partner->description)
+                            <p class="text-gray-400 text-xs line-clamp-2">{{ Str::limit($partner->description, 60) }}</p>
+                            @endif
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <a href="{{ route('admin.worldwide-partners.edit', $partner) }}"
+                               class="text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium p-1">Edit</a>
+                        </div>
+                    </div>
                 </div>
                 @endforeach
             </div>
-            @else
-            <p class="text-gray-400 text-sm">No international offices configured yet.</p>
             @endif
         </div>
     </div>
-</div>
+
+    {{-- SHARE OUR IMPACT SECTION --}}
+    <div x-show="tab === 'sharing'" class="space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-700 text-sm">Share our impact - Social Media Links</h3>
+            </div>
+            
+            <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                @csrf
+                <input type="hidden" name="section" value="sharing">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Enable Share Section</label>
+                        <label class="flex items-center gap-2 text-xs text-gray-600">
+                            <input type="checkbox" name="sharing_enabled" value="1" {{ (old('sharing_enabled', \App\Models\HomeSetting::getValue('sharing_enabled', '1')) == '1') ? 'checked' : '' }}
+                                   class="rounded border-gray-300 text-[#2d6fa3] focus:ring-[#2d6fa3]/20">
+                            Show share buttons on presentation page
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Section Title</label>
+                        <input type="text" name="sharing_title" 
+                               value="{{ old('sharing_title', \App\Models\HomeSetting::getValue('sharing_title', 'Share our impact')) }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                </div>
+                
+                <div class="pt-3 border-t border-gray-100">
+                    <p class="text-xs font-medium text-gray-700 mb-3">Social Media Links & Icons</p>
+                    
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#1877F2] flex items-center justify-center">
+                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg')) }}" alt="Facebook" class="w-6 h-6 filter brightness-0 invert">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Facebook Icon & Link</label>
+                                <input type="url" name="sharing_facebook_link" value="{{ old('sharing_facebook_link', \App\Models\HomeSetting::getValue('sharing_facebook_link', '')) }}"
+                                       class="w-full mb-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                       placeholder="https://facebook.com/yourpage">
+                                <input type="file" name="sharing_facebook_icon" accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#1DA1F2] flex items-center justify-center">
+                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg')) }}" alt="Twitter" class="w-6 h-6 filter brightness-0 invert">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Twitter Icon & Link</label>
+                                <input type="url" name="sharing_twitter_link" value="{{ old('sharing_twitter_link', \App\Models\HomeSetting::getValue('sharing_twitter_link', '')) }}"
+                                       class="w-full mb-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                       placeholder="https://twitter.com/yourpage">
+                                <input type="file" name="sharing_twitter_icon" accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#0A66C2] flex items-center justify-center">
+                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg')) }}" alt="LinkedIn" class="w-6 h-6 filter brightness-0 invert">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-xs font-medium text-gray-600 mb-1">LinkedIn Icon & Link</label>
+                                <input type="url" name="sharing_linkedin_link" value="{{ old('sharing_linkedin_link', \App\Models\HomeSetting::getValue('sharing_linkedin_link', '')) }}"
+                                       class="w-full mb-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                       placeholder="https://linkedin.com/yourpage">
+                                <input type="file" name="sharing_linkedin_icon" accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center">
+                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg')) }}" alt="Share" class="w-6 h-6 filter brightness-0 invert">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Share Icon</label>
+                                <input type="file" name="sharing_share_icon" accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Sharing Settings</button>
+            </form>
+        </div>
+    </div>
 
 @endsection

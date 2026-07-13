@@ -221,104 +221,237 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
 </section>
 
 {{-- ========================================================
-     OUR PROGRAMS SECTION
+     OUR IMPACT SECTION
      ======================================================== --}}
-<section class="py-24 bg-white scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16" data-reveal>
-            <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Our Programs</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto">Five comprehensive programs dedicated to helping children across Cambodia learn, grow, stay healthy, and build brighter futures.</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-            @forelse($programs as $i => $program)
-            <div class="card group flex flex-col"
-                 data-reveal="up" style="--reveal-delay: {{ $i * 100 }}">
-                <div class="relative overflow-hidden h-56">
-                    <img src="{{ $program->image_url }}"
-                         alt="{{ $program->title }}"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>
-                </div>
-
-                {{-- Content --}}
-                <div class="p-6 flex flex-col flex-1">
-                    <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $program->title }}</h3>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-5 line-clamp-3">
-                        {{ $program->description ?? 'Program description coming soon.' }}
-                    </p>
-                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="mt-auto text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
-                        Learn More
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </a>
-                </div>
-            </div>
-            @empty
-            <p class="text-gray-400 text-center py-8 md:col-span-3">No programs listed yet.</p>
-            @endforelse
-        </div>
-    </div>
-</section>
-
-{{-- ========================================================
-     IMPACT / KEY FIGURES SECTION
-     ======================================================== --}}
-<section class="py-24 bg-white scroll-mt-20">
+<section class="py-24 bg-white scroll-mt-20 overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16" data-reveal>
             <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Our Impact</h2>
             <p class="text-gray-500 max-w-2xl mx-auto">The difference we make together for Cambodia's children</p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        {{-- Statistics Grid - Featured card spans 2 columns on desktop --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+
             @php
-            $figures = [
-                ['n' => $settings['stat_children'] ?? '4,079', 'label' => 'Children Supported', 'color' => 'text-[#2d6fa3]'],
-                ['n' => $settings['stat_welfare'] ?? '240', 'label' => 'Child Welfare Program', 'color' => 'text-[#8da83a]'],
-                ['n' => $settings['stat_special_ed'] ?? '768', 'label' => 'Special Education Students', 'color' => 'text-[#1d4e7a]'],
-                ['n' => $settings['stat_2025'] ?? '3,526', 'label' => 'Children in 2025', 'color' => 'text-[#d4af37]'],
-                ['n' => $settings['stat_arts'] ?? '1,088', 'label' => 'Arts & Culture Students', 'color' => 'text-[#2d6fa3]'],
-                ['n' => $settings['stat_counseling'] ?? '357', 'label' => 'Career Counseling', 'color' => 'text-[#8da83a]'],
-                ['n' => $settings['stat_employees'] ?? '68', 'label' => 'Employees', 'color' => 'text-[#1d4e7a]'],
-                ['n' => $settings['stat_budget'] ?? '950K', 'label' => 'Annual Budget (USD)', 'color' => 'text-[#d4af37]'],
-                ['n' => $settings['stat_admin'] ?? '< 4%', 'label' => 'Administrative Costs', 'color' => 'text-[#2d6fa3]'],
-            ];
+                $featuredStat = $impactStatistics->where('is_featured', true)->first();
+                $otherStats = $impactStatistics->where('is_featured', false);
+            @endphp
+
+            @if($featuredStat)
+            {{-- Featured Hero Card --}}
+            <div class="impact-card group relative rounded-3xl overflow-hidden shadow-xl cursor-pointer"
+                 data-reveal="up" style="--reveal-delay: 0; background-image: url('{{ $featuredStat->image_url }}')">
+                <div class="absolute inset-0 bg-black/40"></div>
+                <div class="relative z-10 p-8 h-full flex flex-col justify-between">
+                    <div>
+                        <div class="text-5xl sm:text-6xl md:text-7xl font-black text-white mb-3 counter"
+                             data-target="{{ preg_replace('/[^0-9]/', '', $featuredStat->value) }}">
+                            {{ $featuredStat->value }}
+                        </div>
+                    </div>
+                    <p class="text-white/90 text-lg font-semibold leading-tight">
+                        {{ $featuredStat->label }}
+                    </p>
+                </div>
+            </div>
+            @endif
+
+            @forelse($otherStats as $index => $stat)
+            @php
+                $format = 'plain';
+                if (str_contains($stat->value, 'K')) $format = 'k';
+                if (str_starts_with($stat->value, '<')) $format = 'less-than-percent';
             @endphp
             
-            @foreach($figures as $i => $fig)
-            <div class="bg-[#f8f5f0] rounded-2xl p-6 text-center border border-gray-100 hover:border-[#2d6fa3]/20 transition-all"
-                 data-reveal="scale" style="--reveal-delay: {{ min($i * 60, 300) }}">
-                <div class="text-3xl lg:text-4xl font-black {{ $fig['color'] }} mb-2">{{ $fig['n'] }}</div>
-                <div class="text-gray-500 text-xs leading-snug">{{ $fig['label'] }}</div>
+            <div class="impact-card-small group relative rounded-2xl overflow-hidden shadow-md cursor-pointer"
+                 data-reveal="up" style="--reveal-delay: {{ ($index + 1) * 100 }}; background-image: url('{{ $stat->image_url }}')">
+                <div class="absolute inset-0 bg-black/40"></div>
+                <div class="relative z-10 p-6 h-full flex flex-col justify-end">
+                    <div>
+                        <div class="text-3xl md:text-4xl font-black text-white mb-2 counter"
+                             data-target="{{ preg_replace('/[^0-9]/', '', $stat->value) }}"
+                             data-format="{{ $format }}">
+                            @if($format === 'less-than-percent')
+                            <span class="text-[#e8a020]"><</span> {{ preg_replace('/[^0-9]/', '', $stat->value) }}%
+                            @elseif($format === 'k')
+                            {{ $stat->value }}
+                            @else
+                            {{ $stat->value }}
+                            @endif
+                        </div>
+                        <p class="text-white/90 text-sm font-semibold leading-tight">
+                            {{ $stat->label }}
+                        </p>
+                    </div>
+                </div>
             </div>
-            @endforeach
+            @empty
+            <p class="text-gray-400 text-center py-8 col-span-full">No impact statistics available yet.</p>
+            @endforelse
+
         </div>
     </div>
 </section>
 
+{{-- Social Sharing --}}
+@php
+$sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
+$facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
+$twitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
+$linkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
+$shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
+$facebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
+$twitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
+$linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
+@endphp
+@if($sharingEnabled == '1')
+<div class="max-w-7xl mx-auto px-6 pb-12" data-reveal>
+    <div class="flex items-center justify-center gap-4">
+        <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
+
+<div class="flex items-center gap-3 bg-white/80 backdrop-blur-md rounded-full px-6 py-4 shadow-lg border border-gray-100">
+
+    <!-- Facebook -->
+    <a href="{{ $facebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Presentation') . '&linknote=' . urlencode('Krousar Thmey - Our Impact') }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Share on Facebook"
+        class="group w-14 h-14 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+
+        <img src="{{ asset($facebookIcon) }}"
+            alt="Facebook"
+            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
+    </a>
+
+    <!-- Twitter -->
+    <a href="{{ $twitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Presentation') . '&linknote=' . urlencode('Krousar Thmey - Our Impact') }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Share on Twitter"
+        class="group w-14 h-14 rounded-full bg-[#1DA1F2] flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+
+        <img src="{{ asset($twitterIcon) }}"
+            alt="Twitter"
+            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
+    </a>
+
+    <!-- LinkedIn -->
+    <a href="{{ $linkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Presentation') . '&linknote=' . urlencode('Krousar Thmey - Our Impact') }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Share on LinkedIn"
+        class="group w-14 h-14 rounded-full bg-[#0A66C2] flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+
+        <img src="{{ asset($linkedinIcon) }}"
+            alt="LinkedIn"
+            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
+    </a>
+
+    <!-- Share -->
+    <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Presentation') }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Share"
+        class="group w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+
+        <img src="{{ asset($shareIcon) }}"
+            alt="Share"
+            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
+    </a>
+
+</div>
+</div>
+</div>
+@endif
+
+{{-- Impact Animation Script --}}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // ── Animated Number Counter ───────────────────────────────
+        const counters = document.querySelectorAll(".counter");
+
+        const countObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = +counter.dataset.target;
+                    const format = counter.dataset.format || 'plain';
+
+                    let start = 0;
+                    const duration = 2000;
+                    const startTime = performance.now();
+
+                    const updateCount = (currentTime) => {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+                        let current = Math.floor(start + (target - start) * easeProgress);
+
+                        if (format === 'k') {
+                            counter.innerText = current.toLocaleString() + 'K USD';
+                        } else if (format === 'percent') {
+                            counter.innerText = current + '%';
+                        } else if (format === 'less-than-percent') {
+                            counter.innerHTML = '<span class="text-[#e8a020]"><</span> ' + current + '%';
+                        } else {
+                            counter.innerText = current.toLocaleString();
+                        }
+
+                        if (progress < 1) {
+                            requestAnimationFrame(updateCount);
+                        }
+                    };
+
+                    requestAnimationFrame(updateCount);
+                    countObserver.unobserve(counter);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        counters.forEach(counter => countObserver.observe(counter));
+
+        // ── Scroll reveal for impact cards ─────────────────────────
+        const impactCards = document.querySelectorAll("[data-reveal]");
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-revealed");
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        impactCards.forEach(card => cardObserver.observe(card));
+    });
+</script>
+
+
 {{-- ========================================================
      OUR PRINCIPLE SECTION
      ======================================================== --}}
-<section class="py-24 relative overflow-hidden">
+<section class="relative h-screen min-h-screen overflow-hidden">
     <div class="absolute inset-0">
         @php
         $principleImage = $settings['principle_image'] ?? null;
-        $principleImageUrl = $principleImage ? (str_starts_with($principleImage, 'http') ? $principleImage : asset('storage/' . $principleImage)) : asset('images/community-work.jpg');
+        $principleImageUrl = $principleImage ? (str_starts_with($principleImage, 'http') ? $principleImage : asset('storage/' . $principleImage)) : asset('images/children.jpg');
         @endphp
-        <img src="{{ $principleImageUrl }}" alt="Cambodian community" 
-             class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/50 to-black/70"></div>
+        <div class="absolute inset-0 bg-cover bg-center bg-fixed" style="background-image: url('{{ $principleImageUrl }}')"></div>
+        <div class="absolute inset-0 bg-black/60"></div>
     </div>
     
-    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-10">{{ $settings['principle_title'] ?? 'Our Principle' }}</h2>
-        
-        <div class="relative">
-            <svg class="w-16 h-16 text-[#d4af37] mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-4.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/></svg>
+    <div class="relative z-10 h-full flex items-center justify-center" data-reveal="scale">
+        <div class="max-w-4xl px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-10">{{ $settings['principle_title'] ?? 'Our Principle' }}</h2>
             
-            <blockquote class="text-2xl md:text-3xl lg:text-4xl font-serif italic text-white leading-relaxed">
-                "{{ $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." }}"
-            </blockquote>
+            <div class="relative">
+                <svg class="w-16 h-16 text-[#d4af37] mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-4.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/></svg>
+                
+                <blockquote class="text-2xl md:text-3xl lg:text-4xl font-serif italic text-white leading-relaxed">
+                    "{{ $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." }}"
+                </blockquote>
+            </div>
         </div>
     </div>
 </section>
@@ -326,28 +459,78 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
 {{-- ========================================================
      KROUSAR THMEY WORLDWIDE SECTION
      ======================================================== --}}
-<section class="py-24 bg-[#f8f5f0] scroll-mt-20">
+<section class="py-24 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
+        {{-- Section Header --}}
         <div class="text-center mb-16" data-reveal>
+            <span class="inline-block text-xs font-semibold text-[#2d6fa3] uppercase tracking-wider mb-3">GLOBAL NETWORK</span>
             <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Krousar Thmey Worldwide</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto">International partnerships supporting our mission</p>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Krousar Thmey benefits from the support of partner organizations around the world.
+                Through fundraising, advocacy, volunteer engagement, and international cooperation, these organizations help transform the lives of Cambodian children and young people.
+            </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-            @forelse($offices as $woffice)
-            <div class="bg-white rounded-2xl p-8 text-center border border-gray-100 shadow-md hover:shadow-xl transition-all"
+        {{-- Country Cards Grid --}}
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            @forelse($worldwidePartners as $partner)
+            <div class="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
                  data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
-                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center mx-auto mb-4">
-                    <span class="text-2xl">{{ $woffice->flag }}</span>
+                {{-- Large Country Image --}}
+                <div class="relative aspect-video overflow-hidden">
+                    <img src="{{ $partner->image_url }}" alt="{{ $partner->country_name }}" 
+                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
+                         loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 </div>
-                <h3 class="font-bold text-gray-800 text-lg mb-2">Krousar Thmey {{ $woffice->country }}</h3>
-                <p class="text-gray-500 text-sm">{{ $woffice->city }}, {{ $woffice->country }}</p>
+                
+                {{-- Card Content --}}
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-[#1d4e7a] mb-2">{{ $partner->country_name }}</h3>
+                    <span class="inline-block bg-[#e8a020]/10 text-[#e8a020] text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                        Supporting Cambodia Since 1991
+                    </span>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+                        {{ $partner->description ?? 'Supports fundraising, strategic partnerships, and awareness campaigns that strengthen education and child welfare initiatives.' }}
+                    </p>
+                    <a href="{{ $partner->learn_more_url ?? '#' }}" 
+                       class="inline-flex items-center gap-2 text-[#2d6fa3] font-semibold text-sm border border-[#2d6fa3] bg-white rounded-full px-4 py-2 hover:bg-[#2d6fa3] hover:text-white transition-all duration-300">
+                        {{ $partner->button_text ?? 'Learn More' }}
+                        <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
             @empty
-            <div class="col-span-3 text-center text-gray-400 py-8">
-                <p>Office information coming soon.</p>
+            <div class="col-span-full text-center text-gray-400 py-8">
+                <p>Country partner information coming soon.</p>
             </div>
             @endforelse
+        </div>
+
+        {{-- CTA Section --}}
+        <div class="text-center mt-20" data-reveal="up" style="--reveal-delay: 300">
+            <h3 class="text-2xl font-bold text-[#1d4e7a] mb-4">Together Across Borders</h3>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-8">
+                Our international partners work together to create brighter futures for Cambodian children through education, inclusion, child protection, and community development.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ route('contact') }}" 
+                   class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#2d6fa3] to-[#1d4e7a] text-white font-semibold rounded-full hover:from-[#1d4e7a] hover:to-[#2d6fa3] transition-all transform hover:scale-105 shadow-lg">
+                    Become a Global Partner
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                    </svg>
+                </a>
+                <a href="{{ route('contact') }}" 
+                   class="inline-flex items-center gap-2 px-8 py-3 border-2 border-[#2d6fa3] text-[#2d6fa3] font-semibold rounded-full hover:bg-[#2d6fa3] hover:text-white transition-all">
+                    Contact Us
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                </a>
+            </div>
         </div>
     </div>
 </section>
