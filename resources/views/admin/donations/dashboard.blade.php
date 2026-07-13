@@ -23,7 +23,7 @@
     @foreach($statCards as $i => $card)
     <div class="fade-in d{{ $i + 2 }}">
         <div class="bg-white rounded-2xl p-5 border border-gray-100 hover:shadow-md transition-shadow">
-            <div class="text-3xl font-black text-gray-800 mb-1">{{ $card['value'] }}</div>
+            <div class="text-xl font-bold text-gray-800 mb-1">{{ $card['value'] }}</div>
             <div class="text-gray-400 text-xs">{{ $card['label'] }}</div>
             <div class="h-1 {{ $card['color'] }} rounded-full mt-3 w-8"></div>
         </div>
