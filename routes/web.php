@@ -181,8 +181,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Dashboard
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
-    // Donation Dashboard
+    // Donations
     Route::get('/donations/dashboard', [Admin\DonationDashboardController::class, 'index'])->name('donations.dashboard');
+    Route::resource('donations', Admin\DonationController::class);
 
     // News & Categories
     Route::resource('news', Admin\NewsController::class);
