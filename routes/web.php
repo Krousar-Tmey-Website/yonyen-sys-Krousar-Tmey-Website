@@ -80,7 +80,7 @@ Route::get('/our-programs', function () {
 Route::get('/our-programs/{slug}', function ($slug) {
     $program = Program::where('slug', $slug)->firstOrFail();
 
-    return redirect()->route('programs', ['#'.$program->slug]);
+    return redirect()->to(route('programs') . '#' . $program->slug);
 })->name('programs.show');
 
 Route::get('/programs/item/{id}', function ($id) {
@@ -211,6 +211,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Programs banner
     Route::get('programs-banner', [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
     Route::post('programs-banner', [Admin\ProgramsBannerController::class, 'update'])->name('programs-banner.update');
+    Route::get('project-defaults', [Admin\ProjectDefaultsController::class, 'index'])->name('project-defaults.index');
+    Route::post('project-defaults', [Admin\ProjectDefaultsController::class, 'update'])->name('project-defaults.update');
+    Route::post('project-defaults/{project}', [Admin\ProjectDefaultsController::class, 'updateProject'])->name('project-defaults.project.update');
 
     // Who We Are
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create']);
