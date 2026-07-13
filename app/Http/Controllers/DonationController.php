@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\DonationRequestMail;
+use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -10,7 +11,9 @@ class DonationController extends Controller
 {
     public function show()
     {
-        return view('donate');
+        $paymentMethods = PaymentMethod::active()->ordered()->get();
+
+        return view('donate', compact('paymentMethods'));
     }
 
     public function send(Request $request)

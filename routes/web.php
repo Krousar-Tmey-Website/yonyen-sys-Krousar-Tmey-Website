@@ -228,6 +228,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Books for Sale
     Route::resource('books', Admin\BookController::class)->except(['show']);
 
+    // Payment Methods
+    Route::resource('payments', Admin\PaymentMethodController::class)->except(['show']);
+
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
 
