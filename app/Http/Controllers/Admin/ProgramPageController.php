@@ -25,7 +25,9 @@ class ProgramPageController extends Controller
         $data = $request->validate([
             'title'          => 'required|string|max:255',
             'short_content'  => 'nullable|string',
+            'objective'      => 'nullable|string',
             'detail_content' => 'nullable|string',
+            'activities'     => 'nullable|string',
             'image'          => 'nullable|image|max:4096',
             'image_url'      => 'nullable|url|max:2048',
             'image_2'        => 'nullable|image|max:4096',
@@ -69,7 +71,9 @@ class ProgramPageController extends Controller
         $data = $request->validate([
             'title'          => 'required|string|max:255',
             'short_content'  => 'nullable|string',
+            'objective'      => 'nullable|string',
             'detail_content' => 'nullable|string',
+            'activities'     => 'nullable|string',
             'image'          => 'nullable|image|max:4096',
             'image_url'      => 'nullable|url|max:2048',
             'image_2'        => 'nullable|image|max:4096',
@@ -86,9 +90,13 @@ class ProgramPageController extends Controller
         foreach ([['field' => 'image', 'url' => 'image_url'], ['field' => 'image_2', 'url' => 'image_2_url'], ['field' => 'image_3', 'url' => 'image_3_url']] as $img) {
             $field = $img['field'];
             $url   = $request->input($img['url']);
+            $remove = $request->input('remove_' . $field);
             unset($data[$img['url']]);
 
-            if ($request->hasFile($field)) {
+            if ($remove) {
+                if ($item->$field && !str_starts_with($item->$field, 'http')) Storage::disk('public')->delete($item->$field);
+                $data[$field] = null;
+            } elseif ($request->hasFile($field)) {
                 if ($item->$field && !str_starts_with($item->$field, 'http')) Storage::disk('public')->delete($item->$field);
                 $data[$field] = $request->file($field)->store('program_page_items', 'public');
             } elseif (!empty($url)) {
