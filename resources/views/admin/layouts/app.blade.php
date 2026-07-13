@@ -117,7 +117,7 @@
                             'children' => [
                                 ['route' => 'admin.volunteers.index', 'label' => 'Volunteer Applications'],
                                 ['route' => 'admin.jobs.index', 'label' => 'Job Opportunities'],
-                                ['route' => 'admin.books.index', 'label' => 'Books for Sale'],
+                                ['route' => 'admin.books.index', 'label' => 'Book for Sales'],
                             ],
                         ],
                         'donations' => [

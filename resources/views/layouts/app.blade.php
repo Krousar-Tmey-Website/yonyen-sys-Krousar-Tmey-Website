@@ -189,8 +189,8 @@
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
                             <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">Partnerships</a>
                             <a href="{{ route('involved') }}#volunteer" class="dropdown-item">Volunteering</a>
-                            <a href="{{ route('involved') }}#jobs" class="dropdown-item">Job Opportunities</a>
-                            <a href="{{ route('involved') }}#donate" class="dropdown-item rounded-b-xl">Donate</a>
+                            <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">Book for Sales</a>
+                            <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">Job Opportunities</a>
                         </div>
                     </div>
 
@@ -238,12 +238,12 @@
                 <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Resources</a>
                 <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Contact</a>
                 <div class="pt-3 pb-1">
-                    <a href="{{ route('donate') }}" class="btn-primary w-full justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                        Donate Now
-                    </a>
+                <a href="{{ route('donate') }}" class="btn-primary w-full justify-center">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    Donate Now
+                </a>
                 </div>
             </div>
         </div>
@@ -329,6 +329,7 @@
                         <li><a href="{{ route('programs') }}#{{ $footerProg->slug }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ $footerProg->title }}</a></li>
                         @endforeach
                         <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">Volunteering</a></li>
+                        <li><a href="{{ route('involved') }}#book-for-sales" class="text-white/50 hover:text-white text-sm transition-colors">Book for Sales</a></li>
                         <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>
                     </ul>
 
