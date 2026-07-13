@@ -182,32 +182,35 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16" data-reveal>
             <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Our Values</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto">The principles that guide our work with every child we support</p>
+            <p class="text-gray-500 max-w-2xl mx-auto">The principles that guide everything we do, ensuring every child has the opportunity to grow, belong, and thrive.</p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
             @forelse($coreValues as $i => $value)
-            @php
-                $valueAccents = ['#2d6fa3', '#8da83a', '#d4af37'];
-                $valueAccentBars = ['#2d6fa3', '#8da83a', '#d4af37'];
-                $accent = $valueAccents[$i % count($valueAccents)];
-                $accentBar = $valueAccentBars[$i % count($valueAccentBars)];
-            @endphp
-            <div class="group bg-white rounded-3xl border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-                 data-reveal="scale" style="--reveal-delay: {{ $i * 100 }}">
-                <div class="p-10 text-center">
-                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[{{ $accent }}] to-[#1a3c6e] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-                        @if($value->image_url)
-                        <img src="{{ $value->image_url }}" alt="{{ $value->title }}" class="w-10 h-10 object-contain">
-                        @else
-                        <span class="text-3xl">{{ $value->icon }}</span>
-                        @endif
+            <div class="group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-350 overflow-hidden"
+                 data-reveal="up" style="--reveal-delay: {{ $i * 100 }}">
+                {{-- Image --}}
+                <div class="relative h-48 overflow-hidden">
+                    @if($value->image_url)
+                    <img src="{{ $value->image_url }}" alt="{{ $value->title }}" 
+                         class="w-full h-full object-cover transition-transform duration-350 group-hover:scale-110">
+                    @else
+                    <div class="w-full h-full bg-gradient-to-br from-[#2d6fa3]/10 to-[#8da83a]/10 flex items-center justify-center">
+                        <span class="text-6xl">{{ $value->icon }}</span>
                     </div>
-                    <h3 class="text-2xl font-bold text-[#1d4e7a] mb-4">{{ $value->title }}</h3>
-                    <p class="text-gray-600 leading-relaxed mb-4">
+                    @endif
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+                
+                {{-- Content --}}
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-[#1d4e7a] mb-2 uppercase tracking-wide">{{ $value->title }}</h3>
+                    <p class="text-lg font-semibold text-[#2d6fa3] mb-3">
+                        {{ $value->headline ?? ($value->description ? $value->description : 'Making a difference.') }}
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed">
                         {{ $value->description }}
                     </p>
-                    <div class="w-12 h-1 rounded-full mx-auto" style="background-color: {{ $accentBar }};"></div>
                 </div>
             </div>
             @empty
@@ -220,34 +223,39 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
 {{-- ========================================================
      OUR PROGRAMS SECTION
      ======================================================== --}}
-<section class="py-24 bg-[#f8f5f0] scroll-mt-20">
+<section class="py-24 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16" data-reveal>
             <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Our Programs</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto">Five comprehensive programs reaching children across Cambodia</p>
+            <p class="text-gray-500 max-w-2xl mx-auto">Five comprehensive programs dedicated to helping children across Cambodia learn, grow, stay healthy, and build brighter futures.</p>
         </div>
 
-        <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
-            @php
-            $programs = [
-                ['title' => 'Child Welfare', 'icon' => '👶', 'desc' => 'Support vulnerable children and provide protection and care.', 'color' => 'bg-[#2d6fa3]'],
-                ['title' => 'Education for Deaf or Blind Children', 'icon' => '🦻', 'desc' => 'Provide inclusive and special education opportunities.', 'color' => 'bg-[#1d4e7a]'],
-                ['title' => 'Cultural and Artistic Development', 'icon' => '🎨', 'desc' => 'Preserve Cambodian culture through arts and creativity.', 'color' => 'bg-[#8da83a]'],
-                ['title' => 'Academic and Career Counseling', 'icon' => '📚', 'desc' => 'Support young people in education and career preparation.', 'color' => 'bg-[#d4af37]'],
-                ['title' => 'Health and Hygiene', 'icon' => '🏥', 'desc' => 'Improve children\'s health and well-being.', 'color' => 'bg-[#2d6fa3]'],
-            ];
-            @endphp
-            
-            @foreach($programs as $i => $program)
-            <div class="group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 p-6 text-center"
-                 data-reveal="up" style="--reveal-delay: {{ $i * 80 }}">
-                <div class="w-16 h-16 rounded-full {{ $program['color'] }} flex items-center justify-center mx-auto mb-4 text-2xl group-hover:scale-110 transition-transform">
-                    {{ $program['icon'] }}
+        <div class="grid md:grid-cols-3 gap-8">
+            @forelse($programs as $i => $program)
+            <div class="card group flex flex-col"
+                 data-reveal="up" style="--reveal-delay: {{ $i * 100 }}">
+                <div class="relative overflow-hidden h-56">
+                    <img src="{{ $program->image_url }}"
+                         alt="{{ $program->title }}"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>
                 </div>
-                <h3 class="font-bold text-gray-800 text-sm mb-2">{{ $program['title'] }}</h3>
-                <p class="text-gray-500 text-xs leading-relaxed">{{ $program['desc'] }}</p>
+
+                {{-- Content --}}
+                <div class="p-6 flex flex-col flex-1">
+                    <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $program->title }}</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-5 line-clamp-3">
+                        {{ $program->description ?? 'Program description coming soon.' }}
+                    </p>
+                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="mt-auto text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
+                        Learn More
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                </div>
             </div>
-            @endforeach
+            @empty
+            <p class="text-gray-400 text-center py-8 md:col-span-3">No programs listed yet.</p>
+            @endforelse
         </div>
     </div>
 </section>

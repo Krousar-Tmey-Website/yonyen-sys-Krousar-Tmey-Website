@@ -64,8 +64,9 @@ Route::get('/who-we-are/presentation', function () {
     $settings = HomeSetting::allKeyed();
     $coreValues = CoreValue::ordered()->get();
     $offices = Office::active()->where('country', '!=', 'Cambodia')->get();
+    $programs = Program::active()->get();
 
-    return view('presentation', compact('settings', 'coreValues', 'offices'));
+    return view('presentation', compact('settings', 'coreValues', 'offices', 'programs'));
 })->name('presentation');
 
 Route::get('/who-we-are/transparency', function () {
@@ -198,7 +199,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Who We Are
     Route::get('presentation', [Admin\PresentationController::class, 'index'])->name('presentation.index');
     Route::post('presentation', [Admin\PresentationController::class, 'update'])->name('presentation.update');
-    Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show']);
+    Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show'])->parameters(['presentation-slides' => 'slide']);
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create']);
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
     Route::resource('history-events', Admin\HistoryEventController::class)

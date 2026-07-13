@@ -12,18 +12,24 @@
         <h3 class="font-bold text-gray-700 mb-4 text-sm">Add New Value</h3>
         <form action="{{ route('admin.core-values.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
             @csrf
-            <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Title <span class="text-red-400">*</span></label>
-                <input type="text" name="title" value="{{ old('title') }}" required
-                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                       placeholder="e.g. Identity">
-            </div>
-            <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
-                <textarea name="description" rows="2"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                          placeholder="Short description...">{{ old('description') }}</textarea>
-            </div>
+<div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Title <span class="text-red-400">*</span></label>
+                    <input type="text" name="title" value="{{ old('title') }}" required
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="e.g. Integration">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Headline (e.g. "Every child belongs.")</label>
+                    <input type="text" name="headline" value="{{ old('headline') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="Every child belongs.">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
+                    <textarea name="description" rows="2"
+                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                              placeholder="Full description...">{{ old('description') }}</textarea>
+                </div>
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Icon (emoji)</label>
@@ -98,6 +104,12 @@
                                 <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
                                 <input type="text" name="title" value="{{ $value->title }}" required
                                        class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Headline (e.g. "Every child belongs.")</label>
+                                <input type="text" name="headline" value="{{ $value->headline }}"
+                                       class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                                       placeholder="Every child belongs.">
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>

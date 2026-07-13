@@ -143,11 +143,12 @@
                 <div class="bg-gray-50 rounded-xl border border-gray-100 overflow-hidden flex">
                     {{-- Preview --}}
                     <div class="relative w-40 flex-shrink-0 hidden sm:block">
-                        <div class="h-full min-h-[90px] bg-cover bg-center"
-                             style="background-image: url('{{ $slide->image_url }}')">
+                        <div class="h-24 rounded-l-xl overflow-hidden">
+                            <img src="{{ $slide->image_url }}" alt="{{ $slide->title }}" 
+                                 class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-[#1d4e7a]/60"></div>
                         </div>
-                        <div class="absolute inset-0 flex flex-col justify-end p-3">
+                        <div class="absolute inset-0 flex flex-col justify-end p-3 pointer-events-none">
                             @if($slide->badge_text)
                             <span class="text-xs bg-[#e8a020] text-white px-2 py-0.5 rounded-full w-fit mb-1">{{ $slide->badge_text }}</span>
                             @endif
@@ -400,26 +401,28 @@
             <h3 class="font-bold text-gray-700 mb-4 text-sm">Manage Programs</h3>
             <p class="text-gray-500 text-xs mb-4">Programs are managed in the Programs section. <a href="{{ route('admin.programs.index') }}" class="text-[#2d6fa3] hover:underline">Go to Programs Management</a></p>
             
+            @php
+            $adminPrograms = \App\Models\Program::active()->get();
+            @endphp
+            
+            @if($adminPrograms->isEmpty())
+            <p class="text-gray-400 text-sm">No programs configured yet. <a href="{{ route('admin.programs.index') }}" class="text-[#2d6fa3] hover:underline">Add programs</a></p>
+            @else
             <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
-                @php
-                $programs = [
-                    ['title' => 'Child Welfare', 'icon' => '👶', 'color' => 'bg-[#2d6fa3]'],
-                    ['title' => 'Education for Deaf or Blind Children', 'icon' => '🦻', 'color' => 'bg-[#1d4e7a]'],
-                    ['title' => 'Cultural and Artistic Development', 'icon' => '🎨', 'color' => 'bg-[#8da83a]'],
-                    ['title' => 'Academic and Career Counseling', 'icon' => '📚', 'color' => 'bg-[#d4af37]'],
-                    ['title' => 'Health and Hygiene', 'icon' => '🏥', 'color' => 'bg-[#2d6fa3]'],
-                ];
-                @endphp
-                
-                @foreach($programs as $program)
+                @foreach($adminPrograms as $program)
                 <div class="bg-gray-50 rounded-xl p-4 text-center">
-                    <div class="w-12 h-12 rounded-full {{ $program['color'] }} flex items-center justify-center mx-auto mb-2 text-xl">
-                        {{ $program['icon'] }}
+                    <div class="w-12 h-12 rounded-full bg-[#2d6fa3] flex items-center justify-center mx-auto mb-2 overflow-hidden">
+                        @if($program->image_url)
+                        <img src="{{ $program->image_url }}" alt="{{ $program->title }}" class="w-full h-full object-cover">
+                        @else
+                        <span class="text-xl">⭐</span>
+                        @endif
                     </div>
-                    <p class="text-xs font-medium text-gray-700">{{ $program['title'] }}</p>
+                    <p class="text-xs font-medium text-gray-700">{{ $program->title }}</p>
                 </div>
                 @endforeach
             </div>
+            @endif
         </div>
     </div>
 

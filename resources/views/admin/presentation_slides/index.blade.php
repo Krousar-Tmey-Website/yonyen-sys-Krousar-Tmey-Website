@@ -25,14 +25,15 @@
     <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex">
 
         {{-- Preview --}}
-        <div class="relative w-52 flex-shrink-0 hidden sm:block">
-            <div class="h-full min-h-[130px] bg-cover bg-center"
-                 style="background-image: url('{{ $slide->image_url }}')">
+        <div class="relative w-40 flex-shrink-0 hidden sm:block">
+            <div class="h-24 rounded-l-xl overflow-hidden">
+                <img src="{{ $slide->image_url }}" alt="{{ $slide->title }}" 
+                     class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-[#1d4e7a]/60"></div>
             </div>
-            <div class="absolute inset-0 flex flex-col justify-end p-4">
+            <div class="absolute inset-0 flex flex-col justify-end p-3 pointer-events-none">
                 @if($slide->badge_text)
-                <span class="text-xs bg-[#e8a020] text-white px-2 py-0.5 rounded-full w-fit mb-2">{{ $slide->badge_text }}</span>
+                <span class="text-xs bg-[#e8a020] text-white px-2 py-0.5 rounded-full w-fit mb-1">{{ $slide->badge_text }}</span>
                 @endif
                 <p class="text-white text-xs font-bold leading-snug line-clamp-2">{{ $slide->title }}</p>
             </div>

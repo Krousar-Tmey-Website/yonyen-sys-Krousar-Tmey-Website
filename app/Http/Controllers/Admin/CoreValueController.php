@@ -19,6 +19,7 @@ class CoreValueController extends Controller
     {
         $data = $request->validate([
             'title'       => ['required', 'string', 'max:255'],
+            'headline'    => ['nullable', 'string', 'max:255'],
             'icon'        => ['nullable', 'string', 'max:10'],
             'description' => ['nullable', 'string'],
             'image'       => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
@@ -40,6 +41,7 @@ class CoreValueController extends Controller
     {
         $data = $request->validate([
             'title'        => ['required', 'string', 'max:255'],
+            'headline'     => ['nullable', 'string', 'max:255'],
             'icon'         => ['nullable', 'string', 'max:10'],
             'description'  => ['nullable', 'string'],
             'image'        => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
