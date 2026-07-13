@@ -257,11 +257,9 @@
 
     }
 
-
     .animate-stat {
         animation: fadeUp .8s ease forwards;
     }
-
 
     .animate-stat:nth-child(1) {
         animation-delay: .1s;
@@ -283,14 +281,12 @@
         animation: fadeUp .8s ease forwards;
     }
 
-
     .animate-section {
         opacity: 0;
         transform: translateY(30px);
         transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
                     transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
 
     .animate-section.is-visible {
         opacity: 1;
@@ -352,6 +348,7 @@
 @php
 $structureWelfareItems = array_filter(explode("\n", $settings['structure_welfare_items'] ?? "2 Temporary Protection Centers\n2 Long-term Protection Centers\n2 Family Houses\nOutside Cases"));
 $structureEducationItems = array_filter(explode("\n", $settings['structure_education_items'] ?? "5 Special Education High Schools"));
+$structureImage = \App\Models\HomeSetting::getValue('structure_image', '');
 @endphp
 <section class="py-16 lg:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-6">
@@ -361,7 +358,7 @@ $structureEducationItems = array_filter(explode("\n", $settings['structure_educa
             {{-- Left Side - Map --}}
             <div class="flex justify-center">
                 <img
-                    src="{{ $settings['structure_image'] ? (str_starts_with($settings['structure_image'], 'http') ? $settings['structure_image'] : asset('storage/' . $settings['structure_image'])) : asset('images/cambodia-map.png') }}"
+                    src="{{ $structureImage ? (str_starts_with($structureImage, 'http') ? $structureImage : asset('storage/' . $structureImage)) : asset('images/cambodia-map.png') }}"
                     alt="Cambodia Program Map"
                     class="w-full max-w-2xl object-contain">
             </div>

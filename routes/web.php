@@ -59,6 +59,22 @@ Route::get('/who-we-are', function () {
     return view('about', compact('partnerCategories', 'partnersByCategory', 'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
 })->name('about');
 
+// Who We Are - Sub-pages
+Route::get('/who-we-are/presentation', function () {
+    $settings = HomeSetting::allKeyed();
+    $coreValues = CoreValue::ordered()->get();
+    $offices = Office::active()->where('country', '!=', 'Cambodia')->get();
+
+    return view('presentation', compact('settings', 'coreValues', 'offices'));
+})->name('presentation');
+
+Route::get('/who-we-are/transparency', function () {
+    $settings = HomeSetting::allKeyed();
+    $reports = AnnualReport::active()->get();
+
+    return view('transparency', compact('settings', 'reports'));
+})->name('transparency');
+
 Route::get('/our-programs', function () {
     $programs = Program::active()->with(['projects' => function ($q) {
         $q->where('is_active', true)->orderBy('id');
@@ -180,6 +196,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('programs-banner', [Admin\ProgramsBannerController::class, 'update'])->name('programs-banner.update');
 
     // Who We Are
+    Route::get('presentation', [Admin\PresentationController::class, 'index'])->name('presentation.index');
+    Route::post('presentation', [Admin\PresentationController::class, 'update'])->name('presentation.update');
+    Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show']);
     Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create']);
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
     Route::resource('history-events', Admin\HistoryEventController::class)
@@ -188,6 +207,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('core-values', Admin\CoreValueController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['core-values' => 'coreValue']);
+    Route::resource('transparency', Admin\TransparencyController::class)
+        ->except(['show', 'create'])
+        ->parameters(['transparency' => 'report']);
 
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
