@@ -184,6 +184,12 @@ Route::get('/newsletter/unsubscribe/{email}', [NewsletterController::class, 'uns
 Route::get('/volunteer', [VolunteerController::class, 'show'])->name('volunteer');
 Route::post('/volunteer', [VolunteerController::class, 'store'])->name('volunteer.store');
 
+// Our Values detail page
+Route::get('/our-values/{value}', function (CoreValue $value) {
+    $settings = \App\Models\HomeSetting::allKeyed();
+    return view('core_values.show', compact('value', 'settings'));
+})->name('core-values.show');
+
 // ──────────────────────────────────────────────
 // Admin — Auth (no middleware)
 // ──────────────────────────────────────────────

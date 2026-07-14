@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CoreValue extends Model
 {
-    protected $fillable = ['title', 'headline', 'icon', 'image', 'description', 'sort_order'];
+    protected $fillable = ['title', 'headline', 'icon', 'image', 'description', 'supporting_description', 'sort_order'];
 
     public function scopeOrdered(Builder $query): Builder
     {
