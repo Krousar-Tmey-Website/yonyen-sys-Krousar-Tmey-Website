@@ -54,7 +54,7 @@ class DonationController extends Controller
 
         $donations = $query->orderBy('DonationDate', 'desc')
             ->orderBy('created_at', 'desc')
-            ->paginate(20);
+            ->paginate(10);
 
         // Get distinct values for filter dropdowns
         $donationTypes  = Donation::select('DonationType')->distinct()->whereNotNull('DonationType')->pluck('DonationType');
@@ -97,14 +97,27 @@ class DonationController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'DonorName'      => 'required|string|max:255',
-            'DonationAmount' => 'required|numeric|min:0',
-            'DonationType'   => 'required|string|max:100',
-            'DonationDate'   => 'required|date',
-            'PaymentMethod'  => 'required|string|max:100',
-            'Status'         => 'required|string|max:50',
-        ]);
+        $rules = [
+            'DonorName'     => 'required|string|max:255',
+            'DonationType'  => 'required|string|max:100',
+            'DonationDate'  => 'required|date',
+            'PaymentMethod' => 'nullable|string|max:100',
+            'Status'        => 'required|string|max:50',
+        ];
+
+        $isMoney = $request->DonationType === 'Money';
+
+        // Amount is required only when donation type is Money
+        $rules['DonationAmount'] = $isMoney
+            ? 'required|numeric|min:0'
+            : 'nullable|numeric|min:0';
+
+        // Payment method is required only when donation type is Money
+        $rules['PaymentMethod'] = $isMoney
+            ? 'required|string|max:100'
+            : 'nullable|string|max:100';
+
+        $data = $request->validate($rules);
 
         // Parse donor name into first/last
         $nameParts = explode(' ', trim($data['DonorName']), 2);
@@ -126,10 +139,10 @@ class DonationController extends Controller
         // Create donation
         $donationData = [
             'DonorID'           => $donor->DonorID,
-            'DonationAmount'    => $data['DonationAmount'],
+            'DonationAmount'    => $data['DonationAmount'] ?? 0,
             'DonationType'      => $data['DonationType'],
             'DonationDate'      => $data['DonationDate'],
-            'PaymentMethod'     => $data['PaymentMethod'],
+            'PaymentMethod'     => $data['PaymentMethod'] ?? '',
             'Status'            => $data['Status'],
             'Currency'          => 'USD',
             'IsRecurring'       => false,
@@ -157,14 +170,27 @@ class DonationController extends Controller
 
     public function update(Request $request, Donation $donation)
     {
-        $data = $request->validate([
-            'DonorName'      => 'required|string|max:255',
-            'DonationAmount' => 'required|numeric|min:0',
-            'DonationType'   => 'required|string|max:100',
-            'DonationDate'   => 'required|date',
-            'PaymentMethod'  => 'required|string|max:100',
-            'Status'         => 'required|string|max:50',
-        ]);
+        $rules = [
+            'DonorName'     => 'required|string|max:255',
+            'DonationType'  => 'required|string|max:100',
+            'DonationDate'  => 'required|date',
+            'PaymentMethod' => 'nullable|string|max:100',
+            'Status'        => 'required|string|max:50',
+        ];
+
+        $isMoney = $request->DonationType === 'Money';
+
+        // Amount is required only when donation type is Money
+        $rules['DonationAmount'] = $isMoney
+            ? 'required|numeric|min:0'
+            : 'nullable|numeric|min:0';
+
+        // Payment method is required only when donation type is Money
+        $rules['PaymentMethod'] = $isMoney
+            ? 'required|string|max:100'
+            : 'nullable|string|max:100';
+
+        $data = $request->validate($rules);
 
         // Parse donor name into first/last
         $nameParts = explode(' ', trim($data['DonorName']), 2);
@@ -184,10 +210,10 @@ class DonationController extends Controller
 
         // Update donation
         $donation->update([
-            'DonationAmount'    => $data['DonationAmount'],
+            'DonationAmount'    => $data['DonationAmount'] ?? 0,
             'DonationType'      => $data['DonationType'],
             'DonationDate'      => $data['DonationDate'],
-            'PaymentMethod'     => $data['PaymentMethod'],
+            'PaymentMethod'     => $data['PaymentMethod'] ?? '',
             'Status'            => $data['Status'],
             'Currency'          => 'USD',
             'IsRecurring'       => false,

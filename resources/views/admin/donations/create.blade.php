@@ -177,6 +177,36 @@ document.querySelectorAll('.status-option').forEach(el => {
         this.querySelector('input').checked = true;
     });
 });
+
+// Toggle Amount & PaymentMethod required based on DonationType
+document.addEventListener('DOMContentLoaded', function() {
+    const typeSelect = document.querySelector('select[name="DonationType"]');
+    const amountInput = document.querySelector('input[name="DonationAmount"]');
+    const payMethodSelect = document.querySelector('select[name="PaymentMethod"]');
+
+    function toggleRequiredFields() {
+        const isMoney = typeSelect.value === 'Money';
+
+        // Toggle Amount
+        const amountStar = amountInput.closest('.donate-field').querySelector('.field-label .required-star');
+        amountInput.required = isMoney;
+        if (amountStar) amountStar.style.display = isMoney ? 'inline' : 'none';
+
+        // Toggle Payment Method
+        const payStar = payMethodSelect.closest('.donate-field').querySelector('.field-label .required-star');
+        payMethodSelect.required = isMoney;
+        if (payStar) payStar.style.display = isMoney ? 'inline' : 'none';
+        // Clear validation error when field becomes not required
+        if (!isMoney && payMethodSelect.value === '') {
+            payMethodSelect.classList.remove('error');
+        }
+    }
+
+    if (typeSelect) {
+        typeSelect.addEventListener('change', toggleRequiredFields);
+        toggleRequiredFields();
+    }
+});
 </script>
 
 @endsection

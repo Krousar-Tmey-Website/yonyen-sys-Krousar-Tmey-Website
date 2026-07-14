@@ -717,8 +717,8 @@ select.form-control {
 /* Pagination */
 .pagination-wrapper {
     padding: 14px 24px;
-    border-top: 1px solid #eef2f6;
-    background: #fafbfc;
+    border-top: 1px solid #e0f2fe;
+    background: #f0f9ff;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -727,15 +727,78 @@ select.form-control {
 }
 .pagination-wrapper .pagination-info {
     font-size: 13px;
-    color: #64748b;
+    color: #0369a1;
 }
 .pagination-wrapper .pagination-info strong {
-    color: #0f172a;
+    color: #0c4a6e;
 }
 
 /* Table Header for History (blue background) */
 .table-header--blue {
     background: #e3f0ff;
+}
+
+/* ── Pagination Links (Tailwind Override with Sky Blue) ── */
+.pagination-links nav[role="navigation"] {
+    display: flex;
+    justify-content: center;
+}
+
+/* Prev / Next disabled state */
+.pagination-links span.cursor-not-allowed {
+    background: #f0f9ff !important;
+    border-color: #bae6fd !important;
+    color: #7dd3fc !important;
+}
+
+/* Page number links */
+.pagination-links a:not([rel="prev"]):not([rel="next"]),
+.pagination-links [rel="prev"],
+.pagination-links [rel="next"] {
+    background: #ffffff !important;
+    border-color: #e0f2fe !important;
+    color: #0369a1 !important;
+    transition: all 0.2s ease-in-out !important;
+}
+.pagination-links a:hover:not([rel="prev"]):not([rel="next"]),
+.pagination-links [rel="prev"]:hover,
+.pagination-links [rel="next"]:hover {
+    background: #f0f9ff !important;
+    border-color: #7dd3fc !important;
+    color: #0c4a6e !important;
+}
+
+/* Active page */
+.pagination-links span[aria-current="page"] span {
+    background: #0284c7 !important;
+    border-color: #0284c7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3);
+}
+
+/* Dots separator */
+.pagination-links span.cursor-default {
+    background: #ffffff !important;
+    border-color: #e0f2fe !important;
+    color: #94a3b8 !important;
+}
+
+/* SVG icons in prev/next */
+.pagination-links svg {
+    color: #0284c7;
+}
+.pagination-links span.cursor-not-allowed svg {
+    color: #7dd3fc;
+}
+.pagination-links a:hover svg {
+    color: #0c4a6e;
+}
+
+/* Focus ring */
+.pagination-links a:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2) !important;
+    border-color: #0284c7 !important;
 }
 
 /* Responsive */
