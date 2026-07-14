@@ -3,6 +3,9 @@
     $methodName        = old('name', $paymentMethod->name ?? '');
     $methodCode        = old('code', $paymentMethod->code ?? '');
     $methodDescription = old('description', $paymentMethod->description ?? '');
+    $methodAccountName = old('account_name', $paymentMethod->account_name ?? '');
+    $methodAccountNo   = old('account_no', $paymentMethod->account_no ?? '');
+    $methodCurrency    = old('currency', $paymentMethod->currency ?? '');
     $methodSortOrder   = old('sort_order', $paymentMethod->sort_order ?? 0);
     $methodActive      = old('is_active', $paymentMethod->is_active ?? true);
 @endphp
@@ -32,7 +35,45 @@
     @error('description')<div class="payment-form-error">{{ $message }}</div>@enderror
 </div>
 
+<div class="payment-form-section-header" style="margin-top:24px;">
+    <div class="section-header-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0"/>
+        </svg>
+    </div>
+    <span>Account Details</span>
+</div>
+
 <div class="payment-form-grid">
+    <div class="payment-form-group">
+        <label class="payment-form-label">Account Name</label>
+        <input type="text" name="account_name" value="{{ $methodAccountName }}"
+               class="payment-form-input @error('account_name') error @enderror"
+               placeholder="e.g. Krousar Thmey Cambodia">
+        @error('account_name')<div class="payment-form-error">{{ $message }}</div>@enderror
+    </div>
+
+    <div class="payment-form-group">
+        <label class="payment-form-label">Account No.</label>
+        <input type="text" name="account_no" value="{{ $methodAccountNo }}"
+               class="payment-form-input @error('account_no') error @enderror"
+               placeholder="e.g. 123 456 789">
+        @error('account_no')<div class="payment-form-error">{{ $message }}</div>@enderror
+    </div>
+</div>
+
+<div class="payment-form-grid">
+    <div class="payment-form-group">
+        <label class="payment-form-label">Currency</label>
+        <select name="currency" class="payment-form-input @error('currency') error @enderror">
+            <option value="">Select currency...</option>
+            @foreach(['KHR' => '៛ KHR — Khmer Riel', 'USD' => '$ USD — US Dollar', 'EUR' => '€ EUR — Euro', 'THB' => '฿ THB — Thai Baht'] as $val => $label)
+                <option value="{{ $val }}" {{ $methodCurrency === $val ? 'selected' : '' }}>{{ $label }}</option>
+            @endforeach
+        </select>
+        @error('currency')<div class="payment-form-error">{{ $message }}</div>@enderror
+    </div>
+
     <div class="payment-form-group">
         <label class="payment-form-label">Sort Order</label>
         <input type="number" name="sort_order" value="{{ $methodSortOrder }}" min="0"
@@ -40,19 +81,19 @@
                placeholder="0">
         @error('sort_order')<div class="payment-form-error">{{ $message }}</div>@enderror
     </div>
+</div>
 
-    <div class="payment-form-group">
-        <label class="payment-form-label">Status</label>
-        <div class="payment-form-toggle">
-            <label class="toggle-track">
-                <input type="checkbox" name="is_active" value="1"
-                       {{ $methodActive ? 'checked' : '' }}>
-                <span class="slider"></span>
-            </label>
-            <div>
-                <div class="toggle-label">Active</div>
-                <div class="toggle-desc">Available for donors</div>
-            </div>
+<div class="payment-form-group">
+    <label class="payment-form-label">Status</label>
+    <div class="payment-form-toggle">
+        <label class="toggle-track">
+            <input type="checkbox" name="is_active" value="1"
+                   {{ $methodActive ? 'checked' : '' }}>
+            <span class="slider"></span>
+        </label>
+        <div>
+            <div class="toggle-label">Active</div>
+            <div class="toggle-desc">Available for donors on the Donate page</div>
         </div>
     </div>
 </div>
