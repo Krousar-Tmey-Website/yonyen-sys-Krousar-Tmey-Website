@@ -16,6 +16,16 @@
 
 <body class="bg-white text-gray-800" x-data>
 
+<script>
+function openEmail(email) {
+  if (email.toLowerCase().endsWith('@gmail.com')) {
+    window.open('https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(email), '_blank', 'noopener');
+  } else {
+    window.location.href = 'mailto:' + email;
+  }
+}
+</script>
+
     {{-- Flash Message Popup --}}
     @if(session('success') || session('info'))
     <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)"

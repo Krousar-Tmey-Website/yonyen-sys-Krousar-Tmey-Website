@@ -16,6 +16,16 @@
 
 <body class="h-full" x-data="{ sidebarOpen: false }">
 
+<script>
+function openEmail(email) {
+  if (email.toLowerCase().endsWith('@gmail.com')) {
+    window.open('https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(email), '_blank', 'noopener');
+  } else {
+    window.location.href = 'mailto:' + email;
+  }
+}
+</script>
+
     <div class="flex h-full">
 
         {{-- ── Sidebar ──────────────────────────────── --}}

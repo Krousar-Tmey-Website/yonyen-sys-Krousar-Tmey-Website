@@ -94,7 +94,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <a href="mailto:{{ $volunteer->email }}" class="text-gray-500 hover:text-[#2d6fa3] transition-colors">{{ $volunteer->email }}</a>
+                            <a href="#" @click.prevent="openEmail('{{ $volunteer->email }}')" class="text-gray-500 hover:text-[#2d6fa3] transition-colors">{{ $volunteer->email }}</a>
                         </td>
                         <td class="px-6 py-4 text-gray-500">
                             @if($volunteer->interested_program)

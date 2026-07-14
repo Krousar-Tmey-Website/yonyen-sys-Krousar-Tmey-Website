@@ -60,7 +60,7 @@
                         <div>
                             <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Email</label>
                             <p class="text-gray-800">
-                                <a href="mailto:{{ $volunteer->email }}" class="text-[#2d6fa3] hover:underline">{{ $volunteer->email }}</a>
+                                <a href="#" @click.prevent="openEmail('{{ $volunteer->email }}')" class="text-[#2d6fa3] hover:underline">{{ $volunteer->email }}</a>
                             </p>
                         </div>
                         <div>
