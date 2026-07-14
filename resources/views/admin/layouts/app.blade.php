@@ -8,6 +8,9 @@
     @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @stack('styles')
     <link rel="icon" type="image/png" href="{{ asset('images/logo.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         [x-cloak] {
             display: none !important;
@@ -35,10 +38,9 @@
             <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
                 <div class="bg-white rounded-xl px-3 py-1.5 flex-shrink-0">
                     @php
-                    $logoPath = $settings['site_logo'] ?? 'images/logo.png';
+                    $logoPath = $settings['site_logo'] ?? 'images/logo.svg';
                     $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
                     $siteName = $settings['site_name'] ?? 'Krousar Thmey';
-                    $siteTagline = $settings['site_tagline'] ?? 'គ្រួសារថ្មី · New Family';
                     @endphp
                     <img src="{{ $logoUrl }}"
                         alt="{{ $siteName }}"
@@ -50,8 +52,8 @@
                             <img src="{{ asset('images/logo.svg') }}" alt="">
                         </div>
                         <!-- <div>
-                            <div class="text-[#2d6fa3] font-bold text-lg leading-tight">{{ $siteName }}</div>
-                            <div class="text-[#8da83a] text-xs font-medium">{{ $siteTagline }}</div>
+                            {{-- <div class="text-[#2d6fa3] font-bold text-lg leading-tight">{{ $siteName }}</div> --}}
+                            {{-- <div class="text-[#8da83a] text-xs font-medium">{{ $siteTagline }}</div> --}}
                         </div> -->
                     </div>
                 </div>
