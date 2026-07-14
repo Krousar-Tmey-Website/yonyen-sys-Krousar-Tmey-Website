@@ -194,7 +194,7 @@
                 </div>
                 <p class="text-gray-500 text-sm leading-relaxed">
                     After paying, please send your <strong class="text-gray-700">payment screenshot</strong> to
-                    <a href="mailto:info@krousar-thmey.org" class="text-[#2d6fa3] hover:underline font-medium">info@krousar-thmey.org</a>
+                    <a href="#" @click.prevent="openEmail('info@krousar-thmey.org')" class="text-[#2d6fa3] hover:underline font-medium">info@krousar-thmey.org</a>
                     so we can send you a receipt and thank you note.
                 </p>
             </div>
