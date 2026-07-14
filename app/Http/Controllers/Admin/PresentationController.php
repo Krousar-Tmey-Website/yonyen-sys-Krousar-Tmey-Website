@@ -21,34 +21,27 @@ class PresentationController extends Controller
 
     public function update(Request $request)
     {
-        $section = $request->input('section', 'all');
-        
         $data = $request->validate([
-            'hero_title' => ['nullable', 'string', 'max:255'],
-            'hero_subtitle' => ['nullable', 'string', 'max:255'],
-            'hero_description' => ['nullable', 'string', 'max:255'],
-            'hero_image' => ['nullable', 'url', 'max:2048'],
-            'hero_image_file' => ['nullable', 'image', 'max:4096'],
-            'remove_hero_image' => ['nullable', 'boolean'],
-            'about_title' => ['nullable', 'string', 'max:255'],
-            'about_description' => ['nullable', 'string'],
-            'about_image' => ['nullable', 'url', 'max:2048'],
-            'about_image_file' => ['nullable', 'image', 'max:4096'],
-            'remove_about_image' => ['nullable', 'boolean'],
-            'principle_title' => ['nullable', 'string', 'max:255'],
+            'intro_heading' => ['nullable', 'string', 'max:500'],
+            'mission_title' => ['nullable', 'string', 'max:255'],
+            'mission_text' => ['nullable', 'string'],
+            'mission_image' => ['nullable', 'url', 'max:2048'],
+            'mission_image_file' => ['nullable', 'image', 'max:4096'],
+            'remove_mission_image' => ['nullable', 'boolean'],
+            'vision_title' => ['nullable', 'string', 'max:255'],
+            'vision_text' => ['nullable', 'string'],
+            'vision_image' => ['nullable', 'url', 'max:2048'],
+            'vision_image_file' => ['nullable', 'image', 'max:4096'],
+            'remove_vision_image' => ['nullable', 'boolean'],
+            'portfolio_text' => ['nullable', 'string'],
             'principle_quote' => ['nullable', 'string'],
-            'principle_image' => ['nullable', 'url', 'max:2048'],
-            'principle_image_file' => ['nullable', 'image', 'max:4096'],
-            'remove_principle_image' => ['nullable', 'boolean'],
-            'stat_children' => ['nullable', 'string'],
-            'stat_welfare' => ['nullable', 'string'],
-            'stat_special_ed' => ['nullable', 'string'],
-            'stat_2025' => ['nullable', 'string'],
-            'stat_arts' => ['nullable', 'string'],
-            'stat_counseling' => ['nullable', 'string'],
+            'portfolio_volunteers_text' => ['nullable', 'string'],
+            'stat_provinces' => ['nullable', 'string'],
             'stat_employees' => ['nullable', 'string'],
+            'stat_expats' => ['nullable', 'string'],
             'stat_budget' => ['nullable', 'string'],
-            'stat_admin' => ['nullable', 'string'],
+            'stat_admin_costs' => ['nullable', 'string'],
+            'worldwide_text' => ['nullable', 'string'],
             'sharing_enabled' => ['nullable', 'string'],
             'sharing_title' => ['nullable', 'string', 'max:255'],
             'sharing_facebook_link' => ['nullable', 'url', 'max:2048'],
@@ -60,25 +53,18 @@ class PresentationController extends Controller
             'sharing_share_icon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
         ]);
 
-        // Handle hero image upload
-        if ($request->hasFile('hero_image_file')) {
-            $data['hero_image'] = $request->file('hero_image_file')->store('presentation', 'public');
-        } elseif ($request->boolean('remove_hero_image')) {
-            $data['hero_image'] = null;
+        // Handle mission image upload
+        if ($request->hasFile('mission_image_file')) {
+            $data['mission_image'] = $request->file('mission_image_file')->store('presentation', 'public');
+        } elseif ($request->boolean('remove_mission_image')) {
+            $data['mission_image'] = null;
         }
 
-        // Handle about image upload
-        if ($request->hasFile('about_image_file')) {
-            $data['about_image'] = $request->file('about_image_file')->store('presentation', 'public');
-        } elseif ($request->boolean('remove_about_image')) {
-            $data['about_image'] = null;
-        }
-
-        // Handle principle image upload
-        if ($request->hasFile('principle_image_file')) {
-            $data['principle_image'] = $request->file('principle_image_file')->store('presentation', 'public');
-        } elseif ($request->boolean('remove_principle_image')) {
-            $data['principle_image'] = null;
+        // Handle vision image upload
+        if ($request->hasFile('vision_image_file')) {
+            $data['vision_image'] = $request->file('vision_image_file')->store('presentation', 'public');
+        } elseif ($request->boolean('remove_vision_image')) {
+            $data['vision_image'] = null;
         }
 
         // Handle sharing icon uploads
@@ -88,19 +74,17 @@ class PresentationController extends Controller
                 $file = $request->file($iconKey);
                 $filename = $iconKey . '.' . $file->getClientOriginalExtension();
                 $destinationPath = public_path('images/social');
-                
-                // Create directory if it doesn't exist
+
                 if (!file_exists($destinationPath)) {
                     mkdir($destinationPath, 0755, true);
                 }
-                
+
                 $file->move($destinationPath, $filename);
                 $data[$iconKey] = 'images/social/' . $filename;
             }
         }
 
-        // Remove the file and remove flags from data before saving
-        unset($data['hero_image_file'], $data['remove_hero_image'], $data['about_image_file'], $data['remove_about_image'], $data['principle_image_file'], $data['remove_principle_image']);
+        unset($data['mission_image_file'], $data['remove_mission_image'], $data['vision_image_file'], $data['remove_vision_image']);
 
         foreach ($data as $key => $value) {
             if ($value !== null) {

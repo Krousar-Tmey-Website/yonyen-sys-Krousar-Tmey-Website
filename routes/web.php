@@ -74,9 +74,8 @@ Route::get('/who-we-are/presentation', function () {
     $offices = Office::active()->where('country', '!=', 'Cambodia')->get();
     $programs = Program::active()->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->get();
-    $worldwidePartners = \App\Models\WorldwidePartner::active()->get();
 
-    return view('presentation', compact('settings', 'coreValues', 'offices', 'programs', 'impactStatistics', 'worldwidePartners'));
+    return view('presentation', compact('settings', 'coreValues', 'offices', 'programs', 'impactStatistics'));
 })->name('presentation');
 
 Route::get('/who-we-are/transparency', function () {
@@ -294,4 +293,5 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::delete('{volunteer}', [Admin\VolunteerController::class, 'destroy'])->name('destroy');
     });
 });
+
 
