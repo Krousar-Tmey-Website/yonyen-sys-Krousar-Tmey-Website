@@ -9,8 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('books', function (Blueprint $table) {
-            if (!Schema::hasColumn('books', 'author')) {
-                $table->string('author')->nullable()->after('title');
+            if (Schema::hasColumn('books', 'author')) {
+                $table->dropColumn('author');
             }
         });
     }
@@ -18,7 +18,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('books', function (Blueprint $table) {
-            $table->dropColumn('author');
+            $table->string('author')->nullable()->after('title');
         });
     }
 };

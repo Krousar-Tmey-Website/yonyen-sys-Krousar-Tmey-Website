@@ -74,7 +74,7 @@ class PartnerController extends Controller
         $data['is_active']  = true;
         $data['sort_order'] = 0;
 
-        Partner::create($data);
+        $partner = Partner::create($data);
 
         return redirect()->route('admin.partners.index')
             ->with('success', 'Partner created successfully.');

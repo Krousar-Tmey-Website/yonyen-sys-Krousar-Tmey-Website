@@ -16,6 +16,16 @@
 
 <body class="h-full" x-data="{ sidebarOpen: false }">
 
+<script>
+function openEmail(email) {
+  if (email.toLowerCase().endsWith('@gmail.com')) {
+    window.open('https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(email), '_blank', 'noopener');
+  } else {
+    window.location.href = 'mailto:' + email;
+  }
+}
+</script>
+
     <div class="flex h-full">
 
         {{-- ── Sidebar ──────────────────────────────── --}}
@@ -158,7 +168,7 @@
                                 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
                             'children' => [
                                 ['route' => 'admin.analytics.index', 'label' => 'Analytics'],
-                                ['route' => 'admin.activity.index', 'label' => 'Activity Logs'],
+                                ['route' => 'admin.reports.activity-logs.index', 'label' => 'Activity Logs'],
                             ],
                         ],
                     ];

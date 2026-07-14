@@ -111,7 +111,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="mailto:{{ $inquiry->Email }}"
+                                    <a href="#" @click.prevent="openEmail('{{ $inquiry->Email }}')"
                                         class="text-gray-500 hover:text-[#2d6fa3] transition-colors">{{ $inquiry->Email }}</a>
                                 </td>
                                 <td class="px-6 py-4 text-gray-500 max-w-[200px] truncate">{{ $inquiry->Subject }}</td>
