@@ -26,7 +26,7 @@
             {{-- Title --}}
             <div class="flex items-stretch gap-5 mb-6">
                 <div class="w-1.5 rounded-full bg-gradient-to-b from-[#d32f2f] to-[#e8a020]"></div>
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-[#1a3c6e] uppercase tracking-wide leading-tight drop-shadow-sm">
+                <h1 class="text-3xl md:text-4xl lg:text-[40px] font-extrabold text-[#1a3c6e] uppercase tracking-tight leading-tight drop-shadow-sm">
                     {{ $project->title }}
                 </h1>
             </div>
@@ -44,7 +44,7 @@
                     
                     {{-- Description (Intro) --}}
                     @if($project->description)
-                    <div class="text-xl font-medium text-[#1a3c6e] leading-relaxed relative">
+                    <div class="text-xl font-medium text-[#1a3c6e] leading-relaxed relative" data-reveal="up">
                         <svg class="absolute -top-4 -left-4 w-12 h-12 text-[#8da83a]/10 transform -rotate-12" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
                         <p class="relative z-10">{{ $project->description }}</p>
                     </div>
@@ -52,7 +52,7 @@
 
                     {{-- Objective Block --}}
                     @if($project->objective)
-                    <div class="bg-blue-50/50 rounded-3xl p-8 border border-blue-100/50 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+                    <div class="bg-blue-50/50 rounded-3xl p-8 border border-blue-100/50 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow" data-reveal="up">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-[#1a3c6e]/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-xl group-hover:scale-110 transition-transform duration-700"></div>
                         <div class="flex items-center gap-3 mb-5 relative z-10">
                             <div class="w-8 h-8 rounded-full bg-[#1a3c6e] flex items-center justify-center text-white shadow-sm">
@@ -66,7 +66,7 @@
 
                     {{-- The Project (Detail) --}}
                     @if($project->content)
-                    <div class="bg-white">
+                    <div class="bg-white" data-reveal="up">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-2 h-2 rounded-full bg-[#8da83a]"></div>
                             <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-widest m-0">The Project</h3>
@@ -84,7 +84,7 @@
 
                     {{-- Activities --}}
                     @if($project->activities)
-                    <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 shadow-sm">
+                    <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 shadow-sm" data-reveal="up">
                         <div class="flex items-center gap-3 mb-8">
                             <div class="w-2 h-2 rounded-full bg-[#e8a020]"></div>
                             <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-widest m-0">Key Activities</h3>
@@ -106,21 +106,34 @@
 
                     {{-- Make a Difference --}}
                     @if($project->effective_make_difference_text)
-                    <div class="bg-yellow-50/50 rounded-3xl p-8 border border-yellow-100/50 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+                    <div class="bg-yellow-50/50 rounded-3xl p-8 border border-yellow-100/50 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow" data-reveal="up">
                         <div class="absolute bottom-0 left-0 w-32 h-32 bg-[#e8a020]/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-xl group-hover:scale-110 transition-transform duration-700"></div>
                         <div class="flex items-center gap-3 mb-5 relative z-10">
                             <div class="w-8 h-8 rounded-full bg-[#e8a020] flex items-center justify-center text-white shadow-sm">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             </div>
-                            <h3 class="text-lg font-black text-[#1a3c6e] uppercase tracking-widest m-0">Make a Difference</h3>
+                            <h3 class="text-lg font-black text-[#1a3c6e] uppercase tracking-widest m-0">{{ $project->effective_make_difference_title ?: 'Make a Difference' }}</h3>
                         </div>
                         <p class="text-gray-700 text-[16px] leading-relaxed relative z-10 whitespace-pre-line">{{ $project->effective_make_difference_text }}</p>
+                        
+                        <div class="mt-6 flex flex-col sm:flex-row gap-4 relative z-10">
+                            @if($project->effective_donate_button_text)
+                            <a href="{{ route('donate') }}" class="px-6 py-3 bg-[#d32f2f] hover:bg-[#b72424] text-white text-sm font-bold uppercase tracking-wider rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center">
+                                {{ $project->effective_donate_button_text }}
+                            </a>
+                            @endif
+                            @if($project->effective_contact_button_text)
+                            <a href="{{ route('contact') }}" class="px-6 py-3 bg-[#1a3c6e] hover:bg-[#122b52] text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center text-center">
+                                {{ $project->effective_contact_button_text }}
+                            </a>
+                            @endif
+                        </div>
                     </div>
                     @endif
 
                     {{-- Grants --}}
                     @if($project->grants->isNotEmpty())
-                    <div class="pt-4">
+                    <div class="pt-4" data-reveal="up">
                         <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-widest mb-6">Income Generation Grants</h3>
                         <div class="grid sm:grid-cols-2 gap-4">
                             @foreach($project->grants as $grant)
@@ -144,7 +157,7 @@
                     @endif
 
                     {{-- Social Share --}}
-                    <div class="pt-10 mt-10 border-t border-gray-100">
+                    <div class="pt-10 mt-10 border-t border-gray-100" data-reveal="up">
                         <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Share this project</h4>
                         <div class="flex gap-3">
                             @php
@@ -180,7 +193,7 @@
                     
                     {{-- Images --}}
                     @if($project->image)
-                    <div class="relative w-full h-[300px] lg:h-[350px] cursor-pointer group rounded-3xl overflow-hidden shadow-sm" @click="lightboxImage = '{{ $project->image_url }}'">
+                    <div class="relative w-full h-[300px] lg:h-[350px] cursor-pointer group rounded-3xl overflow-hidden shadow-sm" @click="lightboxImage = '{{ $project->image_url }}'" data-reveal="left">
                         <img src="{{ $project->image_url }}" alt="{{ $project->title }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                         
                         {{-- Hover Overlay --}}
@@ -194,7 +207,7 @@
 
                     {{-- Project info card --}}
                     @if($project->effective_area_of_work || $project->effective_duration || $project->effective_location || $project->effective_beneficiaries)
-                    <div class="bg-gradient-to-br from-[#1a3c6e] to-[#2d6fa3] rounded-3xl p-8 text-white shadow-md relative overflow-hidden group">
+                    <div class="bg-gradient-to-br from-[#1a3c6e] to-[#2d6fa3] rounded-3xl p-8 text-white shadow-md relative overflow-hidden group" data-reveal="left">
                         <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-700"></div>
                         
                         <h4 class="font-black text-xs uppercase tracking-widest text-white/70 mb-6 pb-4 border-b border-white/10 flex items-center gap-2">
@@ -276,7 +289,7 @@
             {{-- Testimony --}}
             @if($project->testimony_name && $project->testimony_story)
             @php $cleanName = preg_replace('/^testimony\s*:?\s*/i', '', $project->testimony_name); @endphp
-            <div class="mt-24">
+            <div class="mt-24" data-reveal="up">
                 <div class="max-w-4xl mx-auto bg-white border border-gray-100 p-8 md:p-14 rounded-[3rem] text-center shadow-lg relative overflow-hidden group">
                     <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#2d6fa3] via-[#8da83a] to-[#e8a020]"></div>
                     <div class="absolute -top-32 -left-32 w-64 h-64 bg-[#2d6fa3]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
@@ -294,11 +307,19 @@
                     </div>
                     
                     <p class="text-[#2d6fa3] font-bold text-xs tracking-widest uppercase mb-1">Impact Testimony</p>
-                    <p class="text-gray-900 font-black text-2xl mb-8">{{ $cleanName }}</p>
+                    <p class="text-gray-900 font-bold text-lg md:text-xl mb-8 px-4">{{ $cleanName }}</p>
                     
-                    <div class="bg-gray-50/80 rounded-[2rem] p-8 md:p-10 text-left border border-gray-100 relative group-hover:bg-white group-hover:shadow-sm transition-all duration-500">
-                        <svg class="absolute -top-5 -left-5 w-16 h-16 text-[#1a3c6e]/5" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                        <p class="text-gray-700 leading-relaxed text-[16px] whitespace-pre-line font-medium relative z-10">{{ $project->testimony_story }}</p>
+                    <div x-data="{ open: false }" class="bg-gray-50/80 rounded-[2rem] text-left border border-gray-100 relative group-hover:bg-white group-hover:shadow-sm transition-all duration-500 overflow-hidden">
+                        <button @click="open = !open" class="w-full flex items-center justify-between p-8 md:p-10 hover:bg-gray-100/50 transition-colors focus:outline-none">
+                            <span class="text-[#1a3c6e] font-bold text-sm uppercase tracking-widest">Read The Full Story</span>
+                            <svg class="w-6 h-6 text-[#1a3c6e] transform transition-transform duration-500" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="open" style="display: none;" class="px-8 pb-8 md:px-10 md:pb-10 pt-2 border-t border-gray-200/50" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                            <svg class="absolute -top-5 -left-5 w-16 h-16 text-[#1a3c6e]/5" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                            <p class="text-gray-700 leading-relaxed text-[16px] whitespace-pre-line font-medium relative z-10">{{ $project->testimony_story }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
