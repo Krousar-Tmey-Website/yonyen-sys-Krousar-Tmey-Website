@@ -18,13 +18,14 @@ class CoreValueController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'headline'    => ['nullable', 'string', 'max:255'],
-            'icon'        => ['nullable', 'string', 'max:10'],
-            'description' => ['nullable', 'string'],
-            'image'       => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
-            'image_url'   => ['nullable', 'url', 'max:2048'],
-            'sort_order'  => ['nullable', 'integer'],
+            'title'                 => ['required', 'string', 'max:255'],
+            'headline'              => ['nullable', 'string', 'max:255'],
+            'icon'                  => ['nullable', 'string', 'max:10'],
+            'description'           => ['nullable', 'string'],
+            'supporting_description'  => ['nullable', 'string'],
+            'image'                 => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'image_url'             => ['nullable', 'url', 'max:2048'],
+            'sort_order'            => ['nullable', 'integer'],
         ]);
 
         $data['icon']       = $data['icon'] ?? '⭐';
@@ -40,14 +41,15 @@ class CoreValueController extends Controller
     public function update(Request $request, CoreValue $coreValue)
     {
         $data = $request->validate([
-            'title'        => ['required', 'string', 'max:255'],
-            'headline'     => ['nullable', 'string', 'max:255'],
-            'icon'         => ['nullable', 'string', 'max:10'],
-            'description'  => ['nullable', 'string'],
-            'image'        => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
-            'image_url'    => ['nullable', 'url', 'max:2048'],
-            'remove_image' => ['nullable', 'boolean'],
-            'sort_order'   => ['nullable', 'integer'],
+            'title'                 => ['required', 'string', 'max:255'],
+            'headline'              => ['nullable', 'string', 'max:255'],
+            'icon'                  => ['nullable', 'string', 'max:10'],
+            'description'           => ['nullable', 'string'],
+            'supporting_description'  => ['nullable', 'string'],
+            'image'                 => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'image_url'             => ['nullable', 'url', 'max:2048'],
+            'remove_image'          => ['nullable', 'boolean'],
+            'sort_order'            => ['nullable', 'integer'],
         ]);
 
         $data['icon'] = $data['icon'] ?? '⭐';

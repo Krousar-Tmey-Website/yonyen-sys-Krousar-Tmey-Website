@@ -40,6 +40,7 @@ class PresentationController extends Controller
             'principle_image' => ['nullable', 'url', 'max:2048'],
             'principle_image_file' => ['nullable', 'image', 'max:4096'],
             'remove_principle_image' => ['nullable', 'boolean'],
+            'values_supporting_description' => ['nullable', 'string'],
             'stat_children' => ['nullable', 'string'],
             'stat_welfare' => ['nullable', 'string'],
             'stat_special_ed' => ['nullable', 'string'],
@@ -102,11 +103,13 @@ class PresentationController extends Controller
         // Remove the file and remove flags from data before saving
         unset($data['hero_image_file'], $data['remove_hero_image'], $data['about_image_file'], $data['remove_about_image'], $data['principle_image_file'], $data['remove_principle_image']);
 
+        // Save all values including empty strings
         foreach ($data as $key => $value) {
-            if ($value !== null) {
-                HomeSetting::setValue($key, $value);
-            }
+            HomeSetting::setValue($key, $value);
         }
+        
+        // Ensure values_supporting_description is saved (even if empty)
+        HomeSetting::setValue('values_supporting_description', $request->input('values_supporting_description', ''));
 
         return redirect()->route('admin.presentation.index')->with('success', 'Presentation settings updated.');
     }

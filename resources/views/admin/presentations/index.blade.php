@@ -176,16 +176,21 @@
                             <p class="text-gray-400 text-xs line-clamp-1 max-w-sm">{{ $slide->subtitle }}</p>
                             @endif
                         </div>
-                        <div class="flex items-center gap-2 flex-shrink-0">
-                            <a href="{{ route('admin.presentation-slides.edit', $slide) }}"
-                               class="text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium px-3 py-1.5 border border-[#2d6fa3]/30 rounded-lg hover:bg-[#2d6fa3]/5 transition-colors">
-                                Edit
+                        <div class="flex items-center justify-end gap-2">
+                            <a href="{{ route('admin.presentation-slides.edit', $slide) }}" title="Edit"
+                               class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 flex items-center justify-center transition">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
                             </a>
                             <form action="{{ route('admin.presentation-slides.destroy', $slide) }}" method="POST"
                                   onsubmit="return confirm('Delete this slide?')">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="text-red-300 hover:text-red-500 text-xs font-medium px-3 py-1.5 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
-                                    Delete
+                                <button type="submit" title="Delete"
+                                        class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
+                                    </svg>
                                 </button>
                             </form>
                         </div>
@@ -259,6 +264,25 @@
 
     {{-- OUR VALUES SECTION --}}
     <div x-show="tab === 'values'" class="space-y-6">
+        {{-- Supporting Description (Global) --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-700 mb-4 text-sm">Our Values Supporting Description</h3>
+            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
+                @csrf
+                <input type="hidden" name="section" value="values_supporting">
+                
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
+                    <textarea name="values_supporting_description" rows="3"
+                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                              placeholder="Krousar Thmey offers a portfolio of cross-cutting programs...">{{ old('values_supporting_description', $settings['values_supporting_description'] ?? '') }}</textarea>
+                    <p class="text-xs text-gray-400 mt-1">This text appears under the Our Values header on the presentation page.</p>
+                </div>
+                
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Supporting Description</button>
+            </form>
+        </div>
+        
         <div class="grid lg:grid-cols-3 gap-6">
             {{-- Add value form --}}
             <div class="bg-white rounded-2xl border border-gray-100 p-6">
@@ -272,10 +296,22 @@
                                placeholder="e.g. Identity">
                     </div>
                     <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Headline (e.g. "Every child belongs.")</label>
+                        <input type="text" name="headline" value="{{ old('headline') }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Every child belongs.">
+                    </div>
+                    <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
                         <textarea name="description" rows="2"
                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="Short description...">{{ old('description') }}</textarea>
+                                  placeholder="Full description...">{{ old('description') }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
+                        <textarea name="supporting_description" rows="2"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Supporting description...">{{ old('supporting_description') }}</textarea>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
@@ -325,18 +361,29 @@
                                     @endif
                                     <div class="min-w-0">
                                         <p class="font-semibold text-gray-700 text-sm">{{ $value->title }}</p>
+                                        @if($value->headline)
+                                        <p class="text-gray-500 text-xs font-medium mt-0.5">{{ $value->headline }}</p>
+                                        @endif
                                         @if($value->description)
                                         <p class="text-gray-400 text-xs mt-1 line-clamp-2">{{ $value->description }}</p>
                                         @endif
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-2 flex-shrink-0 ml-3">
-                                    <button @click="editing = true" class="text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium p-1">Edit</button>
+                                <div class="flex items-center justify-end gap-2">
+                                    <button @click="editing = true" title="Edit"
+                                            class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 flex items-center justify-center transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </button>
                                     <form action="{{ route('admin.core-values.destroy', $value) }}" method="POST"
                                           onsubmit="return confirm('Remove this value?')">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="text-red-300 hover:text-red-500 transition-colors p-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        <button type="submit" title="Delete"
+                                                class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
+                                            </svg>
                                         </button>
                                     </form>
                                 </div>
@@ -351,9 +398,20 @@
                                                class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
                                     </div>
                                     <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Headline (e.g. "Every child belongs.")</label>
+                                        <input type="text" name="headline" value="{{ $value->headline }}"
+                                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                                               placeholder="Every child belongs.">
+                                    </div>
+                                    <div>
                                         <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
                                         <textarea name="description" rows="2"
                                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $value->description }}</textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
+                                        <textarea name="supporting_description" rows="2"
+                                                  class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $value->supporting_description }}</textarea>
                                     </div>
                                     <div class="grid grid-cols-2 gap-3">
                                         <div>
@@ -564,9 +622,13 @@
                             <p class="text-gray-400 text-xs line-clamp-2">{{ Str::limit($partner->description, 60) }}</p>
                             @endif
                         </div>
-                        <div class="flex items-center gap-2 flex-shrink-0">
-                            <a href="{{ route('admin.worldwide-partners.edit', $partner) }}"
-                               class="text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium p-1">Edit</a>
+                        <div class="flex items-center justify-end gap-2">
+                            <a href="{{ route('admin.worldwide-partners.edit', $partner) }}" title="Edit"
+                               class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 flex items-center justify-center transition">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </a>
                         </div>
                     </div>
                 </div>

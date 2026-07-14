@@ -27,7 +27,7 @@ class PartnerController extends Controller
                 $query->where('name', 'like', '%' . $search . '%');
             })
             ->when(filled($category), function ($query) use ($category) {
-                $query->where('category', $category);
+                $query->whereHas('categoryModel', fn ($q) => $q->where('name', $category));
             })
             ->latest()
             ->get()

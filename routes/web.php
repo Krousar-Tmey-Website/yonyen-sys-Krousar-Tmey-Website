@@ -206,6 +206,12 @@ Route::get('/newsletter/unsubscribe/{email}', [NewsletterController::class, 'uns
 Route::get('/volunteer', [VolunteerController::class, 'show'])->name('volunteer');
 Route::post('/volunteer', [VolunteerController::class, 'store'])->name('volunteer.store');
 
+// Our Values detail page
+Route::get('/our-values/{value}', function (CoreValue $value) {
+    $settings = \App\Models\HomeSetting::allKeyed();
+    return view('core_values.show', compact('value', 'settings'));
+})->name('core-values.show');
+
 // ──────────────────────────────────────────────
 // Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
@@ -295,6 +301,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Books for Sale
     Route::resource('books', Admin\BookController::class)->except(['show']);
+
+    // Payment Methods
+    Route::resource('payments', Admin\PaymentMethodController::class)->except(['show']);
 
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);

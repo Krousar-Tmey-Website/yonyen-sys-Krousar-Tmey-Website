@@ -182,12 +182,14 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16" data-reveal>
             <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Our Values</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto">The principles that guide everything we do, ensuring every child has the opportunity to grow, belong, and thrive.</p>
+            <p class="text-gray-500 max-w-2xl mx-auto">
+                {{ \App\Models\HomeSetting::getValue('values_supporting_description', 'The principles that guide everything we do, ensuring every child has the opportunity to grow, belong, and thrive.') }}
+            </p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
             @forelse($coreValues as $i => $value)
-            <div class="group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-350 overflow-hidden"
+            <a href="{{ route('core-values.show', $value) }}" class="group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-350 overflow-hidden block"
                  data-reveal="up" style="--reveal-delay: {{ $i * 100 }}">
                 {{-- Image --}}
                 <div class="relative h-48 overflow-hidden">
@@ -211,8 +213,11 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
                     <p class="text-gray-600 text-sm leading-relaxed">
                         {{ $value->description }}
                     </p>
+                    @if($value->supporting_description)
+                    <p class="text-gray-500 text-xs mt-2 line-clamp-2">{{ $value->supporting_description }}</p>
+                    @endif
                 </div>
-            </div>
+            </a>
             @empty
             <p class="text-gray-400 text-center py-8 md:col-span-3">No values listed yet.</p>
             @endforelse
