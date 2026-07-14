@@ -45,6 +45,20 @@ class WebsiteController extends Controller
             HomeSetting::setValue('site_logo', $path);
         }
 
+        // Handle social icon uploads
+        $iconKeys = ['sharing_facebook_icon', 'sharing_twitter_icon', 'sharing_linkedin_icon', 'sharing_share_icon'];
+        foreach ($iconKeys as $iconKey) {
+            $fileKey = $iconKey . '_file';
+            if ($request->hasFile($fileKey)) {
+                $request->validate([
+                    $fileKey => ['image', 'mimes:svg,svg+xml,png,jpg,jpeg,webp', 'max:2048'],
+                ]);
+
+                $path = $request->file($fileKey)->store('social', 'public');
+                HomeSetting::setValue($iconKey, $path);
+            }
+        }
+
         return redirect()->route('admin.website.index')->with('success', 'Website settings saved successfully.');
     }
 }
