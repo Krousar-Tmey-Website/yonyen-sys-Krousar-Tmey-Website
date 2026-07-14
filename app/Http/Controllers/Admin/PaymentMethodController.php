@@ -16,6 +16,8 @@ class PaymentMethodController extends Controller
         $search = trim((string) $request->query('search', ''));
         $status = $request->query('status');
 
+        $perPage = $request->query('per_page', 10);
+
         $paymentMethods = PaymentMethod::query()
             ->when($search !== '', function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%');
@@ -24,21 +26,21 @@ class PaymentMethodController extends Controller
             ->when($status === 'inactive', fn ($query) => $query->where('is_active', false))
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->get();
+            ->paginate($perPage);
 
         $activeFilters = (filled($search) ? 1 : 0) + (filled($status) ? 1 : 0);
 
         $viewData = [
             'paymentMethods' => $paymentMethods,
             'filters'        => ['search' => $search, 'status' => $status ?? ''],
-            'totalMethods'   => $paymentMethods->count(),
+            'totalMethods'   => $paymentMethods->total(),
             'activeCount'    => $activeFilters,
         ];
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'html'          => view('admin.payments._results', $viewData)->render(),
-                'total'         => $paymentMethods->count(),
+                'total'         => $paymentMethods->total(),
                 'activeFilters' => $activeFilters,
             ]);
         }
