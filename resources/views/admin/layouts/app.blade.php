@@ -47,10 +47,14 @@
                         class="h-8 lg:h-10 w-auto object-contain"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     {{-- Fallback if image not yet placed --}}
-                    <div class="hidden items-center justify-center">
-                        <div class="w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-[#2d6fa3] flex items-center justify-center">
-                            <span class="text-white font-bold text-base lg:text-lg">KT</span>
+                    <div class="hidden items-center gap-3">
+                        <div class="w-4 h-4 lg:w-12 lg:h-12 rounded-xl bg-[#ffffff] flex items-center justify-center">
+                            <img src="{{ asset('images/logo.svg') }}" alt="">
                         </div>
+                        <!-- <div>
+                            {{-- <div class="text-[#2d6fa3] font-bold text-lg leading-tight">{{ $siteName }}</div> --}}
+                            {{-- <div class="text-[#8da83a] text-xs font-medium">{{ $siteTagline }}</div> --}}
+                        </div> -->
                     </div>
                 </div>
                 <div>
