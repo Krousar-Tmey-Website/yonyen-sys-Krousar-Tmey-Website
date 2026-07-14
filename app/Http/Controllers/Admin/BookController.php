@@ -64,6 +64,7 @@ class BookController extends Controller
         $data['is_available'] = $request->boolean('is_available');
         $data['stock']        = $data['stock'] ?? 0;
         $data['sort_order']   = $data['sort_order'] ?? 0;
+        $data['slug']         = $data['slug'] ?? \Illuminate\Support\Str::slug($data['title']);
 
         $book = Book::create($data);
 
@@ -95,6 +96,7 @@ class BookController extends Controller
         }
 
         $data['is_available'] = $request->boolean('is_available');
+        $data['slug']         = $data['slug'] ?? \Illuminate\Support\Str::slug($data['title']);
 
         $book->update($data);
 

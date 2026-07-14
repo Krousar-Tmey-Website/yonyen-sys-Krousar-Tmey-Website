@@ -66,7 +66,8 @@ function openEmail(email) {
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-9">
             <span class="text-white/60 text-xs">{{ $settings['site_tagline'] ?? "Cambodia's first organization helping disadvantaged children since 1991" }}</span>
             <div class="flex items-center gap-5">
-                <a href="{{ route('contact') }}" class="text-white/60 hover:text-white transition-colors text-xs">Contact</a>
+                @php $isTopContact = request()->routeIs('contact') || request()->routeIs('contact.*'); @endphp
+                <a href="{{ route('contact') }}" class="transition-colors text-xs {{ $isTopContact ? 'text-white font-semibold' : 'text-white/60 hover:text-white' }}">Contact</a>
                 <span class="text-white/20">|</span>
                 <div class="flex items-center gap-3">
                     <a href="{{ $settings['social_facebook'] ?? 'https://www.facebook.com/KrousarThmey' }}" target="_blank" rel="noopener" aria-label="Facebook"
@@ -133,11 +134,12 @@ function openEmail(email) {
                 <div class="hidden lg:flex items-center gap-1">
 
                     {{-- Who We Are --}}
+                    @php $isWhoWeAre = request()->routeIs('about') || request()->routeIs('presentation') || request()->routeIs('transparency'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('about') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                        <a href="{{ route('about') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isWhoWeAre ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
                             Who We Are
-                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isWhoWeAre ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -157,11 +159,12 @@ function openEmail(email) {
                     </div>
 
                     {{-- Our Programs --}}
+                    @php $isPrograms = request()->routeIs('programs') || request()->routeIs('programs.*') || request()->routeIs('program-page-items.*') || request()->routeIs('projects.*'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('programs') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                        <a href="{{ route('programs') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isPrograms ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
                             Our Programs
-                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isPrograms ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -182,11 +185,12 @@ function openEmail(email) {
                     </div>
 
                     {{-- Get Involved --}}
+                    @php $isInvolved = request()->routeIs('involved') || request()->routeIs('jobs.*') || request()->routeIs('volunteer') || request()->routeIs('books.*'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('involved') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                        <a href="{{ route('involved') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isInvolved ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
                             Get Involved
-                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isInvolved ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -204,14 +208,39 @@ function openEmail(email) {
                         </div>
                     </div>
 
-                    <a href="{{ route('news') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">News</a>
-                    <a href="{{ route('resources') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">Resources</a>
-                    <a href="{{ route('contact') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">Contact</a>
+                    @php $isNews = request()->routeIs('news') || request()->routeIs('news.*'); @endphp
+                    @php $isResources = request()->routeIs('resources') || request()->routeIs('reports.*'); @endphp
+                    @php $isContact = request()->routeIs('contact') || request()->routeIs('contact.*'); @endphp
+                    <a href="{{ route('news') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isNews ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">News</a>
+
+                    {{-- Resources Dropdown --}}
+                    <div class="relative" x-data="{ open: false }"
+                         @mouseenter="open = true" @mouseleave="open = false">
+                        <a href="{{ route('resources') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isResources ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
+                            Resources
+                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isResources ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </a>
+                        <div x-show="open"
+                            x-transition:enter="transition ease-out duration-150"
+                            x-transition:enter-start="opacity-0 translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-100"
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 translate-y-1"
+                            class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
+                            <a href="{{ route('resources') }}" class="dropdown-item rounded-t-xl">Annual Reports</a>
+                            <a href="{{ route('contact') }}" class="dropdown-item rounded-b-xl">Media Resources</a>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('contact') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isContact ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">Contact</a>
                 </div>
 
                 {{-- CTA + Mobile toggle --}}
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('donate') }}" class="btn-primary text-sm hidden sm:inline-flex">
+                    @php $isDonate = request()->routeIs('donate') || request()->routeIs('donate.*'); @endphp
+                    <a href="{{ route('donate') }}" class="btn-primary text-sm hidden sm:inline-flex {{ $isDonate ? 'ring-2 ring-[#8da83a]/50 ring-offset-2' : '' }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
@@ -241,12 +270,21 @@ function openEmail(email) {
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="lg:hidden border-t border-gray-100 bg-white">
             <div class="max-w-7xl mx-auto px-6 py-4 space-y-1">
-                <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Who We Are</a>
-                <a href="{{ route('programs') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Our Programs</a>
-                <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Get Involved</a>
-                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">News</a>
-                <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Resources</a>
-                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Contact</a>
+                <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isWhoWeAre ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Who We Are</a>
+                <a href="{{ route('programs') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isPrograms ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Our Programs</a>
+                <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isInvolved ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Get Involved</a>
+                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isNews ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">News</a>
+                <div x-data="{ open: false }" class="space-y-1">
+                    <a href="{{ route('resources') }}" @click="open = !open" class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isResources ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">
+                        <span>Resources</span>
+                        <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </a>
+                    <div x-show="open" class="pl-4 space-y-1">
+                        <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-sm hover:bg-gray-50 font-medium transition-all {{ $isResources ? 'text-[#2d6fa3]' : 'text-gray-600 hover:text-[#2d6fa3]' }}">Annual Reports</a>
+                        <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg text-sm hover:bg-gray-50 font-medium transition-all {{ $isContact ? 'text-[#2d6fa3]' : 'text-gray-600 hover:text-[#2d6fa3]' }}">Media Resources</a>
+                    </div>
+                </div>
+                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isContact ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Contact</a>
                 <div class="pt-3 pb-1">
                 <a href="{{ route('donate') }}" class="btn-primary w-full justify-center">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
