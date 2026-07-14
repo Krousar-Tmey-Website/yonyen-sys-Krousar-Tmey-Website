@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Award;
 use App\Models\HomeSetting;
 use App\Models\Partner;
+use App\Models\PartnerCategory;
 use App\Models\Program;
 use App\Models\Project;
 use App\Models\Slide;
@@ -96,6 +97,12 @@ class AdminSeeder extends Seeder
             ['key' => 'programs_banner_title',    'label' => 'Banner Title',    'group' => 'programs_banner', 'value' => 'Our Programs'],
             ['key' => 'programs_banner_subtitle',  'label' => 'Banner Subtitle', 'group' => 'programs_banner', 'value' => 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.'],
             ['key' => 'programs_banner_image',     'label' => 'Banner Background Image (URL or upload path)', 'group' => 'programs_banner', 'value' => ''],
+            // Project defaults group
+            ['key' => 'project_default_area_of_work', 'label' => 'Default Area of Work', 'group' => 'project_defaults', 'value' => 'Child protection'],
+            ['key' => 'project_default_duration', 'label' => 'Default Duration', 'group' => 'project_defaults', 'value' => 'Undetermined'],
+            ['key' => 'project_default_location', 'label' => 'Default Location', 'group' => 'project_defaults', 'value' => 'Cambodia'],
+            ['key' => 'project_default_beneficiaries', 'label' => 'Default Beneficiaries', 'group' => 'project_defaults', 'value' => 'Marginalized children and youth'],
+            ['key' => 'project_default_make_difference_text', 'label' => 'Default Make a Difference Text', 'group' => 'project_defaults', 'value' => '$50 - food expenses per child per month'],
             // Donation tiers group
             ['key' => 'donation_tier_1_amount', 'label' => 'Tier 1 — Amount',      'group' => 'donation_tiers', 'value' => '€15'],
             ['key' => 'donation_tier_1_desc',   'label' => 'Tier 1 — Description', 'group' => 'donation_tiers', 'value' => 'School supplies for one student / month'],
@@ -246,10 +253,25 @@ class AdminSeeder extends Seeder
             ['name' => 'Towns of Collonge-Bellerive, Hermance and Vandoeuvres',      'category' => 'towns', 'country' => 'Switzerland', 'sort_order' => 4],
         ];
 
+        $partnerCategoryIds = PartnerCategory::query()
+            ->pluck('id', 'name')
+            ->mapWithKeys(fn ($id, $name) => [strtolower($name) => $id])
+            ->all();
+
         foreach ($partners as $partner) {
+            $categoryId = $partnerCategoryIds[$partner['category']] ?? null;
+
+            if (! $categoryId) {
+                continue;
+            }
+
+            $partnerData = $partner;
+            unset($partnerData['category']);
+            $partnerData['category_id'] = $categoryId;
+
             Partner::updateOrCreate(
-                ['name' => $partner['name'], 'category' => $partner['category']],
-                array_merge($partner, ['is_active' => true])
+                ['name' => $partner['name'], 'category_id' => $categoryId],
+                array_merge($partnerData, ['is_active' => true])
             );
         }
 

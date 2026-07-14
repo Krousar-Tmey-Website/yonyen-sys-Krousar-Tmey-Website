@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\VolunteerController;
 use App\Models\AnnualReport;
 use App\Models\Award;
+use App\Models\Book;
 use App\Models\CoreValue;
 use App\Models\Gallery;
 use App\Models\HistoryEvent;
@@ -24,9 +26,14 @@ use App\Models\Project;
 use App\Models\Slide;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 // ──────────────────────────────────────────────
-// Public pages
+// Public Routes
+// ──────────────────────────────────────────────
+
+// ──────────────────────────────────────────────
+// Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
 
 Route::get('/', function () {
@@ -93,7 +100,7 @@ Route::get('/our-programs', function () {
 Route::get('/our-programs/{slug}', function ($slug) {
     $program = Program::where('slug', $slug)->firstOrFail();
 
-    return redirect()->route('programs', ['#'.$program->slug]);
+    return redirect()->to(route('programs') . '#' . $program->slug);
 })->name('programs.show');
 
 Route::get('/programs/item/{id}', function ($id) {
@@ -115,9 +122,13 @@ Route::get('/projects/{project}', function (Project $project) {
 Route::get('/get-involved', function () {
     $settings = HomeSetting::allKeyed();
     $jobs = JobOpportunity::active()->ordered()->get();
+    $books = Book::available()->orderBy('sort_order')->orderBy('title')->get();
 
-    return view('involved', compact('settings', 'jobs'));
+    return view('involved', compact('settings', 'jobs', 'books'));
 })->name('involved');
+
+// Books for sale (public detail page)
+Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
 Route::get('/jobs/{jobOpportunity}', function (JobOpportunity $jobOpportunity) {
     if (! $jobOpportunity->is_active) {
@@ -135,6 +146,24 @@ Route::get('/resources', function () {
 
     return view('resources', compact('reports'));
 })->name('resources');
+
+// Secure PDF view/download with graceful error handling
+Route::get('/reports/{report}/view', function (App\Models\AnnualReport $report) {
+    if (!$report->has_pdf_file) {
+        return redirect()->route('resources')->with('error', 'The requested PDF file is no longer available.');
+    }
+    return response()->file(Storage::disk('public')->path($report->file_path));
+})->name('reports.view');
+
+Route::get('/reports/{report}/download', function (App\Models\AnnualReport $report) {
+    if (!$report->has_pdf_file) {
+        return redirect()->route('resources')->with('error', 'The requested PDF file is no longer available.');
+    }
+    return response()->download(
+        Storage::disk('public')->path($report->file_path),
+        $report->original_filename ?? $report->title . '.pdf'
+    );
+})->name('reports.download');
 
 Route::get('/contact', function () {
     $offices = Office::active()->get();
@@ -164,11 +193,12 @@ Route::post('/admin/login', [Admin\AuthController::class, 'login'])->name('admin
 Route::post('/admin/logout', [Admin\AuthController::class, 'logout'])->name('admin.logout');
 
 // ──────────────────────────────────────────────
-// Admin — Protected panel
+// Admin — Protected Panel
 // ──────────────────────────────────────────────
 
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
+    // Dashboard
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // News & Categories
@@ -201,6 +231,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Programs banner
     Route::get('programs-banner', [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
     Route::post('programs-banner', [Admin\ProgramsBannerController::class, 'update'])->name('programs-banner.update');
+    Route::get('project-defaults', [Admin\ProjectDefaultsController::class, 'index'])->name('project-defaults.index');
+    Route::post('project-defaults', [Admin\ProjectDefaultsController::class, 'update'])->name('project-defaults.update');
+    Route::post('project-defaults/{project}', [Admin\ProjectDefaultsController::class, 'updateProject'])->name('project-defaults.project.update');
 
     // Who We Are
     Route::get('presentation', [Admin\PresentationController::class, 'index'])->name('presentation.index');
@@ -224,8 +257,18 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->except(['show', 'create'])
         ->parameters(['transparency' => 'report']);
 
+    // Reports
+    Route::resource('reports', Admin\AnnualReportController::class);
+
+    // Books for Sale
+    Route::resource('books', Admin\BookController::class)->except(['show']);
+
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
+
+    // Donation Campaigns
+    Route::resource('campaigns', Admin\CampaignController::class)->except(['show']);
+    Route::patch('campaigns/{campaign}/toggle', [Admin\CampaignController::class, 'toggle'])->name('campaigns.toggle');
 
     Route::resource('offices', Admin\OfficeController::class)->only(['index', 'store', 'update', 'destroy']);
 
@@ -236,6 +279,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::delete('{contactInquiry}', [Admin\ContactInquiryController::class, 'destroy'])->name('destroy');
     });
 
+    // Newsletter Subscribers
     Route::prefix('newsletter')->name('newsletter.')->group(function () {
         Route::get('/', [Admin\NewsletterController::class, 'index'])->name('index');
         Route::get('export', [Admin\NewsletterController::class, 'export'])->name('export');
@@ -250,3 +294,4 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::delete('{volunteer}', [Admin\VolunteerController::class, 'destroy'])->name('destroy');
     });
 });
+

@@ -13,6 +13,7 @@ class HomeSettingController extends Controller
     {
         $settings = HomeSetting::orderBy('group')->orderBy('id')
             ->where('group', '!=', 'programs_banner')
+            ->where('group', '!=', 'project_defaults')
             ->get()
             ->groupBy('group');
         $keyedSettings = HomeSetting::allKeyed();
@@ -58,6 +59,7 @@ class HomeSettingController extends Controller
         foreach ($data['settings'] as $key => $value) {
             // programs_banner keys are managed by ProgramsBannerController — skip here
             if (str_starts_with($key, 'programs_banner_')) continue;
+            if (str_starts_with($key, 'project_default_')) continue;
             HomeSetting::setValue($key, $value ?? '');
         }
 

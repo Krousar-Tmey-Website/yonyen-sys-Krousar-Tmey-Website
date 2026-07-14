@@ -11,15 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('program_pages', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->text('content')->nullable();
-            $table->string('image')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-        });
+        // Table no longer needed — functionality replaced by program_page_items
     }
 
     /**
@@ -27,6 +19,5 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('program_pages');
     }
 };

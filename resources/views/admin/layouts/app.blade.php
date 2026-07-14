@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin') — Krousar Thmey</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @stack('styles')
     <style>
         [x-cloak] {
@@ -92,11 +92,10 @@
                                 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
                             'children' => [
                                 ['route' => 'admin.programs-banner.index', 'label' => 'Page Banner'],
+                                ['route' => 'admin.project-defaults.index', 'label' => 'Project Defaults'],
                                 ['route' => 'admin.programs.index', 'label' => 'Programs'],
                                 ['route' => 'admin.projects.index', 'label' => 'Projects'],
                                 ['route' => 'admin.program-pages.index', 'label' => 'Additional Info'],
-                                ['route' => 'admin.gallery.index', 'label' => 'Gallery'],
-                                ['route' => 'admin.testimonials.index', 'label' => 'Testimonials'],
                             ],
                         ],
                         'news' => [
@@ -118,7 +117,7 @@
                             'children' => [
                                 ['route' => 'admin.volunteers.index', 'label' => 'Volunteer Applications'],
                                 ['route' => 'admin.jobs.index', 'label' => 'Job Opportunities'],
-                                ['route' => 'admin.books.index', 'label' => 'Books for Sale'],
+                                ['route' => 'admin.books.index', 'label' => 'Book for Sales'],
                             ],
                         ],
                         'donations' => [

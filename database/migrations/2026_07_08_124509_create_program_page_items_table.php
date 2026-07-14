@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('program_page_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('program_page_id')->nullable()->constrained('program_pages')->onDelete('cascade');
             $table->string('title');
             $table->text('short_content')->nullable();
             $table->longText('detail_content')->nullable();

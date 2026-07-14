@@ -31,13 +31,32 @@
             @error('short_content')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
-        {{-- Detail Content --}}
+        {{-- Objective --}}
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Full Detail Content <span class="text-gray-400 font-normal">(shown when viewer clicks "Read More")</span></label>
-            <textarea name="detail_content" rows="14"
+            <label class="block text-sm font-medium text-gray-700 mb-1">Objective</label>
+            <textarea name="objective" rows="3"
+                      class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
+                      placeholder="e.g. To protect the health of Cambodian children...">{{ old('objective') }}</textarea>
+            @error('objective')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+        </div>
+
+        {{-- Detail Content (The Project) --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">The Project (Detail Content)</label>
+            <textarea name="detail_content" rows="10"
                       class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm font-mono"
                       placeholder="Full content (HTML is supported)...">{{ old('detail_content') }}</textarea>
             @error('detail_content')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+        </div>
+
+        {{-- Activities --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Activities</label>
+            <textarea name="activities" rows="5"
+                      class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
+                      placeholder="Activity 1&#10;Activity 2...">{{ old('activities') }}</textarea>
+            <p class="text-xs text-gray-500 mt-1.5">Each new line will be displayed as a bullet point on the public page.</p>
+            @error('activities')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
         <hr class="border-gray-100">

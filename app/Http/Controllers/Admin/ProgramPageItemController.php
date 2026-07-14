@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProgramPageItem;
-use App\Models\ProgramPage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,21 +11,18 @@ class ProgramPageItemController extends Controller
 {
     public function index()
     {
-        $items = ProgramPageItem::with('page')->latest()->get();
-        $pages = ProgramPage::orderBy('title')->get();
-        return view('admin.program_page_items.index', compact('items', 'pages'));
+        $items = ProgramPageItem::latest()->get();
+        return view('admin.program_page_items.index', compact('items'));
     }
 
     public function create()
     {
-        $pages = ProgramPage::orderBy('title')->get();
-        return view('admin.program_page_items.create', compact('pages'));
+        return view('admin.program_page_items.create');
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'program_page_id' => 'nullable|exists:program_pages,id',
             'title'           => 'required|string|max:255',
             'short_content'   => 'nullable|string',
             'detail_content'  => 'nullable|string',
@@ -67,14 +63,12 @@ class ProgramPageItemController extends Controller
 
     public function edit(ProgramPageItem $programPageItem)
     {
-        $pages = ProgramPage::orderBy('title')->get();
-        return view('admin.program_page_items.edit', compact('programPageItem', 'pages'));
+        return view('admin.program_page_items.edit', compact('programPageItem'));
     }
 
     public function update(Request $request, ProgramPageItem $programPageItem)
     {
         $data = $request->validate([
-            'program_page_id' => 'nullable|exists:program_pages,id',
             'title'           => 'required|string|max:255',
             'short_content'   => 'nullable|string',
             'detail_content'  => 'nullable|string',

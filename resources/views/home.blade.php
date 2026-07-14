@@ -348,7 +348,7 @@
 @php
 $structureWelfareItems = array_filter(explode("\n", $settings['structure_welfare_items'] ?? "2 Temporary Protection Centers\n2 Long-term Protection Centers\n2 Family Houses\nOutside Cases"));
 $structureEducationItems = array_filter(explode("\n", $settings['structure_education_items'] ?? "5 Special Education High Schools"));
-$structureImage = \App\Models\HomeSetting::getValue('structure_image', '');
+$structureImage = $settings['structure_image'] ?? null;
 @endphp
 <section class="py-16 lg:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-6">

@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('job_opportunities', function (Blueprint $table) {
-            $table->dropColumn('image');
-        });
+        if (Schema::hasColumn('job_opportunities', 'image')) {
+            Schema::table('job_opportunities', function (Blueprint $table) {
+                $table->dropColumn('image');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('job_opportunities', function (Blueprint $table) {
-            $table->string('image')->nullable()->after('sort_order');
-        });
+        if (! Schema::hasColumn('job_opportunities', 'image')) {
+            Schema::table('job_opportunities', function (Blueprint $table) {
+                $table->string('image')->nullable()->after('sort_order');
+            });
+        }
     }
 };

@@ -9,62 +9,90 @@ use Illuminate\Support\Facades\Storage;
 
 class AnnualReportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $reports = AnnualReport::orderByDesc('year')->get();
-        return view('admin.annual_reports.index', compact('reports'));
+        $search = trim((string) $request->query('search', ''));
+
+        $reports = AnnualReport::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('year', 'like', "%{$search}%");
+                });
+            })
+            ->orderByDesc('year')
+            ->orderByDesc('created_at')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.reports.index', compact('reports', 'search'));
+    }
+
+    public function create()
+    {
+        return view('admin.reports.create');
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'year'        => ['required', 'integer', 'min:1990', 'max:2100'],
-            'description' => ['nullable', 'string', 'max:255'],
-            'file_url'    => ['nullable', 'url', 'max:500'],
-            'file'        => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
-            'sort_order'  => ['nullable', 'integer'],
+            'title' => ['required', 'string', 'max:255'],
+            'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
+            'file'  => ['required', 'file', 'mimes:pdf', 'max:20480'],
         ]);
 
-        if ($request->hasFile('file')) {
-            $data['file_path'] = $request->file('file')->store('reports', 'public');
-        }
+        $file = $request->file('file');
+        $data['file_path'] = $file->store('reports', 'public');
+        $data['original_filename'] = $file->getClientOriginalName();
+        $data['is_active'] = true;
 
-        $data['sort_order'] = $data['sort_order'] ?? 0;
-        unset($data['file']);
         AnnualReport::create($data);
 
-        return redirect()->route('admin.annual-reports.index')->with('success', 'Report added.');
+        return redirect()->route('admin.reports.index')
+            ->with('success', 'Report created successfully.');
     }
 
-    public function update(Request $request, AnnualReport $annualReport)
+    public function show(AnnualReport $report)
+    {
+        return view('admin.reports.show', compact('report'));
+    }
+
+    public function edit(AnnualReport $report)
+    {
+        return view('admin.reports.edit', compact('report'));
+    }
+
+    public function update(Request $request, AnnualReport $report)
     {
         $data = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'year'        => ['required', 'integer', 'min:1990', 'max:2100'],
-            'description' => ['nullable', 'string', 'max:255'],
-            'file_url'    => ['nullable', 'url', 'max:500'],
-            'file'        => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
-            'sort_order'  => ['nullable', 'integer'],
-            'is_active'   => ['nullable', 'boolean'],
+            'title' => ['required', 'string', 'max:255'],
+            'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
+            'file'  => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
         ]);
 
         if ($request->hasFile('file')) {
-            if ($annualReport->file_path) Storage::disk('public')->delete($annualReport->file_path);
-            $data['file_path'] = $request->file('file')->store('reports', 'public');
+            if ($report->file_path) {
+                Storage::disk('public')->delete($report->file_path);
+            }
+            $file = $request->file('file');
+            $data['file_path'] = $file->store('reports', 'public');
+            $data['original_filename'] = $file->getClientOriginalName();
         }
 
-        $data['is_active'] = $request->boolean('is_active');
-        unset($data['file']);
-        $annualReport->update($data);
+        $report->update($data);
 
-        return redirect()->route('admin.annual-reports.index')->with('success', 'Report updated.');
+        return redirect()->route('admin.reports.index')
+            ->with('success', 'Report updated successfully.');
     }
 
-    public function destroy(AnnualReport $annualReport)
+    public function destroy(AnnualReport $report)
     {
-        if ($annualReport->file_path) Storage::disk('public')->delete($annualReport->file_path);
-        $annualReport->delete();
-        return redirect()->route('admin.annual-reports.index')->with('success', 'Report removed.');
+        if ($report->file_path) {
+            Storage::disk('public')->delete($report->file_path);
+        }
+        $report->delete();
+
+        return redirect()->route('admin.reports.index')
+            ->with('success', 'Report deleted successfully.');
     }
 }

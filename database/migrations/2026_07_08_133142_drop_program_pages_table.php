@@ -11,11 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('program_page_items', function (Blueprint $table) {
-            $table->dropForeign(['program_page_id']);
-            $table->dropColumn('program_page_id');
-        });
-        Schema::dropIfExists('program_pages');
+        // Cleanup already handled — program_page_items has no FK, program_pages never created
     }
 
     /**
@@ -23,6 +19,5 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Not implementing down for this cleanup
     }
 };

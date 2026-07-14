@@ -28,10 +28,10 @@
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             @foreach([
-                ['icon' => '❤️', 'title' => 'Donate',       'desc' => 'Support children directly with a one-time or monthly gift.',   'anchor' => 'donate',    'color' => 'hover:border-[#d32f2f]/40'],
                 ['icon' => '🤝', 'title' => 'Partner',      'desc' => 'Formalize a CSR or institutional partnership with us.',         'anchor' => 'partner',   'color' => 'hover:border-[#2d6fa3]/40'],
                 ['icon' => '✋', 'title' => 'Volunteer',    'desc' => 'Contribute your skills for a minimum of 3 months.',             'anchor' => 'volunteer', 'color' => 'hover:border-[#8da83a]/40'],
                 ['icon' => '💼', 'title' => 'Work With Us', 'desc' => 'Join our Cambodian team across social, education & comms.',     'anchor' => 'jobs',      'color' => 'hover:border-[#e8a020]/40'],
+                ['icon' => '📚', 'title' => 'Book for Sales', 'desc' => 'Browse our collection of books and order the titles you love.', 'anchor' => 'book-for-sales', 'color' => 'hover:border-[#d32f2f]/40'],
             ] as $index => $way)
             <a href="#{{ $way['anchor'] }}" class="group bg-[#f8f9fc] rounded-2xl p-7 border-2 border-gray-100 {{ $way['color'] }} hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                data-reveal="up" style="--reveal-delay: {{ $index * 100 }}">
@@ -48,66 +48,52 @@
     </div>
 </section>
 
-{{-- Donate --}}
-<section id="donate" class="py-20 bg-[#1d4e7a] scroll-mt-20 relative overflow-hidden">
+{{-- Book for Sales --}}
+<section id="book-for-sales" class="py-20 bg-[#1d4e7a] scroll-mt-20 relative overflow-hidden">
     <div class="absolute inset-0 opacity-5">
         <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
     </div>
-    <div class="relative max-w-7xl mx-auto px-6">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <div data-reveal="left">
-                <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">Make a Difference</span>
-                <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-2">Donate to Krousar Thmey</h2>
+        <div class="relative max-w-7xl mx-auto px-6">
+            <div class="max-w-2xl mb-12" data-reveal="left">
+                <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">Book for Sales</span>
+                <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-2">Book for Sales</h2>
                 <div class="w-12 h-1 bg-[#d32f2f] rounded-full mb-6"></div>
-                <p class="text-white/70 leading-relaxed mb-5">
-                    We guarantee that the totality of donated sums is used to support the children. With low administrative costs and full annual audits, you can be confident your donation makes a real difference.
+                <p class="text-white/70 leading-relaxed">
+                    Browse our collection of books and order the titles you love. Every purchase supports Krousar Thmey's work with children across Cambodia.
                 </p>
-                <p class="text-white/70 leading-relaxed mb-8">
-                    You can make a one-time donation or set up a monthly gift to provide sustained support for our programs.
-                </p>
-                <div class="flex items-center gap-3 p-4 bg-white/10 border border-white/15 rounded-xl mb-8">
-                    <div class="w-8 h-8 rounded-full bg-[#8da83a] flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    </div>
-                    <p class="text-white/80 text-sm">100% of your donation goes directly to supporting children in Cambodia</p>
-                </div>
-                <div class="flex flex-wrap gap-3">
-                    <a href="{{ route('donate') }}" class="btn-primary text-base">Donate Online</a>
-                    <a href="{{ route('about') }}#transparency" class="btn-outline text-base">View Our Audits</a>
-                </div>
             </div>
-            <div class="space-y-5" data-reveal="right">
-                <div class="relative rounded-3xl overflow-hidden h-52 shadow-2xl">
-                    <img src="{{ asset('images/children.jpg') }}" alt="Children supported by Krousar Thmey"
-                         class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#1d4e7a]/90 via-[#1d4e7a]/30 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 right-4">
-                        <p class="text-white font-black text-lg">4,079 children</p>
-                        <p class="text-white/70 text-xs">supported across 15 Cambodian provinces</p>
+
+            @if($books->isNotEmpty())
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach($books as $book)
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                     data-reveal="up" style="--reveal-delay: {{ $loop->index * 90 }}">
+                    <a href="{{ route('books.show', $book) }}" class="block h-56 overflow-hidden bg-gray-100">
+                        @if($book->cover_image_url)
+                        <img src="{{ $book->cover_image_url }}" alt="{{ $book->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        @else
+                        <div class="w-full h-full flex items-center justify-center text-gray-300 text-5xl">📖</div>
+                        @endif
+                    </a>
+                    <div class="p-5 flex flex-col flex-1">
+                        <h3 class="text-[#2d6fa3] font-black text-base mb-1">{{ $book->title }}</h3>
+                        @if($book->description)
+                        <p class="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">{{ $book->description }}</p>
+                        @endif
+                        <div class="mt-auto flex items-center justify-between gap-3 pt-2">
+                            <span class="text-[#e8a020] font-black text-xl">${{ number_format($book->price, 2) }}</span>
+                            <a href="{{ route('books.show', $book) }}" class="btn-primary text-xs">View Detail</a>
+                        </div>
                     </div>
-                    <div class="absolute top-4 right-4 bg-[#8da83a] text-white text-xs font-bold px-3 py-1.5 rounded-full">100% reaches children</div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    @php
-                    $tiers = [
-                        ['amount' => $settings['donation_tier_1_amount'] ?? '€15',  'desc' => $settings['donation_tier_1_desc'] ?? 'School supplies for one student / month', 'icon' => $settings['donation_tier_1_icon'] ?? '📚'],
-                        ['amount' => $settings['donation_tier_2_amount'] ?? '€30',  'desc' => $settings['donation_tier_2_desc'] ?? 'Food for a child in our care / month',    'icon' => $settings['donation_tier_2_icon'] ?? '🍚'],
-                        ['amount' => $settings['donation_tier_3_amount'] ?? '€60',  'desc' => $settings['donation_tier_3_desc'] ?? "Deaf student's education / month",        'icon' => $settings['donation_tier_3_icon'] ?? '👂'],
-                        ['amount' => $settings['donation_tier_4_amount'] ?? '€100', 'desc' => $settings['donation_tier_4_desc'] ?? 'Vocational training for a young adult',   'icon' => $settings['donation_tier_4_icon'] ?? '🎓'],
-                    ];
-                    @endphp
-                    @foreach($tiers as $tier)
-                    <div class="bg-white/10 border border-white/20 rounded-2xl p-5 text-center hover:bg-white/20 transition-colors"
-                         data-reveal="scale" style="--reveal-delay: {{ $loop->index * 90 }}">
-                        <div class="text-xl mb-1">{{ $tier['icon'] }}</div>
-                        <div class="text-2xl font-black text-[#e8a020] mb-1">{{ $tier['amount'] }}</div>
-                        <p class="text-white/60 text-[11px] leading-relaxed">{{ $tier['desc'] }}</p>
-                    </div>
-                    @endforeach
-                </div>
+                @endforeach
             </div>
+            @else
+            <div class="bg-white/10 border border-white/20 rounded-2xl p-10 text-center">
+                <p class="text-white/70 text-sm">No books available at the moment. Please check back soon.</p>
+            </div>
+            @endif
         </div>
-    </div>
 </section>
 
 {{-- Partner --}}
@@ -568,9 +554,9 @@
     <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
         <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Ready to Help?</p>
         <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">Every Action Counts</h2>
-        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">Whether you donate, volunteer, or partner with us — you are helping build a better future for Cambodia's children.</p>
+        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">Whether you buy a book, volunteer, partner with us, or send your application — you are helping build a better future for Cambodia's children.</p>
         <div class="flex flex-wrap gap-4 justify-center">
-            <a href="{{ route('donate') }}" class="btn-primary text-base">Donate Now</a>
+            <a href="{{ route('involved') }}#book-for-sales" class="btn-primary text-base">Book for Sales</a>
             <a href="{{ route('contact') }}" class="btn-outline text-base">Contact Us</a>
         </div>
     </div>
