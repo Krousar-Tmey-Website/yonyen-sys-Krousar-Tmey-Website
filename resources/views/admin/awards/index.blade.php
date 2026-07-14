@@ -9,76 +9,63 @@
 <div class="grid lg:grid-cols-3 gap-6">
 
     {{-- Add / Edit Award form --}}
-    <div class="bg-white rounded-2xl border border-gray-100 p-6 h-fit">
-        <h3 class="font-bold text-gray-700 mb-5 text-sm">
-            {{ isset($editAward) ? 'Edit Award' : 'Add New Award' }}
-        </h3>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 h-fit">
+        <div class="flex items-center gap-2.5 mb-6">
+            <div class="w-9 h-9 rounded-full bg-[#2d6fa3]/10 flex items-center justify-center text-base flex-shrink-0">
+                🏆
+            </div>
+            <div>
+                <h3 class="font-bold text-gray-800 text-sm leading-tight">
+                    {{ isset($editAward) ? 'Edit Award' : 'Add New Award' }}
+                </h3>
+                <p class="text-xs text-gray-400 leading-tight mt-0.5">
+                    {{ isset($editAward) ? 'Update the details below' : 'Fill in the details to add an award' }}
+                </p>
+            </div>
+        </div>
 
         <form action="{{ isset($editAward) ? route('admin.awards.update', $editAward) : route('admin.awards.store') }}"
-              method="POST" enctype="multipart/form-data" class="space-y-5">
+              method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @if(isset($editAward))
                 @method('PUT')
             @endif
 
-            {{-- TITLE --}}
+            {{-- DETAILS --}}
             <div>
-                <label for="title" class="form-label">
-                    Award Title <span class="text-red-400 font-normal">*</span>
-                </label>
-                <input type="text" id="title" name="title" required autocomplete="off"
-                       value="{{ old('title', $editAward->title ?? '') }}"
-                       class="form-input {{ $errors->has('title') ? 'form-input-error' : '' }}"
-                       placeholder="e.g. International Education Award">
-                @error('title')
-                    <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
-                @enderror
-            </div>
-
-            {{-- ORGANIZATION --}}
-            <div>
-                <label for="organization" class="form-label">
-                    Organization <span class="text-red-400 font-normal">*</span>
-                </label>
-                <input type="text" id="organization" name="organization" required autocomplete="off"
-                       value="{{ old('organization', $editAward->organization ?? '') }}"
-                       class="form-input {{ $errors->has('organization') ? 'form-input-error' : '' }}"
-                       placeholder="Awarding organization...">
-                @error('organization')
-                    <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
-                @enderror
-            </div>
-
-            {{-- RECIPIENT --}}
-            <div>
-                <label for="recipient" class="form-label">
-                    Recipient <span class="text-gray-400 font-normal">(optional)</span>
-                </label>
-                <input type="text" id="recipient" name="recipient" autocomplete="off"
-                       value="{{ old('recipient', $editAward->recipient ?? '') }}"
-                       class="form-input"
-                       placeholder="Person name if applicable...">
-            </div>
-
-            {{-- DESCRIPTION --}}
-            <div>
+                <p class="text-xs font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
+                    <span class="text-sm">📝</span> Details
+                </p>
+                <div class="mb-4">
+                    <label for="year" class="form-label">Year</label>
+                    <p class="text-xs text-gray-400 mb-2">Shown on the ribbon badge on the public page</p>
+                    <input type="text" id="year" name="year" inputmode="numeric" maxlength="10"
+                           value="{{ old('year', $editAward->year ?? '') }}"
+                           class="form-input {{ $errors->has('year') ? 'form-input-error' : '' }}"
+                           placeholder="e.g. 2019">
+                    @error('year')
+                        <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
+                    @enderror
+                </div>
                 <label for="description" class="form-label">
                     Description
                 </label>
-                <textarea id="description" name="description" rows="2"
+                <textarea id="description" name="description" rows="3"
                           class="form-input resize-none"
-                          placeholder="Short description...">{{ old('description', $editAward->description ?? '') }}</textarea>
+                          placeholder="Short description of the award...">{{ old('description', $editAward->description ?? '') }}</textarea>
             </div>
 
             {{-- LINKS --}}
-            <div>
-                <label class="form-label mb-2">Links for Visitors</label>
-                <p class="text-xs text-gray-400 mb-3">Add URLs for visitors to learn more (optional)</p>
-                
+            <div class="pt-5 border-t border-gray-100">
+                <p class="text-xs font-semibold text-gray-700 mb-1 flex items-center gap-1.5">
+                    <span class="text-sm">🔗</span> Links for Visitors
+                </p>
+                <p class="text-xs text-gray-400 mb-3">Optional — shown as buttons on the public page</p>
+
                 <div class="space-y-3">
                     <div>
                         <label for="website_url" class="text-xs font-medium text-gray-600">Website URL</label>
-                        <input type="url" id="website_url" name="website_url" 
+                        <input type="url" id="website_url" name="website_url"
                                value="{{ old('website_url', $editAward->website_url ?? '') }}"
                                class="form-input text-sm"
                                placeholder="https://example.com">
@@ -100,31 +87,11 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                {{-- SORT ORDER --}}
-                <div>
-                    <label for="sort_order" class="form-label">Order</label>
-                    <input type="number" id="sort_order" name="sort_order"
-                           value="{{ old('sort_order', $editAward->sort_order ?? 0) }}"
-                           class="form-input">
-                </div>
-
-                {{-- ACTIVE (edit only — new awards are active by default) --}}
-                @if(isset($editAward))
-                <div class="flex items-end pb-1.5">
-                    <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2.5 rounded-xl border border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-white transition-all duration-150 w-full">
-                        <input type="hidden" name="is_active" value="0">
-                        <input type="checkbox" name="is_active" value="1" {{ old('is_active', $editAward->is_active) ? 'checked' : '' }}
-                               class="w-4 h-4 accent-[#2d6fa3] cursor-pointer">
-                        <span class="text-xs font-semibold text-gray-600">Active</span>
-                    </label>
-                </div>
-                @endif
-            </div>
-
             {{-- IMAGE --}}
-            <div>
-                <label class="form-label">Award Image</label>
+            <div class="pt-5 border-t border-gray-100">
+                <p class="text-xs font-semibold text-gray-700 mb-1 flex items-center gap-1.5">
+                    <span class="text-sm">🖼️</span> Award Image
+                </p>
                 <p class="text-xs text-gray-400 mb-2.5">PNG, JPG or SVG (max 2MB)</p>
 
                 <label for="image" id="image-dropzone"
@@ -177,6 +144,34 @@
                     </label>
                 </div>
                 @endif
+            </div>
+
+            {{-- DISPLAY SETTINGS --}}
+            <div class="pt-5 border-t border-gray-100">
+                <p class="text-xs font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
+                    <span class="text-sm">⚙️</span> Display Settings
+                </p>
+                <div class="grid grid-cols-2 gap-3">
+                    {{-- SORT ORDER --}}
+                    <div>
+                        <label for="sort_order" class="text-xs font-medium text-gray-600">Order</label>
+                        <input type="number" id="sort_order" name="sort_order"
+                               value="{{ old('sort_order', $editAward->sort_order ?? 0) }}"
+                               class="form-input">
+                    </div>
+
+                    {{-- ACTIVE (edit only — new awards are active by default) --}}
+                    @if(isset($editAward))
+                    <div class="flex items-end">
+                        <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2.5 rounded-xl border border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-white transition-all duration-150 w-full">
+                            <input type="hidden" name="is_active" value="0">
+                            <input type="checkbox" name="is_active" value="1" {{ old('is_active', $editAward->is_active) ? 'checked' : '' }}
+                                   class="w-4 h-4 accent-[#2d6fa3] cursor-pointer">
+                            <span class="text-xs font-semibold text-gray-600">Active</span>
+                        </label>
+                    </div>
+                    @endif
+                </div>
             </div>
 
             <button type="submit" class="w-full btn-primary justify-center text-sm py-2.5">

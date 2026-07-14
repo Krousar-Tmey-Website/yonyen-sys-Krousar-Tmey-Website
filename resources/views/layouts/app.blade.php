@@ -152,7 +152,7 @@ function openEmail(email) {
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
                             <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl">Presentation</a>
                             <a href="{{ route('about') }}#history" class="dropdown-item">History</a>
-                            <a href="{{ route('about') }}#values" class="dropdown-item">Our Values</a>
+                            <a href="{{ route('about') }}#awards" class="dropdown-item">Awards</a>
                             <a href="{{ route('about') }}#partners" class="dropdown-item">Partners</a>
                             <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl">Transparency</a>
                         </div>

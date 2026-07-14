@@ -322,11 +322,11 @@ $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Share on Facebook"
-        class="group w-14 h-14 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+        class="group w-14 h-14 rounded-full overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
 
         <img src="{{ asset($facebookIcon) }}"
             alt="Facebook"
-            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
+            class="w-full h-full object-cover">
     </a>
 
     <!-- Twitter -->
@@ -334,11 +334,11 @@ $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Share on Twitter"
-        class="group w-14 h-14 rounded-full bg-[#1DA1F2] flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+        class="group w-14 h-14 rounded-full overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
 
         <img src="{{ asset($twitterIcon) }}"
             alt="Twitter"
-            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
+            class="w-full h-full object-cover">
     </a>
 
     <!-- LinkedIn -->
@@ -346,11 +346,11 @@ $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Share on LinkedIn"
-        class="group w-14 h-14 rounded-full bg-[#0A66C2] flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+        class="group w-14 h-14 rounded-full overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
 
         <img src="{{ asset($linkedinIcon) }}"
             alt="LinkedIn"
-            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
+            class="w-full h-full object-cover">
     </a>
 
     <!-- Share -->
@@ -358,11 +358,11 @@ $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Share"
-        class="group w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+        class="group w-14 h-14 rounded-full overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
 
         <img src="{{ asset($shareIcon) }}"
             alt="Share"
-            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
+            class="w-full h-full object-cover">
     </a>
 
 </div>

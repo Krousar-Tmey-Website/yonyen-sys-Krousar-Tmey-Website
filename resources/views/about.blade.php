@@ -106,14 +106,10 @@
      OUR HISTORY
      ======================================================== --}}
 <section id="history" class="pt-10 pb-20 bg-white scroll-mt-20">
-    <div class="max-w-6xl mx-auto px-6">
+    <div class="max-w-[1400px] mx-auto px-5 md:px-12 lg:px-20">
         {{-- Header --}}
         <div class="text-center mb-16" data-reveal>
-            <p class="text-[#a67c3d] font-semibold text-sm uppercase tracking-[0.2em] mb-4 flex items-center justify-center gap-3">
-                <span class="w-8 h-px bg-[#c9a45c]"></span>
-                Our Journey Since 1991
-                <span class="w-8 h-px bg-[#c9a45c]"></span>
-            </p>
+            <p class="text-[18px] font-semibold tracking-[5px] uppercase text-[#C89B4D] mb-[50px]">The Beginning</p>
             <h2 class="font-serif text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">A Story of Hope and Resilience</h2>
             <p class="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">From a single orphanage in a refugee camp to a nationwide movement for Cambodia's children — every milestone below was made possible by people who believed in a better future.</p>
         </div>
@@ -133,84 +129,13 @@
             }
         @endphp
 
-        <div class="relative">
-            <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#e8d7ae] via-[#c9a45c] to-[#e8d7ae] hidden md:block"></div>
-            <div class="hidden md:flex justify-center mb-8">
-                <div class="relative z-10 w-4 h-4 rounded-full border-2 border-[#c9a45c] bg-white"></div>
-            </div>
-
-            <div class="space-y-12">
-                @forelse($timelineItems as $item)
-                @php
-                    $onLeft  = $loop->index % 2 === 0;
-                    $rotate  = $loop->index % 2 === 0 ? '-rotate-1' : 'rotate-1';
-                    $stagger = $loop->index % 2 === 1 ? 'md:mt-10' : '';
-                @endphp
-                <div class="relative {{ $stagger }}" data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 70, 350) }}">
-                    <div class="hidden md:flex justify-center absolute left-1/2 -translate-x-1/2 top-10 z-10">
-                        <div class="w-3 h-3 rounded-full bg-[#c9a45c] ring-4 ring-white shadow"></div>
-                    </div>
-
-                    <div class="md:grid md:grid-cols-2 md:gap-16">
-                        @if($onLeft)
-                        <div class="relative mb-8 md:mb-0 md:pr-8">
-                            <div class="hidden md:block absolute right-8 top-12 w-8 h-px bg-[#c9a45c]/50"></div>
-                            @if($loop->first)
-                            <p class="max-w-sm mx-auto md:mx-0 md:ml-auto text-right text-[#a67c3d] text-xs font-semibold uppercase tracking-[0.15em] mb-2">The Beginning</p>
-                            @endif
-                            <div class="max-w-sm mx-auto md:mx-0 md:ml-auto text-right">
-                                @if($item['image'])
-                                <div class="inline-block bg-white p-2 border border-[#e8d7ae] shadow-md {{ $rotate }} hover:rotate-0 transition-transform duration-300">
-                                    <img src="{{ $item['image'] }}" alt="History event image" class="w-full h-48 object-cover" style="filter: sepia(0.12) saturate(1.05);">
-                                </div>
-                                @endif
-                                <div class="relative {{ $item['image'] ? '-mt-5 mr-4' : '' }} inline-flex items-center justify-center min-w-[3.5rem] h-14 px-2 rounded-full bg-gradient-to-br from-[#d9b877] to-[#a67c3d] ring-4 ring-white shadow-lg">
-                                    <span class="font-serif font-bold text-black whitespace-nowrap {{ strlen((string) $item['year']) > 4 ? 'text-xs' : 'text-sm' }}">{{ $item['year'] }}</span>
-                                </div>
-                                @if($item['text'])
-                                <p class="text-gray-600 text-sm leading-relaxed mt-3">{{ $item['text'] }}</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div></div>
-                        @else
-                        <div></div>
-                        <div class="relative md:pl-8">
-                            <div class="hidden md:block absolute left-8 top-12 w-8 h-px bg-[#c9a45c]/50"></div>
-                            <div class="max-w-sm mx-auto md:mx-0">
-                                @if($item['image'])
-                                <div class="inline-block bg-white p-2 border border-[#e8d7ae] shadow-md {{ $rotate }} hover:rotate-0 transition-transform duration-300">
-                                    <img src="{{ $item['image'] }}" alt="History event image" class="w-full h-48 object-cover" style="filter: sepia(0.12) saturate(1.05);">
-                                </div>
-                                @endif
-                                <div class="relative {{ $item['image'] ? '-mt-5 ml-4' : '' }} inline-flex items-center justify-center min-w-[3.5rem] h-14 px-2 rounded-full bg-gradient-to-br from-[#d9b877] to-[#a67c3d] ring-4 ring-white shadow-lg">
-                                    <span class="font-serif font-bold text-black whitespace-nowrap {{ strlen((string) $item['year']) > 4 ? 'text-xs' : 'text-sm' }}">{{ $item['year'] }}</span>
-                                </div>
-                                @if($item['text'])
-                                <p class="text-gray-600 text-sm leading-relaxed mt-3">{{ $item['text'] }}</p>
-                                @endif
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-                @empty
-                <p class="text-gray-400 text-center py-8">No history events yet.</p>
-                @endforelse
-            </div>
-
-            @if(count($timelineItems) > 0)
-            <div class="relative mt-16 pt-14 border-t border-[#e8d7ae] text-center" data-reveal="scale">
-                <div class="hidden md:flex justify-center absolute left-1/2 -translate-x-1/2 -top-2.5 z-10">
-                    <div class="w-4 h-4 rounded-full border-2 border-[#c9a45c] bg-white"></div>
-                </div>
-                <p class="text-[#a67c3d] font-semibold text-xs uppercase tracking-[0.2em] mb-3">Present Day</p>
+        <x-timeline :items="$timelineItems" />
+        <div class=" mt-16 pt-14  text-center"​​​>
+            <p class="text-[#a67c3d] font-semibold text-xs uppercase tracking-[0.2em] mb-3">Present Day</p>
                 <h3 class="font-serif text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-4">The Story Continues</h3>
                 <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
                     Today, Krousar Thmey supports <strong class="text-[#1d4e7a]">{{ $settings['stat_children'] ?? '4,079' }} children</strong> across 15 Cambodian provinces — carrying forward the same promise made in 1991: that every child deserves the chance to grow, learn, and thrive.
                 </p>
-            </div>
-            @endif
         </div>
     </div>
 </section>
@@ -220,69 +145,70 @@
      ======================================================== --}}
 <section id="awards" class="pt-10 pb-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
+        @php
+            $sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
+            $facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
+            $twitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
+            $linkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
+            $shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
+            $facebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
+            $twitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
+            $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
+        @endphp
         <div class="text-center mb-16" data-reveal>
-            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Recognition</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Awards</h2>
+            <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">AWARDS</h2>
+            @if($sharingEnabled == '1')
+            <div class="flex items-center justify-center gap-3 mt-6">
+                <a href="{{ $facebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Awards') . '&linknote=' . urlencode('Krousar Thmey - Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($facebookIcon) }}" alt="Facebook" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $twitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Awards') . '&linknote=' . urlencode('Krousar Thmey - Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($twitterIcon) }}" alt="Twitter" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $linkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Awards') . '&linknote=' . urlencode('Krousar Thmey - Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($linkedinIcon) }}" alt="LinkedIn" class="w-full h-full object-cover">
+                </a>
+                <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($shareIcon) }}" alt="Share" class="w-full h-full object-cover">
+                </a>
+            </div>
+            @endif
         </div>
 
         @if($awards->isNotEmpty())
-        @php $awardAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach($awards as $i => $award)
-            @php
-                $accent = $awardAccents[$i % count($awardAccents)];
-                $awardFallbackStyle = "background: linear-gradient(135deg, {$accent}, #1a3c6e)";
-                $awardAccentBarStyle = "background: {$accent}";
-            @endphp
-            <div class="group bg-white rounded-[24px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden"
-                 data-reveal="scale" style="--reveal-delay: {{ min($i * 90, 360) }}">
-                <div class="relative h-32 overflow-hidden">
-                    @if($award->image_url)
-                    <img src="{{ $award->image_url }}" alt="{{ $award->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
-                    @else
-                    <div class="w-full h-full flex items-center justify-center text-4xl drop-shadow-md" style="{{ $awardFallbackStyle }}">🏆</div>
-                    @endif
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 px-4 py-3">
-                        <p class="text-white font-bold text-sm leading-snug drop-shadow-sm">{{ $award->title }}</p>
-                    </div>
-                </div>
-                <div class="p-5 text-center">
-                    <div class="w-8 h-1 rounded-full mx-auto mb-3 group-hover:w-12 transition-all duration-300" style="{{ $awardAccentBarStyle }}"></div>
-                    @if($award->recipient)
-                    <span class="text-[#8da83a] text-xs font-bold uppercase tracking-wider block mb-1">{{ $award->recipient }}</span>
-                    @endif
-                    <p class="text-[#8da83a] text-xs font-semibold mb-2">{{ $award->organization }}</p>
-                    @if($award->description)
-                    <p class="text-gray-400 text-xs leading-relaxed mb-3">{{ $award->description }}</p>
-                    @endif
-                    
-                    @if($award->website_url || $award->article_url || $award->video_url)
-                    <div class="flex flex-wrap gap-2 justify-center">
-                        @if($award->website_url)
-                        <a href="{{ $award->website_url }}" target="_blank" 
-                           class="px-3 py-1.5 bg-[#2d6fa3] text-white text-xs font-medium rounded-lg hover:bg-[#1d4e7a] transition-colors">
-                            Visit Website
-                        </a>
-                        @endif
-                        @if($award->article_url)
-                        <a href="{{ $award->article_url }}" target="_blank"
-                           class="px-3 py-1.5 bg-[#8da83a] text-white text-xs font-medium rounded-lg hover:bg-[#6b8a2b] transition-colors">
-                            Read Article
-                        </a>
-                        @endif
-                        @if($award->video_url)
-                        <a href="{{ $award->video_url }}" target="_blank"
-                           class="px-3 py-1.5 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 transition-colors">
-                            Watch Video
-                        </a>
-                        @endif
-                    </div>
-                    @endif
-                </div>
-            </div>
-            @endforeach
-        </div>
+        @php
+            $awardItems = $awards->map(function ($award) {
+                $cta = null;
+                $link = null;
+                if ($award->website_url) {
+                    $cta = 'Visit Website';
+                    $link = $award->website_url;
+                } elseif ($award->article_url) {
+                    $cta = 'Read Article';
+                    $link = $award->article_url;
+                } elseif ($award->video_url) {
+                    $cta = 'Watch Video';
+                    $link = $award->video_url;
+                }
+                return [
+                    'year' => $award->year,
+                    'image' => $award->image_url,
+                    'title' => $award->organization ? trim($award->organization) : $award->title,
+                    'description' => trim(($award->recipient ? $award->recipient . ' ' : '') . ($award->description ?? '')),
+                    'buttonText' => $cta,
+                    'buttonLink' => $link,
+                ];
+            });
+        @endphp
+        <x-award-grid :items="$awardItems" />
         @else
         <p class="text-gray-400 text-center py-8">No awards listed yet.</p>
         @endif

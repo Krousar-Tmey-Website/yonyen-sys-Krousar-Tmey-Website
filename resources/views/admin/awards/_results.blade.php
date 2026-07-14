@@ -13,32 +13,46 @@
 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
     <table class="w-full text-sm">
         <thead>
-            <tr class="text-gray-400 text-xs border-b border-gray-50">
-                <th class="text-left font-medium px-6 py-3">Award</th>
-                <th class="text-left font-medium px-6 py-3">Organization</th>
-                <th class="text-left font-medium px-6 py-3">Recipient</th>
-                <th class="text-left font-medium px-6 py-3">Status</th>
-                <th class="text-right font-medium px-6 py-3">Action</th>
+            <tr class="text-gray-400 text-xs border-b border-gray-100 bg-gray-50/60">
+                <th class="text-left font-semibold px-6 py-3.5">Award</th>
+                <th class="text-left font-semibold px-6 py-3.5">Year</th>
+                <th class="text-left font-semibold px-6 py-3.5">Status</th>
+                <th class="text-right font-semibold px-6 py-3.5">Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach($awards as $award)
+            @php
+                $displayName = $award->organization ?: $award->title;
+            @endphp
             <tr class="border-t border-gray-50 hover:bg-gray-50/60 transition">
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
                         @if($award->image_url)
-                        <img src="{{ $award->image_url }}" alt="{{ $award->title }}"
-                             class="w-10 h-10 rounded-full object-cover border border-gray-100 bg-white">
+                        <img src="{{ $award->image_url }}" alt="{{ $displayName ?: 'Award' }}"
+                             class="w-11 h-11 rounded-xl object-cover border border-gray-100 bg-white flex-shrink-0">
                         @else
-                        <div class="w-10 h-10 rounded-full bg-[#2d6fa3]/10 flex items-center justify-center text-[#2d6fa3] text-xs font-semibold">
+                        <div class="w-11 h-11 rounded-xl bg-[#2d6fa3]/10 flex items-center justify-center text-[#2d6fa3] text-base flex-shrink-0">
                             🏆
                         </div>
                         @endif
-                        <span class="font-medium text-gray-800">{{ $award->title }}</span>
+                        <div class="min-w-0">
+                            <p class="font-semibold text-gray-800 truncate">{{ $displayName ?: 'Untitled award' }}</p>
+                            @if($award->description)
+                            <p class="text-xs text-gray-400 truncate max-w-xs">{{ Str::limit($award->description, 60) }}</p>
+                            @endif
+                        </div>
                     </div>
                 </td>
-                <td class="px-6 py-4 text-gray-500">{{ $award->organization ?? '—' }}</td>
-                <td class="px-6 py-4 text-gray-500">{{ $award->recipient ?? '—' }}</td>
+                <td class="px-6 py-4">
+                    @if($award->year)
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-[#0A5EA8]/10 text-[#0A5EA8]">
+                        {{ $award->year }}
+                    </span>
+                    @else
+                    <span class="text-gray-300 text-xs">—</span>
+                    @endif
+                </td>
                 <td class="px-6 py-4">
                     @if($award->is_active)
                     <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-600">Active</span>

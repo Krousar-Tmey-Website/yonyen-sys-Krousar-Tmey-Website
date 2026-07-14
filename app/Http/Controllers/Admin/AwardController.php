@@ -63,21 +63,22 @@ class AwardController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'        => ['required', 'string', 'max:255'],
-            'recipient'    => ['nullable', 'string', 'max:255'],
-            'organization' => ['required', 'string', 'max:255'],
-            'description'  => ['nullable', 'string'],
-            'image'        => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
-            'image_url'    => ['nullable', 'url', 'max:2048'],
-            'website_url'  => ['nullable', 'url', 'max:2048'],
-            'article_url'  => ['nullable', 'url', 'max:2048'],
-            'video_url'    => ['nullable', 'url', 'max:2048'],
-            'sort_order'   => ['nullable', 'integer'],
+            'title'          => ['nullable', 'string', 'max:255'],
+            'year'           => ['nullable', 'string', 'max:10'],
+            'recipient'      => ['nullable', 'string', 'max:255'],
+            'organization'   => ['nullable', 'string', 'max:255'],
+            'description'    => ['nullable', 'string'],
+            'image'          => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'image_url'      => ['nullable', 'url', 'max:2048'],
+            'website_url'    => ['nullable', 'url', 'max:2048'],
+            'article_url'    => ['nullable', 'url', 'max:2048'],
+            'video_url'      => ['nullable', 'url', 'max:2048'],
+            'sort_order'     => ['nullable', 'integer'],
         ]);
 
-        $data['sort_order'] = $data['sort_order'] ?? 0;
-        $data['is_active']  = true;
-        $data['image']      = $this->resolveImage($request, $data);
+        $data['sort_order']  = $data['sort_order'] ?? 0;
+        $data['is_active']   = true;
+        $data['image']       = $this->resolveImage($request, $data, 'image');
         unset($data['image_url']);
 
         Award::create($data);
@@ -88,25 +89,26 @@ class AwardController extends Controller
     public function update(Request $request, Award $award)
     {
         $data = $request->validate([
-            'title'        => ['required', 'string', 'max:255'],
-            'recipient'    => ['nullable', 'string', 'max:255'],
-            'organization' => ['required', 'string', 'max:255'],
-            'description'  => ['nullable', 'string'],
-            'image'        => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
-            'image_url'    => ['nullable', 'url', 'max:2048'],
-            'website_url'  => ['nullable', 'url', 'max:2048'],
-            'article_url'  => ['nullable', 'url', 'max:2048'],
-            'video_url'    => ['nullable', 'url', 'max:2048'],
-            'remove_image' => ['nullable', 'boolean'],
-            'sort_order'   => ['nullable', 'integer'],
-            'is_active'    => ['nullable', 'boolean'],
+            'title'             => ['nullable', 'string', 'max:255'],
+            'year'              => ['nullable', 'string', 'max:10'],
+            'recipient'         => ['nullable', 'string', 'max:255'],
+            'organization'      => ['nullable', 'string', 'max:255'],
+            'description'       => ['nullable', 'string'],
+            'image'             => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'image_url'         => ['nullable', 'url', 'max:2048'],
+            'website_url'       => ['nullable', 'url', 'max:2048'],
+            'article_url'       => ['nullable', 'url', 'max:2048'],
+            'video_url'         => ['nullable', 'url', 'max:2048'],
+            'remove_image'      => ['nullable', 'boolean'],
+            'sort_order'        => ['nullable', 'integer'],
+            'is_active'         => ['nullable', 'boolean'],
         ]);
 
         if ($request->boolean('remove_image')) {
             $this->deleteStoredImage($award->image);
             $data['image'] = null;
         } else {
-            $newImage = $this->resolveImage($request, $data);
+            $newImage = $this->resolveImage($request, $data, 'image');
             if ($newImage !== null) {
                 $this->deleteStoredImage($award->image);
                 $data['image'] = $newImage;
@@ -114,6 +116,7 @@ class AwardController extends Controller
                 unset($data['image']);
             }
         }
+
         unset($data['image_url'], $data['remove_image']);
 
         $award->update($data);
@@ -129,16 +132,16 @@ class AwardController extends Controller
     }
 
     /**
-     * Resolve the image value from an uploaded file or an image URL.
-     * Returns null when neither was provided.
+     * Resolve an image value from an uploaded file for the given field, falling back to
+     * 'image_url' when resolving the primary 'image' field. Returns null when nothing was provided.
      */
-    private function resolveImage(Request $request, array $data): ?string
+    private function resolveImage(Request $request, array $data, string $field = 'image'): ?string
     {
-        if ($request->hasFile('image')) {
-            return $request->file('image')->store('awards', 'public');
+        if ($request->hasFile($field)) {
+            return $request->file($field)->store('awards', 'public');
         }
 
-        if (!empty($data['image_url'])) {
+        if ($field === 'image' && !empty($data['image_url'])) {
             return $data['image_url'];
         }
 
