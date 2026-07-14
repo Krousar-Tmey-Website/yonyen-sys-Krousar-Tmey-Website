@@ -39,7 +39,10 @@ class ProjectDefaultsController extends Controller
             'project_default_duration' => ['nullable', 'string', 'max:255'],
             'project_default_location' => ['nullable', 'string', 'max:255'],
             'project_default_beneficiaries' => ['nullable', 'string', 'max:255'],
+            'project_default_make_difference_title' => ['nullable', 'string', 'max:255'],
             'project_default_make_difference_text' => ['nullable', 'string', 'max:2000'],
+            'project_default_donate_button_text' => ['nullable', 'string', 'max:255'],
+            'project_default_contact_button_text' => ['nullable', 'string', 'max:255'],
         ]);
 
         $selectedProjectId = $data['selected_project_id'] ?? null;
@@ -50,7 +53,10 @@ class ProjectDefaultsController extends Controller
             'project_default_duration' => 'Default Duration',
             'project_default_location' => 'Default Location',
             'project_default_beneficiaries' => 'Default Beneficiaries',
+            'project_default_make_difference_title' => 'Default Make a Difference Title',
             'project_default_make_difference_text' => 'Default Make a Difference Text',
+            'project_default_donate_button_text' => 'Default Donate Button Text',
+            'project_default_contact_button_text' => 'Default Contact Button Text',
         ];
 
         foreach ($data as $key => $value) {
@@ -78,7 +84,10 @@ class ProjectDefaultsController extends Controller
             'duration' => ['nullable', 'string', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
             'beneficiaries' => ['nullable', 'string', 'max:255'],
+            'make_difference_title' => ['nullable', 'string', 'max:255'],
             'make_difference_text' => ['nullable', 'string', 'max:2000'],
+            'donate_button_text' => ['nullable', 'string', 'max:255'],
+            'contact_button_text' => ['nullable', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -96,7 +105,10 @@ class ProjectDefaultsController extends Controller
                 'duration' => null,
                 'location' => null,
                 'beneficiaries' => null,
+                'make_difference_title' => null,
                 'make_difference_text' => null,
+                'donate_button_text' => null,
+                'contact_button_text' => null,
             ]);
         } else {
             $project->update([
@@ -104,7 +116,10 @@ class ProjectDefaultsController extends Controller
                 'duration' => $data['duration'] ?? null,
                 'location' => $data['location'] ?? null,
                 'beneficiaries' => $data['beneficiaries'] ?? null,
+                'make_difference_title' => $data['make_difference_title'] ?? null,
                 'make_difference_text' => $data['make_difference_text'] ?? null,
+                'donate_button_text' => $data['donate_button_text'] ?? null,
+                'contact_button_text' => $data['contact_button_text'] ?? null,
             ]);
         }
 
