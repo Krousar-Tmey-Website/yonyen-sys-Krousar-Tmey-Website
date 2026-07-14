@@ -11,7 +11,6 @@ use App\Models\Child;
 use App\Models\ContactInquiry;
 use App\Models\CoreValue;
 use App\Models\Donation;
-use App\Models\Gallery;
 use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
 use App\Models\ImpactStatistic;
@@ -62,7 +61,6 @@ class AppServiceProvider extends ServiceProvider
             ContactInquiry::class,
             CoreValue::class,
             Donation::class,
-            Gallery::class,
             HistoryEvent::class,
             HomeSetting::class,
             ImpactStatistic::class,

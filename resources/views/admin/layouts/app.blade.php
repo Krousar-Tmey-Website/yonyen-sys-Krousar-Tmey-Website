@@ -178,7 +178,7 @@
                 'children' => [
                 ['route' => 'admin.website.index', 'label' => 'Website Settings'],
                 ['route' => 'admin.seo.index', 'label' => 'SEO Settings'],
-                ['route' => 'admin.media.library', 'label' => 'Media Library'],
+
                 ],
                 ],
                 'reports' => [
