@@ -57,13 +57,6 @@
      ======================================================== --}}
 <section id="values" class="py-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
-        <!-- <div class="text-center mb-16" data-reveal>
-            <p class="text-[#2d6fa3] font-bold text-sm uppercase tracking-widest mb-4">Our Values</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Core Values</h2>
-            <p class="pt-[50px]">
-            Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.
-            </p>
-        </div> -->
         <div class="text-center mb-16" data-reveal>
             <p class="text-[#2d6fa3] font-bold text-sm uppercase tracking-widest mb-4">Our Values</p>
             <h2 class="text-4xl font-bold text-[#2d6fa3] mb-8">Core Values</h2>
@@ -73,9 +66,8 @@
             </p>
         </div>
 
-
         @php $valueAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
-        <div class="grid md:grid-cols-3 gap-7 mb-20">
+        <div class="grid md:grid-cols-3 gap-7">
             @forelse($coreValues as $i => $value)
             @php
                 $accent = $valueAccents[$i % count($valueAccents)];
@@ -113,7 +105,7 @@
 {{-- ========================================================
      OUR HISTORY
      ======================================================== --}}
-<section id="history" class="py-20 bg-white scroll-mt-20">
+<section id="history" class="pt-10 pb-20 bg-white scroll-mt-20">
     <div class="max-w-6xl mx-auto px-6">
         {{-- Header --}}
         <div class="text-center mb-16" data-reveal>
@@ -127,9 +119,6 @@
         </div>
 
         @php
-            // Flatten each DB row into up to two timeline entries (one per filled
-            // text field), so we can alternate sides purely by position, regardless
-            // of whether the text came from the Left or Right Column Text field.
             $timelineItems = [];
             foreach ($historyEvents as $event) {
                 if ($event->left_text) {
@@ -145,10 +134,7 @@
         @endphp
 
         <div class="relative">
-            {{-- Vertical timeline line - centered, soft gold --}}
             <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#e8d7ae] via-[#c9a45c] to-[#e8d7ae] hidden md:block"></div>
-
-            {{-- Open ring marker at the very top of the line --}}
             <div class="hidden md:flex justify-center mb-8">
                 <div class="relative z-10 w-4 h-4 rounded-full border-2 border-[#c9a45c] bg-white"></div>
             </div>
@@ -161,7 +147,6 @@
                     $stagger = $loop->index % 2 === 1 ? 'md:mt-10' : '';
                 @endphp
                 <div class="relative {{ $stagger }}" data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 70, 350) }}">
-                    {{-- Connector dot on the center line --}}
                     <div class="hidden md:flex justify-center absolute left-1/2 -translate-x-1/2 top-10 z-10">
                         <div class="w-3 h-3 rounded-full bg-[#c9a45c] ring-4 ring-white shadow"></div>
                     </div>
@@ -170,7 +155,6 @@
                         @if($onLeft)
                         <div class="relative mb-8 md:mb-0 md:pr-8">
                             <div class="hidden md:block absolute right-8 top-12 w-8 h-px bg-[#c9a45c]/50"></div>
-                            {{-- Foundation flourish on the very first milestone --}}
                             @if($loop->first)
                             <p class="max-w-sm mx-auto md:mx-0 md:ml-auto text-right text-[#a67c3d] text-xs font-semibold uppercase tracking-[0.15em] mb-2">The Beginning</p>
                             @endif
@@ -215,7 +199,6 @@
                 @endforelse
             </div>
 
-            {{-- Present-day impact capstone --}}
             @if(count($timelineItems) > 0)
             <div class="relative mt-16 pt-14 border-t border-[#e8d7ae] text-center" data-reveal="scale">
                 <div class="hidden md:flex justify-center absolute left-1/2 -translate-x-1/2 -top-2.5 z-10">
@@ -235,14 +218,13 @@
 {{-- ========================================================
      AWARDS
      ======================================================== --}}
-<section id="awards" class="py-20 bg-white scroll-mt-20">
+<section id="awards" class="pt-10 pb-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Recognition</p>
             <h2 class="text-4xl font-bold text-[#2d6fa3]">Awards</h2>
         </div>
 
-        {{-- Awards from DB --}}
         @if($awards->isNotEmpty())
         @php $awardAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -275,7 +257,6 @@
                     <p class="text-gray-400 text-xs leading-relaxed mb-3">{{ $award->description }}</p>
                     @endif
                     
-                    {{-- Link Buttons --}}
                     @if($award->website_url || $award->article_url || $award->video_url)
                     <div class="flex flex-wrap gap-2 justify-center">
                         @if($award->website_url)
@@ -322,7 +303,6 @@
             </p>
         </div>
 
-        {{-- Search & Filter Controls --}}
         <div class="mb-10 max-w-2xl mx-auto space-y-4">
             <div class="relative">
                 <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -341,7 +321,6 @@
             </div>
         </div>
 
-        {{-- Partnerships with Cambodian Authorities --}}
         <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8"
              x-show="category === 'all' || category === 'cat_Authorities'">
             <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
@@ -367,7 +346,6 @@
             </div>
         </div>
 
-        {{-- Dynamic partner category sections from DB --}}
         @php
             $categoryDisplayConfig = [
                 'Authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
@@ -411,7 +389,6 @@
             @endif
         @endforeach
 
-        {{-- CTA --}}
         <div class="text-center bg-[#2d6fa3] rounded-3xl p-10" data-reveal="scale">
             <p class="text-white/80 text-lg mb-2">Many thanks to all our partners for their support!</p>
             <h3 class="text-white font-bold text-2xl mb-6">Do you wish to get involved with Krousar Thmey?</h3>
@@ -432,7 +409,6 @@
 
         <div class="grid lg:grid-cols-2 gap-12 mb-16">
 
-            {{-- Financial Transparency --}}
             <div data-reveal="left">
                 <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
@@ -464,7 +440,6 @@
                 </div>
             </div>
 
-            {{-- Audited Statements --}}
             <div data-reveal="right">
                 <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-[#8da83a] flex items-center justify-center flex-shrink-0">
@@ -493,7 +468,6 @@
             </div>
         </div>
 
-        {{-- Origins of Funds --}}
         <div class="bg-[#f8f9fc] rounded-3xl p-8 lg:p-10 border border-gray-100" data-reveal>
             <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-[#1d4e7a] flex items-center justify-center flex-shrink-0">
