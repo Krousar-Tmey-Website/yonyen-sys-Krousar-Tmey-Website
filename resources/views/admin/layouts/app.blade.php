@@ -8,6 +8,9 @@
     @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @stack('styles')
     <link rel="icon" type="image/png" href="{{ asset('images/logo.svg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         [x-cloak] {
             display: none !important;
@@ -35,23 +38,18 @@
             <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
                 <div class="bg-white rounded-xl px-3 py-1.5 flex-shrink-0">
                     @php
-                    $logoPath = $settings['site_logo'] ?? 'images/logo.png';
+                    $logoPath = $settings['site_logo'] ?? 'images/logo.svg';
                     $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
                     $siteName = $settings['site_name'] ?? 'Krousar Thmey';
-                    $siteTagline = $settings['site_tagline'] ?? 'គ្រួសារថ្មី · New Family';
                     @endphp
                     <img src="{{ $logoUrl }}"
                         alt="{{ $siteName }}"
                         class="h-8 lg:h-10 w-auto object-contain"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     {{-- Fallback if image not yet placed --}}
-                    <div class="hidden items-center gap-3">
-                        <div class="w-4 h-4 lg:w-12 lg:h-12 rounded-xl bg-[#2d6fa3] flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">KT</span>
-                        </div>
-                        <div>
-                            <div class="text-[#2d6fa3] font-bold text-lg leading-tight">{{ $siteName }}</div>
-                            <div class="text-[#8da83a] text-xs font-medium">{{ $siteTagline }}</div>
+                    <div class="hidden items-center justify-center">
+                        <div class="w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-[#2d6fa3] flex items-center justify-center">
+                            <span class="text-white font-bold text-base lg:text-lg">KT</span>
                         </div>
                     </div>
                 </div>
