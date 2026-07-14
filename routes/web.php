@@ -11,7 +11,7 @@ use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\Book;
 use App\Models\CoreValue;
-use App\Models\Gallery;
+use App\Models\Media;
 use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
 use App\Models\JobOpportunity;
@@ -42,7 +42,7 @@ Route::get('/', function () {
     $slides = Slide::active()->get();
     $projects = Project::where('is_active', true)->take(3)->get();
     $testimonials = Testimonial::where('is_active', true)->take(3)->get();
-    $galleries = Gallery::where('is_active', true)->latest()->take(6)->get();
+    $galleries = Media::where('is_active', true)->latest()->take(6)->get();
     $programs = Program::active()->take(3)->get();
     $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
@@ -233,6 +233,13 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
     Route::resource('page-sections', Admin\PageSectionController::class)->except(['show']);
     Route::resource('slides', Admin\SlideController::class)->except(['show']);
+
+    // Media Gallery
+    Route::post('media/bulk-delete', [Admin\MediaController::class, 'bulkDestroy'])->name('media.bulk-destroy');
+    Route::resource('media', Admin\MediaController::class)
+        ->except(['show'])
+        ->parameters(['media' => 'media']);
+
     Route::resource('impact-statistics', Admin\ImpactStatisticController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['impact-statistics' => 'impactStatistic']);
