@@ -65,7 +65,7 @@ class BookController extends Controller
         $data['stock']        = $data['stock'] ?? 0;
         $data['sort_order']   = $data['sort_order'] ?? 0;
 
-        Book::create($data);
+        $book = Book::create($data);
 
         return redirect()->route('admin.books.index')
             ->with('success', 'Book created successfully.');

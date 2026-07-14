@@ -251,14 +251,22 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('core-values', Admin\CoreValueController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['core-values' => 'coreValue']);
-    
+
     // Worldwide Partners
     Route::resource('worldwide-partners', Admin\WorldwidePartnerController::class)
         ->parameters(['worldwide-partners' => 'worldwidePartner']);
-    
+
     Route::resource('transparency', Admin\TransparencyController::class)
         ->except(['show', 'create'])
         ->parameters(['transparency' => 'report']);
+
+    // Reports — Activity Logs (must be before reports resource to avoid route collision)
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('activity-logs', [Admin\Reports\ActivityLogController::class, 'index'])
+            ->name('activity-logs.index');
+        Route::get('activity-logs/{activityLog}', [Admin\Reports\ActivityLogController::class, 'show'])
+            ->name('activity-logs.show');
+    });
 
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);
@@ -296,5 +304,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::patch('{volunteer}/status', [Admin\VolunteerController::class, 'updateStatus'])->name('status');
         Route::delete('{volunteer}', [Admin\VolunteerController::class, 'destroy'])->name('destroy');
     });
+
+
 });
 
