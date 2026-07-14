@@ -7,7 +7,6 @@ use App\Http\Requests\StorePartnerRequest;
 use App\Http\Requests\UpdatePartnerRequest;
 use App\Models\Partner;
 use App\Models\PartnerCategory;
-use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -77,8 +76,6 @@ class PartnerController extends Controller
 
         $partner = Partner::create($data);
 
-        ActivityLogger::log('created', $partner, "Created partner \"{$partner->name}\"");
-
         return redirect()->route('admin.partners.index')
             ->with('success', 'Partner created successfully.');
     }
@@ -133,10 +130,6 @@ class PartnerController extends Controller
 
         $partner->update($data);
 
-        ActivityLogger::log('updated', $partner, "Updated partner \"{$partner->name}\"", [
-            'changes' => array_keys($data),
-        ]);
-
         return redirect()->route('admin.partners.index')
             ->with('success', 'Partner updated successfully.');
     }
@@ -150,14 +143,7 @@ class PartnerController extends Controller
             Storage::disk('public')->delete($partner->logo);
         }
 
-        $name = $partner->name;
-
         $partner->delete();
-
-        ActivityLogger::log('deleted', null, "Deleted partner \"{$name}\"", [
-            'partner_id' => $partner->id,
-            'name' => $name,
-        ]);
 
         return redirect()->route('admin.partners.index')
             ->with('success', 'Partner removed successfully.');

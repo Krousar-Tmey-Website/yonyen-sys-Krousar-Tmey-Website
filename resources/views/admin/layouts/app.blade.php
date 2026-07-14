@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin') — Krousar Thmey</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @stack('styles')
     <style>
         [x-cloak] {
@@ -69,7 +69,7 @@
                                 ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
                                 ['route' => 'admin.home.index', 'label' => 'Home Settings'],
                                 ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
-                                ['route' => 'admin.impact.index', 'label' => 'Impact Statistics'],
+                                ['route' => 'admin.impact-statistics.index', 'label' => 'Impact Statistics'],
                                 ['route' => 'admin.stories.index', 'label' => 'Success Stories'],
                             ],
                         ],

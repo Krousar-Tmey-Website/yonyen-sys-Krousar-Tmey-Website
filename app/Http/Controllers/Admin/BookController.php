@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
-use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -68,12 +67,6 @@ class BookController extends Controller
 
         $book = Book::create($data);
 
-        ActivityLogger::log('created', $book, "Created book \"{$book->title}\"", [
-            'title' => $book->title,
-            'price' => $book->price,
-            'stock' => $book->stock,
-        ]);
-
         return redirect()->route('admin.books.index')
             ->with('success', 'Book created successfully.');
     }
@@ -105,10 +98,6 @@ class BookController extends Controller
 
         $book->update($data);
 
-        ActivityLogger::log('updated', $book, "Updated book \"{$book->title}\"", [
-            'changes' => array_keys($data),
-        ]);
-
         return redirect()->route('admin.books.index')
             ->with('success', 'Book updated successfully.');
     }
@@ -119,14 +108,7 @@ class BookController extends Controller
             Storage::disk('public')->delete($book->cover_image);
         }
 
-        $title = $book->title;
-
         $book->delete();
-
-        ActivityLogger::log('deleted', null, "Deleted book \"{$title}\"", [
-            'book_id' => $book->id,
-            'title' => $title,
-        ]);
 
         return redirect()->route('admin.books.index')
             ->with('success', 'Book removed successfully.');

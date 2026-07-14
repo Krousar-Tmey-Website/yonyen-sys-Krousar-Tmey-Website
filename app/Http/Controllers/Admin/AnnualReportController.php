@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnnualReport;
-use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -49,8 +48,6 @@ class AnnualReportController extends Controller
 
         $report = AnnualReport::create($data);
 
-        ActivityLogger::log('created', $report, "Created annual report \"{$report->title}\"");
-
         return redirect()->route('admin.reports.index')
             ->with('success', 'Report created successfully.');
     }
@@ -84,10 +81,6 @@ class AnnualReportController extends Controller
 
         $report->update($data);
 
-        ActivityLogger::log('updated', $report, "Updated annual report \"{$report->title}\"", [
-            'changes' => array_keys($data),
-        ]);
-
         return redirect()->route('admin.reports.index')
             ->with('success', 'Report updated successfully.');
     }
@@ -97,14 +90,8 @@ class AnnualReportController extends Controller
         if ($report->file_path) {
             Storage::disk('public')->delete($report->file_path);
         }
-        $title = $report->title;
 
         $report->delete();
-
-        ActivityLogger::log('deleted', null, "Deleted annual report \"{$title}\"", [
-            'report_id' => $report->id,
-            'title' => $title,
-        ]);
 
         return redirect()->route('admin.reports.index')
             ->with('success', 'Report deleted successfully.');
