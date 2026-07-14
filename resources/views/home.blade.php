@@ -257,11 +257,9 @@
 
     }
 
-
     .animate-stat {
         animation: fadeUp .8s ease forwards;
     }
-
 
     .animate-stat:nth-child(1) {
         animation-delay: .1s;
@@ -283,14 +281,12 @@
         animation: fadeUp .8s ease forwards;
     }
 
-
     .animate-section {
         opacity: 0;
         transform: translateY(30px);
         transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
                     transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
 
     .animate-section.is-visible {
         opacity: 1;

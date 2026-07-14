@@ -69,7 +69,7 @@
                                 ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
                                 ['route' => 'admin.home.index', 'label' => 'Home Settings'],
                                 ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
-                                ['route' => 'admin.impact.index', 'label' => 'Impact Statistics'],
+                                ['route' => 'admin.impact-statistics.index', 'label' => 'Impact Statistics'],
                                 ['route' => 'admin.stories.index', 'label' => 'Success Stories'],
                             ],
                         ],

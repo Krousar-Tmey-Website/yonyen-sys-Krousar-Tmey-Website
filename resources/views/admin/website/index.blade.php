@@ -10,10 +10,11 @@
     @csrf
 
     @php
-    $order = ['website', 'social', 'contact', 'footer'];
+    $order = ['website', 'social', 'sharing', 'contact', 'footer'];
     $labels = [
         'website' => ['🌐', 'Website Identity'],
         'social'  => ['🔗', 'Social Media Links'],
+        'sharing' => ['📤', 'Share our impact'],
         'contact' => ['📞', 'Contact Information'],
         'footer'  => ['📍', 'Footer Settings'],
     ];
@@ -59,6 +60,64 @@
                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                 </div>
                 @endforeach
+            </div>
+
+        @elseif($group === 'sharing')
+            {{-- ====== Share our impact - Manageable settings ====== --}}
+            <div class="space-y-4">
+                <p class="text-xs text-gray-500 mb-3">Manage the "Share our impact" section on the presentation page.</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Enable Share Section</label>
+                        <label class="flex items-center gap-2 text-xs text-gray-600">
+                            <input type="checkbox" name="settings[sharing_enabled]" value="1" {{ (old('settings.sharing_enabled', $items->firstWhere('key', 'sharing_enabled')->value ?? '1')) == '1' ? 'checked' : '' }}
+                                   class="rounded border-gray-300 text-[#2d6fa3] focus:ring-[#2d6fa3]/20">
+                            Show share buttons on presentation page
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Section Title</label>
+                        <input type="text" name="settings[sharing_title]" 
+                               value="{{ old('settings.sharing_title', $items->firstWhere('key', 'sharing_title')->value ?? 'Share our impact') }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                </div>
+                
+                <div class="pt-3 border-t border-gray-100">
+                    <p class="text-xs font-medium text-gray-700 mb-3">Social Media Icons</p>
+                    
+                    @php
+                    $iconSettings = [
+                        'sharing_facebook_icon' => ['label' => 'Facebook Icon', 'color' => '#1877F2', 'default' => 'images/social/facebook.svg'],
+                        'sharing_twitter_icon' => ['label' => 'Twitter Icon', 'color' => '#1DA1F2', 'default' => 'images/social/twitter.svg'],
+                        'sharing_linkedin_icon' => ['label' => 'LinkedIn Icon', 'color' => '#0A66C2', 'default' => 'images/social/linkedin.svg'],
+                        'sharing_share_icon' => ['label' => 'Share Icon', 'color' => '#6B7280', 'default' => 'images/social/share.svg'],
+                    ];
+                    @endphp
+                    
+                    <div class="grid grid-cols-1 gap-4">
+                        @foreach($iconSettings as $key => $config)
+                        <div class="flex items-center gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[{{ $config['color'] }}] flex items-center justify-center">
+                                <img src="{{ asset($items->firstWhere('key', $key)->value ?? $config['default']) }}" alt="{{ $config['label'] }}" class="w-6 h-6 filter brightness-0 invert">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-xs font-medium text-gray-600 mb-1">{{ $config['label'] }}</label>
+                                <input type="file" name="settings[{{ $key }}_file]" accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
+                                <input type="hidden" name="settings[{{ $key }}]" value="{{ $items->firstWhere('key', $key)->value ?? $config['default'] }}">
+                                <p class="text-xs text-gray-400 mt-1">SVG, PNG, JPG, or WebP. Will be stored in <code>public/images/social/</code></p>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    
+                    <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-600 mt-4">
+                        <strong>Note:</strong> Icons will be saved to <code>public/images/social/</code> directory. Upload takes priority over existing files.
+                    </div>
+                </div>
             </div>
 
         @elseif($group === 'contact')
