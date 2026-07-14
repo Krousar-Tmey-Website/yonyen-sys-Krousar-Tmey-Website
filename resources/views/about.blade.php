@@ -296,8 +296,41 @@
 {{-- ========================================================
      PARTNERS
      ======================================================== --}}
+@php
+    $individualDonorNames = $partnersByCategory
+        ->get('Individual Donor', collect())
+        ->pluck('name')
+        ->map(fn ($name) => strtolower((string) $name))
+        ->values()
+        ->all();
+@endphp
 <section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20"
-     x-data="{ category: 'all', search: '' }">
+     x-data="{
+        category: 'all',
+        search: '',
+        donorPage: 1,
+        donorPerPage: 8,
+        donorNames: @js($individualDonorNames),
+        get donorFilteredIndexes() {
+            const term = this.search.toLowerCase();
+            return this.donorNames
+                .map((name, index) => ({ name, index }))
+                .filter((item) => term === '' || item.name.includes(term))
+                .map((item) => item.index);
+        },
+        get donorTotalPages() {
+            return Math.max(1, Math.ceil(this.donorFilteredIndexes.length / this.donorPerPage));
+        },
+        donorCardVisible(index) {
+            if (this.donorPage > this.donorTotalPages) {
+                this.donorPage = this.donorTotalPages;
+            }
+
+            const start = (this.donorPage - 1) * this.donorPerPage;
+            return this.donorFilteredIndexes.slice(start, start + this.donorPerPage).includes(index);
+        }
+     }"
+     x-effect="search; donorPage = 1">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support</p>
@@ -355,10 +388,11 @@
         {{-- Dynamic partner category sections from DB --}}
         @php
             $categoryDisplayConfig = [
-                'Authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
-                'Organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
-                'Companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'bgClass' => 'bg-white'],
-                'Towns' => ['title' => 'Towns and Municipalities — Switzerland', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-[#2d6fa3]/5'],
+                'Authorities'     => ['title' => 'Cambodian Public Authorities',                     'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
+                'Organizations'   => ['title' => 'Organizations, Foundations & Institutions',         'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
+                'Companies'       => ['title' => 'Companies',                                        'dot' => 'bg-[#1d4e7a]', 'bgClass' => 'bg-white'],
+                'Towns'           => ['title' => 'Towns and Municipalities — Switzerland',            'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-[#2d6fa3]/5'],
+                'Individual Donor' => ['title' => 'Individual Donor',                                 'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
             ];
         @endphp
 
@@ -377,7 +411,11 @@
                         @foreach ($partners as $partner)
                             @php $ps = json_encode(strtolower($partner->name)); @endphp
                             <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#f8f9fc] hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
-                                 x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
+                                 @if ($cat === 'Individual Donor')
+                                     x-show="donorCardVisible({{ $loop->index }})"
+                                 @else
+                                     x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())"
+                                 @endif>
                                 @if ($partner->logo_url)
                                     <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
                                         <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}"
@@ -388,116 +426,36 @@
                                         <span class="text-lg font-bold text-blue-500">{{ Str::substr($partner->name, 0, 1) }}</span>
                                     </div>
                                 @endif
-                                <span class="text-sm font-medium text-gray-700 leading-tight">{{ $partner->name }}</span>
+                                <div class="min-w-0 flex-1">
+                                    <span class="text-sm font-medium text-gray-700 leading-tight line-clamp-2">{{ $partner->name }}</span>
+                                </div>
                             </div>
                         @endforeach
                     </div>
-                </div>
-            @endif
-        @endforeach
-
-        {{-- CTA --}}
-        <div class="text-center bg-[#2d6fa3] rounded-3xl p-10" data-reveal="scale">
-            <p class="text-white/80 text-lg mb-2">Many thanks to all our partners for their support!</p>
-            <h3 class="text-white font-bold text-2xl mb-6">Do you wish to get involved with Krousar Thmey?</h3>
-            <a href="{{ route('involved') }}" class="btn-primary text-base">Learn More</a>
-        </div>
-    </div>
-</section>
-
-        <div class="text-center mb-12" data-reveal>
-            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Partners</h2>
-            <p class="text-gray-500 mt-4 max-w-3xl mx-auto text-sm leading-relaxed">
-                Since its creation, Krousar Thmey has set up long-term partnerships with Cambodian and international organizations. Donors can financially support a program or project of their choice. Technical partners allow us to benefit from specific expertise.
-            </p>
-        </div>
-
-        {{-- Search & Filter Controls --}}
-        <div class="mb-10 max-w-2xl mx-auto space-y-4">
-            <div class="relative">
-                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <input type="text" x-model="search" placeholder="Search partners..."
-                       class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/20 transition-all outline-none text-sm bg-white">
-            </div>
-            <div class="flex flex-wrap justify-center gap-2">
-                <button @click="category = 'all'"
-                        :class="category === 'all' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">All Partners</button>
-                @foreach ($partnersByCategory as $cat => $partners)
-                    <button @click="category = 'cat_{{ $cat }}'"
-                            :class="category === 'cat_{{ $cat }}' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                            class="px-5 py-2 rounded-full text-sm font-medium transition-all">{{ $cat }}</button>
-                @endforeach
-            </div>
-        </div>
-
-        {{-- Partnerships with Cambodian Authorities --}}
-        <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8"
-             x-show="category === 'all' || category === 'cat_Authorities'">
-            <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
-                <span class="text-2xl">🇰🇭</span> Partnerships with the Cambodian Authorities
-            </h3>
-            <p class="text-gray-500 text-sm leading-relaxed mb-6">
-                Krousar Thmey constantly seeks to develop and maintain lasting relations with the Cambodian authorities. «&nbsp;Memorandums of understanding&nbsp;» are regularly renewed between Krousar Thmey and governing authorities:
-            </p>
-            <div class="grid md:grid-cols-3 gap-4 mb-6">
-                @foreach([
-                    ['ministry'=>'Ministry of Education, Youth and Sport','prog'=>'Education for Deaf or Blind Children Program'],
-                    ['ministry'=>'Ministry of Social Affairs',            'prog'=>'Child Welfare Program'],
-                    ['ministry'=>'Ministry of Culture and Fine Arts',     'prog'=>'Cultural and Artistic Development Program'],
-                ] as $mou)
-                <div class="bg-[#2d6fa3]/5 border border-[#2d6fa3]/15 rounded-xl p-5">
-                    <p class="text-[#2d6fa3] font-bold text-sm mb-1">{{ $mou['ministry'] }}</p>
-                    <p class="text-gray-500 text-xs">{{ $mou['prog'] }}</p>
-                </div>
-                @endforeach
-            </div>
-            <div class="bg-[#8da83a]/10 border border-[#8da83a]/20 rounded-xl p-4 text-sm text-gray-600">
-                Whether for an inauguration or to show their support, H.M. the King, the Prime Minister and his wife, as well as members of the royal family, regularly visit Krousar Thmey's structures. From 2020 onwards, Krousar Thmey works collaboratively with the Ministry of Education, Youth and Sport on the Education for Deaf or Blind Children Program.
-            </div>
-        </div>
-
-        {{-- Dynamic partner category sections from DB --}}
-        @php
-            $categoryDisplayConfig = [
-                'Authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
-                'Organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
-                'Companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'bgClass' => 'bg-white'],
-                'Towns' => ['title' => 'Towns and Municipalities — Switzerland', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-[#2d6fa3]/5'],
-            ];
-        @endphp
-
-        @foreach ($partnersByCategory as $cat => $partners)
-            @if ($partners->isNotEmpty())
-                @php $config = $categoryDisplayConfig[$cat] ?? ['title' => $cat, 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white']; @endphp
-                <div class="{{ $config['bgClass'] }} rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
-                     x-show="category === 'all' || category === 'cat_{{ $cat }}'">
-                    <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
-                        @if ($cat === 'Towns')
-                            <span>🇨🇭</span>
-                        @endif
-                        {{ $config['title'] }}
-                    </h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                        @foreach ($partners as $partner)
-                            @php $ps = json_encode(strtolower($partner->name)); @endphp
-                            <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#f8f9fc] hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
-                                 x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
-                                @if ($partner->logo_url)
-                                    <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
-                                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}"
-                                             class="max-w-full max-h-full object-contain p-2">
-                                    </div>
-                                @else
-                                    <div class="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                        <span class="text-lg font-bold text-blue-500">{{ Str::substr($partner->name, 0, 1) }}</span>
-                                    </div>
-                                @endif
-                                <span class="text-sm font-medium text-gray-700 leading-tight">{{ $partner->name }}</span>
-                            </div>
-                        @endforeach
-                    </div>
+                    @if ($cat === 'Individual Donor')
+                        <div class="mt-6 flex flex-wrap items-center justify-center gap-2"
+                             x-show="donorFilteredIndexes.length > donorPerPage">
+                            <button type="button"
+                                    @click="donorPage = Math.max(1, donorPage - 1)"
+                                    :disabled="donorPage === 1"
+                                    class="px-4 py-2 rounded-full text-sm font-semibold border border-gray-200 bg-white text-gray-600 transition-all hover:border-[#2d6fa3]/30 hover:text-[#2d6fa3] disabled:opacity-40 disabled:cursor-not-allowed">
+                                Previous
+                            </button>
+                            <template x-for="pageNumber in donorTotalPages" :key="pageNumber">
+                                <button type="button"
+                                        @click="donorPage = pageNumber"
+                                        :class="donorPage === pageNumber ? 'bg-[#2d6fa3] text-white shadow-md border-[#2d6fa3]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#2d6fa3]/30 hover:text-[#2d6fa3]'"
+                                        class="w-10 h-10 rounded-full text-sm font-semibold border transition-all"
+                                        x-text="pageNumber"></button>
+                            </template>
+                            <button type="button"
+                                    @click="donorPage = Math.min(donorTotalPages, donorPage + 1)"
+                                    :disabled="donorPage === donorTotalPages"
+                                    class="px-4 py-2 rounded-full text-sm font-semibold border border-gray-200 bg-white text-gray-600 transition-all hover:border-[#2d6fa3]/30 hover:text-[#2d6fa3] disabled:opacity-40 disabled:cursor-not-allowed">
+                                Next
+                            </button>
+                        </div>
+                    @endif
                 </div>
             @endif
         @endforeach

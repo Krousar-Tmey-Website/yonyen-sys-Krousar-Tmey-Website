@@ -56,7 +56,7 @@ Route::get('/who-we-are', function () {
         ->orderBy('sort_order')
         ->orderBy('name')
         ->get()
-        ->groupBy('category');
+        ->groupBy(fn ($p) => $p->category ?? 'Individual Donor');
     $awards = Award::active()->ordered()->get();
     $offices = Office::active()->get();
     $historyEvents = HistoryEvent::active()->get();
@@ -172,7 +172,29 @@ Route::get('/contact', function () {
 })->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-Route::get('/partners', fn () => redirect()->route('about'))->name('partners');
+// `Partner` model is already imported at the top of this file. Removed duplicate import.
+Route::get('/partners', function () {
+    $search   = request('search');
+    $category = request('category');
+
+    $query = Partner::active();
+
+    if ($search) {
+        $query->where('name', 'like', '%' . $search . '%');
+    }
+
+    if ($category === 'individual-donor') {
+        $query->whereNull('category_id');
+    } elseif ($category) {
+        $query->whereHas('categoryModel', function ($q) use ($category) {
+            $q->where('name', $category);
+        });
+    }
+
+    $partners = $query->paginate(8)->withQueryString();
+
+    return view('partners', compact('partners', 'search', 'category'));
+})->name('partners');
 
 Route::get('/donate', [DonationController::class, 'show'])->name('donate');
 Route::post('/donate', [DonationController::class, 'send'])->name('donate.send');
