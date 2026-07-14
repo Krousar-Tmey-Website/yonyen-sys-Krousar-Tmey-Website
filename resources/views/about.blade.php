@@ -293,7 +293,47 @@
      PARTNERS
      ======================================================== --}}
 <section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20"
-     x-data="{ category: 'all', search: '' }">
+     x-data="{
+        category: 'all',
+        search: '',
+        perPage: 8,
+        catPage: {},
+
+        init() {
+            @foreach($partnersByCategory as $cat => $partners)
+                this.catPage['{{ addslashes($cat) }}'] = 1;
+            @endforeach
+        },
+
+        cardVisible(cat, index, name, total) {
+            const term = this.search.toLowerCase();
+            // When searching, show all matching items irrespective of pagination
+            if (term) {
+                return name.toLowerCase().includes(term);
+            }
+
+            // No search — use pagination
+            if (total <= this.perPage) return true;
+
+            const page = this.catPage[cat] || 1;
+            const start = (page - 1) * this.perPage;
+            return index >= start && index < start + this.perPage;
+        },
+
+        nextPage(cat, total) {
+            const maxPage = Math.ceil(total / this.perPage);
+            if ((this.catPage[cat] || 1) < maxPage) {
+                this.catPage[cat] = (this.catPage[cat] || 1) + 1;
+            }
+        },
+
+        prevPage(cat) {
+            if ((this.catPage[cat] || 1) > 1) {
+                this.catPage[cat] = (this.catPage[cat] || 1) - 1;
+            }
+        }
+     }"
+     x-effect="search; Object.keys(catPage).forEach(key => { catPage[key] = 1; })">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support</p>
@@ -348,10 +388,11 @@
 
         @php
             $categoryDisplayConfig = [
-                'Authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
-                'Organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
-                'Companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'bgClass' => 'bg-white'],
-                'Towns' => ['title' => 'Towns and Municipalities — Switzerland', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-[#2d6fa3]/5'],
+                'Authorities'     => ['title' => 'Cambodian Public Authorities',                     'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
+                'Organizations'   => ['title' => 'Organizations, Foundations & Institutions',         'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
+                'Companies'       => ['title' => 'Companies',                                        'dot' => 'bg-[#1d4e7a]', 'bgClass' => 'bg-white'],
+                'Towns'           => ['title' => 'Towns and Municipalities — Switzerland',            'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-[#2d6fa3]/5'],
+                'Individual Donor' => ['title' => 'Individual Donor',                                 'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
             ];
         @endphp
 
@@ -370,7 +411,8 @@
                         @foreach ($partners as $partner)
                             @php $ps = json_encode(strtolower($partner->name)); @endphp
                             <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#f8f9fc] hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
-                                 x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
+                                 @php $catSafe = addslashes($cat); @endphp
+                                 x-show="cardVisible('{{ $catSafe }}', {{ $loop->index }}, {{ $ps }}, {{ $loop->count }})">
                                 @if ($partner->logo_url)
                                     <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
                                         <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}"
@@ -385,6 +427,27 @@
                             </div>
                         @endforeach
                     </div>
+
+                    @if ($partners->count() > 6)
+                    <div class="flex items-center justify-center gap-4 mt-6" x-show="search === ''">
+                        <button @click="prevPage('{{ $catSafe }}')"
+                                :disabled="(catPage['{{ $catSafe }}'] || 1) <= 1"
+                                class="px-4 py-2 text-sm font-medium rounded-lg transition-all"
+                                :class="(catPage['{{ $catSafe }}'] || 1) <= 1 ? 'text-gray-300 cursor-not-allowed' : 'text-[#2d6fa3] hover:bg-[#2d6fa3]/10'">
+                            ← Previous
+                        </button>
+                        <span class="text-sm text-gray-500">
+                            Page <span class="font-semibold text-gray-700" x-text="catPage['{{ $catSafe }}'] || 1"></span>
+                            of <span class="font-semibold text-gray-700" x-text="Math.ceil({{ $partners->count() }} / perPage)"></span>
+                        </span>
+                        <button @click="nextPage('{{ $catSafe }}', {{ $partners->count() }})"
+                                :disabled="(catPage['{{ $catSafe }}'] || 1) >= Math.ceil({{ $partners->count() }} / perPage)"
+                                class="px-4 py-2 text-sm font-medium rounded-lg transition-all"
+                                :class="(catPage['{{ $catSafe }}'] || 1) >= Math.ceil({{ $partners->count() }} / perPage) ? 'text-gray-300 cursor-not-allowed' : 'text-[#2d6fa3] hover:bg-[#2d6fa3]/10'">
+                            Next →
+                        </button>
+                    </div>
+                    @endif
                 </div>
             @endif
         @endforeach

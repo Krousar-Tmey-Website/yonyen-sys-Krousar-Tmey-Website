@@ -27,11 +27,11 @@ class PartnerController extends Controller
                 $query->where('name', 'like', '%' . $search . '%');
             })
             ->when(filled($category), function ($query) use ($category) {
-                $query->where('category', $category);
+                $query->whereHas('categoryModel', fn ($q) => $q->where('name', $category));
             })
             ->latest()
             ->get()
-            ->groupBy(fn ($p) => $p->category ?? 'unknown');
+            ->groupBy(fn ($p) => $p->category ?? 'Individual Donor');
 
         $activeFilters = (filled($search) ? 1 : 0) + (filled($category) ? 1 : 0);
         $totalPartners = $partners->sum(fn ($group) => $group->count());
@@ -89,7 +89,7 @@ class PartnerController extends Controller
 
         $partners = Partner::latest()
             ->get()
-            ->groupBy(fn ($p) => $p->category ?? 'unknown');
+            ->groupBy(fn ($p) => $p->category ?? 'Individual Donor');
 
         $totalPartners = $partners->sum(fn ($group) => $group->count());
 

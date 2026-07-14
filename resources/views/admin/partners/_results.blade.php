@@ -1,18 +1,17 @@
-{{-- Category icons --}}
-@php
-    $catIcons = [
-        'authorities' => '🇰🇭',
-        'organizations' => '🏛️',
-        'companies' => '🏢',
-        'towns' => '🏙️',
-    ];
+{{-- Category icons --}}@php
+$catIcons = [
+    'authorities' => '🇰🇭',
+    'organizations' => '🏛️',
+    'companies' => '🏢',
+    'towns' => '🏙️',
+];
 @endphp
 
 {{-- Grouped tables --}}
 @foreach($partners as $cat => $catPartners)
 @if($catPartners->count())
 @php
-    $displayName = ucfirst($cat);
+    $displayName = $cat === 'Individual Donor' ? 'Individual Donor' : ucfirst($cat);
     $icon = $catIcons[$cat] ?? '🤝';
 @endphp
 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-5">
