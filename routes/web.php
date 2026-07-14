@@ -36,6 +36,13 @@ use Illuminate\Support\Facades\Storage;
 // Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
 
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'km'])) {
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 Route::get('/', function () {
     $settings = HomeSetting::allKeyed();
     $latestNews = News::published()->latest('published_at')->take(3)->get();

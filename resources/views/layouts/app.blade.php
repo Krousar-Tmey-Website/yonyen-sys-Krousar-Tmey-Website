@@ -24,7 +24,47 @@ function openEmail(email) {
     window.location.href = 'mailto:' + email;
   }
 }
+function changeGTranslate(lang) {
+    document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + window.location.hostname;
+    document.cookie = 'googtrans=/en/' + lang + '; path=/';
+    window.location.reload();
+}
+function getCurrentLang() {
+    let match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
+    if (match) {
+        let parts = match[2].split('/');
+        if (parts.length === 3) return parts[2];
+    }
+    return 'en';
+}
 </script>
+
+<style>
+/* Hide the Google Translate UI completely */
+iframe.goog-te-banner-frame { display: none !important; }
+.goog-te-banner-frame { display: none !important; }
+.goog-logo-link { display: none !important; }
+.goog-te-gadget { color: transparent !important; }
+.VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; } /* New GT classes */
+body > .skiptranslate > iframe.skiptranslate { display: none !important; visibility: hidden !important; }
+
+html { margin-top: 0 !important; top: 0 !important; }
+body { margin-top: 0 !important; top: 0 !important; position: static !important; }
+
+.goog-tooltip { display: none !important; }
+.goog-tooltip:hover { display: none !important; }
+.goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+#google_translate_element { display: none !important; }
+</style>
+
+<div id="google_translate_element"></div>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,km', autoDisplay: false}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 
     {{-- Flash Message Popup --}}
     @if(session('success') || session('info'))
@@ -66,7 +106,7 @@ function openEmail(email) {
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-9">
             <span class="text-white/60 text-xs">{{ $settings['site_tagline'] ?? "Cambodia's first organization helping disadvantaged children since 1991" }}</span>
             <div class="flex items-center gap-5">
-                <a href="{{ route('contact') }}" class="text-white/60 hover:text-white transition-colors text-xs">Contact</a>
+                <a href="{{ route('contact') }}" class="text-white/60 hover:text-white transition-colors text-xs">{{ __('Contact') }}</a>
                 <span class="text-white/20">|</span>
                 <div class="flex items-center gap-3">
                     <a href="{{ $settings['social_facebook'] ?? 'https://www.facebook.com/KrousarThmey' }}" target="_blank" rel="noopener" aria-label="Facebook"
@@ -90,9 +130,10 @@ function openEmail(email) {
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
                     </a>
                 </div>
+
                 <a href="{{ route('donate') }}"
                     class="bg-[#8da83a] text-white px-4 py-1 rounded-full font-semibold hover:bg-[#a3c04a] transition-colors text-xs">
-                    Donate
+                    {{ __('Donate') }}
                 </a>
             </div>
         </div>
@@ -136,7 +177,7 @@ function openEmail(email) {
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
                         <a href="{{ route('about') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
-                            Who We Are
+                            {{ __('Who We Are') }}
                             <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
@@ -148,11 +189,11 @@ function openEmail(email) {
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl">Presentation</a>
-                            <a href="{{ route('about') }}#history" class="dropdown-item">History</a>
-                            <a href="{{ route('about') }}#values" class="dropdown-item">Our Values</a>
-                            <a href="{{ route('about') }}#partners" class="dropdown-item">Partners</a>
-                            <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl">Transparency</a>
+                            <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl">{{ __('Presentation') }}</a>
+                            <a href="{{ route('about') }}#history" class="dropdown-item">{{ __('History') }}</a>
+                            <a href="{{ route('about') }}#values" class="dropdown-item">{{ __('Our Values') }}</a>
+                            <a href="{{ route('about') }}#partners" class="dropdown-item">{{ __('Partners') }}</a>
+                            <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl">{{ __('Transparency') }}</a>
                         </div>
                     </div>
 
@@ -160,7 +201,7 @@ function openEmail(email) {
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
                         <a href="{{ route('programs') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
-                            Our Programs
+                            {{ __('Our Programs') }}
                             <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
@@ -185,7 +226,7 @@ function openEmail(email) {
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
                         <a href="{{ route('involved') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
-                            Get Involved
+                            {{ __('Get Involved') }}
                             <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
@@ -197,20 +238,47 @@ function openEmail(email) {
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">Partnerships</a>
-                            <a href="{{ route('involved') }}#volunteer" class="dropdown-item">Volunteering</a>
-                            <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">Book for Sales</a>
-                            <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">Job Opportunities</a>
+                            <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">{{ __('Partnerships') }}</a>
+                            <a href="{{ route('involved') }}#volunteer" class="dropdown-item">{{ __('Volunteering') }}</a>
+                            <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">{{ __('Book for Sales') }}</a>
+                            <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">{{ __('Job Opportunities') }}</a>
                         </div>
                     </div>
 
-                    <a href="{{ route('news') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">News</a>
-                    <a href="{{ route('resources') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">Resources</a>
-                    <a href="{{ route('contact') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">Contact</a>
+                    <a href="{{ route('news') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('News') }}</a>
+                    <a href="{{ route('resources') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Resources') }}</a>
+                    <a href="{{ route('contact') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Contact') }}</a>
                 </div>
 
                 {{-- CTA + Mobile toggle --}}
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-4">
+                    {{-- Translate Dropdown --}}
+                    <div class="hidden lg:block border-r border-gray-200 pr-4" x-data="{ open: false, lang: getCurrentLang() }">
+                        <div class="relative">
+                            <button @click="open = !open" @click.away="open = false" class="flex items-center gap-2 text-gray-700 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-3 rounded-lg hover:bg-gray-50 border border-gray-100 shadow-sm bg-white">
+                                <img :src="lang === 'km' ? 'https://flagcdn.com/w20/kh.png' : 'https://flagcdn.com/w20/gb.png'" class="w-4 h-auto rounded-sm" alt="Flag">
+                                <span x-text="lang === 'km' ? 'ខ្មែរ' : 'EN'">EN</span>
+                                <svg class="w-3 h-3 transition-transform duration-200 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            
+                            <div x-show="open" 
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="opacity-0 scale-95"
+                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="opacity-100 scale-100"
+                                 x-transition:leave-end="opacity-0 scale-95"
+                                 class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[100] overflow-hidden">
+                                <button @click="changeGTranslate('en')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2">
+                                    <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt="English"> English
+                                </button>
+                                <button @click="changeGTranslate('km')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2">
+                                    <img src="https://flagcdn.com/w20/kh.png" class="w-4 h-auto rounded-sm" alt="Khmer"> ខ្មែរ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="{{ route('donate') }}" class="btn-primary text-sm hidden sm:inline-flex">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -241,19 +309,27 @@ function openEmail(email) {
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="lg:hidden border-t border-gray-100 bg-white">
             <div class="max-w-7xl mx-auto px-6 py-4 space-y-1">
-                <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Who We Are</a>
-                <a href="{{ route('programs') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Our Programs</a>
-                <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Get Involved</a>
-                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">News</a>
-                <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Resources</a>
-                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">Contact</a>
-                <div class="pt-3 pb-1">
-                <a href="{{ route('donate') }}" class="btn-primary w-full justify-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                    Donate Now
-                </a>
+                <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Who We Are') }}</a>
+                <a href="{{ route('programs') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Our Programs') }}</a>
+                <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Get Involved') }}</a>
+                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('News') }}</a>
+                <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Resources') }}</a>
+                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Contact') }}</a>
+                <div class="pt-3 pb-1 border-t border-gray-100 mt-2">
+                    <div class="flex items-center gap-3 mb-4" x-data="{ lang: getCurrentLang() }">
+                        <button @click="changeGTranslate('en')" :class="lang === 'en' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
+                            <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt="English"> EN
+                        </button>
+                        <button @click="changeGTranslate('km')" :class="lang === 'km' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
+                            <img src="https://flagcdn.com/w20/kh.png" class="w-4 h-auto rounded-sm" alt="Khmer"> ខ្មែរ
+                        </button>
+                    </div>
+                    <a href="{{ route('donate') }}" class="btn-primary w-full justify-center py-3">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        {{ __('Donate Now') }}
+                    </a>
                 </div>
             </div>
         </div>
@@ -320,13 +396,13 @@ function openEmail(email) {
 
                 {{-- Organization --}}
                 <div>
-                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Organization</h4>
+                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">{{ __('Organization') }}</h4>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('about') }}" class="text-white/50 hover:text-white text-sm transition-colors">Who We Are</a></li>
-                        <li><a href="{{ route('programs') }}" class="text-white/50 hover:text-white text-sm transition-colors">Our Programs</a></li>
-                        <li><a href="{{ route('news') }}" class="text-white/50 hover:text-white text-sm transition-colors">News</a></li>
-                        <li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">Resources</a></li>
-                        <li><a href="{{ route('contact') }}" class="text-white/50 hover:text-white text-sm transition-colors">Contact</a></li>
+                        <li><a href="{{ route('about') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Who We Are') }}</a></li>
+                        <li><a href="{{ route('programs') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Our Programs') }}</a></li>
+                        <li><a href="{{ route('news') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('News') }}</a></li>
+                        <li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Resources') }}</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Contact') }}</a></li>
                     </ul>
                 </div>
 
@@ -338,16 +414,16 @@ function openEmail(email) {
                         @foreach($footerPrograms as $footerProg)
                         <li><a href="{{ route('programs') }}#{{ $footerProg->slug }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ $footerProg->title }}</a></li>
                         @endforeach
-                        <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">Volunteering</a></li>
-                        <li><a href="{{ route('involved') }}#book-for-sales" class="text-white/50 hover:text-white text-sm transition-colors">Book for Sales</a></li>
-                        <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>
+                        <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Volunteering') }}</a></li>
+                        <li><a href="{{ route('involved') }}#book-for-sales" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Book for Sales') }}</a></li>
+                        <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Donate') }}</a></li>
                     </ul>
 
                 </div>
 
                 {{-- Newsletter --}}
                 <div>
-                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Stay Connected</h4>
+                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">{{ __('Stay Connected') }}</h4>
                     <p class="text-white/50 text-sm mb-4">Subscribe for updates on our work in Cambodia.</p>
                     <form class="flex gap-2" method="POST" action="{{ route('newsletter.store') }}">
                         @csrf
@@ -360,7 +436,7 @@ function openEmail(email) {
                     </form>
                     @error('email') <p class="text-red-300 text-xs mt-2">{{ $message }}</p> @enderror
                     <div class="mt-6 space-y-1.5">
-                        <p class="text-white/30 text-xs uppercase tracking-wider font-medium">Contact</p>
+                        <p class="text-white/30 text-xs uppercase tracking-wider font-medium">{{ __('Contact') }}</p>
                         @php
                             $footerAddress = data_get($settings, 'footer_address', '#58, Street 478, Phnom Penh, Cambodia');
                             $footerPhone = data_get($settings, 'footer_phone', '+855 (0)23 211 955');
@@ -372,7 +448,7 @@ function openEmail(email) {
                     </div>
                     <div class="mt-8 pt-6 border-t border-white/10">
                         <p class="text-white/30 text-xs uppercase tracking-wider font-medium mb-3">
-                            Administration
+                            {{ __('Administration') }}
                         </p>
 
                         <a href="{{ url('/admin/login') }}"
