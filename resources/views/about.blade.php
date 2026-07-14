@@ -28,7 +28,7 @@
                class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
                 Presentation
             </a>
-            <a href="#history"
+            <a href="#values"
                class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
                 Our Values
             </a>
@@ -59,18 +59,22 @@
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16" data-reveal>
             <p class="text-[#2d6fa3] font-bold text-sm uppercase tracking-widest mb-4">Our Values</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Core Values</h2>
+            <h2 class="text-4xl font-bold text-[#2d6fa3] mb-8">Core Values</h2>
+            
+            <p class="text-gray-700 max-w-3xl mx-auto leading-relaxed">
+                Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.
+            </p>
         </div>
 
         @php $valueAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
-        <div class="grid md:grid-cols-3 gap-7 mb-20">
+        <div class="grid md:grid-cols-3 gap-7">
             @forelse($coreValues as $i => $value)
             @php
                 $accent = $valueAccents[$i % count($valueAccents)];
                 $valueFallbackStyle = "background: linear-gradient(135deg, {$accent}, #1a3c6e)";
                 $valueAccentBarStyle = "background: {$accent}";
             @endphp
-            <div class="group bg-white rounded-[28px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden"
+            <a href="{{ route('core-values.show', $value) }}" class="group bg-white rounded-[28px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden block"
                  data-reveal="scale" style="--reveal-delay: {{ $i * 100 }}">
                 <div class="relative h-44 overflow-hidden">
                     @if($value->image_url)
@@ -86,8 +90,11 @@
                 <div class="p-6 text-center">
                     <div class="w-10 h-1 rounded-full mx-auto mb-4 group-hover:w-16 transition-all duration-300" style="{{ $valueAccentBarStyle }}"></div>
                     <p class="text-gray-500 text-sm leading-relaxed">{{ $value->description }}</p>
+                    @if($value->supporting_description)
+                    <p class="text-gray-400 text-xs mt-2 line-clamp-2">{{ $value->supporting_description }}</p>
+                    @endif
                 </div>
-            </div>
+            </a>
             @empty
             <p class="text-gray-400 text-center py-8 md:col-span-3">No values listed yet.</p>
             @endforelse
@@ -98,7 +105,7 @@
 {{-- ========================================================
      OUR HISTORY
      ======================================================== --}}
-<section id="history" class="py-20 bg-white scroll-mt-20">
+<section id="history" class="pt-10 pb-20 bg-white scroll-mt-20">
     <div class="max-w-6xl mx-auto px-6">
         {{-- Header --}}
         <div class="text-center mb-16" data-reveal>
@@ -112,9 +119,6 @@
         </div>
 
         @php
-            // Flatten each DB row into up to two timeline entries (one per filled
-            // text field), so we can alternate sides purely by position, regardless
-            // of whether the text came from the Left or Right Column Text field.
             $timelineItems = [];
             foreach ($historyEvents as $event) {
                 if ($event->left_text) {
@@ -130,10 +134,7 @@
         @endphp
 
         <div class="relative">
-            {{-- Vertical timeline line - centered, soft gold --}}
             <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#e8d7ae] via-[#c9a45c] to-[#e8d7ae] hidden md:block"></div>
-
-            {{-- Open ring marker at the very top of the line --}}
             <div class="hidden md:flex justify-center mb-8">
                 <div class="relative z-10 w-4 h-4 rounded-full border-2 border-[#c9a45c] bg-white"></div>
             </div>
@@ -146,7 +147,6 @@
                     $stagger = $loop->index % 2 === 1 ? 'md:mt-10' : '';
                 @endphp
                 <div class="relative {{ $stagger }}" data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 70, 350) }}">
-                    {{-- Connector dot on the center line --}}
                     <div class="hidden md:flex justify-center absolute left-1/2 -translate-x-1/2 top-10 z-10">
                         <div class="w-3 h-3 rounded-full bg-[#c9a45c] ring-4 ring-white shadow"></div>
                     </div>
@@ -155,7 +155,6 @@
                         @if($onLeft)
                         <div class="relative mb-8 md:mb-0 md:pr-8">
                             <div class="hidden md:block absolute right-8 top-12 w-8 h-px bg-[#c9a45c]/50"></div>
-                            {{-- Foundation flourish on the very first milestone --}}
                             @if($loop->first)
                             <p class="max-w-sm mx-auto md:mx-0 md:ml-auto text-right text-[#a67c3d] text-xs font-semibold uppercase tracking-[0.15em] mb-2">The Beginning</p>
                             @endif
@@ -200,7 +199,6 @@
                 @endforelse
             </div>
 
-            {{-- Present-day impact capstone --}}
             @if(count($timelineItems) > 0)
             <div class="relative mt-16 pt-14 border-t border-[#e8d7ae] text-center" data-reveal="scale">
                 <div class="hidden md:flex justify-center absolute left-1/2 -translate-x-1/2 -top-2.5 z-10">
@@ -220,14 +218,13 @@
 {{-- ========================================================
      AWARDS
      ======================================================== --}}
-<section id="awards" class="py-20 bg-white scroll-mt-20">
+<section id="awards" class="pt-10 pb-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Recognition</p>
             <h2 class="text-4xl font-bold text-[#2d6fa3]">Awards</h2>
         </div>
 
-        {{-- Awards from DB --}}
         @if($awards->isNotEmpty())
         @php $awardAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -260,7 +257,6 @@
                     <p class="text-gray-400 text-xs leading-relaxed mb-3">{{ $award->description }}</p>
                     @endif
                     
-                    {{-- Link Buttons --}}
                     @if($award->website_url || $award->article_url || $award->video_url)
                     <div class="flex flex-wrap gap-2 justify-center">
                         @if($award->website_url)
@@ -307,7 +303,6 @@
             </p>
         </div>
 
-        {{-- Search & Filter Controls --}}
         <div class="mb-10 max-w-2xl mx-auto space-y-4">
             <div class="relative">
                 <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -326,7 +321,6 @@
             </div>
         </div>
 
-        {{-- Partnerships with Cambodian Authorities --}}
         <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8"
              x-show="category === 'all' || category === 'cat_Authorities'">
             <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
@@ -352,7 +346,6 @@
             </div>
         </div>
 
-        {{-- Dynamic partner category sections from DB --}}
         @php
             $categoryDisplayConfig = [
                 'Authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
@@ -396,113 +389,6 @@
             @endif
         @endforeach
 
-        {{-- CTA --}}
-        <div class="text-center bg-[#2d6fa3] rounded-3xl p-10" data-reveal="scale">
-            <p class="text-white/80 text-lg mb-2">Many thanks to all our partners for their support!</p>
-            <h3 class="text-white font-bold text-2xl mb-6">Do you wish to get involved with Krousar Thmey?</h3>
-            <a href="{{ route('involved') }}" class="btn-primary text-base">Learn More</a>
-        </div>
-    </div>
-</section>
-
-        <div class="text-center mb-12" data-reveal>
-            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Partners</h2>
-            <p class="text-gray-500 mt-4 max-w-3xl mx-auto text-sm leading-relaxed">
-                Since its creation, Krousar Thmey has set up long-term partnerships with Cambodian and international organizations. Donors can financially support a program or project of their choice. Technical partners allow us to benefit from specific expertise.
-            </p>
-        </div>
-
-        {{-- Search & Filter Controls --}}
-        <div class="mb-10 max-w-2xl mx-auto space-y-4">
-            <div class="relative">
-                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <input type="text" x-model="search" placeholder="Search partners..."
-                       class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/20 transition-all outline-none text-sm bg-white">
-            </div>
-            <div class="flex flex-wrap justify-center gap-2">
-                <button @click="category = 'all'"
-                        :class="category === 'all' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">All Partners</button>
-                @foreach ($partnersByCategory as $cat => $partners)
-                    <button @click="category = 'cat_{{ $cat }}'"
-                            :class="category === 'cat_{{ $cat }}' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                            class="px-5 py-2 rounded-full text-sm font-medium transition-all">{{ $cat }}</button>
-                @endforeach
-            </div>
-        </div>
-
-        {{-- Partnerships with Cambodian Authorities --}}
-        <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8"
-             x-show="category === 'all' || category === 'cat_Authorities'">
-            <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
-                <span class="text-2xl">🇰🇭</span> Partnerships with the Cambodian Authorities
-            </h3>
-            <p class="text-gray-500 text-sm leading-relaxed mb-6">
-                Krousar Thmey constantly seeks to develop and maintain lasting relations with the Cambodian authorities. «&nbsp;Memorandums of understanding&nbsp;» are regularly renewed between Krousar Thmey and governing authorities:
-            </p>
-            <div class="grid md:grid-cols-3 gap-4 mb-6">
-                @foreach([
-                    ['ministry'=>'Ministry of Education, Youth and Sport','prog'=>'Education for Deaf or Blind Children Program'],
-                    ['ministry'=>'Ministry of Social Affairs',            'prog'=>'Child Welfare Program'],
-                    ['ministry'=>'Ministry of Culture and Fine Arts',     'prog'=>'Cultural and Artistic Development Program'],
-                ] as $mou)
-                <div class="bg-[#2d6fa3]/5 border border-[#2d6fa3]/15 rounded-xl p-5">
-                    <p class="text-[#2d6fa3] font-bold text-sm mb-1">{{ $mou['ministry'] }}</p>
-                    <p class="text-gray-500 text-xs">{{ $mou['prog'] }}</p>
-                </div>
-                @endforeach
-            </div>
-            <div class="bg-[#8da83a]/10 border border-[#8da83a]/20 rounded-xl p-4 text-sm text-gray-600">
-                Whether for an inauguration or to show their support, H.M. the King, the Prime Minister and his wife, as well as members of the royal family, regularly visit Krousar Thmey's structures. From 2020 onwards, Krousar Thmey works collaboratively with the Ministry of Education, Youth and Sport on the Education for Deaf or Blind Children Program.
-            </div>
-        </div>
-
-        {{-- Dynamic partner category sections from DB --}}
-        @php
-            $categoryDisplayConfig = [
-                'Authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
-                'Organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
-                'Companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'bgClass' => 'bg-white'],
-                'Towns' => ['title' => 'Towns and Municipalities — Switzerland', 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-[#2d6fa3]/5'],
-            ];
-        @endphp
-
-        @foreach ($partnersByCategory as $cat => $partners)
-            @if ($partners->isNotEmpty())
-                @php $config = $categoryDisplayConfig[$cat] ?? ['title' => $cat, 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white']; @endphp
-                <div class="{{ $config['bgClass'] }} rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
-                     x-show="category === 'all' || category === 'cat_{{ $cat }}'">
-                    <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
-                        @if ($cat === 'Towns')
-                            <span>🇨🇭</span>
-                        @endif
-                        {{ $config['title'] }}
-                    </h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                        @foreach ($partners as $partner)
-                            @php $ps = json_encode(strtolower($partner->name)); @endphp
-                            <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#f8f9fc] hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
-                                 x-show="search === '' || {{ $ps }}.includes(search.toLowerCase())">
-                                @if ($partner->logo_url)
-                                    <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
-                                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}"
-                                             class="max-w-full max-h-full object-contain p-2">
-                                    </div>
-                                @else
-                                    <div class="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                        <span class="text-lg font-bold text-blue-500">{{ Str::substr($partner->name, 0, 1) }}</span>
-                                    </div>
-                                @endif
-                                <span class="text-sm font-medium text-gray-700 leading-tight">{{ $partner->name }}</span>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-        @endforeach
-
-        {{-- CTA --}}
         <div class="text-center bg-[#2d6fa3] rounded-3xl p-10" data-reveal="scale">
             <p class="text-white/80 text-lg mb-2">Many thanks to all our partners for their support!</p>
             <h3 class="text-white font-bold text-2xl mb-6">Do you wish to get involved with Krousar Thmey?</h3>
@@ -523,7 +409,6 @@
 
         <div class="grid lg:grid-cols-2 gap-12 mb-16">
 
-            {{-- Financial Transparency --}}
             <div data-reveal="left">
                 <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
@@ -555,7 +440,6 @@
                 </div>
             </div>
 
-            {{-- Audited Statements --}}
             <div data-reveal="right">
                 <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-[#8da83a] flex items-center justify-center flex-shrink-0">
@@ -584,7 +468,6 @@
             </div>
         </div>
 
-        {{-- Origins of Funds --}}
         <div class="bg-[#f8f9fc] rounded-3xl p-8 lg:p-10 border border-gray-100" data-reveal>
             <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-[#1d4e7a] flex items-center justify-center flex-shrink-0">

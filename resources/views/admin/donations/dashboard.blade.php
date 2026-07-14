@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
 
+@push('styles')
+    @vite(['resources/css/admin-donations.css'])
+@endpush
+
 @section('title', 'Donation Dashboard')
 @section('page-title', 'Donation Dashboard')
 @section('breadcrumb', 'Monitor donation statistics and fundraising performance')
@@ -308,4 +312,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+@vite(['resources/js/admin-donations.js'])
 @endpush
