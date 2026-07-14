@@ -17,6 +17,7 @@ class Donation extends Model
         'DonationID',
         'DonorID',
         'DonationAmount',
+        'DonationType',
         'DonationDate',
         'PaymentMethod',
         'IsRecurring',
@@ -26,6 +27,7 @@ class Donation extends Model
         'Currency',
         'TransactionID',
         'Status',
+        'Notes',
     ];
 
     protected function casts(): array
