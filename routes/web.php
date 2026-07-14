@@ -272,13 +272,13 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('presentation', [Admin\PresentationController::class, 'update'])->name('presentation.update');
     Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show'])->parameters(['presentation-slides' => 'slide']);
     Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show'])->parameters(['principle-slides' => 'slide']);
-    Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create']);
-    Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
+    Route::resource('partners', Admin\PartnerController::class)->except(['show']);
+    Route::resource('awards', Admin\AwardController::class)->except(['show']);
     Route::resource('history-events', Admin\HistoryEventController::class)
         ->except(['show', 'create'])
         ->parameters(['history-events' => 'historyEvent']);
     Route::resource('core-values', Admin\CoreValueController::class)
-        ->except(['show', 'create', 'edit'])
+        ->except(['show', 'edit'])
         ->parameters(['core-values' => 'coreValue']);
 
     // Worldwide Partners
@@ -286,7 +286,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->parameters(['worldwide-partners' => 'worldwidePartner']);
 
     Route::resource('transparency', Admin\TransparencyController::class)
-        ->except(['show', 'create'])
+        ->except(['show'])
         ->parameters(['transparency' => 'report']);
 
     // Reports — Activity Logs (must be before reports resource to avoid route collision)

@@ -58,6 +58,18 @@ class PartnerController extends Controller
     }
 
     /**
+     * Show the page to create a new partner.
+     */
+    public function create()
+    {
+        $partnerCategoryModels = PartnerCategory::orderBy('name')->get();
+
+        return view('admin.partners.create', [
+            'categories' => $partnerCategoryModels,
+        ]);
+    }
+
+    /**
      * Store a new partner.
      */
     public function store(StorePartnerRequest $request)
