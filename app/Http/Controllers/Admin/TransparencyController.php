@@ -16,6 +16,11 @@ class TransparencyController extends Controller
         return view('admin.transparency.index', compact('reports'));
     }
 
+    public function create()
+    {
+        return view('admin.transparency.create');
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -66,6 +71,11 @@ class TransparencyController extends Controller
         $report->update($data);
 
         return redirect()->route('admin.transparency.index')->with('success', 'Report updated.');
+    }
+
+    public function edit(AnnualReport $report)
+    {
+        return view('admin.transparency.edit', compact('report'));
     }
 
     public function destroy(AnnualReport $report)

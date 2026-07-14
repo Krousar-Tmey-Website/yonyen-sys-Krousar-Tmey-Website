@@ -45,6 +45,14 @@ class AwardController extends Controller
     }
 
     /**
+     * Show the page to create a new award.
+     */
+    public function create()
+    {
+        return view('admin.awards.create');
+    }
+
+    /**
      * Show edit form.
      */
     public function edit(Award $award)
