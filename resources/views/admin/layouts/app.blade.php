@@ -7,6 +7,7 @@
     <title>@yield('title', 'Admin') — Krousar Thmey</title>
     @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @stack('styles')
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.svg') }}">
     <style>
         [x-cloak] {
             display: none !important;
