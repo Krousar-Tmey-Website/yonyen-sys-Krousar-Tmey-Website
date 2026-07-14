@@ -120,9 +120,6 @@ function openEmail(email) {
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     {{-- Fallback if image not yet placed --}}
                     <div class="hidden items-center gap-3">
-                        <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-[#2d6fa3] flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">KT</span>
-                        </div>
                         <div>
                             <div class="text-[#2d6fa3] font-bold text-lg leading-tight">{{ $siteName }}</div>
                             <div class="text-[#8da83a] text-xs font-medium">{{ $siteTagline }}</div>
