@@ -93,8 +93,18 @@ Route::get('/our-programs', function () {
     $bannerTitle = HomeSetting::getValue('programs_banner_title', 'Our Programs');
     $bannerSubtitle = HomeSetting::getValue('programs_banner_subtitle', 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.');
     $bannerImage = HomeSetting::getValue('programs_banner_image', '');
+    
+    $additionalLabel = HomeSetting::getValue('programs_additional_label', 'Cross-cutting Work');
+    $additionalTitle = HomeSetting::getValue('programs_additional_title', 'Additional Programs');
+    
+    $infoLabel = HomeSetting::getValue('programs_info_label', 'Learn More');
+    $infoTitle = HomeSetting::getValue('programs_info_title', 'Additional Information');
+    
+    $ctaLabel = HomeSetting::getValue('programs_cta_label', 'Support Our Mission');
+    $ctaTitle = HomeSetting::getValue('programs_cta_title', 'Help Children in Cambodia');
+    $ctaSubtitle = HomeSetting::getValue('programs_cta_subtitle', 'Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.');
 
-    return view('programs', compact('programs', 'bannerTitle', 'bannerSubtitle', 'bannerImage'));
+    return view('programs', compact('programs', 'bannerTitle', 'bannerSubtitle', 'bannerImage', 'additionalLabel', 'additionalTitle', 'infoLabel', 'infoTitle', 'ctaLabel', 'ctaTitle', 'ctaSubtitle'));
 })->name('programs');
 
 Route::get('/our-programs/{slug}', function ($slug) {

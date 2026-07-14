@@ -15,7 +15,9 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'Intersect
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-revealed');
-                revealObserver.unobserve(entry.target);
+            } else {
+                // Remove the class when scrolled out of view so it animates again
+                entry.target.classList.remove('is-revealed');
             }
         });
     }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
