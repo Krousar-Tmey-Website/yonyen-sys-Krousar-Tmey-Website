@@ -1,9 +1,5 @@
 @extends('admin.layouts.app')
 
-@push('styles')
-    @vite(['resources/css/admin-donations.css'])
-@endpush
-
 @section('title', 'Donation Dashboard')
 @section('page-title', 'Donation Dashboard')
 @section('breadcrumb', 'Monitor donation statistics and fundraising performance')
@@ -206,5 +202,5 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-@vite(['resources/js/admin-donations.js'])
+
 @endpush
