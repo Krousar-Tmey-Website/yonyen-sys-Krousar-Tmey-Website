@@ -17,7 +17,7 @@
             ['label' => 'Total Donations', 'value' => number_format($totalDonations, 2) . ' $', 'color' => 'bg-[#2d6fa3]'],
             ['label' => 'Total Donors',    'value' => number_format($totalDonors),             'color' => 'bg-[#8da83a]'],
             ['label' => 'Avg. Donation',   'value' => number_format($avgDonation, 2) . ' $',   'color' => 'bg-[#1d4e7a]'],
-            ['label' => 'Recurring Gifts', 'value' => $recurringCount . ' / ' . $totalCount,   'color' => 'bg-[#e8a020]'],
+            ['label' => 'In-Kind Gifts',   'value' => $nonMoneyCount . ' / ' . $totalCount,   'color' => 'bg-[#e8a020]'],
         ];
     @endphp
     @foreach($statCards as $i => $card)
@@ -150,7 +150,6 @@
                             <th class="px-6 py-3 text-left">Method</th>
                             <th class="px-6 py-3 text-left">Status</th>
                             <th class="px-6 py-3 text-left">Date</th>
-                            <th class="px-6 py-3 text-left">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
@@ -193,26 +192,6 @@
                             <td class="px-6 py-3.5 text-xs text-gray-400 whitespace-nowrap">
                                 {{ $donation->DonationDate ? $donation->DonationDate->format('d M Y') : '—' }}
                             </td>
-                            <td class="px-6 py-3.5">
-                                <div class="flex items-center gap-2">
-                                    <button type="button" class="action-icon-btn view" title="View donation">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="action-icon-btn edit" title="Edit donation">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="action-icon-btn delete" title="Delete donation">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -227,5 +206,111 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const canvas = document.getElementById('monthlyChart');
+    if (!canvas) return;
+
+    const months   = JSON.parse(canvas.dataset.months);
+    const totals   = JSON.parse(canvas.dataset.totals);
+    const counts   = JSON.parse(canvas.dataset.counts);
+
+    if (!months || months.length === 0) return;
+
+    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const labels = months.map(m => monthNames[m - 1] || m);
+
+    new Chart(canvas, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Amount ($)',
+                    data: totals,
+                    backgroundColor: 'rgba(45, 111, 163, 0.7)',
+                    borderColor: '#2d6fa3',
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    yAxisID: 'y',
+                },
+                {
+                    label: 'Count',
+                    data: counts,
+                    backgroundColor: 'rgba(141, 168, 58, 0.6)',
+                    borderColor: '#8da83a',
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    yAxisID: 'y1',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 16,
+                        font: { size: 12 },
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#1e293b',
+                    titleFont: { size: 13 },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    cornerRadius: 8,
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount ($)',
+                        color: '#64748b',
+                        font: { size: 11 },
+                    },
+                    grid: { color: '#f1f5f9' },
+                    ticks: {
+                        color: '#94a3b8',
+                        font: { size: 11 },
+                    }
+                },
+                y1: {
+                    beginAtZero: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Count',
+                        color: '#64748b',
+                        font: { size: 11 },
+                    },
+                    grid: { display: false },
+                    ticks: {
+                        color: '#94a3b8',
+                        font: { size: 11 },
+                        stepSize: 1,
+                    }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        color: '#94a3b8',
+                        font: { size: 11 },
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
 @vite(['resources/js/admin-donations.js'])
 @endpush
