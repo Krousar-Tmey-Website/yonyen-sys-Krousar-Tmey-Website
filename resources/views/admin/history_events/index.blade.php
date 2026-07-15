@@ -43,6 +43,7 @@
             this.removeCurrentImage = false;
             this.currentImageUrl = null;
             this.errors = {};
+            this.submitting = false;
             this.showModal = true;
             // Reset file input
             this.$nextTick(() => {
@@ -66,6 +67,7 @@
             this.removeCurrentImage = false;
             this.currentImageUrl = eventData.image_url ?? null;
             this.errors = {};
+            this.submitting = false;
             this.showModal = true;
             this.$nextTick(() => {
                 const fileInput = document.getElementById('modal-image-input');
@@ -79,6 +81,7 @@
             this.editing = false;
             this.editingId = null;
             this.errors = {};
+            this.submitting = false;
         },
 
         handleImageUpload(event) {
@@ -323,7 +326,9 @@
                             </label>
                             <textarea x-model="form.left_text" rows="2"
                                       class="form-input text-sm resize-none"
+                                      :class="errors.left_text ? 'form-input-error' : ''"
                                       placeholder="Main event description..."></textarea>
+                            <p class="text-xs text-red-500 mt-1" x-show="errors.left_text" x-text="errors.left_text" x-cloak></p>
                         </div>
 
                         {{-- RIGHT COLUMN TEXT --}}
@@ -333,7 +338,9 @@
                             </label>
                             <textarea x-model="form.right_text" rows="2"
                                       class="form-input text-sm resize-none"
+                                      :class="errors.right_text ? 'form-input-error' : ''"
                                       placeholder="Second event for same year..."></textarea>
+                            <p class="text-xs text-red-500 mt-1" x-show="errors.right_text" x-text="errors.right_text" x-cloak></p>
                         </div>
                     </div>
                     <p class="text-xs text-gray-400 -mt-2">At least one of Left or Right Column Text is required.</p>
