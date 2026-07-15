@@ -11,47 +11,38 @@
     $description = $item['description'] ?? $item['text'] ?? null;
     $link        = $item['link'] ?? null;
     $delay       = min($index * 90, 400);
-
-    // Break the uniform grid: cycle image size/shape and alternate a subtle tilt per item.
-    $sizeVariants = [
-        ['width' => 'xl:w-[420px]', 'aspect' => 'aspect-[4/3]'],
-        ['width' => 'xl:w-[480px]', 'aspect' => 'aspect-square'],
-        ['width' => 'xl:w-[360px]', 'aspect' => 'aspect-[3/4]'],
-    ];
-    $variant = $sizeVariants[$index % 3];
-    $tilt = $index % 2 === 0 ? '-rotate-2' : 'rotate-2';
 @endphp
 
-<div class="xl:grid xl:grid-cols-2 xl:gap-16 xl:items-center">
+<div class="bg-white rounded-lg shadow-md overflow-hidden w-full mx-auto md:mx-0 md:max-w-md {{ $isLeft ? 'md:ml-auto md:mr-0' : 'md:mr-auto md:ml-0' }}"
+     data-reveal="scale" style="--reveal-delay: {{ $delay }}">
     @if($image)
-    <div class="relative w-full md:w-[320px] {{ $variant['width'] }} mx-auto {{ $isLeft ? 'xl:order-1 xl:ml-auto xl:mr-0' : 'xl:order-2 xl:mr-auto xl:ml-0' }}"
-         data-reveal="scale" style="--reveal-delay: {{ $delay }}">
-        <div class="w-full {{ $variant['aspect'] }} overflow-hidden border-[6px] border-white rounded-[4px] shadow-lg {{ $tilt }} transition-all duration-300 hover:shadow-2xl hover:rotate-0">
-            <img src="{{ $image }}" alt="{{ $title ?? 'Historical photo' }}"
-                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-[1.03]">
+    <div class="relative w-full">
+        <div class="w-full aspect-[4/3] overflow-hidden bg-gray-100">
+            <img src="{{ $image }}" alt="{{ $title ?? ($year ? 'Historical photo, '.$year : 'Historical photo') }}"
+                 class="w-full h-full object-cover">
         </div>
 
         @if($year)
-        <div class="absolute -bottom-6 {{ $isLeft ? 'right-6' : 'left-6' }} w-[78px] h-[78px] rounded-full bg-[#C89B4D] border-[5px] border-white shadow-lg flex items-center justify-center"
-             data-reveal="scale" style="--reveal-delay: {{ $delay + 160 }}">
-            <span class="text-[24px] font-bold text-black leading-none">{{ $year }}</span>
+        <div class="absolute top-0 inset-x-0 bg-[#1d4e7a]/90 px-4 py-2">
+            <span class="block text-white font-bold text-sm tracking-wide {{ $isLeft ? 'text-right' : 'text-left' }}">{{ $year }}</span>
         </div>
         @endif
     </div>
     @endif
 
-    <div class="max-w-[460px] mx-auto text-center mt-5 xl:mt-0 {{ $isLeft ? 'xl:order-2' : 'xl:order-1' }}"
-         data-reveal style="--reveal-delay: {{ $delay + 40 }}">
+    <div class="pt-5 pb-5 px-5">
         @if($title)
-        <h3 class="font-serif text-[36px] font-bold text-[#1F2A44] leading-tight mb-[14px]">{{ $title }}</h3>
+        <h3 class="font-serif text-xl font-bold text-[#1F2A44] mb-2">{{ $title }}</h3>
         @endif
 
         @if($description)
-        <p class="text-lg leading-[1.8] text-[#5E6778] mb-6">{{ $description }}</p>
+        <p class="text-gray-600 text-sm leading-relaxed">{{ $description }}</p>
         @endif
 
         @if($link)
-        <x-learn-more-button :href="$link">Learn More</x-learn-more-button>
+        <div class="mt-4">
+            <x-learn-more-button :href="$link">Learn More</x-learn-more-button>
+        </div>
         @endif
     </div>
 </div>
