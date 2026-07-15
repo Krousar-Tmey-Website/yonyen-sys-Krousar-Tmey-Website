@@ -165,6 +165,7 @@
 [data-reveal="left"]  { transform: translateX(-36px); }
 [data-reveal="right"] { transform: translateX(36px); }
 [data-reveal="scale"] { transform: translateY(14px) scale(0.94); }
+[data-reveal="line"]  { transform: scaleY(0); transform-origin: top; }
 [data-reveal].is-revealed { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {

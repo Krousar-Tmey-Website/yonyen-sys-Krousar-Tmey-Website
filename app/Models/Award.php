@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Award extends Model
 {
-    protected $fillable = ['title', 'recipient', 'organization', 'description', 'image', 'sort_order', 'is_active', 'website_url', 'article_url', 'video_url'];
+    protected $fillable = ['title', 'year', 'recipient', 'organization', 'description', 'image', 'sort_order', 'is_active', 'website_url', 'article_url', 'video_url'];
+
+    protected $appends = ['image_url'];
 
     protected function casts(): array
     {

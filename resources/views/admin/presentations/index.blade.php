@@ -646,8 +646,8 @@
                     
                     <div class="grid grid-cols-1 gap-4">
                         <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#1877F2] flex items-center justify-center">
-                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg')) }}" alt="Facebook" class="w-6 h-6 filter brightness-0 invert">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden border border-gray-200">
+                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg')) }}" alt="Facebook" class="w-full h-full object-cover">
                             </div>
                             <div class="flex-1">
                                 <label class="block text-xs font-medium text-gray-600 mb-1">Facebook Icon & Link</label>
@@ -659,8 +659,8 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#1DA1F2] flex items-center justify-center">
-                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg')) }}" alt="Twitter" class="w-6 h-6 filter brightness-0 invert">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden border border-gray-200">
+                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg')) }}" alt="Twitter" class="w-full h-full object-cover">
                             </div>
                             <div class="flex-1">
                                 <label class="block text-xs font-medium text-gray-600 mb-1">Twitter Icon & Link</label>
@@ -672,8 +672,8 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#0A66C2] flex items-center justify-center">
-                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg')) }}" alt="LinkedIn" class="w-6 h-6 filter brightness-0 invert">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden border border-gray-200">
+                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg')) }}" alt="LinkedIn" class="w-full h-full object-cover">
                             </div>
                             <div class="flex-1">
                                 <label class="block text-xs font-medium text-gray-600 mb-1">LinkedIn Icon & Link</label>
@@ -685,8 +685,8 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center">
-                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg')) }}" alt="Share" class="w-6 h-6 filter brightness-0 invert">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden border border-gray-200">
+                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg')) }}" alt="Share" class="w-full h-full object-cover">
                             </div>
                             <div class="flex-1">
                                 <label class="block text-xs font-medium text-gray-600 mb-1">Share Icon</label>

@@ -270,7 +270,7 @@
             <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" @click="closeModal()"></div>
 
             {{-- Modal panel --}}
-            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto z-10"
+            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[92vh] overflow-y-auto z-10"
                  @click.stop
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 scale-95"
@@ -280,95 +280,88 @@
                  x-transition:leave-end="opacity-0 scale-95">
 
                 {{-- Header --}}
-                <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
-                    <h3 class="font-bold text-gray-800" x-text="modalTitle"></h3>
+                <div class="sticky top-0 bg-white border-b border-gray-100 px-5 py-3 flex items-center justify-between rounded-t-2xl z-10">
+                    <h3 class="font-bold text-gray-800 text-sm" x-text="modalTitle"></h3>
                     <button @click="closeModal()" type="button"
-                            class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
+                        <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
                 </div>
 
                 {{-- Form --}}
-                <form @submit.prevent="submitForm()" class="p-6 space-y-5" enctype="multipart/form-data">
+                <form @submit.prevent="submitForm()" class="p-5 space-y-3" enctype="multipart/form-data">
                     @csrf
 
-                    {{-- YEAR --}}
-                    <div>
-                        <label class="form-label">
-                            Year <span class="text-red-400 font-normal">*</span>
-                        </label>
-                        <input type="text" x-model="form.year" required
-                               autocomplete="off"
-                               class="form-input"
-                               :class="errors.year ? 'form-input-error' : ''"
-                               placeholder="e.g. 1991">
-                        <p class="text-xs text-red-500 mt-1.5" x-show="errors.year" x-text="errors.year" x-cloak></p>
-                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        {{-- YEAR --}}
+                        <div>
+                            <label class="text-xs font-medium text-gray-600">
+                                Year <span class="text-red-400 font-normal">*</span>
+                            </label>
+                            <input type="text" x-model="form.year" required
+                                   autocomplete="off"
+                                   class="form-input text-sm"
+                                   :class="errors.year ? 'form-input-error' : ''"
+                                   placeholder="e.g. 1991">
+                            <p class="text-xs text-red-500 mt-1" x-show="errors.year" x-text="errors.year" x-cloak></p>
+                        </div>
 
-                    {{-- LEFT COLUMN TEXT --}}
-                    <div>
-                        <label class="form-label">
-                            Left Column Text <span class="text-gray-400 font-normal">(optional)</span>
-                        </label>
-                        <textarea x-model="form.left_text" rows="3"
-                                  class="form-input resize-none"
-                                  placeholder="Main event description..."></textarea>
-                    </div>
-
-                    {{-- RIGHT COLUMN TEXT --}}
-                    <div>
-                        <label class="form-label">
-                            Right Column Text <span class="text-gray-400 font-normal">(optional)</span>
-                        </label>
-                        <textarea x-model="form.right_text" rows="3"
-                                  class="form-input resize-none"
-                                  placeholder="Second event for same year..."></textarea>
-                        <p class="text-xs text-gray-400 mt-1.5">At least one of Left or Right Column Text is required.</p>
+                        {{-- SORT ORDER --}}
+                        <div>
+                            <label class="text-xs font-medium text-gray-600">Order</label>
+                            <input type="number" x-model="form.sort_order" class="form-input text-sm">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
-                        {{-- SORT ORDER --}}
+                        {{-- LEFT COLUMN TEXT --}}
                         <div>
-                            <label class="form-label">Order</label>
-                            <input type="number" x-model="form.sort_order" class="form-input">
+                            <label class="text-xs font-medium text-gray-600">
+                                Left Column Text <span class="text-gray-400 font-normal">(optional)</span>
+                            </label>
+                            <textarea x-model="form.left_text" rows="2"
+                                      class="form-input text-sm resize-none"
+                                      placeholder="Main event description..."></textarea>
                         </div>
 
-                        {{-- ACTIVE --}}
-                        <div class="flex items-end pb-1.5">
-                            <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2.5 rounded-xl border border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-white transition-all duration-150 w-full">
-                                <input type="checkbox" x-model="form.is_active"
-                                       class="w-4 h-4 accent-[#2d6fa3] cursor-pointer">
-                                <span class="text-xs font-semibold text-gray-600">Active</span>
+                        {{-- RIGHT COLUMN TEXT --}}
+                        <div>
+                            <label class="text-xs font-medium text-gray-600">
+                                Right Column Text <span class="text-gray-400 font-normal">(optional)</span>
                             </label>
+                            <textarea x-model="form.right_text" rows="2"
+                                      class="form-input text-sm resize-none"
+                                      placeholder="Second event for same year..."></textarea>
                         </div>
                     </div>
+                    <p class="text-xs text-gray-400 -mt-2">At least one of Left or Right Column Text is required.</p>
+
+                    {{-- ACTIVE --}}
+                    <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2 rounded-xl border border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-white transition-all duration-150 w-fit">
+                        <input type="checkbox" x-model="form.is_active"
+                               class="w-4 h-4 accent-[#2d6fa3] cursor-pointer">
+                        <span class="text-xs font-semibold text-gray-600">Active</span>
+                    </label>
 
                     {{-- IMAGE --}}
                     <div>
-                        <label class="form-label">Event Image</label>
-                        <p class="text-xs text-gray-400 mb-2.5">PNG, JPG or SVG (max 2MB)</p>
+                        <label class="text-xs font-medium text-gray-600">Event Image <span class="text-gray-400 font-normal">(PNG, JPG or SVG, max 2MB)</span></label>
 
                         <label for="modal-image-input" id="modal-image-dropzone"
-                               class="group flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer bg-gray-50 hover:bg-[#2d6fa3]/5 hover:border-[#2d6fa3] transition-all duration-200">
-                            <div class="flex flex-col items-center justify-center" id="modal-image-preview-placeholder">
-                                <div class="w-11 h-11 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center mb-2.5 group-hover:scale-110 group-hover:border-[#2d6fa3]/30 transition-all duration-200">
-                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1117.9 9H18a4 4 0 010 8h-1m-4-4l-3-3m0 0l-3 3m3-3v12" />
-                                    </svg>
-                                </div>
-                                <p class="text-sm font-semibold text-[#2d6fa3]">Click to upload image</p>
-                                <p class="text-xs text-gray-400 mt-0.5">or drag and drop — PNG, JPG, SVG</p>
+                               class="group flex items-center justify-center w-full h-16 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-[#2d6fa3]/5 hover:border-[#2d6fa3] transition-all duration-200 mt-1">
+                            <div class="flex items-center gap-2" id="modal-image-preview-placeholder">
+                                <svg class="w-4 h-4 text-gray-400 group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1117.9 9H18a4 4 0 010 8h-1m-4-4l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                                <p class="text-xs font-semibold text-[#2d6fa3]">Click to upload or drag and drop</p>
                             </div>
-                            <div class="hidden flex-col items-center justify-center gap-1.5" id="modal-image-selected">
-                                <div class="w-11 h-11 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <p class="text-sm font-medium text-gray-700 px-4 text-center truncate max-w-full" id="modal-image-filename"></p>
-                                <p class="text-xs text-[#2d6fa3]">Click to choose a different file</p>
+                            <div class="hidden items-center gap-2" id="modal-image-selected">
+                                <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <p class="text-xs font-medium text-gray-700 truncate max-w-[240px]" id="modal-image-filename"></p>
                             </div>
                             <input id="modal-image-input" type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
                                    class="hidden" @change="handleImageUpload($event)">
@@ -377,24 +370,30 @@
 
                         {{-- Current image (edit mode) --}}
                         <template x-if="editing && currentImageUrl">
-                            <div class="mt-4 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl p-3">
-                                <div class="w-12 h-12 bg-white rounded-lg border border-gray-100 flex items-center justify-center overflow-hidden">
-                                    <img :src="currentImageUrl" class="max-w-full max-h-full object-contain p-1">
+                            <div class="mt-2 flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg p-2">
+                                <div class="w-8 h-8 bg-white rounded border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                    <img :src="currentImageUrl" class="max-w-full max-h-full object-contain">
                                 </div>
                                 <p class="text-xs text-gray-400">Current image</p>
                                 <label class="flex items-center gap-1.5 text-xs text-gray-500 ml-auto cursor-pointer">
-                                    <input type="checkbox" x-model="removeCurrentImage" class="rounded border-gray-300">
+                                    <input type="checkbox" x-model="removeCurrentImage" class="w-3.5 h-3.5 rounded border-gray-300">
                                     Remove
                                 </label>
                             </div>
                         </template>
                     </div>
 
-                    <button type="submit"
-                            class="w-full btn-primary justify-center text-sm py-2.5"
-                            x-text="submitButtonText"
-                            :disabled="submitting">
-                    </button>
+                    <div class="flex items-center gap-3 pt-1">
+                        <button type="submit"
+                                class="flex-1 btn-primary justify-center text-sm py-2.5"
+                                x-text="submitButtonText"
+                                :disabled="submitting">
+                        </button>
+                        <button type="button" @click="closeModal()"
+                                class="px-5 py-2.5 text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
 
                     <div x-show="submitting" class="text-center text-xs text-gray-400" x-cloak>
                         Saving...
