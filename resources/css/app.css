@@ -151,6 +151,19 @@
 /* Carousel transitions */
 .carousel-item { transition: opacity 0.7s ease-in-out; }
 
+/* ── Timeline year flag ──
+   Pointed notch on the edge facing the rail. Mobile's rail is always on the
+   left, so the default notch faces left; desktop's left-column cards face
+   the rail on their right, so they get the opposite cut at md+. */
+.timeline-year-flag {
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%);
+}
+@media (min-width: 768px) {
+    .timeline-year-flag--left {
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
+    }
+}
+
 /* ── Scroll-reveal system ──
    Elements start hidden/offset and fade+slide into place once they enter
    the viewport (see the IntersectionObserver in resources/js/app.js).
@@ -171,10 +184,10 @@
 /* ── Timeline year navigator ──
    Active state toggled by the scrollspy IntersectionObserver in resources/js/app.js. */
 .year-nav-link.is-active {
-    @apply text-[#0A5EA8] border-[#0A5EA8] bg-white;
+    @apply text-[#1d4e7a] border-[#1d4e7a] bg-white;
 }
 .year-nav-link.is-active .year-nav-dot {
-    @apply bg-[#0A5EA8];
+    @apply bg-[#1d4e7a];
 }
 
 @media (prefers-reduced-motion: reduce) {
