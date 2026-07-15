@@ -159,48 +159,7 @@
 {{-- ========================================================
      PARTNERS
      ======================================================== --}}
-<section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20"
-     x-data="{
-        category: 'all',
-        search: '',
-        perPage: 8,
-        catPage: {},
-
-        init() {
-            @foreach($partnersByCategory as $cat => $partners)
-                this.catPage['{{ addslashes($cat) }}'] = 1;
-            @endforeach
-        },
-
-        cardVisible(cat, index, name, total) {
-            const term = this.search.toLowerCase();
-            // When searching, show all matching items irrespective of pagination
-            if (term) {
-                return name.toLowerCase().includes(term);
-            }
-
-            // No search — use pagination
-            if (total <= this.perPage) return true;
-
-            const page = this.catPage[cat] || 1;
-            const start = (page - 1) * this.perPage;
-            return index >= start && index < start + this.perPage;
-        },
-
-        nextPage(cat, total) {
-            const maxPage = Math.ceil(total / this.perPage);
-            if ((this.catPage[cat] || 1) < maxPage) {
-                this.catPage[cat] = (this.catPage[cat] || 1) + 1;
-            }
-        },
-
-        prevPage(cat) {
-            if ((this.catPage[cat] || 1) > 1) {
-                this.catPage[cat] = (this.catPage[cat] || 1) - 1;
-            }
-        }
-     }"
-     x-effect="search; Object.keys(catPage).forEach(key => { catPage[key] = 1; })">
+<section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support</p>
@@ -208,28 +167,12 @@
             <p class="text-gray-500 mt-4 max-w-3xl mx-auto text-sm leading-relaxed">
                 Since its creation, Krousar Thmey has set up long-term partnerships with Cambodian and international organizations. Donors can financially support a program or project of their choice. Technical partners allow us to benefit from specific expertise.
             </p>
+            <a href="{{ route('partners') }}" class="inline-flex items-center mt-6 px-5 py-2.5 border border-[#2d6fa3] text-[#2d6fa3] font-semibold text-sm rounded-full hover:bg-[#2d6fa3] hover:text-white transition-colors">
+                See all partners
+            </a>
         </div>
 
-        <div class="mb-10 max-w-2xl mx-auto space-y-4">
-            <div class="relative">
-                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <input type="text" x-model="search" placeholder="Search partners..."
-                       class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/20 transition-all outline-none text-sm bg-white">
-            </div>
-            <div class="flex flex-wrap justify-center gap-2">
-                <button @click="category = 'all'"
-                        :class="category === 'all' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">All Partners</button>
-                @foreach ($partnersByCategory as $cat => $partners)
-                    <button @click="category = 'cat_{{ $cat }}'"
-                            :class="category === 'cat_{{ $cat }}' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                            class="px-5 py-2 rounded-full text-sm font-medium transition-all">{{ $cat }}</button>
-                @endforeach
-            </div>
-        </div>
-
-        <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8"
-             x-show="category === 'all' || category === 'cat_Authorities'">
+        <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8">
             <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
                 <span class="text-2xl">🇰🇭</span> Partnerships with the Cambodian Authorities
             </h3>
@@ -254,69 +197,121 @@
         </div>
 
         @php
-            $categoryDisplayConfig = [
-                'Authorities'     => ['title' => 'Cambodian Public Authorities',                     'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
-                'Organizations'   => ['title' => 'Organizations, Foundations & Institutions',         'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
-                'Companies'       => ['title' => 'Companies',                                        'dot' => 'bg-[#1d4e7a]', 'bgClass' => 'bg-white'],
-                'Towns'           => ['title' => 'Towns and Municipalities — Switzerland',            'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-[#2d6fa3]/5'],
-                'Individual Donor' => ['title' => 'Individual Donor',                                 'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
+            $financialPartnerGroups = [
+                [
+                    'title' => 'Cambodian Public Authorities',
+                    'dot' => 'bg-[#2d6fa3]',
+                    'items' => [
+                        'His Majesty the King NORODOM Sihamoni',
+                        'Her Majesty the Queen Mother NORODOM Monineath Sihanouk',
+                        'Prime Minister Samdech Moha Borvor Thipadei HUN Manet',
+                        'Samdech Akka Moha Sena Padei Techo Hun Sen, President of the Senate',
+                        'Samdech Dr. Bun Rany HUN Sen',
+                        'The Royal Government of Cambodia',
+                        'Ministry of Social Affairs',
+                        'Ministry of Education, Youth and Sport',
+                        'Ministry of Culture and Fine Arts',
+                        'Ministry of Defense',
+                        'Ministry of Information',
+                        'Ministry of Interior',
+                        'His Excellency the ambassador for Cambodia at UNESCO',
+                        'His Excellency the ambassador for Cambodia to France',
+                    ],
+                ],
+                [
+                    'title' => 'Organizations, Foundations and Institutions',
+                    'dot' => 'bg-[#8da83a]',
+                    'items' => [
+                        'DUBRULLE Family',
+                        'ENFANCE ESPOIR Foundation',
+                        'Fondation Amanjaya',
+                        'Fondation André & Cyprien',
+                        'Fondation Masalina',
+                        'Fonds Mécénat SIG',
+                        'Foundation Philantropique Famille Sandoz',
+                        'Gertrude Hirzel Foundation',
+                        'GREEN LEAVES EDUCATION Foundation',
+                        'Individual donor: Peter Tschofen',
+                        'Individual donor: Suzanne ROY, Grants Barbe.',
+                        'INTERNATIONAL COUNCIL FOR EDUCATION OF PEOPLE WITH VISUAL IMPAIRMENT (ICEVI)',
+                        "LA VOIX DE L'ENFANT Association",
+                        'LES AMIS DES ENFANTS DU MONDE Association',
+                        'MAY-OUI Foundation',
+                        'Miwako Fujiwara – Musica Felice Foundation',
+                        'Musica Felice',
+                        'OVERBROOK SCHOOL FOR THE BLIND (ONNET)',
+                        "PEOPLE'S ACTION FOR INCLUSIVE DEVELOPMENT (PAfID)",
+                        'Raksa Koma Organization',
+                        'ROTARY CLUB OF PERTH',
+                        'ROTARY CLUB OF PHNOM PENH',
+                        'STIFTUNG HIRTEN KINDER Foundation',
+                        'TALIKA',
+                        'UNICEF',
+                    ],
+                ],
+                [
+                    'title' => 'Companies',
+                    'dot' => 'bg-[#1d4e7a]',
+                    'items' => [
+                        'ABA BANK',
+                        'AMANJAYA HOTEL',
+                        'ANGKOR ARTWORK (Eric STOCKER)',
+                        'BAJAJ INTRACITY',
+                        'BRED BANK CAMBODIA',
+                        'BLIND MASSAGE CENTER',
+                        'BODIA NATURE',
+                        'CAMH Co. LTD',
+                        'CMDK',
+                        'D+Z URBAN HOTEL',
+                        'KHMER CERAMICS & FINE ARTS CENTER',
+                        'LONG RA Car mechanic',
+                        'PROMOTION FOR DISABILITY PROJECT',
+                        'PUNLEU THMEY Restaurant',
+                        'RADIO HAPPINESS VOICE FOR THE BLIND',
+                        'SAN FRANSISCO COMPANY',
+                        'SEIN LIM',
+                        'SENG POV Car mechanic',
+                        'SMART Cambodia',
+                        'SOCIAL COFFEE',
+                        'SOFITEL Phnom Penh Phokeethra',
+                        'SOFT SKILL PROFESSIONAL TRAINING SERVICE',
+                        'TEMPLATION ANGKOR BOUTIQUE',
+                        'THALIAS (Malis Restaurant, Khema, Arunreas Hotel)',
+                        'TOP STREET RESTAURANT',
+                        'VOICE OF THE BLIND Radio station',
+                    ],
+                ],
+                [
+                    'title' => 'Towns and Municipalities',
+                    'dot' => 'bg-[#2d6fa3]',
+                    'flag' => '🇨🇭',
+                    'items' => [
+                        'City of Geneva',
+                        'City of Meyrin',
+                        'Town of Hermance',
+                        'Towns of Collonge-Bellerive, Hermance and Vandoeuvres',
+                    ],
+                ],
             ];
         @endphp
 
-        @foreach ($partnersByCategory as $cat => $partners)
-            @if ($partners->isNotEmpty())
-                @php $config = $categoryDisplayConfig[$cat] ?? ['title' => $cat, 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white']; @endphp
-                <div class="{{ $config['bgClass'] }} rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
-                     x-show="category === 'all' || category === 'cat_{{ $cat }}'">
-                    <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
-                        @if ($cat === 'Towns')
-                            <span>🇨🇭</span>
-                        @endif
-                        {{ $config['title'] }}
-                    </h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                        @foreach ($partners as $partner)
-                            @php $ps = json_encode(strtolower($partner->name)); @endphp
-                            <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#f8f9fc] hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
-                                 @php $catSafe = addslashes($cat); @endphp
-                                 x-show="cardVisible('{{ $catSafe }}', {{ $loop->index }}, {{ $ps }}, {{ $loop->count }})">
-                                @if ($partner->logo_url)
-                                    <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
-                                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}"
-                                             class="max-w-full max-h-full object-contain p-2">
-                                    </div>
-                                @else
-                                    <div class="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                        <span class="text-lg font-bold text-blue-500">{{ Str::substr($partner->name, 0, 1) }}</span>
-                                    </div>
-                                @endif
-                                <span class="text-sm font-medium text-gray-700 leading-tight">{{ $partner->name }}</span>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    @if ($partners->count() > 6)
-                    <div class="flex items-center justify-center gap-4 mt-6" x-show="search === ''">
-                        <button @click="prevPage('{{ $catSafe }}')"
-                                :disabled="(catPage['{{ $catSafe }}'] || 1) <= 1"
-                                class="px-4 py-2 text-sm font-medium rounded-lg transition-all"
-                                :class="(catPage['{{ $catSafe }}'] || 1) <= 1 ? 'text-gray-300 cursor-not-allowed' : 'text-[#2d6fa3] hover:bg-[#2d6fa3]/10'">
-                            ← Previous
-                        </button>
-                        <span class="text-sm text-gray-500">
-                            Page <span class="font-semibold text-gray-700" x-text="catPage['{{ $catSafe }}'] || 1"></span>
-                            of <span class="font-semibold text-gray-700" x-text="Math.ceil({{ $partners->count() }} / perPage)"></span>
-                        </span>
-                        <button @click="nextPage('{{ $catSafe }}', {{ $partners->count() }})"
-                                :disabled="(catPage['{{ $catSafe }}'] || 1) >= Math.ceil({{ $partners->count() }} / perPage)"
-                                class="px-4 py-2 text-sm font-medium rounded-lg transition-all"
-                                :class="(catPage['{{ $catSafe }}'] || 1) >= Math.ceil({{ $partners->count() }} / perPage) ? 'text-gray-300 cursor-not-allowed' : 'text-[#2d6fa3] hover:bg-[#2d6fa3]/10'">
-                            Next →
-                        </button>
-                    </div>
-                    @endif
-                </div>
-            @endif
+        @foreach ($financialPartnerGroups as $group)
+        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-8">
+            <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
+                @if (isset($group['flag']))
+                    <span>{{ $group['flag'] }}</span>
+                @endif
+                {{ $group['title'] }}
+            </h3>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2 text-sm text-gray-600">
+                @foreach ($group['items'] as $item)
+                <li class="flex items-start gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full {{ $group['dot'] }} mt-2 flex-shrink-0"></span>
+                    {{ $item }}
+                </li>
+                @endforeach
+            </ul>
+        </div>
         @endforeach
 
         <div class="text-center bg-[#2d6fa3] rounded-3xl p-10" data-reveal="scale">
