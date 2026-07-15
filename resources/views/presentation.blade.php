@@ -198,229 +198,217 @@
 </section>
 
 {{-- ========================================================
-     OUR IMPACT / KEY FIGURES SECTION — Row-Based Layout
+     OUR IMPACT / KEY FIGURES SECTION — MODERN PREMIUM DESIGN
      ======================================================== --}}
 @php
-    $featuredStat = $impactStatistics->where('is_featured', true)->first();
-    $otherStats   = $impactStatistics->where('is_featured', false)->values();
-    $accentPalette = ['#2d6fa3', '#8da83a', '#e8a020', '#d32f2f', '#7c4dff'];
+    $allStats = $impactStatistics->values();
 @endphp
 
-<section class="py-14 bg-white scroll-mt-20 overflow-hidden" id="key-figures">
-    <div class="max-w-6xl mx-auto px-6">
+<section class="py-24 bg-[#fafafa] scroll-mt-20 overflow-hidden relative" id="key-figures">
+    {{-- Decorative background shapes --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        {{-- Soft gradient circles --}}
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-200/20 to-blue-100/10 rounded-full blur-[100px]"></div>
+        <div class="absolute top-1/2 -left-32 w-80 h-80 bg-gradient-to-tr from-green-200/15 to-green-100/5 rounded-full blur-[90px]"></div>
+        <div class="absolute -bottom-24 right-1/4 w-72 h-72 bg-gradient-to-tl from-orange-200/20 to-orange-100/10 rounded-full blur-[85px]"></div>
+        
+        {{-- Subtle dotted pattern overlay --}}
+        <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;"></div>
+    </div>
 
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
         {{-- Section Header --}}
-        <div class="text-center mb-10" data-reveal>
-            <span class="inline-flex items-center gap-2 text-[11px] font-semibold text-[#2d6fa3] uppercase tracking-[0.2em] mb-3">
-                <span class="w-5 h-px bg-[#2d6fa3]"></span>
-                Our Impact by the Numbers
-                <span class="w-5 h-px bg-[#2d6fa3]"></span>
-            </span>
-            <h2 class="text-2xl md:text-3xl font-black text-[#1d4e7a] leading-tight">Key Figures</h2>
-            <div class="w-10 h-0.5 bg-[#8da83a] rounded-full mx-auto mt-3"></div>
+        <div class="text-center max-w-3xl mx-auto mb-20" data-reveal>
+            {{-- Badge --}}
+            <div class="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-4 py-2 text-xs font-semibold text-blue-600 uppercase tracking-[0.15em] mb-6 backdrop-blur-sm">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                Impact Statistics
+            </div>
+
+            {{-- Heading --}}
+            <h2 class="text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-6">
+                Key Figures
+            </h2>
+
+            {{-- Description --}}
+            <p class="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
+                Real numbers behind our commitment to Cambodia's children. Every statistic represents lives changed, futures transformed, and hope restored.
+            </p>
         </div>
 
-        @if($impactStatistics->isEmpty())
-            <p class="text-gray-400 text-center py-12">No impact statistics available yet.</p>
+        @if($allStats->isEmpty())
+            <p class="text-gray-400 text-center py-16">No impact statistics available yet.</p>
         @else
 
-        {{-- Featured Stat — Full-Width Dashboard Row --}}
-        @if($featuredStat)
-        <div class="relative mb-8 group rounded-2xl overflow-hidden" data-reveal>
-            @if($featuredStat->image)
-            <img src="{{ $featuredStat->image_url }}" alt=""
-                 class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-105 transition-transform duration-700">
-            @endif
-            <div class="absolute inset-0 bg-gradient-to-r from-[#0f2448] via-[#1d4e7a] to-[#2d6fa3]"></div>
-            <div class="relative z-10 px-8 py-10 md:py-14 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="text-center md:text-left">
-                    <span class="inline-block text-white/40 text-[10px] font-semibold uppercase tracking-[0.25em] mb-2">
-                        <svg class="w-3 h-3 inline -mt-0.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
-                        Featured Statistic
-                    </span>
-                    <div class="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-none mb-1 counter"
-                         data-target="{{ preg_replace('/[^0-9.]/', '', $featuredStat->value) }}"
-                         data-suffix="{{ preg_match('/[KMBkmb]/', $featuredStat->value) ? substr(trim($featuredStat->value), -1) : '' }}">
-                        {{ $featuredStat->value }}
-                    </div>
-                    <h3 class="text-base md:text-lg font-bold text-white leading-snug">{{ $featuredStat->label }}</h3>
-                </div>
-                @if($featuredStat->description)
-                <div class="text-white/50 text-xs leading-relaxed max-w-xs text-center md:text-right border-l border-white/10 md:pl-6">
-                    {{ $featuredStat->description }}
-                </div>
-                @endif
-            </div>
-        </div>
-        @endif
+        {{-- ===== STATISTICS GRID — Premium 3-2 Layout ===== --}}
+        @php
+            $accentColors = [
+                ['name' => 'blue', 'bg' => '#2d6fa3', 'light' => '#e3f2fd', 'lighter' => '#bbdefb'],
+                ['name' => 'green', 'bg' => '#8da83a', 'light' => '#f1f8e9', 'lighter' => '#dcedc8'],
+                ['name' => 'orange', 'bg' => '#e8a020', 'light' => '#fff3e0', 'lighter' => '#ffe0b2'],
+                ['name' => 'red', 'bg' => '#d32f2f', 'light' => '#ffebee', 'lighter' => '#ffcdd2'],
+                ['name' => 'purple', 'bg' => '#7c4dff', 'light' => '#f3e5f5', 'lighter' => '#e1bee7'],
+            ];
 
-        {{-- Stats Row — Clean Data Dashboard Style --}}
-        <div data-reveal>
-            @foreach($otherStats->chunk(3) as $rowIndex => $row)
-            <div class="grid grid-cols-1 sm:grid-cols-3 {{ $loop->first ? '' : 'border-t border-gray-100' }}">
-                @foreach($row as $index => $stat)
-                @php
-                    $accent = $accentPalette[($rowIndex * 3 + $index) % count($accentPalette)];
-                @endphp
-                <div class="group py-6 md:py-8 px-4 {{ !$loop->first ? 'sm:border-l border-gray-100' : '' }} {{ $loop->first ? 'pl-0' : '' }} {{ $loop->last ? 'pr-0' : '' }}">
-                    <div class="flex items-center gap-3 mb-2">
-                        <div class="text-3xl md:text-4xl font-black counter transition-colors duration-200 group-hover:opacity-80"
-                             data-target="{{ preg_replace('/[^0-9.]/', '', $stat->value) }}"
-                             data-suffix="{{ preg_match('/[KMB]/', $stat->value) ? substr(trim($stat->value), -1) : '' }}"
-                             style="color: {{ $accent }};">
-                            {{ $stat->value }}
+            $statIcons = [
+                '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>',
+                '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>',
+                '<path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>',
+                '<path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342"/>',
+                '<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>',
+            ];
+        @endphp
+
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-5">
+            @foreach($allStats as $index => $stat)
+            @php
+                $colorScheme = $accentColors[$index % count($accentColors)];
+                $icon = $statIcons[$index % count($statIcons)];
+            @endphp
+            <div class="group relative" data-reveal="up" style="--reveal-delay: {{ $index * 100 }}">
+                {{-- Card Container with soft shadow --}}
+                <div class="relative h-full bg-white rounded-[24px] border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-default">
+                    
+                    {{-- Left colored accent border --}}
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 transition-all duration-300" style="background: linear-gradient(to bottom, {{ $colorScheme['bg'] }}, {{ $colorScheme['bg'] }}80))"></div>
+
+                    {{-- Card content with generous padding --}}
+                    <div class="p-8 h-full flex flex-col">
+                        
+                        {{-- Icon in soft circular background --}}
+                        <div class="flex-shrink-0 mb-6">
+                            <div class="relative inline-flex">
+                                {{-- Icon background circle --}}
+                                <div class="w-16 h-16 rounded-[18px] flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+                                     style="background-color: {{ $colorScheme['light'] }}; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.03);">
+                                    <svg class="w-8 h-8 transition-all duration-300" fill="none" stroke="{{ $colorScheme['bg'] }}" stroke-width="1.5" viewBox="0 0 24 24">
+                                        {!! $icon !!}
+                                    </svg>
+                                </div>
+                                
+                                {{-- Subtle glow on hover --}}
+                                <div class="absolute inset-0 rounded-[18px] opacity-0 group-hover:opacity-30 transition-opacity duration-300" style="background: radial-gradient(circle, {{ $colorScheme['bg'] }} 0%, transparent 70%); filter: blur(12px);"></div>
+                            </div>
                         </div>
-                        @if($stat->description)
-                        <span class="text-[11px] text-gray-400 leading-tight flex-1">{{ $stat->description }}</span>
-                        @endif
+
+                        {{-- Large bold number --}}
+                        <div class="mb-3">
+                            <div class="text-4xl md:text-3xl lg:text-4xl font-black transition-all duration-300 counter leading-none"
+                                 data-target="{{ preg_replace('/[^0-9.]/', '', $stat->value) }}"
+                                 data-suffix="{{ preg_match('/[KMBkmb]/', $stat->value) ? substr(trim($stat->value), -1) : '' }}"
+                                 style="color: {{ $colorScheme['bg'] }}">
+                                {{ $stat->value }}
+                            </div>
+                        </div>
+
+                        {{-- Colored accent line below number --}}
+                        <div class="w-10 h-1 rounded-full mb-4 transition-all duration-300 group-hover:w-14" style="background-color: {{ $colorScheme['bg'] }}"></div>
+
+                        {{-- Supporting text --}}
+                        <div class="flex-1">
+                            <p class="text-sm font-bold text-gray-900 leading-snug line-clamp-2 mb-2">{{ $stat->label }}</p>
+                            @if($stat->description)
+                            <p class="text-xs text-gray-500 leading-relaxed line-clamp-2">{{ $stat->description }}</p>
+                            @endif
+                        </div>
                     </div>
-                    <p class="text-xs font-semibold text-gray-800 uppercase tracking-wide">{{ $stat->label }}</p>
+
+                    {{-- Hover gradient overlay (very subtle) --}}
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none" 
+                         style="background: linear-gradient(135deg, {{ $colorScheme['bg'] }} 0%, transparent 100%);"></div>
                 </div>
-                @endforeach
             </div>
             @endforeach
         </div>
 
-        @endif
+        {{-- Responsive grid adjustments --}}
+        <style>
+            @media (max-width: 1279px) {
+                /* 5 items: 3-2 layout on desktop */
+                #key-figures .grid {
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                }
+                #key-figures .grid > :nth-child(4),
+                #key-figures .grid > :nth-child(5) {
+                    grid-column: span 1;
+                }
+                #key-figures .grid > :nth-child(4) {
+                    grid-column: 1;
+                }
+                #key-figures .grid > :nth-child(5) {
+                    grid-column: 2;
+                }
+            }
 
-        {{-- Organisation-wide Figures — Dashboard Row --}}
-        <div class="mt-10 pt-8 border-t border-gray-100" data-reveal>
-            <div class="flex items-center gap-3 mb-8">
-                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-200 to-gray-200"></div>
-                <div class="flex gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3]"></span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a]"></span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></span>
+            @media (max-width: 767px) {
+                /* Single column on mobile */
+                #key-figures .grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @media (min-width: 768px) and (max-width: 1023px) {
+                /* 2 columns on tablet */
+                #key-figures .grid {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
+        </style>
+
+        {{-- ===== ORGANISATION AT A GLANCE — Dashboard Row ===== --}}
+        <div class="relative bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mt-16" data-reveal>
+            <div class="px-10 py-12 border-b border-gray-50">
+                <div class="flex flex-col items-center text-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-black text-[#1d4e7a]">Organization At A Glance</h3>
+                        <p class="text-gray-400 text-xs mt-1">Key operational metrics that define our organization</p>
+                    </div>
                 </div>
-                <div class="h-px flex-1 bg-gradient-to-l from-transparent via-gray-200 to-gray-200"></div>
             </div>
 
-            <div class="text-center mb-8">
-                <h3 class="text-xl md:text-2xl font-black text-[#1d4e7a] uppercase tracking-wide">Organisation at a Glance</h3>
-                <p class="text-gray-500 text-xs mt-1">Key operational metrics that define our organisation</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
-                {{-- Row 1: Human Resources --}}
-                <div class="py-6 sm:py-8 px-4 sm:first:pl-0 sm:last:pr-0 text-center">
-                    <div class="flex items-center justify-center gap-2 mb-2">
-                        <div class="w-8 h-8 rounded-lg bg-[#2d6fa3]/10 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 100-8 4 4 0 000 8zm6 1.13a4 4 0 00-3-3.87m-9 3.87a4 4 0 013-3.87"/></svg>
-                        </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-50">
+                {{-- Human Resources --}}
+                <div class="py-10 px-8 text-center group hover:bg-[#2d6fa3]/[0.02] transition-colors">
+                    <div class="w-10 h-10 rounded-xl bg-[#2d6fa3]/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-5 h-5 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 100-8 4 4 0 000 8zm6 1.13a4 4 0 00-3-3.87m-9 3.87a4 4 0 013-3.87"/></svg>
                     </div>
-                    <div class="text-2xl font-black text-[#2d6fa3] mb-1">
-                        <span class="counter"
-                              data-target="{{ preg_replace('/[^0-9]/', '', $settings['stat_employees'] ?? '68') }}"
-                              data-suffix="+">{{ $settings['stat_employees'] ?? '68' }}</span>
-                        <span class="text-base text-[#8da83a]">+{{ $settings['stat_expats'] ?? '2' }}</span>
+                    <div class="text-3xl font-black text-[#2d6fa3] mb-1.5">
+                        <span class="counter" data-target="{{ preg_replace('/[^0-9]/', '', $settings['stat_employees'] ?? '68') }}" data-suffix="+">{{ $settings['stat_employees'] ?? '68' }}</span>
+                        <span class="text-sm text-[#8da83a] font-semibold"> +{{ $settings['stat_expats'] ?? '2' }}</span>
                     </div>
-                    <p class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider">
-                        Cambodian &amp; Expat<br>Human Resources
-                    </p>
+                    <p class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider">Cambodian &amp; Expat Staff</p>
                 </div>
 
-                {{-- Row 2: Budget --}}
-                <div class="py-6 sm:py-8 px-4 sm:first:pl-0 sm:last:pr-0 text-center">
-                    <div class="flex items-center justify-center gap-2 mb-2">
-                        <div class="w-8 h-8 rounded-lg bg-[#8da83a]/10 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V6m0 10v2m0-2c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        </div>
+                {{-- Budget --}}
+                <div class="py-8 px-6 text-center group hover:bg-[#8da83a]/[0.02] transition-colors">
+                    <div class="w-10 h-10 rounded-xl bg-[#8da83a]/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-5 h-5 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V6m0 10v2m0-2c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <div class="text-2xl font-black text-[#2d6fa3] mb-1">
-                        <span class="counter" data-target="{{ preg_replace('/[^0-9]/', '', $settings['stat_budget'] ?? '950') }}"
-                              data-suffix="K">{{ $settings['stat_budget'] ?? '950' }} K</span>
+                    <div class="text-3xl font-black text-[#8da83a] mb-1.5">
+                        <span class="counter" data-target="{{ preg_replace('/[^0-9]/', '', $settings['stat_budget'] ?? '950') }}" data-suffix="K">{{ $settings['stat_budget'] ?? '950' }}K</span>
                     </div>
-                    <p class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider">USD Budget</p>
+                    <p class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider">Annual Budget (USD)</p>
                 </div>
 
-                {{-- Row 3: Admin Costs --}}
-                <div class="py-6 sm:py-8 px-4 sm:first:pl-0 sm:last:pr-0 text-center">
-                    <div class="flex items-center justify-center gap-2 mb-2">
-                        <div class="w-8 h-8 rounded-lg bg-[#e8a020]/10 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-[#e8a020]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                        </div>
+                {{-- Admin Costs --}}
+                <div class="py-8 px-6 text-center group hover:bg-[#e8a020]/[0.02] transition-colors">
+                    <div class="w-10 h-10 rounded-xl bg-[#e8a020]/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-5 h-5 text-[#e8a020]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                     </div>
-                    <div class="text-3xl font-black text-[#2d6fa3] mb-1">
-                        <span class="counter" data-target="{{ preg_replace('/[^0-9]/', '', $settings['stat_admin_costs'] ?? '4') }}"
-                              data-suffix="%">{{ $settings['stat_admin_costs'] ?? '4' }}%</span>
+                    <div class="text-3xl font-black text-[#e8a020] mb-1.5">
+                        <span class="counter" data-target="{{ preg_replace('/[^0-9]/', '', $settings['stat_admin_costs'] ?? '4') }}" data-suffix="%">{{ $settings['stat_admin_costs'] ?? '4' }}%</span>
                     </div>
                     <p class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider">Administrative Costs</p>
                 </div>
             </div>
         </div>
+
+        @endif
     </div>
 </section>
-
-{{-- Social Sharing --}}
-@php
-$sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
-$facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
-$twitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
-$linkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
-$shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
-$facebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
-$twitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
-$linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
-@endphp
-@if($sharingEnabled == '1')
-<div class="max-w-7xl mx-auto px-6 pb-12" data-reveal>
-    <div class="flex items-center justify-center gap-4">
-        <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
-
-<div class="flex items-center gap-3 bg-white/80 backdrop-blur-md rounded-full px-6 py-4 shadow-lg border border-gray-100">
-
-    <!-- Facebook -->
-    <a href="{{ $facebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Presentation') . '&linknote=' . urlencode('Krousar Thmey - Our Impact') }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Share on Facebook"
-        class="group w-14 h-14 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
-
-        <img src="{{ asset($facebookIcon) }}"
-            alt="Facebook"
-            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
-    </a>
-
-    <!-- Twitter -->
-    <a href="{{ $twitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Presentation') . '&linknote=' . urlencode('Krousar Thmey - Our Impact') }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Share on Twitter"
-        class="group w-14 h-14 rounded-full bg-[#1DA1F2] flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
-
-        <img src="{{ asset($twitterIcon) }}"
-            alt="Twitter"
-            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
-    </a>
-
-    <!-- LinkedIn -->
-    <a href="{{ $linkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Presentation') . '&linknote=' . urlencode('Krousar Thmey - Our Impact') }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Share on LinkedIn"
-        class="group w-14 h-14 rounded-full bg-[#0A66C2] flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
-
-        <img src="{{ asset($linkedinIcon) }}"
-            alt="LinkedIn"
-            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
-    </a>
-
-    <!-- Share -->
-    <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Presentation') }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Share"
-        class="group w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
-
-        <img src="{{ asset($shareIcon) }}"
-            alt="Share"
-            class="w-6 h-6 brightness-0 invert transition-transform duration-300 group-hover:scale-110">
-    </a>
-
-</div>
-</div>
-</div>
-@endif
 
 {{-- Impact Animation Script --}}
 <script>

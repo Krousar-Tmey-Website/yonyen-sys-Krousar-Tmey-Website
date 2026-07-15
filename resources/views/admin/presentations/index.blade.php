@@ -40,11 +40,6 @@
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
                 Krousar Thmey Worldwide
             </button>
-            <button @click="tab = 'sharing'"
-                    :class="tab === 'sharing' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
-                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Share our impact
-            </button>
         </nav>
     </div>
 
@@ -449,95 +444,6 @@
                 @endforeach
             </div>
             @endif
-        </div>
-    </div>
-
-    {{-- SHARE OUR IMPACT SECTION --}}
-    <div x-show="tab === 'sharing'" class="space-y-6">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold text-gray-700 text-sm">Share our impact - Social Media Links</h3>
-            </div>
-
-            <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-                @csrf
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Enable Share Section</label>
-                        <label class="flex items-center gap-2 text-xs text-gray-600">
-                            <input type="checkbox" name="sharing_enabled" value="1" {{ (old('sharing_enabled', \App\Models\HomeSetting::getValue('sharing_enabled', '1')) == '1') ? 'checked' : '' }}
-                                   class="rounded border-gray-300 text-[#2d6fa3] focus:ring-[#2d6fa3]/20">
-                            Show share buttons on presentation page
-                        </label>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Section Title</label>
-                        <input type="text" name="sharing_title"
-                               value="{{ old('sharing_title', \App\Models\HomeSetting::getValue('sharing_title', 'Share our impact')) }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                </div>
-
-                <div class="pt-3 border-t border-gray-100">
-                    <p class="text-xs font-medium text-gray-700 mb-3">Social Media Links & Icons</p>
-
-                    <div class="grid grid-cols-1 gap-4">
-                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#1877F2] flex items-center justify-center">
-                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg')) }}" alt="Facebook" class="w-6 h-6 filter brightness-0 invert">
-                            </div>
-                            <div class="flex-1">
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Facebook Icon & Link</label>
-                                <input type="url" name="sharing_facebook_link" value="{{ old('sharing_facebook_link', \App\Models\HomeSetting::getValue('sharing_facebook_link', '')) }}"
-                                       class="w-full mb-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                                       placeholder="https://facebook.com/yourpage">
-                                <input type="file" name="sharing_facebook_icon" accept="image/svg+xml,image/png,image/jpeg,image/webp"
-                                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#1DA1F2] flex items-center justify-center">
-                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg')) }}" alt="Twitter" class="w-6 h-6 filter brightness-0 invert">
-                            </div>
-                            <div class="flex-1">
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Twitter Icon & Link</label>
-                                <input type="url" name="sharing_twitter_link" value="{{ old('sharing_twitter_link', \App\Models\HomeSetting::getValue('sharing_twitter_link', '')) }}"
-                                       class="w-full mb-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                                       placeholder="https://twitter.com/yourpage">
-                                <input type="file" name="sharing_twitter_icon" accept="image/svg+xml,image/png,image/jpeg,image/webp"
-                                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#0A66C2] flex items-center justify-center">
-                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg')) }}" alt="LinkedIn" class="w-6 h-6 filter brightness-0 invert">
-                            </div>
-                            <div class="flex-1">
-                                <label class="block text-xs font-medium text-gray-600 mb-1">LinkedIn Icon & Link</label>
-                                <input type="url" name="sharing_linkedin_link" value="{{ old('sharing_linkedin_link', \App\Models\HomeSetting::getValue('sharing_linkedin_link', '')) }}"
-                                       class="w-full mb-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                                       placeholder="https://linkedin.com/yourpage">
-                                <input type="file" name="sharing_linkedin_icon" accept="image/svg+xml,image/png,image/jpeg,image/webp"
-                                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center">
-                                <img src="{{ asset(\App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg')) }}" alt="Share" class="w-6 h-6 filter brightness-0 invert">
-                            </div>
-                            <div class="flex-1">
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Share Icon</label>
-                                <input type="file" name="sharing_share_icon" accept="image/svg+xml,image/png,image/jpeg,image/webp"
-                                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-primary text-sm py-2.5">Save Sharing Settings</button>
-            </form>
         </div>
     </div>
 

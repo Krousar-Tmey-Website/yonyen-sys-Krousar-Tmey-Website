@@ -42,15 +42,6 @@ class PresentationController extends Controller
             'stat_budget' => ['nullable', 'string'],
             'stat_admin_costs' => ['nullable', 'string'],
             'worldwide_text' => ['nullable', 'string'],
-            'sharing_enabled' => ['nullable', 'string'],
-            'sharing_title' => ['nullable', 'string', 'max:255'],
-            'sharing_facebook_link' => ['nullable', 'url', 'max:2048'],
-            'sharing_twitter_link' => ['nullable', 'url', 'max:2048'],
-            'sharing_linkedin_link' => ['nullable', 'url', 'max:2048'],
-            'sharing_facebook_icon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
-            'sharing_twitter_icon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
-            'sharing_linkedin_icon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
-            'sharing_share_icon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
         ]);
 
         // Handle mission image upload
@@ -65,23 +56,6 @@ class PresentationController extends Controller
             $data['vision_image'] = $request->file('vision_image_file')->store('presentation', 'public');
         } elseif ($request->boolean('remove_vision_image')) {
             $data['vision_image'] = null;
-        }
-
-        // Handle sharing icon uploads
-        $iconKeys = ['sharing_facebook_icon', 'sharing_twitter_icon', 'sharing_linkedin_icon', 'sharing_share_icon'];
-        foreach ($iconKeys as $iconKey) {
-            if ($request->hasFile($iconKey)) {
-                $file = $request->file($iconKey);
-                $filename = $iconKey . '.' . $file->getClientOriginalExtension();
-                $destinationPath = public_path('images/social');
-
-                if (!file_exists($destinationPath)) {
-                    mkdir($destinationPath, 0755, true);
-                }
-
-                $file->move($destinationPath, $filename);
-                $data[$iconKey] = 'images/social/' . $filename;
-            }
         }
 
         unset($data['mission_image_file'], $data['remove_mission_image'], $data['vision_image_file'], $data['remove_vision_image']);
