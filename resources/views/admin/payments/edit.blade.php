@@ -34,135 +34,14 @@
         </div>
     </div>
 
-    <form action="{{ route('admin.payments.update', ['payment' => $paymentMethod->id]) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
+    {{-- Main Form Card --}}
+    <div class="payment-form-card">
+        <form action="{{ route('admin.payments.update', ['payment' => $paymentMethod->id]) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
 
-        {{-- Details Card --}}
-        <div class="payment-form-card">
             <div class="payment-form-section">
-                <div class="payment-form-section-header">
-                    <div class="section-icon blue">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3>Basic Information</h3>
-                        <p>General details about this payment method</p>
-                    </div>
-                </div>
-                <div class="payment-form-section-body">
-                    <div class="payment-form-grid">
-                        <div class="payment-form-group">
-                            <label class="payment-form-label">Name <span class="required">*</span></label>
-                            <input type="text" name="name" value="{{ old('name', $paymentMethod->name) }}" required
-                                   class="payment-form-input @error('name') error @enderror"
-                                   placeholder="e.g. ABA Bank">
-                            @error('name')<div class="payment-form-error">{{ $message }}</div>@enderror
-                        </div>
-
-                        <div class="payment-form-group">
-                            <label class="payment-form-label">Code <span class="required">*</span></label>
-                            <input type="text" name="code" value="{{ old('code', $paymentMethod->code) }}" required
-                                   class="payment-form-input @error('code') error @enderror"
-                                   placeholder="e.g. ABA">
-                            @error('code')<div class="payment-form-error">{{ $message }}</div>@enderror
-                        </div>
-                    </div>
-
-                    <div class="payment-form-group">
-                        <label class="payment-form-label">Description</label>
-                        <textarea name="description" rows="2" class="payment-form-input payment-form-textarea @error('description') error @enderror"
-                                  placeholder="Instructions for donors using this payment method...">{{ old('description', $paymentMethod->description) }}</textarea>
-                        @error('description')<div class="payment-form-error">{{ $message }}</div>@enderror
-                    </div>
-
-                    <div class="payment-form-grid">
-                        <div class="payment-form-group">
-                            <label class="payment-form-label">Sort Order</label>
-                            <input type="number" name="sort_order" value="{{ old('sort_order', $paymentMethod->sort_order) }}" min="0"
-                                   class="payment-form-input @error('sort_order') error @enderror"
-                                   placeholder="0">
-                            @error('sort_order')<div class="payment-form-error">{{ $message }}</div>@enderror
-                        </div>
-
-                        <div class="payment-form-group">
-                            <label class="payment-form-label">Status</label>
-                            <div class="payment-form-toggle">
-                                <label class="toggle-track">
-                                    <input type="checkbox" name="is_active" value="1"
-                                           {{ old('is_active', $paymentMethod->is_active) ? 'checked' : '' }}>
-                                    <span class="slider"></span>
-                                </label>
-                                <div>
-                                    <div class="toggle-label">Active</div>
-                                    <div class="toggle-desc">Available for donors on the Donate page</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- QR Code Section --}}
-            <div class="payment-form-section">
-                <div class="payment-form-section-header">
-                    <div class="section-icon green">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3>QR Code</h3>
-                        <p>Upload a QR code image for donors to scan</p>
-                    </div>
-                    @if($paymentMethod->qr_code)
-                        <button type="button" class="payments-badge-link"
-                                onclick="document.getElementById('qrPreviewModal').classList.remove('hidden')">
-                            Preview Current
-                        </button>
-                    @endif
-                </div>
-                <div class="payment-form-section-body">
-                    @if($paymentMethod->qr_code)
-                    <div class="payment-form-current-file">
-                        <img src="{{ $paymentMethod->qr_code_url . '?v=' . ($paymentMethod->updated_at?->timestamp ?? time()) }}"
-                             alt="Current QR" class="current-file-thumb">
-                        <div class="current-file-info">
-                            <strong>Current QR code</strong>
-                            <span>{{ $paymentMethod->qr_code }}</span>
-                        </div>
-                        <label class="current-file-remove">
-                            <input type="checkbox" name="remove_qr" value="1"
-                                   class="rounded border-gray-300 text-red-500 focus:ring-red-400">
-                            <span>Remove</span>
-                        </label>
-                    </div>
-                    @endif
-
-                    <div class="payment-form-group">
-                        <label class="payment-form-label">
-                            {{ $paymentMethod->qr_code ? 'Replace QR Code' : 'Upload QR Code' }}
-                            <span class="optional">(optional)</span>
-                        </label>
-                        <div class="payment-form-upload" id="uploadZone"
-                             onclick="document.getElementById('qrInput').click()">
-                            <input type="file" name="qr_code" id="qrInput" accept="image/*" class="hidden">
-                            <div id="qrPlaceholder" class="upload-placeholder">
-                                <div class="upload-icon-box">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
-                                    </svg>
-                                </div>
-                                <div class="upload-label">Click to upload QR code</div>
-                                <div class="upload-hint">JPG, PNG, GIF or WebP · Max 2MB</div>
-                            </div>
-                            <div id="qrPreview" class="hidden"></div>
-                        </div>
-                        @error('qr_code')<div class="payment-form-error">{{ $message }}</div>@enderror
-                    </div>
-                </div>
+                @include('admin.payments._form', ['paymentMethod' => $paymentMethod])
             </div>
 
             {{-- Form Actions --}}
@@ -179,8 +58,8 @@
                     </button>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 
     {{-- Danger Zone --}}
     <div class="payment-form-card payment-form-card-danger">
@@ -218,70 +97,5 @@
         </div>
     </div>
 </div>
-
-{{-- QR Preview Modal --}}
-<div id="qrPreviewModal" class="payments-modal-overlay hidden"
-     onclick="this.classList.add('hidden')">
-    <div class="payments-modal-content" onclick="event.stopPropagation()">
-        <div class="payments-modal-header">
-            <h3>QR Code Preview</h3>
-            <button type="button" class="payments-modal-close"
-                    onclick="document.getElementById('qrPreviewModal').classList.add('hidden')">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-        <div class="payments-modal-body">
-            <img src="{{ $paymentMethod->qr_code_url . '?v=' . ($paymentMethod->updated_at?->timestamp ?? time()) }}"
-                 alt="{{ $paymentMethod->name }} QR">
-            <p class="payments-modal-label">{{ $paymentMethod->name }} — Scan to donate</p>
-        </div>
-        <div class="payments-modal-footer">
-            <a href="{{ $paymentMethod->qr_code_url . '?v=' . ($paymentMethod->updated_at?->timestamp ?? time()) }}" download
-               class="payments-modal-download">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                </svg>
-                Download QR Code
-            </a>
-        </div>
-    </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const qrInput = document.getElementById('qrInput');
-    if (qrInput) {
-        qrInput.addEventListener('change', function(e) {
-            const preview = document.getElementById('qrPreview');
-            const placeholder = document.getElementById('qrPlaceholder');
-            const uploadZone = document.getElementById('uploadZone');
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    placeholder.classList.add('hidden');
-                    preview.classList.remove('hidden');
-                    uploadZone.classList.add('has-file');
-                    preview.innerHTML = `
-                        <img src="${e.target.result}" alt="Preview"
-                             style="height:120px;width:auto;object-fit:contain;border-radius:8px;border:1px solid #e2e8f0;margin:0 auto;">
-                        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;">
-                            <span style="font-size:11px;color:#94a3b8;">${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>
-                            <button type="button"
-                                    style="background:#f1f5f9;border:none;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:12px;color:#64748b;"
-                                    onclick="document.getElementById('qrInput').value=''; document.getElementById('qrPreview').innerHTML=''; document.getElementById('qrPreview').classList.add('hidden'); document.getElementById('qrPlaceholder').classList.remove('hidden'); document.getElementById('uploadZone').classList.remove('has-file');">
-                                × Clear
-                            </button>
-                        </div>
-                    `;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-});
-</script>
 
 @endsection

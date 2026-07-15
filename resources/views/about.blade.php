@@ -6,116 +6,46 @@
 @section('content')
 
 {{-- ========================================================
-     PAGE HEADER
-     ======================================================== --}}
-<div class="bg-[#2d6fa3] pt-16 pb-24 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
-        <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a] translate-y-1/2 -translate-x-1/3"></div>
-    </div>
-    <div class="relative max-w-7xl mx-auto px-6">
-        <nav class="flex items-center gap-2 text-sm text-white/50 mb-8">
-            <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-white">Who We Are</span>
-        </nav>
-        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Who We Are</h1>
-        <p class="text-white/70 text-lg max-w-xl">Presentation · History · Awards · Partners · Transparency</p>
-
-        {{-- In-page navigation --}}
-        <div class="flex flex-wrap gap-3 mt-10">
-            <a href="{{ route('presentation') }}"
-               class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
-                Presentation
-            </a>
-            <a href="#values"
-               class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
-                Our Values
-            </a>
-            <a href="#history"
-               class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
-                History
-            </a>
-            <a href="#awards"
-               class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
-                Awards
-            </a>
-            <a href="#partners"
-               class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
-                Partners
-            </a>
-            <a href="{{ route('transparency') }}"
-               class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
-                Transparency
-            </a>
-        </div>
-    </div>
-</div>
-
-{{-- ========================================================
-     OUR VALUES
-     ======================================================== --}}
-<section id="values" class="py-20 bg-white scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16" data-reveal>
-            <p class="text-[#2d6fa3] font-bold text-sm uppercase tracking-widest mb-4">Our Values</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3] mb-8">Core Values</h2>
-            
-            <p class="text-gray-700 max-w-3xl mx-auto leading-relaxed">
-                Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.
-            </p>
-        </div>
-
-        @php $valueAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
-        <div class="grid md:grid-cols-3 gap-7">
-            @forelse($coreValues as $i => $value)
-            @php
-                $accent = $valueAccents[$i % count($valueAccents)];
-                $valueFallbackStyle = "background: linear-gradient(135deg, {$accent}, #1a3c6e)";
-                $valueAccentBarStyle = "background: {$accent}";
-            @endphp
-            <a href="{{ route('core-values.show', $value) }}" class="group bg-white rounded-[28px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden block"
-                 data-reveal="scale" style="--reveal-delay: {{ $i * 100 }}">
-                <div class="relative h-44 overflow-hidden">
-                    @if($value->image_url)
-                    <img src="{{ $value->image_url }}" alt="{{ $value->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
-                    @else
-                    <div class="w-full h-full flex items-center justify-center text-6xl drop-shadow-md" style="{{ $valueFallbackStyle }}">{{ $value->icon }}</div>
-                    @endif
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 px-6 py-4">
-                        <h3 class="text-white font-bold text-lg drop-shadow-sm">{{ $value->title }}</h3>
-                    </div>
-                </div>
-                <div class="p-6 text-center">
-                    <div class="w-10 h-1 rounded-full mx-auto mb-4 group-hover:w-16 transition-all duration-300" style="{{ $valueAccentBarStyle }}"></div>
-                    <p class="text-gray-500 text-sm leading-relaxed">{{ $value->description }}</p>
-                    @if($value->supporting_description)
-                    <p class="text-gray-400 text-xs mt-2 line-clamp-2">{{ $value->supporting_description }}</p>
-                    @endif
-                </div>
-            </a>
-            @empty
-            <p class="text-gray-400 text-center py-8 md:col-span-3">No values listed yet.</p>
-            @endforelse
-        </div>
-    </div>
-</section>
-
-{{-- ========================================================
      OUR HISTORY
      ======================================================== --}}
 <section id="history" class="pt-10 pb-20 bg-white scroll-mt-20">
-    <div class="max-w-6xl mx-auto px-6">
-        {{-- Header --}}
+    <div class="max-w-[1400px] mx-auto px-5 md:px-12 lg:px-20">
+        @php
+            $historySharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
+            $historyFacebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
+            $historyTwitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
+            $historyLinkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
+            $historyShareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
+            $historyFacebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
+            $historyTwitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
+            $historyLinkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
+        @endphp
         <div class="text-center mb-16" data-reveal>
-            <p class="text-[#a67c3d] font-semibold text-sm uppercase tracking-[0.2em] mb-4 flex items-center justify-center gap-3">
-                <span class="w-8 h-px bg-[#c9a45c]"></span>
-                Our Journey Since 1991
-                <span class="w-8 h-px bg-[#c9a45c]"></span>
-            </p>
-            <h2 class="font-serif text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">A Story of Hope and Resilience</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">From a single orphanage in a refugee camp to a nationwide movement for Cambodia's children — every milestone below was made possible by people who believed in a better future.</p>
+            <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">OUR HISTORY</h2>
+            @if($historySharingEnabled == '1')
+            <div class="flex items-center justify-center gap-3 mt-6 mb-12">
+                <a href="{{ $historyFacebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyFacebookIcon) }}" alt="Facebook" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $historyTwitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyTwitterIcon) }}" alt="Twitter" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $historyLinkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyLinkedinIcon) }}" alt="LinkedIn" class="w-full h-full object-cover">
+                </a>
+                <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyShareIcon) }}" alt="Share" class="w-full h-full object-cover">
+                </a>
+            </div>
+            @endif
         </div>
 
         @php
@@ -131,86 +61,22 @@
                     $timelineItems[] = ['year' => $event->year, 'text' => null, 'image' => $event->image_url];
                 }
             }
+            $historyYears = collect($timelineItems)->pluck('year')->filter()->unique()->sort()->values();
         @endphp
+        
 
-        <div class="relative">
-            <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#e8d7ae] via-[#c9a45c] to-[#e8d7ae] hidden md:block"></div>
-            <div class="hidden md:flex justify-center mb-8">
-                <div class="relative z-10 w-4 h-4 rounded-full border-2 border-[#c9a45c] bg-white"></div>
+        <div class="flex items-start gap-8">
+            <x-timeline-year-nav :years="$historyYears" />
+            <div class="flex-1 min-w-0">
+                <x-timeline :items="$timelineItems" />
             </div>
-
-            <div class="space-y-12">
-                @forelse($timelineItems as $item)
-                @php
-                    $onLeft  = $loop->index % 2 === 0;
-                    $rotate  = $loop->index % 2 === 0 ? '-rotate-1' : 'rotate-1';
-                    $stagger = $loop->index % 2 === 1 ? 'md:mt-10' : '';
-                @endphp
-                <div class="relative {{ $stagger }}" data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 70, 350) }}">
-                    <div class="hidden md:flex justify-center absolute left-1/2 -translate-x-1/2 top-10 z-10">
-                        <div class="w-3 h-3 rounded-full bg-[#c9a45c] ring-4 ring-white shadow"></div>
-                    </div>
-
-                    <div class="md:grid md:grid-cols-2 md:gap-16">
-                        @if($onLeft)
-                        <div class="relative mb-8 md:mb-0 md:pr-8">
-                            <div class="hidden md:block absolute right-8 top-12 w-8 h-px bg-[#c9a45c]/50"></div>
-                            @if($loop->first)
-                            <p class="max-w-sm mx-auto md:mx-0 md:ml-auto text-right text-[#a67c3d] text-xs font-semibold uppercase tracking-[0.15em] mb-2">The Beginning</p>
-                            @endif
-                            <div class="max-w-sm mx-auto md:mx-0 md:ml-auto text-right">
-                                @if($item['image'])
-                                <div class="inline-block bg-white p-2 border border-[#e8d7ae] shadow-md {{ $rotate }} hover:rotate-0 transition-transform duration-300">
-                                    <img src="{{ $item['image'] }}" alt="History event image" class="w-full h-48 object-cover" style="filter: sepia(0.12) saturate(1.05);">
-                                </div>
-                                @endif
-                                <div class="relative {{ $item['image'] ? '-mt-5 mr-4' : '' }} inline-flex items-center justify-center min-w-[3.5rem] h-14 px-2 rounded-full bg-gradient-to-br from-[#d9b877] to-[#a67c3d] ring-4 ring-white shadow-lg">
-                                    <span class="font-serif font-bold text-black whitespace-nowrap {{ strlen((string) $item['year']) > 4 ? 'text-xs' : 'text-sm' }}">{{ $item['year'] }}</span>
-                                </div>
-                                @if($item['text'])
-                                <p class="text-gray-600 text-sm leading-relaxed mt-3">{{ $item['text'] }}</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div></div>
-                        @else
-                        <div></div>
-                        <div class="relative md:pl-8">
-                            <div class="hidden md:block absolute left-8 top-12 w-8 h-px bg-[#c9a45c]/50"></div>
-                            <div class="max-w-sm mx-auto md:mx-0">
-                                @if($item['image'])
-                                <div class="inline-block bg-white p-2 border border-[#e8d7ae] shadow-md {{ $rotate }} hover:rotate-0 transition-transform duration-300">
-                                    <img src="{{ $item['image'] }}" alt="History event image" class="w-full h-48 object-cover" style="filter: sepia(0.12) saturate(1.05);">
-                                </div>
-                                @endif
-                                <div class="relative {{ $item['image'] ? '-mt-5 ml-4' : '' }} inline-flex items-center justify-center min-w-[3.5rem] h-14 px-2 rounded-full bg-gradient-to-br from-[#d9b877] to-[#a67c3d] ring-4 ring-white shadow-lg">
-                                    <span class="font-serif font-bold text-black whitespace-nowrap {{ strlen((string) $item['year']) > 4 ? 'text-xs' : 'text-sm' }}">{{ $item['year'] }}</span>
-                                </div>
-                                @if($item['text'])
-                                <p class="text-gray-600 text-sm leading-relaxed mt-3">{{ $item['text'] }}</p>
-                                @endif
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-                @empty
-                <p class="text-gray-400 text-center py-8">No history events yet.</p>
-                @endforelse
-            </div>
-
-            @if(count($timelineItems) > 0)
-            <div class="relative mt-16 pt-14 border-t border-[#e8d7ae] text-center" data-reveal="scale">
-                <div class="hidden md:flex justify-center absolute left-1/2 -translate-x-1/2 -top-2.5 z-10">
-                    <div class="w-4 h-4 rounded-full border-2 border-[#c9a45c] bg-white"></div>
-                </div>
-                <p class="text-[#a67c3d] font-semibold text-xs uppercase tracking-[0.2em] mb-3">Present Day</p>
-                <h3 class="font-serif text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-4">The Story Continues</h3>
-                <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
-                    Today, Krousar Thmey supports <strong class="text-[#1d4e7a]">{{ $settings['stat_children'] ?? '4,079' }} children</strong> across 15 Cambodian provinces — carrying forward the same promise made in 1991: that every child deserves the chance to grow, learn, and thrive.
-                </p>
-            </div>
-            @endif
+        </div>
+        <div class="mt-16 pt-14 text-center" data-reveal>
+            <p class="text-[#a67c3d] font-semibold text-xs uppercase tracking-[0.2em] mb-3">Present Day</p>
+            <h3 class="font-serif text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-4">The Story Continues</h3>
+            <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                Today, Krousar Thmey supports <strong class="text-[#1d4e7a]">{{ $settings['stat_children'] ?? '4,079' }} children</strong> across 15 Cambodian provinces — carrying forward the same promise made in 1991: that every child deserves the chance to grow, learn, and thrive.
+            </p>
         </div>
     </div>
 </section>
@@ -220,69 +86,70 @@
      ======================================================== --}}
 <section id="awards" class="pt-10 pb-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
+        @php
+            $sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
+            $facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
+            $twitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
+            $linkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
+            $shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
+            $facebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
+            $twitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
+            $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
+        @endphp
         <div class="text-center mb-16" data-reveal>
-            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Recognition</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Awards</h2>
+            <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">AWARDS</h2>
+            @if($sharingEnabled == '1')
+            <div class="flex items-center justify-center gap-3 mt-6">
+                <a href="{{ $facebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Awards') . '&linknote=' . urlencode('Krousar Thmey - Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($facebookIcon) }}" alt="Facebook" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $twitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Awards') . '&linknote=' . urlencode('Krousar Thmey - Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($twitterIcon) }}" alt="Twitter" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $linkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Awards') . '&linknote=' . urlencode('Krousar Thmey - Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($linkedinIcon) }}" alt="LinkedIn" class="w-full h-full object-cover">
+                </a>
+                <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($shareIcon) }}" alt="Share" class="w-full h-full object-cover">
+                </a>
+            </div>
+            @endif
         </div>
 
         @if($awards->isNotEmpty())
-        @php $awardAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a']; @endphp
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach($awards as $i => $award)
-            @php
-                $accent = $awardAccents[$i % count($awardAccents)];
-                $awardFallbackStyle = "background: linear-gradient(135deg, {$accent}, #1a3c6e)";
-                $awardAccentBarStyle = "background: {$accent}";
-            @endphp
-            <div class="group bg-white rounded-[24px] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden"
-                 data-reveal="scale" style="--reveal-delay: {{ min($i * 90, 360) }}">
-                <div class="relative h-32 overflow-hidden">
-                    @if($award->image_url)
-                    <img src="{{ $award->image_url }}" alt="{{ $award->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
-                    @else
-                    <div class="w-full h-full flex items-center justify-center text-4xl drop-shadow-md" style="{{ $awardFallbackStyle }}">🏆</div>
-                    @endif
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 px-4 py-3">
-                        <p class="text-white font-bold text-sm leading-snug drop-shadow-sm">{{ $award->title }}</p>
-                    </div>
-                </div>
-                <div class="p-5 text-center">
-                    <div class="w-8 h-1 rounded-full mx-auto mb-3 group-hover:w-12 transition-all duration-300" style="{{ $awardAccentBarStyle }}"></div>
-                    @if($award->recipient)
-                    <span class="text-[#8da83a] text-xs font-bold uppercase tracking-wider block mb-1">{{ $award->recipient }}</span>
-                    @endif
-                    <p class="text-[#8da83a] text-xs font-semibold mb-2">{{ $award->organization }}</p>
-                    @if($award->description)
-                    <p class="text-gray-400 text-xs leading-relaxed mb-3">{{ $award->description }}</p>
-                    @endif
-                    
-                    @if($award->website_url || $award->article_url || $award->video_url)
-                    <div class="flex flex-wrap gap-2 justify-center">
-                        @if($award->website_url)
-                        <a href="{{ $award->website_url }}" target="_blank" 
-                           class="px-3 py-1.5 bg-[#2d6fa3] text-white text-xs font-medium rounded-lg hover:bg-[#1d4e7a] transition-colors">
-                            Visit Website
-                        </a>
-                        @endif
-                        @if($award->article_url)
-                        <a href="{{ $award->article_url }}" target="_blank"
-                           class="px-3 py-1.5 bg-[#8da83a] text-white text-xs font-medium rounded-lg hover:bg-[#6b8a2b] transition-colors">
-                            Read Article
-                        </a>
-                        @endif
-                        @if($award->video_url)
-                        <a href="{{ $award->video_url }}" target="_blank"
-                           class="px-3 py-1.5 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 transition-colors">
-                            Watch Video
-                        </a>
-                        @endif
-                    </div>
-                    @endif
-                </div>
-            </div>
-            @endforeach
-        </div>
+        @php
+            $awardItems = $awards->map(function ($award) {
+                $cta = null;
+                $link = null;
+                if ($award->website_url) {
+                    $cta = 'Visit Website';
+                    $link = $award->website_url;
+                } elseif ($award->article_url) {
+                    $cta = 'Read Article';
+                    $link = $award->article_url;
+                } elseif ($award->video_url) {
+                    $cta = 'Watch Video';
+                    $link = $award->video_url;
+                }
+                return [
+                    'year' => $award->year,
+                    'image' => $award->image_url,
+                    'title' => $award->organization ? trim($award->organization) : $award->title,
+                    'description' => trim(($award->recipient ? $award->recipient . ' ' : '') . ($award->description ?? '')),
+                    'buttonText' => $cta,
+                    'buttonLink' => $link,
+                ];
+            });
+        @endphp
+        <x-award-grid :items="$awardItems" />
         @else
         <p class="text-gray-400 text-center py-8">No awards listed yet.</p>
         @endif
@@ -292,48 +159,7 @@
 {{-- ========================================================
      PARTNERS
      ======================================================== --}}
-<section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20"
-     x-data="{
-        category: 'all',
-        search: '',
-        perPage: 8,
-        catPage: {},
-
-        init() {
-            @foreach($partnersByCategory as $cat => $partners)
-                this.catPage['{{ addslashes($cat) }}'] = 1;
-            @endforeach
-        },
-
-        cardVisible(cat, index, name, total) {
-            const term = this.search.toLowerCase();
-            // When searching, show all matching items irrespective of pagination
-            if (term) {
-                return name.toLowerCase().includes(term);
-            }
-
-            // No search — use pagination
-            if (total <= this.perPage) return true;
-
-            const page = this.catPage[cat] || 1;
-            const start = (page - 1) * this.perPage;
-            return index >= start && index < start + this.perPage;
-        },
-
-        nextPage(cat, total) {
-            const maxPage = Math.ceil(total / this.perPage);
-            if ((this.catPage[cat] || 1) < maxPage) {
-                this.catPage[cat] = (this.catPage[cat] || 1) + 1;
-            }
-        },
-
-        prevPage(cat) {
-            if ((this.catPage[cat] || 1) > 1) {
-                this.catPage[cat] = (this.catPage[cat] || 1) - 1;
-            }
-        }
-     }"
-     x-effect="search; Object.keys(catPage).forEach(key => { catPage[key] = 1; })">
+<section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support</p>
@@ -341,28 +167,12 @@
             <p class="text-gray-500 mt-4 max-w-3xl mx-auto text-sm leading-relaxed">
                 Since its creation, Krousar Thmey has set up long-term partnerships with Cambodian and international organizations. Donors can financially support a program or project of their choice. Technical partners allow us to benefit from specific expertise.
             </p>
+            <a href="{{ route('partners') }}" class="inline-flex items-center mt-6 px-5 py-2.5 border border-[#2d6fa3] text-[#2d6fa3] font-semibold text-sm rounded-full hover:bg-[#2d6fa3] hover:text-white transition-colors">
+                See all partners
+            </a>
         </div>
 
-        <div class="mb-10 max-w-2xl mx-auto space-y-4">
-            <div class="relative">
-                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <input type="text" x-model="search" placeholder="Search partners..."
-                       class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#2d6fa3] focus:ring-2 focus:ring-[#2d6fa3]/20 transition-all outline-none text-sm bg-white">
-            </div>
-            <div class="flex flex-wrap justify-center gap-2">
-                <button @click="category = 'all'"
-                        :class="category === 'all' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                        class="px-5 py-2 rounded-full text-sm font-medium transition-all">All Partners</button>
-                @foreach ($partnersByCategory as $cat => $partners)
-                    <button @click="category = 'cat_{{ $cat }}'"
-                            :class="category === 'cat_{{ $cat }}' ? 'bg-[#2d6fa3] text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'"
-                            class="px-5 py-2 rounded-full text-sm font-medium transition-all">{{ $cat }}</button>
-                @endforeach
-            </div>
-        </div>
-
-        <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8"
-             x-show="category === 'all' || category === 'cat_Authorities'">
+        <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8">
             <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
                 <span class="text-2xl">🇰🇭</span> Partnerships with the Cambodian Authorities
             </h3>
@@ -387,69 +197,121 @@
         </div>
 
         @php
-            $categoryDisplayConfig = [
-                'Authorities'     => ['title' => 'Cambodian Public Authorities',                     'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white'],
-                'Organizations'   => ['title' => 'Organizations, Foundations & Institutions',         'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
-                'Companies'       => ['title' => 'Companies',                                        'dot' => 'bg-[#1d4e7a]', 'bgClass' => 'bg-white'],
-                'Towns'           => ['title' => 'Towns and Municipalities — Switzerland',            'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-[#2d6fa3]/5'],
-                'Individual Donor' => ['title' => 'Individual Donor',                                 'dot' => 'bg-[#8da83a]', 'bgClass' => 'bg-white'],
+            $financialPartnerGroups = [
+                [
+                    'title' => 'Cambodian Public Authorities',
+                    'dot' => 'bg-[#2d6fa3]',
+                    'items' => [
+                        'His Majesty the King NORODOM Sihamoni',
+                        'Her Majesty the Queen Mother NORODOM Monineath Sihanouk',
+                        'Prime Minister Samdech Moha Borvor Thipadei HUN Manet',
+                        'Samdech Akka Moha Sena Padei Techo Hun Sen, President of the Senate',
+                        'Samdech Dr. Bun Rany HUN Sen',
+                        'The Royal Government of Cambodia',
+                        'Ministry of Social Affairs',
+                        'Ministry of Education, Youth and Sport',
+                        'Ministry of Culture and Fine Arts',
+                        'Ministry of Defense',
+                        'Ministry of Information',
+                        'Ministry of Interior',
+                        'His Excellency the ambassador for Cambodia at UNESCO',
+                        'His Excellency the ambassador for Cambodia to France',
+                    ],
+                ],
+                [
+                    'title' => 'Organizations, Foundations and Institutions',
+                    'dot' => 'bg-[#8da83a]',
+                    'items' => [
+                        'DUBRULLE Family',
+                        'ENFANCE ESPOIR Foundation',
+                        'Fondation Amanjaya',
+                        'Fondation André & Cyprien',
+                        'Fondation Masalina',
+                        'Fonds Mécénat SIG',
+                        'Foundation Philantropique Famille Sandoz',
+                        'Gertrude Hirzel Foundation',
+                        'GREEN LEAVES EDUCATION Foundation',
+                        'Individual donor: Peter Tschofen',
+                        'Individual donor: Suzanne ROY, Grants Barbe.',
+                        'INTERNATIONAL COUNCIL FOR EDUCATION OF PEOPLE WITH VISUAL IMPAIRMENT (ICEVI)',
+                        "LA VOIX DE L'ENFANT Association",
+                        'LES AMIS DES ENFANTS DU MONDE Association',
+                        'MAY-OUI Foundation',
+                        'Miwako Fujiwara – Musica Felice Foundation',
+                        'Musica Felice',
+                        'OVERBROOK SCHOOL FOR THE BLIND (ONNET)',
+                        "PEOPLE'S ACTION FOR INCLUSIVE DEVELOPMENT (PAfID)",
+                        'Raksa Koma Organization',
+                        'ROTARY CLUB OF PERTH',
+                        'ROTARY CLUB OF PHNOM PENH',
+                        'STIFTUNG HIRTEN KINDER Foundation',
+                        'TALIKA',
+                        'UNICEF',
+                    ],
+                ],
+                [
+                    'title' => 'Companies',
+                    'dot' => 'bg-[#1d4e7a]',
+                    'items' => [
+                        'ABA BANK',
+                        'AMANJAYA HOTEL',
+                        'ANGKOR ARTWORK (Eric STOCKER)',
+                        'BAJAJ INTRACITY',
+                        'BRED BANK CAMBODIA',
+                        'BLIND MASSAGE CENTER',
+                        'BODIA NATURE',
+                        'CAMH Co. LTD',
+                        'CMDK',
+                        'D+Z URBAN HOTEL',
+                        'KHMER CERAMICS & FINE ARTS CENTER',
+                        'LONG RA Car mechanic',
+                        'PROMOTION FOR DISABILITY PROJECT',
+                        'PUNLEU THMEY Restaurant',
+                        'RADIO HAPPINESS VOICE FOR THE BLIND',
+                        'SAN FRANSISCO COMPANY',
+                        'SEIN LIM',
+                        'SENG POV Car mechanic',
+                        'SMART Cambodia',
+                        'SOCIAL COFFEE',
+                        'SOFITEL Phnom Penh Phokeethra',
+                        'SOFT SKILL PROFESSIONAL TRAINING SERVICE',
+                        'TEMPLATION ANGKOR BOUTIQUE',
+                        'THALIAS (Malis Restaurant, Khema, Arunreas Hotel)',
+                        'TOP STREET RESTAURANT',
+                        'VOICE OF THE BLIND Radio station',
+                    ],
+                ],
+                [
+                    'title' => 'Towns and Municipalities',
+                    'dot' => 'bg-[#2d6fa3]',
+                    'flag' => '🇨🇭',
+                    'items' => [
+                        'City of Geneva',
+                        'City of Meyrin',
+                        'Town of Hermance',
+                        'Towns of Collonge-Bellerive, Hermance and Vandoeuvres',
+                    ],
+                ],
             ];
         @endphp
 
-        @foreach ($partnersByCategory as $cat => $partners)
-            @if ($partners->isNotEmpty())
-                @php $config = $categoryDisplayConfig[$cat] ?? ['title' => $cat, 'dot' => 'bg-[#2d6fa3]', 'bgClass' => 'bg-white']; @endphp
-                <div class="{{ $config['bgClass'] }} rounded-3xl p-8 border border-gray-100 shadow-sm mb-8"
-                     x-show="category === 'all' || category === 'cat_{{ $cat }}'">
-                    <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
-                        @if ($cat === 'Towns')
-                            <span>🇨🇭</span>
-                        @endif
-                        {{ $config['title'] }}
-                    </h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                        @foreach ($partners as $partner)
-                            @php $ps = json_encode(strtolower($partner->name)); @endphp
-                            <div class="flex items-center gap-3 p-4 rounded-xl border border-gray-100 bg-[#f8f9fc] hover:border-[#2d6fa3]/20 hover:shadow-sm transition-all"
-                                 @php $catSafe = addslashes($cat); @endphp
-                                 x-show="cardVisible('{{ $catSafe }}', {{ $loop->index }}, {{ $ps }}, {{ $loop->count }})">
-                                @if ($partner->logo_url)
-                                    <div class="w-16 h-16 rounded-xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
-                                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}"
-                                             class="max-w-full max-h-full object-contain p-2">
-                                    </div>
-                                @else
-                                    <div class="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                        <span class="text-lg font-bold text-blue-500">{{ Str::substr($partner->name, 0, 1) }}</span>
-                                    </div>
-                                @endif
-                                <span class="text-sm font-medium text-gray-700 leading-tight">{{ $partner->name }}</span>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    @if ($partners->count() > 6)
-                    <div class="flex items-center justify-center gap-4 mt-6" x-show="search === ''">
-                        <button @click="prevPage('{{ $catSafe }}')"
-                                :disabled="(catPage['{{ $catSafe }}'] || 1) <= 1"
-                                class="px-4 py-2 text-sm font-medium rounded-lg transition-all"
-                                :class="(catPage['{{ $catSafe }}'] || 1) <= 1 ? 'text-gray-300 cursor-not-allowed' : 'text-[#2d6fa3] hover:bg-[#2d6fa3]/10'">
-                            ← Previous
-                        </button>
-                        <span class="text-sm text-gray-500">
-                            Page <span class="font-semibold text-gray-700" x-text="catPage['{{ $catSafe }}'] || 1"></span>
-                            of <span class="font-semibold text-gray-700" x-text="Math.ceil({{ $partners->count() }} / perPage)"></span>
-                        </span>
-                        <button @click="nextPage('{{ $catSafe }}', {{ $partners->count() }})"
-                                :disabled="(catPage['{{ $catSafe }}'] || 1) >= Math.ceil({{ $partners->count() }} / perPage)"
-                                class="px-4 py-2 text-sm font-medium rounded-lg transition-all"
-                                :class="(catPage['{{ $catSafe }}'] || 1) >= Math.ceil({{ $partners->count() }} / perPage) ? 'text-gray-300 cursor-not-allowed' : 'text-[#2d6fa3] hover:bg-[#2d6fa3]/10'">
-                            Next →
-                        </button>
-                    </div>
-                    @endif
-                </div>
-            @endif
+        @foreach ($financialPartnerGroups as $group)
+        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-8">
+            <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
+                @if (isset($group['flag']))
+                    <span>{{ $group['flag'] }}</span>
+                @endif
+                {{ $group['title'] }}
+            </h3>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2 text-sm text-gray-600">
+                @foreach ($group['items'] as $item)
+                <li class="flex items-start gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full {{ $group['dot'] }} mt-2 flex-shrink-0"></span>
+                    {{ $item }}
+                </li>
+                @endforeach
+            </ul>
+        </div>
         @endforeach
 
         <div class="text-center bg-[#2d6fa3] rounded-3xl p-10" data-reveal="scale">

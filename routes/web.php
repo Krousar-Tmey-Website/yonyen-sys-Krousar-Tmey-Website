@@ -18,8 +18,6 @@ use App\Models\JobOpportunity;
 use App\Models\News;
 use App\Models\Office;
 use App\Models\PageSection;
-use App\Models\Partner;
-use App\Models\PartnerCategory;
 use App\Models\Program;
 use App\Models\ProgramPageItem;
 use App\Models\Project;
@@ -50,12 +48,6 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/who-we-are', function () {
-    $partnerCategories = PartnerCategory::orderBy('name')->get();
-    $partnersByCategory = Partner::where('is_active', true)
-        ->orderBy('sort_order')
-        ->orderBy('name')
-        ->get()
-        ->groupBy(fn ($p) => $p->category ?? 'Individual Donor');
     $awards = Award::active()->ordered()->get();
     $offices = Office::active()->get();
     $historyEvents = HistoryEvent::active()->get();
@@ -63,7 +55,7 @@ Route::get('/who-we-are', function () {
     $settings = HomeSetting::allKeyed();
     $coreValues = CoreValue::ordered()->get();
 
-    return view('about', compact('partnerCategories', 'partnersByCategory', 'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
+    return view('about', compact('awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
 })->name('about');
 
 // Who We Are - Sub-pages
@@ -71,11 +63,9 @@ Route::get('/who-we-are/presentation', function () {
     $settings = HomeSetting::allKeyed();
     $coreValues = CoreValue::ordered()->get();
     $offices = Office::active()->where('country', '!=', 'Cambodia')->get();
-    $programs = Program::active()->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->get();
-    $worldwidePartners = \App\Models\WorldwidePartner::active()->get();
 
-    return view('presentation', compact('settings', 'coreValues', 'offices', 'programs', 'impactStatistics', 'worldwidePartners'));
+    return view('presentation', compact('settings', 'coreValues', 'offices', 'impactStatistics'));
 })->name('presentation');
 
 Route::get('/who-we-are/transparency', function () {
@@ -92,8 +82,18 @@ Route::get('/our-programs', function () {
     $bannerTitle = HomeSetting::getValue('programs_banner_title', 'Our Programs');
     $bannerSubtitle = HomeSetting::getValue('programs_banner_subtitle', 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.');
     $bannerImage = HomeSetting::getValue('programs_banner_image', '');
+    
+    $additionalLabel = HomeSetting::getValue('programs_additional_label', 'Cross-cutting Work');
+    $additionalTitle = HomeSetting::getValue('programs_additional_title', 'Additional Programs');
+    
+    $infoLabel = HomeSetting::getValue('programs_info_label', 'Learn More');
+    $infoTitle = HomeSetting::getValue('programs_info_title', 'Additional Information');
+    
+    $ctaLabel = HomeSetting::getValue('programs_cta_label', 'Support Our Mission');
+    $ctaTitle = HomeSetting::getValue('programs_cta_title', 'Help Children in Cambodia');
+    $ctaSubtitle = HomeSetting::getValue('programs_cta_subtitle', 'Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.');
 
-    return view('programs', compact('programs', 'bannerTitle', 'bannerSubtitle', 'bannerImage'));
+    return view('programs', compact('programs', 'bannerTitle', 'bannerSubtitle', 'bannerImage', 'additionalLabel', 'additionalTitle', 'infoLabel', 'infoTitle', 'ctaLabel', 'ctaTitle', 'ctaSubtitle'));
 })->name('programs');
 
 Route::get('/our-programs/{slug}', function ($slug) {
@@ -185,28 +185,8 @@ Route::get('/contact', function () {
 })->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-// `Partner` model is already imported at the top of this file. Removed duplicate import.
 Route::get('/partners', function () {
-    $search   = request('search');
-    $category = request('category');
-
-    $query = Partner::active();
-
-    if ($search) {
-        $query->where('name', 'like', '%' . $search . '%');
-    }
-
-    if ($category === 'individual-donor') {
-        $query->whereNull('category_id');
-    } elseif ($category) {
-        $query->whereHas('categoryModel', function ($q) use ($category) {
-            $q->where('name', $category);
-        });
-    }
-
-    $partners = $query->paginate(8)->withQueryString();
-
-    return view('partners', compact('partners', 'search', 'category'));
+    return view('partners');
 })->name('partners');
 
 Route::get('/donate', [DonationController::class, 'show'])->name('donate');
@@ -286,13 +266,13 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('presentation', [Admin\PresentationController::class, 'update'])->name('presentation.update');
     Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show'])->parameters(['presentation-slides' => 'slide']);
     Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show'])->parameters(['principle-slides' => 'slide']);
-    Route::resource('partners', Admin\PartnerController::class)->except(['show', 'create']);
+    Route::resource('partners', Admin\PartnerController::class)->except(['show']);
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
     Route::resource('history-events', Admin\HistoryEventController::class)
         ->except(['show', 'create'])
         ->parameters(['history-events' => 'historyEvent']);
     Route::resource('core-values', Admin\CoreValueController::class)
-        ->except(['show', 'create', 'edit'])
+        ->except(['show', 'edit'])
         ->parameters(['core-values' => 'coreValue']);
 
     // Worldwide Partners
@@ -300,7 +280,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->parameters(['worldwide-partners' => 'worldwidePartner']);
 
     Route::resource('transparency', Admin\TransparencyController::class)
-        ->except(['show', 'create'])
+        ->except(['show'])
         ->parameters(['transparency' => 'report']);
 
     // Reports — Activity Logs (must be before reports resource to avoid route collision)
@@ -356,4 +336,5 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
 
 });
+
 

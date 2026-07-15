@@ -83,14 +83,40 @@
                 </div>
             </div>
 
-            <div>
-                <label for="project_default_make_difference_text" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference</label>
-                <textarea id="project_default_make_difference_text"
-                          name="project_default_make_difference_text"
-                          rows="4"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                          placeholder="e.g. $50 - food expenses per child per month">{{ old('project_default_make_difference_text', $settings['project_default_make_difference_text']->value ?? '') }}</textarea>
-                <p class="mt-1.5 text-xs text-gray-400">Shown on the public project page whenever a project leaves its own donation/details text blank.</p>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="md:col-span-2">
+                    <label for="project_default_make_difference_title" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title</label>
+                    <input type="text"
+                           id="project_default_make_difference_title"
+                           name="project_default_make_difference_title"
+                           value="{{ old('project_default_make_difference_title', $settings['project_default_make_difference_title']->value ?? 'Make a Difference') }}"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div class="md:col-span-2">
+                    <label for="project_default_make_difference_text" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text</label>
+                    <textarea id="project_default_make_difference_text"
+                              name="project_default_make_difference_text"
+                              rows="4"
+                              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                              placeholder="e.g. $50 - food expenses per child per month">{{ old('project_default_make_difference_text', $settings['project_default_make_difference_text']->value ?? '') }}</textarea>
+                    <p class="mt-1.5 text-xs text-gray-400">Shown on the public project page whenever a project leaves its own donation/details text blank.</p>
+                </div>
+                <div>
+                    <label for="project_default_donate_button_text" class="block text-sm font-medium text-gray-700 mb-1.5">Donate Button Text</label>
+                    <input type="text"
+                           id="project_default_donate_button_text"
+                           name="project_default_donate_button_text"
+                           value="{{ old('project_default_donate_button_text', $settings['project_default_donate_button_text']->value ?? 'Donate Now') }}"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label for="project_default_contact_button_text" class="block text-sm font-medium text-gray-700 mb-1.5">Contact Button Text</label>
+                    <input type="text"
+                           id="project_default_contact_button_text"
+                           name="project_default_contact_button_text"
+                           value="{{ old('project_default_contact_button_text', $settings['project_default_contact_button_text']->value ?? 'Want to know more about this project? Contact us') }}"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
             </div>
         </div>
 
@@ -223,14 +249,37 @@
                     </div>
                 </div>
 
-                <div class="transition-opacity duration-200" :class="detailsMode === 'specific' ? 'opacity-100' : 'opacity-60'">
-                    <label for="make_difference_text" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference</label>
-                    <textarea id="make_difference_text"
-                              name="make_difference_text"
-                              rows="4"
-                              :disabled="detailsMode !== 'specific'"
-                              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                              placeholder="e.g. $50 - food expenses per child per month">{{ old('make_difference_text', $selectedProject->make_difference_text) }}</textarea>
+                <div class="grid md:grid-cols-2 gap-4 transition-opacity duration-200" :class="detailsMode === 'specific' ? 'opacity-100' : 'opacity-60'">
+                    <div class="md:col-span-2">
+                        <label for="make_difference_title" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title</label>
+                        <input type="text" id="make_difference_title" name="make_difference_title"
+                               value="{{ old('make_difference_title', $selectedProject->make_difference_title) }}"
+                               :disabled="detailsMode !== 'specific'"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="make_difference_text" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text</label>
+                        <textarea id="make_difference_text"
+                                  name="make_difference_text"
+                                  rows="4"
+                                  :disabled="detailsMode !== 'specific'"
+                                  class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="e.g. $50 - food expenses per child per month">{{ old('make_difference_text', $selectedProject->make_difference_text) }}</textarea>
+                    </div>
+                    <div>
+                        <label for="donate_button_text" class="block text-sm font-medium text-gray-700 mb-1.5">Donate Button Text</label>
+                        <input type="text" id="donate_button_text" name="donate_button_text"
+                               value="{{ old('donate_button_text', $selectedProject->donate_button_text) }}"
+                               :disabled="detailsMode !== 'specific'"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label for="contact_button_text" class="block text-sm font-medium text-gray-700 mb-1.5">Contact Button Text</label>
+                        <input type="text" id="contact_button_text" name="contact_button_text"
+                               value="{{ old('contact_button_text', $selectedProject->contact_button_text) }}"
+                               :disabled="detailsMode !== 'specific'"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -275,8 +324,22 @@
                 </div>
 
                 <div class="mt-4 rounded-xl bg-[#f8f9fc] border border-gray-100 p-4">
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Make a Difference</p>
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Make a Difference Title</p>
+                    <p class="text-sm text-gray-700 leading-relaxed font-semibold">{{ $selectedProject->effective_make_difference_title ?: 'Make a Difference' }}</p>
+                </div>
+                <div class="mt-4 rounded-xl bg-[#f8f9fc] border border-gray-100 p-4">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Make a Difference Text</p>
                     <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{{ $selectedProject->effective_make_difference_text ?: 'Not set' }}</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4 mt-4">
+                    <div class="rounded-xl bg-[#f8f9fc] border border-gray-100 p-4">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Donate Button</p>
+                        <p class="text-sm text-gray-700 leading-relaxed font-semibold">{{ $selectedProject->effective_donate_button_text ?: 'Donate Now' }}</p>
+                    </div>
+                    <div class="rounded-xl bg-[#f8f9fc] border border-gray-100 p-4">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Contact Button</p>
+                        <p class="text-sm text-gray-700 leading-relaxed font-semibold">{{ $selectedProject->effective_contact_button_text ?: 'Want to know more about this project? Contact us' }}</p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -51,6 +51,21 @@ class Project extends Model
         return $this->resolveProjectDefault($this->attributes['make_difference_text'] ?? null, 'project_default_make_difference_text');
     }
 
+    public function getEffectiveMakeDifferenceTitleAttribute(): string
+    {
+        return $this->resolveProjectDefault($this->attributes['make_difference_title'] ?? null, 'project_default_make_difference_title');
+    }
+
+    public function getEffectiveDonateButtonTextAttribute(): string
+    {
+        return $this->resolveProjectDefault($this->attributes['donate_button_text'] ?? null, 'project_default_donate_button_text');
+    }
+
+    public function getEffectiveContactButtonTextAttribute(): string
+    {
+        return $this->resolveProjectDefault($this->attributes['contact_button_text'] ?? null, 'project_default_contact_button_text');
+    }
+
     public function getUsesSpecificPageDetailsAttribute(): bool
     {
         return collect([
@@ -59,6 +74,9 @@ class Project extends Model
             $this->attributes['location'] ?? null,
             $this->attributes['beneficiaries'] ?? null,
             $this->attributes['make_difference_text'] ?? null,
+            $this->attributes['make_difference_title'] ?? null,
+            $this->attributes['donate_button_text'] ?? null,
+            $this->attributes['contact_button_text'] ?? null,
         ])->contains(fn ($value) => trim((string) $value) !== '');
     }
 

@@ -100,8 +100,8 @@
                     <div class="grid grid-cols-1 gap-4">
                         @foreach($iconSettings as $key => $config)
                         <div class="flex items-center gap-4">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[{{ $config['color'] }}] flex items-center justify-center">
-                                <img src="{{ asset($items->firstWhere('key', $key)->value ?? $config['default']) }}" alt="{{ $config['label'] }}" class="w-6 h-6 filter brightness-0 invert">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden border border-gray-200">
+                                <img src="{{ asset($items->firstWhere('key', $key)->value ?? $config['default']) }}" alt="{{ $config['label'] }}" class="w-full h-full object-cover">
                             </div>
                             <div class="flex-1">
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ $config['label'] }}</label>
@@ -113,9 +113,34 @@
                         </div>
                         @endforeach
                     </div>
-                    
+
                     <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-600 mt-4">
                         <strong>Note:</strong> Icons will be saved to <code>public/images/social/</code> directory. Upload takes priority over existing files.
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-gray-100">
+                    <p class="text-xs font-medium text-gray-700 mb-1">Share Link Overrides</p>
+                    <p class="text-xs text-gray-400 mb-3">Optional — leave blank to auto-generate a "share this page" link for whichever page the buttons appear on (Presentation, Awards, ...).</p>
+
+                    @php
+                    $linkSettings = [
+                        'sharing_facebook_link' => 'Facebook Link',
+                        'sharing_twitter_link'  => 'Twitter Link',
+                        'sharing_linkedin_link' => 'LinkedIn Link',
+                    ];
+                    @endphp
+
+                    <div class="grid grid-cols-1 gap-4">
+                        @foreach($linkSettings as $key => $label)
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">{{ $label }}</label>
+                            <input type="text" name="settings[{{ $key }}]"
+                                   value="{{ old('settings.'.$key, $items->firstWhere('key', $key)->value ?? '') }}"
+                                   placeholder="https://..."
+                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

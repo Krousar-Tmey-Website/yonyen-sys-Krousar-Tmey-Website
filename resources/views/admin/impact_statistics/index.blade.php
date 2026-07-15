@@ -137,7 +137,7 @@
                                 @endif
                                 <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
                                        class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-[#2d6fa3]">
-                                <input type="url" name="image_url" value="{{ $stat->image }}"
+                                <input type="url" name="image_url" value="{{ str_starts_with((string) $stat->image, 'http') ? $stat->image : old('image_url') }}"
                                        class="w-full mt-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
                                        placeholder="...or paste an image URL">
                                 @error('image')<p class="text-red-400 text-xs mt-1">{{ $message }}</p>@enderror

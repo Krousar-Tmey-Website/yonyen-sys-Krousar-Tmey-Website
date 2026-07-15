@@ -15,6 +15,11 @@ class CoreValueController extends Controller
         return view('admin.core_values.index', compact('coreValues'));
     }
 
+    public function create()
+    {
+        return view('admin.core_values.create');
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
