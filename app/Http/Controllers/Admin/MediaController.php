@@ -36,14 +36,14 @@ class MediaController extends Controller
             'sort_order'    => ['nullable', 'integer'],
         ]);
 
-        $data['is_published'] = $request->boolean('is_published');
+        $data['is_published'] = $request->boolean('is_published'); // hidden input sends 0 when unchecked
         $data['sort_order']   = $data['sort_order'] ?? 0;
 
         // Resolve image
         $data['image'] = $this->resolveImage($request, $data);
         unset($data['image_url']);
 
-        if ($data['is_published']) {
+        if ($data['is_published'] && empty($data['published_at'])) {
             $data['published_at'] = now();
         }
 

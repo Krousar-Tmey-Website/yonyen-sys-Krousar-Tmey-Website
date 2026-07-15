@@ -150,11 +150,12 @@
                 <div class="form-group form-group--no-margin">
                     <div class="form-grid">
                         <div class="publish-option">
+                            <input type="hidden" name="is_published" value="0">
                             <input type="checkbox" name="is_published" id="is_published" value="1"
                                    {{ old('is_published', $media->is_published) ? 'checked' : '' }}>
                             <div>
-                                <div class="label">Published</div>
-                                <div class="description">Uncheck to save as draft</div>
+                                <div class="label">Visible on public Media page</div>
+                                <div class="description">Uncheck to hide from visitors</div>
                             </div>
                         </div>
                         <div class="info-box">
@@ -162,8 +163,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <div>
-                                <div class="info-title">Draft vs Published</div>
-                                <div class="info-desc">Drafts are only visible to admins.</div>
+                                <div class="info-title">Auto-published</div>
+                                <div class="info-desc">Items are visible on the public Media page by default.</div>
                             </div>
                         </div>
                     </div>

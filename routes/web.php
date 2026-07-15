@@ -15,6 +15,7 @@ use App\Models\CoreValue;
 use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
 use App\Models\JobOpportunity;
+use App\Models\MediaItem;
 use App\Models\News;
 use App\Models\Office;
 use App\Models\PageSection;
@@ -147,17 +148,14 @@ Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
 
-    // Featured article = latest published news
-    $featuredArticle = News::published()->latest('published_at')->first();
-
-    // Latest news (excluding the featured one)
-    $latestNews = News::published()
-        ->when($featuredArticle, fn ($q) => $q->where('id', '!=', $featuredArticle->id))
-        ->latest('published_at')
-        ->take(6)
+    // Media items from the Media Gallery
+    $featuredMedia = MediaItem::published()->ordered()->first();
+    $mediaItems = MediaItem::published()
+        ->when($featuredMedia, fn ($q) => $q->where('id', '!=', $featuredMedia->id))
+        ->ordered()
         ->get();
 
-    return view('resources', compact('reports', 'featuredArticle', 'latestNews'));
+    return view('resources', compact('reports', 'featuredMedia', 'mediaItems'));
 })->name('resources');
 
 // Secure PDF view/download with graceful error handling

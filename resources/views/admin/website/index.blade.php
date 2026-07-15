@@ -10,10 +10,11 @@
     @csrf
 
     @php
-    $order = ['website', 'social', 'sharing', 'contact', 'footer'];
+    $order = ['website', 'social', 'media', 'sharing', 'contact', 'footer'];
     $labels = [
         'website' => ['🌐', 'Website Identity'],
         'social'  => ['🔗', 'Social Media Links'],
+        'media'   => ['📺', 'Media Page'],
         'sharing' => ['📤', 'Share our impact'],
         'contact' => ['📞', 'Contact Information'],
         'footer'  => ['📍', 'Footer Settings'],
@@ -22,8 +23,9 @@
     @endphp
 
     @foreach($order as $group)
-    @if(!isset($settings[$group])) @continue @endif
-    @php $items = $settings[$group]; @endphp
+    @php
+        $items = $settings[$group] ?? collect();
+    @endphp
     <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
         <div class="flex items-center gap-3 mb-4">
             <span class="text-xl">{{ $labels[$group][0] }}</span>
@@ -60,6 +62,40 @@
                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                 </div>
                 @endforeach
+            </div>
+
+        @elseif($group === 'media')
+            {{-- ====== Media Page Settings ====== --}}
+            <div class="space-y-4">
+                <p class="text-xs text-gray-500 mb-3">Configure the <a href="{{ route('media') }}" target="_blank" class="text-[#2d6fa3] hover:underline font-medium">Media page</a> header, social links, and contact email.</p>
+
+                <div class="space-y-4">
+                    @php
+                        $mediaFields = [
+                            'media_title' => ['label' => 'Page Title', 'type' => 'text', 'default' => 'MEDIA', 'placeholder' => 'MEDIA'],
+                            'media_contact_email' => ['label' => 'Contact Email', 'type' => 'email', 'default' => 'communication@krousar-thmey.org', 'placeholder' => 'communication@krousar-thmey.org'],
+                            'media_facebook_url' => ['label' => 'Facebook URL', 'type' => 'url', 'default' => 'https://www.facebook.com/KrousarThmey/', 'placeholder' => 'https://facebook.com/...'],
+                            'media_twitter_url' => ['label' => 'Twitter/X URL', 'type' => 'url', 'default' => 'https://twitter.com/krousarthmey', 'placeholder' => 'https://twitter.com/...'],
+                            'media_linkedin_url' => ['label' => 'LinkedIn URL', 'type' => 'url', 'default' => 'https://www.linkedin.com/company/krousar-thmey/', 'placeholder' => 'https://linkedin.com/...'],
+                        ];
+                    @endphp
+
+                    @foreach($mediaFields as $key => $field)
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">{{ $field['label'] }}</label>
+                        @if($field['type'] === 'textarea')
+                            <textarea name="settings[{{ $key }}]" rows="3"
+                                      class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                      placeholder="{{ $field['placeholder'] }}">{{ old('settings.'.$key, $items->firstWhere('key', $key)->value ?? $field['default']) }}</textarea>
+                        @else
+                            <input type="{{ $field['type'] }}" name="settings[{{ $key }}]"
+                                   value="{{ old('settings.'.$key, $items->firstWhere('key', $key)->value ?? $field['default']) }}"
+                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                   placeholder="{{ $field['placeholder'] }}">
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
             </div>
 
         @elseif($group === 'sharing')
