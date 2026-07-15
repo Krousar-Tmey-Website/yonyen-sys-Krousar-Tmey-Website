@@ -107,11 +107,48 @@
      ======================================================== --}}
 <section id="history" class="pt-10 pb-20 bg-white scroll-mt-20">
     <div class="max-w-[1400px] mx-auto px-5 md:px-12 lg:px-20">
+        @php
+            $historySharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
+            $historyFacebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
+            $historyTwitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
+            $historyLinkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
+            $historyShareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
+            $historyFacebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
+            $historyTwitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
+            $historyLinkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
+        @endphp
+        <div class="text-center mb-16" data-reveal>
+            <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">OUR HISTORY</h2>
+            @if($historySharingEnabled == '1')
+            <div class="flex items-center justify-center gap-3 mt-6 mb-12">
+                <a href="{{ $historyFacebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyFacebookIcon) }}" alt="Facebook" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $historyTwitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyTwitterIcon) }}" alt="Twitter" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $historyLinkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyLinkedinIcon) }}" alt="LinkedIn" class="w-full h-full object-cover">
+                </a>
+                <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyShareIcon) }}" alt="Share" class="w-full h-full object-cover">
+                </a>
+            </div>
+            @endif
+        </div>
+
         {{-- Header --}}
         <div class="text-center mb-16" data-reveal>
-            <p class="text-[18px] font-semibold tracking-[5px] uppercase text-[#C89B4D] mb-[50px]">The Beginning</p>
-            <h2 class="font-serif text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">A Story of Hope and Resilience</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">From a single orphanage in a refugee camp to a nationwide movement for Cambodia's children — every milestone below was made possible by people who believed in a better future.</p>
+            <p class="text-[18px] font-semibold tracking-[5px] uppercase text-[#C89B4D] mb-[50px]"></p>
+           
         </div>
 
         @php
