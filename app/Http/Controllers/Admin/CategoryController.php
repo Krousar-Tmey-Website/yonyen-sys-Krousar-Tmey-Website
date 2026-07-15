@@ -29,7 +29,18 @@ class CategoryController extends Controller
         // Remove CategoryStatus - don't set it
         // $data['CategoryStatus'] = 1;
 
-        Category::create($data);
+        $category = Category::create($data);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Category created successfully.',
+                'category' => [
+                    'CategoryID' => $category->CategoryID,
+                    'CategoryName' => $category->CategoryName,
+                ],
+            ]);
+        }
 
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category created successfully.');

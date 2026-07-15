@@ -534,29 +534,7 @@ $structureImage = $settings['structure_image'] ?? null;
 </section>
 @endif
 
-{{-- ===== GALLERY ===== --}}
-@if($galleries->count())
-<section class="py-16 lg:py-24 bg-[#1a3c6e]">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-12">
-            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">In Pictures</span>
-            <h2 class="text-3xl font-bold text-white mt-3">A Glimpse Into Our Work</h2>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            @foreach($galleries as $photo)
-            <div class="group relative overflow-hidden rounded-xl aspect-square bg-white/5">
-                @if($photo->image)
-                <img src="{{ str_starts_with($photo->image, 'http') ? $photo->image : asset('storage/' . $photo->image) }}" alt="{{ $photo->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                @endif
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-                    <p class="text-white font-medium text-sm">{{ $photo->title }}</p>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-@endif
+
 
 {{-- ===== NEWS ===== --}}
 <section class="py-20 lg:py-28 bg-white">

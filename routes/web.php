@@ -11,7 +11,6 @@ use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\Book;
 use App\Models\CoreValue;
-use App\Models\Media;
 use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
 use App\Models\JobOpportunity;
@@ -42,12 +41,11 @@ Route::get('/', function () {
     $slides = Slide::active()->get();
     $projects = Project::where('is_active', true)->take(3)->get();
     $testimonials = Testimonial::where('is_active', true)->take(3)->get();
-    $galleries = Media::where('is_active', true)->latest()->take(6)->get();
     $programs = Program::active()->take(3)->get();
     $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
 
-    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics'));
+    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'programs', 'pageSections', 'impactStatistics'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -144,7 +142,17 @@ Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
 
-    return view('resources', compact('reports'));
+    // Featured article = latest published news
+    $featuredArticle = News::published()->latest('published_at')->first();
+
+    // Latest news (excluding the featured one)
+    $latestNews = News::published()
+        ->when($featuredArticle, fn ($q) => $q->where('id', '!=', $featuredArticle->id))
+        ->latest('published_at')
+        ->take(6)
+        ->get();
+
+    return view('resources', compact('reports', 'featuredArticle', 'latestNews'));
 })->name('resources');
 
 // Secure PDF view/download with graceful error handling
@@ -256,12 +264,6 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
     Route::resource('page-sections', Admin\PageSectionController::class)->except(['show']);
     Route::resource('slides', Admin\SlideController::class)->except(['show']);
-
-    // Media Gallery
-    Route::post('media/bulk-delete', [Admin\MediaController::class, 'bulkDestroy'])->name('media.bulk-destroy');
-    Route::resource('media', Admin\MediaController::class)
-        ->except(['show'])
-        ->parameters(['media' => 'media']);
 
     Route::resource('impact-statistics', Admin\ImpactStatisticController::class)
         ->except(['show', 'create', 'edit'])
