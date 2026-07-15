@@ -168,6 +168,15 @@
 [data-reveal="line"]  { transform: scaleY(0); transform-origin: top; }
 [data-reveal].is-revealed { opacity: 1; transform: none; }
 
+/* ── Timeline year navigator ──
+   Active state toggled by the scrollspy IntersectionObserver in resources/js/app.js. */
+.year-nav-link.is-active {
+    @apply text-[#0A5EA8] border-[#0A5EA8] bg-white;
+}
+.year-nav-link.is-active .year-nav-dot {
+    @apply bg-[#0A5EA8];
+}
+
 @media (prefers-reduced-motion: reduce) {
     .hero-media-drift,
     .hero-float-slow,

@@ -67,9 +67,15 @@
                     $timelineItems[] = ['year' => $event->year, 'text' => null, 'image' => $event->image_url];
                 }
             }
+            $historyYears = collect($timelineItems)->pluck('year')->filter()->unique()->sort()->values();
         @endphp
 
-        <x-timeline :items="$timelineItems" />
+        <div class="flex items-start gap-8">
+            <x-timeline-year-nav :years="$historyYears" />
+            <div class="flex-1 min-w-0">
+                <x-timeline :items="$timelineItems" />
+            </div>
+        </div>
         <div class=" mt-16 pt-14  text-center"​​​>
             <p class="text-[#a67c3d] font-semibold text-xs uppercase tracking-[0.2em] mb-3">Present Day</p>
                 <h3 class="font-serif text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-4">The Story Continues</h3>

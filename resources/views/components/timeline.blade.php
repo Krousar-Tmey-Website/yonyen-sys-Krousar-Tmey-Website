@@ -16,9 +16,16 @@
              data-reveal="line"></div>
 
         <ol class="relative list-none pl-0 grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-14 md:gap-y-16">
+            @php $seenYears = []; @endphp
             @forelse($items as $index => $item)
-            @php $isLeft = $index % 2 === 0; @endphp
-            <li class="relative pl-12 md:pl-0 {{ $isLeft ? '' : 'md:mt-20' }}">
+            @php
+                $isLeft = $index % 2 === 0;
+                $year = $item['year'] ?? null;
+                $isFirstForYear = $year && !in_array($year, $seenYears, true);
+                if ($isFirstForYear) { $seenYears[] = $year; }
+            @endphp
+            <li class="relative pl-12 md:pl-0 scroll-mt-28 {{ $isLeft ? '' : 'md:mt-20' }}"
+                @if($isFirstForYear) id="year-{{ $year }}" data-year-anchor="{{ $year }}" @endif>
                 {{-- Marker dot on the center rail --}}
                 <span class="absolute z-10 w-4 h-4 rounded-full bg-[#C89B4D] border-4 border-white shadow
                              top-6 left-5 -translate-x-1/2
