@@ -27,6 +27,8 @@ class ProgramController extends Controller
             'full_description' => ['nullable', 'string'],
             'image'            => ['nullable', 'image', 'max:2048'],
             'image_url'        => ['nullable', 'url', 'max:2048'],
+            'icon_image'       => ['nullable', 'image', 'max:2048'],
+            'icon_image_url'   => ['nullable', 'url', 'max:2048'],
             'sort_order'       => ['prohibited'],
             'is_active'        => ['nullable', 'boolean'],
             'Status'           => ['nullable', 'string', 'max:255'],
@@ -51,6 +53,15 @@ class ProgramController extends Controller
             $data['image'] = $request->file('image')->store('programs', 'public');
         } elseif (!empty($imageUrl)) {
             $data['image'] = $imageUrl;
+        }
+
+        $iconImageUrl = $data['icon_image_url'] ?? null;
+        unset($data['icon_image_url']);
+
+        if ($request->hasFile('icon_image')) {
+            $data['icon_image'] = $request->file('icon_image')->store('programs/icons', 'public');
+        } elseif (!empty($iconImageUrl)) {
+            $data['icon_image'] = $iconImageUrl;
         }
 
         $testimonyImageUrl = $request->input('testimony_image_url');
@@ -82,6 +93,9 @@ class ProgramController extends Controller
             'full_description' => ['nullable', 'string'],
             'image'            => ['nullable', 'image', 'max:2048'],
             'image_url'        => ['nullable', 'url', 'max:2048'],
+            'icon_image'       => ['nullable', 'image', 'max:2048'],
+            'icon_image_url'   => ['nullable', 'url', 'max:2048'],
+            'remove_icon_image' => ['nullable', 'boolean'],
             'sort_order'       => ['prohibited'],
             'is_active'        => ['nullable', 'boolean'],
             'Status'           => ['nullable', 'string', 'max:255'],
@@ -118,6 +132,29 @@ class ProgramController extends Controller
             // Keep existing image
             unset($data['image']);
         }
+
+        $iconImageUrl = $data['icon_image_url'] ?? null;
+        unset($data['icon_image_url']);
+
+        if ($request->hasFile('icon_image')) {
+            if ($program->icon_image && !str_starts_with($program->icon_image, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($program->icon_image);
+            }
+            $data['icon_image'] = $request->file('icon_image')->store('programs/icons', 'public');
+        } elseif (!empty($iconImageUrl)) {
+            if ($program->icon_image && !str_starts_with($program->icon_image, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($program->icon_image);
+            }
+            $data['icon_image'] = $iconImageUrl;
+        } elseif ($request->boolean('remove_icon_image')) {
+            if ($program->icon_image && !str_starts_with($program->icon_image, 'http')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($program->icon_image);
+            }
+            $data['icon_image'] = null;
+        } else {
+            unset($data['icon_image']);
+        }
+        unset($data['remove_icon_image']);
 
         $testimonyImageUrl = $request->input('testimony_image_url');
         unset($data['testimony_image_url']);

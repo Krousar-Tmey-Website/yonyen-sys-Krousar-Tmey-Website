@@ -337,3 +337,131 @@
         grid-row: span 1 / span 1 !important;
     }
 }
+
+/* ─────────────────────────────────────────────────────────
+   PREMIUM KEY FIGURES / IMPACT STATISTICS SECTION
+   ───────────────────────────────────────────────────────── */
+
+/* Main section background with decorative elements */
+#key-figures {
+    position: relative;
+}
+
+/* Smooth counter animation for numbers */
+@keyframes countUp {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.counter {
+    animation: countUp 0.6s ease-out;
+}
+
+/* Premium card styling with hover effects */
+#key-figures .group {
+    position: relative;
+}
+
+/* Card hover effect - lift and shadow */
+#key-figures .group:hover {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Icon scale effect on card hover */
+#key-figures .group:hover svg {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Accent line animation */
+#key-figures .group:hover .h-1 {
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Grid responsive layout */
+#key-figures .grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+/* Desktop: 3-2 layout */
+@media (min-width: 1280px) {
+    #key-figures .grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+/* Large screens: 3-2 layout with proper centering */
+@media (min-width: 1024px) and (max-width: 1279px) {
+    #key-figures .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-flow: dense;
+    }
+    
+    #key-figures .grid > :nth-child(4),
+    #key-figures .grid > :nth-child(5) {
+        grid-column: auto;
+    }
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 768px) and (max-width: 1023px) {
+    #key-figures .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+    }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 767px) {
+    #key-figures .grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+/* Subtle decorative pattern */
+#key-figures .opacity-30 {
+    animation: slowDrift 20s ease-in-out infinite;
+}
+
+@keyframes slowDrift {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.35; }
+}
+
+/* Glow effect on decorative circles */
+@keyframes softGlow {
+    0%, 100% { filter: blur(100px); opacity: 0.2; }
+    50% { filter: blur(90px); opacity: 0.3; }
+}
+
+#key-figures [class*="bg-gradient"] {
+    animation: softGlow 8s ease-in-out infinite;
+}
+
+/* Smooth color transitions */
+.transition-all {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Prevent layout shift on hover */
+#key-figures .group {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Reduce motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    #key-figures .group,
+    #key-figures .counter,
+    #key-figures .group:hover,
+    #key-figures [class*="bg-gradient"] {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+    
+    #key-figures .group:hover {
+        transform: none !important;
+    }
+}

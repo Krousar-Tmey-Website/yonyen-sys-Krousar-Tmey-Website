@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Presentation — Krousar Thmey')
@@ -6,169 +7,68 @@
 @section('content')
 
 {{-- ========================================================
-     HERO CAROUSEL (Like Homepage)
+     WHO WE ARE / INTRO SECTION
      ======================================================== --}}
-@php
-$heroSlides = \App\Models\PresentationSlide::active()->get();
-@endphp
-<section class="relative h-[90vh] min-h-[520px] max-h-[800px] overflow-hidden"
-    x-data="{
-            current: 0,
-            total: {{ max($heroSlides->count(), 1) }},
-            timer: null,
-            start() {
-                if (this.total <= 1) return;
-                this.timer = setInterval(() => {
-                    this.current = (this.current + 1) % this.total;
-                }, 5500);
-            },
-            go(i) {
-                this.current = i;
-                clearInterval(this.timer);
-                this.start();
-            }
-         }"
-    x-init="start()">
+<section class="py-14 bg-[#f8f5f0] scroll-mt-20">
+    <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto mb-8" data-reveal>
+            <span class="inline-flex items-center gap-2 text-[11px] font-semibold text-[#8da83a] uppercase tracking-[0.2em] mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a]"></span>
+                Since 1991
+            </span>
+            <h1 class="text-lg md:text-xl font-bold text-[#1d4e7a] leading-snug uppercase tracking-wide">
+                {{ $settings['intro_heading'] ?? 'Krousar Thmey, the first Cambodian organization helping disadvantaged children, born in 1991 in the Site II refugee camp in Thailand.' }}
+            </h1>
+            <div class="w-10 h-0.5 bg-[#d32f2f] rounded-full mx-auto mt-3"></div>
+        </div>
 
-    @forelse($heroSlides as $slide)
-    {{-- Slide {{ $loop->iteration }} --}}
-    <div class="absolute inset-0 transition-opacity duration-1000"
-        :class="current === {{ $loop->index }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
-        <div class="absolute inset-0 bg-gradient-to-r from-[#0f2448]/85 via-[#0f2448]/60 to-transparent z-10"></div>
-        <div class="absolute inset-0 bg-cover bg-center"
-            style="background-image: url('{{ $slide->image_url }}')"></div>
-        <div class="relative z-20 h-full flex items-center">
-            <div class="max-w-7xl mx-auto px-6 w-full">
-                <div class="max-w-2xl"
-                    x-show="current === {{ $loop->index }}"
-                    x-transition:enter="transition ease-out duration-700 delay-300"
-                    x-transition:enter-start="opacity-0 translate-y-8"
-                    x-transition:enter-end="opacity-100 translate-y-0">
-                    @if($slide->badge_text)
-                    <span class="inline-block bg-[#e8a020] text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-5 uppercase tracking-wider">{{ $slide->badge_text }}</span>
-                    @endif
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-                        {!! nl2br(e($slide->title)) !!}
-                    </h1>
-                    @if($slide->subtitle)
-                    <p class="text-white/80 text-lg mb-8 leading-relaxed">{{ $slide->subtitle }}</p>
-                    @endif
+        {{-- Our Mission / Our Vision photo cards --}}
+        <div class="grid md:grid-cols-2 gap-6">
+            {{-- Our Mission --}}
+            <div class="group relative rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 h-64 md:h-72" data-reveal="left">
+                @php
+                $missionImage = $settings['mission_image'] ?? null;
+                $missionImageUrl = $missionImage ? (str_starts_with($missionImage, 'http') ? $missionImage : asset('storage/' . $missionImage)) : asset('images/children.jpg');
+                @endphp
+                <img src="{{ $missionImageUrl }}" alt="Our Mission"
+                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/95 via-[#0f2448]/25 to-transparent"></div>
+                <div class="absolute top-0 left-0 right-0 h-1 bg-[#2d6fa3]"></div>
 
-                    @if($slide->cta_primary_text || $slide->cta_secondary_text)
-                    <div class="flex flex-wrap gap-6">
-                        @if($slide->cta_primary_text)
-                        <a href="{{ $slide->cta_primary_url ?? route('donate') }}" class="btn-primary">{{ $slide->cta_primary_text }}</a>
-                        @endif
-                        @if($slide->cta_secondary_text)
-                        <a href="{{ $slide->cta_secondary_url ?? route('donate') }}" class="btn-outline">{{ $slide->cta_secondary_text }}</a>
-                        @endif
+                <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-9 h-9 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                        </span>
+                        <h3 class="text-white font-bold text-sm uppercase tracking-[0.15em]">{{ $settings['mission_title'] ?? 'Our Mission' }}</h3>
                     </div>
-                    @endif
+                    <p class="text-white/80 text-xs leading-relaxed max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-out overflow-hidden">
+                        {{ $settings['mission_text'] ?? 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.' }}
+                    </p>
                 </div>
             </div>
-        </div>
-    </div>
-    @empty
-    {{-- Fallback static hero --}}
-    <div class="absolute inset-0 transition-opacity duration-1000 opacity-100 z-10">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60 z-10"></div>
-        <div class="absolute inset-0">
-            @php
-            $heroImage = $settings['hero_image'] ?? null;
-            $heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/children-hero.jpg');
-            @endphp
-            <img src="{{ $heroImageUrl }}" alt="Cambodian children" 
-                 class="w-full h-full object-cover">
-        </div>
-        <div class="relative z-20 h-full flex items-center">
-            <div class="max-w-4xl mx-auto px-6 text-center">
-                <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
-                    {{ $settings['hero_title'] ?? 'KROUSAR THMEY' }}
-                </h1>
-                <p class="text-2xl md:text-3xl text-white/90 font-medium mb-4">
-                    {{ $settings['hero_subtitle'] ?? 'The First Cambodian Organization Helping Disadvantaged Children' }}
-                </p>
-                <p class="text-lg text-white/70 mb-10 max-w-2xl mx-auto">
-                    {{ $settings['hero_description'] ?? 'Born in 1991 in the Site II Refugee Camp in Thailand.' }}
-                </p>
-                
-                <div class="flex items-center justify-center gap-4 mb-10">
-                    <div class="w-16 h-px bg-[#d4af37]"></div>
-                    <div class="w-3 h-3 rounded-full bg-[#d4af37]"></div>
-                    <div class="w-16 h-px bg-[#d4af37]"></div>
-                </div>
-                
-                <a href="#who-we-are" 
-                   class="inline-flex items-center gap-3 px-8 py-4 bg-[#2d6fa3] text-white font-semibold rounded-full hover:bg-[#1d4e7a] transition-all transform hover:scale-105 shadow-lg">
-                    Discover Our Mission
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-                </a>
-            </div>
-        </div>
-    </div>
-    @endforelse
 
-    {{-- Dot controls (only shown when multiple slides) --}}
-    @if($heroSlides->count() > 1)
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-6">
-        <template x-for="i in total" :key="i">
-            <button @click="go(i - 1)"
-                class="transition-all duration-300 rounded-full"
-                :class="current === i - 1 ? 'w-8 h-3 bg-[#e8a020]' : 'w-3 h-3 bg-white/50 hover:bg-white/80'"
-                :aria-label="'Go to slide ' + i">
-            </button>
-        </template>
-    </div>
+            {{-- Our Vision --}}
+            <div class="group relative rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 h-64 md:h-72" data-reveal="right">
+                @php
+                $visionImage = $settings['vision_image'] ?? null;
+                $visionImageUrl = $visionImage ? (str_starts_with($visionImage, 'http') ? $visionImage : asset('storage/' . $visionImage)) : asset('images/cultural.jpg');
+                @endphp
+                <img src="{{ $visionImageUrl }}" alt="Our Vision"
+                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/95 via-[#0f2448]/25 to-transparent"></div>
+                <div class="absolute top-0 left-0 right-0 h-1 bg-[#1d4e7a]"></div>
 
-    <button @click="go((current - 1 + total) % total)"
-        class="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center hover:bg-white/30 transition-colors" aria-label="Previous">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-    </button>
-    <button @click="go((current + 1) % total)"
-        class="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center hover:bg-white/30 transition-colors" aria-label="Next">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-    </button>
-    @endif
-</section>
-
-{{-- ========================================================
-     WHO WE ARE SECTION
-     ======================================================== --}}
-<section id="who-we-are" class="py-24 bg-[#f8f5f0] scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-            {{-- Left: Image --}}
-            <div class="relative" data-reveal="left">
-                <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-                    @php
-                    $aboutImage = $settings['about_image'] ?? null;
-                    $aboutImageUrl = $aboutImage ? (str_starts_with($aboutImage, 'http') ? $aboutImage : asset('storage/' . $aboutImage)) : asset('images/children-community.jpg');
-                    @endphp
-                    <img src="{{ $aboutImageUrl }}" alt="Cambodian children and community" 
-                         class="w-full h-[500px] object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                </div>
-                {{-- Khmer pattern decoration --}}
-                <div class="absolute -top-6 -right-6 w-24 h-24 opacity-10">
-                    <svg viewBox="0 0 100 100" class="w-full h-full text-[#d4af37]"><path d="M50,0 L61,35 L98,35 L68,57 L79,92 L50,70 L21,92 L32,57 L2,35 L39,35 Z" fill="currentColor"/></svg>
-                </div>
-            </div>
-            
-            {{-- Right: Content --}}
-            <div data-reveal="right">
-                <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-6">{{ $settings['about_title'] ?? 'Who We Are' }}</h2>
-                <p class="text-lg text-gray-600 leading-relaxed mb-8">
-                    {{ $settings['about_description'] ?? 'Krousar Thmey supports disadvantaged children through sustainable projects focused on child welfare, education, culture, inclusion, and health. The organization develops projects led by Cambodians for Cambodians.' }}
-                </p>
-                
-                {{-- Statistics badge --}}
-                <div class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-md">
-                    <span class="w-3 h-3 rounded-full bg-[#8da83a] animate-pulse"></span>
-                    <span class="text-sm font-semibold text-gray-700">Supporting <span class="text-[#2d6fa3]">{{ $settings['stat_children'] ?? '4,079' }} children</span> across 15 provinces</span>
+                <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-9 h-9 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        </span>
+                        <h3 class="text-white font-bold text-sm uppercase tracking-[0.15em]">{{ $settings['vision_title'] ?? 'Our Vision' }}</h3>
+                    </div>
+                    <p class="text-white/80 text-xs leading-relaxed max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-out overflow-hidden">
+                        {{ $settings['vision_text'] ?? 'A world in which all children are empowered to grow into independent and responsible adults.' }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -181,43 +81,30 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
 <section class="py-24 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16" data-reveal>
+            <span class="inline-block text-xs font-semibold text-[#2d6fa3] uppercase tracking-wider mb-3">What Drives Us</span>
             <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Our Values</h2>
             <p class="text-gray-500 max-w-2xl mx-auto">
                 {{ \App\Models\HomeSetting::getValue('values_supporting_description', 'The principles that guide everything we do, ensuring every child has the opportunity to grow, belong, and thrive.') }}
             </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+            @php $valueAccents = ['#2d6fa3', '#8da83a', '#e8a020', '#d32f2f']; @endphp
             @forelse($coreValues as $i => $value)
-            <a href="{{ route('core-values.show', $value) }}" class="group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-350 overflow-hidden block"
+            @php $accent = $valueAccents[$i % count($valueAccents)]; @endphp
+            <div class="group relative bg-white rounded-2xl border border-gray-100 p-8 lg:p-10 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-350"
                  data-reveal="up" style="--reveal-delay: {{ $i * 100 }}">
-                {{-- Image --}}
-                <div class="relative h-48 overflow-hidden">
-                    @if($value->image_url)
-                    <img src="{{ $value->image_url }}" alt="{{ $value->title }}" 
-                         class="w-full h-full object-cover transition-transform duration-350 group-hover:scale-110">
-                    @else
-                    <div class="w-full h-full bg-gradient-to-br from-[#2d6fa3]/10 to-[#8da83a]/10 flex items-center justify-center">
-                        <span class="text-6xl">{{ $value->icon }}</span>
-                    </div>
-                    @endif
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background-color: {{ $accent }}">
+                        {{ sprintf('%02d', $i + 1) }}
+                    </span>
+                    <div class="h-px flex-1 bg-gray-100"></div>
                 </div>
-                
-                {{-- Content --}}
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-[#1d4e7a] mb-2 uppercase tracking-wide">{{ $value->title }}</h3>
-                    <p class="text-lg font-semibold text-[#2d6fa3] mb-3">
-                        {{ $value->headline ?? ($value->description ? $value->description : 'Making a difference.') }}
-                    </p>
-                    <p class="text-gray-600 text-sm leading-relaxed">
-                        {{ $value->description }}
-                    </p>
-                    @if($value->supporting_description)
-                    <p class="text-gray-500 text-xs mt-2 line-clamp-2">{{ $value->supporting_description }}</p>
-                    @endif
-                </div>
-            </a>
+                <h3 class="text-xl font-black uppercase tracking-wider text-[#1d4e7a] mb-4">{{ $value->title }}</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    {{ $value->description }}
+                </p>
+            </div>
             @empty
             <p class="text-gray-400 text-center py-8 md:col-span-3">No values listed yet.</p>
             @endforelse
@@ -226,149 +113,315 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
 </section>
 
 {{-- ========================================================
-     OUR IMPACT SECTION
+     OUR PORTFOLIO SECTION
      ======================================================== --}}
-<section class="py-24 bg-white scroll-mt-20 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16" data-reveal>
-            <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Our Impact</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto">The difference we make together for Cambodia's children</p>
+<section id="our-portfolio" class="py-24 bg-[#f8f5f0] scroll-mt-20">
+    <div class="max-w-4xl mx-auto px-6" data-reveal>
+        <div class="text-center mb-12">
+            <span class="inline-block text-xs font-semibold text-[#2d6fa3] uppercase tracking-wider mb-3">Our Portfolio</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-[#1d4e7a]">How We Work</h2>
         </div>
 
-        {{-- Statistics Grid - Featured card spans 2 columns on desktop --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div class="bg-white rounded-3xl shadow-lg border border-gray-100 px-8 py-12 md:px-16 md:py-14 text-center">
+            <p class="text-gray-700 leading-relaxed mb-10">
+                {{ $settings['portfolio_text'] ?? 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.' }}
+            </p>
 
-            @php
-                $featuredStat = $impactStatistics->where('is_featured', true)->first();
-                $otherStats = $impactStatistics->where('is_featured', false);
-            @endphp
-
-            @if($featuredStat)
-            {{-- Featured Hero Card --}}
-            <div class="impact-card group relative rounded-3xl overflow-hidden shadow-xl cursor-pointer"
-                 data-reveal="up" style="--reveal-delay: 0; background-image: url('{{ $featuredStat->image_url }}')">
-                <div class="absolute inset-0 bg-black/40"></div>
-                <div class="relative z-10 p-8 h-full flex flex-col justify-between">
-                    <div>
-                        <div class="text-5xl sm:text-6xl md:text-7xl font-black text-white mb-3 counter"
-                             data-target="{{ preg_replace('/[^0-9]/', '', $featuredStat->value) }}">
-                            {{ $featuredStat->value }}
-                        </div>
-                    </div>
-                    <p class="text-white/90 text-lg font-semibold leading-tight">
-                        {{ $featuredStat->label }}
-                    </p>
-                </div>
+            <div class="relative py-8 border-y border-gray-100">
+                <p class="text-xl md:text-2xl font-serif italic text-[#1d4e7a] leading-snug max-w-2xl mx-auto">
+                    "{{ $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." }}"
+                </p>
             </div>
-            @endif
 
-            @forelse($otherStats as $index => $stat)
-            @php
-                $format = 'plain';
-                if (str_contains($stat->value, 'K')) $format = 'k';
-                if (str_starts_with($stat->value, '<')) $format = 'less-than-percent';
-            @endphp
-            
-            <div class="impact-card-small group relative rounded-2xl overflow-hidden shadow-md cursor-pointer"
-                 data-reveal="up" style="--reveal-delay: {{ ($index + 1) * 100 }}; background-image: url('{{ $stat->image_url }}')">
-                <div class="absolute inset-0 bg-black/40"></div>
-                <div class="relative z-10 p-6 h-full flex flex-col justify-end">
-                    <div>
-                        <div class="text-3xl md:text-4xl font-black text-white mb-2 counter"
-                             data-target="{{ preg_replace('/[^0-9]/', '', $stat->value) }}"
-                             data-format="{{ $format }}">
-                            @if($format === 'less-than-percent')
-                            <span class="text-[#e8a020]"><</span> {{ preg_replace('/[^0-9]/', '', $stat->value) }}%
-                            @elseif($format === 'k')
-                            {{ $stat->value }}
-                            @else
-                            {{ $stat->value }}
-                            @endif
-                        </div>
-                        <p class="text-white/90 text-sm font-semibold leading-tight">
-                            {{ $stat->label }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-            @empty
-            <p class="text-gray-400 text-center py-8 col-span-full">No impact statistics available yet.</p>
-            @endforelse
-
+            <p class="text-gray-500 text-sm leading-relaxed mt-10 max-w-2xl mx-auto">
+                {{ $settings['portfolio_volunteers_text'] ?? 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.' }}
+            </p>
         </div>
     </div>
 </section>
 
-{{-- Social Sharing --}}
+{{-- ========================================================
+     PROGRAMS STRIP SECTION
+     ======================================================== --}}
+<section class="py-24 bg-white scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16" data-reveal>
+            <span class="inline-block text-xs font-semibold text-[#2d6fa3] uppercase tracking-wider mb-3">Our Reach</span>
+            <h2 class="text-2xl md:text-3xl font-black uppercase tracking-wide text-[#1d4e7a] max-w-3xl mx-auto">
+                Krousar Thmey operates 3 programs and 2 cross-cutting projects in {{ $settings['stat_provinces'] ?? '15' }} Cambodian provinces
+            </h2>
+        </div>
+
+        @php
+        $programs = [
+            [
+                'title' => 'Child Welfare',
+                'accent' => '#d32f2f',
+                'light' => '#fde8e8',
+                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>',
+            ],
+            [
+                'title' => 'Education for Deaf or Blind Children',
+                'accent' => '#8da83a',
+                'light' => '#eef3dc',
+                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>',
+            ],
+            [
+                'title' => 'Cultural and Artistic Development',
+                'accent' => '#7c4dff',
+                'light' => '#ede7fb',
+                'icon' => '<circle cx="12.6" cy="4.2" r="1.3" fill="currentColor" stroke="none"/><path stroke-linecap="round" stroke-linejoin="round" d="M12.3 6.2c-.5 1.4-.3 2.9.4 4.1M12.3 6.2c-1.1 0-2.2-.5-2.9-1.5m2.9 1.5c1.1.6 2.4.6 3.4-.1M9.4 4.7c-.5-.6-.6-1.4-.4-2.1M15.1 4.6c.6-.5 1-1.2 1-2M12.7 10.3c-1.7.7-2.9 2.3-3.1 4.2M12.7 10.3c1.7.9 2.7 2.8 2.4 4.7M9.6 21l1.1-6.6M15.1 20.6l-2-5.6"/>',
+            ],
+            [
+                'title' => 'Academic and Career Counseling',
+                'accent' => '#e8a020',
+                'light' => '#fbf0dc',
+                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21V4M12 6.5h6l1.75 1.75L18 10h-6M12 11h-6l-1.75 1.75L6 14.5h6"/>',
+            ],
+            [
+                'title' => 'Health and Hygiene',
+                'accent' => '#2d6fa3',
+                'light' => '#e1ecf4',
+                'icon' => '<circle cx="12" cy="5" r="2.2"/><path stroke-linecap="round" stroke-linejoin="round" d="M7 20v-3a5 5 0 0110 0v3"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 9.5c2.3 1.2 3.5 3.8 2.7 6.5"/><circle cx="17.9" cy="17.3" r="1.3"/>',
+            ],
+        ];
+        $programRows = collect($programs)->chunk(3);
+        @endphp
+
+        <div class="space-y-14">
+            @foreach($programRows as $row)
+            <div class="grid gap-x-10 gap-y-14 mx-auto" style="grid-template-columns: repeat({{ $row->count() }}, minmax(0, 1fr)); max-width: {{ $row->count() * 260 }}px;">
+                @foreach($row as $j => $program)
+                <div class="group flex flex-col items-center text-center" data-reveal="up" style="--reveal-delay: {{ $j * 100 }}">
+                    <div class="relative w-28 h-28 rounded-full flex items-center justify-center mb-5 shadow-sm transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-xl"
+                         style="background-color: {{ $program['light'] }}; box-shadow: inset 0 0 0 1px {{ $program['accent'] }}22;">
+                        <svg class="w-11 h-11" fill="none" stroke="{{ $program['accent'] }}" stroke-width="1.6" viewBox="0 0 24 24">
+                            {!! $program['icon'] !!}
+                        </svg>
+                        <div class="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="box-shadow: 0 8px 24px -6px {{ $program['accent'] }}66;"></div>
+                    </div>
+                    <p class="text-sm font-semibold text-[#1d4e7a] leading-snug max-w-[10rem]">{{ $program['title'] }}</p>
+                    <div class="w-16 h-1 rounded-full mt-3 transition-all duration-300 group-hover:w-20" style="background-color: {{ $program['accent'] }}"></div>
+                </div>
+                @endforeach
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- ========================================================
+     OUR IMPACT / KEY FIGURES SECTION — MODERN PREMIUM DESIGN
+     ======================================================== --}}
 @php
-$sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
-$facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
-$twitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
-$linkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
-$shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
-$facebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
-$twitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
-$linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
+    $allStats = $impactStatistics->values();
 @endphp
-@if($sharingEnabled == '1')
-<div class="max-w-7xl mx-auto px-6 pb-12" data-reveal>
-    <div class="flex items-center justify-center gap-4">
-        <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
 
-<div class="flex items-center gap-3 bg-white/80 backdrop-blur-md rounded-full px-6 py-4 shadow-lg border border-gray-100">
+<section class="py-24 bg-[#fafafa] scroll-mt-20 overflow-hidden relative" id="key-figures">
+    {{-- Decorative background shapes --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        {{-- Soft gradient circles --}}
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-200/20 to-blue-100/10 rounded-full blur-[100px]"></div>
+        <div class="absolute top-1/2 -left-32 w-80 h-80 bg-gradient-to-tr from-green-200/15 to-green-100/5 rounded-full blur-[90px]"></div>
+        <div class="absolute -bottom-24 right-1/4 w-72 h-72 bg-gradient-to-tl from-orange-200/20 to-orange-100/10 rounded-full blur-[85px]"></div>
+        
+        {{-- Subtle dotted pattern overlay --}}
+        <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;"></div>
+    </div>
 
-    <!-- Facebook -->
-    <a href="{{ $facebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Presentation') . '&linknote=' . urlencode('Krousar Thmey - Our Impact') }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Share on Facebook"
-        class="group w-14 h-14 rounded-full overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+        {{-- Section Header --}}
+        <div class="text-center max-w-3xl mx-auto mb-20" data-reveal>
+            {{-- Badge --}}
+            <div class="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-4 py-2 text-xs font-semibold text-blue-600 uppercase tracking-[0.15em] mb-6 backdrop-blur-sm">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                Impact Statistics
+            </div>
 
-        <img src="{{ asset($facebookIcon) }}"
-            alt="Facebook"
-            class="w-full h-full object-cover">
-    </a>
+            {{-- Heading --}}
+            <h2 class="text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-6">
+                Key Figures
+            </h2>
 
-    <!-- Twitter -->
-    <a href="{{ $twitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Presentation') . '&linknote=' . urlencode('Krousar Thmey - Our Impact') }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Share on Twitter"
-        class="group w-14 h-14 rounded-full overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+            {{-- Description --}}
+            <p class="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
+                Real numbers behind our commitment to Cambodia's children. Every statistic represents lives changed, futures transformed, and hope restored.
+            </p>
+        </div>
 
-        <img src="{{ asset($twitterIcon) }}"
-            alt="Twitter"
-            class="w-full h-full object-cover">
-    </a>
+        @if($allStats->isEmpty())
+            <p class="text-gray-400 text-center py-16">No impact statistics available yet.</p>
+        @else
 
-    <!-- LinkedIn -->
-    <a href="{{ $linkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Presentation') . '&linknote=' . urlencode('Krousar Thmey - Our Impact') }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Share on LinkedIn"
-        class="group w-14 h-14 rounded-full overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+        {{-- ===== STATISTICS GRID — Premium 3-2 Layout ===== --}}
+        @php
+            $accentColors = [
+                ['name' => 'blue', 'bg' => '#2d6fa3', 'light' => '#e3f2fd', 'lighter' => '#bbdefb'],
+                ['name' => 'green', 'bg' => '#8da83a', 'light' => '#f1f8e9', 'lighter' => '#dcedc8'],
+                ['name' => 'orange', 'bg' => '#e8a020', 'light' => '#fff3e0', 'lighter' => '#ffe0b2'],
+                ['name' => 'red', 'bg' => '#d32f2f', 'light' => '#ffebee', 'lighter' => '#ffcdd2'],
+                ['name' => 'purple', 'bg' => '#7c4dff', 'light' => '#f3e5f5', 'lighter' => '#e1bee7'],
+            ];
 
-        <img src="{{ asset($linkedinIcon) }}"
-            alt="LinkedIn"
-            class="w-full h-full object-cover">
-    </a>
+            $statIcons = [
+                '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>',
+                '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>',
+                '<path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>',
+                '<path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342"/>',
+                '<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>',
+            ];
+        @endphp
 
-    <!-- Share -->
-    <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Presentation') }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Share"
-        class="group w-14 h-14 rounded-full overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 hover:scale-110 hover:shadow-xl">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-5">
+            @foreach($allStats as $index => $stat)
+            @php
+                $colorScheme = $accentColors[$index % count($accentColors)];
+                $icon = $statIcons[$index % count($statIcons)];
+            @endphp
+            <div class="group relative" data-reveal="up" style="--reveal-delay: {{ $index * 100 }}">
+                {{-- Card Container with soft shadow --}}
+                <div class="relative h-full bg-white rounded-[24px] border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-default">
+                    
+                    {{-- Left colored accent border --}}
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 transition-all duration-300" style="background: linear-gradient(to bottom, {{ $colorScheme['bg'] }}, {{ $colorScheme['bg'] }}80))"></div>
 
-        <img src="{{ asset($shareIcon) }}"
-            alt="Share"
-            class="w-full h-full object-cover">
-    </a>
+                    {{-- Card content with generous padding --}}
+                    <div class="p-8 h-full flex flex-col">
+                        
+                        {{-- Icon in soft circular background --}}
+                        <div class="flex-shrink-0 mb-6">
+                            <div class="relative inline-flex">
+                                {{-- Icon background circle --}}
+                                <div class="w-16 h-16 rounded-[18px] flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+                                     style="background-color: {{ $colorScheme['light'] }}; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.03);">
+                                    <svg class="w-8 h-8 transition-all duration-300" fill="none" stroke="{{ $colorScheme['bg'] }}" stroke-width="1.5" viewBox="0 0 24 24">
+                                        {!! $icon !!}
+                                    </svg>
+                                </div>
+                                
+                                {{-- Subtle glow on hover --}}
+                                <div class="absolute inset-0 rounded-[18px] opacity-0 group-hover:opacity-30 transition-opacity duration-300" style="background: radial-gradient(circle, {{ $colorScheme['bg'] }} 0%, transparent 70%); filter: blur(12px);"></div>
+                            </div>
+                        </div>
 
-</div>
-</div>
-</div>
-@endif
+                        {{-- Large bold number --}}
+                        <div class="mb-3">
+                            <div class="text-4xl md:text-3xl lg:text-4xl font-black transition-all duration-300 counter leading-none"
+                                 data-target="{{ preg_replace('/[^0-9.]/', '', $stat->value) }}"
+                                 data-suffix="{{ preg_match('/[KMBkmb]/', $stat->value) ? substr(trim($stat->value), -1) : '' }}"
+                                 style="color: {{ $colorScheme['bg'] }}">
+                                {{ $stat->value }}
+                            </div>
+                        </div>
+
+                        {{-- Colored accent line below number --}}
+                        <div class="w-10 h-1 rounded-full mb-4 transition-all duration-300 group-hover:w-14" style="background-color: {{ $colorScheme['bg'] }}"></div>
+
+                        {{-- Supporting text --}}
+                        <div class="flex-1">
+                            <p class="text-sm font-bold text-gray-900 leading-snug line-clamp-2 mb-2">{{ $stat->label }}</p>
+                            @if($stat->description)
+                            <p class="text-xs text-gray-500 leading-relaxed line-clamp-2">{{ $stat->description }}</p>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Hover gradient overlay (very subtle) --}}
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none" 
+                         style="background: linear-gradient(135deg, {{ $colorScheme['bg'] }} 0%, transparent 100%);"></div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+        {{-- Responsive grid adjustments --}}
+        <style>
+            @media (max-width: 1279px) {
+                /* 5 items: 3-2 layout on desktop */
+                #key-figures .grid {
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                }
+                #key-figures .grid > :nth-child(4),
+                #key-figures .grid > :nth-child(5) {
+                    grid-column: span 1;
+                }
+                #key-figures .grid > :nth-child(4) {
+                    grid-column: 1;
+                }
+                #key-figures .grid > :nth-child(5) {
+                    grid-column: 2;
+                }
+            }
+
+            @media (max-width: 767px) {
+                /* Single column on mobile */
+                #key-figures .grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @media (min-width: 768px) and (max-width: 1023px) {
+                /* 2 columns on tablet */
+                #key-figures .grid {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
+        </style>
+
+        {{-- ===== ORGANISATION AT A GLANCE — Dashboard Row ===== --}}
+        <div class="relative bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mt-16" data-reveal>
+            <div class="px-10 py-12 border-b border-gray-50">
+                <div class="flex flex-col items-center text-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-black text-[#1d4e7a]">Organization At A Glance</h3>
+                        <p class="text-gray-400 text-xs mt-1">Key operational metrics that define our organization</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-50">
+                {{-- Human Resources --}}
+                <div class="py-10 px-8 text-center group hover:bg-[#2d6fa3]/[0.02] transition-colors">
+                    <div class="w-10 h-10 rounded-xl bg-[#2d6fa3]/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-5 h-5 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 100-8 4 4 0 000 8zm6 1.13a4 4 0 00-3-3.87m-9 3.87a4 4 0 013-3.87"/></svg>
+                    </div>
+                    <div class="text-3xl font-black text-[#2d6fa3] mb-1.5">
+                        <span class="counter" data-target="{{ preg_replace('/[^0-9]/', '', $settings['stat_employees'] ?? '68') }}" data-suffix="+">{{ $settings['stat_employees'] ?? '68' }}</span>
+                        <span class="text-sm text-[#8da83a] font-semibold"> +{{ $settings['stat_expats'] ?? '2' }}</span>
+                    </div>
+                    <p class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider">Cambodian &amp; Expat Staff</p>
+                </div>
+
+                {{-- Budget --}}
+                <div class="py-8 px-6 text-center group hover:bg-[#8da83a]/[0.02] transition-colors">
+                    <div class="w-10 h-10 rounded-xl bg-[#8da83a]/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-5 h-5 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V6m0 10v2m0-2c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div class="text-3xl font-black text-[#8da83a] mb-1.5">
+                        <span class="counter" data-target="{{ preg_replace('/[^0-9]/', '', $settings['stat_budget'] ?? '950') }}" data-suffix="K">{{ $settings['stat_budget'] ?? '950' }}K</span>
+                    </div>
+                    <p class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider">Annual Budget (USD)</p>
+                </div>
+
+                {{-- Admin Costs --}}
+                <div class="py-8 px-6 text-center group hover:bg-[#e8a020]/[0.02] transition-colors">
+                    <div class="w-10 h-10 rounded-xl bg-[#e8a020]/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-5 h-5 text-[#e8a020]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    </div>
+                    <div class="text-3xl font-black text-[#e8a020] mb-1.5">
+                        <span class="counter" data-target="{{ preg_replace('/[^0-9]/', '', $settings['stat_admin_costs'] ?? '4') }}" data-suffix="%">{{ $settings['stat_admin_costs'] ?? '4' }}%</span>
+                    </div>
+                    <p class="text-gray-500 text-[11px] font-semibold uppercase tracking-wider">Administrative Costs</p>
+                </div>
+            </div>
+        </div>
+
+        @endif
+    </div>
+</section>
 
 {{-- Impact Animation Script --}}
 <script>
@@ -382,6 +435,8 @@ $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
                     const counter = entry.target;
                     const target = +counter.dataset.target;
                     const format = counter.dataset.format || 'plain';
+                    const suffix = counter.dataset.suffix || '';
+                    const prefix = counter.dataset.prefix || '';
 
                     let start = 0;
                     const duration = 2000;
@@ -393,15 +448,18 @@ $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
                         const easeProgress = 1 - Math.pow(1 - progress, 3);
 
                         let current = Math.floor(start + (target - start) * easeProgress);
+                        const formatted = current.toLocaleString();
 
                         if (format === 'k') {
-                            counter.innerText = current.toLocaleString() + 'K USD';
+                            counter.innerText = formatted + 'K USD';
                         } else if (format === 'percent') {
-                            counter.innerText = current + '%';
+                            counter.innerText = formatted + '%';
                         } else if (format === 'less-than-percent') {
-                            counter.innerHTML = '<span class="text-[#e8a020]"><</span> ' + current + '%';
+                            counter.innerHTML = '<span class="text-[#e8a020]"><</span> ' + formatted + '%';
+                        } else if (suffix) {
+                            counter.innerText = prefix + formatted + suffix;
                         } else {
-                            counter.innerText = current.toLocaleString();
+                            counter.innerText = prefix + formatted;
                         }
 
                         if (progress < 1) {
@@ -435,165 +493,101 @@ $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
 {{-- ========================================================
      KROUSAR THMEY WORLDWIDE SECTION
      ======================================================== --}}
-<section class="py-24 bg-white scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-6">
+<section class="py-24 bg-[#fafbfd] scroll-mt-20">
+    <div class="max-w-6xl mx-auto px-6">
         {{-- Section Header --}}
-        <div class="text-center mb-16" data-reveal>
-            <span class="inline-block text-xs font-semibold text-[#2d6fa3] uppercase tracking-wider mb-3">GLOBAL NETWORK</span>
-            <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Krousar Thmey Worldwide</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Krousar Thmey benefits from the support of partner organizations around the world.
-                Through fundraising, advocacy, volunteer engagement, and international cooperation, these organizations help transform the lives of Cambodian children and young people.
+        <div class="text-center max-w-2xl mx-auto mb-16" data-reveal>
+            <span class="inline-flex items-center gap-2 text-xs font-semibold text-[#2d6fa3] uppercase tracking-[0.2em] mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3]"></span>
+                Global Network
+            </span>
+            <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-5">Krousar Thmey Worldwide</h2>
+            <p class="text-gray-500 leading-relaxed mb-4">
+                {{ $settings['worldwide_text'] ?? 'Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.' }}
             </p>
+            <p class="text-[#1d4e7a] font-semibold text-sm">To know more about each international structure:</p>
         </div>
 
         {{-- Country Cards Grid --}}
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            @forelse($worldwidePartners as $partner)
-            <div class="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+        @php
+            $flagSvgs = [
+                'france' => '<rect width="3" height="2" fill="#ED2939"/><rect width="2" height="2" fill="#FFF"/><rect width="1" height="2" fill="#002395"/>',
+                'switzerland' => '<rect width="3" height="2" fill="#D52B1E"/><rect x="1.25" y="0.4" width="0.5" height="1.2" fill="#FFF"/><rect x="0.9" y="0.75" width="1.2" height="0.5" fill="#FFF"/>',
+                'singapore' => '<rect width="3" height="1" fill="#EF3340"/><rect y="1" width="3" height="1" fill="#FFF"/><circle cx="0.75" cy="0.5" r="0.4" fill="#FFF"/><circle cx="0.9" cy="0.5" r="0.32" fill="#EF3340"/><g fill="#FFF"><circle cx="1.25" cy="0.22" r="0.045"/><circle cx="1.45" cy="0.36" r="0.045"/><circle cx="1.38" cy="0.6" r="0.045"/><circle cx="1.12" cy="0.6" r="0.045"/><circle cx="1.05" cy="0.36" r="0.045"/></g>',
+                'cambodia' => '<rect width="3" height="2" fill="#032EA1"/><rect y="0.5" width="3" height="1" fill="#E00025"/><rect x="1.2" y="0.65" width="0.6" height="0.7" fill="#FFF"/>',
+            ];
+        @endphp
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+            @forelse($offices as $loc)
+            @php
+                preg_match('/#([0-9a-fA-F]{3,8})/', $loc->accent_color, $m);
+                $hex = '#' . ($m[1] ?? '2d6fa3');
+                $flagKey = strtolower(trim($loc->country));
+                $flagSvg = $flagSvgs[$flagKey] ?? null;
+            @endphp
+            <div class="relative bg-white rounded-[28px] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden group flex flex-col"
                  data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
-                {{-- Large Country Image --}}
-                <div class="relative aspect-video overflow-hidden">
-                    <img src="{{ $partner->image_url }}" alt="{{ $partner->country_name }}" 
-                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
-                         loading="lazy">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                {{-- Top accent bar --}}
+                <div class="h-1.5 w-full" style="background-color: {{ $hex }}"></div>
+
+                <div class="p-7 md:p-8 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-6">
+                        @if($flagSvg)
+                        <span class="w-16 h-11 rounded-lg overflow-hidden border border-gray-100 shadow-sm flex-shrink-0">
+                            <svg class="w-full h-full" viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice">{!! $flagSvg !!}</svg>
+                        </span>
+                        @else
+                        <span class="w-16 h-11 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-2xl flex-shrink-0">{{ $loc->flag }}</span>
+                        @endif
+                        @if($loc->badge)
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full {{ $loc->badge_color }}">{{ $loc->badge }}</span>
+                        @endif
+                    </div>
+
+                    <h3 class="text-xl font-black uppercase tracking-wide mb-1" style="color: {{ $hex }}">{{ $loc->country }}</h3>
+                    <p class="text-[#8da83a] text-xs font-semibold uppercase tracking-wide mb-6">{{ $loc->city }}</p>
+
+                    <div class="space-y-4 flex-1">
+                        <div class="flex items-start gap-3">
+                            <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background-color: {{ $hex }}1a">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="{{ $hex }}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            </span>
+                            <p class="text-gray-500 text-xs leading-relaxed pt-1">{{ $loc->address }}</p>
+                        </div>
+                        @if($loc->phone)
+                        <a href="tel:{{ preg_replace('/[^+0-9]/', '', $loc->phone) }}" class="flex items-center gap-3 group/link">
+                            <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background-color: {{ $hex }}1a">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="{{ $hex }}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            </span>
+                            <span class="text-gray-500 text-xs group-hover/link:text-[#1d4e7a] transition-colors">{{ $loc->phone }}</span>
+                        </a>
+                        @endif
+                        @if($loc->email)
+                        <a href="mailto:{{ $loc->email }}" class="flex items-center gap-3 group/link">
+                            <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background-color: {{ $hex }}1a">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="{{ $hex }}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </span>
+                            <span class="text-gray-500 text-xs group-hover/link:text-[#1d4e7a] transition-colors break-all">{{ $loc->email }}</span>
+                        </a>
+                        @endif
+                    </div>
                 </div>
-                
-                {{-- Card Content --}}
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-[#1d4e7a] mb-2">{{ $partner->country_name }}</h3>
-                    <span class="inline-block bg-[#e8a020]/10 text-[#e8a020] text-xs font-semibold px-3 py-1 rounded-full mb-3">
-                        Supporting Cambodia Since 1991
-                    </span>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                        {{ $partner->description ?? 'Supports fundraising, strategic partnerships, and awareness campaigns that strengthen education and child welfare initiatives.' }}
-                    </p>
-                    <a href="{{ $partner->learn_more_url ?? '#' }}" 
-                       class="inline-flex items-center gap-2 text-[#2d6fa3] font-semibold text-sm border border-[#2d6fa3] bg-white rounded-full px-4 py-2 hover:bg-[#2d6fa3] hover:text-white transition-all duration-300">
-                        {{ $partner->button_text ?? 'Learn More' }}
-                        <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
+                @if($loc->email)
+                <div class="px-7 md:px-8 pb-7 md:pb-8 pt-1">
+                    <a href="mailto:{{ $loc->email }}" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-white text-xs font-semibold uppercase tracking-wide shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" style="background-color: {{ $hex }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        Send Email
                     </a>
                 </div>
+                @endif
             </div>
             @empty
             <div class="col-span-full text-center text-gray-400 py-8">
-                <p>Country partner information coming soon.</p>
+                <p>Office information coming soon.</p>
             </div>
             @endforelse
         </div>
-
-        {{-- CTA Section --}}
-        <div class="text-center mt-20" data-reveal="up" style="--reveal-delay: 300">
-            <h3 class="text-2xl font-bold text-[#1d4e7a] mb-4">Together Across Borders</h3>
-            <p class="text-gray-600 max-w-2xl mx-auto mb-8">
-                Our international partners work together to create brighter futures for Cambodian children through education, inclusion, child protection, and community development.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{{ route('contact') }}" 
-                   class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#2d6fa3] to-[#1d4e7a] text-white font-semibold rounded-full hover:from-[#1d4e7a] hover:to-[#2d6fa3] transition-all transform hover:scale-105 shadow-lg">
-                    Become a Global Partner
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-                    </svg>
-                </a>
-                <a href="{{ route('contact') }}" 
-                   class="inline-flex items-center gap-2 px-8 py-3 border-2 border-[#2d6fa3] text-[#2d6fa3] font-semibold rounded-full hover:bg-[#2d6fa3] hover:text-white transition-all">
-                    Contact Us
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
     </div>
-</section>
-
-{{-- ========================================================
-     OUR PRINCIPLE SECTION
-     ======================================================== --}}
-@php
-$principleSlides = \App\Models\PrincipleSlide::active()->get();
-@endphp
-<section class="relative h-screen min-h-screen overflow-hidden"
-    x-data="{
-            current: 0,
-            total: {{ max($principleSlides->count(), 1) }},
-            timer: null,
-            start() {
-                if (this.total <= 1) return;
-                this.timer = setInterval(() => {
-                    this.current = (this.current + 1) % this.total;
-                }, 5500);
-            },
-            go(i) {
-                this.current = i;
-                clearInterval(this.timer);
-                this.start();
-            }
-         }"
-    x-init="start()">
-
-    @forelse($principleSlides as $slide)
-    {{-- Slide {{ $loop->iteration }} --}}
-    <div class="absolute inset-0 transition-opacity duration-1000"
-        :class="current === {{ $loop->index }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
-        <div class="absolute inset-0 bg-black/60"></div>
-        <div class="absolute inset-0 bg-cover bg-center bg-fixed" style="background-image: url('{{ $slide->image_url }}')"></div>
-    </div>
-    @empty
-    {{-- Fallback static image --}}
-    <div class="absolute inset-0 transition-opacity duration-1000 opacity-100 z-10">
-        <div class="absolute inset-0 bg-black/60"></div>
-        @php
-        $principleImage = $settings['principle_image'] ?? null;
-        $principleImageUrl = $principleImage ? (str_starts_with($principleImage, 'http') ? $principleImage : asset('storage/' . $principleImage)) : asset('images/children.jpg');
-        @endphp
-        <div class="absolute inset-0 bg-cover bg-center bg-fixed" style="background-image: url('{{ $principleImageUrl }}')"></div>
-    </div>
-    @endforelse
-
-    <div class="relative z-10 h-full flex items-center justify-center" data-reveal="scale">
-        <div class="max-w-4xl px-6 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-10">{{ $settings['principle_title'] ?? 'Our Principle' }}</h2>
-            
-            <div class="relative">
-                <svg class="w-16 h-16 text-[#d4af37] mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-4.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/></svg>
-                
-                <blockquote class="text-2xl md:text-3xl lg:text-4xl font-serif italic text-white leading-relaxed">
-                    "{{ $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." }}"
-                </blockquote>
-            </div>
-        </div>
-    </div>
-
-    {{-- Dot controls (only shown when multiple slides) --}}
-    @if($principleSlides->count() > 1)
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-6">
-        <template x-for="i in total" :key="i">
-            <button @click="go(i - 1)"
-                class="transition-all duration-300 rounded-full"
-                :class="current === i - 1 ? 'w-8 h-3 bg-[#d4af37]' : 'w-3 h-3 bg-white/50 hover:bg-white/80'"
-                :aria-label="'Go to slide ' + i">
-            </button>
-        </template>
-    </div>
-
-    <button @click="go((current - 1 + total) % total)"
-        class="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center hover:bg-white/30 transition-colors" aria-label="Previous">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-    </button>
-    <button @click="go((current + 1) % total)"
-        class="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center hover:bg-white/30 transition-colors" aria-label="Next">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-    </button>
-    @endif
 </section>
 
 @endsection
