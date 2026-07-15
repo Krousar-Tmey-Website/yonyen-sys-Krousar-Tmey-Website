@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\VolunteerController;
 use App\Models\AnnualReport;
@@ -138,6 +139,10 @@ Route::get('/jobs/{jobOpportunity}', function (JobOpportunity $jobOpportunity) {
 
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
+
+// Media — dedicated page
+Route::get('/media', [MediaController::class, 'index'])->name('media');
+Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show');
 
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
@@ -305,6 +310,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('activity-logs/{activityLog}', [Admin\Reports\ActivityLogController::class, 'show'])
             ->name('activity-logs.show');
     });
+
+    // Media Gallery
+    Route::resource('media', Admin\MediaController::class)->except(['show'])->parameters(['media' => 'media']);
 
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);
