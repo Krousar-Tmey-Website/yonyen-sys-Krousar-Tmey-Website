@@ -10,7 +10,7 @@
             @foreach($years as $year)
             <li>
                 <a href="#year-{{ $year }}" data-year-nav="{{ $year }}"
-                   class="year-nav-link relative z-10 flex items-center justify-between gap-3 pl-4 pr-4 py-1.5 text-sm font-semibold text-gray-500 border-l-4 border-transparent transition-colors hover:text-[#0A5EA8]">
+                   class="year-nav-link relative z-10 flex items-center justify-between gap-3 pl-4 pr-4 py-1.5 text-sm font-semibold text-gray-500 border-l-4 border-transparent transition-colors hover:text-[#1d4e7a]">
                     <span>{{ $year }}</span>
                     <span class="year-nav-dot w-2.5 h-2.5 rounded-full bg-gray-400 ring-4 ring-gray-50 shrink-0"></span>
                 </a>

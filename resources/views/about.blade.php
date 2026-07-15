@@ -48,12 +48,6 @@
             @endif
         </div>
 
-        {{-- Header --}}
-        <div class="text-center mb-16" data-reveal>
-            <p class="text-[18px] font-semibold tracking-[5px] uppercase text-[#C89B4D] mb-[50px]"></p>
-           
-        </div>
-
         @php
             $timelineItems = [];
             foreach ($historyEvents as $event) {
@@ -69,6 +63,7 @@
             }
             $historyYears = collect($timelineItems)->pluck('year')->filter()->unique()->sort()->values();
         @endphp
+        
 
         <div class="flex items-start gap-8">
             <x-timeline-year-nav :years="$historyYears" />
@@ -76,12 +71,12 @@
                 <x-timeline :items="$timelineItems" />
             </div>
         </div>
-        <div class=" mt-16 pt-14  text-center"​​​>
+        <div class="mt-16 pt-14 text-center" data-reveal>
             <p class="text-[#a67c3d] font-semibold text-xs uppercase tracking-[0.2em] mb-3">Present Day</p>
-                <h3 class="font-serif text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-4">The Story Continues</h3>
-                <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
-                    Today, Krousar Thmey supports <strong class="text-[#1d4e7a]">{{ $settings['stat_children'] ?? '4,079' }} children</strong> across 15 Cambodian provinces — carrying forward the same promise made in 1991: that every child deserves the chance to grow, learn, and thrive.
-                </p>
+            <h3 class="font-serif text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-4">The Story Continues</h3>
+            <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                Today, Krousar Thmey supports <strong class="text-[#1d4e7a]">{{ $settings['stat_children'] ?? '4,079' }} children</strong> across 15 Cambodian provinces — carrying forward the same promise made in 1991: that every child deserves the chance to grow, learn, and thrive.
+            </p>
         </div>
     </div>
 </section>
