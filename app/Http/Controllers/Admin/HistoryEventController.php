@@ -43,6 +43,11 @@ class HistoryEventController extends Controller
         return view('admin.history_events.index', $viewData);
     }
 
+    public function create()
+    {
+        return redirect()->route('admin.history-events.index');
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -66,21 +71,26 @@ class HistoryEventController extends Controller
         $data['left_text']  = $data['left_text'] !== '' ? ($data['left_text'] ?? null) : null;
         $data['right_text'] = $data['right_text'] !== '' ? ($data['right_text'] ?? null) : null;
 
-        HistoryEvent::create($data);
+        $event = HistoryEvent::create($data);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'History event added.',
+                'event'   => $event->fresh()->toArray(),
+            ]);
+        }
+
         return redirect()->route('admin.history-events.index')->with('success', 'History event added.');
     }
 
     public function edit(HistoryEvent $historyEvent)
     {
-        $events = HistoryEvent::orderBy('sort_order')->orderBy('year')->get();
-        $totalEvents = $events->count();
+        if (request()->wantsJson()) {
+            return response()->json($historyEvent->toArray());
+        }
 
-        return view('admin.history_events.index', [
-            'events'      => $events,
-            'editEvent'   => $historyEvent,
-            'filters'     => ['search' => ''],
-            'totalEvents' => $totalEvents,
-        ]);
+        return redirect()->route('admin.history-events.index');
     }
 
     public function update(Request $request, HistoryEvent $historyEvent)
@@ -125,6 +135,14 @@ class HistoryEventController extends Controller
         }
 
         $historyEvent->update($data);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'History event updated.',
+                'event'   => $historyEvent->fresh()->toArray(),
+            ]);
+        }
 
         return redirect()->route('admin.history-events.index')->with('success', 'History event updated.');
     }

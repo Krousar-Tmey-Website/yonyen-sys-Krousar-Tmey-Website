@@ -6,45 +6,66 @@
 
 @section('content')
 
-<div class="grid lg:grid-cols-3 gap-6">
-    {{-- Add form --}}
-    <div class="bg-white rounded-2xl border border-gray-100 p-6">
-        <h3 class="font-bold text-gray-700 mb-4 text-sm">Add New Report</h3>
-        <form action="{{ route('admin.transparency.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-            @csrf
-            <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Title <span class="text-red-400">*</span></label>
-                <input type="text" name="title" value="{{ old('title') }}" required
-                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                       placeholder="Annual Report 2024">
-            </div>
-            <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Year <span class="text-red-400">*</span></label>
-                <input type="number" name="year" value="{{ old('year', date('Y')) }}" required min="1990" max="2100"
-                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-            </div>
-            <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
-                <input type="text" name="description" value="{{ old('description') }}"
-                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                       placeholder="PDF · Full Report">
-            </div>
-            <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Upload PDF</label>
-                <input type="file" name="file" accept=".pdf"
-                       class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-[#2d6fa3]/10 file:text-[#2d6fa3]">
-            </div>
-            <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">— or External URL</label>
-                <input type="url" name="file_url" value="{{ old('file_url') }}"
-                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                       placeholder="https://...">
-            </div>
-            <button type="submit" class="w-full btn-primary text-sm py-2.5">Add Report</button>
-        </form>
+<div class="space-y-6">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h3 class="text-xl font-bold text-gray-900">Transparency Reports</h3>
+            <p class="text-sm text-gray-500 mt-1">Manage published reports and uploaded PDFs in one place.</p>
+        </div>
+        <a href="{{ route('admin.transparency.create') }}"
+           class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] text-white rounded-full text-sm font-semibold hover:bg-[#1d4e7a] transition-shadow shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Report
+        </a>
     </div>
 
-    {{-- List --}}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        @if($reports->isEmpty())
+            <div class="px-6 py-12 text-center text-gray-400 text-sm">
+                No reports yet. Click "Add New Report" to create the first one.
+            </div>
+        @else
+            <div class="px-5 py-4 bg-gray-50 border-b border-gray-100">
+                <h4 class="font-semibold text-gray-700 text-sm">{{ $reports->count() }} Report(s)</h4>
+            </div>
+            <div class="divide-y divide-gray-100">
+                @foreach($reports as $report)
+                <div class="px-5 py-4 sm:px-6 hover:bg-gray-50 transition">
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="min-w-0">
+                            <p class="font-semibold text-gray-800 truncate">{{ $report->title }}</p>
+                            <p class="text-xs text-gray-500 mt-1">
+                                {{ $report->year }} · {{ $report->description ?? 'PDF' }}
+                                @if($report->file_path)
+                                    · <a href="{{ $report->download_url }}" target="_blank" class="text-[#2d6fa3] hover:underline">View</a>
+                                @endif
+                                @unless($report->is_active)
+                                    <span class="inline-flex items-center rounded-full bg-orange-50 text-orange-600 px-2 py-0.5 text-[11px] uppercase tracking-[.18em]">Hidden</span>
+                                @endunless
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <a href="{{ route('admin.transparency.edit', $report) }}"
+                               class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#2d6fa3] bg-[#2d6fa3]/10 rounded-full hover:bg-[#2d6fa3]/15 transition">
+                                Edit
+                            </a>
+                            <form action="{{ route('admin.transparency.destroy', $report) }}" method="POST" onsubmit="return confirm('Delete this report?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-full hover:bg-red-100 transition">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+</div>
     <div class="lg:col-span-2">
         @if($reports->isEmpty())
         <div class="bg-white rounded-2xl border border-gray-100 py-12 text-center text-gray-400 text-sm">

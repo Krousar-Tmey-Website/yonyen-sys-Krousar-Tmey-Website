@@ -70,13 +70,21 @@
                                 <p class="text-gray-500 text-xs mt-1">Order: {{ $slide->sort_order }}</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 flex-shrink-0 ml-3">
-                            <button @click="editing = true" class="text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium p-1">Edit</button>
+                        <div class="flex items-center justify-end gap-2">
+                            <button @click="editing = true" title="Edit"
+                                    class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 flex items-center justify-center transition">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </button>
                             <form action="{{ route('admin.principle-slides.destroy', $slide) }}" method="POST"
                                   onsubmit="return confirm('Remove this slide?')">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="text-red-300 hover:text-red-500 transition-colors p-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                <button type="submit" title="Delete"
+                                        class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
+                                    </svg>
                                 </button>
                             </form>
                         </div>
@@ -104,7 +112,7 @@
                                 @endif
                                 <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
                                        class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-[#2d6fa3]">
-                                <input type="url" name="image_url" value="{{ $slide->image }}"
+                                <input type="url" name="image_url" value="{{ $slide->image_url ?? '' }}"
                                        class="w-full mt-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
                                        placeholder="...or paste an image URL">
                                 @error('image')<p class="text-red-400 text-xs mt-1">{{ $message }}</p>@enderror

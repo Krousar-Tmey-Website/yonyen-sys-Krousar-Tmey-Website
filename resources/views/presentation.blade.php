@@ -83,7 +83,9 @@
         <div class="text-center mb-16" data-reveal>
             <span class="inline-block text-xs font-semibold text-[#2d6fa3] uppercase tracking-wider mb-3">What Drives Us</span>
             <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Our Values</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto">The principles that guide everything we do, ensuring every child has the opportunity to grow, belong, and thrive.</p>
+            <p class="text-gray-500 max-w-2xl mx-auto">
+                {{ \App\Models\HomeSetting::getValue('values_supporting_description', 'The principles that guide everything we do, ensuring every child has the opportunity to grow, belong, and thrive.') }}
+            </p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
@@ -151,48 +153,59 @@
         </div>
 
         @php
-        $programAccents = ['#d32f2f', '#8da83a', '#7c4dff', '#e8a020', '#2d6fa3'];
-        $programIconsSvg = [
-            // Child Welfare — home
-            '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>',
-            // Education — open book
-            '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>',
-            // Cultural & Artistic — flowing dance pose
-            '<circle cx="12.6" cy="4.2" r="1.3" fill="currentColor" stroke="none"/><path stroke-linecap="round" stroke-linejoin="round" d="M12.3 6.2c-.5 1.4-.3 2.9.4 4.1M12.3 6.2c-1.1 0-2.2-.5-2.9-1.5m2.9 1.5c1.1.6 2.4.6 3.4-.1M9.4 4.7c-.5-.6-.6-1.4-.4-2.1M15.1 4.6c.6-.5 1-1.2 1-2M12.7 10.3c-1.7.7-2.9 2.3-3.1 4.2M12.7 10.3c1.7.9 2.7 2.8 2.4 4.7M9.6 21l1.1-6.6M15.1 20.6l-2-5.6"/>',
-            // Academic & Career Counseling — signpost
-            '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21V4M12 6.5h6l1.75 1.75L18 10h-6M12 11h-6l-1.75 1.75L6 14.5h6"/>',
-            // Health & Hygiene — doctor with stethoscope
-            '<circle cx="12" cy="5" r="2.2"/><path stroke-linecap="round" stroke-linejoin="round" d="M7 20v-3a5 5 0 0110 0v3"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 9.5c2.3 1.2 3.5 3.8 2.7 6.5"/><circle cx="17.9" cy="17.3" r="1.3"/>',
+        $programs = [
+            [
+                'title' => 'Child Welfare',
+                'accent' => '#d32f2f',
+                'light' => '#fde8e8',
+                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>',
+            ],
+            [
+                'title' => 'Education for Deaf or Blind Children',
+                'accent' => '#8da83a',
+                'light' => '#eef3dc',
+                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>',
+            ],
+            [
+                'title' => 'Cultural and Artistic Development',
+                'accent' => '#7c4dff',
+                'light' => '#ede7fb',
+                'icon' => '<circle cx="12.6" cy="4.2" r="1.3" fill="currentColor" stroke="none"/><path stroke-linecap="round" stroke-linejoin="round" d="M12.3 6.2c-.5 1.4-.3 2.9.4 4.1M12.3 6.2c-1.1 0-2.2-.5-2.9-1.5m2.9 1.5c1.1.6 2.4.6 3.4-.1M9.4 4.7c-.5-.6-.6-1.4-.4-2.1M15.1 4.6c.6-.5 1-1.2 1-2M12.7 10.3c-1.7.7-2.9 2.3-3.1 4.2M12.7 10.3c1.7.9 2.7 2.8 2.4 4.7M9.6 21l1.1-6.6M15.1 20.6l-2-5.6"/>',
+            ],
+            [
+                'title' => 'Academic and Career Counseling',
+                'accent' => '#e8a020',
+                'light' => '#fbf0dc',
+                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21V4M12 6.5h6l1.75 1.75L18 10h-6M12 11h-6l-1.75 1.75L6 14.5h6"/>',
+            ],
+            [
+                'title' => 'Health and Hygiene',
+                'accent' => '#2d6fa3',
+                'light' => '#e1ecf4',
+                'icon' => '<circle cx="12" cy="5" r="2.2"/><path stroke-linecap="round" stroke-linejoin="round" d="M7 20v-3a5 5 0 0110 0v3"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 9.5c2.3 1.2 3.5 3.8 2.7 6.5"/><circle cx="17.9" cy="17.3" r="1.3"/>',
+            ],
         ];
-        $programRows = $programs->values()->chunk(3);
+        $programRows = collect($programs)->chunk(3);
         @endphp
 
-        <div class="space-y-12">
-            @forelse($programRows as $rowIndex => $row)
-            <div class="grid gap-x-10 gap-y-12 mx-auto" style="grid-template-columns: repeat({{ $row->count() }}, minmax(0, 1fr)); max-width: {{ $row->count() * 260 }}px;">
+        <div class="space-y-14">
+            @foreach($programRows as $row)
+            <div class="grid gap-x-10 gap-y-14 mx-auto" style="grid-template-columns: repeat({{ $row->count() }}, minmax(0, 1fr)); max-width: {{ $row->count() * 260 }}px;">
                 @foreach($row as $j => $program)
-                @php
-                $i = $j;
-                $accent = $programAccents[$i % count($programAccents)];
-                @endphp
-                <div class="group flex flex-col items-center text-center" data-reveal="up" style="--reveal-delay: {{ $i * 100 }}">
-                    <div class="w-28 h-28 rounded-full border-2 border-[#2d6fa3]/40 flex items-center justify-center mb-4 bg-white shadow-md transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-xl group-hover:border-[#2d6fa3]">
-                        @if($program->icon_image_url)
-                        <img src="{{ $program->icon_image_url }}" alt="{{ $program->title }}" class="w-16 h-16 object-contain">
-                        @else
-                        <svg class="w-10 h-10" fill="none" stroke="{{ $accent }}" stroke-width="1.5" viewBox="0 0 24 24">
-                            {!! $programIconsSvg[$i % count($programIconsSvg)] !!}
+                <div class="group flex flex-col items-center text-center" data-reveal="up" style="--reveal-delay: {{ $j * 100 }}">
+                    <div class="relative w-28 h-28 rounded-full flex items-center justify-center mb-5 shadow-sm transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-xl"
+                         style="background-color: {{ $program['light'] }}; box-shadow: inset 0 0 0 1px {{ $program['accent'] }}22;">
+                        <svg class="w-11 h-11" fill="none" stroke="{{ $program['accent'] }}" stroke-width="1.6" viewBox="0 0 24 24">
+                            {!! $program['icon'] !!}
                         </svg>
-                        @endif
+                        <div class="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="box-shadow: 0 8px 24px -6px {{ $program['accent'] }}66;"></div>
                     </div>
-                    <p class="text-sm font-semibold text-[#1d4e7a] leading-snug max-w-[10rem]">{{ $program->title }}</p>
-                    <div class="w-16 h-1 rounded-full mt-3 transition-all duration-300 group-hover:w-20" style="background-color: {{ $accent }}"></div>
+                    <p class="text-sm font-semibold text-[#1d4e7a] leading-snug max-w-[10rem]">{{ $program['title'] }}</p>
+                    <div class="w-16 h-1 rounded-full mt-3 transition-all duration-300 group-hover:w-20" style="background-color: {{ $program['accent'] }}"></div>
                 </div>
                 @endforeach
             </div>
-            @empty
-            <p class="text-gray-400 text-center py-8">No programs listed yet.</p>
-            @endforelse
+            @endforeach
         </div>
     </div>
 </section>
@@ -480,55 +493,88 @@
 {{-- ========================================================
      KROUSAR THMEY WORLDWIDE SECTION
      ======================================================== --}}
-<section class="py-24 bg-white scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-6">
+<section class="py-24 bg-[#fafbfd] scroll-mt-20">
+    <div class="max-w-6xl mx-auto px-6">
         {{-- Section Header --}}
-        <div class="text-center mb-16" data-reveal>
-            <span class="inline-block text-xs font-semibold text-[#2d6fa3] uppercase tracking-wider mb-3">Global Network</span>
-            <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Krousar Thmey Worldwide</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto mb-3">
+        <div class="text-center max-w-2xl mx-auto mb-16" data-reveal>
+            <span class="inline-flex items-center gap-2 text-xs font-semibold text-[#2d6fa3] uppercase tracking-[0.2em] mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3]"></span>
+                Global Network
+            </span>
+            <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-5">Krousar Thmey Worldwide</h2>
+            <p class="text-gray-500 leading-relaxed mb-4">
                 {{ $settings['worldwide_text'] ?? 'Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.' }}
             </p>
-            <p class="text-[#2d6fa3] font-semibold text-sm">To know more about each international structure:</p>
+            <p class="text-[#1d4e7a] font-semibold text-sm">To know more about each international structure:</p>
         </div>
 
         {{-- Country Cards Grid --}}
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        @php
+            $flagSvgs = [
+                'france' => '<rect width="3" height="2" fill="#ED2939"/><rect width="2" height="2" fill="#FFF"/><rect width="1" height="2" fill="#002395"/>',
+                'switzerland' => '<rect width="3" height="2" fill="#D52B1E"/><rect x="1.25" y="0.4" width="0.5" height="1.2" fill="#FFF"/><rect x="0.9" y="0.75" width="1.2" height="0.5" fill="#FFF"/>',
+                'singapore' => '<rect width="3" height="1" fill="#EF3340"/><rect y="1" width="3" height="1" fill="#FFF"/><circle cx="0.75" cy="0.5" r="0.4" fill="#FFF"/><circle cx="0.9" cy="0.5" r="0.32" fill="#EF3340"/><g fill="#FFF"><circle cx="1.25" cy="0.22" r="0.045"/><circle cx="1.45" cy="0.36" r="0.045"/><circle cx="1.38" cy="0.6" r="0.045"/><circle cx="1.12" cy="0.6" r="0.045"/><circle cx="1.05" cy="0.36" r="0.045"/></g>',
+                'cambodia' => '<rect width="3" height="2" fill="#032EA1"/><rect y="0.5" width="3" height="1" fill="#E00025"/><rect x="1.2" y="0.65" width="0.6" height="0.7" fill="#FFF"/>',
+            ];
+        @endphp
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
             @forelse($offices as $loc)
-            <div class="bg-[#f8f9fc] rounded-3xl border-2 {{ $loc->accent_color }}/30 hover:border-opacity-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden group"
+            @php
+                preg_match('/#([0-9a-fA-F]{3,8})/', $loc->accent_color, $m);
+                $hex = '#' . ($m[1] ?? '2d6fa3');
+                $flagKey = strtolower(trim($loc->country));
+                $flagSvg = $flagSvgs[$flagKey] ?? null;
+            @endphp
+            <div class="relative bg-white rounded-[28px] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden group flex flex-col"
                  data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <span class="text-4xl">{{ $loc->flag }}</span>
+                {{-- Top accent bar --}}
+                <div class="h-1.5 w-full" style="background-color: {{ $hex }}"></div>
+
+                <div class="p-7 md:p-8 flex-1 flex flex-col">
+                    <div class="flex items-start justify-between mb-6">
+                        @if($flagSvg)
+                        <span class="w-16 h-11 rounded-lg overflow-hidden border border-gray-100 shadow-sm flex-shrink-0">
+                            <svg class="w-full h-full" viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice">{!! $flagSvg !!}</svg>
+                        </span>
+                        @else
+                        <span class="w-16 h-11 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-2xl flex-shrink-0">{{ $loc->flag }}</span>
+                        @endif
                         @if($loc->badge)
                         <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full {{ $loc->badge_color }}">{{ $loc->badge }}</span>
                         @endif
                     </div>
-                    <h3 class="text-lg font-black text-[#2d6fa3] uppercase tracking-wide">{{ $loc->country }}</h3>
-                    <p class="text-[#8da83a] text-xs font-semibold mb-4">{{ $loc->city }}</p>
 
-                    <div class="space-y-3">
-                        <div class="flex items-start gap-2.5">
-                            <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <p class="text-gray-500 text-xs leading-relaxed">{{ $loc->address }}</p>
+                    <h3 class="text-xl font-black uppercase tracking-wide mb-1" style="color: {{ $hex }}">{{ $loc->country }}</h3>
+                    <p class="text-[#8da83a] text-xs font-semibold uppercase tracking-wide mb-6">{{ $loc->city }}</p>
+
+                    <div class="space-y-4 flex-1">
+                        <div class="flex items-start gap-3">
+                            <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background-color: {{ $hex }}1a">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="{{ $hex }}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            </span>
+                            <p class="text-gray-500 text-xs leading-relaxed pt-1">{{ $loc->address }}</p>
                         </div>
                         @if($loc->phone)
-                        <a href="tel:{{ preg_replace('/[^+0-9]/', '', $loc->phone) }}" class="flex items-center gap-2.5 group/link">
-                            <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                            <span class="text-gray-500 text-xs group-hover/link:text-[#2d6fa3] transition-colors">{{ $loc->phone }}</span>
+                        <a href="tel:{{ preg_replace('/[^+0-9]/', '', $loc->phone) }}" class="flex items-center gap-3 group/link">
+                            <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background-color: {{ $hex }}1a">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="{{ $hex }}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            </span>
+                            <span class="text-gray-500 text-xs group-hover/link:text-[#1d4e7a] transition-colors">{{ $loc->phone }}</span>
                         </a>
                         @endif
                         @if($loc->email)
-                        <a href="mailto:{{ $loc->email }}" class="flex items-center gap-2.5 group/link">
-                            <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            <span class="text-gray-500 text-xs group-hover/link:text-[#2d6fa3] transition-colors break-all">{{ $loc->email }}</span>
+                        <a href="mailto:{{ $loc->email }}" class="flex items-center gap-3 group/link">
+                            <span class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background-color: {{ $hex }}1a">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="{{ $hex }}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </span>
+                            <span class="text-gray-500 text-xs group-hover/link:text-[#1d4e7a] transition-colors break-all">{{ $loc->email }}</span>
                         </a>
                         @endif
                     </div>
                 </div>
                 @if($loc->email)
-                <div class="px-6 pb-5">
-                    <a href="mailto:{{ $loc->email }}" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#2d6fa3]/10 text-[#2d6fa3] text-xs font-semibold hover:bg-[#2d6fa3] hover:text-white transition-all duration-200">
+                <div class="px-7 md:px-8 pb-7 md:pb-8 pt-1">
+                    <a href="mailto:{{ $loc->email }}" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-white text-xs font-semibold uppercase tracking-wide shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" style="background-color: {{ $hex }}">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         Send Email
                     </a>

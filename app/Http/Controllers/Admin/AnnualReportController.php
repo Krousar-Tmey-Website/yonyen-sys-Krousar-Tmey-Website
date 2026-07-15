@@ -46,7 +46,7 @@ class AnnualReportController extends Controller
         $data['original_filename'] = $file->getClientOriginalName();
         $data['is_active'] = true;
 
-        AnnualReport::create($data);
+        $report = AnnualReport::create($data);
 
         return redirect()->route('admin.reports.index')
             ->with('success', 'Report created successfully.');
@@ -90,6 +90,7 @@ class AnnualReportController extends Controller
         if ($report->file_path) {
             Storage::disk('public')->delete($report->file_path);
         }
+
         $report->delete();
 
         return redirect()->route('admin.reports.index')

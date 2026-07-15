@@ -18,7 +18,7 @@
             <button @click="tab = 'values'"
                     :class="tab === 'values' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Our Values
+                Our Portfolio
             </button>
             <button @click="tab = 'portfolio'"
                     :class="tab === 'portfolio' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
@@ -34,11 +34,6 @@
                     :class="tab === 'impact' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
                 Key Figures
-            </button>
-            <button @click="tab = 'worldwide'"
-                    :class="tab === 'worldwide' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
-                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Krousar Thmey Worldwide
             </button>
         </nav>
     </div>
@@ -154,6 +149,26 @@
     {{-- OUR VALUES SECTION --}}
     <div x-show="tab === 'values'" class="space-y-6">
         <p class="text-gray-400 text-xs">These values also appear on the About page. Need to set a photo per value? Use the full <a href="{{ route('admin.core-values.index') }}" class="text-[#2d6fa3] hover:underline">Our Values</a> manager.</p>
+
+        {{-- Supporting Description (Global) --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-700 mb-4 text-sm">Our Values Supporting Description</h3>
+            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
+                @csrf
+                <input type="hidden" name="section" value="values_supporting">
+                
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
+                    <textarea name="values_supporting_description" rows="3"
+                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                              placeholder="Krousar Thmey offers a portfolio of cross-cutting programs...">{{ old('values_supporting_description', $settings['values_supporting_description'] ?? '') }}</textarea>
+                    <p class="text-xs text-gray-400 mt-1">This text appears under the Our Values header on the presentation page.</p>
+                </div>
+                
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Supporting Description</button>
+            </form>
+        </div>
+
         <div class="grid lg:grid-cols-3 gap-6">
             {{-- Add value form --}}
             <div class="bg-white rounded-2xl border border-gray-100 p-6">
@@ -167,22 +182,35 @@
                                placeholder="e.g. Identity">
                     </div>
                     <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Headline (e.g. "Every child belongs.")</label>
+                        <input type="text" name="headline" value="{{ old('headline') }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Every child belongs.">
+                    </div>
+                    <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
                         <textarea name="description" rows="2"
                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="Short description...">{{ old('description') }}</textarea>
+                                  placeholder="Full description...">{{ old('description') }}</textarea>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 mb-1">Icon (emoji)</label>
-                            <input type="text" name="icon" value="{{ old('icon', '⭐') }}"
-                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] text-center text-lg">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
-                            <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}"
-                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
+                        <textarea name="supporting_description" rows="2"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Supporting description...">{{ old('supporting_description') }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
+                        <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Image</label>
+                        <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <input type="url" name="image_url" value="{{ old('image_url') }}"
+                               class="w-full mt-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="...or paste an image URL">
                     </div>
                     <button type="submit" class="w-full btn-primary text-sm py-2.5">Add Value</button>
                 </form>
@@ -205,21 +233,36 @@
                             {{-- View row --}}
                             <div class="flex items-start justify-between px-5 py-4 hover:bg-gray-50/50" x-show="!editing">
                                 <div class="flex items-start gap-3 min-w-0">
+                                    @if($value->image_url)
+                                    <img src="{{ $value->image_url }}" alt="" class="w-8 h-8 object-cover flex-shrink-0 mt-0.5 rounded-lg">
+                                    @else
                                     <span class="text-2xl flex-shrink-0 mt-0.5">{{ $value->icon }}</span>
+                                    @endif
                                     <div class="min-w-0">
                                         <p class="font-semibold text-gray-700 text-sm">{{ $value->title }}</p>
+                                        @if($value->headline)
+                                        <p class="text-gray-500 text-xs font-medium mt-0.5">{{ $value->headline }}</p>
+                                        @endif
                                         @if($value->description)
                                         <p class="text-gray-400 text-xs mt-1 line-clamp-2">{{ $value->description }}</p>
                                         @endif
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-2 flex-shrink-0 ml-3">
-                                    <button @click="editing = true" class="text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium p-1">Edit</button>
+                                <div class="flex items-center justify-end gap-2">
+                                    <button @click="editing = true" title="Edit"
+                                            class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 flex items-center justify-center transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </button>
                                     <form action="{{ route('admin.core-values.destroy', $value) }}" method="POST"
                                           onsubmit="return confirm('Remove this value?')">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="text-red-300 hover:text-red-500 transition-colors p-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        <button type="submit" title="Delete"
+                                                class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
+                                            </svg>
                                         </button>
                                     </form>
                                 </div>
@@ -234,21 +277,42 @@
                                                class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
                                     </div>
                                     <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Headline (e.g. "Every child belongs.")</label>
+                                        <input type="text" name="headline" value="{{ $value->headline }}"
+                                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                                               placeholder="Every child belongs.">
+                                    </div>
+                                    <div>
                                         <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
                                         <textarea name="description" rows="2"
                                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $value->description }}</textarea>
                                     </div>
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <div>
-                                            <label class="block text-xs font-medium text-gray-600 mb-1">Icon</label>
-                                            <input type="text" name="icon" value="{{ $value->icon }}"
-                                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] text-center text-lg">
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
+                                        <textarea name="supporting_description" rows="2"
+                                                  class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $value->supporting_description }}</textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
+                                        <input type="number" name="sort_order" value="{{ $value->sort_order }}"
+                                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Image</label>
+                                        @if($value->image_url)
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <img src="{{ $value->image_url }}" alt="" class="w-10 h-10 object-cover rounded-lg border border-gray-200">
+                                            <label class="flex items-center gap-1.5 text-xs text-gray-500">
+                                                <input type="checkbox" name="remove_image" value="1" class="rounded border-gray-300">
+                                                Remove current image
+                                            </label>
                                         </div>
-                                        <div>
-                                            <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
-                                            <input type="number" name="sort_order" value="{{ $value->sort_order }}"
-                                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
-                                        </div>
+                                        @endif
+                                        <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-[#2d6fa3]">
+                                        <input type="url" name="image_url"
+                                               class="w-full mt-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                                               placeholder="...or paste an image URL">
                                     </div>
                                     <div class="flex gap-2">
                                         <button type="submit" class="btn-primary text-xs px-4 py-2">Save</button>
@@ -399,51 +463,6 @@
                 </div>
                 <button type="submit" class="btn-primary text-sm py-2.5">Save Organisation Figures</button>
             </form>
-        </div>
-    </div>
-
-    {{-- KROUSAR THMEY WORLDWIDE SECTION --}}
-    <div x-show="tab === 'worldwide'" class="space-y-6">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 class="font-bold text-gray-700 mb-1 text-sm">Krousar Thmey Worldwide</h3>
-            <p class="text-gray-400 text-xs mb-4">Intro text shown above the country office cards.</p>
-            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
-                @csrf
-                <textarea name="worldwide_text" rows="3"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['worldwide_text'] ?? 'Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.' }}</textarea>
-                <button type="submit" class="btn-primary text-sm py-2.5">Save Worldwide Text</button>
-            </form>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold text-gray-700 text-sm">Country Offices</h3>
-                <a href="{{ route('admin.offices.index') }}" class="text-xs text-[#2d6fa3] hover:underline">Manage All Offices</a>
-            </div>
-            <p class="text-gray-400 text-xs mb-4">The country cards (flag, address, phone, email) shown here are the same offices used on the Contact page.</p>
-
-            @if($offices->isEmpty())
-            <div class="bg-gray-50 rounded-xl py-12 text-center text-gray-400">
-                <p class="text-sm font-medium mb-2">No international offices yet.</p>
-                <a href="{{ route('admin.offices.index') }}" class="text-[#2d6fa3] text-sm underline">Add your first office</a>
-            </div>
-            @else
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                @foreach($offices as $office)
-                <div class="bg-gray-50 rounded-xl border border-gray-100 p-4 flex items-start justify-between gap-3">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xl">{{ $office->flag }}</span>
-                            <h4 class="font-bold text-gray-800 text-sm truncate">{{ $office->country }}</h4>
-                        </div>
-                        <p class="text-gray-400 text-xs truncate">{{ $office->email }}</p>
-                    </div>
-                    <a href="{{ route('admin.offices.index') }}"
-                       class="text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium p-1 flex-shrink-0">Edit</a>
-                </div>
-                @endforeach
-            </div>
-            @endif
         </div>
     </div>
 

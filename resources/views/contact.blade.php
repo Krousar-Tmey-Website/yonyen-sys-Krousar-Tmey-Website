@@ -27,7 +27,7 @@
                 <svg class="w-4 h-4 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                 +855 (0)23 211 955
             </a>
-            <a href="mailto:info@krousar-thmey.org" class="flex items-center gap-2 bg-white/15 border border-white/20 rounded-full px-5 py-2.5 text-white text-sm font-medium hover:bg-white/25 transition-colors">
+            <a href="#" @click.prevent="openEmail('info@krousar-thmey.org')" class="flex items-center gap-2 bg-white/15 border border-white/20 rounded-full px-5 py-2.5 text-white text-sm font-medium hover:bg-white/25 transition-colors">
                 <svg class="w-4 h-4 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 info@krousar-thmey.org
             </a>
@@ -102,7 +102,7 @@
                         </a>
                         @endif
                         @if($loc->email)
-                        <a href="mailto:{{ $loc->email }}" class="flex items-center gap-2.5 group/link">
+                        <a href="#" @click.prevent="openEmail('{{ $loc->email }}')" class="flex items-center gap-2.5 group/link">
                             <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                             <span class="text-gray-500 text-xs group-hover/link:text-[#2d6fa3] transition-colors break-all">{{ $loc->email }}</span>
                         </a>
@@ -111,7 +111,7 @@
                 </div>
                 @if($loc->email)
                 <div class="px-6 pb-5">
-                    <a href="mailto:{{ $loc->email }}" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#2d6fa3]/10 text-[#2d6fa3] text-xs font-semibold hover:bg-[#2d6fa3] hover:text-white transition-all duration-200">
+                    <a href="#" @click.prevent="openEmail('{{ $loc->email }}')" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#2d6fa3]/10 text-[#2d6fa3] text-xs font-semibold hover:bg-[#2d6fa3] hover:text-white transition-all duration-200">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         Send Email
                     </a>

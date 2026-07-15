@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CoreValue;
 use App\Models\HomeSetting;
-use App\Models\Office;
 use Illuminate\Http\Request;
 
 class PresentationController extends Controller
@@ -13,10 +12,9 @@ class PresentationController extends Controller
     public function index()
     {
         $coreValues = CoreValue::ordered()->get();
-        $offices = Office::active()->where('country', '!=', 'Cambodia')->get();
         $settings = HomeSetting::allKeyed();
 
-        return view('admin.presentations.index', compact('coreValues', 'offices', 'settings'));
+        return view('admin.presentations.index', compact('coreValues', 'settings'));
     }
 
     public function update(Request $request)
@@ -60,11 +58,13 @@ class PresentationController extends Controller
 
         unset($data['mission_image_file'], $data['remove_mission_image'], $data['vision_image_file'], $data['remove_vision_image']);
 
+        // Save all values including empty strings
         foreach ($data as $key => $value) {
-            if ($value !== null) {
-                HomeSetting::setValue($key, $value);
-            }
+            HomeSetting::setValue($key, $value);
         }
+        
+        // Ensure values_supporting_description is saved (even if empty)
+        HomeSetting::setValue('values_supporting_description', $request->input('values_supporting_description', ''));
 
         return redirect()->route('admin.presentation.index')->with('success', 'Presentation settings updated.');
     }
