@@ -6,7 +6,7 @@
     <p class="text-gray-400 text-xs mt-1">Try a different search term.</p>
     @else
     <p class="text-gray-500 text-sm">No awards available</p>
-    <p class="text-gray-400 text-xs mt-1">Add your first award using the form</p>
+    <p class="text-gray-400 text-xs mt-1">Click <strong>Add New Award</strong> to create one</p>
     @endif
 </div>
 @else
@@ -62,12 +62,12 @@
                 </td>
                 <td class="px-6 py-4">
                     <div class="flex items-center justify-end gap-2">
-                        <a href="{{ route('admin.awards.edit', $award) }}" title="Edit"
-                           class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 flex items-center justify-center transition">
+                        <button @click="openEditModal(@js($award->toArray()))" title="Edit"
+                                class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 flex items-center justify-center transition cursor-pointer">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
-                        </a>
+                        </button>
                         <form action="{{ route('admin.awards.destroy', $award) }}" method="POST" onsubmit="return confirm('Delete this award?')">
                             @csrf @method('DELETE')
                             <button type="submit" title="Delete" class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition">

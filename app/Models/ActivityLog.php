@@ -22,7 +22,7 @@ class ActivityLog extends Model
 
     protected $casts = [
         'properties' => 'array',
-        'subject_id' => 'integer',
+        'subject_id' => 'string',
     ];
 
     public function user(): BelongsTo

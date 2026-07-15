@@ -10,17 +10,34 @@
 
 <body class="min-h-screen bg-[#1d4e7a] flex items-center justify-center p-4">
 
-<div class="w-full max-w-sm">
-    {{-- Logo --}}
-    <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center bg-white rounded-2xl p-4 shadow-xl mb-5">
-            @php $loginLogoPath = data_get($settings ?? [], 'site_logo', 'images/logo.png'); @endphp
-            <img src="{{ str_starts_with($loginLogoPath, 'http') ? $loginLogoPath : (str_starts_with($loginLogoPath, 'logos/') ? asset('storage/' . $loginLogoPath) : asset($loginLogoPath)) }}" alt="{{ data_get($settings ?? [], 'site_name', 'Krousar Thmey') }}" class="h-16 w-auto"
-                 onerror="this.parentElement.innerHTML='<span class=\'text-[#2d6fa3] font-black text-2xl\'>KT</span>'">
+    <div class="w-full max-w-sm">
+        {{-- Logo --}}
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center bg-white rounded-2xl p-4 shadow-xl mb-5">
+                @php
+                $logoPath = $settings['site_logo'] ?? 'images/logo.png';
+                $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
+                $siteName = $settings['site_name'] ?? 'Krousar Thmey';
+                $siteTagline = $settings['site_tagline'] ?? 'គ្រួសារថ្មី · New Family';
+                @endphp
+                <img src="{{ $logoUrl }}"
+                    alt="{{ $siteName }}"
+                    class="h-12 lg:h-14 w-auto object-contain"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                {{-- Fallback if image not yet placed --}}
+                <div class="hidden items-center gap-3">
+                    <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-[#2d6fa3] flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">KT</span>
+                    </div>
+                    <div>
+                        <div class="text-[#2d6fa3] font-bold text-lg leading-tight">{{ $siteName }}</div>
+                        <div class="text-[#8da83a] text-xs font-medium">{{ $siteTagline }}</div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="text-white font-bold text-2xl">Krousar Thmey</h1>
+            <p class="text-white/50 text-sm mt-1">Admin Panel</p>
         </div>
-        <h1 class="text-white font-bold text-2xl">Krousar Thmey</h1>
-        <p class="text-white/50 text-sm mt-1">Admin Panel</p>
-    </div>
 
         {{-- Card --}}
         <div class="bg-white rounded-3xl shadow-2xl p-8">

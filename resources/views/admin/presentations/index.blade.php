@@ -6,28 +6,24 @@
 
 @section('content')
 
-<div class="space-y-8" x-data="{ tab: 'hero' }">
+<div class="space-y-8" x-data="{ tab: 'slideshow' }">
     {{-- Tab Navigation --}}
     <div class="border-b border-gray-200">
         <nav class="flex space-x-8 overflow-x-auto">
-            <button @click="tab = 'hero'" 
-                    :class="tab === 'hero' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
-                Hero Section
-            </button>
             <button @click="tab = 'slideshow'" 
                     :class="tab === 'slideshow' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Hero Slideshow
+                Intro / Mission / Vision
             </button>
             <button @click="tab = 'about'" 
                     :class="tab === 'about' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                About Section
+                Our Values
             </button>
             <button @click="tab = 'values'" 
                     :class="tab === 'values' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Our Values
+                Our Portfolio
             </button>
             <button @click="tab = 'programs'" 
                     :class="tab === 'programs' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
@@ -37,21 +33,16 @@
             <button @click="tab = 'impact'" 
                     :class="tab === 'impact' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Impact Statistics
+                Key Figures
             </button>
             <button @click="tab = 'principle'" 
                     :class="tab === 'principle' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Our Principle
-            </button>
-    <button @click="tab = 'worldwide'" 
-                :class="tab === 'worldwide' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
-                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
                 Krousar Thmey Worldwide
             </button>
-            <button @click="tab = 'sharing'" 
-                :class="tab === 'sharing' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
-                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+            <button @click="tab = 'worldwide'" 
+                    :class="tab === 'worldwide' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
                 Share our impact
             </button>
         </nav>
@@ -313,20 +304,12 @@
                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
                                   placeholder="Supporting description...">{{ old('supporting_description') }}</textarea>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 mb-1">Icon (emoji)</label>
-                            <input type="text" name="icon" value="{{ old('icon', '⭐') }}"
-                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] text-center text-lg">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
-                            <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}"
-                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        </div>
-                    </div>
                     <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Image (optional, overrides icon)</label>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
+                        <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>                            <label class="block text-xs font-medium text-gray-600 mb-1">Image</label>
                         <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
                                class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         <input type="url" name="image_url" value="{{ old('image_url') }}"
@@ -356,8 +339,6 @@
                                 <div class="flex items-start gap-3 min-w-0">
                                     @if($value->image_url)
                                     <img src="{{ $value->image_url }}" alt="" class="w-8 h-8 object-cover flex-shrink-0 mt-0.5 rounded-lg">
-                                    @else
-                                    <span class="text-2xl flex-shrink-0 mt-0.5">{{ $value->icon }}</span>
                                     @endif
                                     <div class="min-w-0">
                                         <p class="font-semibold text-gray-700 text-sm">{{ $value->title }}</p>
@@ -413,20 +394,13 @@
                                         <textarea name="supporting_description" rows="2"
                                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $value->supporting_description }}</textarea>
                                     </div>
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <div>
-                                            <label class="block text-xs font-medium text-gray-600 mb-1">Icon</label>
-                                            <input type="text" name="icon" value="{{ $value->icon }}"
-                                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] text-center text-lg">
-                                        </div>
-                                        <div>
-                                            <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
-                                            <input type="number" name="sort_order" value="{{ $value->sort_order }}"
-                                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
-                                        </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
+                                        <input type="number" name="sort_order" value="{{ $value->sort_order }}"
+                                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-600 mb-1">Image (optional, overrides icon)</label>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Image</label>
                                         @if($value->image_url)
                                         <div class="flex items-center gap-2 mb-2">
                                             <img src="{{ $value->image_url }}" alt="" class="w-10 h-10 object-cover rounded-lg border border-gray-200">

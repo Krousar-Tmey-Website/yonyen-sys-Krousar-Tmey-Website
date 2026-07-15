@@ -20,7 +20,7 @@ class DonationDashboardController extends Controller
         $totalDonations = (clone $baseQuery)->sum(DB::raw('COALESCE(DonationAmount, Amount, 0)'));
         $totalDonors    = Donor::count();
         $totalCount     = (clone $baseQuery)->count();
-        $recurringCount = (clone $baseQuery)->where('IsRecurring', true)->count();
+        $nonMoneyCount  = (clone $baseQuery)->where('DonationType', '!=', 'Money')->whereNotNull('DonationType')->count();
         $avgDonation    = $totalCount > 0 ? $totalDonations / $totalCount : 0;
 
         // ── Donations by payment method ──
@@ -62,7 +62,7 @@ class DonationDashboardController extends Controller
             'totalDonations',
             'totalDonors',
             'totalCount',
-            'recurringCount',
+            'nonMoneyCount',
             'avgDonation',
             'byPaymentMethod',
             'monthlyDonations',

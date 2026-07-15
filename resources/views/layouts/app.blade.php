@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', ($settings['site_name'] ?? 'Krousar Thmey') . ' — ' . ($settings['site_tagline'] ?? 'Helping Children in Cambodia'))</title>
     <meta name="description" content="@yield('description', $settings['site_description'] ?? 'Krousar Thmey is Cambodia\'s first organization dedicated to helping disadvantaged children — through child welfare, special education, and cultural development.')">
-
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -120,9 +120,6 @@ function openEmail(email) {
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     {{-- Fallback if image not yet placed --}}
                     <div class="hidden items-center gap-3">
-                        <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-[#2d6fa3] flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">KT</span>
-                        </div>
                         <div>
                             <div class="text-[#2d6fa3] font-bold text-lg leading-tight">{{ $siteName }}</div>
                             <div class="text-[#8da83a] text-xs font-medium">{{ $siteTagline }}</div>

@@ -45,19 +45,19 @@ class AwardController extends Controller
     }
 
     /**
-     * Show edit form.
+     * Adding is handled via a modal on the index page.
+     */
+    public function create()
+    {
+        return redirect()->route('admin.awards.index');
+    }
+
+    /**
+     * Editing is handled via a modal on the index page.
      */
     public function edit(Award $award)
     {
-        $awards = Award::latest()->get();
-        $totalAwards = $awards->count();
-
-        return view('admin.awards.index', [
-            'awards'      => $awards,
-            'editAward'   => $award,
-            'filters'     => ['search' => ''],
-            'totalAwards' => $totalAwards,
-        ]);
+        return redirect()->route('admin.awards.index');
     }
 
     public function store(Request $request)
