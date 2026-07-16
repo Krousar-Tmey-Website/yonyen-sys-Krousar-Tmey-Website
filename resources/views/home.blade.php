@@ -675,7 +675,7 @@ $structureImage = $settings['structure_image'] ?? null;
         
         {{-- Section Header --}}
         <div class="text-center mb-12">
-            <h2 class="section-title mt-2 text-[#1a3c6e]">Among our loyal supporters</h2>
+            <h2 class="section-title mt-2 text-[#1a3c6e]">{{ __('Among our loyal supporters') }}</h2>
             <div class="w-16 h-1 bg-[#e8a020] mx-auto mt-4 rounded-full opacity-80"></div>
         </div>
 
