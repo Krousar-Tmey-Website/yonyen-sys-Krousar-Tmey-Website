@@ -13,9 +13,13 @@
         @php
             $historySharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
             $historyFacebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
+            $historyFacebookIcon = str_starts_with($historyFacebookIcon, 'social/') ? 'storage/' . $historyFacebookIcon : $historyFacebookIcon;
             $historyTwitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
+            $historyTwitterIcon = str_starts_with($historyTwitterIcon, 'social/') ? 'storage/' . $historyTwitterIcon : $historyTwitterIcon;
             $historyLinkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
+            $historyLinkedinIcon = str_starts_with($historyLinkedinIcon, 'social/') ? 'storage/' . $historyLinkedinIcon : $historyLinkedinIcon;
             $historyShareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
+            $historyShareIcon = str_starts_with($historyShareIcon, 'social/') ? 'storage/' . $historyShareIcon : $historyShareIcon;
             $historyFacebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
             $historyTwitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
             $historyLinkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
@@ -89,9 +93,13 @@
         @php
             $sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
             $facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
+            $facebookIcon = str_starts_with($facebookIcon, 'social/') ? 'storage/' . $facebookIcon : $facebookIcon;
             $twitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
+            $twitterIcon = str_starts_with($twitterIcon, 'social/') ? 'storage/' . $twitterIcon : $twitterIcon;
             $linkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
+            $linkedinIcon = str_starts_with($linkedinIcon, 'social/') ? 'storage/' . $linkedinIcon : $linkedinIcon;
             $shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
+            $shareIcon = str_starts_with($shareIcon, 'social/') ? 'storage/' . $shareIcon : $shareIcon;
             $facebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
             $twitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
             $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');

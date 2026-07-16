@@ -296,17 +296,28 @@
                 </label>
                 @endif
             </div>
+
+            {{-- ── Action Bar (footer of this card) ───── --}}
+            <div class="-mx-6 -mb-6 mt-2 px-6 py-4 border-t border-gray-100 bg-gray-50/40 flex items-center justify-end gap-3 rounded-b-2xl">
+                <a href="{{ route('programs') }}#{{ $program->slug }}" target="_blank"
+                   class="mr-auto flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    View live on Our Programs
+                </a>
+                <a href="{{ route('admin.programs.index') }}"
+                   class="px-5 py-2 text-sm font-medium text-gray-500 hover:text-gray-800 rounded-xl hover:bg-white transition-all border border-gray-200">
+                    Cancel
+                </a>
+                <button type="submit"
+                        class="inline-flex items-center gap-2 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white px-6 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow-md">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Save Changes
+                </button>
+            </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <button type="submit" class="px-6 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-medium rounded-xl transition-colors">Save Changes</button>
-            <a href="{{ route('admin.programs.index') }}" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</a>
-            <a href="{{ route('programs') }}#{{ $program->slug }}" target="_blank"
-               class="ml-auto flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                View live on Our Programs
-            </a>
-        </div>
     </form>
 </div>
 

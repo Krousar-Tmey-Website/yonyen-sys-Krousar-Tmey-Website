@@ -15,12 +15,8 @@
             title: '',
             headline: '',
             description: '',
-            supporting_description: '',
             sort_order: 0,
         },
-        imageFile: null,
-        removeCurrentImage: false,
-        currentImageUrl: null,
 
         get modalTitle() {
             return this.editing ? 'Edit Value' : 'Add New Value';
@@ -33,16 +29,8 @@
         openAddModal() {
             this.editing = false;
             this.editingId = null;
-            this.form = { title: '', headline: '', description: '', supporting_description: '', sort_order: 0 };
-            this.imageFile = null;
-            this.removeCurrentImage = false;
-            this.currentImageUrl = null;
+            this.form = { title: '', headline: '', description: '', sort_order: 0 };
             this.showModal = true;
-            this.$nextTick(() => {
-                const fileInput = document.getElementById('modal-value-image');
-                if (fileInput) fileInput.value = '';
-                this.updateImagePreview(null);
-            });
         },
 
         openEditModal(value) {
@@ -52,52 +40,15 @@
                 title: value.title ?? '',
                 headline: value.headline ?? '',
                 description: value.description ?? '',
-                supporting_description: value.supporting_description ?? '',
                 sort_order: value.sort_order ?? 0,
             };
-            this.imageFile = null;
-            this.removeCurrentImage = false;
-            this.currentImageUrl = value.image_url ?? null;
             this.showModal = true;
-            this.$nextTick(() => {
-                const fileInput = document.getElementById('modal-value-image');
-                if (fileInput) fileInput.value = '';
-                this.updateImagePreview(null);
-            });
         },
 
         closeModal() {
             this.showModal = false;
             this.editing = false;
             this.editingId = null;
-        },
-
-        handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.imageFile = file;
-                this.updateImagePreview(file);
-            } else {
-                this.imageFile = null;
-                this.updateImagePreview(null);
-            }
-        },
-
-        updateImagePreview(file) {
-            const preview = document.getElementById('modal-value-image-preview');
-            const selected = document.getElementById('modal-value-image-selected');
-            const filename = document.getElementById('modal-value-image-filename');
-            if (!preview || !selected) return;
-            if (file) {
-                preview.classList.add('hidden');
-                selected.classList.remove('hidden');
-                selected.classList.add('flex');
-                if (filename) filename.textContent = file.name;
-            } else {
-                preview.classList.remove('hidden');
-                selected.classList.add('hidden');
-                selected.classList.remove('flex');
-            }
         },
      }">
 
@@ -108,14 +59,7 @@
             @csrf
             <input type="hidden" name="section" value="values_supporting">
             
-            <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
-                <textarea name="values_supporting_description" rows="3"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                          placeholder="Krousar Thmey offers a portfolio of cross-cutting programs...">{{ old('values_supporting_description', \App\Models\HomeSetting::getValue('values_supporting_description', '')) }}</textarea>
-                <p class="text-xs text-gray-400 mt-1">This text appears under the Our Values header on the presentation page.</p>
-            </div>
-            
+
             <button type="submit" class="btn-primary text-sm py-2.5">Save Supporting Description</button>
         </form>
     </div>
@@ -248,7 +192,7 @@
 
                 {{-- Form --}}
                 <form :action="editing ? '{{ route('admin.core-values.update', '__ID__') }}'.replace('__ID__', editingId) : '{{ route('admin.core-values.store') }}'"
-                      method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+                      method="POST" class="p-6 space-y-4">
                     @csrf
                     <template x-if="editing">
                         <input type="hidden" name="_method" value="PUT">
@@ -280,72 +224,11 @@
                                   placeholder="Full description..."></textarea>
                     </div>
 
-                    {{-- Supporting Description --}}
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
-                        <textarea name="supporting_description" x-model="form.supporting_description" rows="2"
-                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="Supporting description..."></textarea>
-                    </div>
-
                     {{-- Order --}}
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
                         <input type="number" name="sort_order" x-model="form.sort_order"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-
-                    {{-- Image --}}
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Image <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <p class="text-xs text-gray-400 mb-2.5">PNG, JPG, WebP or SVG (max 2MB)</p>
-
-                        <label for="modal-value-image" class="group flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer bg-gray-50 hover:bg-[#2d6fa3]/5 hover:border-[#2d6fa3] transition-all duration-200">
-                            <div class="flex flex-col items-center justify-center" id="modal-value-image-preview">
-                                <div class="w-11 h-11 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center mb-2.5 group-hover:scale-110 group-hover:border-[#2d6fa3]/30 transition-all duration-200">
-                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1117.9 9H18a4 4 0 010 8h-1m-4-4l-3-3m0 0l-3 3m3-3v12" />
-                                    </svg>
-                                </div>
-                                <p class="text-sm font-semibold text-[#2d6fa3]">Click to upload image</p>
-                                <p class="text-xs text-gray-400 mt-0.5">or drag and drop — PNG, JPG, WebP, SVG</p>
-                            </div>
-                            <div class="hidden flex-col items-center justify-center gap-1.5" id="modal-value-image-selected">
-                                <div class="w-11 h-11 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <p class="text-sm font-medium text-gray-700 px-4 text-center truncate max-w-full" id="modal-value-image-filename"></p>
-                                <p class="text-xs text-[#2d6fa3]">Click to choose a different file</p>
-                            </div>
-                            <input id="modal-value-image" type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
-                                   class="hidden" @change="handleImageUpload($event)">
-                        </label>
-
-                        {{-- Current image (edit mode) --}}
-                        <template x-if="editing && currentImageUrl">
-                            <div class="mt-4 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl p-3">
-                                <div class="w-12 h-12 bg-white rounded-lg border border-gray-100 flex items-center justify-center overflow-hidden">
-                                    <img :src="currentImageUrl" class="max-w-full max-h-full object-contain p-1">
-                                </div>
-                                <p class="text-xs text-gray-400">Current image</p>
-                                <label class="flex items-center gap-1.5 text-xs text-gray-500 ml-auto cursor-pointer">
-                                    <input type="checkbox" name="remove_image" value="1" x-model="removeCurrentImage" class="rounded border-gray-300">
-                                    Remove
-                                </label>
-                            </div>
-                        </template>
-
-                        {{-- Image URL fallback --}}
-                        <div class="flex items-center gap-2 mt-3">
-                            <div class="flex-1 h-px bg-gray-200"></div>
-                            <span class="text-xs text-gray-400 flex-shrink-0">OR paste an image URL</span>
-                            <div class="flex-1 h-px bg-gray-200"></div>
-                        </div>
-                        <input type="url" name="image_url" x-model="form.image_url"
-                               class="w-full mt-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="https://example.com/image.jpg">
                     </div>
 
                     {{-- Buttons --}}
