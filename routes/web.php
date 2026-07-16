@@ -51,8 +51,9 @@ Route::get('/', function () {
     $programs = Program::active()->take(3)->get();
     $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
+    $sponsors = \App\Models\Sponsor::active()->orderBy('sort_order')->get();
 
-    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics'));
+    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics', 'sponsors'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -246,6 +247,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('impact-statistics', Admin\ImpactStatisticController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['impact-statistics' => 'impactStatistic']);
+
+    Route::resource('sponsors', Admin\SponsorController::class)->except(['show']);
 
     // Programs banner
     Route::get('programs-banner', [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
