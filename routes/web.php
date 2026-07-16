@@ -16,8 +16,11 @@ use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
 use App\Models\JobOpportunity;
 use App\Models\News;
+use App\Enums\PartnerCategory;
+use App\Enums\PartnerSubcategory;
 use App\Models\Office;
 use App\Models\PageSection;
+use App\Models\Partner;
 use App\Models\Program;
 use App\Models\ProgramPageItem;
 use App\Models\Project;
@@ -56,7 +59,21 @@ Route::get('/who-we-are', function () {
     $settings = HomeSetting::allKeyed();
     $coreValues = CoreValue::ordered()->get();
 
-    return view('about', compact('awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
+    $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
+
+    $financialPartnersBySubcategory = Partner::active()
+        ->where('category', PartnerCategory::Financial->value)
+        ->get()
+        ->groupBy('subcategory');
+
+    $transferProgramItem = ProgramPageItem::active()
+        ->where('title', 'Transfer of Krousar Thmey Schools to the Cambodian Authorities')
+        ->first();
+
+    return view('about', compact(
+        'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues',
+        'technicalPartners', 'financialPartnersBySubcategory', 'transferProgramItem'
+    ));
 })->name('about');
 
 // Who We Are - Sub-pages
