@@ -101,6 +101,7 @@
                 ['route' => 'admin.home.index', 'label' => 'Home Settings'],
                 ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
                 ['route' => 'admin.impact-statistics.index', 'label' => 'Impact Statistics'],
+                ['route' => 'admin.sponsors.index', 'label' => 'Sponsors'],
                 ['route' => 'admin.stories.index', 'label' => 'Success Stories'],
                 ],
                 ],

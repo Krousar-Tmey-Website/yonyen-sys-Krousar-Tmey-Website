@@ -137,14 +137,18 @@
                         @foreach($iconSettings as $key => $config)
                         <div class="flex items-center gap-4">
                             <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden border border-gray-200">
-                                <img src="{{ asset($items->firstWhere('key', $key)->value ?? $config['default']) }}" alt="{{ $config['label'] }}" class="w-full h-full object-cover">
+                                @php
+                                    $_previewIcon = $items->firstWhere('key', $key)->value ?? $config['default'];
+                                    $_previewUrl = str_starts_with($_previewIcon, 'social/') ? asset('storage/' . $_previewIcon) : asset($_previewIcon);
+                                @endphp
+                                <img src="{{ $_previewUrl }}" alt="{{ $config['label'] }}" class="w-full h-full object-cover">
                             </div>
                             <div class="flex-1">
                                 <label class="block text-xs font-medium text-gray-600 mb-1">{{ $config['label'] }}</label>
-                                <input type="file" name="settings[{{ $key }}_file]" accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                                <input type="file" name="{{ $key }}_file" accept="image/svg+xml,image/png,image/jpeg,image/webp"
                                        class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
                                 <input type="hidden" name="settings[{{ $key }}]" value="{{ $items->firstWhere('key', $key)->value ?? $config['default'] }}">
-                                <p class="text-xs text-gray-400 mt-1">SVG, PNG, JPG, or WebP. Will be stored in <code>public/images/social/</code></p>
+                                <p class="text-xs text-gray-400 mt-1">SVG, PNG, JPG, or WebP. Upload to replace icon.</p>
                             </div>
                         </div>
                         @endforeach

@@ -35,6 +35,13 @@ use Illuminate\Support\Facades\Storage;
 // Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
 
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'km', 'fr'])) {
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 Route::get('/', function () {
     $settings = HomeSetting::allKeyed();
     $latestNews = News::published()->latest('published_at')->take(3)->get();
@@ -44,8 +51,9 @@ Route::get('/', function () {
     $programs = Program::active()->take(3)->get();
     $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
+    $sponsors = \App\Models\Sponsor::active()->orderBy('sort_order')->get();
 
-    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'programs', 'pageSections', 'impactStatistics'));
+    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'programs', 'pageSections', 'impactStatistics', 'sponsors'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -199,7 +207,7 @@ Route::post('/volunteer', [VolunteerController::class, 'store'])->name('voluntee
 
 // Our Values detail page
 Route::get('/our-values/{value}', function (CoreValue $value) {
-    $settings = \App\Models\HomeSetting::allKeyed();
+    $settings = HomeSetting::allKeyed();
     return view('core_values.show', compact('value', 'settings'));
 })->name('core-values.show');
 
@@ -251,6 +259,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('impact-statistics', Admin\ImpactStatisticController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['impact-statistics' => 'impactStatistic']);
+
+    Route::resource('sponsors', Admin\SponsorController::class)->except(['show']);
 
     // Programs banner
     Route::get('programs-banner', [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');

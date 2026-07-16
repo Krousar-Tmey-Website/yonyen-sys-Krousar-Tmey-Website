@@ -27,7 +27,60 @@ function openEmail(email) {
     window.location.href = 'mailto:' + email;
   }
 }
+function changeGTranslate(lang) {
+    document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + window.location.hostname;
+    document.cookie = 'googtrans=/en/' + lang + '; path=/';
+    window.location.reload();
+}
+function getCurrentLang() {
+    let match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
+    if (match) {
+        let parts = match[2].split('/');
+        if (parts.length === 3 && parts[2] !== 'en') return parts[2];
+    }
+    // Fall back to Laravel session locale
+    return '{{ session("locale", "en") }}';
+}
+function switchLang(lang) {
+    if (lang === 'km' || lang === 'fr') {
+        // Use Google Translate for non-English
+        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + window.location.hostname;
+        document.cookie = 'googtrans=/en/' + lang + '; path=/';
+    } else {
+        // Clear Google Translate cookie for English
+        document.cookie = 'googtrans=; path=/; domain=' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    }
+    window.location.href = '{{ url("/lang") }}/' + lang + '?redirect=' + encodeURIComponent(window.location.href);
+}
 </script>
+
+<style>
+/* Hide the Google Translate UI completely */
+iframe.goog-te-banner-frame { display: none !important; }
+.goog-te-banner-frame { display: none !important; }
+.goog-logo-link { display: none !important; }
+.goog-te-gadget { color: transparent !important; }
+.VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; } /* New GT classes */
+body > .skiptranslate > iframe.skiptranslate { display: none !important; visibility: hidden !important; }
+
+html { margin-top: 0 !important; top: 0 !important; }
+body { margin-top: 0 !important; top: 0 !important; position: static !important; }
+
+.goog-tooltip { display: none !important; }
+.goog-tooltip:hover { display: none !important; }
+.goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+#google_translate_element { display: none !important; }
+</style>
+
+<div id="google_translate_element"></div>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,km,fr', autoDisplay: false}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 
     {{-- Flash Message Popup --}}
     @if(session('success') || session('info'))
@@ -69,34 +122,45 @@ function openEmail(email) {
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-9">
             <span class="text-white/60 text-xs">{{ $settings['site_tagline'] ?? "Cambodia's first organization helping disadvantaged children since 1991" }}</span>
             <div class="flex items-center gap-5">
-                @php $isTopContact = request()->routeIs('contact') || request()->routeIs('contact.*'); @endphp
-                <a href="{{ route('contact') }}" class="transition-colors text-xs {{ $isTopContact ? 'text-white font-semibold' : 'text-white/60 hover:text-white' }}">Contact</a>
+                <a href="{{ route('contact') }}" class="text-white/60 hover:text-white transition-colors text-xs">{{ __('Contact') }}</a>
                 <span class="text-white/20">|</span>
                 <div class="flex items-center gap-3">
-                    <a href="{{ $settings['social_facebook'] ?? 'https://www.facebook.com/KrousarThmey' }}" target="_blank" rel="noopener" aria-label="Facebook"
+                    @php
+                        $topSocialPlatforms = [
+                            'facebook'  => ['key' => 'social_facebook_icon',  'setting' => 'social_facebook',  'defaultUrl' => 'https://www.facebook.com/KrousarThmey'],
+                            'instagram' => ['key' => 'social_instagram_icon', 'setting' => 'social_instagram', 'defaultUrl' => 'https://www.instagram.com/krousarthmey/'],
+                            'linkedin'  => ['key' => 'social_linkedin_icon',   'setting' => 'social_linkedin',  'defaultUrl' => 'https://www.linkedin.com/company/krousar-thmey/'],
+                            'youtube'   => ['key' => 'social_youtube_icon',    'setting' => 'social_youtube',   'defaultUrl' => 'https://www.youtube.com/@KrousarThmey'],
+                            'telegram'  => ['key' => 'social_telegram_icon',   'setting' => 'social_telegram',  'defaultUrl' => 'https://t.me/krousarthmey'],
+                        ];
+                        $topSocialSvgs = [
+                            'facebook'  => '<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>',
+                            'instagram' => '<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-4.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>',
+                            'linkedin'  => '<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>',
+                            'youtube'   => '<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>',
+                            'telegram'  => '<path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>',
+                        ];
+                    @endphp
+                    @foreach($topSocialPlatforms as $name => $topInfo)
+                    @php
+                        $_iconVal = $settings[$topInfo['key']] ?? '';
+                        $_hasIcon = str_starts_with($_iconVal ?? '', 'social/');
+                        $_iconUrl = $_hasIcon ? asset('storage/' . $_iconVal) : '';
+                    @endphp
+                    <a href="{{ $settings[$topInfo['setting']] ?? $topInfo['defaultUrl'] }}" target="_blank" rel="noopener" aria-label="{{ ucfirst($name) }}"
                        class="text-white/50 hover:text-[#8da83a] transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        @if($_hasIcon)
+                        <img src="{{ $_iconUrl }}" alt="{{ ucfirst($name) }}" class="w-3.5 h-3.5 object-contain">
+                        @else
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">{!! $topSocialSvgs[$name] !!}</svg>
+                        @endif
                     </a>
-                    <a href="{{ $settings['social_instagram'] ?? 'https://www.instagram.com/krousarthmey/' }}" target="_blank" rel="noopener" aria-label="Instagram"
-                       class="text-white/50 hover:text-[#8da83a] transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-4.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    </a>
-                    <a href="{{ $settings['social_linkedin'] ?? 'https://www.linkedin.com/company/krousar-thmey/' }}" target="_blank" rel="noopener" aria-label="LinkedIn"
-                       class="text-white/50 hover:text-[#8da83a] transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                    </a>
-                    <a href="{{ $settings['social_youtube'] ?? 'https://www.youtube.com/@KrousarThmey' }}" target="_blank" rel="noopener" aria-label="YouTube"
-                       class="text-white/50 hover:text-[#8da83a] transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                    </a>
-                    <a href="{{ $settings['social_telegram'] ?? 'https://t.me/krousarthmey' }}" target="_blank" rel="noopener" aria-label="Telegram"
-                       class="text-white/50 hover:text-[#8da83a] transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-                    </a>
+                    @endforeach
                 </div>
+
                 <a href="{{ route('donate') }}"
                     class="bg-[#8da83a] text-white px-4 py-1 rounded-full font-semibold hover:bg-[#a3c04a] transition-colors text-xs">
-                    Donate
+                    {{ __('Donate') }}
                 </a>
             </div>
         </div>
@@ -137,9 +201,9 @@ function openEmail(email) {
                     @php $isWhoWeAre = request()->routeIs('about') || request()->routeIs('presentation') || request()->routeIs('transparency'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('about') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isWhoWeAre ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
-                            Who We Are
-                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isWhoWeAre ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
+                        <a href="{{ route('about') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                            {{ __('Who We Are') }}
+                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -150,11 +214,11 @@ function openEmail(email) {
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl">Presentation</a>
-                            <a href="{{ route('about') }}#history" class="dropdown-item">History</a>
-                            <a href="{{ route('about') }}#awards" class="dropdown-item">Awards</a>
-                            <a href="{{ route('about') }}#partners" class="dropdown-item">Partners</a>
-                            <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl">Transparency</a>
+                            <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl">{{ __('Presentation') }}</a>
+                            <a href="{{ route('about') }}#history" class="dropdown-item">{{ __('History') }}</a>
+                            <a href="{{ route('about') }}#values" class="dropdown-item">{{ __('Our Values') }}</a>
+                            <a href="{{ route('about') }}#partners" class="dropdown-item">{{ __('Partners') }}</a>
+                            <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl">{{ __('Transparency') }}</a>
                         </div>
                     </div>
 
@@ -162,9 +226,9 @@ function openEmail(email) {
                     @php $isPrograms = request()->routeIs('programs') || request()->routeIs('programs.*') || request()->routeIs('program-page-items.*') || request()->routeIs('projects.*'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('programs') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isPrograms ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
-                            Our Programs
-                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isPrograms ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
+                        <a href="{{ route('programs') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                            {{ __('Our Programs') }}
+                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -188,9 +252,9 @@ function openEmail(email) {
                     @php $isInvolved = request()->routeIs('involved') || request()->routeIs('jobs.*') || request()->routeIs('volunteer') || request()->routeIs('books.*'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('involved') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isInvolved ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
-                            Get Involved
-                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isInvolved ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
+                        <a href="{{ route('involved') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                            {{ __('Get Involved') }}
+                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -201,10 +265,10 @@ function openEmail(email) {
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">Partnerships</a>
-                            <a href="{{ route('involved') }}#volunteer" class="dropdown-item">Volunteering</a>
-                            <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">Book for Sales</a>
-                            <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">Job Opportunities</a>
+                            <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">{{ __('Partnerships') }}</a>
+                            <a href="{{ route('involved') }}#volunteer" class="dropdown-item">{{ __('Volunteering') }}</a>
+                            <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">{{ __('Book for Sales') }}</a>
+                            <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">{{ __('Job Opportunities') }}</a>
                         </div>
                     </div>
 
@@ -238,9 +302,38 @@ function openEmail(email) {
                 </div>
 
                 {{-- CTA + Mobile toggle --}}
-                <div class="flex items-center gap-3">
-                    @php $isDonate = request()->routeIs('donate') || request()->routeIs('donate.*'); @endphp
-                    <a href="{{ route('donate') }}" class="btn-primary text-sm hidden sm:inline-flex {{ $isDonate ? 'ring-2 ring-[#8da83a]/50 ring-offset-2' : '' }}">
+                <div class="flex items-center gap-4">
+                    {{-- Translate Dropdown --}}
+                    <div class="hidden lg:block border-r border-gray-200 pr-4" x-data="{ open: false, lang: getCurrentLang() }">
+                        <div class="relative">
+                            <button @click="open = !open" @click.away="open = false" class="flex items-center gap-2 text-gray-700 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-3 rounded-lg hover:bg-gray-50 border border-gray-100 shadow-sm bg-white">
+                                <img :src="lang === 'km' ? 'https://flagcdn.com/w20/kh.png' : (lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png')" class="w-4 h-auto rounded-sm" alt="Flag">
+                                <span x-text="lang === 'km' ? 'ខ្មែរ' : (lang === 'fr' ? 'FR' : 'EN')">EN</span>
+                                <svg class="w-3 h-3 transition-transform duration-200 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            
+                            <div x-show="open" 
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="opacity-0 scale-95"
+                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="opacity-100 scale-100"
+                                 x-transition:leave-end="opacity-0 scale-95"
+                                 class="absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[100] overflow-hidden">
+                                <button @click="switchLang('en')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2" :class="lang === 'en' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : ''">
+                                    <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt="English"> English
+                                </button>
+                                <button @click="switchLang('fr')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2" :class="lang === 'fr' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : ''">
+                                    <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt="Français"> Français
+                                </button>
+                                <button @click="switchLang('km')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2" :class="lang === 'km' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : ''">
+                                    <img src="https://flagcdn.com/w20/kh.png" class="w-4 h-auto rounded-sm" alt="Khmer"> ខ្មែរ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('donate') }}" class="btn-primary text-sm hidden sm:inline-flex">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
@@ -284,14 +377,26 @@ function openEmail(email) {
                         <a href="{{ route('media') }}" class="block px-3 py-2 rounded-lg text-sm hover:bg-gray-50 font-medium transition-all {{ request()->routeIs('media') ? 'text-[#2d6fa3]' : 'text-gray-600 hover:text-[#2d6fa3]' }}">Media</a>
                     </div>
                 </div>
-                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isContact ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Contact</a>
-                <div class="pt-3 pb-1">
-                <a href="{{ route('donate') }}" class="btn-primary w-full justify-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                    Donate Now
-                </a>
+                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ request()->routeIs('contact') || request()->routeIs('contact.*') ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Contact</a>
+                <div class="pt-3 pb-1 border-t border-gray-100 mt-2">
+                    <div class="flex items-center gap-2 mb-4" x-data="{ lang: getCurrentLang() }">
+                        <button @click="switchLang('en')" :class="lang === 'en' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
+                            <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt="English"> EN
+                        </button>
+                        <button @click="switchLang('fr')" :class="lang === 'fr' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
+                            <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt="Français"> FR
+                        </button>
+                        <button @click="switchLang('km')" :class="lang === 'km' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
+                            <img src="https://flagcdn.com/w20/kh.png" class="w-4 h-auto rounded-sm" alt="Khmer"> KM
+                        </button>
+                    </div>
+                    </div>
+                    <a href="{{ route('donate') }}" class="btn-primary w-full justify-center py-3">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        {{ __('Donate Now') }}
+                    </a>
                 </div>
             </div>
         </div>
@@ -338,18 +443,35 @@ function openEmail(email) {
                     </p>
                     <div class="flex items-center gap-3 mt-6">
                         @php
-                            $socialLinks = [
-                                ['href' => $settings['social_facebook'] ?? '#', 'label' => 'Facebook',  'svg' => '<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>'],
-                                ['href' => $settings['social_instagram'] ?? '#', 'label' => 'Instagram', 'svg' => '<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-4.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>'],
-                                ['href' => $settings['social_linkedin'] ?? '#', 'label' => 'LinkedIn', 'svg' => '<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>'],
-                                ['href' => $settings['social_youtube'] ?? '#', 'label' => 'YouTube',  'svg' => '<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>'],
-                                ['href' => $settings['social_telegram'] ?? '#', 'label' => 'Telegram', 'svg' => '<path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>'],
+                            $footerSocialPlatforms = [
+                                ['key' => 'social_facebook_icon',  'setting' => 'social_facebook',  'name' => 'facebook',  'label' => 'Facebook',  'defaultIcon' => 'images/social/facebook.svg',  'svg' => '<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>'],
+                                ['key' => 'social_instagram_icon', 'setting' => 'social_instagram', 'name' => 'instagram', 'label' => 'Instagram', 'defaultIcon' => 'images/social/instagram.svg',  'svg' => '<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-4.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>'],
+                                ['key' => 'social_linkedin_icon',   'setting' => 'social_linkedin',  'name' => 'linkedin',  'label' => 'LinkedIn',  'defaultIcon' => 'images/social/linkedin.svg',    'svg' => '<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>'],
+                                ['key' => 'social_youtube_icon',    'setting' => 'social_youtube',   'name' => 'youtube',   'label' => 'YouTube',   'defaultIcon' => 'images/social/youtube.svg',     'svg' => '<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>'],
+                                ['key' => 'social_telegram_icon',   'setting' => 'social_telegram',  'name' => 'telegram',  'label' => 'Telegram',  'defaultIcon' => 'images/social/telegram.svg',     'svg' => '<path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>'],
                             ];
                         @endphp
-                        @foreach($socialLinks as $social)
-                        <a href="{{ $social['href'] }}" target="_blank" rel="noopener" aria-label="{{ $social['label'] }}"
+                        @foreach($footerSocialPlatforms as $footerSocial)                            @php
+                                $_fsIconVal = $settings[$footerSocial['key']] ?? '';
+                                $_fsHasIcon = str_starts_with($_fsIconVal ?? '', 'social/');
+                                $_fsIconUrl = $_fsHasIcon ? asset('storage/' . $_fsIconVal) : '';
+                            @endphp
+                            @php
+                                $_fsHref = $settings[$footerSocial['setting']] ?? (
+                                    $footerSocial['name'] === 'telegram' ? 'https://t.me/krousarthmey' :
+                                    ($footerSocial['name'] === 'facebook' ? 'https://www.facebook.com/KrousarThmey' :
+                                    ($footerSocial['name'] === 'instagram' ? 'https://www.instagram.com/krousarthmey/' :
+                                    ($footerSocial['name'] === 'linkedin' ? 'https://www.linkedin.com/company/krousar-thmey/' :
+                                    ($footerSocial['name'] === 'youtube' ? 'https://www.youtube.com/@KrousarThmey' : '#'))))
+                                );
+                            @endphp
+                            <a href="{{ $_fsHref }}" target="_blank" rel="noopener" aria-label="{{ $footerSocial['label'] }}"
                             class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-[#8da83a] transition-colors">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">{!! $social['svg'] !!}</svg>
+                            @if($_fsHasIcon)
+                            <img src="{{ $_fsIconUrl }}" alt="{{ $footerSocial['label'] }}" class="w-4 h-4 object-contain">
+                            @else
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">{!! $footerSocial['svg'] !!}</svg>
+                            @endif
                         </a>
                         @endforeach
                     </div>
@@ -358,14 +480,14 @@ function openEmail(email) {
 
                 {{-- Organization --}}
                 <div>
-                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Organization</h4>
+                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">{{ __('Organization') }}</h4>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('about') }}" class="text-white/50 hover:text-white text-sm transition-colors">Who We Are</a></li>
-                        <li><a href="{{ route('programs') }}" class="text-white/50 hover:text-white text-sm transition-colors">Our Programs</a></li>
-                        <li><a href="{{ route('news') }}" class="text-white/50 hover:text-white text-sm transition-colors">News</a></li>
-                        <li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">Resources</a></li>
-                        <li><a href="{{ route('media') }}" class="text-white/50 hover:text-white text-sm transition-colors">Media</a></li>
-                        <li><a href="{{ route('contact') }}" class="text-white/50 hover:text-white text-sm transition-colors">Contact</a></li>
+                        <li><a href="{{ route('about') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Who We Are') }}</a></li>
+                        <li><a href="{{ route('programs') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Our Programs') }}</a></li>
+                        <li><a href="{{ route('news') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('News') }}</a></li>
+                        <li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Resources') }}</a></li>
+                        <li><a href="{{ route('media') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Media') }}</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Contact') }}</a></li>
                     </ul>
                 </div>
 
@@ -377,16 +499,16 @@ function openEmail(email) {
                         @foreach($footerPrograms as $footerProg)
                         <li><a href="{{ route('programs') }}#{{ $footerProg->slug }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ $footerProg->title }}</a></li>
                         @endforeach
-                        <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">Volunteering</a></li>
-                        <li><a href="{{ route('involved') }}#book-for-sales" class="text-white/50 hover:text-white text-sm transition-colors">Book for Sales</a></li>
-                        <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>
+                        <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Volunteering') }}</a></li>
+                        <li><a href="{{ route('involved') }}#book-for-sales" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Book for Sales') }}</a></li>
+                        <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Donate') }}</a></li>
                     </ul>
 
                 </div>
 
                 {{-- Newsletter --}}
                 <div>
-                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Stay Connected</h4>
+                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">{{ __('Stay Connected') }}</h4>
                     <p class="text-white/50 text-sm mb-4">Subscribe for updates on our work in Cambodia.</p>
                     <form class="flex gap-2" method="POST" action="{{ route('newsletter.store') }}">
                         @csrf
@@ -399,7 +521,7 @@ function openEmail(email) {
                     </form>
                     @error('email') <p class="text-red-300 text-xs mt-2">{{ $message }}</p> @enderror
                     <div class="mt-6 space-y-1.5">
-                        <p class="text-white/30 text-xs uppercase tracking-wider font-medium">Contact</p>
+                        <p class="text-white/30 text-xs uppercase tracking-wider font-medium">{{ __('Contact') }}</p>
                         @php
                             $footerAddress = data_get($settings, 'footer_address', '#58, Street 478, Phnom Penh, Cambodia');
                             $footerPhone = data_get($settings, 'footer_phone', '+855 (0)23 211 955');
@@ -411,7 +533,7 @@ function openEmail(email) {
                     </div>
                     <div class="mt-8 pt-6 border-t border-white/10">
                         <p class="text-white/30 text-xs uppercase tracking-wider font-medium mb-3">
-                            Administration
+                            {{ __('Administration') }}
                         </p>
 
                         <a href="{{ url('/admin/login') }}"
