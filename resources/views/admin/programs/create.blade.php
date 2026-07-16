@@ -208,6 +208,30 @@
                     <p class="mt-2 text-xs text-gray-400">Enter a direct link to the image.</p>
                 </div>
             </div>
+
+            {{-- Presentation Page Icon --}}
+            <div class="pt-4 border-t border-gray-100" x-data="{ iconType: 'upload' }">
+                <div class="flex items-center gap-4 mb-3">
+                    <label class="block text-sm font-medium text-gray-700">Presentation Page Icon</label>
+                    <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
+                        <button type="button" @click="iconType = 'upload'" :class="iconType === 'upload' ? 'bg-white shadow-sm text-[#2d6fa3]' : 'text-gray-500 hover:text-gray-700'" class="px-3 py-1.5 text-xs font-medium rounded-md transition-all">Upload File</button>
+                        <button type="button" @click="iconType = 'url'" :class="iconType === 'url' ? 'bg-white shadow-sm text-[#2d6fa3]' : 'text-gray-500 hover:text-gray-700'" class="px-3 py-1.5 text-xs font-medium rounded-md transition-all">Image URL</button>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 mb-3">The small round icon shown for this program on the Presentation page's "Our Reach" strip. Falls back to a generic line icon if not set.</p>
+
+                <div x-show="iconType === 'upload'">
+                    <input type="file" name="icon_image" accept="image/*"
+                           class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#2d6fa3]/10 file:text-[#2d6fa3] hover:file:bg-[#2d6fa3]/20">
+                    <p class="mt-2 text-xs text-gray-400">Max 2MB. Square icon graphics work best.</p>
+                </div>
+
+                <div x-show="iconType === 'url'" style="display: none;">
+                    <input type="url" name="icon_image_url" placeholder="https://example.com/icon.png"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <p class="mt-2 text-xs text-gray-400">Enter a direct link to the icon image.</p>
+                </div>
+            </div>
         </div>
 
         <div class="flex items-center gap-3">

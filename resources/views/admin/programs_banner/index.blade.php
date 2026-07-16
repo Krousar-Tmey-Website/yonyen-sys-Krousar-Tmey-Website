@@ -1,8 +1,8 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Programs Page Banner')
-@section('page-title', 'Programs Page Banner')
-@section('breadcrumb', 'Edit the hero banner shown at the top of the Our Programs public page')
+@section('title', 'Programs Page Settings')
+@section('page-title', 'Programs Page Settings')
+@section('breadcrumb', 'Edit the content blocks shown on the Our Programs public page')
 
 @section('content')
 
@@ -149,10 +149,65 @@
             </div>
         </div>
 
+        {{-- Additional Programs Text --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
+                <span class="text-base">&#128203;&#65039;</span> Additional Programs Section
+            </h3>
+            <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Label</label>
+                    <input type="text" name="programs_additional_label" value="{{ old('programs_additional_label', $settings['programs_additional_label']->value ?? 'Cross-cutting Work') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Cross-cutting Work">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Title</label>
+                    <input type="text" name="programs_additional_title" value="{{ old('programs_additional_title', $settings['programs_additional_title']->value ?? 'Additional Programs') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Additional Programs">
+                </div>
+            </div>
+        </div>
+
+        {{-- Additional Information Text --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
+                <span class="text-base">&#8505;&#65039;</span> Additional Information Section
+            </h3>
+            <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Label</label>
+                    <input type="text" name="programs_info_label" value="{{ old('programs_info_label', $settings['programs_info_label']->value ?? 'Learn More') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Learn More">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Title</label>
+                    <input type="text" name="programs_info_title" value="{{ old('programs_info_title', $settings['programs_info_title']->value ?? 'Additional Information') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Additional Information">
+                </div>
+            </div>
+        </div>
+
+        {{-- CTA Text --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
+                <span class="text-base">&#128150;&#65039;</span> Bottom CTA Section
+            </h3>
+            <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Label</label>
+                    <input type="text" name="programs_cta_label" value="{{ old('programs_cta_label', $settings['programs_cta_label']->value ?? 'Support Our Mission') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Support Our Mission">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Title</label>
+                    <input type="text" name="programs_cta_title" value="{{ old('programs_cta_title', $settings['programs_cta_title']->value ?? 'Help Children in Cambodia') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Help Children in Cambodia">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle / Description</label>
+                <textarea name="programs_cta_subtitle" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Your donation goes directly to one of these programs...">{{ old('programs_cta_subtitle', $settings['programs_cta_subtitle']->value ?? 'Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.') }}</textarea>
+            </div>
+        </div>
+
         {{-- Actions --}}
         <div class="flex items-center gap-3">
             <button type="submit" class="px-6 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-semibold rounded-xl transition-colors">
-                Save Banner
+                Save Settings
             </button>
             <a href="{{ route('admin.programs.index') }}" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</a>
             <a href="{{ route('programs') }}" target="_blank" class="ml-auto flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors">

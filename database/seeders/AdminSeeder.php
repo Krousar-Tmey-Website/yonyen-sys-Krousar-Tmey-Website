@@ -203,8 +203,11 @@ class AdminSeeder extends Seeder
             ['name' => 'Foundation Philanthropique Famille Sandoz',            'category' => 'organizations', 'sort_order' => 7],
             ['name' => 'Gertrude Hirzel Foundation',                           'category' => 'organizations', 'sort_order' => 8],
             ['name' => 'GREEN LEAVES EDUCATION Foundation',                    'category' => 'organizations', 'sort_order' => 9],
-            ['name' => 'Individual donor: Peter Tschofen',                     'category' => 'organizations', 'sort_order' => 10],
-            ['name' => 'Individual donor: Suzanne ROY, Grants Barbe',          'category' => 'organizations', 'sort_order' => 11],
+            // Individual Donors (no category — shows under 'Individual Donor' filter)
+            ['name' => 'Peter Tschofen, Individual Donor',                     'category' => null, 'sort_order' => 100],
+            ['name' => 'Suzanne ROY, Grants Barbe, Individual Donor',          'category' => null, 'sort_order' => 101],
+            ['name' => 'Sophie Delacroix, Private Supporter',                  'category' => null, 'sort_order' => 102],
+            ['name' => 'James & Margaret Thornton Foundation',                 'category' => null, 'sort_order' => 103],
             ['name' => 'ICEVI',                                                 'category' => 'organizations', 'sort_order' => 12],
             ['name' => 'LA VOIX DE L\'ENFANT Association',                     'category' => 'organizations', 'sort_order' => 13],
             ['name' => 'LES AMIS DES ENFANTS DU MONDE Association',            'category' => 'organizations', 'sort_order' => 14],
@@ -259,6 +262,19 @@ class AdminSeeder extends Seeder
             ->all();
 
         foreach ($partners as $partner) {
+            if ($partner['category'] === null) {
+                // Individual donor — no category (category_id = null)
+                $partnerData = $partner;
+                unset($partnerData['category']);
+                $partnerData['category_id'] = null;
+
+                Partner::updateOrCreate(
+                    ['name' => $partner['name']],
+                    array_merge($partnerData, ['is_active' => true])
+                );
+                continue;
+            }
+
             $categoryId = $partnerCategoryIds[$partner['category']] ?? null;
 
             if (! $categoryId) {

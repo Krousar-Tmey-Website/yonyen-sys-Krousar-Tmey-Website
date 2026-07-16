@@ -1,18 +1,17 @@
-{{-- Category icons --}}
-@php
-    $catIcons = [
-        'authorities' => '🇰🇭',
-        'organizations' => '🏛️',
-        'companies' => '🏢',
-        'towns' => '🏙️',
-    ];
+{{-- Category icons --}}@php
+$catIcons = [
+    'authorities' => '🇰🇭',
+    'organizations' => '🏛️',
+    'companies' => '🏢',
+    'towns' => '🏙️',
+];
 @endphp
 
 {{-- Grouped tables --}}
 @foreach($partners as $cat => $catPartners)
 @if($catPartners->count())
 @php
-    $displayName = ucfirst($cat);
+    $displayName = $cat === 'Individual Donor' ? 'Individual Donor' : ucfirst($cat);
     $icon = $catIcons[$cat] ?? '🤝';
 @endphp
 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-5">
@@ -57,12 +56,12 @@
                 </td>
                 <td class="px-6 py-4">
                     <div class="flex items-center justify-end gap-2">
-                        <a href="{{ route('admin.partners.edit', $partner) }}" title="Edit"
-                           class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 flex items-center justify-center transition">
+                        <button @click="openEditModal(@js($partner->toArray()))" title="Edit"
+                                class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 flex items-center justify-center transition cursor-pointer">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
-                        </a>
+                        </button>
                         <form action="{{ route('admin.partners.destroy', $partner) }}" method="POST" onsubmit="return confirm('Delete this partner?')">
                             @csrf @method('DELETE')
                             <button type="submit" title="Delete" class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition">
@@ -89,7 +88,7 @@
     <p class="text-gray-400 text-xs mt-1">Try a different search term or category.</p>
     @else
     <p class="text-gray-500 text-sm">No partners available</p>
-    <p class="text-gray-400 text-xs mt-1">Add your first partner using the form</p>
+    <p class="text-gray-400 text-xs mt-1">Click <strong>Add New Partner</strong> to create one</p>
     @endif
 </div>
 @endif

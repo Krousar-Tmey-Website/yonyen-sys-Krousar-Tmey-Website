@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
 
+@push('styles')
+    @vite(['resources/css/admin-donations.css'])
+@endpush
+
 @section('title', 'Donation Dashboard')
 @section('page-title', 'Donation Dashboard')
 @section('breadcrumb', 'Monitor donation statistics and fundraising performance')
@@ -13,7 +17,7 @@
             ['label' => 'Total Donations', 'value' => number_format($totalDonations, 2) . ' $', 'color' => 'bg-[#2d6fa3]'],
             ['label' => 'Total Donors',    'value' => number_format($totalDonors),             'color' => 'bg-[#8da83a]'],
             ['label' => 'Avg. Donation',   'value' => number_format($avgDonation, 2) . ' $',   'color' => 'bg-[#1d4e7a]'],
-            ['label' => 'Recurring Gifts', 'value' => $recurringCount . ' / ' . $totalCount,   'color' => 'bg-[#e8a020]'],
+            ['label' => 'In-Kind Gifts',   'value' => $nonMoneyCount . ' / ' . $totalCount,   'color' => 'bg-[#e8a020]'],
         ];
     @endphp
     @foreach($statCards as $i => $card)
@@ -202,5 +206,111 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const canvas = document.getElementById('monthlyChart');
+    if (!canvas) return;
 
+    const months   = JSON.parse(canvas.dataset.months);
+    const totals   = JSON.parse(canvas.dataset.totals);
+    const counts   = JSON.parse(canvas.dataset.counts);
+
+    if (!months || months.length === 0) return;
+
+    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const labels = months.map(m => monthNames[m - 1] || m);
+
+    new Chart(canvas, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Amount ($)',
+                    data: totals,
+                    backgroundColor: 'rgba(45, 111, 163, 0.7)',
+                    borderColor: '#2d6fa3',
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    yAxisID: 'y',
+                },
+                {
+                    label: 'Count',
+                    data: counts,
+                    backgroundColor: 'rgba(141, 168, 58, 0.6)',
+                    borderColor: '#8da83a',
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    yAxisID: 'y1',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            interaction: {
+                intersect: false,
+                mode: 'index',
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 16,
+                        font: { size: 12 },
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#1e293b',
+                    titleFont: { size: 13 },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    cornerRadius: 8,
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount ($)',
+                        color: '#64748b',
+                        font: { size: 11 },
+                    },
+                    grid: { color: '#f1f5f9' },
+                    ticks: {
+                        color: '#94a3b8',
+                        font: { size: 11 },
+                    }
+                },
+                y1: {
+                    beginAtZero: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Count',
+                        color: '#64748b',
+                        font: { size: 11 },
+                    },
+                    grid: { display: false },
+                    ticks: {
+                        color: '#94a3b8',
+                        font: { size: 11 },
+                        stepSize: 1,
+                    }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        color: '#94a3b8',
+                        font: { size: 11 },
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+@vite(['resources/js/admin-donations.js'])
 @endpush
