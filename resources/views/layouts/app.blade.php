@@ -24,7 +24,60 @@ function openEmail(email) {
     window.location.href = 'mailto:' + email;
   }
 }
+function changeGTranslate(lang) {
+    document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + window.location.hostname;
+    document.cookie = 'googtrans=/en/' + lang + '; path=/';
+    window.location.reload();
+}
+function getCurrentLang() {
+    let match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
+    if (match) {
+        let parts = match[2].split('/');
+        if (parts.length === 3 && parts[2] !== 'en') return parts[2];
+    }
+    // Fall back to Laravel session locale
+    return '{{ session("locale", "en") }}';
+}
+function switchLang(lang) {
+    if (lang === 'km' || lang === 'fr') {
+        // Use Google Translate for non-English
+        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + window.location.hostname;
+        document.cookie = 'googtrans=/en/' + lang + '; path=/';
+    } else {
+        // Clear Google Translate cookie for English
+        document.cookie = 'googtrans=; path=/; domain=' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    }
+    window.location.href = '{{ url("/lang") }}/' + lang + '?redirect=' + encodeURIComponent(window.location.href);
+}
 </script>
+
+<style>
+/* Hide the Google Translate UI completely */
+iframe.goog-te-banner-frame { display: none !important; }
+.goog-te-banner-frame { display: none !important; }
+.goog-logo-link { display: none !important; }
+.goog-te-gadget { color: transparent !important; }
+.VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; } /* New GT classes */
+body > .skiptranslate > iframe.skiptranslate { display: none !important; visibility: hidden !important; }
+
+html { margin-top: 0 !important; top: 0 !important; }
+body { margin-top: 0 !important; top: 0 !important; position: static !important; }
+
+.goog-tooltip { display: none !important; }
+.goog-tooltip:hover { display: none !important; }
+.goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+#google_translate_element { display: none !important; }
+</style>
+
+<div id="google_translate_element"></div>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,km,fr', autoDisplay: false}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 
     {{-- Flash Message Popup --}}
     @if(session('success') || session('info'))
@@ -66,8 +119,7 @@ function openEmail(email) {
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-9">
             <span class="text-white/60 text-xs">{{ $settings['site_tagline'] ?? "Cambodia's first organization helping disadvantaged children since 1991" }}</span>
             <div class="flex items-center gap-5">
-                @php $isTopContact = request()->routeIs('contact') || request()->routeIs('contact.*'); @endphp
-                <a href="{{ route('contact') }}" class="transition-colors text-xs {{ $isTopContact ? 'text-white font-semibold' : 'text-white/60 hover:text-white' }}">Contact</a>
+                <a href="{{ route('contact') }}" class="text-white/60 hover:text-white transition-colors text-xs">{{ __('Contact') }}</a>
                 <span class="text-white/20">|</span>
                 <div class="flex items-center gap-3">
                     @php
@@ -102,9 +154,10 @@ function openEmail(email) {
                     </a>
                     @endforeach
                 </div>
+
                 <a href="{{ route('donate') }}"
                     class="bg-[#8da83a] text-white px-4 py-1 rounded-full font-semibold hover:bg-[#a3c04a] transition-colors text-xs">
-                    Donate
+                    {{ __('Donate') }}
                 </a>
             </div>
         </div>
@@ -145,9 +198,9 @@ function openEmail(email) {
                     @php $isWhoWeAre = request()->routeIs('about') || request()->routeIs('presentation') || request()->routeIs('transparency'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('about') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isWhoWeAre ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
-                            Who We Are
-                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isWhoWeAre ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
+                        <a href="{{ route('about') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                            {{ __('Who We Are') }}
+                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -158,11 +211,11 @@ function openEmail(email) {
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl">Presentation</a>
-                            <a href="{{ route('about') }}#history" class="dropdown-item">History</a>
-                            <a href="{{ route('about') }}#awards" class="dropdown-item">Awards</a>
-                            <a href="{{ route('about') }}#partners" class="dropdown-item">Partners</a>
-                            <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl">Transparency</a>
+                            <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl">{{ __('Presentation') }}</a>
+                            <a href="{{ route('about') }}#history" class="dropdown-item">{{ __('History') }}</a>
+                            <a href="{{ route('about') }}#values" class="dropdown-item">{{ __('Our Values') }}</a>
+                            <a href="{{ route('about') }}#partners" class="dropdown-item">{{ __('Partners') }}</a>
+                            <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl">{{ __('Transparency') }}</a>
                         </div>
                     </div>
 
@@ -170,9 +223,9 @@ function openEmail(email) {
                     @php $isPrograms = request()->routeIs('programs') || request()->routeIs('programs.*') || request()->routeIs('program-page-items.*') || request()->routeIs('projects.*'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('programs') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isPrograms ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
-                            Our Programs
-                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isPrograms ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
+                        <a href="{{ route('programs') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                            {{ __('Our Programs') }}
+                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -196,9 +249,9 @@ function openEmail(email) {
                     @php $isInvolved = request()->routeIs('involved') || request()->routeIs('jobs.*') || request()->routeIs('volunteer') || request()->routeIs('books.*'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('involved') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isInvolved ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
-                            Get Involved
-                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isInvolved ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
+                        <a href="{{ route('involved') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                            {{ __('Get Involved') }}
+                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -209,46 +262,51 @@ function openEmail(email) {
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">Partnerships</a>
-                            <a href="{{ route('involved') }}#volunteer" class="dropdown-item">Volunteering</a>
-                            <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">Book for Sales</a>
-                            <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">Job Opportunities</a>
+                            <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">{{ __('Partnerships') }}</a>
+                            <a href="{{ route('involved') }}#volunteer" class="dropdown-item">{{ __('Volunteering') }}</a>
+                            <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">{{ __('Book for Sales') }}</a>
+                            <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">{{ __('Job Opportunities') }}</a>
                         </div>
                     </div>
 
-                    @php $isNews = request()->routeIs('news') || request()->routeIs('news.*'); @endphp
-                    @php $isResources = request()->routeIs('resources') || request()->routeIs('reports.*'); @endphp
-                    @php $isContact = request()->routeIs('contact') || request()->routeIs('contact.*'); @endphp
-                    <a href="{{ route('news') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isNews ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">News</a>
-
-                    {{-- Resources Dropdown --}}
-                    <div class="relative" x-data="{ open: false }"
-                         @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('resources') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isResources ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">
-                            Resources
-                            <svg class="w-4 h-4 transition-transform duration-200 {{ $isResources ? 'text-[#2d6fa3]' : 'text-gray-400' }}" :class="open ? 'rotate-180' : ''"
-                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                        </a>
-                        <div x-show="open"
-                            x-transition:enter="transition ease-out duration-150"
-                            x-transition:enter-start="opacity-0 translate-y-1"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            x-transition:leave="transition ease-in duration-100"
-                            x-transition:leave-start="opacity-100 translate-y-0"
-                            x-transition:leave-end="opacity-0 translate-y-1"
-                            class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('resources') }}" class="dropdown-item rounded-t-xl">Annual Reports</a>
-                            <a href="{{ route('contact') }}" class="dropdown-item rounded-b-xl">Media Resources</a>
-                        </div>
-                    </div>
-
-                    <a href="{{ route('contact') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50 transition-all {{ $isContact ? 'bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold' : '' }}">Contact</a>
+                    <a href="{{ route('news') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('News') }}</a>
+                    <a href="{{ route('resources') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Resources') }}</a>
+                    <a href="{{ route('contact') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Contact') }}</a>
                 </div>
 
                 {{-- CTA + Mobile toggle --}}
-                <div class="flex items-center gap-3">
-                    @php $isDonate = request()->routeIs('donate') || request()->routeIs('donate.*'); @endphp
-                    <a href="{{ route('donate') }}" class="btn-primary text-sm hidden sm:inline-flex {{ $isDonate ? 'ring-2 ring-[#8da83a]/50 ring-offset-2' : '' }}">
+                <div class="flex items-center gap-4">
+                    {{-- Translate Dropdown --}}
+                    <div class="hidden lg:block border-r border-gray-200 pr-4" x-data="{ open: false, lang: getCurrentLang() }">
+                        <div class="relative">
+                            <button @click="open = !open" @click.away="open = false" class="flex items-center gap-2 text-gray-700 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-3 rounded-lg hover:bg-gray-50 border border-gray-100 shadow-sm bg-white">
+                                <img :src="lang === 'km' ? 'https://flagcdn.com/w20/kh.png' : (lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png')" class="w-4 h-auto rounded-sm" alt="Flag">
+                                <span x-text="lang === 'km' ? 'ខ្មែរ' : (lang === 'fr' ? 'FR' : 'EN')">EN</span>
+                                <svg class="w-3 h-3 transition-transform duration-200 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            
+                            <div x-show="open" 
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="opacity-0 scale-95"
+                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="opacity-100 scale-100"
+                                 x-transition:leave-end="opacity-0 scale-95"
+                                 class="absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[100] overflow-hidden">
+                                <button @click="switchLang('en')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2" :class="lang === 'en' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : ''">
+                                    <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt="English"> English
+                                </button>
+                                <button @click="switchLang('fr')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2" :class="lang === 'fr' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : ''">
+                                    <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt="Français"> Français
+                                </button>
+                                <button @click="switchLang('km')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2" :class="lang === 'km' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : ''">
+                                    <img src="https://flagcdn.com/w20/kh.png" class="w-4 h-auto rounded-sm" alt="Khmer"> ខ្មែរ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('donate') }}" class="btn-primary text-sm hidden sm:inline-flex">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
@@ -278,28 +336,30 @@ function openEmail(email) {
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="lg:hidden border-t border-gray-100 bg-white">
             <div class="max-w-7xl mx-auto px-6 py-4 space-y-1">
-                <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isWhoWeAre ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Who We Are</a>
-                <a href="{{ route('programs') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isPrograms ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Our Programs</a>
-                <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isInvolved ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Get Involved</a>
-                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isNews ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">News</a>
-                <div x-data="{ open: false }" class="space-y-1">
-                    <a href="{{ route('resources') }}" @click="open = !open" class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isResources ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">
-                        <span>Resources</span>
-                        <svg class="w-4 h-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </a>
-                    <div x-show="open" class="pl-4 space-y-1">
-                        <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-sm hover:bg-gray-50 font-medium transition-all {{ $isResources ? 'text-[#2d6fa3]' : 'text-gray-600 hover:text-[#2d6fa3]' }}">Annual Reports</a>
-                        <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg text-sm hover:bg-gray-50 font-medium transition-all {{ $isContact ? 'text-[#2d6fa3]' : 'text-gray-600 hover:text-[#2d6fa3]' }}">Media Resources</a>
+                <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Who We Are') }}</a>
+                <a href="{{ route('programs') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Our Programs') }}</a>
+                <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Get Involved') }}</a>
+                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('News') }}</a>
+                <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Resources') }}</a>
+                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Contact') }}</a>
+                <div class="pt-3 pb-1 border-t border-gray-100 mt-2">
+                    <div class="flex items-center gap-2 mb-4" x-data="{ lang: getCurrentLang() }">
+                        <button @click="switchLang('en')" :class="lang === 'en' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
+                            <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt="English"> EN
+                        </button>
+                        <button @click="switchLang('fr')" :class="lang === 'fr' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
+                            <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt="Français"> FR
+                        </button>
+                        <button @click="switchLang('km')" :class="lang === 'km' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
+                            <img src="https://flagcdn.com/w20/kh.png" class="w-4 h-auto rounded-sm" alt="Khmer"> KM
+                        </button>
                     </div>
-                </div>
-                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ $isContact ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Contact</a>
-                <div class="pt-3 pb-1">
-                <a href="{{ route('donate') }}" class="btn-primary w-full justify-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                    Donate Now
-                </a>
+                    <a href="{{ route('donate') }}" class="btn-primary w-full justify-center py-3">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        {{ __('Donate Now') }}
+                    </a>
                 </div>
             </div>
         </div>
@@ -383,13 +443,13 @@ function openEmail(email) {
 
                 {{-- Organization --}}
                 <div>
-                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Organization</h4>
+                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">{{ __('Organization') }}</h4>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('about') }}" class="text-white/50 hover:text-white text-sm transition-colors">Who We Are</a></li>
-                        <li><a href="{{ route('programs') }}" class="text-white/50 hover:text-white text-sm transition-colors">Our Programs</a></li>
-                        <li><a href="{{ route('news') }}" class="text-white/50 hover:text-white text-sm transition-colors">News</a></li>
-                        <li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">Resources</a></li>
-                        <li><a href="{{ route('contact') }}" class="text-white/50 hover:text-white text-sm transition-colors">Contact</a></li>
+                        <li><a href="{{ route('about') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Who We Are') }}</a></li>
+                        <li><a href="{{ route('programs') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Our Programs') }}</a></li>
+                        <li><a href="{{ route('news') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('News') }}</a></li>
+                        <li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Resources') }}</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Contact') }}</a></li>
                     </ul>
                 </div>
 
@@ -401,16 +461,16 @@ function openEmail(email) {
                         @foreach($footerPrograms as $footerProg)
                         <li><a href="{{ route('programs') }}#{{ $footerProg->slug }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ $footerProg->title }}</a></li>
                         @endforeach
-                        <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">Volunteering</a></li>
-                        <li><a href="{{ route('involved') }}#book-for-sales" class="text-white/50 hover:text-white text-sm transition-colors">Book for Sales</a></li>
-                        <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">Donate</a></li>
+                        <li><a href="{{ route('involved') }}#volunteer" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Volunteering') }}</a></li>
+                        <li><a href="{{ route('involved') }}#book-for-sales" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Book for Sales') }}</a></li>
+                        <li><a href="{{ route('donate') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Donate') }}</a></li>
                     </ul>
 
                 </div>
 
                 {{-- Newsletter --}}
                 <div>
-                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Stay Connected</h4>
+                    <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">{{ __('Stay Connected') }}</h4>
                     <p class="text-white/50 text-sm mb-4">Subscribe for updates on our work in Cambodia.</p>
                     <form class="flex gap-2" method="POST" action="{{ route('newsletter.store') }}">
                         @csrf
@@ -423,7 +483,7 @@ function openEmail(email) {
                     </form>
                     @error('email') <p class="text-red-300 text-xs mt-2">{{ $message }}</p> @enderror
                     <div class="mt-6 space-y-1.5">
-                        <p class="text-white/30 text-xs uppercase tracking-wider font-medium">Contact</p>
+                        <p class="text-white/30 text-xs uppercase tracking-wider font-medium">{{ __('Contact') }}</p>
                         @php
                             $footerAddress = data_get($settings, 'footer_address', '#58, Street 478, Phnom Penh, Cambodia');
                             $footerPhone = data_get($settings, 'footer_phone', '+855 (0)23 211 955');
@@ -435,7 +495,7 @@ function openEmail(email) {
                     </div>
                     <div class="mt-8 pt-6 border-t border-white/10">
                         <p class="text-white/30 text-xs uppercase tracking-wider font-medium mb-3">
-                            Administration
+                            {{ __('Administration') }}
                         </p>
 
                         <a href="{{ url('/admin/login') }}"

@@ -34,6 +34,13 @@ use Illuminate\Support\Facades\Storage;
 // Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
 
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'km', 'fr'])) {
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 Route::get('/', function () {
     $settings = HomeSetting::allKeyed();
     $latestNews = News::published()->latest('published_at')->take(3)->get();
@@ -188,7 +195,7 @@ Route::post('/volunteer', [VolunteerController::class, 'store'])->name('voluntee
 
 // Our Values detail page
 Route::get('/our-values/{value}', function (CoreValue $value) {
-    $settings = \App\Models\HomeSetting::allKeyed();
+    $settings = HomeSetting::allKeyed();
     return view('core_values.show', compact('value', 'settings'));
 })->name('core-values.show');
 
