@@ -11,8 +11,7 @@ class ImpactStatisticController extends Controller
 {
     public function index()
     {
-        $statistics = ImpactStatistic::orderBy('sort_order')->get();
-        return view('admin.impact_statistics.index', compact('statistics'));
+        return redirect()->route('admin.presentation.index');
     }
 
     public function store(Request $request)
@@ -30,7 +29,7 @@ class ImpactStatisticController extends Controller
 
         ImpactStatistic::create($data);
 
-        return redirect()->route('admin.impact-statistics.index')
+        return redirect()->route('admin.presentation.index')
             ->with('success', 'Impact statistic created successfully.');
     }
 
@@ -47,7 +46,7 @@ class ImpactStatisticController extends Controller
 
         $impactStatistic->update($data);
 
-        return redirect()->route('admin.impact-statistics.index')
+        return redirect()->route('admin.presentation.index')
             ->with('success', 'Impact statistic updated successfully.');
     }
 
@@ -56,7 +55,7 @@ class ImpactStatisticController extends Controller
         $this->deleteStoredImage($impactStatistic->image);
         $impactStatistic->delete();
 
-        return redirect()->route('admin.impact-statistics.index')
+        return redirect()->route('admin.presentation.index')
             ->with('success', 'Impact statistic deleted successfully.');
     }
 
