@@ -5,6 +5,9 @@
 
 @section('content')
 
+{{-- ===== SCROLL PROGRESS BAR ===== --}}
+<div id="scroll-progress" class="fixed top-0 left-0 right-0 z-[9999] h-1 bg-gradient-to-r from-[#2d6fa3] via-[#e8a020] to-[#8da83a] origin-left scale-x-0 transition-transform duration-150 ease-out"></div>
+
 {{-- ===== HERO CAROUSEL ===== --}}
 <section class="relative h-[90vh] min-h-[520px] max-h-[800px] overflow-hidden"
     x-data="{
@@ -52,10 +55,10 @@
                     @if($slide->cta_primary_text || $slide->cta_secondary_text)
                     <div class="flex flex-wrap gap-6">
                         @if($slide->cta_primary_text)
-                        <a href="{{ $slide->cta_primary_url ?? '#' }}" class="btn-primary">{{ $slide->cta_primary_text }}</a>
+                        <a href="{{ $slide->cta_primary_url ?? '#' }}" class="btn-primary btn-micro">{{ $slide->cta_primary_text }}</a>
                         @endif
                         @if($slide->cta_secondary_text)
-                        <a href="{{ $slide->cta_secondary_url ?? route('donate') }}" class="btn-outline">{{ $slide->cta_secondary_text }}</a>
+                        <a href="{{ $slide->cta_secondary_url ?? route('donate') }}" class="btn-outline btn-micro">{{ $slide->cta_secondary_text }}</a>
                         @endif
                     </div>
                     @endif
@@ -100,7 +103,7 @@
 </section>
 
 {{-- ===== STATS / DATA SECTION ===== --}}
-<section class="bg-[#1a3c6e] py-12 lg:py-16 overflow-hidden">
+<section class="bg-[#1a3c6e] py-12 lg:py-16 overflow-hidden" data-reveal>
     <div class="max-w-7xl mx-auto px-6">
 
         <div class="text-center mb-10 animate-fade-up">
@@ -165,138 +168,270 @@
 </section>
 
 
-{{-- Animation Script --}}
+{{-- ===== ANIMATION & SCROLL SYSTEM ===== --}}
 <script>
     document.addEventListener("DOMContentLoaded", () => {
 
+        // ── Scroll Progress Bar ───────────────────────────────
+        const progressBar = document.getElementById('scroll-progress');
+        if (progressBar) {
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+                progressBar.style.transform = `scaleX(${Math.min(progress, 1)})`;
+            }, { passive: true });
+        }
+
+        // ── Animated Number Counter ───────────────────────────
         const counters = document.querySelectorAll(".counter");
-
-        const observer = new IntersectionObserver(entries => {
-
+        const countObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-
                 if (entry.isIntersecting) {
-
                     const counter = entry.target;
                     const target = +counter.dataset.target;
+                    const finalVal = counter.dataset.final || target;
 
-                    let count = 0;
+                    let start = 0;
+                    const duration = 2000;
+                    const startTime = performance.now();
 
-                    const speed = target / 80;
+                    const updateCount = (currentTime) => {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const easeOut = 1 - Math.pow(1 - progress, 3);
+                        const current = Math.floor(start + (target - start) * easeOut);
+                        counter.innerText = current.toLocaleString();
 
-                    const update = () => {
-
-                        count += speed;
-
-                        if (count < target) {
-                            counter.innerText = Math.floor(count).toLocaleString();
-                            requestAnimationFrame(update);
+                        if (progress < 1) {
+                            requestAnimationFrame(updateCount);
                         } else {
-                            const finalValue = counter.dataset.final || target;
-                            counter.innerText = finalValue;
+                            counter.innerText = finalVal;
                         }
-
                     };
 
-                    update();
-
-                    observer.unobserve(counter);
+                    requestAnimationFrame(updateCount);
+                    countObserver.unobserve(counter);
                 }
-
             });
+        }, { threshold: 0.4 });
 
-        }, {
-            threshold: 0.5
-        });
+        counters.forEach(counter => countObserver.observe(counter));
 
+        // ── Unified Scroll Reveal System ─────────────────────
+        const revealElements = document.querySelectorAll("[data-reveal]");
 
-        counters.forEach(counter => {
-            observer.observe(counter);
-        });
-
-
-        // ── Scroll animation for PageSections ──────────────
-        const sectionBlocks = document.querySelectorAll(".animate-section");
-
-        const sectionObserver = new IntersectionObserver(entries => {
-
+        const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add("is-visible");
-                    sectionObserver.unobserve(entry.target);
+                    const el = entry.target;
+                    const delay = el.dataset.revealDelay || 0;
+                    setTimeout(() => {
+                        el.classList.add("is-revealed");
+                    }, delay);
+                    revealObserver.unobserve(el);
                 }
             });
-
         }, {
-            threshold: 0.15
+            threshold: 0.12,
+            rootMargin: "0px 0px -40px 0px"
         });
 
+        revealElements.forEach(el => revealObserver.observe(el));
 
-        sectionBlocks.forEach(el => {
-            sectionObserver.observe(el);
+        // ── Smooth anchor scroll ─────────────────────────────
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
         });
-
 
     });
 </script>
 
 
-{{-- Tailwind custom animation --}}
+{{-- ===== PROFESSIONAL ANIMATION STYLES ===== --}}
 <style>
-    @keyframes fadeUp {
+    /* ── Scroll Reveal Base ──────────────────────────────── */
+    [data-reveal] {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
+    [data-reveal].is-revealed {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    [data-reveal="left"] {
+        transform: translateX(-50px);
+    }
+
+    [data-reveal="left"].is-revealed {
+        transform: translateX(0);
+    }
+
+    [data-reveal="right"] {
+        transform: translateX(50px);
+    }
+
+    [data-reveal="right"].is-revealed {
+        transform: translateX(0);
+    }
+
+    [data-reveal="scale"] {
+        transform: scale(0.85);
+    }
+
+    [data-reveal="scale"].is-revealed {
+        transform: scale(1);
+    }
+
+    /* ── Staggered delay via CSS variable ─────────────────── */
+    [data-reveal] {
+        transition-delay: calc(var(--reveal-delay, 0ms) * 1ms);
+    }
+
+    /* ── Stats section animation ──────────────────────────── */
+    .animate-stat {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-stat:nth-child(1) { animation-delay: 0.1s; }
+    .animate-stat:nth-child(2) { animation-delay: 0.2s; }
+    .animate-stat:nth-child(3) { animation-delay: 0.3s; }
+    .animate-stat:nth-child(4) { animation-delay: 0.4s; }
+
+    .animate-fade-up {
+        animation: fadeUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeUp {
         from {
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(30px);
         }
-
         to {
             opacity: 1;
             transform: translateY(0);
         }
-
     }
 
-    .animate-stat {
-        animation: fadeUp .8s ease forwards;
+    /* ── Card hover effects ───────────────────────────────── */
+    .card-hover {
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .animate-stat:nth-child(1) {
-        animation-delay: .1s;
+    .card-hover:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
     }
 
-    .animate-stat:nth-child(2) {
-        animation-delay: .2s;
+    .card-hover-light {
+        transition: all 0.3s ease;
     }
 
-    .animate-stat:nth-child(3) {
-        animation-delay: .3s;
+    .card-hover-light:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.1);
     }
 
-    .animate-stat:nth-child(4) {
-        animation-delay: .4s;
+    /* ── Button micro-interactions ────────────────────────── */
+    .btn-micro {
+        transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    .animate-fade-up {
-        animation: fadeUp .8s ease forwards;
+    .btn-micro:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 24px -6px rgba(45, 111, 163, 0.35);
     }
 
-    .animate-section {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-            transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    .btn-micro:active {
+        transform: translateY(0) scale(0.98);
     }
 
-    .animate-section.is-visible {
-        opacity: 1;
-        transform: translateY(0);
+    /* ── Link arrow slide ─────────────────────────────────── */
+    .link-arrow svg {
+        transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .link-arrow:hover svg {
+        transform: translateX(4px);
+    }
+
+    /* ── Testimonial card ─────────────────────────────────── */
+    .testimonial-card {
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-6px) scale(1.01);
+        box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.15);
+        border-color: rgba(45, 111, 163, 0.15);
+    }
+
+    /* ── Marquee (kept from original) ─────────────────────── */
+    @keyframes marqueeScroll {
+        0% { transform: translate3d(0, 0, 0); }
+        100% { transform: translate3d(-50%, 0, 0); }
+    }
+
+    @keyframes marqueeScrollReverse {
+        0% { transform: translate3d(-50%, 0, 0); }
+        100% { transform: translate3d(0, 0, 0); }
+    }
+
+    .marquee-track {
+        will-change: transform;
+        animation: marqueeScroll 30s linear infinite;
+        width: max-content;
+    }
+
+    .marquee-track-reverse {
+        will-change: transform;
+        animation: marqueeScrollReverse 30s linear infinite;
+        width: max-content;
+    }
+
+    /* ── Smooth scroll for the whole page ─────────────────── */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* ── Reduced motion preference ────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+        [data-reveal],
+        .animate-stat,
+        .animate-fade-up,
+        .card-hover,
+        .card-hover-light,
+        .testimonial-card,
+        .logo-glow,
+        .overlay-content,
+        .marquee-track,
+        .marquee-track-reverse {
+            animation: none !important;
+            transition: none !important;
+            transform: none !important;
+            opacity: 1 !important;
+        }
+        html {
+            scroll-behavior: auto;
+        }
     }
 </style>
 
 
 {{-- ===== PROGRAMS ===== --}}
-<section class="py-20 lg:py-28 bg-[#f8f9fc]">
+<section class="py-20 lg:py-28 bg-[#f8f9fc]" data-reveal>
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">{{ $settings['programs_badge'] ?? 'WHAT WE DO' }}</span>
@@ -306,7 +441,7 @@
 
         <div class="grid lg:grid-cols-3 gap-8">
             @foreach($programs as $program)
-            <div class="card group flex flex-col">
+            <div class="card group flex flex-col card-hover" data-reveal="up" style="--reveal-delay: {{ $loop->index * 120 }}">
                 <div class="relative overflow-hidden h-56">
                     <img src="{{ $program->image_url }}"
                         alt="{{ $program->title }}"
@@ -329,8 +464,7 @@
                         <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>{{ $stat['value'] }} {{ strtolower($stat['label']) }}</li>
                         @endforeach
                         @endif
-                    </ul>
-                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="mt-auto text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
+                    </ul>                        <a href="{{ route('programs') }}#{{ $program->slug }}" class="mt-auto text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300 link-arrow">
                         {{ $settings['programs_learn_btn'] ?? 'Learn More' }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -341,8 +475,7 @@
             @endforeach
         </div>
 
-        <div class="text-center mt-12">
-            <a href="{{ route('programs') }}" class="btn-blue">{{ $settings['programs_cta'] ?? 'View All Programs' }}</a>
+        <div class="text-center mt-12">                    <a href="{{ route('programs') }}" class="btn-blue btn-micro">{{ $settings['programs_cta'] ?? 'View All Programs' }}</a>
         </div>
     </div>
 </section>
@@ -352,7 +485,7 @@ $structureWelfareItems = array_filter(explode("\n", $settings['structure_welfare
 $structureEducationItems = array_filter(explode("\n", $settings['structure_education_items'] ?? "5 Special Education High Schools"));
 $structureImage = $settings['structure_image'] ?? null;
 @endphp
-<section class="py-16 lg:py-24 bg-white">
+<section class="py-16 lg:py-24 bg-white" data-reveal>
     <div class="max-w-7xl mx-auto px-6">
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
@@ -456,7 +589,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
             </div>
 
             {{-- Content side --}}
-            <div class="{{ $isReversed ? 'lg:order-1' : '' }} animate-section">
+            <div class="{{ $isReversed ? 'lg:order-1' : '' }}" data-reveal="up" style="--reveal-delay: 100">
                 {{-- Section label --}}
                 <div class="flex items-center gap-6 mb-4">
                     <span class="h-px w-8 bg-[#e8a020]"></span>
@@ -511,7 +644,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
 {{-- ===== PROJECTS ===== --}}
 @if($projects->count())
-<section class="py-16 lg:py-24 bg-white border-t border-gray-100">
+<section class="py-16 lg:py-24 bg-white border-t border-gray-100" data-reveal>
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">{{ $settings['projects_badge'] ?? 'Our Projects' }}</span>
@@ -519,13 +652,12 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
         </div>
         <div class="grid md:grid-cols-3 gap-6">
             @foreach($projects as $project)
-            <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 hover:shadow-lg transition-shadow group">
+            <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 card-hover-light group" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
                 @if($project->image)
                 <img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset('storage/' . $project->image) }}" class="w-full h-40 object-cover rounded-xl mb-5 group-hover:opacity-90 transition-opacity">
                 @endif
                 <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $project->title }}</h3>
-                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5">{{ $project->description }}</p>
-                <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300" style="color: #e8a020; font-weight: bold;">
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5">{{ $project->description }}</p>                        <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300 link-arrow" style="color: #e8a020; font-weight: bold;">
                     {{ $settings['projects_read_more'] ?? 'Read More Detail' }}
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -540,7 +672,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
 {{-- ===== GALLERY ===== --}}
 @if($galleries->count())
-<section class="py-16 lg:py-24 bg-[#1a3c6e]">
+<section class="py-16 lg:py-24 bg-[#1a3c6e]" data-reveal>
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">In Pictures</span>
@@ -548,7 +680,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
             @foreach($galleries as $photo)
-            <div class="group relative overflow-hidden rounded-xl aspect-square bg-white/5">
+            <div class="group relative overflow-hidden rounded-xl aspect-square bg-white/5 gallery-overlay" data-reveal="scale" style="--reveal-delay: {{ $loop->index * 80 }}">
                 @if($photo->image)
                 <img src="{{ str_starts_with($photo->image, 'http') ? $photo->image : asset('storage/' . $photo->image) }}" alt="{{ $photo->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                 @endif
@@ -563,7 +695,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 @endif
 
 {{-- ===== NEWS ===== --}}
-<section class="py-20 lg:py-28 bg-white">
+<section class="py-20 lg:py-28 bg-white" data-reveal>
     <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-14 gap-6">
             <div>
@@ -571,7 +703,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                 <h2 class="section-title mt-3">{{ $settings['news_title'] ?? 'News & Stories' }}</h2>
                 <p class="text-gray-500 mt-3 max-w-2xl">{{ $settings['news_subtitle'] ?? 'News and stories about our impact, events, and community progress.' }}</p>
             </div>
-            <a href="{{ route('news') }}" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors flex-shrink-0">
+            <a href="{{ route('news') }}" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors flex-shrink-0 link-arrow">
                 {{ $settings['news_view_all'] ?? 'All News' }}
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -581,7 +713,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($latestNews as $article)
-            <article class="card group flex flex-col">
+            <article class="card group flex flex-col card-hover" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
                 <div class="relative overflow-hidden h-52">
                     <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -596,7 +728,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                     </time>
                     <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug group-hover:text-[#1a3c6e] transition-colors">{{ $article->title }}</h3>
                     <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $article->excerpt }}</p>
-                    <a href="{{ route('news') }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors">
+                    <a href="{{ route('news') }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors link-arrow">
                         Read More
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -616,7 +748,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
 {{-- ===== TESTIMONIALS ===== --}}
 @if($testimonials->count())
-<section class="py-20 lg:py-28 bg-[#f8f9fc]">
+<section class="py-20 lg:py-28 bg-[#f8f9fc]" data-reveal>
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Voices</span>
@@ -624,7 +756,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
         </div>
         <div class="grid md:grid-cols-3 gap-8">
             @foreach($testimonials as $testimony)
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative testimonial-card" data-reveal="up" style="--reveal-delay: {{ $loop->index * 120 }}">
                 <svg class="w-10 h-10 text-[#e8a020]/20 absolute top-6 right-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
@@ -648,7 +780,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 @endif
 
 {{-- ===== CALL TO ACTION ===== --}}
-<section class="relative py-24 overflow-hidden">
+<section class="relative py-24 overflow-hidden" data-reveal="scale">
     <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80')] bg-cover bg-center"></div>
     <div class="absolute inset-0 bg-[#1a3c6e]/85"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
@@ -660,23 +792,23 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
             {{ $settings['cta_subtitle'] ?? 'We guarantee that 100% of your donation is used to support children across Cambodia. Every contribution, big or small, changes a life.' }}
         </p>
         <div class="flex flex-col sm:flex-row gap-6 justify-center">
-            <a href="{{ $settings['cta_primary_url'] ?? route('donate') }}" class="btn-primary text-base">
+            <a href="{{ $settings['cta_primary_url'] ?? route('donate') }}" class="btn-primary text-base btn-micro">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
                 {{ $settings['cta_primary_text'] ?? 'Donate Now' }}
             </a>
             @if(!empty($settings['cta_secondary_text']))
-            <a href="{{ $settings['cta_secondary_url'] ?? route('get-involved') }}" class="btn-outline text-base">{{ $settings['cta_secondary_text'] }}</a>
+            <a href="{{ $settings['cta_secondary_url'] ?? route('get-involved') }}" class="btn-outline text-base btn-micro">{{ $settings['cta_secondary_text'] }}</a>
             @endif
-            <a href="{{ route('resources') }}" class="btn-outline text-base">{{ $settings['cta_annual_report_text'] ?? 'Annual Report' }}</a>
+            <a href="{{ route('resources') }}" class="btn-outline text-base btn-micro">{{ $settings['cta_annual_report_text'] ?? 'Annual Report' }}</a>
         </div>
     </div>
 </section>
 
 {{-- ===== SPONSORS ===== --}}
 @if(isset($sponsors) && $sponsors->isNotEmpty())
-<section class="py-16 bg-gradient-to-b from-white to-[#f8f9fc] relative overflow-hidden">
+<section class="py-16 bg-gradient-to-b from-white to-[#f8f9fc] relative overflow-hidden" data-reveal>
     <div class="max-w-7xl mx-auto px-6 relative z-10">
 
         {{-- Section Header --}}
@@ -757,7 +889,7 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
 @endphp
 
 @if($homePartners->isNotEmpty())
-<section class="py-16 bg-gradient-to-b from-white to-[#ffffff] relative overflow-hidden">
+<section class="py-16 bg-gradient-to-b from-white to-[#ffffff] relative overflow-hidden" data-reveal>
     <div class="max-w-7xl mx-auto px-6 relative z-10">
 
         {{-- Section Header --}}
@@ -785,8 +917,6 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
                     <div class="group w-72 flex-shrink-0 mx-4">
                         <a href="{{ $partner->url ?? '#' }}" {{ $partner->url ? 'target="_blank" rel="noopener noreferrer"' : '' }}
                             class="flex flex-col items-center justify-center h-32 px-6 py-5 rounded-2xl transition-all duration-300  hover:-translate-y-1">
-
-
                             <div class="flex-grow flex items-center justify-center w-full mb-4">
                                 @if($partner->logo)
                                 <img src="{{ str_starts_with($partner->logo, 'http') ? $partner->logo : asset('storage/' . $partner->logo) }}"
@@ -797,7 +927,7 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
                                 @endif
                             </div>
 
-                            <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
+                            <div class="h-12 flex items-center justify-center w-full pt-3">
                             </div>
                         </a>
                     </div>
@@ -808,8 +938,7 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
                     <div class="group w-72 flex-shrink-0 mx-4">
                         <a href="{{ $partner->url ?? '#' }}" {{ $partner->url ? 'target="_blank" rel="noopener noreferrer"' : '' }}
                             class="flex flex-col items-center justify-center h-32 px-6 py-5 rounded-2xl transition-all duration-300  hover:-translate-y-1">
-
-`                            <div class="flex-grow flex items-center justify-center w-full mb-4">
+                           <div class="flex-grow flex items-center justify-center w-full mb-4">
                                 @if($partner->logo)
                                 <img src="{{ str_starts_with($partner->logo, 'http') ? $partner->logo : asset('storage/' . $partner->logo) }}"
                                     alt="{{ $partner->name }}"
@@ -819,7 +948,7 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
                                 @endif
                             </div>
 
-                            <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
+                            <div class="h-12 flex items-center justify-center w-full pt-3">
                             </div>
                         </a>
                     </div>
@@ -830,7 +959,7 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
 
         {{-- Bottom CTA --}}
         <div class="text-center mt-10">
-            <a href="{{ route('partners') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#2d6fa3] hover:text-[#1d4e7a] transition-colors group">
+            <a href="{{ route('presentation') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#2d6fa3] hover:text-[#1d4e7a] transition-colors group">
                 {{ $settings['partners_view_all'] ?? 'View All Partners' }}
                 <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -841,39 +970,6 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
 </section>
 @endif
 
-{{-- Marquee keyframes --}}
-<style>
-    @keyframes marqueeScroll {
-        0% {
-            transform: translate3d(0, 0, 0);
-        }
 
-        100% {
-            transform: translate3d(-50%, 0, 0);
-        }
-    }
-
-    @keyframes marqueeScrollReverse {
-        0% {
-            transform: translate3d(-50%, 0, 0);
-        }
-
-        100% {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-
-    .marquee-track {
-        will-change: transform;
-        animation: marqueeScroll 30s linear infinite;
-        width: max-content;
-    }
-
-    .marquee-track-reverse {
-        will-change: transform;
-        animation: marqueeScrollReverse 30s linear infinite;
-        width: max-content;
-    }
-</style>
 
 @endsection
