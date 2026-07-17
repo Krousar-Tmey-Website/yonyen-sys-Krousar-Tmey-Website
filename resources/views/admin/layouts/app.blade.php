@@ -171,7 +171,6 @@
                 'children' => [
                 ['route' => 'admin.contacts.index', 'label' => 'Contact Messages'],
                 ['route' => 'admin.newsletter.index', 'label' => 'Subscribers'],
-                ['route' => 'admin.offices.index', 'label' => 'Offices'],
                 ],
                 ],
                 'settings' => [
