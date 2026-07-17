@@ -7,40 +7,45 @@
 
 @section('content')
 
-{{-- Page Header --}}
-<div class="bg-[#1a3c6e] pt-16 pb-20 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
-    </div>
-    <div class="relative max-w-4xl mx-auto px-6">
-        <nav class="flex items-center gap-2 text-sm text-white/60 mb-8">
-            <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <a href="{{ route('news') }}" class="hover:text-white transition-colors">News</a>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-white">{{ Str::limit($article->title, 40) }}</span>
-        </nav>
-        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">{{ $article->title }}</h1>
-        <div class="flex items-center gap-4 text-white/70 text-sm">
-            <time class="flex items-center gap-1.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                {{ $article->published_at?->format('F j, Y') ?? $article->created_at->format('F j, Y') }}
-            </time>
-            <span class="px-3 py-1 bg-white/10 rounded-full capitalize">{{ $article->category_name }}</span>
-        </div>
-    </div>
-</div>
-
-{{-- Article Content --}}
-<article class="py-16 bg-white">
+<article class="py-12 bg-white">
     <div class="max-w-4xl mx-auto px-6">
+        {{-- Breadcrumb --}}
+        <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6">
+            <a href="{{ route('home') }}" class="hover:text-[#1a3c6e] transition-colors">Home</a>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <a href="{{ route('news') }}" class="hover:text-[#1a3c6e] transition-colors">News</a>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span class="text-gray-600">{{ Str::limit($article->title, 40) }}</span>
+        </nav>
+
+        {{-- Title --}}
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#1a3c6e] leading-tight mb-3">{{ $article->title }}</h1>
+
+        {{-- Byline: date | tags --}}
+        <div class="text-sm mb-8">
+            <span class="text-gray-500">{{ $article->published_at?->format('F j, Y') ?? $article->created_at->format('F j, Y') }}</span>
+            @if(!empty($article->tag_links))
+            <span class="text-gray-300 mx-1.5">|</span>
+            @foreach($article->tag_links as $tag)
+                @if(!empty($tag['url']))
+                <a href="{{ $tag['url'] }}" class="text-[#8da83a] hover:underline">{{ $tag['label'] }}</a>
+                @else
+                <span class="text-[#8da83a]">{{ $tag['label'] }}</span>
+                @endif
+                @if(!$loop->last)<span class="text-gray-400">,</span>@endif
+            @endforeach
+            @endif
+        </div>
+
+        {{-- Cover Image --}}
         @if($article->image)
-        <div class="mb-10 -mx-6 md:mx-0">
-            <img src="{{ $article->image_url }}" alt="{{ $article->title }}" class="w-full md:rounded-xl max-h-96 object-cover">
+        <div class="mb-8">
+            <img src="{{ $article->image_url }}" alt="{{ $article->title }}" class="w-full rounded-lg object-cover">
         </div>
         @endif
 
-        <div class="prose prose-lg max-w-none prose-headings:text-[#1a3c6e] prose-a:text-[#2d6fa3] prose-a:hover:text-[#1a4a7a] prose-img:rounded-lg">
+        {{-- Content --}}
+        <div class="article-content prose prose-lg max-w-none text-justify prose-p:text-gray-700 prose-headings:text-[#1a3c6e] prose-a:text-[#2d6fa3] prose-a:hover:text-[#1a4a7a] prose-img:rounded-lg">
             {!! $article->content !!}
         </div>
 

@@ -578,11 +578,13 @@ $structureImage = $settings['structure_image'] ?? null;
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($latestNews as $article)
             <article class="card group flex flex-col">
-                <div class="relative overflow-hidden h-52">
+                <a href="{{ route('news.show', $article->slug) }}" class="relative overflow-hidden h-52 block">
                     <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#1a3c6e] text-xs font-semibold px-3 py-1 rounded-full capitalize">{{ str_replace('-', ' ', $article->category) }}</span>
-                </div>
+                    @if(!empty($article->tag_links[0]['label']))
+                    <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#1a3c6e] text-xs font-semibold px-3 py-1 rounded-full">{{ $article->tag_links[0]['label'] }}</span>
+                    @endif
+                </a>
                 <div class="p-6 flex flex-col flex-1">
                     <time class="text-gray-400 text-xs mb-3 flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -590,9 +592,11 @@ $structureImage = $settings['structure_image'] ?? null;
                         </svg>
                         {{ $article->published_at?->format('F Y') ?? $article->created_at->format('F Y') }}
                     </time>
-                    <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug group-hover:text-[#1a3c6e] transition-colors">{{ $article->title }}</h3>
+                    <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug">
+                        <a href="{{ route('news.show', $article->slug) }}" class="group-hover:text-[#1a3c6e] transition-colors">{{ $article->title }}</a>
+                    </h3>
                     <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $article->excerpt }}</p>
-                    <a href="{{ route('news') }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors">
+                    <a href="{{ route('news.show', $article->slug) }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors">
                         Read More
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />

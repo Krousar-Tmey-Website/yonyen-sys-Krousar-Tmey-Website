@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -478,3 +479,11 @@
         transform: none !important;
     }
 }
+
+/* Article body videos: match the contained width/rounding used for article images */
+.article-content video {
+    width: 100%;
+    border-radius: 0.5rem;
+    display: block;
+}
+

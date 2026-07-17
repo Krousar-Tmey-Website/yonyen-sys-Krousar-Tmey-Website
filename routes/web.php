@@ -6,6 +6,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\ResourcePageController;
 use App\Http\Controllers\VolunteerController;
 use App\Models\AnnualReport;
 use App\Models\Award;
@@ -141,6 +142,9 @@ Route::get('/jobs/{jobOpportunity}', function (JobOpportunity $jobOpportunity) {
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
+Route::get('/topics', [ResourcePageController::class, 'index'])->name('resource-pages.index');
+Route::get('/topics/{slug}', [ResourcePageController::class, 'show'])->name('resource-pages.show');
+
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
 
@@ -213,9 +217,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('/donations/dashboard', [Admin\DonationDashboardController::class, 'index'])->name('donations.dashboard');
     Route::resource('donations', Admin\DonationController::class);
 
-    // News & Categories
+    // News
     Route::resource('news', Admin\NewsController::class);
-    Route::resource('categories', Admin\CategoryController::class)->except(['show']);
+    Route::resource('resource-pages', Admin\ResourcePageController::class)->except(['show']);
 
     // Programs & Projects
     Route::resource('programs', Admin\ProgramController::class)->except(['show']);
