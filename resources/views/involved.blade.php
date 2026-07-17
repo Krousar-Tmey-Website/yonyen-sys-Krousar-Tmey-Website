@@ -99,25 +99,11 @@
 {{-- Partner --}}
 {{--
     ===================================================================
-    STATIC CONTENT — Developer-only changes
+    STATIC CONTENT — Developer-only changes, no admin/CMS
     ===================================================================
-    The sections below are hardcoded because they are fixed institutional
-    copy that rarely changes. To modify any of this text, edit the HTML
-    directly in this template.
-
-    STATIC (edit via template only):
-      • Page title ("Become a Partner")
-      • Introduction content (co-construction dynamic paragraph)
-      • Partnership Principles (4 items: Trust and respect, etc.)
-      • Partnership Approach paragraph
-      • Partner Categories — TWO-LEVEL hierarchy (categories with
-        sub-items and descriptions). The old admin panel only managed
-        category names; the full nested structure is defined below.
-
-    DYNAMIC (editable via admin/CMS at /admin/partner-page):
-      • Banner image (upload or URL)
-      • Partner count stat badge
-      • CTA title, description, button text, button link
+    The entire "Become a Partner" section is hardcoded — heading, intro,
+    principles, approach, CTA, and partner categories. To modify any of
+    this content, edit the HTML directly in this template.
     ===================================================================
 --}}
 <section id="partner" class="py-20 md:py-28 bg-white scroll-mt-20 relative overflow-hidden">
@@ -189,6 +175,7 @@
                             ],
                         ];
                     @endphp
+                    
                     @foreach($principles as $p)
                         <div class="group p-5 rounded-2xl border-2 border-gray-200 bg-gradient-to-br {{ $p['color'] }} {{ $p['hover'] }} hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-default">
                             <div class="flex items-start gap-4">

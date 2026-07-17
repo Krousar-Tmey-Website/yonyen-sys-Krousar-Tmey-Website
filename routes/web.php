@@ -315,10 +315,6 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
 
-    // Become a Partner page content
-    Route::get('partner-page', [Admin\PartnerPageController::class, 'index'])->name('partner-page.index');
-    Route::post('partner-page', [Admin\PartnerPageController::class, 'update'])->name('partner-page.update');
-
     // Donation Campaigns
     Route::resource('campaigns', Admin\CampaignController::class)->except(['show']);
     Route::patch('campaigns/{campaign}/toggle', [Admin\CampaignController::class, 'toggle'])->name('campaigns.toggle');
