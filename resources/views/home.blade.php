@@ -285,7 +285,7 @@
         opacity: 0;
         transform: translateY(30px);
         transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .animate-section.is-visible {
@@ -309,8 +309,8 @@
             <div class="card group flex flex-col">
                 <div class="relative overflow-hidden h-56">
                     <img src="{{ $program->image_url }}"
-                         alt="{{ $program->title }}"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        alt="{{ $program->title }}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>
                     @if($program->stats && count($program->stats) > 0)
                     <span class="absolute top-4 left-4 bg-[#e8a020] text-white text-xs font-bold px-3 py-1 rounded-full">{{ $program->stats[0]['value'] }} {{ $program->stats[0]['label'] }}</span>
@@ -325,14 +325,16 @@
                     </p>
                     <ul class="space-y-1.5 mb-6">
                         @if($program->stats && count($program->stats) > 1)
-                            @foreach(array_slice($program->stats, 1, 3) as $stat)
-                            <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>{{ $stat['value'] }} {{ strtolower($stat['label']) }}</li>
-                            @endforeach
+                        @foreach(array_slice($program->stats, 1, 3) as $stat)
+                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>{{ $stat['value'] }} {{ strtolower($stat['label']) }}</li>
+                        @endforeach
                         @endif
                     </ul>
                     <a href="{{ route('programs') }}#{{ $program->slug }}" class="mt-auto text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
                         {{ $settings['programs_learn_btn'] ?? 'Learn More' }}
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
                     </a>
                 </div>
             </div>
@@ -409,9 +411,9 @@ $structureImage = $settings['structure_image'] ?? null;
 @if($pageSections->isNotEmpty())
 @foreach($pageSections as $index => $section)
 @php
-    $isReversed = $index % 2 !== 0;
-    $sectionImage = $section->images->first();
-    $sectionLinks = $section->links->where('active', true)->sortBy('order');
+$isReversed = $index % 2 !== 0;
+$sectionImage = $section->images->first();
+$sectionLinks = $section->links->where('active', true)->sortBy('order');
 @endphp
 <section class="py-20 lg:py-28 {{ $isReversed ? 'bg-[#f8f9fc]' : 'bg-white' }} overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
@@ -426,9 +428,9 @@ $structureImage = $settings['structure_image'] ?? null;
 
                     @if($sectionImage)
                     <img src="{{ str_starts_with($sectionImage->path, 'http') ? $sectionImage->path : asset('storage/' . $sectionImage->path) }}"
-                         alt="{{ $sectionImage->alt ?? $section->title }}"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                         class="w-full h-[340px] lg:h-[420px] object-cover rounded-2xl shadow-xl
+                        alt="{{ $sectionImage->alt ?? $section->title }}"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                        class="w-full h-[340px] lg:h-[420px] object-cover rounded-2xl shadow-xl
                                 group-hover:shadow-2xl transition-all duration-700
                                 group-hover:scale-[1.02]">
                     @endif
@@ -440,7 +442,7 @@ $structureImage = $settings['structure_image'] ?? null;
                                 group-hover:border-[#2d6fa3]/30 group-hover:shadow-2xl transition-all duration-500
                                 {{ $sectionImage ? 'hidden' : '' }}">
                         <svg class="w-16 h-16 mb-4 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         <p class="text-sm font-medium">Image placeholder</p>
                         <p class="text-xs mt-1">Upload via admin panel</p>
@@ -482,16 +484,16 @@ $structureImage = $settings['structure_image'] ?? null;
                 <div class="flex flex-wrap gap-6">
                     @foreach($sectionLinks as $link)
                     <a href="{{ $link->url }}"
-                       target="{{ $link->target ?? '_self' }}"
-                       class="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300
+                        target="{{ $link->target ?? '_self' }}"
+                        class="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300
                               {{ $loop->first
                                   ? 'bg-[#2d6fa3] text-white hover:bg-[#1d4e7a] shadow-md hover:shadow-lg'
                                   : 'bg-white text-[#2d6fa3] border-2 border-[#2d6fa3]/20 hover:border-[#2d6fa3] hover:bg-[#2d6fa3]/5'
                               }}">
                         <span>{{ $link->text }}</span>
                         <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                     </a>
                     @endforeach
@@ -525,7 +527,9 @@ $structureImage = $settings['structure_image'] ?? null;
                 <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5">{{ $project->description }}</p>
                 <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300" style="color: #e8a020; font-weight: bold;">
                     {{ $settings['projects_read_more'] ?? 'Read More Detail' }}
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                 </a>
             </div>
             @endforeach
@@ -599,7 +603,9 @@ $structureImage = $settings['structure_image'] ?? null;
         <div class="grid md:grid-cols-3 gap-8">
             @foreach($testimonials as $testimony)
             <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative">
-                <svg class="w-10 h-10 text-[#e8a020]/20 absolute top-6 right-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" /></svg>
+                <svg class="w-10 h-10 text-[#e8a020]/20 absolute top-6 right-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                </svg>
                 <div class="flex items-center gap-4 mb-6 relative z-10">
                     @if($testimony->image)
                     <img src="{{ str_starts_with($testimony->image, 'http') ? $testimony->image : asset('storage/' . $testimony->image) }}" alt="{{ $testimony->name }}" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md">
@@ -650,7 +656,8 @@ $structureImage = $settings['structure_image'] ?? null;
 @if(isset($sponsors) && $sponsors->isNotEmpty())
 <section class="py-16 bg-gradient-to-b from-white to-[#f8f9fc] relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
-        
+
+
         {{-- Section Header --}}
         <div class="text-center mb-12">
             <h2 class="section-title mt-2 text-[#1a3c6e]">{{ __('Among our loyal supporters') }}</h2>
@@ -659,7 +666,7 @@ $structureImage = $settings['structure_image'] ?? null;
 
         {{-- Sponsors Marquee --}}
         <div class="relative max-w-7xl mx-auto"
-             x-data="{ paused: false }"
+            x-data="{ paused: false }"
              @mouseenter="paused = true"
              @mouseleave="paused = false">
 
@@ -669,7 +676,7 @@ $structureImage = $settings['structure_image'] ?? null;
 
             <div class="overflow-hidden py-6">
                 <div class="flex marquee-track items-center"
-                     :style="{ animationPlayState: paused ? 'paused' : 'running' }">
+                    :style="{ animationPlayState: paused ? 'paused' : 'running' }">
                     
                     {{-- Set 1 --}}
                     @foreach($sponsors as $sponsor)
@@ -686,7 +693,7 @@ $structureImage = $settings['structure_image'] ?? null;
                                 <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->name, 0, 1) }}</div>
                                 @endif
                             </div>
-                            
+
                             <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
                                 <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->name }}</h4>
                             </div>
@@ -709,7 +716,7 @@ $structureImage = $settings['structure_image'] ?? null;
                                 <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->name, 0, 1) }}</div>
                                 @endif
                             </div>
-                            
+
                             <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
                                 <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->name }}</h4>
                             </div>
@@ -729,47 +736,71 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
 @endphp
 
 @if($homePartners->isNotEmpty())
-<section class="py-16 bg-[#f8f9fc] border-t border-gray-100 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6">
+<section class="py-16 bg-gradient-to-b from-white to-[#ffffff] relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
 
-        {{-- Header --}}
-        <div class="text-center mb-10">
-            <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-[0.2em]">{{ $settings['partners_badge'] ?? 'OUR NETWORK' }}</span>
-            <h2 class="section-title mt-2">{{ $settings['partners_heading'] ?? 'Supported by Our Partners Worldwide' }}</h2>
-            <p class="text-gray-400 text-sm mt-2 max-w-xl mx-auto">
-                We are grateful for the trust and collaboration of {{ $homePartners->count() }} partner organisations across the globe.
-            </p>
+        {{-- Section Header --}}
+        <div class="text-center mb-12">
+            <h2 class="section-title mt-2 text-[#1a3c6e]">{{ __('Supported by Our Partners Worldwide') }}</h2>
+            <div class="w-16 h-1 bg-[#e8a020] mx-auto mt-4 rounded-full opacity-80"></div>
         </div>
 
-        {{-- Infinite seamless marquee --}}
-        <div class="relative"
-             x-data="{ paused: false }"
-             @mouseenter="paused = true"
-             @mouseleave="paused = false">
+        {{-- Partners Marquee (reverse direction) --}}
+        <div class="relative max-w-7xl mx-auto"
+            x-data="{ paused: false }"
+            @mouseenter="paused = true"
+            @mouseleave="paused = false">
 
             {{-- Gradient fade edges --}}
-            <div class="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#f8f9fc] to-transparent z-10 pointer-events-none"></div>
-            <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#fcfcfd] to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none"></div>
 
-            <div class="overflow-hidden">
-                <div class="flex marquee-track"
-                     :style="{ animationPlayState: paused ? 'paused' : 'running' }">
-                    {{-- Set 1 --}}
+            <div class="overflow-hidden py-6">
+                <div class="flex marquee-track-reverse items-center"
+                    :style="{ animationPlayState: paused ? 'paused' : 'running' }">
+
+                    {{-- Set 2 (first in DOM so -50% shows Set 1 / originals) --}}
                     @foreach($homePartners as $partner)
-                    <div class="flex items-center justify-center w-52 h-20 bg-white rounded-lg shadow-sm border border-gray-100 mx-3
-                                hover:shadow-md hover:border-[#2d6fa3]/20 transition-all duration-300 flex-shrink-0">
-                        <img src="{{ asset('storage/' . $partner->logo) }}"
-                             alt="{{ $partner->name }}"
-                             class="w-full h-full object-contain p-4 transition-all duration-500">
+                    <div class="group w-72 flex-shrink-0 mx-4">
+                        <a href="{{ $partner->url ?? '#' }}" {{ $partner->url ? 'target="_blank" rel="noopener noreferrer"' : '' }}
+                            class="flex flex-col items-center justify-center h-32 px-6 py-5 rounded-2xl transition-all duration-300  hover:-translate-y-1">
+
+
+                            <div class="flex-grow flex items-center justify-center w-full mb-4">
+                                @if($partner->logo)
+                                <img src="{{ str_starts_with($partner->logo, 'http') ? $partner->logo : asset('storage/' . $partner->logo) }}"
+                                    alt="{{ $partner->name }}"
+                                    class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
+                                @else
+                                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($partner->name, 0, 1) }}</div>
+                                @endif
+                            </div>
+
+                            <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
+                            </div>
+                        </a>
                     </div>
                     @endforeach
-                    {{-- Duplicate set for seamless loop --}}
+
+                    {{-- Set 1 (original logos — shown first when page loads at -50%) --}}
                     @foreach($homePartners as $partner)
-                    <div class="flex items-center justify-center w-52 h-20 bg-white rounded-lg shadow-sm border border-gray-100 mx-3
-                                hover:shadow-md hover:border-[#2d6fa3]/20 transition-all duration-300 flex-shrink-0">
-                        <img src="{{ asset('storage/' . $partner->logo) }}"
-                             alt="{{ $partner->name }}"
-                             class="w-full h-full object-contain p-4 transition-all duration-500">
+                    <div class="group w-72 flex-shrink-0 mx-4">
+                        <a href="{{ $partner->url ?? '#' }}" {{ $partner->url ? 'target="_blank" rel="noopener noreferrer"' : '' }}
+                            class="flex flex-col items-center justify-center h-32 px-6 py-5 rounded-2xl transition-all duration-300  hover:-translate-y-1">
+
+`                            <div class="flex-grow flex items-center justify-center w-full mb-4">
+                                @if($partner->logo)
+                                <img src="{{ str_starts_with($partner->logo, 'http') ? $partner->logo : asset('storage/' . $partner->logo) }}"
+                                    alt="{{ $partner->name }}"
+                                    class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
+                                @else
+                                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($partner->name, 0, 1) }}</div>
+                                @endif
+                            </div>
+
+                            <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
+                            </div>
+                        </a>
                     </div>
                     @endforeach
                 </div>
@@ -781,7 +812,7 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
             <a href="{{ route('partners') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#2d6fa3] hover:text-[#1d4e7a] transition-colors group">
                 {{ $settings['partners_view_all'] ?? 'View All Partners' }}
                 <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
             </a>
         </div>
@@ -792,12 +823,34 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
 {{-- Marquee keyframes --}}
 <style>
     @keyframes marqueeScroll {
-        0% { transform: translate3d(0, 0, 0); }
-        100% { transform: translate3d(-50%, 0, 0); }
+        0% {
+            transform: translate3d(0, 0, 0);
+        }
+
+        100% {
+            transform: translate3d(-50%, 0, 0);
+        }
     }
+
+    @keyframes marqueeScrollReverse {
+        0% {
+            transform: translate3d(-50%, 0, 0);
+        }
+
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
     .marquee-track {
         will-change: transform;
         animation: marqueeScroll 30s linear infinite;
+        width: max-content;
+}
+
+    .marquee-track-reverse {
+        will-change: transform;
+        animation: marqueeScrollReverse 30s linear infinite;
         width: max-content;
     }
 </style>

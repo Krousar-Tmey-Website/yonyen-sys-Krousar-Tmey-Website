@@ -17,7 +17,6 @@ use App\Models\HomeSetting;
 use App\Models\JobOpportunity;
 use App\Models\MediaItem;
 use App\Models\News;
-use App\Models\Office;
 use App\Models\PageSection;
 use App\Models\Program;
 use App\Models\ProgramPageItem;
@@ -53,12 +52,12 @@ Route::get('/', function () {
     $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
     $sponsors = \App\Models\Sponsor::active()->orderBy('sort_order')->get();
 
-    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'programs', 'pageSections', 'impactStatistics', 'sponsors'));
+return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'programs', 'pageSections', 'impactStatistics', 'sponsors'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
     $awards = Award::active()->ordered()->get();
-    $offices = Office::active()->get();
+    $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
     $historyEvents = HistoryEvent::active()->get();
     $reports = AnnualReport::active()->get();
     $settings = HomeSetting::allKeyed();
@@ -71,7 +70,7 @@ Route::get('/who-we-are', function () {
 Route::get('/who-we-are/presentation', function () {
     $settings = HomeSetting::allKeyed();
     $coreValues = CoreValue::ordered()->get();
-    $offices = Office::active()->where('country', '!=', 'Cambodia')->get();
+    $offices = collect(config('offices'))->reject(fn ($o) => $o['country'] === 'Cambodia')->map(fn ($o) => (object) $o);
     $impactStatistics = \App\Models\ImpactStatistic::active()->get();
 
     return view('presentation', compact('settings', 'coreValues', 'offices', 'impactStatistics'));
@@ -185,7 +184,7 @@ Route::get('/reports/{report}/download', function (App\Models\AnnualReport $repo
 })->name('reports.download');
 
 Route::get('/contact', function () {
-    $offices = Office::active()->get();
+    $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
 
     return view('contact', compact('offices'));
 })->name('contact');
@@ -317,8 +316,6 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Donation Campaigns
     Route::resource('campaigns', Admin\CampaignController::class)->except(['show']);
     Route::patch('campaigns/{campaign}/toggle', [Admin\CampaignController::class, 'toggle'])->name('campaigns.toggle');
-
-    Route::resource('offices', Admin\OfficeController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::prefix('contacts')->name('contacts.')->group(function () {
         Route::get('/', [Admin\ContactInquiryController::class, 'index'])->name('index');

@@ -52,7 +52,7 @@
         },
      }">
 
-    {{-- Supporting Description (Global) --}}
+{{-- Supporting Description (Global) --}}
     <div class="bg-white rounded-2xl border border-gray-100 p-6">
         <h3 class="font-bold text-gray-700 mb-4 text-sm">Our Values Supporting Description</h3>
         <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
@@ -63,7 +63,6 @@
             <button type="submit" class="btn-primary text-sm py-2.5">Save Supporting Description</button>
         </form>
     </div>
-
     {{-- Values List --}}
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
         {{-- Toolbar --}}
