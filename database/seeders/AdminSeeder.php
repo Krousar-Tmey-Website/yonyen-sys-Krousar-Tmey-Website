@@ -119,6 +119,14 @@ class AdminSeeder extends Seeder
             // About page
             ['key' => 'about_worldwide_title', 'label' => 'Worldwide Section Title', 'group' => 'about', 'value' => 'Krousar Thmey Worldwide'],
             ['key' => 'about_worldwide_desc',  'label' => 'Worldwide Section Description', 'group' => 'about', 'value' => 'Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.'],
+            // Become a Partner page
+            ['key' => 'partner_banner_image',       'label' => 'Banner Image (URL or upload path)', 'group' => 'partner_page', 'value' => ''],
+            ['key' => 'partner_count',              'label' => 'Partner Count Stat',                'group' => 'partner_page', 'value' => '70+'],
+            ['key' => 'partner_count_label',        'label' => 'Partner Count Label',              'group' => 'partner_page', 'value' => 'Partner organisations'],
+            ['key' => 'partner_cta_title',          'label' => 'CTA Title',                        'group' => 'partner_page', 'value' => 'Interested in becoming a partner?'],
+            ['key' => 'partner_cta_description',    'label' => 'CTA Description',                  'group' => 'partner_page', 'value' => "Let's build together our future cooperation"],
+            ['key' => 'partner_cta_button_text',    'label' => 'CTA Button Text',                  'group' => 'partner_page', 'value' => 'Contact Us to Partner'],
+            ['key' => 'partner_cta_button_link',    'label' => 'CTA Button Link',                  'group' => 'partner_page', 'value' => ''],
         ];
 
         foreach ($homeSettings as $setting) {

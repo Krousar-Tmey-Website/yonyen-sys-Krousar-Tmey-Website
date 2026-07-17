@@ -131,7 +131,6 @@ Route::get('/get-involved', function () {
     $settings = HomeSetting::allKeyed();
     $jobs = JobOpportunity::active()->ordered()->get();
     $books = Book::available()->orderBy('sort_order')->orderBy('title')->get();
-
     return view('involved', compact('settings', 'jobs', 'books'));
 })->name('involved');
 
@@ -298,6 +297,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
+
+    // Become a Partner page content
+    Route::get('partner-page', [Admin\PartnerPageController::class, 'index'])->name('partner-page.index');
+    Route::post('partner-page', [Admin\PartnerPageController::class, 'update'])->name('partner-page.update');
 
     // Donation Campaigns
     Route::resource('campaigns', Admin\CampaignController::class)->except(['show']);

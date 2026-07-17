@@ -27,6 +27,25 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'Intersect
     });
 }
 
+// ── Staggered card reveal (once-only) ──
+// Fades/slides [data-reveal-card] elements sequentially as they enter
+// the viewport. Unlike [data-reveal], this observer unobserves after
+// the first trigger, so the animation only plays once per card.
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    const cardRevealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-card-revealed');
+                cardRevealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('[data-reveal-card]').forEach((el) => cardRevealObserver.observe(el));
+    });
+}
+
 // ── Timeline year navigator scrollspy ──
 // Highlights the year in the sidebar nav that matches the card currently in view.
 if ('IntersectionObserver' in window) {
