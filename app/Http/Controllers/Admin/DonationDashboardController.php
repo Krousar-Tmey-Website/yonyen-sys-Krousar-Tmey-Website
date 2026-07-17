@@ -30,19 +30,34 @@ class DonationDashboardController extends Controller
             ->orderByDesc('total')
             ->get();
 
-        // ── Monthly donations (current year) ──
-        $monthlyDonations = (clone $baseQuery)
+        // ── Retrieve selected year & available years ──
+        $year = request('year', now()->year);
+        $availableYears = range(2026, 2030);
+
+        // ── Monthly donations (filtered by year) ──
+        $rawMonthly = (clone $baseQuery)
             ->select(
                 DB::raw('MONTH(DonationDate) as month'),
-                DB::raw('YEAR(DonationDate) as year'),
                 DB::raw('COUNT(*) as count'),
                 DB::raw('SUM(COALESCE(DonationAmount, Amount, 0)) as total')
             )
-            ->whereYear('DonationDate', now()->year)
-            ->groupBy(DB::raw('MONTH(DonationDate)'), DB::raw('YEAR(DonationDate)'))
-            ->orderBy('month')
+            ->whereYear('DonationDate', $year)
+            ->groupBy(DB::raw('MONTH(DonationDate)'))
             ->get();
 
+        $keyed = $rawMonthly->keyBy('month');
+        $donationMonths = collect();
+        $donationTotals = collect();
+        $donationCounts = collect();
+
+        for ($m = 1; $m <= 12; $m++) {
+            $monthName = date('M', mktime(0, 0, 0, $m, 1));
+            $data = $keyed->get($m);
+            $donationMonths->push($monthName);
+            $donationTotals->push((float) ($data->total ?? 0));
+            $donationCounts->push((int) ($data->count ?? 0));
+        }
+ 
         // ── Recent donations (last 20) ──
         $recentDonations = (clone $baseQuery)
             ->with('donor')
@@ -50,14 +65,13 @@ class DonationDashboardController extends Controller
             ->take(20)
             ->get();
 
-        // ── Currency breakdown ──
-        $byCurrency = (clone $baseQuery)
-            ->select('Currency', DB::raw('COUNT(*) as count'), DB::raw('SUM(COALESCE(DonationAmount, Amount, 0)) as total'))
-            ->whereNotNull('Currency')
-            ->groupBy('Currency')
+        // ── Donation Type breakdown ──
+        $byType = (clone $baseQuery)
+            ->select(DB::raw("COALESCE(DonationType, 'Other') as DonationType"), DB::raw('COUNT(*) as count'), DB::raw('SUM(COALESCE(DonationAmount, Amount, 0)) as total'))
+            ->groupBy('DonationType')
             ->orderByDesc('total')
             ->get();
-
+ 
         return view('admin.donations.dashboard', compact(
             'totalDonations',
             'totalDonors',
@@ -65,9 +79,13 @@ class DonationDashboardController extends Controller
             'nonMoneyCount',
             'avgDonation',
             'byPaymentMethod',
-            'monthlyDonations',
+            'donationMonths',
+            'donationTotals',
+            'donationCounts',
             'recentDonations',
-            'byCurrency'
+            'byType',
+            'year',
+            'availableYears'
         ));
     }
 }

@@ -199,10 +199,9 @@
     background: #94a3b8;
 }
 
-/* Action Buttons - Professional Circular Buttons */
 .action-btn {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
@@ -213,8 +212,8 @@
     position: relative;
 }
 .action-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
 }
 
 /* View Button - Green */
