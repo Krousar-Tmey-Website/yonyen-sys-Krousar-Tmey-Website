@@ -1,108 +1,157 @@
 @extends('admin.layouts.app')
 
+@push('styles')
+    @vite(['resources/css/admin.css'])
+@endpush
+
 @section('title', 'Edit Sponsor')
 @section('page-title', 'Edit Sponsor')
-@section('breadcrumb', 'Update sponsor details')
+@section('breadcrumb', 'Sponsors → Edit')
 
 @section('content')
 
-<div class="mb-8 flex justify-between items-center">
-    <div>
-        <h2 class="text-2xl font-bold text-gray-900">Edit Sponsor</h2>
-        <p class="mt-1 text-sm text-gray-500">Update sponsor details and configuration.</p>
-    </div>
-    <a href="{{ route('admin.sponsors.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-sm font-medium rounded-md text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
-        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-        Back to List
-    </a>
-</div>
+<div class="form-container" x-data="{ logoMethod: '{{ str_starts_with($sponsor->logo ?? '', 'http') ? 'url' : 'file' }}', fileName: '' }">
+    <form action="{{ route('admin.sponsors.update', $sponsor) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-    <div class="p-8">
-        <form action="{{ route('admin.sponsors.update', $sponsor) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-            
-            <div class="space-y-8 tracking-tight">
-                {{-- Name --}}
-                <div>
-                    <label for="name" class="block text-sm font-semibold text-gray-800 mb-2">Sponsor Name <span class="text-red-500">*</span></label>
-                    <input type="text" name="name" id="name" required value="{{ old('name', $sponsor->name) }}" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1a3c6e] focus:ring-[#1a3c6e] px-4 py-2.5 transition-colors">
-                    @error('name')<p class="text-red-500 text-xs mt-2 font-medium">{{ $message }}</p>@enderror
+        <div class="form-card">
+            <div class="card-header">
+                <div class="icon blue">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </div>
+                <h3>Sponsor Details</h3>
+                <span class="badge">Required *</span>
+            </div>
+
+            <div class="card-body space-y-6">
+                <!-- Sponsor Name -->
+                <div class="form-group">
+                    <label class="form-label">Sponsor Name <span class="required">*</span></label>
+                    <input type="text" name="name" value="{{ old('name', $sponsor->name) }}" required
+                           class="form-control @error('name') error @enderror"
+                           placeholder="e.g. Ministry of Education, Youth and Sport">
+                    @error('name')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">The official display name of the sponsor.</div>
                 </div>
 
-                {{-- Logo Selection --}}
-                <div class="bg-gray-50/50 p-6 rounded-xl border border-gray-100">
-                    <div class="flex items-start justify-between mb-6">
-                        <label class="block text-sm font-semibold text-gray-800">Sponsor Logo <span class="text-gray-400 font-normal ml-1">(Choose one method)</span></label>
-                        @if($sponsor->logo)
-                            <div class="text-right">
-                                <p class="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">Current Logo</p>
-                                <div class="bg-white border border-gray-200 rounded-lg p-2 inline-block shadow-sm">
-                                    <img src="{{ str_starts_with($sponsor->logo, 'http') ? $sponsor->logo : asset('storage/' . $sponsor->logo) }}" alt="Current Logo" class="h-14 w-auto object-contain">
-                                </div>
+                <!-- Website URL -->
+                <div class="form-group">
+                    <label class="form-label">Website URL <span class="optional">(optional)</span></label>
+                    <input type="url" name="url" value="{{ old('url', $sponsor->url) }}"
+                           class="form-control @error('url') error @enderror"
+                           placeholder="https://example.com">
+                    @error('url')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">The destination URL when someone clicks this sponsor's logo.</div>
+                </div>
+
+                <!-- Logo Selection -->
+                <div class="bg-gray-50/50 p-6 rounded-xl border border-gray-200/50">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <label class="form-label font-bold text-gray-800 mb-0">Sponsor Logo <span class="optional">(Choose one method)</span></label>
+                        
+                        <!-- Toggle Tab buttons -->
+                        <div class="flex items-center gap-1 p-1 bg-gray-200/60 border border-gray-200 rounded-lg self-start sm:self-auto">
+                            <button type="button" 
+                                    @click="logoMethod = 'file'" 
+                                    :class="logoMethod === 'file' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-800'" 
+                                    class="px-3 py-1 text-[11px] font-bold rounded-md transition-all">
+                                Upload File
+                            </button>
+                            <button type="button" 
+                                    @click="logoMethod = 'url'" 
+                                    :class="logoMethod === 'url' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-800'" 
+                                    class="px-3 py-1 text-[11px] font-bold rounded-md transition-all">
+                                External URL
+                            </button>
+                        </div>
+                    </div>
+
+                    @if($sponsor->logo)
+                        <div class="flex items-center gap-3 bg-white p-3 rounded-xl border border-gray-200 shadow-sm mb-4 self-start max-w-xs">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Current Logo:</span>
+                            <div class="h-10 w-16 flex items-center justify-center p-1 bg-gray-50 rounded-lg border border-gray-100">
+                                <img src="{{ str_starts_with($sponsor->logo, 'http') ? $sponsor->logo : asset('storage/' . $sponsor->logo) }}" alt="Current Logo" class="max-h-full max-w-full object-contain">
                             </div>
-                        @endif
+                        </div>
+                    @endif
+
+                    <!-- Upload File Box -->
+                    <div x-show="logoMethod === 'file'" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform -translate-y-1"
+                         x-transition:enter-end="opacity-100 transform translate-y-0"
+                         class="relative">
+                        <div class="border-2 border-dashed border-gray-200 hover:border-indigo-400 rounded-xl p-6 bg-white hover:bg-gray-50/50 text-center transition-all cursor-pointer relative"
+                             @click="$refs.fileInput.click()">
+                            <input type="file" x-ref="fileInput" name="logo_file" accept="image/*" class="hidden" 
+                                   @change="fileName = $event.target.files[0] ? $event.target.files[0].name : ''">
+                            
+                            <svg class="mx-auto h-10 w-10 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <p class="text-xs font-semibold text-gray-700">Click to upload new logo file</p>
+                            <p class="text-[10px] text-gray-400 mt-1">PNG, JPG, SVG or WEBP up to 2MB (Leave empty to keep current)</p>
+                            
+                            <!-- Display file name if chosen -->
+                            <div x-show="fileName" class="mt-3 p-2 bg-indigo-50 border border-indigo-100 rounded-lg inline-flex items-center gap-2 max-w-full" @click.stop>
+                                <svg class="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="text-xs text-indigo-700 font-semibold truncate max-w-[200px]" x-text="fileName"></span>
+                                <button type="button" @click="fileName = ''; $refs.fileInput.value = ''" class="text-indigo-400 hover:text-indigo-600 focus:outline-none">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        @error('logo_file')<div class="form-error mt-2">{{ $message }}</div>@enderror
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
-                        {{-- Divider for Desktop --}}
-                        <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-200 transform -translate-x-1/2">
-                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 px-2 text-xs font-bold text-gray-400">OR</div>
-                        </div>
 
-                        {{-- Upload File --}}
-                        <div class="flex flex-col justify-center">
-                            <label for="logo_file" class="block text-sm font-medium text-gray-700 mb-2">Upload New File</label>
-                            <input type="file" name="logo_file" id="logo_file" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1a3c6e]/10 file:text-[#1a3c6e] hover:file:bg-[#1a3c6e]/20 transition-all cursor-pointer">
-                            @error('logo_file')<p class="text-red-500 text-xs mt-2 font-medium">{{ $message }}</p>@enderror
-                        </div>
-
-                        {{-- Divider for Mobile --}}
-                        <div class="md:hidden relative flex py-2 items-center">
-                            <div class="flex-grow border-t border-gray-200"></div>
-                            <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold">OR</span>
-                            <div class="flex-grow border-t border-gray-200"></div>
-                        </div>
-
-                        {{-- URL --}}
-                        <div class="flex flex-col justify-center">
-                            <label for="logo_url" class="block text-sm font-medium text-gray-700 mb-2">External URL</label>
-                            <input type="url" name="logo_url" id="logo_url" value="{{ old('logo_url', str_starts_with($sponsor->logo ?? '', 'http') ? $sponsor->logo : '') }}" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1a3c6e] focus:ring-[#1a3c6e] px-4 py-2.5 transition-colors" placeholder="https://example.com/logo.png">
-                            @error('logo_url')<p class="text-red-500 text-xs mt-2 font-medium">{{ $message }}</p>@enderror
-                        </div>
+                    <!-- External URL Input -->
+                    <div x-show="logoMethod === 'url'"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform -translate-y-1"
+                         x-transition:enter-end="opacity-100 transform translate-y-0"
+                         class="space-y-2">
+                        <input type="url" name="logo_url" value="{{ old('logo_url', str_starts_with($sponsor->logo ?? '', 'http') ? $sponsor->logo : '') }}" class="form-control" placeholder="https://example.com/logo.png">
+                        @error('logo_url')<div class="form-error mt-2">{{ $message }}</div>@enderror
+                        <div class="text-[11px] text-gray-400">Direct link to the image hosted on another server. Leave empty to keep current logo.</div>
                     </div>
-                    <p class="text-gray-500 text-xs mt-6 flex items-center"><svg class="w-4 h-4 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Leave both empty to keep the current logo. Max 2MB.</p>
                 </div>
 
-                {{-- Settings Grid --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <label for="sort_order" class="block text-sm font-semibold text-gray-800 mb-2">Sort Order</label>
-                        <input type="number" name="sort_order" id="sort_order" value="{{ old('sort_order', $sponsor->sort_order) }}" class="w-full md:w-32 rounded-lg border-gray-300 shadow-sm focus:border-[#1a3c6e] focus:ring-[#1a3c6e] px-4 py-2.5 transition-colors">
-                        <p class="text-gray-500 text-xs mt-2">Lower numbers appear first.</p>
+                <!-- Settings Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group form-group--no-margin">
+                          <label class="form-label">Sort Order</label>
+                          <input type="number" name="sort_order" value="{{ old('sort_order', $sponsor->sort_order) }}" class="form-control w-full md:w-32">
+                          @error('sort_order')<div class="form-error">{{ $message }}</div>@enderror
+                          <div class="form-helper">Lower numbers appear first.</div>
                     </div>
                     
-                    <div class="flex items-center pt-8">
-                        <label class="relative inline-flex items-center cursor-pointer">
+                    <div class="flex items-center pt-6">
+                        <label class="relative inline-flex items-center cursor-pointer select-none">
                             <input type="hidden" name="is_active" value="0">
                             <input type="checkbox" name="is_active" value="1" class="sr-only peer" {{ $sponsor->is_active ? 'checked' : '' }}>
                             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#1a3c6e]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1a3c6e]"></div>
-                            <span class="ml-3 text-sm font-semibold text-gray-800">Sponsor is Active</span>
+                            <span class="ml-3 text-sm font-semibold text-gray-700">Sponsor is Active</span>
                         </label>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="mt-10 pt-6 border-t border-gray-100 flex justify-end gap-3">
-                <a href="{{ route('admin.sponsors.index') }}" class="px-6 py-2.5 bg-white border border-gray-300 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">Cancel</a>
-                <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-[#1a3c6e] text-white text-sm font-medium rounded-lg shadow-sm hover:bg-[#153059] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1a3c6e]">
-                    <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    Update Sponsor
-                </button>
-            </div>
-        </form>
-    </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Update Sponsor
+            </button>
+            <a href="{{ route('admin.sponsors.index') }}" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
 </div>
 
 @endsection
