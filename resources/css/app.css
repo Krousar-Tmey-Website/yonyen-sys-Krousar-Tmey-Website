@@ -182,6 +182,19 @@
 [data-reveal="line"]  { transform: scaleY(0); transform-origin: top; }
 [data-reveal].is-revealed { opacity: 1; transform: none; }
 
+/* ── Article body media ──
+   Subtle hover zoom on inline images/embeds within news article content,
+   applies uniformly across every article without touching stored HTML. */
+.article-content img {
+    transition: transform 0.5s ease;
+}
+.article-content img:hover {
+    transform: scale(1.02);
+}
+.article-content iframe {
+    border-radius: 0.5rem;
+}
+
 /* ── Timeline year navigator ──
    Active state toggled by the scrollspy IntersectionObserver in resources/js/app.js. */
 .year-nav-link.is-active {

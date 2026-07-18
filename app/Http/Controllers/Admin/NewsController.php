@@ -40,6 +40,7 @@ class NewsController extends Controller
             'gallery.*'    => ['image', 'max:2048'],
             'videos'       => ['nullable', 'array'],
             'videos.*'     => ['file', 'mimes:mp4,mov,webm', 'max:35000'],
+            'video_url'    => ['nullable', 'url', 'max:500'],
             'links'        => ['nullable', 'json'],
             'tag_links'    => ['nullable', 'json'],
         ]);
@@ -69,11 +70,19 @@ class NewsController extends Controller
             );
         }
 
+        $videos = [];
         if ($request->hasFile('videos')) {
-            $data['videos'] = array_map(
+            $videos = array_map(
                 fn ($file) => $file->store('news/videos', 'public'),
                 $request->file('videos')
             );
+        }
+        if (!empty($data['video_url'])) {
+            $videos[] = $data['video_url'];
+        }
+        unset($data['video_url']);
+        if (!empty($videos)) {
+            $data['videos'] = $videos;
         }
 
         // Handle links
@@ -110,7 +119,7 @@ class NewsController extends Controller
     {
         return ResourcePage::active()->get(['title', 'slug'])->map(fn ($page) => [
             'label' => $page->title,
-            'url'   => route('resource-pages.show', $page->slug),
+            'url'   => route('resource-pages.show', $page->slug, absolute: false),
         ])->all();
     }
 
@@ -128,6 +137,7 @@ class NewsController extends Controller
             'remove_gallery.*' => ['string'],
             'videos'         => ['nullable', 'array'],
             'videos.*'       => ['file', 'mimes:mp4,mov,webm', 'max:35000'],
+            'video_url'      => ['nullable', 'url', 'max:500'],
             'remove_videos'  => ['nullable', 'array'],
             'remove_videos.*' => ['string'],
             'links'          => ['nullable', 'json'],
@@ -189,8 +199,11 @@ class NewsController extends Controller
                 $videos[] = $file->store('news/videos', 'public');
             }
         }
+        if (!empty($data['video_url'])) {
+            $videos[] = $data['video_url'];
+        }
         $data['videos'] = $videos;
-        unset($data['remove_videos']);
+        unset($data['remove_videos'], $data['video_url']);
 
         // Handle links
         if ($request->has('links') && !empty($request->input('links'))) {

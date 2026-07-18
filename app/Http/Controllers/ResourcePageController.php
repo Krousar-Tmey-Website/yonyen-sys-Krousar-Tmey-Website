@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\News;
 use App\Models\ResourcePage;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class ResourcePageController extends Controller
 {
@@ -25,7 +27,7 @@ class ResourcePageController extends Controller
      * Every article is bylined "by Krousar Thmey", so that page shows all
      * published articles, 5 per page (with Newer/Older Entries paging).
      * Every other page shows only articles tagged with its title (tags now
-     * point back at the matching resource page).
+     * point back at the matching resource page), 6 per page.
      */
     private function relatedArticles(ResourcePage $page)
     {
@@ -35,10 +37,21 @@ class ResourcePageController extends Controller
 
         $title = strtolower($page->title);
 
-        return News::published()->latest('published_at')->get()->filter(
+        $matching = News::published()->latest('published_at')->get()->filter(
             fn (News $article) => collect($article->tag_links)
                 ->pluck('label')
                 ->contains(fn ($label) => strtolower($label) === $title)
         )->values();
+
+        $perPage = 6;
+        $currentPage = Paginator::resolveCurrentPage('page');
+
+        return new LengthAwarePaginator(
+            $matching->forPage($currentPage, $perPage)->values(),
+            $matching->count(),
+            $perPage,
+            $currentPage,
+            ['path' => Paginator::resolveCurrentPath(), 'query' => request()->query()]
+        );
     }
 }

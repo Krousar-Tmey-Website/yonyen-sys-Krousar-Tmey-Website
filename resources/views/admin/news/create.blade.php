@@ -57,8 +57,7 @@
             </div>
             <div class="card-body">
                 <div class="form-group form-group--no-margin">
-                    <textarea name="content" rows="16" class="form-control content"
-                              placeholder="Write your article content here...">{{ old('content') }}</textarea>
+                    @include('admin.news._content-editor')
                     @error('content')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
@@ -157,6 +156,15 @@
                     <div class="video-preview-list" id="videoPreviewList"></div>
                     @error('videos')<div class="form-error">{{ $message }}</div>@enderror
                     @error('videos.*')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Video Link <span class="optional">(optional)</span></label>
+                    <input type="url" name="video_url" value="{{ old('video_url') }}"
+                           class="form-control @error('video_url') error @enderror"
+                           placeholder="https://www.facebook.com/watch/?v=...">
+                    @error('video_url')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Paste a Facebook or YouTube video link to embed it on the article page.</div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
@@ -386,5 +394,7 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 </script>
+
+@vite(['resources/js/admin-news-editor.js'])
 
 @endsection

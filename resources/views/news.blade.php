@@ -10,17 +10,17 @@
     <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/3"></div>
     <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a]/40 translate-y-1/2 -translate-x-1/4"></div>
     <div class="relative max-w-7xl mx-auto px-6">
-        <nav class="flex items-center gap-2 text-sm text-white/50 mb-8">
+        <nav data-reveal class="flex items-center gap-2 text-sm text-white/50 mb-8">
             <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <span class="text-white/80">News</span>
         </nav>
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-4">
+        <div data-reveal style="--reveal-delay: 60" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-4">
             <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
             <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">Krousar Thmey</span>
         </div>
-        <h1 class="text-3xl md:text-4xl font-black text-white mb-3 uppercase tracking-wide">Krousar Thmey's news, in Cambodia and around the world</h1>
-        <p class="text-white/60 text-base max-w-2xl leading-relaxed">Updates from our programs, success stories from our beneficiaries, and events from Krousar Thmey.</p>
+        <h1 data-reveal style="--reveal-delay: 120" class="text-3xl md:text-4xl font-black text-white mb-3 uppercase tracking-wide">Krousar Thmey's news, in Cambodia and around the world</h1>
+        <p data-reveal style="--reveal-delay: 180" class="text-white/60 text-base max-w-2xl leading-relaxed">Updates from our programs, success stories from our beneficiaries, and events from Krousar Thmey.</p>
     </div>
 </div>
 
@@ -36,7 +36,7 @@
         @else
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($articles as $article)
-            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col group hover:-translate-y-1 transition-all duration-300">
+            <article data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 80, 480) }}" class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col group hover:-translate-y-1 transition-all duration-300">
                 @if($article->image)
                 <a href="{{ route('news.show', $article->slug) }}" class="relative overflow-hidden h-44 block">
                     <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
@@ -82,7 +82,7 @@
 
         {{-- Pagination --}}
         @if($articles->hasPages())
-        <div class="flex items-center justify-between mt-10 pt-6 border-t border-gray-200">
+        <div data-reveal class="flex items-center justify-between mt-10 pt-6 border-t border-gray-200">
             <div>
                 @if(!$articles->onFirstPage())
                 <a href="{{ $articles->previousPageUrl() }}" class="inline-flex items-center gap-1.5 text-[#2d6fa3] text-sm font-semibold hover:underline">
@@ -107,7 +107,7 @@
 
 {{-- Newsletter CTA --}}
 <section class="py-14 bg-white border-t border-gray-100">
-    <div class="max-w-2xl mx-auto px-6 text-center">
+    <div data-reveal class="max-w-2xl mx-auto px-6 text-center">
         <h2 class="text-2xl font-bold text-[#1a3c6e] mb-3">Stay Updated</h2>
         <p class="text-gray-500 mb-8">Subscribe to our newsletter for the latest stories and updates from Cambodia.</p>
         <form class="flex gap-3 max-w-md mx-auto" onsubmit="return false;">

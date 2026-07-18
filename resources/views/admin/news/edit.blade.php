@@ -59,8 +59,7 @@
             </div>
             <div class="card-body">
                 <div class="form-group form-group--no-margin">
-                    <textarea name="content" rows="16" class="form-control content"
-                              placeholder="Write your article content here...">{{ old('content', $news->content) }}</textarea>
+                    @include('admin.news._content-editor', ['contentValue' => $news->content])
                     @error('content')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
@@ -172,10 +171,11 @@
                             <img src="{{ $news->gallery_urls[$index] ?? '' }}" alt="Gallery image {{ $index + 1 }}">
                             <button type="button" class="remove-gallery-item"
                                     onclick="toggleRemoveGalleryItem({{ $index }}, '{{ $path }}')" title="Remove">×</button>
+                            <button type="button" class="insert-gallery-item" data-insert-image-src="{{ $news->gallery_urls[$index] ?? '' }}" title="Insert into article content">+ Insert</button>
                         </div>
                         @endforeach
                     </div>
-                    <div class="form-helper">Click × to mark an image for removal. Changes apply when you save.</div>
+                    <div class="form-helper">Click × to mark an image for removal, or "+ Insert" to add it into the article content above. Changes apply when you save.</div>
                 </div>
                 @endif
 
@@ -225,6 +225,16 @@
                     <div class="video-preview-list" id="videoPreviewList"></div>
                     @error('videos')<div class="form-error">{{ $message }}</div>@enderror
                     @error('videos.*')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+
+                {{-- Add Video by URL --}}
+                <div class="form-group">
+                    <label class="form-label">Video Link <span class="optional">(optional)</span></label>
+                    <input type="url" name="video_url" value="{{ old('video_url') }}"
+                           class="form-control @error('video_url') error @enderror"
+                           placeholder="https://www.facebook.com/watch/?v=...">
+                    @error('video_url')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Paste a Facebook or YouTube video link to embed it on the article page.</div>
                 </div>
 
                 {{-- Publishing Options --}}
@@ -520,5 +530,7 @@ function escapeHtml(text) {
 }
 
 </script>
+
+@vite(['resources/js/admin-news-editor.js'])
 
 @endsection
