@@ -75,6 +75,7 @@
                 if ($currentRoute && ($currentRoute === $r || str_starts_with($currentRoute, $r . '.'))) {
                 return true;
                 }
+
                 }
                 return false;
                 };
