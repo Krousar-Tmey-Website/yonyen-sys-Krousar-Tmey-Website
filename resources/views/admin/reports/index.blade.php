@@ -74,7 +74,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pagination-links border-t border-gray-100 px-4 py-4">
+            <div class="border-t border-gray-100 px-4 py-4">
                 {{ $reports->links() }}
             </div>
         </div>

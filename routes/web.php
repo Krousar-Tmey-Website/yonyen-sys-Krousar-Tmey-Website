@@ -6,6 +6,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\ResourcePageController;
 use App\Http\Controllers\VolunteerController;
 use App\Models\AnnualReport;
 use App\Models\Award;
@@ -16,8 +17,6 @@ use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
 use App\Models\JobOpportunity;
 use App\Models\News;
-use App\Enums\PartnerCategory;
-use App\Enums\PartnerSubcategory;
 use App\Models\Office;
 use App\Models\PageSection;
 use App\Models\Partner;
@@ -37,13 +36,6 @@ use Illuminate\Support\Facades\Storage;
 // Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
 
-Route::get('/lang/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'km', 'fr'])) {
-        session()->put('locale', $locale);
-    }
-    return redirect()->back();
-})->name('lang.switch');
-
 Route::get('/', function () {
     $settings = HomeSetting::allKeyed();
     $latestNews = News::published()->latest('published_at')->take(3)->get();
@@ -54,14 +46,13 @@ Route::get('/', function () {
     $programs = Program::active()->take(3)->get();
     $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
-    $sponsors = \App\Models\Sponsor::active()->orderBy('sort_order')->get();
 
-    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics', 'sponsors'));
+    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
     $awards = Award::active()->ordered()->get();
-    $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
+    $offices = Office::active()->get();
     $historyEvents = HistoryEvent::active()->get();
     $reports = AnnualReport::active()->get();
     $settings = HomeSetting::allKeyed();
@@ -88,7 +79,7 @@ Route::get('/who-we-are', function () {
 Route::get('/who-we-are/presentation', function () {
     $settings = HomeSetting::allKeyed();
     $coreValues = CoreValue::ordered()->get();
-    $offices = collect(config('offices'))->reject(fn ($o) => $o['country'] === 'Cambodia')->map(fn ($o) => (object) $o);
+    $offices = Office::active()->where('country', '!=', 'Cambodia')->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->get();
 
     return view('presentation', compact('settings', 'coreValues', 'offices', 'impactStatistics'));
@@ -165,6 +156,9 @@ Route::get('/jobs/{jobOpportunity}', function (JobOpportunity $jobOpportunity) {
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
+Route::get('/topics', [ResourcePageController::class, 'index'])->name('resource-pages.index');
+Route::get('/topics/{slug}', [ResourcePageController::class, 'show'])->name('resource-pages.show');
+
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
 
@@ -190,7 +184,7 @@ Route::get('/reports/{report}/download', function (App\Models\AnnualReport $repo
 })->name('reports.download');
 
 Route::get('/contact', function () {
-    $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
+    $offices = Office::active()->get();
 
     return view('contact', compact('offices'));
 })->name('contact');
@@ -212,7 +206,7 @@ Route::post('/volunteer', [VolunteerController::class, 'store'])->name('voluntee
 
 // Our Values detail page
 Route::get('/our-values/{value}', function (CoreValue $value) {
-    $settings = HomeSetting::allKeyed();
+    $settings = \App\Models\HomeSetting::allKeyed();
     return view('core_values.show', compact('value', 'settings'));
 })->name('core-values.show');
 
@@ -237,9 +231,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('/donations/dashboard', [Admin\DonationDashboardController::class, 'index'])->name('donations.dashboard');
     Route::resource('donations', Admin\DonationController::class);
 
-    // News & Categories
+    // News
     Route::resource('news', Admin\NewsController::class);
-    Route::resource('categories', Admin\CategoryController::class)->except(['show']);
+    Route::resource('resource-pages', Admin\ResourcePageController::class)->except(['show']);
 
     // Programs & Projects
     Route::resource('programs', Admin\ProgramController::class)->except(['show']);
@@ -263,8 +257,6 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('impact-statistics', Admin\ImpactStatisticController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['impact-statistics' => 'impactStatistic']);
-
-    Route::resource('sponsors', Admin\SponsorController::class)->except(['show']);
 
     // Programs banner
     Route::get('programs-banner', [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
@@ -318,6 +310,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Donation Campaigns
     Route::resource('campaigns', Admin\CampaignController::class)->except(['show']);
     Route::patch('campaigns/{campaign}/toggle', [Admin\CampaignController::class, 'toggle'])->name('campaigns.toggle');
+
+    Route::resource('offices', Admin\OfficeController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::prefix('contacts')->name('contacts.')->group(function () {
         Route::get('/', [Admin\ContactInquiryController::class, 'index'])->name('index');

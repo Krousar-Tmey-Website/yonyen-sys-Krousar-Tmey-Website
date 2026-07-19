@@ -1,8 +1,8 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Homepage Statistics')
-@section('page-title', 'Homepage Statistics')
-@section('breadcrumb', 'Configure key statistics numbers displayed on the homepage')
+@section('title', 'Home Settings')
+@section('page-title', 'Home Page Settings')
+@section('breadcrumb', 'Customise all the text and content that appears on your homepage')
 
 @section('content')
 
@@ -20,16 +20,83 @@
             'icon'   => '📊',
             'title'  => 'Stats & Data',
             'fields' => [
-                ['key' => 'stat_children',       'label' => 'Children Supported',                     'type' => 'number', 'placeholder' => 'e.g. 10000'],
-                ['key' => 'stat_employees',      'label' => 'Employees',                              'type' => 'number', 'placeholder' => 'e.g. 70'],
+                ['key' => 'stat_children',       'label' => 'Number of Children Supported',           'type' => 'number', 'placeholder' => 'e.g. 10000'],
+                ['key' => 'stat_children_label', 'label' => '— Label',                                'type' => 'text',   'default' => 'CHILDREN SUPPORTED'],
+                ['key' => 'stat_children_sub',   'label' => '— Subtitle',                             'type' => 'text',   'default' => 'SINCE 1991'],
+                ['key' => 'stat_employees',      'label' => 'Number of Employees',                    'type' => 'number', 'placeholder' => 'e.g. 70'],
+                ['key' => 'stat_employees_label','label' => '— Label',                                'type' => 'text',   'default' => 'EMPLOYEES'],
                 ['key' => 'stat_budget',         'label' => 'Annual Budget (number or e.g. 950K)',    'type' => 'budget', 'placeholder' => 'e.g. 950000 or 950K'],
-                ['key' => 'stat_provinces',      'label' => 'Provinces in Cambodia',                  'type' => 'number', 'placeholder' => 'e.g. 15'],
+                ['key' => 'stat_budget_label',   'label' => '— Label',                                'type' => 'text',   'default' => 'USD ANNUAL BUDGET'],
+                ['key' => 'stat_provinces',      'label' => 'Number of Provinces',                    'type' => 'number', 'placeholder' => 'e.g. 15'],
+                ['key' => 'stat_provinces_label','label' => '— Label',                                'type' => 'text',   'default' => 'PROVINCES IN CAMBODIA'],
+            ],
+        ],
+        'programs' => [
+            'icon'   => '🧩',
+            'title'  => 'Programs Overview',
+            'fields' => [
+                ['key' => 'programs_badge',      'label' => 'Badge Text',                             'type' => 'text',   'default' => 'WHAT WE DO'],
+                ['key' => 'programs_heading',    'label' => 'Heading',                                'type' => 'text',   'default' => 'Two Programs, One Mission'],
+                ['key' => 'programs_subtitle',   'label' => 'Subtitle',                               'type' => 'textarea', 'default' => 'Operating across 15 Cambodian provinces, our programs address the most pressing needs of vulnerable children.'],
+                ['key' => 'programs_learn_btn',  'label' => 'Learn More Button Text',                 'type' => 'text',   'default' => 'Learn More'],
+                ['key' => 'programs_cta',        'label' => 'View All CTA Button Text',               'type' => 'text',   'default' => 'View All Programs'],
+            ],
+        ],
+        'structure' => [
+            'icon'   => '🗺️',
+            'title'  => 'Program Structure Map',
+            'fields' => [
+                ['key' => 'structure_heading',           'label' => 'Section Heading',                 'type' => 'text',   'default' => "KROUSAR THMEY'S STRUCTURES"],
+                ['key' => 'structure_welfare_title',     'label' => 'Child Welfare — Title',           'type' => 'text',   'default' => 'Child Welfare Program'],
+                ['key' => 'structure_welfare_items',     'label' => 'Child Welfare — Items (one per line)', 'type' => 'textarea'],
+                ['key' => 'structure_education_title',   'label' => 'Education — Title',               'type' => 'text',   'default' => 'Education for Deaf or Blind Children Program'],
+                ['key' => 'structure_education_items',   'label' => 'Education — Items (one per line)',     'type' => 'textarea'],
+                ['key' => 'structure_image',             'label' => 'Map Image',                        'type' => 'image'],
+            ],
+        ],
+        'news' => [
+            'icon'   => '📰',
+            'title'  => 'Latest News Section',
+            'fields' => [
+                ['key' => 'news_title',      'label' => 'Section Badge / Title',                      'type' => 'text',   'default' => 'Latest Updates'],
+                ['key' => 'news_subtitle',   'label' => 'Subtitle Description',                       'type' => 'textarea'],
+                ['key' => 'news_view_all',   'label' => 'View All Link Text',                         'type' => 'text',   'default' => 'All News'],
+            ],
+        ],
+        'projects' => [
+            'icon'   => '🔧',
+            'title'  => 'Cross-cutting Projects Section',
+            'fields' => [
+                ['key' => 'projects_badge',      'label' => 'Badge Text',                             'type' => 'text',   'default' => 'Our Projects'],
+                ['key' => 'projects_title',      'label' => 'Section Heading',                        'type' => 'text',   'default' => 'Cross-cutting Initiatives'],
+                ['key' => 'projects_read_more',  'label' => 'Read More Button Text',                  'type' => 'text',   'default' => 'Read More Detail'],
             ],
         ],
 
 
-
-
+        'cta' => [
+            'icon'   => '🚀',
+            'title'  => 'Call to Action',
+            'fields' => [
+                ['key' => 'cta_label',             'label' => 'Badge Label',                          'type' => 'text',   'default' => 'Support Our Work'],
+                ['key' => 'cta_title',             'label' => 'Heading',                              'type' => 'text',   'default' => 'Help a Child Build Their Future'],
+                ['key' => 'cta_subtitle',          'label' => 'Subtitle Description',                 'type' => 'textarea'],
+                ['key' => 'cta_primary_text',      'label' => 'Primary Button Text',                  'type' => 'text',   'default' => 'Donate Now'],
+                ['key' => 'cta_primary_url',       'label' => 'Primary Button URL',                   'type' => 'url'],
+                ['key' => 'cta_secondary_text',    'label' => 'Secondary Button Text',                'type' => 'text'],
+                ['key' => 'cta_secondary_url',     'label' => 'Secondary Button URL',                 'type' => 'url'],
+                ['key' => 'cta_annual_report_text','label' => 'Annual Report Button Text',            'type' => 'text',   'default' => 'Annual Report'],
+            ],
+        ],
+        'partners' => [
+            'icon'   => '🤝',
+            'title'  => 'Partners Section',
+            'fields' => [
+                ['key' => 'partners_badge',    'label' => 'Badge Text',                               'type' => 'text',   'default' => 'OUR NETWORK'],
+                ['key' => 'partners_heading',  'label' => 'Section Heading',                          'type' => 'text',   'default' => 'Supported by Our Partners Worldwide'],
+                ['key' => 'partners_view_all', 'label' => 'View All Link Text',                       'type' => 'text',   'default' => 'View All Partners'],
+            ],
+        ],
     ];
     @endphp
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CoreValue;
 use App\Models\HomeSetting;
 use Illuminate\Http\Request;
 
@@ -10,20 +11,24 @@ class PresentationController extends Controller
 {
     public function index()
     {
+        $coreValues = CoreValue::ordered()->get();
         $settings = HomeSetting::allKeyed();
 
-        return view('admin.presentations.index', compact('settings'));
+        return view('admin.presentations.index', compact('coreValues', 'settings'));
     }
 
     public function update(Request $request)
     {
         $data = $request->validate([
+            'intro_heading' => ['nullable', 'string', 'max:500'],
             'mission_title' => ['nullable', 'string', 'max:255'],
             'mission_text' => ['nullable', 'string'],
+            'mission_image' => ['nullable', 'url', 'max:2048'],
             'mission_image_file' => ['nullable', 'image', 'max:4096'],
             'remove_mission_image' => ['nullable', 'boolean'],
             'vision_title' => ['nullable', 'string', 'max:255'],
             'vision_text' => ['nullable', 'string'],
+            'vision_image' => ['nullable', 'url', 'max:2048'],
             'vision_image_file' => ['nullable', 'image', 'max:4096'],
             'remove_vision_image' => ['nullable', 'boolean'],
             'portfolio_text' => ['nullable', 'string'],

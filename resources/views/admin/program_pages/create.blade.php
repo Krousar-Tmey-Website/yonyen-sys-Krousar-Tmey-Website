@@ -107,20 +107,12 @@
         </div>
 
     </div>
-
-    {{-- ── Action Bar (footer of this card) ───── --}}
-    <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex items-center justify-end gap-3">
-        <a href="{{ route('admin.program-pages.index') }}"
-           class="px-5 py-2 text-sm font-medium text-gray-500 hover:text-gray-800 rounded-xl hover:bg-gray-100 transition-all border border-transparent hover:border-gray-200">
-            Cancel
-        </a>
-        <button type="submit"
-                class="inline-flex items-center gap-2 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white px-7 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow-md">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
+    <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3">
+        <a href="{{ route('admin.program-pages.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">Cancel</a>
+        <button type="submit" class="bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white px-6 py-2 rounded-xl text-sm font-medium transition-colors">
             Create Item
         </button>
     </div>
 </form>
+</div>
 @endsection
