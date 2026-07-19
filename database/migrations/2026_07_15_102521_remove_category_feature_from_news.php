@@ -58,6 +58,14 @@ return new class extends Migration
             }
         });
 
+        // Drop foreign key from media_categories before dropping categories
+        if (Schema::hasTable('media_categories')) {
+            Schema::table('media_categories', function (Blueprint $table) {
+                $table->dropForeign(['category_id']);
+            });
+            Schema::dropIfExists('media_categories');
+        }
+
         // Unused legacy pivot table with no model/controller anywhere in the app;
         // its FK to categories.CategoryID blocks dropping that table otherwise.
         Schema::dropIfExists('article_categories');
