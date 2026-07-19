@@ -124,6 +124,12 @@ class News extends Model
         return (array) $value;
     }
 
+    // Encode array assignment (e.g. from newly uploaded files) to JSON for storage
+    public function setGalleryAttribute(mixed $value): void
+    {
+        $this->attributes['gallery'] = is_array($value) ? json_encode($value) : $value;
+    }
+
     // Resolve each stored gallery path to a full URL
     public function getGalleryUrlsAttribute(): array
     {
@@ -146,6 +152,12 @@ class News extends Model
         }
 
         return (array) $value;
+    }
+
+    // Encode array assignment (e.g. from newly uploaded files) to JSON for storage
+    public function setVideosAttribute(mixed $value): void
+    {
+        $this->attributes['videos'] = is_array($value) ? json_encode($value) : $value;
     }
 
     // Resolve each stored video path to a full URL
