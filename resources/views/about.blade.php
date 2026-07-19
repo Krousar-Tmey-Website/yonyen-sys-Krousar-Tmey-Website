@@ -13,13 +13,9 @@
         @php
             $historySharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
             $historyFacebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
-            $historyFacebookIcon = str_starts_with($historyFacebookIcon, 'social/') ? 'storage/' . $historyFacebookIcon : $historyFacebookIcon;
             $historyTwitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
-            $historyTwitterIcon = str_starts_with($historyTwitterIcon, 'social/') ? 'storage/' . $historyTwitterIcon : $historyTwitterIcon;
             $historyLinkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
-            $historyLinkedinIcon = str_starts_with($historyLinkedinIcon, 'social/') ? 'storage/' . $historyLinkedinIcon : $historyLinkedinIcon;
             $historyShareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
-            $historyShareIcon = str_starts_with($historyShareIcon, 'social/') ? 'storage/' . $historyShareIcon : $historyShareIcon;
             $historyFacebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
             $historyTwitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
             $historyLinkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
@@ -93,13 +89,9 @@
         @php
             $sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
             $facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
-            $facebookIcon = str_starts_with($facebookIcon, 'social/') ? 'storage/' . $facebookIcon : $facebookIcon;
             $twitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
-            $twitterIcon = str_starts_with($twitterIcon, 'social/') ? 'storage/' . $twitterIcon : $twitterIcon;
             $linkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
-            $linkedinIcon = str_starts_with($linkedinIcon, 'social/') ? 'storage/' . $linkedinIcon : $linkedinIcon;
             $shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
-            $shareIcon = str_starts_with($shareIcon, 'social/') ? 'storage/' . $shareIcon : $shareIcon;
             $facebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
             $twitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
             $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
@@ -167,567 +159,168 @@
 {{-- ========================================================
      PARTNERS
      ======================================================== --}}
-<div class="kt-partners bg-white">
+<section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-12" data-reveal>
+            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support</p>
+            <h2 class="text-4xl font-bold text-[#2d6fa3]">Partners</h2>
+            <p class="text-gray-500 mt-4 max-w-3xl mx-auto text-sm leading-relaxed">
+                Since its creation, Krousar Thmey has set up long-term partnerships with Cambodian and international organizations. Donors can financially support a program or project of their choice. Technical partners allow us to benefit from specific expertise.
+            </p>
+            <a href="{{ route('partners') }}" class="inline-flex items-center mt-6 px-5 py-2.5 border border-[#2d6fa3] text-[#2d6fa3] font-semibold text-sm rounded-full hover:bg-[#2d6fa3] hover:text-white transition-colors">
+                See all partners
+            </a>
+        </div>
 
-    {{-- ========================================================
-         PAGE HEADER
-         ======================================================== --}}
-    <div class="text-center py-14 md:py-16" data-reveal>
-        <div class="max-w-4xl mx-auto px-5 md:px-8">
-            {{-- Decorative top ornament --}}
-            <div class="flex items-center justify-center gap-3 mb-6">
-                <span class="w-8 h-px bg-[#8da83a]/40"></span>
-                <span class="w-2 h-2 rounded-full bg-[#8da83a]/60"></span>
-                <span class="w-8 h-px bg-[#8da83a]/40"></span>
+        <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8">
+            <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
+                <span class="text-2xl">🇰🇭</span> Partnerships with the Cambodian Authorities
+            </h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-6">
+                Krousar Thmey constantly seeks to develop and maintain lasting relations with the Cambodian authorities. «&nbsp;Memorandums of understanding&nbsp;» are regularly renewed between Krousar Thmey and governing authorities:
+            </p>
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                @foreach([
+                    ['ministry'=>'Ministry of Education, Youth and Sport','prog'=>'Education for Deaf or Blind Children Program'],
+                    ['ministry'=>'Ministry of Social Affairs',            'prog'=>'Child Welfare Program'],
+                    ['ministry'=>'Ministry of Culture and Fine Arts',     'prog'=>'Cultural and Artistic Development Program'],
+                ] as $mou)
+                <div class="bg-[#2d6fa3]/5 border border-[#2d6fa3]/15 rounded-xl p-5">
+                    <p class="text-[#2d6fa3] font-bold text-sm mb-1">{{ $mou['ministry'] }}</p>
+                    <p class="text-gray-500 text-xs">{{ $mou['prog'] }}</p>
+                </div>
+                @endforeach
             </div>
-            
-            <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">PARTNERS</h1>
-            
-            {{-- Decorative underline --}}
-            <div class="flex items-center justify-center gap-2 mt-5 mb-8">
-                <span class="w-12 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
-                <span class="w-16 h-0.5 bg-[#8da83a] rounded-full"></span>
-                <span class="w-12 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
+            <div class="bg-[#8da83a]/10 border border-[#8da83a]/20 rounded-xl p-4 text-sm text-gray-600">
+                Whether for an inauguration or to show their support, H.M. the King, the Prime Minister and his wife, as well as members of the royal family, regularly visit Krousar Thmey's structures. From 2020 onwards, Krousar Thmey works collaboratively with the Ministry of Education, Youth and Sport on the Education for Deaf or Blind Children Program.
             </div>
-            
-            {{-- Sharing icons --}}
-            <div class="flex items-center justify-center gap-2">
-                <span class="text-xs text-gray-400 uppercase tracking-widest mr-2">Share</span>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.krousar-thmey.org/partners/" target="_blank" rel="noopener"
-                   class="w-9 h-9 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-                   style="background-color:#1877f2;">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                </a>
-                <a href="https://twitter.com/intent/tweet?url=https://www.krousar-thmey.org/partners/" target="_blank" rel="noopener"
-                   class="w-9 h-9 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-                   style="background-color:#1da1f2;">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                </a>
-                <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://www.krousar-thmey.org/partners/" target="_blank" rel="noopener"
-                   class="w-9 h-9 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-                   style="background-color:#0a66c2;">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                </a>
-                <a href="#"
-                   class="w-9 h-9 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-                   style="background-color:#11568c;">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
-                </a>
-            </div>
+        </div>
+
+        @php
+            $financialPartnerGroups = [
+                [
+                    'title' => 'Cambodian Public Authorities',
+                    'dot' => 'bg-[#2d6fa3]',
+                    'items' => [
+                        'His Majesty the King NORODOM Sihamoni',
+                        'Her Majesty the Queen Mother NORODOM Monineath Sihanouk',
+                        'Prime Minister Samdech Moha Borvor Thipadei HUN Manet',
+                        'Samdech Akka Moha Sena Padei Techo Hun Sen, President of the Senate',
+                        'Samdech Dr. Bun Rany HUN Sen',
+                        'The Royal Government of Cambodia',
+                        'Ministry of Social Affairs',
+                        'Ministry of Education, Youth and Sport',
+                        'Ministry of Culture and Fine Arts',
+                        'Ministry of Defense',
+                        'Ministry of Information',
+                        'Ministry of Interior',
+                        'His Excellency the ambassador for Cambodia at UNESCO',
+                        'His Excellency the ambassador for Cambodia to France',
+                    ],
+                ],
+                [
+                    'title' => 'Organizations, Foundations and Institutions',
+                    'dot' => 'bg-[#8da83a]',
+                    'items' => [
+                        'DUBRULLE Family',
+                        'ENFANCE ESPOIR Foundation',
+                        'Fondation Amanjaya',
+                        'Fondation André & Cyprien',
+                        'Fondation Masalina',
+                        'Fonds Mécénat SIG',
+                        'Foundation Philantropique Famille Sandoz',
+                        'Gertrude Hirzel Foundation',
+                        'GREEN LEAVES EDUCATION Foundation',
+                        'Individual donor: Peter Tschofen',
+                        'Individual donor: Suzanne ROY, Grants Barbe.',
+                        'INTERNATIONAL COUNCIL FOR EDUCATION OF PEOPLE WITH VISUAL IMPAIRMENT (ICEVI)',
+                        "LA VOIX DE L'ENFANT Association",
+                        'LES AMIS DES ENFANTS DU MONDE Association',
+                        'MAY-OUI Foundation',
+                        'Miwako Fujiwara – Musica Felice Foundation',
+                        'Musica Felice',
+                        'OVERBROOK SCHOOL FOR THE BLIND (ONNET)',
+                        "PEOPLE'S ACTION FOR INCLUSIVE DEVELOPMENT (PAfID)",
+                        'Raksa Koma Organization',
+                        'ROTARY CLUB OF PERTH',
+                        'ROTARY CLUB OF PHNOM PENH',
+                        'STIFTUNG HIRTEN KINDER Foundation',
+                        'TALIKA',
+                        'UNICEF',
+                    ],
+                ],
+                [
+                    'title' => 'Companies',
+                    'dot' => 'bg-[#1d4e7a]',
+                    'items' => [
+                        'ABA BANK',
+                        'AMANJAYA HOTEL',
+                        'ANGKOR ARTWORK (Eric STOCKER)',
+                        'BAJAJ INTRACITY',
+                        'BRED BANK CAMBODIA',
+                        'BLIND MASSAGE CENTER',
+                        'BODIA NATURE',
+                        'CAMH Co. LTD',
+                        'CMDK',
+                        'D+Z URBAN HOTEL',
+                        'KHMER CERAMICS & FINE ARTS CENTER',
+                        'LONG RA Car mechanic',
+                        'PROMOTION FOR DISABILITY PROJECT',
+                        'PUNLEU THMEY Restaurant',
+                        'RADIO HAPPINESS VOICE FOR THE BLIND',
+                        'SAN FRANSISCO COMPANY',
+                        'SEIN LIM',
+                        'SENG POV Car mechanic',
+                        'SMART Cambodia',
+                        'SOCIAL COFFEE',
+                        'SOFITEL Phnom Penh Phokeethra',
+                        'SOFT SKILL PROFESSIONAL TRAINING SERVICE',
+                        'TEMPLATION ANGKOR BOUTIQUE',
+                        'THALIAS (Malis Restaurant, Khema, Arunreas Hotel)',
+                        'TOP STREET RESTAURANT',
+                        'VOICE OF THE BLIND Radio station',
+                    ],
+                ],
+                [
+                    'title' => 'Towns and Municipalities',
+                    'dot' => 'bg-[#2d6fa3]',
+                    'flag' => '🇨🇭',
+                    'items' => [
+                        'City of Geneva',
+                        'City of Meyrin',
+                        'Town of Hermance',
+                        'Towns of Collonge-Bellerive, Hermance and Vandoeuvres',
+                    ],
+                ],
+            ];
+        @endphp
+
+        @foreach ($financialPartnerGroups as $group)
+        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-8">
+            <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
+                @if (isset($group['flag']))
+                    <span>{{ $group['flag'] }}</span>
+                @endif
+                {{ $group['title'] }}
+            </h3>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2 text-sm text-gray-600">
+                @foreach ($group['items'] as $item)
+                <li class="flex items-start gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full {{ $group['dot'] }} mt-2 flex-shrink-0"></span>
+                    {{ $item }}
+                </li>
+                @endforeach
+            </ul>
+        </div>
+        @endforeach
+
+        <div class="text-center bg-[#2d6fa3] rounded-3xl p-10" data-reveal="scale">
+            <p class="text-white/80 text-lg mb-2">Many thanks to all our partners for their support!</p>
+            <h3 class="text-white font-bold text-2xl mb-6">Do you wish to get involved with Krousar Thmey?</h3>
+            <a href="{{ route('involved') }}" class="btn-primary text-base">Learn More</a>
         </div>
     </div>
-
-    {{-- Divider between header and first section --}}
-    <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent max-w-4xl mx-auto"></div>
-
-    {{-- ========================================================
-         PARTNERSHIPS AROUND THE WORLD
-         ======================================================== --}}
-    <section class="py-16 md:py-20 relative">
-        {{-- Decorative background accent --}}
-        <div class="absolute inset-0 bg-[#f8f9fc]/60 pointer-events-none"></div>
-        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#8da83a]/30 to-transparent"></div>
-        
-        <div class="relative max-w-4xl mx-auto px-5 md:px-8" data-reveal>
-            {{-- Section header --}}
-            <div class="flex items-center justify-center gap-3 mb-6">
-                <span class="w-8 h-px bg-[#8da83a]/40"></span>
-                <span class="w-2 h-2 rounded-full bg-[#8da83a]/60"></span>
-                <span class="w-8 h-px bg-[#8da83a]/40"></span>
-            </div>
-            
-            <h2 class="text-center text-3xl md:text-4xl font-extrabold tracking-tight text-[#0A5EA8] mb-3">Partnerships Around The World</h2>
-            
-            <div class="flex items-center justify-center gap-2 mb-10">
-                <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
-                <span class="w-4 h-0.5 bg-[#8da83a] rounded-full"></span>
-                <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
-            </div>
-            
-            {{-- Intro text --}}
-            <p class="text-center text-gray-600 text-base md:text-lg leading-relaxed max-w-3xl mx-auto mb-12">
-                Since its creation, Krousar Thmey has set up long-term partnerships with Cambodian and international organizations.
-            </p>
-            
-            {{-- Partner type cards --}}
-            <div class="grid md:grid-cols-3 gap-6 mb-12">
-                {{-- Financial Support --}}
-                <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
-                    <div class="w-11 h-11 rounded-xl bg-[#2d6fa3]/10 flex items-center justify-center mb-4 group-hover:bg-[#2d6fa3] transition-colors duration-300">
-                        <svg class="w-5 h-5 text-[#2d6fa3] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-[#1d4e7a] text-base mb-2">Financial Support</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">Donors can financially support a program or project of their choice.</p>
-                </div>
-                
-                {{-- Technical Expertise --}}
-                <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
-                    <div class="w-11 h-11 rounded-xl bg-[#8da83a]/10 flex items-center justify-center mb-4 group-hover:bg-[#8da83a] transition-colors duration-300">
-                        <svg class="w-5 h-5 text-[#8da83a] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-[#1d4e7a] text-base mb-2">Technical Expertise</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">Technical partners allow us to benefit from specific expertise that Krousar Thmey does not have. We ensure every project includes a transfer of skills to our staff.</p>
-                </div>
-                
-                {{-- Career Counseling --}}
-                <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
-                    <div class="w-11 h-11 rounded-xl bg-[#a67c3d]/10 flex items-center justify-center mb-4 group-hover:bg-[#a67c3d] transition-colors duration-300">
-                        <svg class="w-5 h-5 text-[#a67c3d] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-[#1d4e7a] text-base mb-2">Academic &amp; Career Guidance</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">Organizations, universities, institutions help Krousar Thmey&rsquo;s Academic and Career Counseling Project support young people in finding their path.</p>
-                </div>
-            </div>
-            
-            {{-- CTA --}}
-            <div class="text-center">
-                <a href="#financial-partners" 
-                   class="inline-flex items-center gap-2 px-7 py-3.5 bg-[#2d6fa3] text-white font-semibold rounded-full shadow-md hover:bg-[#3a82bb] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                    See All Partners
-                </a>
-            </div>
-        </div>
-    </section>
-
-    {{-- ========================================================
-         PARTNERSHIPS WITH THE CAMBODIAN AUTHORITIES
-         ======================================================== --}}
-    <section class="py-16 md:py-20 relative">
-        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#8da83a]/30 to-transparent"></div>
-        
-        <div class="relative max-w-4xl mx-auto px-5 md:px-8" data-reveal>
-            {{-- Section header --}}
-            <div class="flex items-center justify-center gap-3 mb-6">
-                <span class="w-8 h-px bg-[#8da83a]/40"></span>
-                <span class="w-2 h-2 rounded-full bg-[#8da83a]/60"></span>
-                <span class="w-8 h-px bg-[#8da83a]/40"></span>
-            </div>
-            
-            <h2 class="text-center text-3xl md:text-4xl font-extrabold tracking-tight text-[#0A5EA8] mb-3">Partnerships With The Cambodian Authorities</h2>
-            
-            <div class="flex items-center justify-center gap-2 mb-10">
-                <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
-                <span class="w-4 h-0.5 bg-[#8da83a] rounded-full"></span>
-                <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
-            </div>
-            
-            {{-- Intro paragraph --}}
-            <p class="text-center text-gray-600 text-base md:text-lg leading-relaxed max-w-3xl mx-auto mb-10">
-                Krousar Thmey constantly seeks to develop and maintain lasting relations with the Cambodian authorities. In addition to greater recognition, it brings us legitimacy, notoriety to the Cambodian population as well as financial contributions.
-            </p>
-            
-            {{-- MoU box --}}
-            <div class="bg-[#f8f9fc] rounded-2xl border border-gray-100 p-8 mb-10">
-                <div class="flex items-center gap-3 mb-5">
-                    <div class="w-10 h-10 rounded-xl bg-[#1d4e7a] flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                    </div>
-                    <p class="text-[#1d4e7a] font-semibold text-sm">Memorandums of Understanding</p>
-                </div>
-                <p class="text-gray-500 text-sm mb-5">
-                    &laquo;&nbsp;Memorandums of understanding&nbsp;&raquo; are regularly renewed between Krousar Thmey and governing authorities:
-                </p>
-                <ul class="space-y-3">
-                    <li class="flex items-start gap-3 text-gray-600 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a] mt-2 shrink-0"></span>
-                        <span>the Ministry of Education, Youth and Sport regarding the Education for Deaf or Blind Children Program</span>
-                    </li>
-                    <li class="flex items-start gap-3 text-gray-600 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a] mt-2 shrink-0"></span>
-                        <span>the Ministry of Social Affairs regarding the Child Welfare Program</span>
-                    </li>
-                    <li class="flex items-start gap-3 text-gray-600 text-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a] mt-2 shrink-0"></span>
-                        <span>the Ministry of Culture and Fine Arts regarding the Cultural and Artistic Development Program</span>
-                    </li>
-                </ul>
-            </div>
-            
-            {{-- Royal support --}}
-            <p class="text-center text-gray-500 text-sm leading-relaxed max-w-2xl mx-auto mb-10 italic">
-                Whether for an inauguration or to show their support, H.M. the King, the Prime Minister and his wife, as well as members of the royal family, regularly visit Krousar Thmey&rsquo;s structures.
-            </p>
-            
-            {{-- Image + CTA row --}}
-            <div class="flex flex-col md:flex-row items-center gap-8 bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
-                <div class="shrink-0">
-                    <div class="w-28 h-28 rounded-2xl bg-[#f8f9fc] border border-gray-100 flex items-center justify-center overflow-hidden">
-                        <img src="{{ asset('images/partners/university.png') }}" alt="" class="w-20 h-20 object-contain">
-                    </div>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                    <p class="text-gray-600 text-sm leading-relaxed mb-5">
-                        From 2020 onwards, Krousar Thmey will work collaboratively with the Ministry of Education, Youth and Sport on the Education for Deaf or Blind Children Program.
-                    </p>
-                    <a href="{{ route('programs.show', 'special-education') }}"
-                       class="inline-flex items-center gap-2 px-6 py-3 bg-[#2d6fa3] text-white font-semibold rounded-full shadow-md hover:bg-[#3a82bb] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                        </svg>
-                        Know More
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- ========================================================
-         THANKS BANNER / GET INVOLVED
-         ======================================================== --}}
-    <section class="py-16 md:py-20 bg-[#f8f9fc]/60" data-reveal>
-        <div class="max-w-5xl mx-auto px-5 md:px-8">
-            <h2 class="text-center text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-10">
-                Many thanks to all our partners for their support!
-            </h2>
-            
-            <div class="grid md:grid-cols-3 rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                {{-- Left image --}}
-                <div class="aspect-[4/3] md:aspect-auto overflow-hidden bg-gray-100">
-                    <img src="{{ asset('images/partners/partner_image1.webp') }}" alt=""
-                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
-                </div>
-                
-                {{-- Center CTA --}}
-                <div class="bg-white flex flex-col items-center justify-center text-center px-8 py-10 md:py-12">
-                    <div class="w-14 h-14 rounded-full bg-[#11568c]/10 flex items-center justify-center mb-5">
-                        <svg class="w-6 h-6 text-[#11568c]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                        </svg>
-                    </div>
-                    <p class="font-bold text-lg text-[#11568c] mb-4">Do you wish to get involved with Krousar Thmey?</p>
-                    <a href="{{ route('involved') }}"
-                       class="inline-flex items-center gap-2 px-6 py-3 bg-[#11568c] text-white font-semibold rounded-full hover:bg-[#1d6fa3] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
-                        Learn More
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                        </svg>
-                    </a>
-                </div>
-                
-                {{-- Right image --}}
-                <div class="aspect-[4/3] md:aspect-auto overflow-hidden bg-gray-100">
-                    <img src="{{ asset('images/partners/partner_image2.webp') }}" alt=""
-                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- ========================================================
-         TECHNICAL PARTNERS
-         ======================================================== --}}
-    <section class="py-16 md:py-20 relative">
-        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#8da83a]/30 to-transparent"></div>
-        
-        <div class="relative max-w-4xl mx-auto px-5 md:px-8" data-reveal>
-            {{-- Section header --}}
-            <div class="flex items-center justify-center gap-3 mb-6">
-                <span class="w-8 h-px bg-[#8da83a]/40"></span>
-                <span class="w-2 h-2 rounded-full bg-[#8da83a]/60"></span>
-                <span class="w-8 h-px bg-[#8da83a]/40"></span>
-            </div>
-            
-            <h2 class="text-center text-3xl md:text-4xl font-extrabold tracking-tight text-[#0A5EA8] mb-3">Technical Partners</h2>
-            
-            <div class="flex items-center justify-center gap-2 mb-10">
-                <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
-                <span class="w-4 h-0.5 bg-[#8da83a] rounded-full"></span>
-                <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
-            </div>
-            
-            {{-- Logo grid --}}
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-5 mb-10">
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner1.webp') }}" alt="Enfants Sourds du Cambodge" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner2.webp') }}" alt="Friends International" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner3.webp') }}" alt="Deaf Development Programme" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner4.webp') }}" alt="Cambodian Living Arts" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner5.webp') }}" alt="Sipar" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner6.webp') }}" alt="Save the Children" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
-            </div>
-            
-            {{-- Description --}}
-            <p class="text-center text-gray-500 text-sm leading-relaxed max-w-2xl mx-auto">
-                Krousar Thmey develops partnerships with other local organizations to give access to the children supported by the Foundation to other activities.
-            </p>
-        </div>
-    </section>
-
-    {{-- ========================================================
-         FINANCIAL PARTNERS
-         ======================================================== --}}
-    <section id="financial-partners" class="py-16 md:py-20 relative">
-        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#8da83a]/30 to-transparent"></div>
-        
-        <div class="relative max-w-4xl mx-auto px-5 md:px-8" data-reveal>
-            {{-- Section header --}}
-            <div class="flex items-center justify-center gap-3 mb-6">
-                <span class="w-8 h-px bg-[#8da83a]/40"></span>
-                <span class="w-2 h-2 rounded-full bg-[#8da83a]/60"></span>
-                <span class="w-8 h-px bg-[#8da83a]/40"></span>
-            </div>
-            
-            <h2 class="text-center text-3xl md:text-4xl font-extrabold tracking-tight text-[#0A5EA8] mb-3">Financial Partners</h2>
-            
-            <div class="flex items-center justify-center gap-2 mb-12">
-                <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
-                <span class="w-4 h-0.5 bg-[#8da83a] rounded-full"></span>
-                <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
-            </div>
-
-            {{-- Cambodian Public Authorities: always visible --}}
-            <div class="bg-[#f8f9fc] rounded-2xl border border-gray-100 p-8 mb-8">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 rounded-xl bg-[#1d4e7a] flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-[#1d4e7a] text-lg">Cambodian Public Authorities</h3>
-                </div>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <ul class="space-y-2">
-                        @foreach([
-                            'His Majesty the King NORODOM Sihamoni',
-                            'Prime Minister Samdech Moha Borvor Thipadei HUN Manet',
-                            'Samdech Dr. Bun Rany HUN Sen',
-                            'Ministry of Social Affairs',
-                            'Ministry of Culture and Fine Arts',
-                            'Ministry of Information',
-                            'His Excellency the ambassador for Cambodia at UNESCO',
-                        ] as $authority)
-                        <li class="flex items-start gap-2 text-gray-600 text-sm">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 shrink-0"></span>
-                            <span>{{ $authority }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
-                    <ul class="space-y-2">
-                        @foreach([
-                            'Her Majesty the Queen Mother NORODOM Monineath Sihanouk',
-                            'Samdech Akka Moha Sena Padei Techo Hun Sen, President of the Senate',
-                            'The Royal Government of Cambodia',
-                            'Ministry of Education, Youth and Sport',
-                            'Ministry of Defense',
-                            'Ministry of Interior',
-                            'His Excellency the ambassador for Cambodia to France',
-                        ] as $authority)
-                        <li class="flex items-start gap-2 text-gray-600 text-sm">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 shrink-0"></span>
-                            <span>{{ $authority }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-
-            {{-- Accordion groups using Alpine.js --}}
-            <div class="space-y-3" x-data="{ openPanel: null }">
-                
-                {{-- Organizations, Foundations and Institutions --}}
-                <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-                    <button @click="openPanel = openPanel === 'org' ? null : 'org'"
-                            class="w-full flex items-center justify-between px-6 py-4 text-left transition-colors hover:bg-[#f8f9fc]">
-                        <span class="font-semibold text-[#1d4e7a] text-sm">Organizations, Foundations and Institutions</span>
-                        <svg class="w-4 h-4 text-[#8da83a] transition-transform duration-300"
-                             :class="openPanel === 'org' ? 'rotate-180' : ''"
-                             fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
-                    <div x-show="openPanel === 'org'"
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 -translate-y-2"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         x-transition:leave="transition ease-in duration-150"
-                         x-transition:leave-start="opacity-100 translate-y-0"
-                         x-transition:leave-end="opacity-0 -translate-y-2"
-                         class="border-t border-gray-100">
-                        <div class="px-6 py-5">
-                            <div class="grid md:grid-cols-2 gap-4">
-                                <ul class="space-y-2">
-                                    @foreach([
-                                        'DUBRULLE Family',
-                                        'Fondation Amanjaya',
-                                        'Fondation Masalina',
-                                        'Foundation Philantropique Famille Sandoz',
-                                        'GREEN LEAVES EDUCATION Foundation',
-                                        'Individual donor: Suzanne ROY, Grants Barbe.',
-                                        'LA VOIX DE L&rsquo;ENFANT Association',
-                                        'MAY-OUI Foundation',
-                                        'Musica Felice',
-                                        'PEOPLE&rsquo;S ACTION FOR INCLUSIVE DEVELOPMENT (PAfID)',
-                                        'ROTARY CLUB OF PERTH',
-                                        'STIFTUNG HIRTEN KINDER Foundation',
-                                        'UNICEF',
-                                    ] as $item)
-                                    <li class="flex items-start gap-2 text-gray-600 text-sm">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a] mt-2 shrink-0"></span>
-                                        <span>{!! $item !!}</span>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                                <ul class="space-y-2">
-                                    @foreach([
-                                        'ENFANCE ESPOIR Foundation',
-                                        'Fondation Andr&eacute; &amp; Cyprien',
-                                        'Fonds M&eacute;c&eacute;nat SIG',
-                                        'Gertrude Hirzel Foundation',
-                                        'Individual donor: Peter Tschofen',
-                                        'INTERNATIONAL COUNCIL FOR EDUCATION OF PEOPLE WITH VISUAL IMPAIRMENT (ICEVI)',
-                                        'LES AMIS DES ENFANTS DU MONDE Association',
-                                        'Miwako Fujiwara &ndash; Musica Felice Foundation',
-                                        'OVERBROOK SCHOOL FOR THE BLIND (ONNET)',
-                                        'Raksa Koma Organization',
-                                        'ROTARY CLUB OF PHNOM PENH',
-                                        'TALIKA',
-                                    ] as $item)
-                                    <li class="flex items-start gap-2 text-gray-600 text-sm">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a] mt-2 shrink-0"></span>
-                                        <span>{!! $item !!}</span>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Companies --}}
-                <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-                    <button @click="openPanel = openPanel === 'companies' ? null : 'companies'"
-                            class="w-full flex items-center justify-between px-6 py-4 text-left transition-colors hover:bg-[#f8f9fc]">
-                        <span class="font-semibold text-[#1d4e7a] text-sm">Companies</span>
-                        <svg class="w-4 h-4 text-[#8da83a] transition-transform duration-300"
-                             :class="openPanel === 'companies' ? 'rotate-180' : ''"
-                             fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
-                    <div x-show="openPanel === 'companies'"
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 -translate-y-2"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         x-transition:leave="transition ease-in duration-150"
-                         x-transition:leave-start="opacity-100 translate-y-0"
-                         x-transition:leave-end="opacity-0 -translate-y-2"
-                         class="border-t border-gray-100">
-                        <div class="px-6 py-5">
-                            <div class="grid md:grid-cols-2 gap-4">
-                                <ul class="space-y-2">
-                                    @foreach([
-                                        'ABA BANK',
-                                        'ANGKOR ARTWORK (Eric STOCKER)',
-                                        'BRED BANK CAMBODIA',
-                                        'BODIA NATURE',
-                                        'CMDK',
-                                        'KHMER CERAMICS &amp; FINE ARTS CENTER',
-                                        'PROMOTION FOR DISABILITY PROJECT',
-                                        'RADIO HAPPINESS VOICE FOR THE BLIND',
-                                        'SEIN LIM',
-                                        'SMART Cambodia',
-                                        'SOFITEL Phnom Penh Phokeethra',
-                                        'TEMPLATION ANGKOR BOUTIQUE',
-                                        'TOP STREET RESTAURANT',
-                                    ] as $item)
-                                    <li class="flex items-start gap-2 text-gray-600 text-sm">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 shrink-0"></span>
-                                        <span>{!! $item !!}</span>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                                <ul class="space-y-2">
-                                    @foreach([
-                                        'AMANJAYA HOTEL',
-                                        'BAJAJ INTRACITY',
-                                        'BLIND MASSAGE CENTER',
-                                        'CAMH Co. LTD',
-                                        'D+Z URBAN HOTEL',
-                                        'LONG RA Car mechanic',
-                                        'PUNLEU THMEY Restaurant',
-                                        'SAN FRANSISCO COMPANY',
-                                        'SENG POV Car mechanic',
-                                        'SOCIAL COFFEE',
-                                        'SOFT SKILL PROFESSIONAL TRAINING SERVICE',
-                                        'THALIAS (Malis Restaurant, Khema, Arunreas Hotel)',
-                                        'VOICE OF THE BLIND Radio station',
-                                    ] as $item)
-                                    <li class="flex items-start gap-2 text-gray-600 text-sm">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 shrink-0"></span>
-                                        <span>{!! $item !!}</span>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Towns and Municipalities --}}
-                <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-                    <button @click="openPanel = openPanel === 'towns' ? null : 'towns'"
-                            class="w-full flex items-center justify-between px-6 py-4 text-left transition-colors hover:bg-[#f8f9fc]">
-                        <span class="font-semibold text-[#1d4e7a] text-sm">Towns and Municipalities</span>
-                        <svg class="w-4 h-4 text-[#8da83a] transition-transform duration-300"
-                             :class="openPanel === 'towns' ? 'rotate-180' : ''"
-                             fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
-                    <div x-show="openPanel === 'towns'"
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 -translate-y-2"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         x-transition:leave="transition ease-in duration-150"
-                         x-transition:leave-start="opacity-100 translate-y-0"
-                         x-transition:leave-end="opacity-0 -translate-y-2"
-                         class="border-t border-gray-100">
-                        <div class="px-6 py-5">
-                            <ul class="space-y-2 max-w-lg">
-                                @foreach([
-                                    'City of Geneva',
-                                    'City of Meyrin',
-                                    'Town of Hermance',
-                                    'Towns of Collonge-Bellerive, Hermance and Vandoeuvres',
-                                ] as $item)
-                                <li class="flex items-start gap-2 text-gray-600 text-sm">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-[#a67c3d] mt-2 shrink-0"></span>
-                                    <span>{{ $item }}</span>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-</div>
+</section>
 
 {{-- ========================================================
      TRANSPARENCY AND ACCOUNTABILITY

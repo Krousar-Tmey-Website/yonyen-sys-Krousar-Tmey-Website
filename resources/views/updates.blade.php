@@ -21,6 +21,7 @@
     </div>
 </div>
 
+
 <section class="py-16 bg-gray-50">
     <div class="max-w-3xl mx-auto px-6">
 
@@ -32,6 +33,8 @@
                 <p class="text-gray-400 text-sm">No updates yet. Check back soon!</p>
             </div>
         @else
+
+        
             @foreach($groups as $label => $notifications)
             <div class="mb-10">
                 {{-- Date group label --}}

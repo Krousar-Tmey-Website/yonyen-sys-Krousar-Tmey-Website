@@ -52,7 +52,8 @@
     <div class="lg:col-span-2 space-y-5"
          x-data="{
             search: @js($filters['search'] ?? ''),
-            categoryId: @js($filters['category'] ?? ''),
+            category: @js($filters['category'] ?? ''),
+            subcategory: @js($filters['subcategory'] ?? ''),
             total: @js($totalPartners),
             activeFilters: @js($activeCount),
             loading: false,
@@ -60,7 +61,8 @@
                 this.loading = true;
                 const params = new URLSearchParams();
                 if (this.search) params.set('search', this.search);
-                if (this.categoryId) params.set('category', this.categoryId);
+                if (this.category) params.set('category', this.category);
+                if (this.subcategory) params.set('subcategory', this.subcategory);
                 const url = '{{ route('admin.partners.index') }}' + (params.toString() ? '?' + params.toString() : '');
                 fetch(url, { headers: { 'Accept': 'application/json' } })
                     .then(r => r.json())
@@ -75,11 +77,16 @@
             },
             resetFilters() {
                 this.search = '';
-                this.categoryId = '';
+                this.category = '';
+                this.subcategory = '';
                 this.applyFilters();
             }
          }"
-         x-init="$watch('search', () => applyFilters()); $watch('categoryId', () => applyFilters())">
+         x-init="
+            $watch('search', () => applyFilters());
+            $watch('category', (value) => { if (value !== 'Financial Partners') { subcategory = ''; } applyFilters(); });
+            $watch('subcategory', () => applyFilters());
+         ">
 
         {{-- Toolbar: title, count, search + category filter --}}
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
@@ -120,12 +127,27 @@
                 </div>
 
                 <div class="relative">
-                    <select name="category" x-model="categoryId"
+                    <select name="category" x-model="category"
                             class="pl-4 pr-9 py-2.5 rounded-full border border-gray-300 text-sm font-medium text-gray-600 bg-white appearance-none cursor-pointer transition-all duration-150 hover:border-gray-400 focus:outline-none focus:border-[#2d6fa3] focus:ring-4 focus:ring-[#2d6fa3]/15">
                         <option value="">All Categories</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat->name }}" {{ ($filters['category'] ?? '') == $cat->name ? 'selected' : '' }}>
-                                {{ $cat->name }}
+                        @foreach($mainCategories as $cat)
+                            <option value="{{ $cat->value }}" {{ ($filters['category'] ?? '') === $cat->value ? 'selected' : '' }}>
+                                {{ $cat->value }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <svg class="w-3.5 h-3.5 text-gray-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+
+                <div class="relative" x-show="category === 'Financial Partners'" x-cloak>
+                    <select name="subcategory" x-model="subcategory"
+                            class="pl-4 pr-9 py-2.5 rounded-full border border-gray-300 text-sm font-medium text-gray-600 bg-white appearance-none cursor-pointer transition-all duration-150 hover:border-gray-400 focus:outline-none focus:border-[#2d6fa3] focus:ring-4 focus:ring-[#2d6fa3]/15">
+                        <option value="">All Subcategories</option>
+                        @foreach($subcategories as $sub)
+                            <option value="{{ $sub->value }}" {{ ($filters['subcategory'] ?? '') === $sub->value ? 'selected' : '' }}>
+                                {{ $sub->value }}
                             </option>
                         @endforeach
                     </select>
@@ -205,14 +227,15 @@
                     {{-- CATEGORY --}}
                     <div>
                         <label for="modal-category" class="form-label">
-                            Category <span class="text-red-400 font-normal">*</span>
+                            Main Category <span class="text-red-400 font-normal">*</span>
                         </label>
                         <div class="relative">
                             <select id="modal-category" name="category" x-model="form.category"
+                                    @change="if (form.category !== 'Financial Partners') form.subcategory = ''"
                                     class="form-input appearance-none pr-9 cursor-pointer">
                                 <option value="">Select a category</option>
-                                @foreach($categories as $cat)
-                                    <option value="{{ $cat->name }}">{{ $cat->name }}</option>
+                                @foreach(\App\Enums\PartnerCategory::cases() as $cat)
+                                    <option value="{{ $cat->value }}">{{ $cat->value }}</option>
                                 @endforeach
                             </select>
                             <svg class="w-4 h-4 text-gray-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,15 +244,24 @@
                         </div>
                     </div>
 
-                    {{-- COUNTRY --}}
-                    <div>
-                        <label for="modal-country" class="form-label">
-                            Country <span class="text-gray-400 font-normal">(optional)</span>
+                    {{-- SUBCATEGORY — only for Financial Partners --}}
+                    <div x-show="form.category === 'Financial Partners'" x-cloak>
+                        <label for="modal-subcategory" class="form-label">
+                            Subcategory <span class="text-red-400 font-normal">*</span>
                         </label>
-                        <input type="text" id="modal-country" name="country" autocomplete="off"
-                               :value="form.country ?? ''"
-                               class="form-input"
-                               placeholder="Example: Switzerland">
+                        <div class="relative">
+                            <select id="modal-subcategory" name="subcategory" x-model="form.subcategory"
+                                    :disabled="form.category !== 'Financial Partners'"
+                                    class="form-input appearance-none pr-9 cursor-pointer">
+                                <option value="">Select a subcategory</option>
+                                @foreach(\App\Enums\PartnerSubcategory::cases() as $sub)
+                                    <option value="{{ $sub->value }}">{{ $sub->value }}</option>
+                                @endforeach
+                            </select>
+                            <svg class="w-4 h-4 text-gray-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
@@ -302,6 +334,7 @@
                             </div>
                         </template>
                     </div>
+
 
                     <button type="submit" class="w-full btn-primary justify-center text-sm py-2.5"
                             x-text="editing ? 'Update Partner' : 'Add Partner'">

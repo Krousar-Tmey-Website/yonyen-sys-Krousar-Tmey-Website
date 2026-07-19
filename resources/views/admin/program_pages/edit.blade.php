@@ -120,38 +120,24 @@
         </div>
 
     </div>
-
-    {{-- ── Action Bar (footer of this card) ───── --}}
-    <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex items-center justify-between gap-4">
-
-        {{-- Delete --}}
-        <button type="button" onclick="if(confirm('Delete this item permanently?')) document.getElementById('delete-item-form').submit();"
-                class="flex items-center gap-2 text-sm font-medium text-red-400 hover:text-red-600 hover:bg-red-50 px-4 py-2 rounded-xl transition-all border border-transparent hover:border-red-100">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-            Delete Item
-        </button>
-
-        {{-- Save / Cancel --}}
-        <div class="flex items-center gap-3">
-            <a href="{{ route('admin.program-pages.index') }}"
-               class="px-5 py-2 text-sm font-medium text-gray-500 hover:text-gray-800 rounded-xl hover:bg-gray-100 transition-all border border-transparent hover:border-gray-200">
-                Cancel
-            </a>
-            <button type="submit"
-                    class="inline-flex items-center gap-2 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white px-7 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow-md">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                Update Item
-            </button>
-        </div>
     </div>
 </form>
 
-<form id="delete-item-form" action="{{ route('admin.program-pages.destroy', $item) }}" method="POST"
-      onsubmit="return confirm('Delete this item permanently?');" class="hidden">
-    @csrf @method('DELETE')
-</form>
+<div class="bg-gray-50 px-6 py-4 border border-t-0 border-gray-100 flex items-center justify-between gap-3 rounded-b-2xl shadow-sm -mt-6 relative z-0">
+    <form action="{{ route('admin.program-pages.destroy', $item) }}" method="POST"
+          onsubmit="return confirm('Delete this item permanently?');">
+        @csrf @method('DELETE')
+        <button type="submit" class="text-red-500 hover:text-red-700 text-sm font-medium flex items-center gap-1.5 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            Delete Item
+        </button>
+    </form>
+    <div class="flex items-center gap-3">
+        <a href="{{ route('admin.program-pages.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">Cancel</a>
+        <button type="submit" form="main-update-form" class="bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white px-6 py-2 rounded-xl text-sm font-medium transition-colors">
+            Update Item
+        </button>
+    </div>
+</div>
+</div>
 @endsection

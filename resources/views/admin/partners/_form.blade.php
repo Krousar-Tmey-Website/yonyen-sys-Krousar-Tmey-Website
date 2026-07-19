@@ -2,6 +2,7 @@
     $isEdit = isset($partner);
     $partnerName = $isEdit ? $partner->name : old('name');
     $selectedCategory = old('category', $isEdit ? $partner->category : '');
+    $selectedSubcategory = old('subcategory', $isEdit ? $partner->subcategory : '');
 @endphp
 
 {{-- PARTNER NAME --}}
@@ -29,56 +30,77 @@
     @enderror
 </div>
 
-{{-- CATEGORY --}}
-<div>
-    <label for="category" class="block text-sm font-semibold text-gray-700 mb-1.5">
-        Category <span class="text-red-400">*</span>
-    </label>
-    <div class="relative">
-        <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
-            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-        </svg>
-        <select id="category" name="category" required
-            class="w-full pl-11 pr-10 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none appearance-none cursor-pointer
-                {{ $errors->has('category') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}">
-            <option value="" disabled {{ $selectedCategory === '' ? 'selected' : '' }}>Select a category</option>
-            @foreach ($categories as $cat)
-                <option value="{{ $cat->name }}" {{ $selectedCategory == $cat->name ? 'selected' : '' }}>
-                    {{ $cat->name }}
-                </option>
-            @endforeach
-        </select>
-        {{-- Chevron --}}
-        <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
-            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
+{{-- CATEGORY & SUBCATEGORY --}}
+<div x-data="{ category: {{ Js::from($selectedCategory) }} }">
+    {{-- MAIN CATEGORY --}}
+    <div>
+        <label for="category" class="block text-sm font-semibold text-gray-700 mb-1.5">
+            Main Category <span class="text-red-400">*</span>
+        </label>
+        <div class="relative">
+            <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+            <select id="category" name="category" x-model="category" required
+                class="w-full pl-11 pr-10 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none appearance-none cursor-pointer
+                    {{ $errors->has('category') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}">
+                <option value="" disabled {{ $selectedCategory === '' ? 'selected' : '' }}>Select a category</option>
+                @foreach (\App\Enums\PartnerCategory::cases() as $cat)
+                    <option value="{{ $cat->value }}" {{ $selectedCategory === $cat->value ? 'selected' : '' }}>
+                        {{ $cat->value }}
+                    </option>
+                @endforeach
+            </select>
+            {{-- Chevron --}}
+            <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
+        @error('category')
+            <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+                <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                {{ $message }}
+            </p>
+        @enderror
     </div>
-    @error('category')
-        <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
-            {{ $message }}
-        </p>
-    @enderror
-</div>
 
-{{-- COUNTRY --}}
-<div>
-    <label for="country" class="block text-sm font-semibold text-gray-700 mb-1.5">
-        Country <span class="text-gray-400 font-normal">(optional)</span>
-    </label>
-    <div class="relative">
-        <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
-            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
-        </svg>
-        <input type="text" id="country" name="country" autocomplete="off"
-            value="{{ old('country', $isEdit ? $partner->country : '') }}"
-            class="w-full pl-11 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none"
-            placeholder="Example: Switzerland">
+    {{-- SUBCATEGORY — only for Financial Partners --}}
+    <div class="mt-5" x-show="category === 'Financial Partners'" x-cloak>
+        <label for="subcategory" class="block text-sm font-semibold text-gray-700 mb-1.5">
+            Subcategory <span class="text-red-400">*</span>
+        </label>
+        <div class="relative">
+            <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <select id="subcategory" name="subcategory"
+                :disabled="category !== 'Financial Partners'"
+                class="w-full pl-11 pr-10 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none appearance-none cursor-pointer
+                    {{ $errors->has('subcategory') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}">
+                <option value="" {{ $selectedSubcategory === '' ? 'selected' : '' }}>Select a subcategory</option>
+                @foreach (\App\Enums\PartnerSubcategory::cases() as $sub)
+                    <option value="{{ $sub->value }}" {{ $selectedSubcategory === $sub->value ? 'selected' : '' }}>
+                        {{ $sub->value }}
+                    </option>
+                @endforeach
+            </select>
+            {{-- Chevron --}}
+            <svg class="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
+        @error('subcategory')
+            <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+                <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                {{ $message }}
+            </p>
+        @enderror
     </div>
 </div>
 
@@ -175,3 +197,4 @@
         <input type="hidden" name="remove_logo" x-bind:value="hasLogo ? '0' : '1'">
     @endif
 </div>
+
