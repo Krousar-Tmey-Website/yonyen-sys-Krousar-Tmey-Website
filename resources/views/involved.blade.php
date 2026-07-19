@@ -176,17 +176,19 @@
                         ];
                     @endphp
                     
-                    @foreach($principles as $p)
-                        <div class="group p-5 rounded-2xl border-2 border-gray-200 bg-gradient-to-br {{ $p['color'] }} {{ $p['hover'] }} hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-default">
+                    @foreach($partnerPrinciples as $index => $principle)
+                        @php
+                            // Wrap index if there are more principles in DB than hardcoded styles
+                            $styleIndex = $index % count($principles);
+                            $pStyle = $principles[$styleIndex];
+                        @endphp
+                        <div class="group p-5 rounded-2xl border-2 border-gray-200 bg-gradient-to-br {{ $pStyle['color'] }} {{ $pStyle['hover'] }} hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-default">
                             <div class="flex items-start gap-4">
-                                <div class="w-11 h-11 rounded-xl {{ $p['iconBg'] }} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
-                                    {!! $p['icon'] !!}
+                                <div class="w-11 h-11 rounded-xl {{ $pStyle['iconBg'] }} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
+                                    {!! $pStyle['icon'] !!}
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <h4 class="font-bold text-[#1d4e7a] text-sm mb-0.5">{{ $p['title'] }}</h4>
-                                    @if(!empty($p['subtitle']))
-                                        <p class="text-gray-500 text-xs leading-relaxed">{{ $p['subtitle'] }}</p>
-                                    @endif
+                                    <h4 class="font-bold text-[#1d4e7a] text-sm mb-0.5">{{ $principle->content }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -232,6 +234,45 @@
                 </div>
             </div>
 
+            {{-- ── Worldwide Partners ── --}}
+            @if(isset($worldwidePartners) && $worldwidePartners->isNotEmpty())
+            <div data-reveal="up" class="mb-16">
+                <h3 class="text-lg font-bold text-[#1d4e7a] mb-10 flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3]"></span>
+                    Our Worldwide Partners
+                </h3>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    @foreach($worldwidePartners as $wwp)
+                        <div class="group relative bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 flex flex-col h-full">
+                            @if($wwp->image)
+                                <div class="relative h-48 overflow-hidden bg-gray-50 flex items-center justify-center">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-[#1d4e7a]/20 to-transparent z-10"></div>
+                                    <img src="{{ $wwp->image_url }}" alt="{{ $wwp->country_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out z-0">
+                                </div>
+                            @else
+                                <div class="relative h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
+                                    <span class="text-gray-400 font-bold text-xl">{{ $wwp->country_name }}</span>
+                                </div>
+                            @endif
+                            <div class="p-6 flex flex-col flex-grow relative z-20 bg-white">
+                                <h4 class="font-black text-[#1d4e7a] text-xl mb-3">{{ $wwp->country_name }}</h4>
+                                <p class="text-gray-500 text-sm leading-relaxed mb-6 flex-grow">
+                                    {{ $wwp->description }}
+                                </p>
+                                @if($wwp->learn_more_url)
+                                    <a href="{{ $wwp->learn_more_url }}" target="_blank" rel="noopener"
+                                       class="inline-flex items-center justify-center gap-2 w-full bg-white text-[#2d6fa3] font-bold text-sm px-6 py-2.5 rounded-xl border-2 border-[#2d6fa3]/20 hover:border-[#2d6fa3] hover:bg-[#2d6fa3] hover:text-white transition-all duration-300">
+                                        <span>{{ $wwp->button_text ?: 'Learn More' }}</span>
+                                        <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             {{-- ── CTA Section — Enhanced with overlays & hover effects ── --}}
             <div data-reveal="up" class="relative group/card">
                 <div class="grid grid-cols-1 md:grid-cols-3 items-stretch bg-gradient-to-br from-[#f8f9fc] to-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500">
@@ -276,102 +317,60 @@
                 </p>
 
                 <div class="space-y-8">
-                    {{-- Category 1: Organizations from associative sector --}}
-                    <div data-reveal-card style="--reveal-card-delay: 0" class="group/cat relative bg-white border-l-4 border-[#2d6fa3] rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
-                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#2d6fa3]/[0.02] to-transparent pointer-events-none"></div>
-                        <div class="relative">
-                            <div class="flex items-center gap-3 mb-5">
-                                <div class="w-10 h-10 rounded-xl bg-[#2d6fa3]/10 text-[#2d6fa3] flex items-center justify-center flex-shrink-0 group-hover/cat:scale-110 transition-all duration-300" aria-hidden="true">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
-                                </div>
-                                <h4 class="font-black text-[#1d4e7a] text-sm uppercase tracking-wide">Organizations from Associative Sector</h4>
-                            </div>
-                            <div class="space-y-4">
-                                @foreach([
-                                    ['title' => 'Associations / local NGOs', 'desc' => 'Can be of any size, from the small local association benefiting from a local fort, to the professional NGO (basic organizations that have structured and professionalized).'],
-                                    ['title' => 'Platforms / thematic networks (locals)', 'desc' => 'The thematic platforms or networks are clusters of local and / or international NGOs working on specific fields and / or international and UN agencies. They are places of reflection, exchange of practices and experiences and pooling of the stakes in targeted fields, in order to define strategies and actions to raise awareness and advocate with stakeholders.'],
-                                    ['title' => 'NGOs or local branches of international organizations', 'desc' => 'A partnership with these international organizations and bilateral and multilateral agencies (eg United Nations Agencies or European Union) can be developed from Cambodia or Europe.'],
-                                ] as $sub)
-                                <div class="pl-4 border-l-2 border-gray-100 hover:border-[#2d6fa3]/40 transition-colors">
-                                    <p class="font-bold text-[#2d6fa3] text-sm mb-1">{{ $sub['title'] }}</p>
-                                    <p class="text-gray-500 text-sm leading-relaxed">{{ $sub['desc'] }}</p>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
+                    @php
+                        $catStyles = [
+                            [
+                                'border' => 'border-[#2d6fa3]',
+                                'bg' => 'from-[#2d6fa3]/[0.02]',
+                                'iconBg' => 'bg-[#2d6fa3]/10 text-[#2d6fa3]',
+                                'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>',
+                            ],
+                            [
+                                'border' => 'border-[#8da83a]',
+                                'bg' => 'from-[#8da83a]/[0.02]',
+                                'iconBg' => 'bg-[#8da83a]/10 text-[#8da83a]',
+                                'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>',
+                            ],
+                            [
+                                'border' => 'border-[#e8a020]',
+                                'bg' => 'from-[#e8a020]/[0.02]',
+                                'iconBg' => 'bg-[#e8a020]/10 text-[#e8a020]',
+                                'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>',
+                            ],
+                            [
+                                'border' => 'border-[#d32f2f]',
+                                'bg' => 'from-[#d32f2f]/[0.02]',
+                                'iconBg' => 'bg-[#d32f2f]/10 text-[#d32f2f]',
+                                'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/></svg>',
+                            ]
+                        ];
+                    @endphp
 
-                    {{-- Category 2: Local education structures --}}
-                    <div data-reveal-card style="--reveal-card-delay: 150" class="group/cat relative bg-white border-l-4 border-[#8da83a] rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
-                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#8da83a]/[0.02] to-transparent pointer-events-none"></div>
-                        <div class="relative">
-                            <div class="flex items-center gap-3 mb-5">
-                                <div class="w-10 h-10 rounded-xl bg-[#8da83a]/10 text-[#8da83a] flex items-center justify-center flex-shrink-0 group-hover/cat:scale-110 transition-all duration-300" aria-hidden="true">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+                    @foreach($partnershipCategories as $index => $category)
+                        @php
+                            $style = $catStyles[$index % count($catStyles)];
+                        @endphp
+                        <div data-reveal-card style="--reveal-card-delay: {{ ($index % 4) * 150 }}" class="group/cat relative bg-white border-l-4 {{ $style['border'] }} rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
+                            <div class="absolute inset-0 rounded-2xl bg-gradient-to-r {{ $style['bg'] }} to-transparent pointer-events-none"></div>
+                            <div class="relative">
+                                <div class="flex items-center gap-3 mb-5">
+                                    <div class="w-10 h-10 rounded-xl {{ $style['iconBg'] }} flex items-center justify-center flex-shrink-0 group-hover/cat:scale-110 transition-all duration-300" aria-hidden="true">
+                                        {!! $style['icon'] !!}
+                                    </div>
+                                    <h4 class="font-black text-[#1d4e7a] text-sm uppercase tracking-wide">{{ $category->name }}</h4>
                                 </div>
-                                <h4 class="font-black text-[#1d4e7a] text-sm uppercase tracking-wide">Local Education Structures (Public or Private)</h4>
-                            </div>
-                            <div class="space-y-4">
-                                @foreach([
-                                    ['title' => 'Research institutes', 'desc' => 'NGOs and researchers, due to very different professional cultures, have neither the same interests, nor the same knowledge of field reality or scientific approach initially. However, both researchers and NGOs share willingness and interests to cooperate to improve effectiveness, field anchoring, knowledge and advocacy.'],
-                                    ['title' => 'Universities / Training institutes', 'desc' => 'Due to very different professional cultures, NGOs and researchers have neither the same interests nor the same knowledge of the field reality or the scientific approach at first glance. However, there is both willingness and interest on the part of researchers and NGOs to work together to improve effectiveness, anchoring, knowledge and advocacy.'],
-                                ] as $sub)
-                                <div class="pl-4 border-l-2 border-gray-100 hover:border-[#8da83a]/40 transition-colors">
-                                    <p class="font-bold text-[#2d6fa3] text-sm mb-1">{{ $sub['title'] }}</p>
-                                    <p class="text-gray-500 text-sm leading-relaxed">{{ $sub['desc'] }}</p>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Category 3: Public services --}}
-                    <div data-reveal-card style="--reveal-card-delay: 300" class="group/cat relative bg-white border-l-4 border-[#e8a020] rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
-                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#e8a020]/[0.02] to-transparent pointer-events-none"></div>
-                        <div class="relative">
-                            <div class="flex items-center gap-3 mb-5">
-                                <div class="w-10 h-10 rounded-xl bg-[#e8a020]/10 text-[#e8a020] flex items-center justify-center flex-shrink-0 group-hover/cat:scale-110 transition-all duration-300" aria-hidden="true">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                                </div>
-                                <h4 class="font-black text-[#1d4e7a] text-sm uppercase tracking-wide">Public Services</h4>
-                            </div>
-                            <div class="space-y-4">
-                                @foreach([
-                                    ['title' => 'Centralized or decentralized state services', 'desc' => 'Local services aligned with Krousar Thmey\'s intervention areas (inclusive education and child welfare) serve as relevant partners for testing and disseminating effective practices locally. Collaboration with decision-making entities enables scaling at provincial or national levels.'],
-                                    ['title' => 'Local authorities', 'desc' => 'Municipalities, districts, or provinces frequently establish international solidarity cooperation policies with substantial funding and undertake project selection procedures.'],
-                                ] as $sub)
-                                <div class="pl-4 border-l-2 border-gray-100 hover:border-[#e8a020]/40 transition-colors">
-                                    <p class="font-bold text-[#2d6fa3] text-sm mb-1">{{ $sub['title'] }}</p>
-                                    <p class="text-gray-500 text-sm leading-relaxed">{{ $sub['desc'] }}</p>
-                                </div>
-                                @endforeach
+                                @if($category->description)
+                                    <div class="space-y-4">
+                                        <div class="pl-4 border-l-2 border-gray-100 hover:border-gray-300 transition-colors">
+                                            <div class="text-gray-500 text-sm leading-relaxed prose prose-sm max-w-none">
+                                                {!! $category->description !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
-                    </div>
-
-                    {{-- Category 4: Companies and foundations from the private sector --}}
-                    <div data-reveal-card style="--reveal-card-delay: 450" class="group/cat relative bg-white border-l-4 border-[#d32f2f] rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
-                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#d32f2f]/[0.02] to-transparent pointer-events-none"></div>
-                        <div class="relative">
-                            <div class="flex items-center gap-3 mb-5">
-                                <div class="w-10 h-10 rounded-xl bg-[#d32f2f]/10 text-[#d32f2f] flex items-center justify-center flex-shrink-0 group-hover/cat:scale-110 transition-all duration-300" aria-hidden="true">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/></svg>
-                                </div>
-                                <h4 class="font-black text-[#1d4e7a] text-sm uppercase tracking-wide">Companies and Foundations from the Private Sector</h4>
-                            </div>
-                            <div class="space-y-4">
-                                @foreach([
-                                    ['title' => 'Companies', 'desc' => 'Beyond financial contributions, corporate partnerships can empower Krousar Thmey employees and include volunteering opportunities such as language instruction.'],
-                                    ['title' => 'Foundations', 'desc' => 'The requirement level of some foundations has reached an almost equivalent level of international donors. They are increasingly interested in committing not only financially but also technically to projects with long-term impact.'],
-                                ] as $sub)
-                                <div class="pl-4 border-l-2 border-gray-100 hover:border-[#d32f2f]/40 transition-colors">
-                                    <p class="font-bold text-[#2d6fa3] text-sm mb-1">{{ $sub['title'] }}</p>
-                                    <p class="text-gray-500 text-sm leading-relaxed">{{ $sub['desc'] }}</p>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
