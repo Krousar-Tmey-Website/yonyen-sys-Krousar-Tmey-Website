@@ -42,12 +42,17 @@ function loadExistingHtml(quill, html) {
     const container = document.createElement('div');
     container.innerHTML = html;
 
-    const isComplex = (el) => {
-        if (el.hasAttribute('class') || el.hasAttribute('style')) return true;
-        if (el.querySelector('[class],[style],iframe')) return true;
-        return Array.from(el.attributes).some((attr) => /^(x-|@|:)/.test(attr.name))
-            || !!el.querySelector('*');
-    };
+    // True if THIS element (not just its descendants) carries a class, style,
+    // target/rel, or Alpine directive — any of which Quill's native parser
+    // would silently drop.
+    const hasComplexAttrs = (el) =>
+        el.hasAttribute('class') || el.hasAttribute('style') || el.hasAttribute('target') || el.hasAttribute('rel')
+        || Array.from(el.attributes).some((attr) => /^(x-|@|:)/.test(attr.name));
+
+    // Complex if the element itself, or ANY descendant, carries one of those
+    // attributes, or if an iframe appears anywhere in the subtree.
+    const isComplex = (el) =>
+        hasComplexAttrs(el) || el.querySelector('iframe') !== null || Array.from(el.querySelectorAll('*')).some(hasComplexAttrs);
 
     let simpleBuffer = '';
     const flushSimple = () => {
@@ -57,20 +62,43 @@ function loadExistingHtml(quill, html) {
     };
 
     Array.from(container.children).forEach((node) => {
-        const tag = node.tagName.toLowerCase();
-        const isPlainTextBlock = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'blockquote'].includes(tag);
-        const hasOnlyInlineFormatting = !node.querySelector('div, iframe, img, [x-data], [class], [style]');
-
-        if (tag === 'p' && node.children.length === 1 && node.firstElementChild?.tagName === 'IMG' && !node.firstElementChild.hasAttribute('class')) {
-            simpleBuffer += node.outerHTML; // plain <p><img></p> — Quill handles images natively
-        } else if (isPlainTextBlock && hasOnlyInlineFormatting) {
-            simpleBuffer += node.outerHTML;
-        } else {
+        if (node.classList.contains('ql-raw-html-block')) {
+            // Already a saved raw block from a previous edit — use its inner
+            // content as the value directly, so re-editing doesn't nest a
+            // fresh wrapper around an existing one.
+            flushSimple();
+            quill.insertEmbed(Math.max(quill.getLength() - 1, 0), 'rawHtml', node.innerHTML, 'silent');
+        } else if (isComplex(node)) {
             flushSimple();
             quill.insertEmbed(Math.max(quill.getLength() - 1, 0), 'rawHtml', node.outerHTML, 'silent');
+        } else {
+            simpleBuffer += node.outerHTML;
         }
     });
     flushSimple();
+}
+
+/**
+ * getSemanticHTML() serializes the live DOM, so raw-HTML embeds come back
+ * wrapped in their .ql-raw-html-block container div (plus the
+ * contenteditable attribute Quill adds for editing safety) — neither of
+ * which belongs in the stored article content. Unwrap each one back to its
+ * bare inner markup before saving.
+ */
+function unwrapRawHtmlBlocks(html) {
+    const container = document.createElement('div');
+    container.innerHTML = html;
+    container.querySelectorAll('.ql-raw-html-block').forEach((block) => {
+        block.replaceWith(...Array.from(block.childNodes));
+    });
+    // Raw blocks are contenteditable="false" and never touched by the
+    // browser's text engine, so this can't affect them — but as soon as a
+    // user clicks/types anywhere in the editor, the browser's contenteditable
+    // silently rewrites plain spaces in surrounding text to non-breaking
+    // spaces (U+00A0), which getSemanticHTML() then serializes as literal
+    // "&nbsp;" entities. Left alone, every edit would replace normal spacing
+    // with non-breaking spaces throughout the paragraph.
+    return container.innerHTML.replace(/&nbsp;/g, ' ');
 }
 
 function initEditor(root) {
@@ -100,7 +128,8 @@ function initEditor(root) {
             hiddenInput.value = '';
             return;
         }
-        hiddenInput.value = quill.getSemanticHTML ? quill.getSemanticHTML() : editorEl.querySelector('.ql-editor').innerHTML;
+        const html = quill.getSemanticHTML ? quill.getSemanticHTML() : editorEl.querySelector('.ql-editor').innerHTML;
+        hiddenInput.value = unwrapRawHtmlBlocks(html);
     };
     quill.on('text-change', syncHiddenInput);
 
@@ -125,7 +154,7 @@ function initEditor(root) {
         insertRawHtml(html);
     };
 
-    toolbarEl.querySelector('[data-action="insert-image"]')?.addEventListener('click', () => {
+    root.querySelector('[data-action="insert-image"]')?.addEventListener('click', () => {
         const src = prompt('Image URL (e.g. /storage/news/gallery/xxx.jpg):');
         if (!src) return;
         const caption = prompt('Caption text (optional, shown centered under the image):') || '';
@@ -133,14 +162,14 @@ function initEditor(root) {
     });
 
     // ── Callout / pull-quote box ──
-    toolbarEl.querySelector('[data-action="insert-callout"]')?.addEventListener('click', () => {
+    root.querySelector('[data-action="insert-callout"]')?.addEventListener('click', () => {
         const text = prompt('Callout text:');
         if (!text) return;
         insertRawHtml(`<blockquote class="not-italic border-l-4 border-[#2d6fa3] bg-blue-50 pl-4 py-2 text-gray-700">${text}</blockquote>`);
     });
 
     // ── Collapsible "accordion" box ──
-    toolbarEl.querySelector('[data-action="insert-accordion"]')?.addEventListener('click', () => {
+    root.querySelector('[data-action="insert-accordion"]')?.addEventListener('click', () => {
         const title = prompt('Box title (e.g. "About Krousar Thmey"):');
         if (!title) return;
         const body = prompt('Box text (shown when expanded):');
@@ -160,7 +189,7 @@ function initEditor(root) {
     });
 
     // ── Video embed (Facebook or YouTube), with optional heading/subtitle ──
-    toolbarEl.querySelector('[data-action="insert-video"]')?.addEventListener('click', () => {
+    root.querySelector('[data-action="insert-video"]')?.addEventListener('click', () => {
         const url = prompt('Video URL (Facebook watch/post link, or YouTube link):');
         if (!url) return;
         const heading = prompt('Heading above the video (optional, leave blank for none):') || '';

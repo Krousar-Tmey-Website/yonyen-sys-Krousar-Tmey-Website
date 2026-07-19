@@ -11,7 +11,13 @@ class ResourcePageController extends Controller
 {
     public function index()
     {
-        $pages = ResourcePage::active()->get();
+        $allArticles = News::published()->get();
+
+        $pages = ResourcePage::active()->get()->map(function (ResourcePage $page) use ($allArticles) {
+            $page->article_count = $this->matchingArticles($page, $allArticles)->count();
+            return $page;
+        });
+
         return view('resource-pages.index', compact('pages'));
     }
 
@@ -25,9 +31,27 @@ class ResourcePageController extends Controller
 
     /**
      * Every article is bylined "by Krousar Thmey", so that page shows all
-     * published articles, 5 per page (with Newer/Older Entries paging).
-     * Every other page shows only articles tagged with its title (tags now
-     * point back at the matching resource page), 6 per page.
+     * published articles. Every other page shows only articles tagged with
+     * its title (tags now point back at the matching resource page).
+     */
+    private function matchingArticles(ResourcePage $page, $allArticles)
+    {
+        if ($page->slug === 'krousar-thmey') {
+            return $allArticles;
+        }
+
+        $title = strtolower($page->title);
+
+        return $allArticles->filter(
+            fn (News $article) => collect($article->tag_links)
+                ->pluck('label')
+                ->contains(fn ($label) => strtolower($label) === $title)
+        )->values();
+    }
+
+    /**
+     * The "Krousar Thmey" catch-all page paginates 5 per page; every other
+     * topic page paginates 6 per page (with Newer/Older Entries paging).
      */
     private function relatedArticles(ResourcePage $page)
     {
@@ -35,13 +59,7 @@ class ResourcePageController extends Controller
             return News::published()->latest('published_at')->latest('id')->paginate(5);
         }
 
-        $title = strtolower($page->title);
-
-        $matching = News::published()->latest('published_at')->get()->filter(
-            fn (News $article) => collect($article->tag_links)
-                ->pluck('label')
-                ->contains(fn ($label) => strtolower($label) === $title)
-        )->values();
+        $matching = $this->matchingArticles($page, News::published()->latest('published_at')->get());
 
         $perPage = 6;
         $currentPage = Paginator::resolveCurrentPage('page');
