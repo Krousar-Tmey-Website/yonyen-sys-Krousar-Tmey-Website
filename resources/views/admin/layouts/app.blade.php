@@ -138,8 +138,8 @@
                 'children' => [
                 ['route' => 'admin.news.index', 'label' => 'News Articles'],
                 ['route' => 'admin.resource-pages.index', 'label' => 'Resource Pages'],
-                ['route' => 'admin.media.index', 'label' => 'Media Gallery'],
                 ['route' => 'admin.reports.index', 'label' => 'Annual Reports'],
+                ['route' => 'admin.media.index', 'label' => 'Media Gallery'],
                 ['route' => 'admin.downloads.index', 'label' => 'Downloads'],
                 ],
                 ],
