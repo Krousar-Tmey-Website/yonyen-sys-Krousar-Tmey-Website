@@ -32,9 +32,36 @@
         <h2 class="font-bold text-gray-800">Recent Articles</h2>
         <a href="{{ route('admin.news.create') }}" class="btn-primary text-xs px-4 py-2">+ New Article</a>
     </div>
-    @if($recentNews->isEmpty())
-    <div class="px-6 py-12 text-center text-gray-400 text-sm">
-        No articles yet. <a href="{{ route('admin.news.create') }}" class="text-[#2d6fa3] underline">Create your first article.</a>
+
+    {{-- Partner Categories Chart --}}
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 hover-lift">
+        <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 text-sm">Partner Categories</h3>
+                    <p class="text-xs text-gray-400">Distribution by category</p>
+                </div>
+            </div>
+            <span class="text-xs text-gray-400 bg-gray-50 px-3 py-1 rounded-full">{{ $chartData['partnerCategories']->sum() }} partners</span>
+        </div>
+        <div class="chart-container">
+            @if(!$chartData['partnerCategories']->isEmpty())
+            <canvas id="categoryChart"></canvas>
+            @else
+            <div class="flex flex-col items-center justify-center h-full text-center">
+                <svg class="w-12 h-12 text-gray-200 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <p class="text-gray-400 text-sm font-medium">No partners yet</p>
+                <p class="text-gray-300 text-xs mt-1">Category distribution will appear once partners are added.</p>
+            </div>
+            @endif
+        </div>
     </div>
     @else
     <table class="w-full text-sm">
@@ -69,3 +96,179 @@
 </div>
 
 @endsection
+<<<<<<< HEAD
+=======
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Chart === 'undefined') return;
+
+    // ── Donation Trends (Bar Chart) ──
+    const donationCtx = document.getElementById('donationChart')?.getContext('2d');
+    if (donationCtx) {
+        new Chart(donationCtx, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($chartData['donationMonths']) !!},
+                datasets: [{
+                    label: 'Donations ($)',
+                    data: {!! json_encode($chartData['donationTotals']) !!},
+                    backgroundColor: 'rgba(232, 160, 32, 0.6)',
+                    borderColor: '#e8a020',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    hoverBackgroundColor: '#e8a020',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(ctx) { return '$' + ctx.raw.toLocaleString(); }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: 100,
+                        grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
+                        ticks: {
+                            color: '#94a3b8',
+                            font: { size: 11 },
+                            precision: 0,
+                            callback: function(value) { return '$' + value.toLocaleString(); }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8', font: { size: 10 } }
+                    }
+                }
+            }
+        });
+    }
+
+    // ── Category Distribution (Doughnut Chart) ──
+    const categoryCtx = document.getElementById('categoryChart')?.getContext('2d');
+    if (categoryCtx) {
+        const categoryLabels = {!! json_encode($chartData['partnerCategoryLabels']) !!};
+        const categoryData = {!! json_encode($chartData['partnerCategories']) !!};
+        const colors = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a', '#c4840a', '#4a7c59', '#6b7280', '#9ca3af'];
+
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryData,
+                    backgroundColor: colors.slice(0, categoryLabels.length),
+                    borderWidth: 0,
+                    hoverOffset: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 16,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: { size: 11 },
+                            color: '#64748b',
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(ctx) {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const pct = total > 0 ? ((ctx.raw / total) * 100).toFixed(1) : 0;
+                                return ctx.label + ': ' + ctx.raw + ' (' + pct + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // ── Donation by Type (Pie Chart) ──
+    const typeCtx = document.getElementById('donationTypeChart')?.getContext('2d');
+    if (typeCtx) {
+        const typeData = {!! json_encode($chartData['donationByType']->pluck('total')) !!};
+        const typeLabels = {!! json_encode($chartData['donationByType']->pluck('DonationType')) !!};
+        const typeColors = {
+            'Food': '#f97316',
+            'Money': '#22c55e',
+            'Clothes': '#3b82f6',
+        };
+        const bgColors = typeLabels.map(l => typeColors[l] || '#94a3b8');
+
+        new Chart(typeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: typeLabels,
+                datasets: [{
+                    data: typeData,
+                    backgroundColor: bgColors,
+                    borderWidth: 0,
+                    hoverOffset: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 12,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: { size: 10 },
+                            color: '#64748b',
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        padding: 10,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(ctx) {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const pct = total > 0 ? ((ctx.raw / total) * 100).toFixed(1) : 0;
+                                return ctx.label + ': $' + ctx.raw.toLocaleString() + ' (' + pct + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+@endpush
+>>>>>>> fc15dc2970bbf006f0657bd29a72215570261c7e
