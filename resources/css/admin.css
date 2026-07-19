@@ -640,11 +640,11 @@ select.form-control {
 }
 
 /* Action Buttons */
-.action-btn, .payments-action-btn, .al-action-btn {
+.action-btn {
     width: 32px;
     height: 32px;
-    border-radius: 9999px !important;
-    border: 1px solid #e2e8f0;
+    border-radius: 9999px;
+    border: none;
     background: #f1f5f9;
     color: #64748b;
     cursor: pointer;
@@ -652,43 +652,26 @@ select.form-control {
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    transition: all 0.2s ease;
 }
-.action-btn:hover, .payments-action-btn:hover, .al-action-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+.action-btn.edit {
+    background: #eff6ff;
+    color: #2563eb;
 }
-.action-btn.edit, .action-btn.btn-edit, .payments-action-btn.edit, .payments-action-btn.btn-edit, .al-action-btn.edit, .al-action-btn.btn-edit {
-    background: #e8eaf6 !important;
-    border-color: #c5cae9 !important;
-    color: #1a237e !important;
+.action-btn.delete {
+    background: #fef2f2;
+    color: #ef4444;
 }
-.action-btn.edit:hover, .action-btn.btn-edit:hover, .payments-action-btn.edit:hover, .payments-action-btn.btn-edit:hover, .al-action-btn.edit:hover, .al-action-btn.btn-edit:hover {
-    background: #dbdfea !important;
-    border-color: #b0b7df !important;
+.action-btn.btn-view {
+    background: #eff6ff;
+    color: #2563eb;
 }
-.action-btn.delete, .action-btn.btn-delete, .payments-action-btn.delete, .payments-action-btn.btn-delete, .al-action-btn.delete, .al-action-btn.btn-delete {
-    background: #ffebee !important;
-    border-color: #ffcdd2 !important;
-    color: #b71c1c !important;
+.action-btn.btn-edit {
+    background: #eff6ff;
+    color: #2563eb;
 }
-.action-btn.delete:hover, .action-btn.btn-delete:hover, .payments-action-btn.delete:hover, .payments-action-btn.btn-delete:hover, .al-action-btn.delete:hover, .al-action-btn.btn-delete:hover {
-    background: #ffd5d8 !important;
-    border-color: #ffa4ab !important;
-}
-.action-btn.btn-view, .action-btn.view, .payments-action-btn.btn-view, .payments-action-btn.view, .al-action-btn.btn-view, .al-action-btn.view {
-    background: #e8f5e9 !important;
-    border-color: #c8e6c9 !important;
-    color: #1b5e20 !important;
-}
-.action-btn.btn-view:hover, .action-btn.view:hover, .payments-action-btn.btn-view:hover, .payments-action-btn.view:hover, .al-action-btn.btn-view:hover, .al-action-btn.view:hover {
-    background: #d4edd6 !important;
-    border-color: #a5d6a7 !important;
-}
-.action-btn svg, .payments-action-btn svg, .al-action-btn svg {
-    width: 16px !important;
-    height: 16px !important;
-    stroke-width: 2px !important;
+.action-btn.btn-delete {
+    background: #fef2f2;
+    color: #ef4444;
 }
 .action-btn .tooltip {
     position: absolute;
@@ -758,123 +741,67 @@ select.form-control {
     background: #e3f0ff;
 }
 
-/* ── Pagination Links Override (Extremely Creative & Premium) ── */
+/* ── Pagination Links (Tailwind Override with Sky Blue) ── */
 .pagination-links nav[role="navigation"] {
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
-/* Hide the default mobile buttons on larger screens */
-.pagination-links nav > div:first-child {
-    display: none !important;
-}
-.pagination-links nav > div:last-child {
-    display: flex !important;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 100%;
+/* Prev / Next disabled state */
+.pagination-links span.cursor-not-allowed {
+    background: #f0f9ff !important;
+    border-color: #bae6fd !important;
+    color: #7dd3fc !important;
 }
 
-/* Page description text style */
-.pagination-links nav > div:last-child p {
-    font-size: 13px;
-    color: #64748b;
-    font-weight: 500;
-}
-.pagination-links nav > div:last-child p span {
-    color: #1e293b;
-    font-weight: 600;
-}
-
-/* Wrapping span holding the page links */
-.pagination-links nav > div:last-child > span {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-}
-
-/* Buttons style (Page numbers & arrows) */
+/* Page number links */
 .pagination-links a:not([rel="prev"]):not([rel="next"]),
-.pagination-links a[rel="prev"],
-.pagination-links a[rel="next"],
-.pagination-links span[aria-current="page"] span,
-.pagination-links span.cursor-default span,
-.pagination-links span.cursor-not-allowed span {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    width: 34px !important;
-    height: 34px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border-radius: 10px !important;
-    border: 1px solid #e2e8f0 !important;
+.pagination-links [rel="prev"],
+.pagination-links [rel="next"] {
     background: #ffffff !important;
-    color: #475569 !important;
-    font-size: 13px !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
+    border-color: #e0f2fe !important;
+    color: #0369a1 !important;
+    transition: all 0.2s ease-in-out !important;
+}
+.pagination-links a:hover:not([rel="prev"]):not([rel="next"]),
+.pagination-links [rel="prev"]:hover,
+.pagination-links [rel="next"]:hover {
+    background: #f0f9ff !important;
+    border-color: #7dd3fc !important;
+    color: #0c4a6e !important;
 }
 
-/* Hover and Focus States */
-.pagination-links a:hover {
-    border-color: #2d6fa3 !important;
-    background: #f8faff !important;
-    color: #2d6fa3 !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(45, 111, 163, 0.1), 0 2px 4px -1px rgba(45, 111, 163, 0.06) !important;
-}
-
-/* Active State */
+/* Active page */
 .pagination-links span[aria-current="page"] span {
-    background: #2d6fa3 !important;
-    border-color: #2d6fa3 !important;
+    background: #0284c7 !important;
+    border-color: #0284c7 !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 6px -1px rgba(45, 111, 163, 0.2), 0 2px 4px -1px rgba(45, 111, 163, 0.1) !important;
-    font-weight: 700 !important;
+    box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3);
 }
 
-/* Disabled State */
-.pagination-links span.cursor-not-allowed span {
-    background: #f8fafc !important;
-    border-color: #e2e8f0 !important;
-    color: #cbd5e1 !important;
-    cursor: not-allowed !important;
-    box-shadow: none !important;
-}
-
-/* Dots Separator */
-.pagination-links span.cursor-default span {
-    border: none !important;
-    background: transparent !important;
+/* Dots separator */
+.pagination-links span.cursor-default {
+    background: #ffffff !important;
+    border-color: #e0f2fe !important;
     color: #94a3b8 !important;
-    font-weight: 500 !important;
-    box-shadow: none !important;
 }
 
-/* Icons inside Prev / Next */
+/* SVG icons in prev/next */
 .pagination-links svg {
-    width: 16px !important;
-    height: 16px !important;
-    stroke-width: 2px !important;
-    color: #475569 !important;
-    transition: transform 0.2s ease !important;
+    color: #0284c7;
+}
+.pagination-links span.cursor-not-allowed svg {
+    color: #7dd3fc;
 }
 .pagination-links a:hover svg {
-    color: #2d6fa3 !important;
+    color: #0c4a6e;
 }
-.pagination-links a[rel="prev"]:hover svg {
-    transform: translateX(-2px);
-}
-.pagination-links a[rel="next"]:hover svg {
-    transform: translateX(2px);
+
+/* Focus ring */
+.pagination-links a:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2) !important;
+    border-color: #0284c7 !important;
 }
 
 /* Responsive */

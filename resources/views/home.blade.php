@@ -5,9 +5,6 @@
 
 @section('content')
 
-{{-- ===== SCROLL PROGRESS BAR ===== --}}
-<div id="scroll-progress" class="fixed top-0 left-0 right-0 z-[9999] h-1 bg-gradient-to-r from-[#2d6fa3] via-[#e8a020] to-[#8da83a] origin-left scale-x-0 transition-transform duration-150 ease-out"></div>
-
 {{-- ===== HERO CAROUSEL ===== --}}
 <section class="relative h-[90vh] min-h-[520px] max-h-[800px] overflow-hidden"
     x-data="{
@@ -55,10 +52,10 @@
                     @if($slide->cta_primary_text || $slide->cta_secondary_text)
                     <div class="flex flex-wrap gap-6">
                         @if($slide->cta_primary_text)
-                        <a href="{{ $slide->cta_primary_url ?? '#' }}" class="btn-primary btn-micro">{{ $slide->cta_primary_text }}</a>
+                        <a href="{{ $slide->cta_primary_url ?? '#' }}" class="btn-primary">{{ $slide->cta_primary_text }}</a>
                         @endif
                         @if($slide->cta_secondary_text)
-                        <a href="{{ $slide->cta_secondary_url ?? route('donate') }}" class="btn-outline btn-micro">{{ $slide->cta_secondary_text }}</a>
+                        <a href="{{ $slide->cta_secondary_url ?? route('donate') }}" class="btn-outline">{{ $slide->cta_secondary_text }}</a>
                         @endif
                     </div>
                     @endif
@@ -103,7 +100,7 @@
 </section>
 
 {{-- ===== STATS / DATA SECTION ===== --}}
-<section class="bg-[#1a3c6e] py-12 lg:py-16 overflow-hidden" data-reveal>
+<section class="bg-[#1a3c6e] py-12 lg:py-16 overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
 
         <div class="text-center mb-10 animate-fade-up">
@@ -168,270 +165,138 @@
 </section>
 
 
-{{-- ===== ANIMATION & SCROLL SYSTEM ===== --}}
+{{-- Animation Script --}}
 <script>
     document.addEventListener("DOMContentLoaded", () => {
 
-        // ── Scroll Progress Bar ───────────────────────────────
-        const progressBar = document.getElementById('scroll-progress');
-        if (progressBar) {
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.scrollY;
-                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const progress = docHeight > 0 ? scrollTop / docHeight : 0;
-                progressBar.style.transform = `scaleX(${Math.min(progress, 1)})`;
-            }, { passive: true });
-        }
-
-        // ── Animated Number Counter ───────────────────────────
         const counters = document.querySelectorAll(".counter");
-        const countObserver = new IntersectionObserver((entries) => {
+
+        const observer = new IntersectionObserver(entries => {
+
             entries.forEach(entry => {
+
                 if (entry.isIntersecting) {
+
                     const counter = entry.target;
                     const target = +counter.dataset.target;
-                    const finalVal = counter.dataset.final || target;
 
-                    let start = 0;
-                    const duration = 2000;
-                    const startTime = performance.now();
+                    let count = 0;
 
-                    const updateCount = (currentTime) => {
-                        const elapsed = currentTime - startTime;
-                        const progress = Math.min(elapsed / duration, 1);
-                        const easeOut = 1 - Math.pow(1 - progress, 3);
-                        const current = Math.floor(start + (target - start) * easeOut);
-                        counter.innerText = current.toLocaleString();
+                    const speed = target / 80;
 
-                        if (progress < 1) {
-                            requestAnimationFrame(updateCount);
+                    const update = () => {
+
+                        count += speed;
+
+                        if (count < target) {
+                            counter.innerText = Math.floor(count).toLocaleString();
+                            requestAnimationFrame(update);
                         } else {
-                            counter.innerText = finalVal;
+                            const finalValue = counter.dataset.final || target;
+                            counter.innerText = finalValue;
                         }
+
                     };
 
-                    requestAnimationFrame(updateCount);
-                    countObserver.unobserve(counter);
+                    update();
+
+                    observer.unobserve(counter);
                 }
+
             });
-        }, { threshold: 0.4 });
 
-        counters.forEach(counter => countObserver.observe(counter));
+        }, {
+            threshold: 0.5
+        });
 
-        // ── Unified Scroll Reveal System ─────────────────────
-        const revealElements = document.querySelectorAll("[data-reveal]");
 
-        const revealObserver = new IntersectionObserver((entries) => {
+        counters.forEach(counter => {
+            observer.observe(counter);
+        });
+
+
+        // ── Scroll animation for PageSections ──────────────
+        const sectionBlocks = document.querySelectorAll(".animate-section");
+
+        const sectionObserver = new IntersectionObserver(entries => {
+
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const el = entry.target;
-                    const delay = el.dataset.revealDelay || 0;
-                    setTimeout(() => {
-                        el.classList.add("is-revealed");
-                    }, delay);
-                    revealObserver.unobserve(el);
+                    entry.target.classList.add("is-visible");
+                    sectionObserver.unobserve(entry.target);
                 }
             });
+
         }, {
-            threshold: 0.12,
-            rootMargin: "0px 0px -40px 0px"
+            threshold: 0.15
         });
 
-        revealElements.forEach(el => revealObserver.observe(el));
 
-        // ── Smooth anchor scroll ─────────────────────────────
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    e.preventDefault();
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
+        sectionBlocks.forEach(el => {
+            sectionObserver.observe(el);
         });
+
 
     });
 </script>
 
 
-{{-- ===== PROFESSIONAL ANIMATION STYLES ===== --}}
+{{-- Tailwind custom animation --}}
 <style>
-    /* ── Scroll Reveal Base ──────────────────────────────── */
-    [data-reveal] {
-        opacity: 0;
-        transform: translateY(40px);
-        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    [data-reveal].is-revealed {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    [data-reveal="left"] {
-        transform: translateX(-50px);
-    }
-
-    [data-reveal="left"].is-revealed {
-        transform: translateX(0);
-    }
-
-    [data-reveal="right"] {
-        transform: translateX(50px);
-    }
-
-    [data-reveal="right"].is-revealed {
-        transform: translateX(0);
-    }
-
-    [data-reveal="scale"] {
-        transform: scale(0.85);
-    }
-
-    [data-reveal="scale"].is-revealed {
-        transform: scale(1);
-    }
-
-    /* ── Staggered delay via CSS variable ─────────────────── */
-    [data-reveal] {
-        transition-delay: calc(var(--reveal-delay, 0ms) * 1ms);
-    }
-
-    /* ── Stats section animation ──────────────────────────── */
-    .animate-stat {
-        opacity: 0;
-        transform: translateY(30px);
-        animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .animate-stat:nth-child(1) { animation-delay: 0.1s; }
-    .animate-stat:nth-child(2) { animation-delay: 0.2s; }
-    .animate-stat:nth-child(3) { animation-delay: 0.3s; }
-    .animate-stat:nth-child(4) { animation-delay: 0.4s; }
-
-    .animate-fade-up {
-        animation: fadeUp 0.8s ease forwards;
-    }
-
     @keyframes fadeUp {
+
         from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(40px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
         }
+
     }
 
-    /* ── Card hover effects ───────────────────────────────── */
-    .card-hover {
-        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    .animate-stat {
+        animation: fadeUp .8s ease forwards;
     }
 
-    .card-hover:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+    .animate-stat:nth-child(1) {
+        animation-delay: .1s;
     }
 
-    .card-hover-light {
-        transition: all 0.3s ease;
+    .animate-stat:nth-child(2) {
+        animation-delay: .2s;
     }
 
-    .card-hover-light:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.1);
+    .animate-stat:nth-child(3) {
+        animation-delay: .3s;
     }
 
-    /* ── Button micro-interactions ────────────────────────── */
-    .btn-micro {
-        transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    .animate-stat:nth-child(4) {
+        animation-delay: .4s;
     }
 
-    .btn-micro:hover {
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 8px 24px -6px rgba(45, 111, 163, 0.35);
+    .animate-fade-up {
+        animation: fadeUp .8s ease forwards;
     }
 
-    .btn-micro:active {
-        transform: translateY(0) scale(0.98);
+    .animate-section {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* ── Link arrow slide ─────────────────────────────────── */
-    .link-arrow svg {
-        transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-
-    .link-arrow:hover svg {
-        transform: translateX(4px);
-    }
-
-    /* ── Testimonial card ─────────────────────────────────── */
-    .testimonial-card {
-        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-
-    .testimonial-card:hover {
-        transform: translateY(-6px) scale(1.01);
-        box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.15);
-        border-color: rgba(45, 111, 163, 0.15);
-    }
-
-    /* ── Marquee (kept from original) ─────────────────────── */
-    @keyframes marqueeScroll {
-        0% { transform: translate3d(0, 0, 0); }
-        100% { transform: translate3d(-50%, 0, 0); }
-    }
-
-    @keyframes marqueeScrollReverse {
-        0% { transform: translate3d(-50%, 0, 0); }
-        100% { transform: translate3d(0, 0, 0); }
-    }
-
-    .marquee-track {
-        will-change: transform;
-        animation: marqueeScroll 30s linear infinite;
-        width: max-content;
-    }
-
-    .marquee-track-reverse {
-        will-change: transform;
-        animation: marqueeScrollReverse 30s linear infinite;
-        width: max-content;
-    }
-
-    /* ── Smooth scroll for the whole page ─────────────────── */
-    html {
-        scroll-behavior: smooth;
-    }
-
-    /* ── Reduced motion preference ────────────────────────── */
-    @media (prefers-reduced-motion: reduce) {
-        [data-reveal],
-        .animate-stat,
-        .animate-fade-up,
-        .card-hover,
-        .card-hover-light,
-        .testimonial-card,
-        .logo-glow,
-        .overlay-content,
-        .marquee-track,
-        .marquee-track-reverse {
-            animation: none !important;
-            transition: none !important;
-            transform: none !important;
-            opacity: 1 !important;
-        }
-        html {
-            scroll-behavior: auto;
-        }
+    .animate-section.is-visible {
+        opacity: 1;
+        transform: translateY(0);
     }
 </style>
 
 
 {{-- ===== PROGRAMS ===== --}}
-<section class="py-20 lg:py-28 bg-[#f8f9fc]" data-reveal>
+<section class="py-20 lg:py-28 bg-[#f8f9fc]">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">{{ $settings['programs_badge'] ?? 'WHAT WE DO' }}</span>
@@ -441,11 +306,11 @@
 
         <div class="grid lg:grid-cols-3 gap-8">
             @foreach($programs as $program)
-            <div class="card group flex flex-col card-hover" data-reveal="up" style="--reveal-delay: {{ $loop->index * 120 }}">
+            <div class="card group flex flex-col">
                 <div class="relative overflow-hidden h-56">
                     <img src="{{ $program->image_url }}"
-                        alt="{{ $program->title }}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                         alt="{{ $program->title }}"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>
                     @if($program->stats && count($program->stats) > 0)
                     <span class="absolute top-4 left-4 bg-[#e8a020] text-white text-xs font-bold px-3 py-1 rounded-full">{{ $program->stats[0]['value'] }} {{ $program->stats[0]['label'] }}</span>
@@ -460,22 +325,22 @@
                     </p>
                     <ul class="space-y-1.5 mb-6">
                         @if($program->stats && count($program->stats) > 1)
-                        @foreach(array_slice($program->stats, 1, 3) as $stat)
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>{{ $stat['value'] }} {{ strtolower($stat['label']) }}</li>
-                        @endforeach
+                            @foreach(array_slice($program->stats, 1, 3) as $stat)
+                            <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>{{ $stat['value'] }} {{ strtolower($stat['label']) }}</li>
+                            @endforeach
                         @endif
-                    </ul>                        <a href="{{ route('programs') }}#{{ $program->slug }}" class="mt-auto text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300 link-arrow">
+                    </ul>
+                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="mt-auto text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300">
                         {{ $settings['programs_learn_btn'] ?? 'Learn More' }}
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
                 </div>
             </div>
             @endforeach
         </div>
 
-        <div class="text-center mt-12">                    <a href="{{ route('programs') }}" class="btn-blue btn-micro">{{ $settings['programs_cta'] ?? 'View All Programs' }}</a>
+        <div class="text-center mt-12">
+            <a href="{{ route('programs') }}" class="btn-blue">{{ $settings['programs_cta'] ?? 'View All Programs' }}</a>
         </div>
     </div>
 </section>
@@ -485,7 +350,7 @@ $structureWelfareItems = array_filter(explode("\n", $settings['structure_welfare
 $structureEducationItems = array_filter(explode("\n", $settings['structure_education_items'] ?? "5 Special Education High Schools"));
 $structureImage = $settings['structure_image'] ?? null;
 @endphp
-<section class="py-16 lg:py-24 bg-white" data-reveal>
+<section class="py-16 lg:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-6">
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
@@ -544,9 +409,9 @@ $structureImage = $settings['structure_image'] ?? null;
 @if($pageSections->isNotEmpty())
 @foreach($pageSections as $index => $section)
 @php
-$isReversed = $index % 2 !== 0;
-$sectionImage = $section->images->first();
-$sectionLinks = $section->links->where('active', true)->sortBy('order');
+    $isReversed = $index % 2 !== 0;
+    $sectionImage = $section->images->first();
+    $sectionLinks = $section->links->where('active', true)->sortBy('order');
 @endphp
 <section class="py-20 lg:py-28 {{ $isReversed ? 'bg-[#f8f9fc]' : 'bg-white' }} overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
@@ -561,9 +426,9 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
                     @if($sectionImage)
                     <img src="{{ str_starts_with($sectionImage->path, 'http') ? $sectionImage->path : asset('storage/' . $sectionImage->path) }}"
-                        alt="{{ $sectionImage->alt ?? $section->title }}"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                        class="w-full h-[340px] lg:h-[420px] object-cover rounded-2xl shadow-xl
+                         alt="{{ $sectionImage->alt ?? $section->title }}"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                         class="w-full h-[340px] lg:h-[420px] object-cover rounded-2xl shadow-xl
                                 group-hover:shadow-2xl transition-all duration-700
                                 group-hover:scale-[1.02]">
                     @endif
@@ -575,7 +440,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                                 group-hover:border-[#2d6fa3]/30 group-hover:shadow-2xl transition-all duration-500
                                 {{ $sectionImage ? 'hidden' : '' }}">
                         <svg class="w-16 h-16 mb-4 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                         <p class="text-sm font-medium">Image placeholder</p>
                         <p class="text-xs mt-1">Upload via admin panel</p>
@@ -589,7 +454,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
             </div>
 
             {{-- Content side --}}
-            <div class="{{ $isReversed ? 'lg:order-1' : '' }}" data-reveal="up" style="--reveal-delay: 100">
+            <div class="{{ $isReversed ? 'lg:order-1' : '' }} animate-section">
                 {{-- Section label --}}
                 <div class="flex items-center gap-6 mb-4">
                     <span class="h-px w-8 bg-[#e8a020]"></span>
@@ -617,16 +482,16 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                 <div class="flex flex-wrap gap-6">
                     @foreach($sectionLinks as $link)
                     <a href="{{ $link->url }}"
-                        target="{{ $link->target ?? '_self' }}"
-                        class="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300
+                       target="{{ $link->target ?? '_self' }}"
+                       class="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300
                               {{ $loop->first
                                   ? 'bg-[#2d6fa3] text-white hover:bg-[#1d4e7a] shadow-md hover:shadow-lg'
                                   : 'bg-white text-[#2d6fa3] border-2 border-[#2d6fa3]/20 hover:border-[#2d6fa3] hover:bg-[#2d6fa3]/5'
                               }}">
                         <span>{{ $link->text }}</span>
                         <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                         </svg>
                     </a>
                     @endforeach
@@ -644,7 +509,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
 {{-- ===== PROJECTS ===== --}}
 @if($projects->count())
-<section class="py-16 lg:py-24 bg-white border-t border-gray-100" data-reveal>
+<section class="py-16 lg:py-24 bg-white border-t border-gray-100">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">{{ $settings['projects_badge'] ?? 'Our Projects' }}</span>
@@ -652,16 +517,15 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
         </div>
         <div class="grid md:grid-cols-3 gap-6">
             @foreach($projects as $project)
-            <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 card-hover-light group" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
+            <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 hover:shadow-lg transition-shadow group">
                 @if($project->image)
                 <img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset('storage/' . $project->image) }}" class="w-full h-40 object-cover rounded-xl mb-5 group-hover:opacity-90 transition-opacity">
                 @endif
                 <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $project->title }}</h3>
-                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5">{{ $project->description }}</p>                        <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300 link-arrow" style="color: #e8a020; font-weight: bold;">
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5">{{ $project->description }}</p>
+                <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300" style="color: #e8a020; font-weight: bold;">
                     {{ $settings['projects_read_more'] ?? 'Read More Detail' }}
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </a>
             </div>
             @endforeach
@@ -672,7 +536,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
 {{-- ===== GALLERY ===== --}}
 @if($galleries->count())
-<section class="py-16 lg:py-24 bg-[#1a3c6e]" data-reveal>
+<section class="py-16 lg:py-24 bg-[#1a3c6e]">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">In Pictures</span>
@@ -680,7 +544,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
             @foreach($galleries as $photo)
-            <div class="group relative overflow-hidden rounded-xl aspect-square bg-white/5 gallery-overlay" data-reveal="scale" style="--reveal-delay: {{ $loop->index * 80 }}">
+            <div class="group relative overflow-hidden rounded-xl aspect-square bg-white/5">
                 @if($photo->image)
                 <img src="{{ str_starts_with($photo->image, 'http') ? $photo->image : asset('storage/' . $photo->image) }}" alt="{{ $photo->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                 @endif
@@ -695,7 +559,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 @endif
 
 {{-- ===== NEWS ===== --}}
-<section class="py-20 lg:py-28 bg-white" data-reveal>
+<section class="py-20 lg:py-28 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-14 gap-6">
             <div>
@@ -703,7 +567,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                 <h2 class="section-title mt-3">{{ $settings['news_title'] ?? 'News & Stories' }}</h2>
                 <p class="text-gray-500 mt-3 max-w-2xl">{{ $settings['news_subtitle'] ?? 'News and stories about our impact, events, and community progress.' }}</p>
             </div>
-            <a href="{{ route('news') }}" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors flex-shrink-0 link-arrow">
+            <a href="{{ route('news') }}" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors flex-shrink-0">
                 {{ $settings['news_view_all'] ?? 'All News' }}
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -713,12 +577,14 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($latestNews as $article)
-            <article class="card group flex flex-col card-hover" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
-                <div class="relative overflow-hidden h-52">
+            <article class="card group flex flex-col">
+                <a href="{{ route('news.show', $article->slug) }}" class="relative overflow-hidden h-52 block">
                     <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#1a3c6e] text-xs font-semibold px-3 py-1 rounded-full capitalize">{{ str_replace('-', ' ', $article->category) }}</span>
-                </div>
+                    @if(!empty($article->tag_links[0]['label']))
+                    <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#1a3c6e] text-xs font-semibold px-3 py-1 rounded-full">{{ $article->tag_links[0]['label'] }}</span>
+                    @endif
+                </a>
                 <div class="p-6 flex flex-col flex-1">
                     <time class="text-gray-400 text-xs mb-3 flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -726,9 +592,11 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                         </svg>
                         {{ $article->published_at?->format('F Y') ?? $article->created_at->format('F Y') }}
                     </time>
-                    <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug group-hover:text-[#1a3c6e] transition-colors">{{ $article->title }}</h3>
+                    <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug">
+                        <a href="{{ route('news.show', $article->slug) }}" class="group-hover:text-[#1a3c6e] transition-colors">{{ $article->title }}</a>
+                    </h3>
                     <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $article->excerpt }}</p>
-                    <a href="{{ route('news') }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors link-arrow">
+                    <a href="{{ route('news.show', $article->slug) }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors">
                         Read More
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -748,7 +616,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
 {{-- ===== TESTIMONIALS ===== --}}
 @if($testimonials->count())
-<section class="py-20 lg:py-28 bg-[#f8f9fc]" data-reveal>
+<section class="py-20 lg:py-28 bg-[#f8f9fc]">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Voices</span>
@@ -756,10 +624,8 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
         </div>
         <div class="grid md:grid-cols-3 gap-8">
             @foreach($testimonials as $testimony)
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative testimonial-card" data-reveal="up" style="--reveal-delay: {{ $loop->index * 120 }}">
-                <svg class="w-10 h-10 text-[#e8a020]/20 absolute top-6 right-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative">
+                <svg class="w-10 h-10 text-[#e8a020]/20 absolute top-6 right-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" /></svg>
                 <div class="flex items-center gap-4 mb-6 relative z-10">
                     @if($testimony->image)
                     <img src="{{ str_starts_with($testimony->image, 'http') ? $testimony->image : asset('storage/' . $testimony->image) }}" alt="{{ $testimony->name }}" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md">
@@ -780,7 +646,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 @endif
 
 {{-- ===== CALL TO ACTION ===== --}}
-<section class="relative py-24 overflow-hidden" data-reveal="scale">
+<section class="relative py-24 overflow-hidden">
     <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80')] bg-cover bg-center"></div>
     <div class="absolute inset-0 bg-[#1a3c6e]/85"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
@@ -792,25 +658,25 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
             {{ $settings['cta_subtitle'] ?? 'We guarantee that 100% of your donation is used to support children across Cambodia. Every contribution, big or small, changes a life.' }}
         </p>
         <div class="flex flex-col sm:flex-row gap-6 justify-center">
-            <a href="{{ $settings['cta_primary_url'] ?? route('donate') }}" class="btn-primary text-base btn-micro">
+            <a href="{{ $settings['cta_primary_url'] ?? route('donate') }}" class="btn-primary text-base">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
                 {{ $settings['cta_primary_text'] ?? 'Donate Now' }}
             </a>
             @if(!empty($settings['cta_secondary_text']))
-            <a href="{{ $settings['cta_secondary_url'] ?? route('get-involved') }}" class="btn-outline text-base btn-micro">{{ $settings['cta_secondary_text'] }}</a>
+            <a href="{{ $settings['cta_secondary_url'] ?? route('get-involved') }}" class="btn-outline text-base">{{ $settings['cta_secondary_text'] }}</a>
             @endif
-            <a href="{{ route('resources') }}" class="btn-outline text-base btn-micro">{{ $settings['cta_annual_report_text'] ?? 'Annual Report' }}</a>
+            <a href="{{ route('resources') }}" class="btn-outline text-base">{{ $settings['cta_annual_report_text'] ?? 'Annual Report' }}</a>
         </div>
     </div>
 </section>
 
 {{-- ===== SPONSORS ===== --}}
 @if(isset($sponsors) && $sponsors->isNotEmpty())
-<section class="py-16 bg-gradient-to-b from-white to-[#f8f9fc] relative overflow-hidden" data-reveal>
+<section class="py-16 bg-gradient-to-b from-white to-[#f8f9fc] relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
-
+        
         {{-- Section Header --}}
         <div class="text-center mb-12">
             <h2 class="section-title mt-2 text-[#1a3c6e]">{{ __('Among our loyal supporters') }}</h2>
@@ -819,9 +685,9 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
         {{-- Sponsors Marquee --}}
         <div class="relative max-w-7xl mx-auto"
-            x-data="{ paused: false }"
-            @mouseenter="paused = true"
-            @mouseleave="paused = false">
+             x-data="{ paused: false }"
+             @mouseenter="paused = true"
+             @mouseleave="paused = false">
 
             {{-- Gradient fade edges --}}
             <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#fcfcfd] to-transparent z-10 pointer-events-none"></div>
@@ -829,24 +695,24 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
             <div class="overflow-hidden py-6">
                 <div class="flex marquee-track items-center"
-                    :style="{ animationPlayState: paused ? 'paused' : 'running' }">
-
+                     :style="{ animationPlayState: paused ? 'paused' : 'running' }">
+                    
                     {{-- Set 1 --}}
                     @foreach($sponsors as $sponsor)
                     <div class="group w-72 flex-shrink-0 mx-4">
-                        <a href="{{ $sponsor->url ?? '#' }}" {{ $sponsor->url ? 'target="_blank" rel="noopener noreferrer"' : '' }}
-                            class="flex flex-col items-center justify-center h-48 px-6 py-5 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-100 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#1a3c6e]/20">
-
+                        <a href="{{ $sponsor->url ?? '#' }}" {{ $sponsor->url ? 'target="_blank" rel="noopener noreferrer"' : '' }} 
+                           class="flex flex-col items-center justify-center h-48 px-6 py-5 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-100 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#1a3c6e]/20">
+                           
                             <div class="flex-grow flex items-center justify-center w-full mb-4">
                                 @if($sponsor->logo)
-                                <img src="{{ str_starts_with($sponsor->logo, 'http') ? $sponsor->logo : asset('storage/' . $sponsor->logo) }}"
-                                    alt="{{ $sponsor->name }}"
-                                    class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
+                                <img src="{{ str_starts_with($sponsor->logo, 'http') ? $sponsor->logo : asset('storage/' . $sponsor->logo) }}" 
+                                     alt="{{ $sponsor->name }}" 
+                                     class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
                                 @else
                                 <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->name, 0, 1) }}</div>
                                 @endif
                             </div>
-
+                            
                             <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
                                 <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->name }}</h4>
                             </div>
@@ -857,19 +723,19 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                     {{-- Set 2 for seamless loop --}}
                     @foreach($sponsors as $sponsor)
                     <div class="group w-72 flex-shrink-0 mx-4">
-                        <a href="{{ $sponsor->url ?? '#' }}" {{ $sponsor->url ? 'target="_blank" rel="noopener noreferrer"' : '' }}
-                            class="flex flex-col items-center justify-center h-48 px-6 py-5 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-100 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#1a3c6e]/20">
-
+                        <a href="{{ $sponsor->url ?? '#' }}" {{ $sponsor->url ? 'target="_blank" rel="noopener noreferrer"' : '' }} 
+                           class="flex flex-col items-center justify-center h-48 px-6 py-5 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-100 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#1a3c6e]/20">
+                           
                             <div class="flex-grow flex items-center justify-center w-full mb-4">
                                 @if($sponsor->logo)
-                                <img src="{{ str_starts_with($sponsor->logo, 'http') ? $sponsor->logo : asset('storage/' . $sponsor->logo) }}"
-                                    alt="{{ $sponsor->name }}"
-                                    class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
+                                <img src="{{ str_starts_with($sponsor->logo, 'http') ? $sponsor->logo : asset('storage/' . $sponsor->logo) }}" 
+                                     alt="{{ $sponsor->name }}" 
+                                     class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
                                 @else
                                 <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->name, 0, 1) }}</div>
                                 @endif
                             </div>
-
+                            
                             <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
                                 <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->name }}</h4>
                             </div>
@@ -889,68 +755,47 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
 @endphp
 
 @if($homePartners->isNotEmpty())
-<section class="py-16 bg-gradient-to-b from-white to-[#ffffff] relative overflow-hidden" data-reveal>
-    <div class="max-w-7xl mx-auto px-6 relative z-10">
+<section class="py-16 bg-[#f8f9fc] border-t border-gray-100 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
 
-        {{-- Section Header --}}
-        <div class="text-center mb-12">
-            <h2 class="section-title mt-2 text-[#1a3c6e]">{{ __('Supported by Our Partners Worldwide') }}</h2>
-            <div class="w-16 h-1 bg-[#e8a020] mx-auto mt-4 rounded-full opacity-80"></div>
+        {{-- Header --}}
+        <div class="text-center mb-10">
+            <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-[0.2em]">{{ $settings['partners_badge'] ?? 'OUR NETWORK' }}</span>
+            <h2 class="section-title mt-2">{{ $settings['partners_heading'] ?? 'Supported by Our Partners Worldwide' }}</h2>
+            <p class="text-gray-400 text-sm mt-2 max-w-xl mx-auto">
+                We are grateful for the trust and collaboration of {{ $homePartners->count() }} partner organisations across the globe.
+            </p>
         </div>
 
-        {{-- Partners Marquee (reverse direction) --}}
-        <div class="relative max-w-7xl mx-auto"
-            x-data="{ paused: false }"
-            @mouseenter="paused = true"
-            @mouseleave="paused = false">
+        {{-- Infinite seamless marquee --}}
+        <div class="relative"
+             x-data="{ paused: false }"
+             @mouseenter="paused = true"
+             @mouseleave="paused = false">
 
             {{-- Gradient fade edges --}}
-            <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#fcfcfd] to-transparent z-10 pointer-events-none"></div>
-            <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#f8f9fc] to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none"></div>
 
-            <div class="overflow-hidden py-6">
-                <div class="flex marquee-track-reverse items-center"
-                    :style="{ animationPlayState: paused ? 'paused' : 'running' }">
-
-                    {{-- Set 2 (first in DOM so -50% shows Set 1 / originals) --}}
+            <div class="overflow-hidden">
+                <div class="flex marquee-track"
+                     :style="{ animationPlayState: paused ? 'paused' : 'running' }">
+                    {{-- Set 1 --}}
                     @foreach($homePartners as $partner)
-                    <div class="group w-72 flex-shrink-0 mx-4">
-                        <a href="{{ $partner->url ?? '#' }}" {{ $partner->url ? 'target="_blank" rel="noopener noreferrer"' : '' }}
-                            class="flex flex-col items-center justify-center h-32 px-6 py-5 rounded-2xl transition-all duration-300  hover:-translate-y-1">
-                            <div class="flex-grow flex items-center justify-center w-full mb-4">
-                                @if($partner->logo)
-                                <img src="{{ str_starts_with($partner->logo, 'http') ? $partner->logo : asset('storage/' . $partner->logo) }}"
-                                    alt="{{ $partner->name }}"
-                                    class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
-                                @else
-                                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($partner->name, 0, 1) }}</div>
-                                @endif
-                            </div>
-
-                            <div class="h-12 flex items-center justify-center w-full pt-3">
-                            </div>
-                        </a>
+                    <div class="flex items-center justify-center w-52 h-20 bg-white rounded-lg shadow-sm border border-gray-100 mx-3
+                                hover:shadow-md hover:border-[#2d6fa3]/20 transition-all duration-300 flex-shrink-0">
+                        <img src="{{ asset('storage/' . $partner->logo) }}"
+                             alt="{{ $partner->name }}"
+                             class="w-full h-full object-contain p-4 transition-all duration-500">
                     </div>
                     @endforeach
-
-                    {{-- Set 1 (original logos — shown first when page loads at -50%) --}}
+                    {{-- Duplicate set for seamless loop --}}
                     @foreach($homePartners as $partner)
-                    <div class="group w-72 flex-shrink-0 mx-4">
-                        <a href="{{ $partner->url ?? '#' }}" {{ $partner->url ? 'target="_blank" rel="noopener noreferrer"' : '' }}
-                            class="flex flex-col items-center justify-center h-32 px-6 py-5 rounded-2xl transition-all duration-300  hover:-translate-y-1">
-                           <div class="flex-grow flex items-center justify-center w-full mb-4">
-                                @if($partner->logo)
-                                <img src="{{ str_starts_with($partner->logo, 'http') ? $partner->logo : asset('storage/' . $partner->logo) }}"
-                                    alt="{{ $partner->name }}"
-                                    class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
-                                @else
-                                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($partner->name, 0, 1) }}</div>
-                                @endif
-                            </div>
-
-                            <div class="h-12 flex items-center justify-center w-full pt-3">
-                            </div>
-                        </a>
+                    <div class="flex items-center justify-center w-52 h-20 bg-white rounded-lg shadow-sm border border-gray-100 mx-3
+                                hover:shadow-md hover:border-[#2d6fa3]/20 transition-all duration-300 flex-shrink-0">
+                        <img src="{{ asset('storage/' . $partner->logo) }}"
+                             alt="{{ $partner->name }}"
+                             class="w-full h-full object-contain p-4 transition-all duration-500">
                     </div>
                     @endforeach
                 </div>
@@ -959,17 +804,29 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
 
         {{-- Bottom CTA --}}
         <div class="text-center mt-10">
-            <a href="{{ route('presentation') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#2d6fa3] hover:text-[#1d4e7a] transition-colors group">
+            <a href="{{ route('partners') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#2d6fa3] hover:text-[#1d4e7a] transition-colors group">
                 {{ $settings['partners_view_all'] ?? 'View All Partners' }}
                 <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
             </a>
         </div>
+
     </div>
 </section>
 @endif
 
-
+{{-- Marquee keyframes --}}
+<style>
+    @keyframes marqueeScroll {
+        0% { transform: translate3d(0, 0, 0); }
+        100% { transform: translate3d(-50%, 0, 0); }
+    }
+    .marquee-track {
+        will-change: transform;
+        animation: marqueeScroll 30s linear infinite;
+        width: max-content;
+    }
+</style>
 
 @endsection

@@ -118,11 +118,11 @@
                                     {{ $subscriber->subscribed_at?->format('d M Y') ?? '—' }}
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <form method="POST" action="{{ route('admin.newsletter.destroy', $subscriber) }}" class="inline">
+                                    <form method="POST" action="{{ route('admin.newsletter.destroy', $subscriber) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                            class="action-btn btn-delete"
+                                            class="inline-flex items-center justify-center w-9 h-9 text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100 rounded-full transition-all duration-200"
                                             title="Delete Subscriber">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -138,7 +138,7 @@
             </div>
 
             {{-- Pagination --}}
-            <div class="pagination-links px-6 py-4 border-t border-gray-50">
+            <div class="px-6 py-4 border-t border-gray-50">
                 {{ $subscribers->appends(request()->query())->links() }}
             </div>
         @endif
