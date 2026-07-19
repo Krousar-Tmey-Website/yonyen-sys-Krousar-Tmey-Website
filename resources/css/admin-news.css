@@ -199,9 +199,10 @@
     background: #94a3b8;
 }
 
+/* Action Buttons - Professional Circular Buttons */
 .action-btn {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
@@ -212,8 +213,8 @@
     position: relative;
 }
 .action-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
 }
 
 /* View Button - Green */
@@ -392,18 +393,42 @@
     min-height: 100vh;
 }
 
+/* Two-column layout: main content + sticky sidebar */
+.form-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+@media (min-width: 1024px) {
+    .form-layout {
+        grid-template-columns: minmax(0, 1fr) 340px;
+    }
+}
+.form-main,
+.form-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+}
+@media (min-width: 1024px) {
+    .form-sidebar {
+        position: sticky;
+        top: 24px;
+    }
+}
+
 .form-card {
     background: #ffffff;
-    border: none;
-    border-bottom: 1px solid #e9ecef;
+    border: 1px solid #eef2f6;
+    border-radius: 16px;
     overflow: hidden;
-}
-.form-card:last-child {
-    border-bottom: none;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
 .card-header {
-    padding: 14px 24px;
+    padding: 16px 24px;
     background: #fafbfc;
     border-bottom: 1px solid #f0f0f0;
     display: flex;
@@ -414,7 +439,7 @@
 .card-header .icon {
     width: 28px;
     height: 28px;
-    border-radius: 6px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -424,6 +449,7 @@
 .card-header .icon.purple { background: #f0e6ff; color: #7c3aed; }
 .card-header .icon.green { background: #e3f5e3; color: #16a34a; }
 .card-header .icon.orange { background: #fef3e2; color: #ea580c; }
+.card-header .icon.red { background: #fee2e2; color: #dc2626; }
 
 .card-header .icon svg {
     width: 16px;
@@ -617,6 +643,101 @@
 .publish-option .description {
     font-size: 12px;
     color: #94a3b8;
+}
+
+/* Publish status pill (sidebar card header) */
+.publish-status-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 12px;
+    border-radius: 12px;
+    margin-left: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.publish-status-badge.is-draft { background: #fffbeb; color: #92400e; }
+.publish-status-badge.is-published { background: #ecfdf5; color: #065f46; }
+
+/* Toggle switch (replaces plain checkbox in the Publish card) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.switch .slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    background: #cbd5e1;
+    border-radius: 999px;
+    transition: background 0.2s ease;
+}
+.switch .slider::before {
+    content: '';
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    top: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.switch input:checked + .slider { background: #2d6fa3; }
+.switch input:checked + .slider::before { transform: translateX(18px); }
+.switch input:focus-visible + .slider { box-shadow: 0 0 0 3px rgba(45,111,163,0.25); }
+
+/* Sidebar action buttons (Save / Cancel stacked full-width) */
+.sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+}
+.sidebar-actions .btn-primary {
+    width: 100%;
+    justify-content: center;
+}
+.sidebar-actions .btn-cancel {
+    width: 100%;
+    text-align: center;
+    padding: 10px 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+/* Danger zone (delete) section */
+.danger-zone-card {
+    border-color: #fecaca;
+}
+.danger-zone-card .card-header {
+    background: #fff5f5;
+    border-bottom-color: #fee2e2;
+}
+.danger-zone-card .card-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.danger-zone-card .danger-text .title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+.danger-zone-card .danger-text .desc {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-top: 2px;
 }
 
 .info-box {
@@ -858,6 +979,175 @@ select.form-control {
     border: 1px dashed #e2e8f0;
 }
 
+/* Section tabs (News Articles / Resource Pages) */
+.section-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+.section-tabs a {
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+.section-tabs a:hover {
+    color: #2d6fa3;
+}
+.section-tabs a.active {
+    color: #2d6fa3;
+    border-bottom-color: #2d6fa3;
+}
+
+/* Gallery image preview grid (create/edit article) */
+.gallery-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+.gallery-preview-grid:empty {
+    display: none;
+}
+.gallery-preview-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+.gallery-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.gallery-preview-item .remove-gallery-item {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.65);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.gallery-preview-item .remove-gallery-item:hover {
+    background: #ef4444;
+}
+.gallery-preview-item.is-marked-for-removal {
+    opacity: 0.35;
+}
+.gallery-preview-item .insert-gallery-item {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 4px 0;
+    background: rgba(45, 111, 163, 0.85);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    transition: background 0.2s;
+}
+.gallery-preview-item .insert-gallery-item:hover {
+    background: #1a3c6e;
+}
+
+/* Video preview / current-videos list (create/edit article) */
+.video-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+.video-preview-list:empty {
+    display: none;
+}
+.video-preview-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #334155;
+}
+.video-preview-item .remove-gallery-item {
+    position: static;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #94a3b8;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+.video-preview-item .remove-gallery-item:hover {
+    background: #ef4444;
+}
+.video-preview-item.is-marked-for-removal {
+    opacity: 0.35;
+}
+
+/* Quick-add preset tag buttons */
+.quick-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.preset-tag-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 14px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.preset-tag-btn:hover {
+    background: #e0f2fe;
+    border-color: #2d6fa3;
+    color: #1a4a7a;
+}
+.preset-tag-btn.is-added {
+    background: #dbeafe;
+    border-color: #93c5fd;
+    color: #1e40af;
+    cursor: default;
+}
+
 /* ============================================
    RESPONSIVE
 ============================================ */
@@ -999,4 +1289,89 @@ select.form-control {
         font-size: 10px;
         padding: 2px 10px;
     }
+}
+
+/* Rich text content editor (Quill) — see resources/js/admin-news-editor.js */
+[data-quill-root] {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+[data-quill-toolbar].ql-toolbar.ql-snow {
+    border: none;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+.quill-insert-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #eef4f9;
+    border-bottom: 1px solid #e2e8f0;
+}
+.quill-insert-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin-right: 2px;
+}
+.quill-insert-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2d6fa3;
+    background: #fff;
+    border: 1px solid #cbd8e4;
+    border-radius: 999px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.quill-insert-btn svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+.quill-insert-btn:hover {
+    background: #2d6fa3;
+    border-color: #2d6fa3;
+    color: #fff;
+}
+[data-quill-root] .ql-container.ql-snow {
+    border: none;
+    font-size: 14px;
+    min-height: 320px;
+}
+[data-quill-root] .ql-editor {
+    min-height: 320px;
+}
+[data-quill-root] .ql-editor.ql-blank::before {
+    font-style: normal;
+    color: #9ca3af;
+}
+[data-quill-root] .ql-raw-html-block {
+    position: relative;
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    background: #f8fafc;
+}
+[data-quill-root] .ql-raw-html-block::before {
+    content: "Custom block (edit via the buttons above, not by typing)";
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #94a3b8;
+    margin-bottom: 6px;
 }

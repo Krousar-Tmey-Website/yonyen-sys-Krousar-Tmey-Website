@@ -20,9 +20,6 @@
         {{-- Header --}}
         <div class="px-6 py-5 border-b border-gray-100">
             <div class="flex items-center gap-2 mb-3">
-                <span class="px-3 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-600">
-                    {{ $news->category_name }}
-                </span>
                 @if($news->is_published)
                     <span class="px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-xs font-semibold flex items-center gap-1">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
@@ -68,13 +65,10 @@
                     </div>
 
                     <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Category</p>
-                        <p class="text-sm font-medium text-gray-800">{{ $news->category_name }}</p>
-                    </div>
-
-                    <div>
                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Tags</p>
-                        <p class="text-sm font-medium text-gray-800">{{ $news->tags ?? '—' }}</p>
+                        <p class="text-sm font-medium text-gray-800">
+                            {{ !empty($news->tag_links) ? collect($news->tag_links)->pluck('label')->implode(', ') : '—' }}
+                        </p>
                     </div>
 
                     <div>

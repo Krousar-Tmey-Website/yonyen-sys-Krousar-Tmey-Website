@@ -10,23 +10,26 @@ use App\Models\Partner;
 use App\Models\Program;
 use App\Models\Project;
 use App\Models\ProgramPageItem;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $donationTotalsRow = Donation::selectRaw(
+            'COUNT(*) as cnt, COALESCE(SUM(DonationAmount), 0) + COALESCE(SUM(Amount), 0) as total'
+        )->first();
+
         $stats = [
-            'news_total'        => News::count(),
-            'news_published'    => News::published()->count(),
-            'programs'          => Program::count(),
-            'projects'          => Project::count(),
-            'partners'          => Partner::count(),
-            'awards'            => Award::count(),
-            'page_items'        => ProgramPageItem::count(),
-            'donations'         => Donation::count(),
-            'donations_amount'  => Donation::sum('DonationAmount') + Donation::sum('Amount'),
+            'news_total'       => News::count(),
+            'news_published'   => News::published()->count(),
+            'programs'         => Program::count(),
+            'projects'         => Project::count(),
+            'partners'         => Partner::count(),
+            'awards'           => Award::count(),
+            'page_items'       => ProgramPageItem::count(),
+            'donations'        => (int) $donationTotalsRow->cnt,
+            'donations_amount' => (float) $donationTotalsRow->total,
         ];
 
         $recentNews = News::latest()->take(5)->get();

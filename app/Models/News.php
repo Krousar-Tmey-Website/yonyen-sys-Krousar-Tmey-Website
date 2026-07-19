@@ -20,8 +20,8 @@ class News extends Model
 {
     protected $fillable = [
         'title', 'slug', 'excerpt', 'content',
-        'image', 'category', 'is_published', 'published_at',
-        'links', 'tags',
+        'image', 'gallery', 'videos', 'is_published', 'published_at',
+        'links', 'tag_links',
     ];
 
     protected function casts(): array
@@ -43,7 +43,7 @@ class News extends Model
                 $slug = $baseSlug;
                 $counter = 1;
                 
-                while (static::where('slug', $slug, '=', true)->exists()) {
+                while (static::where('slug', $slug)->exists()) {
                     $slug = $baseSlug . '-' . $counter;
                     $counter++;
                 }
@@ -85,24 +85,87 @@ class News extends Model
         if (is_null($value) || $value === '') {
             return [];
         }
-        
+
         if (is_string($value)) {
             $decoded = json_decode($value, true);
             return is_array($decoded) ? $decoded : [];
         }
-        
+
         return (array) $value;
     }
 
-    // Get the category from the relationship
-    public function categoryRelation()
+    // Ensure tag_links is always returned as an array of ['label' => ..., 'url' => ...]
+    public function getTagLinksAttribute(mixed $value): array
     {
-        return $this->belongsTo(Category::class, 'category', 'CategoryName');
+        if (is_null($value) || $value === '') {
+            return [];
+        }
+
+        if (is_string($value)) {
+            $decoded = json_decode($value, true);
+            return is_array($decoded) ? $decoded : [];
+        }
+
+        return (array) $value;
     }
 
-    // Accessor for category name - returns the stored category name directly
-    public function getCategoryNameAttribute(): string
+    // Ensure gallery is always returned as an array of stored image paths
+    public function getGalleryAttribute(mixed $value): array
     {
-        return $this->category ?? '';
+        if (is_null($value) || $value === '') {
+            return [];
+        }
+
+        if (is_string($value)) {
+            $decoded = json_decode($value, true);
+            return is_array($decoded) ? $decoded : [];
+        }
+
+        return (array) $value;
+    }
+
+    // Encode array assignment (e.g. from newly uploaded files) to JSON for storage
+    public function setGalleryAttribute(mixed $value): void
+    {
+        $this->attributes['gallery'] = is_array($value) ? json_encode($value) : $value;
+    }
+
+    // Resolve each stored gallery path to a full URL
+    public function getGalleryUrlsAttribute(): array
+    {
+        return array_map(
+            fn (string $path) => str_starts_with($path, 'http') ? $path : asset('storage/' . $path),
+            $this->gallery
+        );
+    }
+
+    // Ensure videos is always returned as an array of stored video paths
+    public function getVideosAttribute(mixed $value): array
+    {
+        if (is_null($value) || $value === '') {
+            return [];
+        }
+
+        if (is_string($value)) {
+            $decoded = json_decode($value, true);
+            return is_array($decoded) ? $decoded : [];
+        }
+
+        return (array) $value;
+    }
+
+    // Encode array assignment (e.g. from newly uploaded files) to JSON for storage
+    public function setVideosAttribute(mixed $value): void
+    {
+        $this->attributes['videos'] = is_array($value) ? json_encode($value) : $value;
+    }
+
+    // Resolve each stored video path to a full URL
+    public function getVideoUrlsAttribute(): array
+    {
+        return array_map(
+            fn (string $path) => str_starts_with($path, 'http') ? $path : asset('storage/' . $path),
+            $this->videos
+        );
     }
 }

@@ -10,77 +10,19 @@
 <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6">
     @php
         $statItems = [
-            [
-                'label' => 'Total',
-                'count' => $stats->total,
-                'status' => null,
-                'borderColor' => '#1d4e7a',
-                'bgColor' => 'rgba(29, 78, 122, 0.05)',
-                'iconColor' => '#1d4e7a',
-                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>'
-            ],
-            [
-                'label' => 'Pending',
-                'count' => $stats->pending,
-                'status' => 'Pending',
-                'borderColor' => '#e8a020',
-                'bgColor' => 'rgba(232, 160, 32, 0.05)',
-                'iconColor' => '#e8a020',
-                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>'
-            ],
-            [
-                'label' => 'Under Review',
-                'count' => $stats->under_review,
-                'status' => 'Under Review',
-                'borderColor' => '#2d6fa3',
-                'bgColor' => 'rgba(45, 111, 163, 0.05)',
-                'iconColor' => '#2d6fa3',
-                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>'
-            ],
-            [
-                'label' => 'Interview Scheduled',
-                'count' => $stats->interview_scheduled,
-                'status' => 'Interview Scheduled',
-                'borderColor' => '#8e44ad',
-                'bgColor' => 'rgba(142, 68, 173, 0.05)',
-                'iconColor' => '#8e44ad',
-                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>'
-            ],
-            [
-                'label' => 'Approved',
-                'count' => $stats->approved,
-                'status' => 'Approved',
-                'borderColor' => '#8da83a',
-                'bgColor' => 'rgba(141, 168, 58, 0.05)',
-                'iconColor' => '#8da83a',
-                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>'
-            ],
-            [
-                'label' => 'Rejected',
-                'count' => $stats->rejected,
-                'status' => 'Rejected',
-                'borderColor' => '#c0392b',
-                'bgColor' => 'rgba(192, 57, 43, 0.05)',
-                'iconColor' => '#c0392b',
-                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>'
-            ],
+            ['label' => 'Total',              'count' => $stats->total,              'status' => null],
+            ['label' => 'Pending',            'count' => $stats->pending,            'status' => 'Pending'],
+            ['label' => 'Under Review',       'count' => $stats->under_review,       'status' => 'Under Review'],
+            ['label' => 'Interview Scheduled','count' => $stats->interview_scheduled,'status' => 'Interview Scheduled'],
+            ['label' => 'Approved',           'count' => $stats->approved,           'status' => 'Approved'],
+            ['label' => 'Rejected',           'count' => $stats->rejected,           'status' => 'Rejected'],
         ];
     @endphp
     @foreach($statItems as $item)
     <a href="{{ $item['status'] ? route('admin.volunteers.index', ['status' => $item['status']]) : route('admin.volunteers.index') }}"
-       class="bg-white rounded-2xl border border-gray-100 border-l-4 p-5 flex items-center justify-between hover-lift shadow-sm hover:shadow-md transition-all duration-300 group"
-       style="border-left-color: {{ $item['borderColor'] }} !important;">
-        <div>
-            <div class="text-gray-400 text-xs font-semibold tracking-wide mb-1">{{ $item['label'] }}</div>
-            <div class="text-2xl font-black text-gray-800">{{ $item['count'] }}</div>
-        </div>
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform"
-             style="background-color: {{ $item['bgColor'] }} !important;">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                 style="color: {{ $item['iconColor'] }} !important;">
-                {!! $item['icon'] !!}
-            </svg>
-        </div>
+       class="bg-white rounded-xl border border-gray-100 p-4 text-center hover:shadow-sm transition-shadow {{ request('status') === $item['status'] ? 'ring-2 ring-[#2d6fa3]/20 border-[#2d6fa3]/30' : '' }}">
+        <p class="text-2xl font-bold text-gray-800">{{ $item['count'] }}</p>
+        <p class="text-xs text-gray-500 mt-0.5">{{ $item['label'] }}</p>
     </a>
     @endforeach
 </div>
@@ -131,7 +73,7 @@
     @else
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
-                <thead class="bg-[#2d6fa3]/10 text-xs text-[#2d6fa3] uppercase tracking-wider font-semibold">
+                <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wider">
                     <tr>
                         <th class="px-6 py-3 text-left">Name</th>
                         <th class="px-6 py-3 text-left">Email</th>
@@ -174,9 +116,9 @@
                             <span class="px-2.5 py-1 rounded-full text-xs font-medium {{ $statusClasses }}">{{ $volunteer->status }}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <div class="inline-flex items-center gap-1.5 justify-end">
+                            <div class="inline-flex items-center gap-2 justify-end">
                                 <a href="{{ route('admin.volunteers.show', $volunteer) }}" title="View"
-                                   class="action-btn btn-view">
+                                   class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 transition-all">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -186,7 +128,7 @@
                                 <form action="{{ route('admin.volunteers.destroy', $volunteer) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" title="Delete" class="action-btn btn-delete">
+                                    <button type="submit" title="Delete" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition-all">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                         </svg>
@@ -201,7 +143,7 @@
         </div>
 
         {{-- Pagination --}}
-        <div class="pagination-links px-6 py-4 border-t border-gray-50">
+        <div class="px-6 py-4 border-t border-gray-50">
             {{ $volunteers->appends(request()->query())->links() }}
         </div>
     @endif
