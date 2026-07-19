@@ -223,7 +223,7 @@
     {{-- ========================================================
          PARTNERSHIPS AROUND THE WORLD
          ======================================================== --}}
-    <section class="py-16 md:py-20 relative">
+    <section id="partners" class="py-16 md:py-20 relative scroll-mt-20">
         {{-- Decorative background accent --}}
         <div class="absolute inset-0 bg-[#f8f9fc]/60 pointer-events-none"></div>
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#8da83a]/30 to-transparent"></div>
@@ -270,7 +270,7 @@
                         </svg>
                     </div>
                     <h3 class="font-bold text-[#1d4e7a] text-base mb-2">Technical Expertise</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">Technical partners allow us to benefit from specific expertise that Krousar Thmey does not have. We ensure every project includes a transfer of skills to our staff.</p>
+                    <p class="text-gray-500 text-sm leading-relaxed">Technical partners allow us to benefit from specific expertise that Krousar Thmey does not have. Krousar Thmey always ensures that the projects implemented include a transfer of skills to the staff of the Foundation.</p>
                 </div>
                 
                 {{-- Career Counseling --}}
@@ -370,7 +370,7 @@
                     <p class="text-gray-600 text-sm leading-relaxed mb-5">
                         From 2020 onwards, Krousar Thmey will work collaboratively with the Ministry of Education, Youth and Sport on the Education for Deaf or Blind Children Program.
                     </p>
-                    <a href="{{ route('programs.show', 'special-education') }}"
+                    <a href="{{ $transferProgramItem ? route('program-page-items.show', $transferProgramItem->id) : route('programs.show', 'special-education') }}"
                        class="inline-flex items-center gap-2 px-6 py-3 bg-[#2d6fa3] text-white font-semibold rounded-full shadow-md hover:bg-[#3a82bb] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -448,24 +448,18 @@
             
             {{-- Logo grid --}}
             <div class="grid grid-cols-2 md:grid-cols-3 gap-5 mb-10">
+                @foreach($technicalPartners as $partner)
+                    @continue(!$partner->logo_url)
                 <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner1.webp') }}" alt="Enfants Sourds du Cambodge" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                    @if($partner->website_url)
+                    <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="w-full h-full flex items-center justify-center" title="{{ $partner->description ?? $partner->name }}">
+                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                    </a>
+                    @else
+                    <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" title="{{ $partner->description ?? $partner->name }}" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                    @endif
                 </div>
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner2.webp') }}" alt="Friends International" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner3.webp') }}" alt="Deaf Development Programme" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner4.webp') }}" alt="Cambodian Living Arts" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner5.webp') }}" alt="Sipar" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
-                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
-                    <img src="{{ asset('images/partners/partner6.webp') }}" alt="Save the Children" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
-                </div>
+                @endforeach
             </div>
             
             {{-- Description --}}
@@ -497,6 +491,13 @@
                 <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
             </div>
 
+            @php
+                $authorityHalves = $financialPartnersBySubcategory->get(\App\Enums\PartnerSubcategory::CambodianPublicAuthorities->value, collect())->split(2);
+                $orgHalves = $financialPartnersBySubcategory->get(\App\Enums\PartnerSubcategory::OrganizationsFoundationsInstitutions->value, collect())->split(2);
+                $companyHalves = $financialPartnersBySubcategory->get(\App\Enums\PartnerSubcategory::Companies->value, collect())->split(2);
+                $towns = $financialPartnersBySubcategory->get(\App\Enums\PartnerSubcategory::TownsAndMunicipalities->value, collect());
+            @endphp
+
             {{-- Cambodian Public Authorities: always visible --}}
             <div class="bg-[#f8f9fc] rounded-2xl border border-gray-100 p-8 mb-8">
                 <div class="flex items-center gap-3 mb-6">
@@ -510,34 +511,30 @@
                 
                 <div class="grid md:grid-cols-2 gap-6">
                     <ul class="space-y-2">
-                        @foreach([
-                            'His Majesty the King NORODOM Sihamoni',
-                            'Prime Minister Samdech Moha Borvor Thipadei HUN Manet',
-                            'Samdech Dr. Bun Rany HUN Sen',
-                            'Ministry of Social Affairs',
-                            'Ministry of Culture and Fine Arts',
-                            'Ministry of Information',
-                            'His Excellency the ambassador for Cambodia at UNESCO',
-                        ] as $authority)
+                        @foreach(($authorityHalves[0] ?? []) as $partner)
                         <li class="flex items-start gap-2 text-gray-600 text-sm">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 shrink-0"></span>
-                            <span>{{ $authority }}</span>
+                            <span>
+                                @if($partner->website_url)
+                                <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-[#2d6fa3] hover:underline">{{ $partner->name }}</a>
+                                @else
+                                {{ $partner->name }}
+                                @endif
+                            </span>
                         </li>
                         @endforeach
                     </ul>
                     <ul class="space-y-2">
-                        @foreach([
-                            'Her Majesty the Queen Mother NORODOM Monineath Sihanouk',
-                            'Samdech Akka Moha Sena Padei Techo Hun Sen, President of the Senate',
-                            'The Royal Government of Cambodia',
-                            'Ministry of Education, Youth and Sport',
-                            'Ministry of Defense',
-                            'Ministry of Interior',
-                            'His Excellency the ambassador for Cambodia to France',
-                        ] as $authority)
+                        @foreach(($authorityHalves[1] ?? []) as $partner)
                         <li class="flex items-start gap-2 text-gray-600 text-sm">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 shrink-0"></span>
-                            <span>{{ $authority }}</span>
+                            <span>
+                                @if($partner->website_url)
+                                <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-[#2d6fa3] hover:underline">{{ $partner->name }}</a>
+                                @else
+                                {{ $partner->name }}
+                                @endif
+                            </span>
                         </li>
                         @endforeach
                     </ul>
@@ -569,45 +566,30 @@
                         <div class="px-6 py-5">
                             <div class="grid md:grid-cols-2 gap-4">
                                 <ul class="space-y-2">
-                                    @foreach([
-                                        'DUBRULLE Family',
-                                        'Fondation Amanjaya',
-                                        'Fondation Masalina',
-                                        'Foundation Philantropique Famille Sandoz',
-                                        'GREEN LEAVES EDUCATION Foundation',
-                                        'Individual donor: Suzanne ROY, Grants Barbe.',
-                                        'LA VOIX DE L&rsquo;ENFANT Association',
-                                        'MAY-OUI Foundation',
-                                        'Musica Felice',
-                                        'PEOPLE&rsquo;S ACTION FOR INCLUSIVE DEVELOPMENT (PAfID)',
-                                        'ROTARY CLUB OF PERTH',
-                                        'STIFTUNG HIRTEN KINDER Foundation',
-                                        'UNICEF',
-                                    ] as $item)
+                                    @foreach(($orgHalves[0] ?? []) as $partner)
                                     <li class="flex items-start gap-2 text-gray-600 text-sm">
                                         <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a] mt-2 shrink-0"></span>
-                                        <span>{!! $item !!}</span>
+                                        <span>
+                                            @if($partner->website_url)
+                                            <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-[#2d6fa3] hover:underline">{{ $partner->name }}</a>
+                                            @else
+                                            {{ $partner->name }}
+                                            @endif
+                                        </span>
                                     </li>
                                     @endforeach
                                 </ul>
                                 <ul class="space-y-2">
-                                    @foreach([
-                                        'ENFANCE ESPOIR Foundation',
-                                        'Fondation Andr&eacute; &amp; Cyprien',
-                                        'Fonds M&eacute;c&eacute;nat SIG',
-                                        'Gertrude Hirzel Foundation',
-                                        'Individual donor: Peter Tschofen',
-                                        'INTERNATIONAL COUNCIL FOR EDUCATION OF PEOPLE WITH VISUAL IMPAIRMENT (ICEVI)',
-                                        'LES AMIS DES ENFANTS DU MONDE Association',
-                                        'Miwako Fujiwara &ndash; Musica Felice Foundation',
-                                        'OVERBROOK SCHOOL FOR THE BLIND (ONNET)',
-                                        'Raksa Koma Organization',
-                                        'ROTARY CLUB OF PHNOM PENH',
-                                        'TALIKA',
-                                    ] as $item)
+                                    @foreach(($orgHalves[1] ?? []) as $partner)
                                     <li class="flex items-start gap-2 text-gray-600 text-sm">
                                         <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a] mt-2 shrink-0"></span>
-                                        <span>{!! $item !!}</span>
+                                        <span>
+                                            @if($partner->website_url)
+                                            <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-[#2d6fa3] hover:underline">{{ $partner->name }}</a>
+                                            @else
+                                            {{ $partner->name }}
+                                            @endif
+                                        </span>
                                     </li>
                                     @endforeach
                                 </ul>
@@ -638,46 +620,30 @@
                         <div class="px-6 py-5">
                             <div class="grid md:grid-cols-2 gap-4">
                                 <ul class="space-y-2">
-                                    @foreach([
-                                        'ABA BANK',
-                                        'ANGKOR ARTWORK (Eric STOCKER)',
-                                        'BRED BANK CAMBODIA',
-                                        'BODIA NATURE',
-                                        'CMDK',
-                                        'KHMER CERAMICS &amp; FINE ARTS CENTER',
-                                        'PROMOTION FOR DISABILITY PROJECT',
-                                        'RADIO HAPPINESS VOICE FOR THE BLIND',
-                                        'SEIN LIM',
-                                        'SMART Cambodia',
-                                        'SOFITEL Phnom Penh Phokeethra',
-                                        'TEMPLATION ANGKOR BOUTIQUE',
-                                        'TOP STREET RESTAURANT',
-                                    ] as $item)
+                                    @foreach(($companyHalves[0] ?? []) as $partner)
                                     <li class="flex items-start gap-2 text-gray-600 text-sm">
                                         <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 shrink-0"></span>
-                                        <span>{!! $item !!}</span>
+                                        <span>
+                                            @if($partner->website_url)
+                                            <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-[#2d6fa3] hover:underline">{{ $partner->name }}</a>
+                                            @else
+                                            {{ $partner->name }}
+                                            @endif
+                                        </span>
                                     </li>
                                     @endforeach
                                 </ul>
                                 <ul class="space-y-2">
-                                    @foreach([
-                                        'AMANJAYA HOTEL',
-                                        'BAJAJ INTRACITY',
-                                        'BLIND MASSAGE CENTER',
-                                        'CAMH Co. LTD',
-                                        'D+Z URBAN HOTEL',
-                                        'LONG RA Car mechanic',
-                                        'PUNLEU THMEY Restaurant',
-                                        'SAN FRANSISCO COMPANY',
-                                        'SENG POV Car mechanic',
-                                        'SOCIAL COFFEE',
-                                        'SOFT SKILL PROFESSIONAL TRAINING SERVICE',
-                                        'THALIAS (Malis Restaurant, Khema, Arunreas Hotel)',
-                                        'VOICE OF THE BLIND Radio station',
-                                    ] as $item)
+                                    @foreach(($companyHalves[1] ?? []) as $partner)
                                     <li class="flex items-start gap-2 text-gray-600 text-sm">
                                         <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 shrink-0"></span>
-                                        <span>{!! $item !!}</span>
+                                        <span>
+                                            @if($partner->website_url)
+                                            <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-[#2d6fa3] hover:underline">{{ $partner->name }}</a>
+                                            @else
+                                            {{ $partner->name }}
+                                            @endif
+                                        </span>
                                     </li>
                                     @endforeach
                                 </ul>
@@ -707,15 +673,16 @@
                          class="border-t border-gray-100">
                         <div class="px-6 py-5">
                             <ul class="space-y-2 max-w-lg">
-                                @foreach([
-                                    'City of Geneva',
-                                    'City of Meyrin',
-                                    'Town of Hermance',
-                                    'Towns of Collonge-Bellerive, Hermance and Vandoeuvres',
-                                ] as $item)
+                                @foreach($towns as $partner)
                                 <li class="flex items-start gap-2 text-gray-600 text-sm">
                                     <span class="w-1.5 h-1.5 rounded-full bg-[#a67c3d] mt-2 shrink-0"></span>
-                                    <span>{{ $item }}</span>
+                                    <span>
+                                        @if($partner->website_url)
+                                        <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="hover:text-[#2d6fa3] hover:underline">{{ $partner->name }}</a>
+                                        @else
+                                        {{ $partner->name }}
+                                        @endif
+                                    </span>
                                 </li>
                                 @endforeach
                             </ul>
