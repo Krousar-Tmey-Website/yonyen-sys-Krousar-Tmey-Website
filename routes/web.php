@@ -19,6 +19,7 @@ use App\Models\JobOpportunity;
 use App\Models\News;
 use App\Models\Office;
 use App\Models\PageSection;
+use App\Models\Partner;
 use App\Models\Program;
 use App\Models\ProgramPageItem;
 use App\Models\Project;
@@ -57,7 +58,21 @@ Route::get('/who-we-are', function () {
     $settings = HomeSetting::allKeyed();
     $coreValues = CoreValue::ordered()->get();
 
-    return view('about', compact('awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
+    $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
+
+    $financialPartnersBySubcategory = Partner::active()
+        ->where('category', PartnerCategory::Financial->value)
+        ->get()
+        ->groupBy('subcategory');
+
+    $transferProgramItem = ProgramPageItem::active()
+        ->where('title', 'Transfer of Krousar Thmey Schools to the Cambodian Authorities')
+        ->first();
+
+    return view('about', compact(
+        'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues',
+        'technicalPartners', 'financialPartnersBySubcategory', 'transferProgramItem'
+    ));
 })->name('about');
 
 // Who We Are - Sub-pages
@@ -124,7 +139,6 @@ Route::get('/get-involved', function () {
     $settings = HomeSetting::allKeyed();
     $jobs = JobOpportunity::active()->ordered()->get();
     $books = Book::available()->orderBy('sort_order')->orderBy('title')->get();
-
     return view('involved', compact('settings', 'jobs', 'books'));
 })->name('involved');
 

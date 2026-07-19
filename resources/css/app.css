@@ -204,6 +204,23 @@
     @apply bg-[#1d4e7a];
 }
 
+/* ── Staggered card reveal (once-only) ──
+   Each card fades in and slides up sequentially as it enters the
+   viewport. The IntersectionObserver in app.js unobserves after
+   the first trigger so animations only play once per card. */
+[data-reveal-card] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--reveal-card-delay, 0) * 1ms);
+    will-change: opacity, transform;
+}
+[data-reveal-card].is-card-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
     .hero-media-drift,
     .hero-float-slow,
@@ -215,6 +232,7 @@
         transform: none !important;
     }
     [data-reveal] { transition: none !important; opacity: 1 !important; transform: none !important; }
+    [data-reveal-card] { transition: none !important; opacity: 1 !important; transform: none !important; }
 }
 
 /* Custom scrollbar */

@@ -123,6 +123,7 @@
             </ul>
             <p>Whether for an inauguration or to show their support, H.M. the King, the Prime Minister and his wife, as well as members of the royal family, regularly visit Krousar Thmey&rsquo;s structures.</p>
 
+            
             <div class="row align-items-center mt-4 g-4">
                 <div class="col-auto mx-auto mx-sm-0">
                     <img src="{{ asset('images/partners/university.png') }}" alt="" width="110" height="110">
