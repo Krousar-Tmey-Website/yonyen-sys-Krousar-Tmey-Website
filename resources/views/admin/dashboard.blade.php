@@ -100,34 +100,32 @@
         </div>
     </div>
 
-    {{-- Article Categories Chart --}}
+    {{-- Partner Categories Chart --}}
     <div class="bg-white rounded-2xl border border-gray-100 p-6 hover-lift">
         <div class="flex items-center justify-between mb-5">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
                 </div>
                 <div>
-                    <h3 class="font-bold text-gray-800 text-sm">Article Categories</h3>
+                    <h3 class="font-bold text-gray-800 text-sm">Partner Categories</h3>
                     <p class="text-xs text-gray-400">Distribution by category</p>
                 </div>
             </div>
-            <span class="text-xs text-gray-400 bg-gray-50 px-3 py-1 rounded-full">{{ $chartData['categories']->sum() }} articles</span>
+            <span class="text-xs text-gray-400 bg-gray-50 px-3 py-1 rounded-full">{{ $chartData['partnerCategories']->sum() }} partners</span>
         </div>
         <div class="chart-container">
-            @if(!$chartData['categories']->isEmpty())
+            @if(!$chartData['partnerCategories']->isEmpty())
             <canvas id="categoryChart"></canvas>
             @else
             <div class="flex flex-col items-center justify-center h-full text-center">
                 <svg class="w-12 h-12 text-gray-200 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                 </svg>
-                <p class="text-gray-400 text-sm font-medium">No articles yet</p>
-                <p class="text-gray-300 text-xs mt-1">Category distribution will appear once articles are created.</p>
+                <p class="text-gray-400 text-sm font-medium">No partners yet</p>
+                <p class="text-gray-300 text-xs mt-1">Category distribution will appear once partners are added.</p>
             </div>
             @endif
         </div>
@@ -439,8 +437,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // ── Category Distribution (Doughnut Chart) ──
     const categoryCtx = document.getElementById('categoryChart')?.getContext('2d');
     if (categoryCtx) {
-        const categoryLabels = {!! json_encode($chartData['categoryLabels']) !!};
-        const categoryData = {!! json_encode($chartData['categories']) !!};
+        const categoryLabels = {!! json_encode($chartData['partnerCategoryLabels']) !!};
+        const categoryData = {!! json_encode($chartData['partnerCategories']) !!};
         const colors = ['#2d6fa3', '#8da83a', '#e8a020', '#1d4e7a', '#c4840a', '#4a7c59', '#6b7280', '#9ca3af'];
 
         new Chart(categoryCtx, {
