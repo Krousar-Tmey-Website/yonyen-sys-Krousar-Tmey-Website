@@ -50,6 +50,12 @@ class ResourcePage extends Model
         return (array) $value;
     }
 
+    // Encode array assignment to JSON for storage
+    public function setItemsAttribute(mixed $value): void
+    {
+        $this->attributes['items'] = is_array($value) ? json_encode($value) : $value;
+    }
+
     // Same items array, but with each image path resolved to a full URL for display
     public function getItemsForDisplayAttribute(): array
     {
