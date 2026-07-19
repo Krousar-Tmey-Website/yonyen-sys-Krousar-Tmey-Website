@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -181,6 +182,19 @@
 [data-reveal="line"]  { transform: scaleY(0); transform-origin: top; }
 [data-reveal].is-revealed { opacity: 1; transform: none; }
 
+/* ── Article body media ──
+   Subtle hover zoom on inline images/embeds within news article content,
+   applies uniformly across every article without touching stored HTML. */
+.article-content img {
+    transition: transform 0.5s ease;
+}
+.article-content img:hover {
+    transform: scale(1.02);
+}
+.article-content iframe {
+    border-radius: 0.5rem;
+}
+
 /* ── Timeline year navigator ──
    Active state toggled by the scrollspy IntersectionObserver in resources/js/app.js. */
 .year-nav-link.is-active {
@@ -188,6 +202,23 @@
 }
 .year-nav-link.is-active .year-nav-dot {
     @apply bg-[#1d4e7a];
+}
+
+/* ── Staggered card reveal (once-only) ──
+   Each card fades in and slides up sequentially as it enters the
+   viewport. The IntersectionObserver in app.js unobserves after
+   the first trigger so animations only play once per card. */
+[data-reveal-card] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--reveal-card-delay, 0) * 1ms);
+    will-change: opacity, transform;
+}
+[data-reveal-card].is-card-revealed {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -201,6 +232,7 @@
         transform: none !important;
     }
     [data-reveal] { transition: none !important; opacity: 1 !important; transform: none !important; }
+    [data-reveal-card] { transition: none !important; opacity: 1 !important; transform: none !important; }
 }
 
 /* Custom scrollbar */
@@ -478,3 +510,11 @@
         transform: none !important;
     }
 }
+
+/* Article body videos: match the contained width/rounding used for article images */
+.article-content video {
+    width: 100%;
+    border-radius: 0.5rem;
+    display: block;
+}
+

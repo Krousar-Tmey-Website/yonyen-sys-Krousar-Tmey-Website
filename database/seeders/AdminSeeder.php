@@ -4,9 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Award;
 use App\Models\HomeSetting;
+use App\Enums\PartnerCategory;
+use App\Enums\PartnerSubcategory;
 use App\Models\Partner;
-use App\Models\PartnerCategory;
 use App\Models\Program;
+use App\Models\ProgramPageItem;
 use App\Models\Project;
 use App\Models\Slide;
 use App\Models\User;
@@ -176,7 +178,90 @@ class AdminSeeder extends Seeder
             }
         }
 
-        // ── Partners ──────────────────────────────────────────
+        $this->seedPartners();
+
+        // ── Program Page Items ──────────────────────────────────
+        ProgramPageItem::updateOrCreate(
+            ['title' => 'Transfer of Krousar Thmey Schools to the Cambodian Authorities'],
+            [
+                'objective' => 'To enable children with disabilities to be integrated into the Cambodian educational system and thus provide greater equality of opportunity for all children.',
+                'detail_content' => '<p>Initiated in 2011, the transfer of specialized schools to the Cambodian authorities was formalized at the start of the school year in November 2018. The schools have now become public institutions, under the strategic leadership of the Department of Special Education (DSE) of the Ministry of Education, Youth and Sports. Like all public schools, their budgetary and administrative management is decentralized to the provincial education offices from which they report.</p>'
+                    . '<p>In parallel, the National Institute for Special Education (NISE), created in 2017 and headed by Mrs. Phalla NEANG, former coordinator of the education program for blind children of Krousar Thmey, is now officially operational. Mainly in charge of the training of specialized teachers and the development of curricula, it is also interested in the production of adapted resources. The Braille workshop and the Sign Language Committee are under its responsibility.</p>'
+                    . '<p><a href="' . route('programs.show', 'special-education', false) . '">Learn more about the teacher training project &rarr;</a></p>'
+                    . '<p>In order to better support this transition, Krousar Thmey retains a role as technical advisor to the ministry in terms of teaching practices, the status of staff, and adapted care of students with disabilities. The Foundation also continues to carry out various projects for the creation of educational tools and resources, the screening and the inclusion of children with disabilities.</p>',
+                'is_active' => true,
+                'sort_order' => 0,
+            ]
+        );
+
+        // ── Awards ────────────────────────────────────────────
+        $awards = [
+            ['title' => 'Hero Award',                                  'recipient' => 'Benoît Duchâteau-Arminjon', 'organization' => 'World of Children',          'description' => 'Awarded for the long-lasting impact of the actions conducted by former honorees.',                          'sort_order' => 1],
+            ['title' => 'Trophy for French Living Abroad',             'recipient' => 'Benoît Duchâteau-Arminjon', 'organization' => 'French Republic',            'description' => 'Humanitarian and social category.',                                                                         'sort_order' => 2],
+            ['title' => 'Top 10 Best Teachers — Global Teacher Prize', 'recipient' => 'Phalla NEANG, Director NISE', 'organization' => 'Global Teacher Prize',       'description' => 'Nominated in the top 10 best teachers in the world.',                                                       'sort_order' => 3],
+            ['title' => '86th Best NGO in the World',                  'recipient' => null,                        'organization' => 'Global Journal',              'description' => 'Ranked among the top 100 best NGOs in the world for global impact and operational excellence.',             'sort_order' => 4],
+            ['title' => 'First Prize for Education in Asia-Pacific',   'recipient' => null,                        'organization' => 'Stars Foundation',            'description' => 'First prize for education in Asia-Pacific region.',                                                         'sort_order' => 5],
+            ['title' => 'Humanitarian Prize',                          'recipient' => null,                        'organization' => 'World of Children Award',     'description' => 'Recognised for outstanding humanitarian work with children.',                                               'sort_order' => 6],
+            ['title' => 'Wenhui Award for Educational Innovation',     'recipient' => null,                        'organization' => 'UNESCO',                      'description' => 'Awarded for innovative and impactful educational programs.',                                                 'sort_order' => 7],
+            ['title' => 'Human Rights Prize',                          'recipient' => null,                        'organization' => 'French Republic',             'description' => 'Awarded by the French Republic in recognition of work promoting human rights and dignity for children.',   'sort_order' => 8],
+        ];
+
+        foreach ($awards as $award) {
+            Award::updateOrCreate(['title' => $award['title']], $award);
+        }
+
+        // ── Slides ────────────────────────────────────────────
+        $slides = [
+            [
+                'title' => "Cultural Performance\nfor Charity",
+                'subtitle' => 'Our students showcase the beauty of Khmer arts and culture, raising awareness and funds for disadvantaged children across Cambodia.',
+                'badge_text' => 'Cultural Arts',
+                'image' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Cambodia%2C_Angkor_Wat_%285%29.jpg/1280px-Cambodia%2C_Angkor_Wat_%285%29.jpg',
+                'cta_primary_text' => 'Learn More',
+                'cta_primary_url' => '/our-programs#culture',
+                'cta_secondary_text' => 'Donate Now',
+                'cta_secondary_url' => '/donate',
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'title' => "Understanding Special\nEducation",
+                'subtitle' => 'A Parent Information Workshop — empowering families with knowledge and resources to support their deaf or blind children\'s education.',
+                'badge_text' => 'Special Education',
+                'image' => 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=1400&q=80',
+                'cta_primary_text' => 'Learn More',
+                'cta_primary_url' => '/our-programs#education',
+                'cta_secondary_text' => 'Donate Now',
+                'cta_secondary_url' => '/donate',
+                'sort_order' => 2,
+                'is_active' => true,
+            ],
+            [
+                'title' => "A Home Away\nFrom Home",
+                'subtitle' => 'Family-centered care for children in need — providing safety, love, and opportunity to build a brighter future.',
+                'badge_text' => 'Child Welfare',
+                'image' => 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80',
+                'cta_primary_text' => 'Learn More',
+                'cta_primary_url' => '/our-programs#welfare',
+                'cta_secondary_text' => 'Donate Now',
+                'cta_secondary_url' => '/donate',
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($slides as $slide) {
+            Slide::updateOrCreate(['title' => $slide['title']], $slide);
+        }
+    }
+
+    /**
+     * Seed (or repair) partner rows and their category/subcategory assignment.
+     * Safe to call on its own — matches existing rows by name, so re-running
+     * never duplicates data.
+     */
+    public function seedPartners(): void
+    {
         $partners = [
             // Cambodian Authorities
             ['name' => 'His Majesty the King NORODOM Sihamoni',                                       'category' => 'authorities', 'sort_order' => 1],
@@ -256,17 +341,33 @@ class AdminSeeder extends Seeder
             ['name' => 'Towns of Collonge-Bellerive, Hermance and Vandoeuvres',      'category' => 'towns', 'country' => 'Switzerland', 'sort_order' => 4],
         ];
 
-        $partnerCategoryIds = PartnerCategory::query()
-            ->pluck('id', 'name')
-            ->mapWithKeys(fn ($id, $name) => [strtolower($name) => $id])
-            ->all();
+        // Technical Partners have no subcategory.
+        $technicalPartners = [
+            ['name' => 'Enfants Sourds du Cambodge',   'logo' => 'partners/technical-partner-1.webp', 'sort_order' => 1],
+            ['name' => 'Friends International',        'logo' => 'partners/technical-partner-2.webp', 'sort_order' => 2],
+            ['name' => 'Deaf Development Programme',   'logo' => 'partners/technical-partner-3.webp', 'sort_order' => 3],
+            ['name' => 'Cambodian Living Arts',         'logo' => 'partners/technical-partner-4.webp', 'sort_order' => 4],
+            ['name' => 'Sipar',                         'logo' => 'partners/technical-partner-5.webp', 'sort_order' => 5],
+            ['name' => 'Save the Children',             'logo' => 'partners/technical-partner-6.webp', 'sort_order' => 6],
+        ];
+
+        // Old seed key ('authorities', ...) → Financial Partner subcategory.
+        $subcategoryMap = [
+            'authorities'   => PartnerSubcategory::CambodianPublicAuthorities->value,
+            'organizations' => PartnerSubcategory::OrganizationsFoundationsInstitutions->value,
+            'companies'     => PartnerSubcategory::Companies->value,
+            'towns'         => PartnerSubcategory::TownsAndMunicipalities->value,
+        ];
 
         foreach ($partners as $partner) {
-            if ($partner['category'] === null) {
-                // Individual donor — no category (category_id = null)
-                $partnerData = $partner;
-                unset($partnerData['category']);
-                $partnerData['category_id'] = null;
+            $partnerData = $partner;
+            $key = $partnerData['category'];
+            unset($partnerData['category']);
+
+            if ($key === null) {
+                // Individual donor — no main category assigned.
+                $partnerData['category'] = null;
+                $partnerData['subcategory'] = null;
 
                 Partner::updateOrCreate(
                     ['name' => $partner['name']],
@@ -275,80 +376,24 @@ class AdminSeeder extends Seeder
                 continue;
             }
 
-            $categoryId = $partnerCategoryIds[$partner['category']] ?? null;
-
-            if (! $categoryId) {
-                continue;
-            }
-
-            $partnerData = $partner;
-            unset($partnerData['category']);
-            $partnerData['category_id'] = $categoryId;
+            $partnerData['category'] = PartnerCategory::Financial->value;
+            $partnerData['subcategory'] = $subcategoryMap[$key] ?? null;
 
             Partner::updateOrCreate(
-                ['name' => $partner['name'], 'category_id' => $categoryId],
+                ['name' => $partner['name']],
                 array_merge($partnerData, ['is_active' => true])
             );
         }
 
-        // ── Awards ────────────────────────────────────────────
-        $awards = [
-            ['title' => 'Hero Award',                                  'recipient' => 'Benoît Duchâteau-Arminjon', 'organization' => 'World of Children',          'description' => 'Awarded for the long-lasting impact of the actions conducted by former honorees.',                          'sort_order' => 1],
-            ['title' => 'Trophy for French Living Abroad',             'recipient' => 'Benoît Duchâteau-Arminjon', 'organization' => 'French Republic',            'description' => 'Humanitarian and social category.',                                                                         'sort_order' => 2],
-            ['title' => 'Top 10 Best Teachers — Global Teacher Prize', 'recipient' => 'Phalla NEANG, Director NISE', 'organization' => 'Global Teacher Prize',       'description' => 'Nominated in the top 10 best teachers in the world.',                                                       'sort_order' => 3],
-            ['title' => '86th Best NGO in the World',                  'recipient' => null,                        'organization' => 'Global Journal',              'description' => 'Ranked among the top 100 best NGOs in the world for global impact and operational excellence.',             'sort_order' => 4],
-            ['title' => 'First Prize for Education in Asia-Pacific',   'recipient' => null,                        'organization' => 'Stars Foundation',            'description' => 'First prize for education in Asia-Pacific region.',                                                         'sort_order' => 5],
-            ['title' => 'Humanitarian Prize',                          'recipient' => null,                        'organization' => 'World of Children Award',     'description' => 'Recognised for outstanding humanitarian work with children.',                                               'sort_order' => 6],
-            ['title' => 'Wenhui Award for Educational Innovation',     'recipient' => null,                        'organization' => 'UNESCO',                      'description' => 'Awarded for innovative and impactful educational programs.',                                                 'sort_order' => 7],
-            ['title' => 'Human Rights Prize',                          'recipient' => null,                        'organization' => 'French Republic',             'description' => 'Awarded by the French Republic in recognition of work promoting human rights and dignity for children.',   'sort_order' => 8],
-        ];
-
-        foreach ($awards as $award) {
-            Award::updateOrCreate(['title' => $award['title']], $award);
-        }
-
-        // ── Slides ────────────────────────────────────────────
-        $slides = [
-            [
-                'title' => "Cultural Performance\nfor Charity",
-                'subtitle' => 'Our students showcase the beauty of Khmer arts and culture, raising awareness and funds for disadvantaged children across Cambodia.',
-                'badge_text' => 'Cultural Arts',
-                'image' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Cambodia%2C_Angkor_Wat_%285%29.jpg/1280px-Cambodia%2C_Angkor_Wat_%285%29.jpg',
-                'cta_primary_text' => 'Learn More',
-                'cta_primary_url' => '/our-programs#culture',
-                'cta_secondary_text' => 'Donate Now',
-                'cta_secondary_url' => '/donate',
-                'sort_order' => 1,
-                'is_active' => true,
-            ],
-            [
-                'title' => "Understanding Special\nEducation",
-                'subtitle' => 'A Parent Information Workshop — empowering families with knowledge and resources to support their deaf or blind children\'s education.',
-                'badge_text' => 'Special Education',
-                'image' => 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=1400&q=80',
-                'cta_primary_text' => 'Learn More',
-                'cta_primary_url' => '/our-programs#education',
-                'cta_secondary_text' => 'Donate Now',
-                'cta_secondary_url' => '/donate',
-                'sort_order' => 2,
-                'is_active' => true,
-            ],
-            [
-                'title' => "A Home Away\nFrom Home",
-                'subtitle' => 'Family-centered care for children in need — providing safety, love, and opportunity to build a brighter future.',
-                'badge_text' => 'Child Welfare',
-                'image' => 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80',
-                'cta_primary_text' => 'Learn More',
-                'cta_primary_url' => '/our-programs#welfare',
-                'cta_secondary_text' => 'Donate Now',
-                'cta_secondary_url' => '/donate',
-                'sort_order' => 3,
-                'is_active' => true,
-            ],
-        ];
-
-        foreach ($slides as $slide) {
-            Slide::updateOrCreate(['title' => $slide['title']], $slide);
+        foreach ($technicalPartners as $partner) {
+            Partner::updateOrCreate(
+                ['name' => $partner['name']],
+                array_merge($partner, [
+                    'category'    => PartnerCategory::Technical->value,
+                    'subcategory' => null,
+                    'is_active'   => true,
+                ])
+            );
         }
     }
 }

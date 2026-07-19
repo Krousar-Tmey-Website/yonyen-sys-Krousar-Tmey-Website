@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
+use App\Enums\PartnerCategory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Partner extends Model
 {
     protected $fillable = [
         'name',
         'category',
-        'category_id',
+        'subcategory',
         'logo',
         'country',
+        'description',
+        'website_url',
         'sort_order',
         'is_active',
     ];
@@ -20,43 +22,20 @@ class Partner extends Model
     protected function casts(): array
     {
         return [
-            'is_active'   => 'boolean',
-            'sort_order'  => 'integer',
-            'category_id' => 'integer',
+            'is_active'  => 'boolean',
+            'sort_order' => 'integer',
         ];
     }
 
-    public function categoryModel(): BelongsTo
+    protected static function booted(): void
     {
-        return $this->belongsTo(PartnerCategory::class, 'category_id');
-    }
-
-    public function getCategoryAttribute(): ?string
-    {
-        if (array_key_exists('category', $this->attributes)) {
-            return $this->attributes['category'];
-        }
-
-        return $this->relationLoaded('categoryModel')
-            ? $this->categoryModel?->name
-            : $this->categoryModel()->value('name');
-    }
-
-    public function setCategoryAttribute(?string $value): void
-    {
-        if ($value === null || $value === '') {
-            $this->attributes['category_id'] = null;
-
-            return;
-        }
-
-        $categoryId = is_numeric($value)
-            ? (int) $value
-            : PartnerCategory::query()
-                ->where('name', $value)
-                ->value('id');
-
-        $this->attributes['category_id'] = $categoryId;
+        // A Technical Partner never carries a Financial subcategory, regardless
+        // of what was posted — enforced here in addition to form validation.
+        static::saving(function (Partner $partner) {
+            if ($partner->category !== PartnerCategory::Financial->value) {
+                $partner->subcategory = null;
+            }
+        });
     }
 
     /**

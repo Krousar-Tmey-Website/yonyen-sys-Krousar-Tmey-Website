@@ -24,7 +24,7 @@
             {{-- Title --}}
             <div class="flex items-stretch gap-5 mb-6">
                 <div class="w-1.5 rounded-full bg-gradient-to-b from-[#d32f2f] to-[#e8a020]"></div>
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-[#1a3c6e] uppercase tracking-wide leading-tight drop-shadow-sm">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-black text-[#1a3c6e] uppercase tracking-wide leading-tight drop-shadow-sm">
                     {{ $item->title }}
                 </h1>
             </div>
@@ -59,7 +59,7 @@
                     <div class="bg-white">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-2 h-2 rounded-full bg-[#8da83a]"></div>
-                            <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-widest m-0">The Project</h3>
+                            <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-widest m-0">Our Approach</h3>
                         </div>
                         <div class="prose prose-lg max-w-none
                                     prose-headings:text-[#1a3c6e] prose-headings:font-black
@@ -129,17 +129,22 @@
                     </div>
                 </div>
 
+
                 {{-- RIGHT: Images --}}
                 <div class="lg:w-5/12 lg:sticky lg:top-28 space-y-6" x-data="{ lightboxImage: null }">
                     @php
-                        $rawUrls = array_filter([$item->image_url, $item->image_2_url, $item->image_3_url]);
+                        $rawUrls = [];
+                        if ($item->image) $rawUrls[] = $item->image_url;
+                        if ($item->image_2) $rawUrls[] = $item->image_2_url;
+                        if ($item->image_3) $rawUrls[] = $item->image_3_url;
                         $imageUrls = array_values(array_unique($rawUrls));
                     @endphp
                     
+                    
                     @forelse($imageUrls as $index => $imgUrl)
-                    <div class="relative w-full h-[300px] lg:h-[350px] cursor-pointer group rounded-3xl overflow-hidden shadow-sm" @click="lightboxImage = '{{ $imgUrl }}'">
+                    <div class="relative w-full aspect-square cursor-pointer group rounded-3xl overflow-hidden shadow-sm" @click="lightboxImage = '{{ $imgUrl }}'">
                         <img src="{{ $imgUrl }}" alt="{{ $item->title }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                        
+
                         {{-- Hover Overlay --}}
                         <div class="absolute inset-0 bg-gradient-to-t from-[#1a3c6e]/80 via-[#1a3c6e]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                             <div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform duration-300">
@@ -149,7 +154,7 @@
                     </div>
                     @empty
                     {{-- Placeholder if no images --}}
-                    <div class="w-full h-[300px] rounded-3xl bg-gray-50 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400">
+                    <div class="w-full aspect-square rounded-3xl bg-gray-50 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400">
                         <svg class="w-12 h-12 mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L28 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         <p class="text-sm font-medium">No images available</p>
                     </div>
