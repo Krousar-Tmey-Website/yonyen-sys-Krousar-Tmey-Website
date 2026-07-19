@@ -2,55 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\PartnerCategory;
+use App\Enums\PartnerSubcategory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePartnerRequest;
 use App\Http\Requests\UpdatePartnerRequest;
 use App\Models\Partner;
-use App\Models\PartnerCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class PartnerController extends Controller
 {
     /**
-     * Display partner list with optional search & category filter.
+     * Display partner list with optional search & category/subcategory filters.
      */
     public function index(Request $request)
     {
-        $search  = trim((string) $request->query('search', ''));
-        $category = $request->query('category');
-
-        $partnerCategoryModels = PartnerCategory::orderBy('name')->get();
-
-        $partners = Partner::query()
-            ->when($search !== '', function ($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%');
-            })
-            ->when(filled($category), function ($query) use ($category) {
-                $query->whereHas('categoryModel', fn ($q) => $q->where('name', $category));
-            })
-            ->latest()
-            ->get()
-            ->groupBy(fn ($p) => $p->category ?? 'Individual Donor');
-
-        $activeFilters = (filled($search) ? 1 : 0) + (filled($category) ? 1 : 0);
-        $totalPartners = $partners->sum(fn ($group) => $group->count());
-
-        $viewData = [
-            'partners'      => $partners,
-            'filters'       => ['search' => $search, 'category' => $category ?? ''],
-            'categories'    => $partnerCategoryModels,
-            'totalPartners' => $totalPartners,
-            'activeCount'   => $activeFilters,
-        ];
+        $viewData = $this->buildListViewData($request);
 
         if ($request->ajax() || $request->wantsJson()) {
             $html = view('admin.partners._results', $viewData)->render();
 
             return response()->json([
                 'html'          => $html,
-                'total'         => $totalPartners,
-                'activeFilters' => $activeFilters,
+                'total'         => $viewData['totalPartners'],
+                'activeFilters' => $viewData['activeCount'],
             ]);
         }
 
@@ -62,11 +38,7 @@ class PartnerController extends Controller
      */
     public function create()
     {
-        $partnerCategoryModels = PartnerCategory::orderBy('name')->get();
-
-        return view('admin.partners.create', [
-            'categories' => $partnerCategoryModels,
-        ]);
+        return view('admin.partners.create');
     }
 
     /**
@@ -86,7 +58,7 @@ class PartnerController extends Controller
         $data['is_active']  = true;
         $data['sort_order'] = 0;
 
-        $partner = Partner::create($data);
+        Partner::create($data);
 
         return redirect()->route('admin.partners.index')
             ->with('success', 'Partner created successfully.');
@@ -97,22 +69,10 @@ class PartnerController extends Controller
      */
     public function edit(Partner $partner)
     {
-        $partnerCategoryModels = PartnerCategory::orderBy('name')->get();
+        $viewData = $this->buildListViewData(request());
+        $viewData['editPartner'] = $partner;
 
-        $partners = Partner::latest()
-            ->get()
-            ->groupBy(fn ($p) => $p->category ?? 'Individual Donor');
-
-        $totalPartners = $partners->sum(fn ($group) => $group->count());
-
-        return view('admin.partners.index', [
-            'partners'      => $partners,
-            'editPartner'   => $partner,
-            'filters'       => ['search' => '', 'category' => ''],
-            'categories'    => $partnerCategoryModels,
-            'totalPartners' => $totalPartners,
-            'activeCount'   => 0,
-        ]);
+        return view('admin.partners.index', $viewData);
     }
 
     /**
@@ -159,5 +119,40 @@ class PartnerController extends Controller
 
         return redirect()->route('admin.partners.index')
             ->with('success', 'Partner removed successfully.');
+    }
+
+    /**
+     * Shared query + view-data builder for the index/edit list views.
+     */
+    private function buildListViewData(Request $request): array
+    {
+        $search      = trim((string) $request->query('search', ''));
+        $category    = $request->query('category');
+        $subcategory = $request->query('subcategory');
+
+        $partners = Partner::query()
+            ->whereNotNull('category')
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->when(filled($category), function ($query) use ($category) {
+                $query->where('category', $category);
+            })
+            ->when(filled($subcategory), function ($query) use ($subcategory) {
+                $query->where('subcategory', $subcategory);
+            })
+            ->latest()
+            ->get();
+
+        $activeFilters = (filled($search) ? 1 : 0) + (filled($category) ? 1 : 0) + (filled($subcategory) ? 1 : 0);
+
+        return [
+            'partners'      => $partners,
+            'filters'       => ['search' => $search, 'category' => $category ?? '', 'subcategory' => $subcategory ?? ''],
+            'mainCategories' => PartnerCategory::cases(),
+            'subcategories'  => PartnerSubcategory::cases(),
+            'totalPartners' => $partners->count(),
+            'activeCount'   => $activeFilters,
+        ];
     }
 }

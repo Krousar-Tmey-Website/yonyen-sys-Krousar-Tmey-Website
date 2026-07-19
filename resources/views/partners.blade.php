@@ -123,6 +123,7 @@
             </ul>
             <p>Whether for an inauguration or to show their support, H.M. the King, the Prime Minister and his wife, as well as members of the royal family, regularly visit Krousar Thmey&rsquo;s structures.</p>
 
+            
             <div class="row align-items-center mt-4 g-4">
                 <div class="col-auto mx-auto mx-sm-0">
                     <img src="{{ asset('images/partners/university.png') }}" alt="" width="110" height="110">
@@ -165,36 +166,19 @@
         <div class="container" style="max-width: 900px;">
             <h2 class="eyebrow mb-5">Technical Partners</h2>
             <div class="row row-cols-2 row-cols-sm-3 g-4 mb-5">
+                @foreach($technicalPartners as $partner)
                 <div class="col">
                     <div class="partner-logo-box">
-                        <img src="{{ asset('images/partners/partner1.webp') }}" alt="Enfants Sourds du Cambodge">
+                        @if($partner->website_url)
+                            <a href="{{ $partner->website_url }}" target="_blank" rel="noopener">
+                        @endif
+                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}">
+                        @if($partner->website_url)
+                            </a>
+                        @endif
                     </div>
                 </div>
-                <div class="col">
-                    <div class="partner-logo-box">
-                        <img src="{{ asset('images/partners/partner2.webp') }}" alt="Friends International">
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="partner-logo-box">
-                        <img src="{{ asset('images/partners/partner3.webp') }}" alt="Deaf Development Programme">
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="partner-logo-box">
-                        <img src="{{ asset('images/partners/partner4.webp') }}" alt="Cambodian Living Arts">
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="partner-logo-box">
-                        <img src="{{ asset('images/partners/partner5.webp') }}" alt="Sipar">
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="partner-logo-box">
-                        <img src="{{ asset('images/partners/partner6.webp') }}" alt="Save the Children">
-                    </div>
-                </div>
+                @endforeach
             </div>
             <p class="text-muted small">
                 Krousar Thmey develops partnerships with other local organizations to give access to the children supported by the Foundation to other activities.
@@ -209,153 +193,85 @@
         <div class="container" style="max-width: 900px;">
             <h2 class="eyebrow mb-4">Financial Partners</h2>
 
+            @php
+                $publicAuthorities = $financialPartnersBySubcategory->get(\App\Enums\PartnerSubcategory::CambodianPublicAuthorities->value, collect());
+            @endphp
+            
             {{-- Cambodian Public Authorities: always visible, no accordion --}}
+            @if($publicAuthorities->isNotEmpty())
             <div class="mb-2">
-                <h3 class="h4 fw-bold text-dark mb-3">Cambodian Public Authorities</h3>
+                <h3 class="h4 fw-bold text-dark mb-3">{{ \App\Enums\PartnerSubcategory::CambodianPublicAuthorities->value }}</h3>
                 <div class="row pb-4 border-bottom">
+                    @php
+                        $half = ceil($publicAuthorities->count() / 2);
+                        $chunks = $publicAuthorities->chunk($half);
+                    @endphp
+                    @foreach($chunks as $chunk)
                     <div class="col-md-6">
                         <ul class="list-plain">
-                            <li>His Majesty the King NORODOM Sihamoni</li>
-                            <li>Prime Minister Samdech Moha Borvor Thipadei HUN Manet</li>
-                            <li>Samdech Dr. Bun Rany HUN Sen</li>
-                            <li>Ministry of Social Affairs</li>
-                            <li>Ministry of Culture and Fine Arts</li>
-                            <li>Ministry of Information</li>
-                            <li>His Excellency the ambassador for Cambodia at UNESCO</li>
+                            @foreach($chunk as $partner)
+                                <li>
+                                    @if($partner->website_url)
+                                        <a href="{{ $partner->website_url }}" target="_blank" rel="noopener">{{ $partner->name }}</a>
+                                    @else
+                                        {{ $partner->name }}
+                                    @endif
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
-                    <div class="col-md-6">
-                        <ul class="list-plain">
-                            <li>Her Majesty the Queen Mother NORODOM Monineath Sihanouk</li>
-                            <li>Samdech Akka Moha Sena Padei Techo Hun Sen, President of the Senate</li>
-                            <li>The Royal Government of Cambodia</li>
-                            <li>Ministry of Education, Youth and Sport</li>
-                            <li>Ministry of Defense</li>
-                            <li>Ministry of Interior</li>
-                            <li>His Excellency the ambassador for Cambodia to France</li>
-                        </ul>
-                    </div>
+                    @endforeach
                 </div>
             </div>
+            @endif
 
-            {{-- Remaining groups: Bootstrap 5 native accordion (no Alpine, no loops) --}}
+            {{-- Remaining groups: Bootstrap 5 native accordion --}}
             <div class="accordion" id="financialPartnersAccordion">
-
-                {{-- Organizations, Foundations and Institutions --}}
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrganizations" aria-expanded="false" aria-controls="collapseOrganizations">
-                            Organizations, Foundations and Institutions
-                        </button>
-                    </h2>
-                    <div id="collapseOrganizations" class="accordion-collapse collapse" data-bs-parent="#financialPartnersAccordion">
-                        <div class="accordion-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul class="list-plain">
-                                        <li>DUBRULLE Family</li>
-                                        <li>Fondation Amanjaya</li>
-                                        <li>Fondation Masalina</li>
-                                        <li>Foundation Philantropique Famille Sandoz</li>
-                                        <li>GREEN LEAVES EDUCATION Foundation</li>
-                                        <li>Individual donor: Suzanne ROY, Grants Barbe.</li>
-                                        <li>LA VOIX DE L&rsquo;ENFANT Association</li>
-                                        <li>MAY-OUI Foundation</li>
-                                        <li>Musica Felice</li>
-                                        <li>PEOPLE&rsquo;S ACTION FOR INCLUSIVE DEVELOPMENT (PAfID)</li>
-                                        <li>ROTARY CLUB OF PERTH</li>
-                                        <li>STIFTUNG HIRTEN KINDER Foundation</li>
-                                        <li>UNICEF</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <ul class="list-plain">
-                                        <li>ENFANCE ESPOIR Foundation</li>
-                                        <li>Fondation Andr&eacute; &amp; Cyprien</li>
-                                        <li>Fonds M&eacute;c&eacute;nat SIG</li>
-                                        <li>Gertrude Hirzel Foundation</li>
-                                        <li>Individual donor: Peter Tschofen</li>
-                                        <li>INTERNATIONAL COUNCIL FOR EDUCATION OF PEOPLE WITH VISUAL IMPAIRMENT (ICEVI)</li>
-                                        <li>LES AMIS DES ENFANTS DU MONDE Association</li>
-                                        <li>Miwako Fujiwara &ndash; Musica Felice Foundation</li>
-                                        <li>OVERBROOK SCHOOL FOR THE BLIND (ONNET)</li>
-                                        <li>Raksa Koma Organization</li>
-                                        <li>ROTARY CLUB OF PHNOM PENH</li>
-                                        <li>TALIKA</li>
-                                    </ul>
+                @foreach(\App\Enums\PartnerSubcategory::cases() as $index => $subcategory)
+                    @if($subcategory === \App\Enums\PartnerSubcategory::CambodianPublicAuthorities)
+                        @continue
+                    @endif
+                    
+                    @php
+                        $partners = $financialPartnersBySubcategory->get($subcategory->value, collect());
+                    @endphp
+                    
+                    @if($partners->isNotEmpty())
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="false" aria-controls="collapse{{ $index }}">
+                                {{ $subcategory->value }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ $index }}" class="accordion-collapse collapse" data-bs-parent="#financialPartnersAccordion">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    @php
+                                        $half = ceil($partners->count() / 2);
+                                        $chunks = $partners->chunk($half);
+                                    @endphp
+                                    @foreach($chunks as $chunk)
+                                    <div class="col-md-6">
+                                        <ul class="list-plain">
+                                            @foreach($chunk as $partner)
+                                                <li>
+                                                    @if($partner->website_url)
+                                                        <a href="{{ $partner->website_url }}" target="_blank" rel="noopener">{{ $partner->name }}</a>
+                                                    @else
+                                                        {{ $partner->name }}
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                {{-- Companies --}}
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCompanies" aria-expanded="false" aria-controls="collapseCompanies">
-                            Companies
-                        </button>
-                    </h2>
-                    <div id="collapseCompanies" class="accordion-collapse collapse" data-bs-parent="#financialPartnersAccordion">
-                        <div class="accordion-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul class="list-plain">
-                                        <li>ABA BANK</li>
-                                        <li>ANGKOR ARTWORK (Eric STOCKER)</li>
-                                        <li>BRED BANK CAMBODIA</li>
-                                        <li>BODIA NATURE</li>
-                                        <li>CMDK</li>
-                                        <li>KHMER CERAMICS &amp; FINE ARTS CENTER</li>
-                                        <li>PROMOTION FOR DISABILITY PROJECT</li>
-                                        <li>RADIO HAPPINESS VOICE FOR THE BLIND</li>
-                                        <li>SEIN LIM</li>
-                                        <li>SMART Cambodia</li>
-                                        <li>SOFITEL Phnom Penh Phokeethra</li>
-                                        <li>TEMPLATION ANGKOR BOUTIQUE</li>
-                                        <li>TOP STREET RESTAURANT</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <ul class="list-plain">
-                                        <li>AMANJAYA HOTEL</li>
-                                        <li>BAJAJ INTRACITY</li>
-                                        <li>BLIND MASSAGE CENTER</li>
-                                        <li>CAMH Co. LTD</li>
-                                        <li>D+Z URBAN HOTEL</li>
-                                        <li>LONG RA Car mechanic</li>
-                                        <li>PUNLEU THMEY Restaurant</li>
-                                        <li>SAN FRANSISCO COMPANY</li>
-                                        <li>SENG POV Car mechanic</li>
-                                        <li>SOCIAL COFFEE</li>
-                                        <li>SOFT SKILL PROFESSIONAL TRAINING SERVICE</li>
-                                        <li>THALIAS (Malis Restaurant, Khema, Arunreas Hotel)</li>
-                                        <li>VOICE OF THE BLIND Radio station</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Towns and Municipalities --}}
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTowns" aria-expanded="false" aria-controls="collapseTowns">
-                            Towns and Municipalities
-                        </button>
-                    </h2>
-                    <div id="collapseTowns" class="accordion-collapse collapse" data-bs-parent="#financialPartnersAccordion">
-                        <div class="accordion-body">
-                            <ul class="list-plain">
-                                <li>City of Geneva</li>
-                                <li>City of Meyrin</li>
-                                <li>Town of Hermance</li>
-                                <li>Towns of Collonge-Bellerive, Hermance and Vandoeuvres</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                    @endif
+                @endforeach
+            </div>
 
             </div>
         </div>

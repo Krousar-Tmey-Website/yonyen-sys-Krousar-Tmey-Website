@@ -7,6 +7,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\ResourcePageController;
 use App\Http\Controllers\VolunteerController;
 use App\Models\AnnualReport;
 use App\Models\Award;
@@ -18,6 +19,7 @@ use App\Models\JobOpportunity;
 use App\Models\MediaItem;
 use App\Models\News;
 use App\Models\PageSection;
+use App\Models\Partner;
 use App\Models\Program;
 use App\Models\ProgramPageItem;
 use App\Models\Project;
@@ -63,7 +65,21 @@ Route::get('/who-we-are', function () {
     $settings = HomeSetting::allKeyed();
     $coreValues = CoreValue::ordered()->get();
 
-    return view('about', compact('awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues'));
+    $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
+
+    $financialPartnersBySubcategory = Partner::active()
+        ->where('category', PartnerCategory::Financial->value)
+        ->get()
+        ->groupBy('subcategory');
+
+    $transferProgramItem = ProgramPageItem::active()
+        ->where('title', 'Transfer of Krousar Thmey Schools to the Cambodian Authorities')
+        ->first();
+
+    return view('about', compact(
+        'awards', 'offices', 'historyEvents', 'reports', 'settings', 'coreValues',
+        'technicalPartners', 'financialPartnersBySubcategory', 'transferProgramItem'
+    ));
 })->name('about');
 
 // Who We Are - Sub-pages
@@ -130,8 +146,12 @@ Route::get('/get-involved', function () {
     $settings = HomeSetting::allKeyed();
     $jobs = JobOpportunity::active()->ordered()->get();
     $books = Book::available()->orderBy('sort_order')->orderBy('title')->get();
+    
+    $partnershipCategories = \App\Models\PartnershipCategory::ordered()->get();
+    $partnerPrinciples = \App\Models\PartnerPrinciple::ordered()->get();
+    $worldwidePartners = \App\Models\WorldwidePartner::active()->get();
 
-    return view('involved', compact('settings', 'jobs', 'books'));
+    return view('involved', compact('settings', 'jobs', 'books', 'partnershipCategories', 'partnerPrinciples', 'worldwidePartners'));
 })->name('involved');
 
 // Books for sale (public detail page)
@@ -151,6 +171,9 @@ Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 // Media — dedicated page
 Route::get('/media', [MediaController::class, 'index'])->name('media');
 Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show');
+
+Route::get('/topics', [ResourcePageController::class, 'index'])->name('resource-pages.index');
+Route::get('/topics/{slug}', [ResourcePageController::class, 'show'])->name('resource-pages.show');
 
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
@@ -191,7 +214,14 @@ Route::get('/contact', function () {
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/partners', function () {
-    return view('partners');
+    $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
+    
+    $financialPartnersBySubcategory = Partner::active()
+        ->where('category', PartnerCategory::Financial->value)
+        ->get()
+        ->groupBy('subcategory');
+
+    return view('partners', compact('technicalPartners', 'financialPartnersBySubcategory'));
 })->name('partners');
 
 Route::get('/donate', [DonationController::class, 'show'])->name('donate');
@@ -231,9 +261,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('/donations/dashboard', [Admin\DonationDashboardController::class, 'index'])->name('donations.dashboard');
     Route::resource('donations', Admin\DonationController::class);
 
-    // News & Categories
+    // News
     Route::resource('news', Admin\NewsController::class);
-    Route::resource('categories', Admin\CategoryController::class)->except(['show']);
+    Route::resource('resource-pages', Admin\ResourcePageController::class)->except(['show']);
 
     // Programs & Projects
     Route::resource('programs', Admin\ProgramController::class)->except(['show']);

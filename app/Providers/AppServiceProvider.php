@@ -6,7 +6,6 @@ use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\Book;
 use App\Models\Campaign;
-use App\Models\Category;
 use App\Models\Child;
 use App\Models\ContactInquiry;
 use App\Models\CoreValue;
@@ -56,7 +55,6 @@ class AppServiceProvider extends ServiceProvider
             Award::class,
             Book::class,
             Campaign::class,
-            Category::class,
             Child::class,
             ContactInquiry::class,
             CoreValue::class,

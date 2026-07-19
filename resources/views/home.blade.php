@@ -560,11 +560,13 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($latestNews as $article)
             <article class="card group flex flex-col">
-                <div class="relative overflow-hidden h-52">
+                <a href="{{ route('news.show', $article->slug) }}" class="relative overflow-hidden h-52 block">
                     <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#1a3c6e] text-xs font-semibold px-3 py-1 rounded-full capitalize">{{ str_replace('-', ' ', $article->category) }}</span>
-                </div>
+                    @if(!empty($article->tag_links[0]['label']))
+                    <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#1a3c6e] text-xs font-semibold px-3 py-1 rounded-full">{{ $article->tag_links[0]['label'] }}</span>
+                    @endif
+                </a>
                 <div class="p-6 flex flex-col flex-1">
                     <time class="text-gray-400 text-xs mb-3 flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -572,9 +574,11 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                         </svg>
                         {{ $article->published_at?->format('F Y') ?? $article->created_at->format('F Y') }}
                     </time>
-                    <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug group-hover:text-[#1a3c6e] transition-colors">{{ $article->title }}</h3>
+                    <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug">
+                        <a href="{{ route('news.show', $article->slug) }}" class="group-hover:text-[#1a3c6e] transition-colors">{{ $article->title }}</a>
+                    </h3>
                     <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $article->excerpt }}</p>
-                    <a href="{{ route('news') }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors">
+                    <a href="{{ route('news.show', $article->slug) }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors">
                         Read More
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -656,8 +660,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 @if(isset($sponsors) && $sponsors->isNotEmpty())
 <section class="py-16 bg-gradient-to-b from-white to-[#f8f9fc] relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
-
-
+        
         {{-- Section Header --}}
         <div class="text-center mb-12">
             <h2 class="section-title mt-2 text-[#1a3c6e]">{{ __('Among our loyal supporters') }}</h2>
@@ -666,7 +669,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
         {{-- Sponsors Marquee --}}
         <div class="relative max-w-7xl mx-auto"
-            x-data="{ paused: false }"
+             x-data="{ paused: false }"
              @mouseenter="paused = true"
              @mouseleave="paused = false">
 
@@ -676,7 +679,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
             <div class="overflow-hidden py-6">
                 <div class="flex marquee-track items-center"
-                    :style="{ animationPlayState: paused ? 'paused' : 'running' }">
+                     :style="{ animationPlayState: paused ? 'paused' : 'running' }">
                     
                     {{-- Set 1 --}}
                     @foreach($sponsors as $sponsor)
@@ -693,7 +696,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                                 <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->name, 0, 1) }}</div>
                                 @endif
                             </div>
-
+                            
                             <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
                                 <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->name }}</h4>
                             </div>
@@ -716,7 +719,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                                 <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->name, 0, 1) }}</div>
                                 @endif
                             </div>
-
+                            
                             <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
                                 <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->name }}</h4>
                             </div>
