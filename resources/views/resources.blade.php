@@ -70,38 +70,54 @@
 
         @php
             $mediaContactEmail = \App\Models\HomeSetting::getValue('media_contact_email', 'communication@krousar-thmey.org');
-            $mediaFacebookUrl = \App\Models\HomeSetting::getValue('media_facebook_url', 'https://www.facebook.com/KrousarThmey/');
-            $mediaTwitterUrl = \App\Models\HomeSetting::getValue('media_twitter_url', 'https://twitter.com/krousarthmey');
-            $mediaLinkedinUrl = \App\Models\HomeSetting::getValue('media_linkedin_url', 'https://www.linkedin.com/company/krousar-thmey/');
+
+            // Sharing settings (same system as Awards/History sections)
+            $sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
+            $facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
+            $facebookIcon = str_starts_with($facebookIcon, 'social/') ? 'storage/' . $facebookIcon : $facebookIcon;
+            $twitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
+            $twitterIcon = str_starts_with($twitterIcon, 'social/') ? 'storage/' . $twitterIcon : $twitterIcon;
+            $linkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
+            $linkedinIcon = str_starts_with($linkedinIcon, 'social/') ? 'storage/' . $linkedinIcon : $linkedinIcon;
+            $shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
+            $shareIcon = str_starts_with($shareIcon, 'social/') ? 'storage/' . $shareIcon : $shareIcon;
+            $facebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
+            $twitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
+            $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
         @endphp
 
-        <div class="text-center mb-16">
-            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Press & Coverage</span>
-            <h2 class="section-title mt-3 mb-3">Media Resources</h2>
-            <p class="text-gray-500">Press articles, media coverage, and news featuring Krousar Thmey's work in Cambodia.</p>
+        <div class="text-center mb-16" data-reveal>
+            <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">MEDIA RESOURCES</h2>
 
+            {{-- Sharing icons (same style as Awards/History) --}}
+            @if($sharingEnabled == '1')
             <div class="flex items-center justify-center gap-3 mt-6">
-                <a href="{{ $mediaFacebookUrl }}" target="_blank" rel="noopener noreferrer"
-                   class="w-10 h-10 rounded-full bg-[#1a4fa0]/10 hover:bg-[#1a4fa0] text-[#1a4fa0] hover:text-white flex items-center justify-center transition-all duration-200">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <a href="{{ $facebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Media Resources') . '&linknote=' . urlencode('Krousar Thmey - Media Resources') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($facebookIcon) }}" alt="Facebook" class="w-full h-full object-cover">
                 </a>
-                <a href="{{ $mediaTwitterUrl }}" target="_blank" rel="noopener noreferrer"
-                   class="w-10 h-10 rounded-full bg-[#1a4fa0]/10 hover:bg-[#1a4fa0] text-[#1a4fa0] hover:text-white flex items-center justify-center transition-all duration-200">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <a href="{{ $twitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Media Resources') . '&linknote=' . urlencode('Krousar Thmey - Media Resources') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($twitterIcon) }}" alt="Twitter" class="w-full h-full object-cover">
                 </a>
-                <a href="{{ $mediaLinkedinUrl }}" target="_blank" rel="noopener noreferrer"
-                   class="w-10 h-10 rounded-lg bg-[#1a4fa0]/10 hover:bg-[#1a4fa0] text-[#1a4fa0] hover:text-white flex items-center justify-center transition-all duration-200">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <a href="{{ $linkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Media Resources') . '&linknote=' . urlencode('Krousar Thmey - Media Resources') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($linkedinIcon) }}" alt="LinkedIn" class="w-full h-full object-cover">
                 </a>
-                <button onclick="if(navigator.share){navigator.share({title:'Krousar Thmey Media',url:window.location.href})}else{navigator.clipboard.writeText(window.location.href);this.classList.add('bg-green-500','text-white');setTimeout(()=>this.classList.remove('bg-green-500','text-white'),1500)}"
-                   class="w-10 h-10 rounded-lg bg-[#1a4fa0]/10 hover:bg-[#1a4fa0] text-[#1a4fa0] hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                </button>
+                <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Media Resources') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($shareIcon) }}" alt="Share" class="w-full h-full object-cover">
+                </a>
             </div>
+            @endif
 
-            <p class="text-gray-600 text-sm max-w-2xl mx-auto leading-relaxed mt-4">
+            <p class="text-gray-600 text-sm max-w-2xl mx-auto leading-relaxed mt-6">
                 For any request, please contact our Communication Officer at
-                <a href="mailto:{{ $mediaContactEmail }}" class="text-[#1a4fa0] font-semibold hover:underline">{{ $mediaContactEmail }}</a>
+                <a href="mailto:{{ $mediaContactEmail }}" class="text-[#0A5EA8] font-semibold hover:underline">{{ $mediaContactEmail }}</a>
             </p>
         </div>
 

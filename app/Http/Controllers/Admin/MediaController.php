@@ -26,22 +26,19 @@ class MediaController extends Controller
         $data = $request->validate([
             'title'         => ['required', 'string', 'max:255'],
             'description'   => ['nullable', 'string'],
-            'caption'       => ['nullable', 'string', 'max:500'],
-            'category'      => ['nullable', 'string', 'max:255'],
             'source'        => ['nullable', 'string', 'max:255'],
             'external_link' => ['nullable', 'url', 'max:2048'],
             'image'         => ['nullable', 'image', 'max:2048'],
-            'image_url'     => ['nullable', 'url', 'max:2048'],
             'is_published'  => ['nullable', 'boolean'],
+            'published_at'  => ['nullable', 'date'],
             'sort_order'    => ['nullable', 'integer'],
         ]);
 
-        $data['is_published'] = $request->boolean('is_published'); // hidden input sends 0 when unchecked
+        $data['is_published'] = $request->boolean('is_published');
         $data['sort_order']   = $data['sort_order'] ?? 0;
 
         // Resolve image
-        $data['image'] = $this->resolveImage($request, $data);
-        unset($data['image_url']);
+        $data['image'] = $this->resolveImage($request);
 
         if ($data['is_published'] && empty($data['published_at'])) {
             $data['published_at'] = now();
@@ -62,14 +59,12 @@ class MediaController extends Controller
         $data = $request->validate([
             'title'         => ['required', 'string', 'max:255'],
             'description'   => ['nullable', 'string'],
-            'caption'       => ['nullable', 'string', 'max:500'],
-            'category'      => ['nullable', 'string', 'max:255'],
             'source'        => ['nullable', 'string', 'max:255'],
             'external_link' => ['nullable', 'url', 'max:2048'],
             'image'         => ['nullable', 'image', 'max:2048'],
-            'image_url'     => ['nullable', 'url', 'max:2048'],
             'remove_image'  => ['nullable', 'boolean'],
             'is_published'  => ['nullable', 'boolean'],
+            'published_at'  => ['nullable', 'date'],
             'sort_order'    => ['nullable', 'integer'],
         ]);
 
@@ -81,7 +76,7 @@ class MediaController extends Controller
             $this->deleteStoredImage($media->image);
             $data['image'] = null;
         } else {
-            $newImage = $this->resolveImage($request, $data);
+            $newImage = $this->resolveImage($request);
             if ($newImage !== null) {
                 $this->deleteStoredImage($media->image);
                 $data['image'] = $newImage;
@@ -89,9 +84,9 @@ class MediaController extends Controller
                 unset($data['image']);
             }
         }
-        unset($data['image_url'], $data['remove_image']);
+        unset($data['remove_image']);
 
-        if ($data['is_published'] && !$media->published_at) {
+        if ($data['is_published'] && empty($data['published_at'])) {
             $data['published_at'] = now();
         }
 
@@ -122,14 +117,10 @@ class MediaController extends Controller
         return redirect()->route('admin.media.index')->with('success', 'Media item deleted.');
     }
 
-    private function resolveImage(Request $request, array $data): ?string
+    private function resolveImage(Request $request): ?string
     {
         if ($request->hasFile('image')) {
             return $request->file('image')->store('media', 'public');
-        }
-
-        if (!empty($data['image_url'])) {
-            return $data['image_url'];
         }
 
         return null;

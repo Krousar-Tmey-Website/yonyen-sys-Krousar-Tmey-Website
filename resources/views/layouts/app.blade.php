@@ -294,7 +294,7 @@ function googleTranslateElementInit() {
                             x-transition:leave-end="opacity-0 translate-y-1"
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
                             <a href="{{ route('resources') }}" class="dropdown-item rounded-t-xl">Annual Reports</a>
-                            <a href="{{ route('media') }}" class="dropdown-item rounded-b-xl">Media</a>
+                            <a href="{{ route('resources') }}" class="dropdown-item rounded-b-xl">Media</a>
                         </div>
                     </div>
 
@@ -374,7 +374,7 @@ function googleTranslateElementInit() {
                     </a>
                     <div x-show="open" class="pl-4 space-y-1">
                         <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-sm hover:bg-gray-50 font-medium transition-all {{ $isResources ? 'text-[#2d6fa3]' : 'text-gray-600 hover:text-[#2d6fa3]' }}">Annual Reports</a>
-                        <a href="{{ route('media') }}" class="block px-3 py-2 rounded-lg text-sm hover:bg-gray-50 font-medium transition-all {{ request()->routeIs('media') ? 'text-[#2d6fa3]' : 'text-gray-600 hover:text-[#2d6fa3]' }}">Media</a>
+                        <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-sm hover:bg-gray-50 font-medium transition-all {{ request()->routeIs('resources') ? 'text-[#2d6fa3]' : 'text-gray-600 hover:text-[#2d6fa3]' }}">Media</a>
                     </div>
                 </div>
                 <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg hover:bg-gray-50 font-medium transition-all {{ request()->routeIs('contact') || request()->routeIs('contact.*') ? 'bg-[#2d6fa3]/10 text-[#2d6fa3]' : 'text-gray-700 hover:text-[#2d6fa3]' }}">Contact</a>
@@ -486,7 +486,7 @@ function googleTranslateElementInit() {
                         <li><a href="{{ route('programs') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Our Programs') }}</a></li>
                         <li><a href="{{ route('news') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('News') }}</a></li>
                         <li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Resources') }}</a></li>
-<li><a href="{{ route('media') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Media') }}</a></li>
+<li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Media') }}</a></li>
                         <li><a href="{{ route('contact') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Contact') }}</a></li>
                     </ul>
                 </div>

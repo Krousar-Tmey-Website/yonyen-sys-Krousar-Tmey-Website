@@ -18,7 +18,7 @@ class MediaController extends Controller
             ->ordered()
             ->get();
 
-        return view('media', compact('featured', 'mediaItems'));
+return view('media', compact('featured', 'mediaItems'));
     }
 
     public function show(MediaItem $media)
