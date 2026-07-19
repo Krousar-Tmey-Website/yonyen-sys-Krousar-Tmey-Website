@@ -672,6 +672,83 @@ $structureImage = $settings['structure_image'] ?? null;
     </div>
 </section>
 
+{{-- ===== SPONSORS ===== --}}
+@if(isset($sponsors) && $sponsors->isNotEmpty())
+<section class="py-16 bg-gradient-to-b from-white to-[#f8f9fc] relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        
+        {{-- Section Header --}}
+        <div class="text-center mb-12">
+            <h2 class="section-title mt-2 text-[#1a3c6e]">{{ __('Among our loyal supporters') }}</h2>
+            <div class="w-16 h-1 bg-[#e8a020] mx-auto mt-4 rounded-full opacity-80"></div>
+        </div>
+
+        {{-- Sponsors Marquee --}}
+        <div class="relative max-w-7xl mx-auto"
+             x-data="{ paused: false }"
+             @mouseenter="paused = true"
+             @mouseleave="paused = false">
+
+            {{-- Gradient fade edges --}}
+            <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#fcfcfd] to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none"></div>
+
+            <div class="overflow-hidden py-6">
+                <div class="flex marquee-track items-center"
+                     :style="{ animationPlayState: paused ? 'paused' : 'running' }">
+                    
+                    {{-- Set 1 --}}
+                    @foreach($sponsors as $sponsor)
+                    <div class="group w-72 flex-shrink-0 mx-4">
+                        <a href="{{ $sponsor->url ?? '#' }}" {{ $sponsor->url ? 'target="_blank" rel="noopener noreferrer"' : '' }} 
+                           class="flex flex-col items-center justify-center h-48 px-6 py-5 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-100 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#1a3c6e]/20">
+                           
+                            <div class="flex-grow flex items-center justify-center w-full mb-4">
+                                @if($sponsor->logo)
+                                <img src="{{ str_starts_with($sponsor->logo, 'http') ? $sponsor->logo : asset('storage/' . $sponsor->logo) }}" 
+                                     alt="{{ $sponsor->name }}" 
+                                     class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
+                                @else
+                                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->name, 0, 1) }}</div>
+                                @endif
+                            </div>
+                            
+                            <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
+                                <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->name }}</h4>
+                            </div>
+                        </a>
+                    </div>
+                    @endforeach
+
+                    {{-- Set 2 for seamless loop --}}
+                    @foreach($sponsors as $sponsor)
+                    <div class="group w-72 flex-shrink-0 mx-4">
+                        <a href="{{ $sponsor->url ?? '#' }}" {{ $sponsor->url ? 'target="_blank" rel="noopener noreferrer"' : '' }} 
+                           class="flex flex-col items-center justify-center h-48 px-6 py-5 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-100 transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#1a3c6e]/20">
+                           
+                            <div class="flex-grow flex items-center justify-center w-full mb-4">
+                                @if($sponsor->logo)
+                                <img src="{{ str_starts_with($sponsor->logo, 'http') ? $sponsor->logo : asset('storage/' . $sponsor->logo) }}" 
+                                     alt="{{ $sponsor->name }}" 
+                                     class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
+                                @else
+                                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->name, 0, 1) }}</div>
+                                @endif
+                            </div>
+                            
+                            <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
+                                <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->name }}</h4>
+                            </div>
+                        </a>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
+
 {{-- ===== PARTNERS ===== --}}
 @php
 $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo', '!=', '')->get();
@@ -737,6 +814,7 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
 
     </div>
 </section>
+@endif
 
 {{-- Marquee keyframes --}}
 <style>
@@ -747,8 +825,8 @@ $homePartners = \App\Models\Partner::active()->whereNotNull('logo')->where('logo
     .marquee-track {
         will-change: transform;
         animation: marqueeScroll 30s linear infinite;
+        width: max-content;
     }
 </style>
-@endif
 
 @endsection
