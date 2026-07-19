@@ -148,7 +148,12 @@ Route::get('/get-involved', function () {
     $settings = HomeSetting::allKeyed();
     $jobs = JobOpportunity::active()->ordered()->get();
     $books = Book::available()->orderBy('sort_order')->orderBy('title')->get();
-    return view('involved', compact('settings', 'jobs', 'books'));
+    
+    $partnershipCategories = \App\Models\PartnershipCategory::ordered()->get();
+    $partnerPrinciples = \App\Models\PartnerPrinciple::ordered()->get();
+    $worldwidePartners = \App\Models\WorldwidePartner::active()->get();
+
+    return view('involved', compact('settings', 'jobs', 'books', 'partnershipCategories', 'partnerPrinciples', 'worldwidePartners'));
 })->name('involved');
 
 // Books for sale (public detail page)
@@ -197,7 +202,14 @@ Route::get('/contact', function () {
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/partners', function () {
-    return view('partners');
+    $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
+    
+    $financialPartnersBySubcategory = Partner::active()
+        ->where('category', PartnerCategory::Financial->value)
+        ->get()
+        ->groupBy('subcategory');
+
+    return view('partners', compact('technicalPartners', 'financialPartnersBySubcategory'));
 })->name('partners');
 
 Route::get('/donate', [DonationController::class, 'show'])->name('donate');
