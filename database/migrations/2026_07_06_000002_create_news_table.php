@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('category')->default('general');
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();
+            $table->json('links')->nullable();
+            $table->string('tags')->nullable();
             $table->timestamps();
         });
     }

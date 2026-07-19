@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -21,6 +22,7 @@
 @layer base {
     html { scroll-behavior: smooth; }
     body { @apply font-sans antialiased; }
+    [x-cloak] { display: none !important; }
 }
 
 @layer components {
@@ -63,9 +65,32 @@
                transition-colors duration-150;
     }
 
-    .animate-slide-up {
-        animation: slideUp 0.6s ease forwards;
+    .form-label {
+        @apply block text-sm font-bold text-gray-700 mb-1.5;
     }
+
+    .form-input {
+        @apply w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-sm text-gray-800
+               placeholder:text-gray-400 placeholder:font-normal transition-all duration-150
+               hover:border-gray-400
+               focus:outline-none focus:bg-white focus:border-[#2d6fa3] focus:ring-4 focus:ring-[#2d6fa3]/15;
+    }
+
+    .form-input-error {
+        @apply border-red-300 bg-red-50/40 focus:border-red-400 focus:ring-red-400/15;
+    }
+
+ .animate-slide-up {
+     animation: slideUp 0.6s ease forwards;
+ }
+
+ .scale-108 {
+     transform: scale(1.08);
+ }
+ 
+ .impact-card-small {
+     transition: all 0.3s ease;
+ }
 }
 
 @keyframes slideUp {
@@ -73,11 +98,423 @@
     to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes heroDrift {
+    0%, 100% { transform: scale(1.04) translate3d(0, 0, 0); }
+    50% { transform: scale(1.08) translate3d(-1.5%, -1%, 0); }
+}
+
+@keyframes heroFloat {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -14px, 0); }
+}
+
+@keyframes heroPulse {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.34; transform: scale(1.08); }
+}
+
+@keyframes heroReveal {
+    from { opacity: 0; transform: translate3d(0, 24px, 0) scale(0.985); }
+    to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+.hero-media-drift {
+    animation: heroDrift 18s ease-in-out infinite;
+    will-change: transform;
+}
+
+.hero-float-slow {
+    animation: heroFloat 9s ease-in-out infinite;
+    will-change: transform;
+}
+
+.hero-float-delayed {
+    animation: heroFloat 11s ease-in-out infinite;
+    animation-delay: 1.2s;
+    will-change: transform;
+}
+
+.hero-pulse {
+    animation: heroPulse 8s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+.hero-reveal {
+    opacity: 0;
+    animation: heroReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-reveal-delay-1 { animation-delay: 0.12s; }
+.hero-reveal-delay-2 { animation-delay: 0.24s; }
+.hero-reveal-delay-3 { animation-delay: 0.36s; }
+.hero-reveal-delay-4 { animation-delay: 0.48s; }
+
 /* Carousel transitions */
 .carousel-item { transition: opacity 0.7s ease-in-out; }
+
+/* ── Timeline year flag ──
+   Pointed notch on the edge facing the rail. Mobile's rail is always on the
+   left, so the default notch faces left; desktop's left-column cards face
+   the rail on their right, so they get the opposite cut at md+. */
+.timeline-year-flag {
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%);
+}
+@media (min-width: 768px) {
+    .timeline-year-flag--left {
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
+    }
+}
+
+/* ── Scroll-reveal system ──
+   Elements start hidden/offset and fade+slide into place once they enter
+   the viewport (see the IntersectionObserver in resources/js/app.js).
+   Variants: data-reveal="up" (default), "left", "right", "scale". */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--reveal-delay, 0) * 1ms);
+    will-change: opacity, transform;
+}
+[data-reveal="left"]  { transform: translateX(-36px); }
+[data-reveal="right"] { transform: translateX(36px); }
+[data-reveal="scale"] { transform: translateY(14px) scale(0.94); }
+[data-reveal="line"]  { transform: scaleY(0); transform-origin: top; }
+[data-reveal].is-revealed { opacity: 1; transform: none; }
+
+/* ── Article body media ──
+   Subtle hover zoom on inline images/embeds within news article content,
+   applies uniformly across every article without touching stored HTML. */
+.article-content img {
+    transition: transform 0.5s ease;
+}
+.article-content img:hover {
+    transform: scale(1.02);
+}
+.article-content iframe {
+    border-radius: 0.5rem;
+}
+
+/* ── Timeline year navigator ──
+   Active state toggled by the scrollspy IntersectionObserver in resources/js/app.js. */
+.year-nav-link.is-active {
+    @apply text-[#1d4e7a] border-[#1d4e7a] bg-white;
+}
+.year-nav-link.is-active .year-nav-dot {
+    @apply bg-[#1d4e7a];
+}
+
+/* ── Staggered card reveal (once-only) ──
+   Each card fades in and slides up sequentially as it enters the
+   viewport. The IntersectionObserver in app.js unobserves after
+   the first trigger so animations only play once per card. */
+[data-reveal-card] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--reveal-card-delay, 0) * 1ms);
+    will-change: opacity, transform;
+}
+[data-reveal-card].is-card-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-media-drift,
+    .hero-float-slow,
+    .hero-float-delayed,
+    .hero-pulse,
+    .hero-reveal {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    [data-reveal] { transition: none !important; opacity: 1 !important; transform: none !important; }
+    [data-reveal-card] { transition: none !important; opacity: 1 !important; transform: none !important; }
+}
 
 /* Custom scrollbar */
 ::-webkit-scrollbar       { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: #2d6fa3; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #3a82bb; }
+
+/* ── Impact Cards (Our Impact / Key Figures Section) ── */
+@media (min-width: 1024px) {
+    .impact-card {
+        grid-column: span 2 / span 2;
+        grid-row: span 2 / span 2;
+    }
+}
+
+/* Featured Hero Card - Premium Design */
+.impact-card {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+/* Override the data-reveal opacity for impact cards */
+.impact-card[data-reveal] {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Gradient border effect for featured card */
+.impact-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 32px;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(232, 160, 32, 0.4), rgba(45, 111, 163, 0.4), rgba(141, 168, 58, 0.4));
+    background-size: 300% 300%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1;
+}
+
+.impact-card::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 30px;
+    background: inherit;
+    z-index: 0;
+}
+
+.impact-card.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.impact-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 35px 60px -15px rgba(29, 78, 122, 0.35);
+    animation: subtleGlow 2s ease-in-out infinite;
+}
+
+.impact-card:hover::before {
+    opacity: 1;
+    animation: gradientShift 3s ease infinite;
+}
+
+/* Glassmorphism card for featured hero */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s ease;
+}
+
+.glass-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Small cards - Image background with dark overlay */
+.impact-card-small {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.impact-card-small.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Smooth background image scale on hover for small impact cards */
+.impact-card-small:hover {
+    background-size: 110%;
+    transition: background-size 0.5s ease;
+}
+
+/* Override the data-reveal opacity for small impact cards */
+.impact-card-small[data-reveal] {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Subtle glow effect for featured card */
+@keyframes subtleGlow {
+    0%, 100% { box-shadow: 0 35px 60px -15px rgba(29, 78, 122, 0.35); }
+    50% { box-shadow: 0 35px 80px -15px rgba(232, 160, 32, 0.25); }
+}
+
+/* Background zoom for featured card */
+.impact-card.group:hover {
+    background-size: 105%;
+    transition: background-size 5s ease;
+}
+
+/* Gradient animation for featured card border */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Responsive behavior for tablet and mobile */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .impact-card {
+        grid-column: span 2 / span 2 !important;
+    }
+}
+
+/* Mobile: Featured card appears first */
+@media (max-width: 767px) {
+    .impact-card {
+        grid-column: span 1 / span 1 !important;
+        grid-row: span 1 / span 1 !important;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────
+   PREMIUM KEY FIGURES / IMPACT STATISTICS SECTION
+   ───────────────────────────────────────────────────────── */
+
+/* Main section background with decorative elements */
+#key-figures {
+    position: relative;
+}
+
+/* Smooth counter animation for numbers */
+@keyframes countUp {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.counter {
+    animation: countUp 0.6s ease-out;
+}
+
+/* Premium card styling with hover effects */
+#key-figures .group {
+    position: relative;
+}
+
+/* Card hover effect - lift and shadow */
+#key-figures .group:hover {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Icon scale effect on card hover */
+#key-figures .group:hover svg {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Accent line animation */
+#key-figures .group:hover .h-1 {
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Grid responsive layout */
+#key-figures .grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+/* Desktop: 3-2 layout */
+@media (min-width: 1280px) {
+    #key-figures .grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+/* Large screens: 3-2 layout with proper centering */
+@media (min-width: 1024px) and (max-width: 1279px) {
+    #key-figures .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-flow: dense;
+    }
+    
+    #key-figures .grid > :nth-child(4),
+    #key-figures .grid > :nth-child(5) {
+        grid-column: auto;
+    }
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 768px) and (max-width: 1023px) {
+    #key-figures .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+    }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 767px) {
+    #key-figures .grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+/* Subtle decorative pattern */
+#key-figures .opacity-30 {
+    animation: slowDrift 20s ease-in-out infinite;
+}
+
+@keyframes slowDrift {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.35; }
+}
+
+/* Glow effect on decorative circles */
+@keyframes softGlow {
+    0%, 100% { filter: blur(100px); opacity: 0.2; }
+    50% { filter: blur(90px); opacity: 0.3; }
+}
+
+#key-figures [class*="bg-gradient"] {
+    animation: softGlow 8s ease-in-out infinite;
+}
+
+/* Smooth color transitions */
+.transition-all {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Prevent layout shift on hover */
+#key-figures .group {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Reduce motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    #key-figures .group,
+    #key-figures .counter,
+    #key-figures .group:hover,
+    #key-figures [class*="bg-gradient"] {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+    
+    #key-figures .group:hover {
+        transform: none !important;
+    }
+}
+
+/* Article body videos: match the contained width/rounding used for article images */
+.article-content video {
+    width: 100%;
+    border-radius: 0.5rem;
+    display: block;
+}
+

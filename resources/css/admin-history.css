@@ -1,0 +1,27 @@
+/* ============================================
+   ADMIN HISTORY - STYLES
+============================================ */
+
+/* History Page Specific Styles */
+.history-year {
+    font-weight: 700;
+    color: #2d6fa3;
+}
+
+/* Action Buttons for History */
+.action-btn.edit {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.action-btn.delete {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .history-year {
+        font-size: 14px;
+    }
+}

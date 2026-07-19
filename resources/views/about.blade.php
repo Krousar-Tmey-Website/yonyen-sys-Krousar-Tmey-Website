@@ -6,262 +6,77 @@
 @section('content')
 
 {{-- ========================================================
-     PAGE HEADER
-     ======================================================== --}}
-<div class="bg-[#2d6fa3] pt-16 pb-24 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
-        <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a] translate-y-1/2 -translate-x-1/3"></div>
-    </div>
-    <div class="relative max-w-7xl mx-auto px-6">
-        <nav class="flex items-center gap-2 text-sm text-white/50 mb-8">
-            <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-white">Who We Are</span>
-        </nav>
-        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Who We Are</h1>
-        <p class="text-white/70 text-lg max-w-xl">Presentation · History · Awards · Partners · Transparency</p>
-
-        {{-- In-page navigation --}}
-        <div class="flex flex-wrap gap-3 mt-10">
-            @foreach(['presentation'=>'Presentation','history'=>'Our History','awards'=>'Awards','partners'=>'Partners','transparency'=>'Transparency'] as $id => $label)
-            <a href="#{{ $id }}"
-               class="px-5 py-2 rounded-full bg-white/15 text-white text-sm font-medium hover:bg-white/25 transition-colors border border-white/20">
-                {{ $label }}
-            </a>
-            @endforeach
-        </div>
-    </div>
-</div>
-
-{{-- ========================================================
-     PRESENTATION
-     ======================================================== --}}
-<section id="presentation" class="py-20 bg-white scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-6">
-
-        {{-- Hero statement --}}
-        <div class="text-center mb-16 max-w-4xl mx-auto">
-            <p class="text-[#2d6fa3] font-bold text-sm uppercase tracking-widest mb-4">Our Mission</p>
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
-                Krousar Thmey,<br>
-                <span class="text-[#2d6fa3]">The first Cambodian organization</span><br>
-                helping disadvantaged children,<br>
-                <span class="text-[#8da83a] text-2xl md:text-3xl font-semibold">born in 1991 in the Site II refugee camp in Thailand.</span>
-            </h2>
-        </div>
-
-        {{-- Values --}}
-        <div class="grid md:grid-cols-3 gap-6 mb-20">
-            @foreach([
-                ['title'=>'Identity',    'icon'=>'🏛️', 'desc'=>'Every child can reconnect with their roots and traditions.'],
-                ['title'=>'Integration', 'icon'=>'🤝', 'desc'=>'Every child is fully integrated into Cambodian society.'],
-                ['title'=>'Dignity',     'icon'=>'⭐', 'desc'=>'Every child is respected and can build the future they deserve.'],
-            ] as $value)
-            <div class="group relative bg-[#f8f9fc] rounded-3xl p-8 border border-gray-100 hover:border-[#2d6fa3]/30 hover:shadow-lg transition-all duration-300 text-center overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-[#8da83a] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-t-3xl"></div>
-                <div class="text-5xl mb-5">{{ $value['icon'] }}</div>
-                <h3 class="text-xl font-bold text-[#2d6fa3] mb-3">{{ $value['title'] }}</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">{{ $value['desc'] }}</p>
-            </div>
-            @endforeach
-        </div>
-
-        {{-- Mission text --}}
-        <div class="grid lg:grid-cols-2 gap-14 items-center mb-20">
-            <div>
-                <p class="text-gray-600 leading-relaxed text-lg mb-6">
-                    Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting <strong class="text-[#2d6fa3]">4,079 children</strong> in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene.
-                </p>
-                <p class="text-gray-600 leading-relaxed mb-6">
-                    In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.
-                </p>
-                <div class="bg-[#2d6fa3] rounded-2xl p-6 text-white">
-                    <p class="font-bold text-lg leading-snug uppercase tracking-wide">
-                        Krousar Thmey's main principle is the development of projects<br>led by Cambodians for Cambodians.
-                    </p>
-                </div>
-                <p class="text-gray-500 leading-relaxed text-sm mt-6">
-                    Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.
-                </p>
-            </div>
-            <div>
-                <img src="{{ asset('images/children.jpg') }}" alt="Children at Krousar Thmey"
-                     class="rounded-3xl shadow-2xl w-full h-[420px] object-cover">
-            </div>
-        </div>
-
-        {{-- 3 Programs + 2 Projects --}}
-        <div class="mb-20">
-            <div class="text-center mb-10">
-                <div class="inline-block bg-[#2d6fa3] text-white font-bold text-lg px-6 py-3 rounded-2xl mb-4">
-                    Krousar Thmey operates 3 programs and 2 cross-cutting projects in 15 Cambodian provinces
-                </div>
-            </div>
-            <div class="grid md:grid-cols-3 gap-6 mb-6">
-                @foreach([
-                    ['title'=>'Child Welfare',                      'img'=>'children.jpg',    'color'=>'bg-[#2d6fa3]',  'href'=>route('programs').'#welfare'],
-                    ['title'=>'Education for Deaf or Blind Children','img'=>'special-ed.jpg',  'color'=>'bg-[#1d4e7a]',  'href'=>route('programs').'#education'],
-                    ['title'=>'Cultural and Artistic Development',   'img'=>'cultural.jpg',    'color'=>'bg-[#8da83a]',  'href'=>route('programs').'#culture'],
-                ] as $prog)
-                <a href="{{ $prog['href'] }}" class="group block rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative h-44 overflow-hidden">
-                        <img src="{{ asset('images/'.$prog['img']) }}" alt="{{ $prog['title'] }}"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    </div>
-                    <div class="{{ $prog['color'] }} px-5 py-4">
-                        <p class="text-white font-semibold text-sm">{{ $prog['title'] }}</p>
-                    </div>
-                </a>
-                @endforeach
-            </div>
-            <div class="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                @foreach([
-                    ['title'=>'Academic and Career Counseling', 'img'=>'program.jpg',  'href'=>route('programs')],
-                    ['title'=>'Health and Hygiene',             'img'=>'hygiene.jpg',  'href'=>route('programs')],
-                ] as $proj)
-                <a href="{{ $proj['href'] }}" class="group block rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative h-36 overflow-hidden">
-                        <img src="{{ asset('images/'.$proj['img']) }}" alt="{{ $proj['title'] }}"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    </div>
-                    <div class="bg-[#2d6fa3]/80 px-5 py-3">
-                        <p class="text-white font-semibold text-sm">{{ $proj['title'] }}</p>
-                    </div>
-                </a>
-                @endforeach
-            </div>
-        </div>
-
-        {{-- Key Figures --}}
-        <div class="bg-[#1d4e7a] rounded-3xl p-10 mb-20">
-            <h3 class="text-white font-bold text-2xl text-center mb-10 uppercase tracking-wider">Key Figures</h3>
-            <div class="grid grid-cols-2 lg:grid-cols-5 gap-6 text-center">
-                @foreach([
-                    ['n'=>'4,079', 'label'=>'Children supported'],
-                    ['n'=>'240',   'label'=>'In Child Welfare'],
-                    ['n'=>'768',   'label'=>'Special Ed students'],
-                    ['n'=>'1,088', 'label'=>'Arts & Culture students'],
-                    ['n'=>'357',   'label'=>'Career counseling'],
-                ] as $fig)
-                <div class="text-white">
-                    <div class="text-3xl lg:text-4xl font-black text-[#8da83a] mb-2">{{ $fig['n'] }}</div>
-                    <div class="text-white/70 text-xs leading-snug">{{ $fig['label'] }}</div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-
-        {{-- Worldwide --}}
-        <div>
-            <h3 class="text-2xl font-bold text-[#2d6fa3] mb-3">Krousar Thmey Worldwide</h3>
-            <p class="text-gray-500 mb-8 text-sm leading-relaxed max-w-3xl">
-                Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.
-            </p>
-            <div class="grid md:grid-cols-3 gap-5">
-                @foreach([
-                    ['flag'=>'🇫🇷','name'=>'Krousar Thmey France',      'city'=>'Paris, France'],
-                    ['flag'=>'🇨🇭','name'=>'Krousar Thmey Switzerland',  'city'=>'Geneva, Switzerland'],
-                    ['flag'=>'🇸🇬','name'=>'Krousar Thmey Singapore',    'city'=>'Singapore'],
-                ] as $office)
-                <div class="bg-[#f8f9fc] border border-gray-100 rounded-2xl p-6 flex items-center gap-4 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all">
-                    <span class="text-4xl">{{ $office['flag'] }}</span>
-                    <div>
-                        <p class="font-bold text-[#2d6fa3] text-sm">{{ $office['name'] }}</p>
-                        <p class="text-gray-400 text-xs">{{ $office['city'] }}</p>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- ========================================================
      OUR HISTORY
      ======================================================== --}}
-<section id="history" class="py-20 bg-[#f8f9fc] scroll-mt-20">
-    <div class="max-w-5xl mx-auto px-6">
-        <div class="text-center mb-16">
-            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Timeline</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Our History</h2>
+<section id="history" class="pt-10 pb-20 bg-white scroll-mt-20">
+    <div class="max-w-[1400px] mx-auto px-5 md:px-12 lg:px-20">
+        @php
+            $historySharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
+            $historyFacebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
+            $historyTwitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
+            $historyLinkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
+            $historyShareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
+            $historyFacebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
+            $historyTwitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
+            $historyLinkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
+        @endphp
+        <div class="text-center mb-16" data-reveal>
+            <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">OUR HISTORY</h2>
+            @if($historySharingEnabled == '1')
+            <div class="flex items-center justify-center gap-3 mt-6 mb-12">
+                <a href="{{ $historyFacebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyFacebookIcon) }}" alt="Facebook" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $historyTwitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyTwitterIcon) }}" alt="Twitter" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $historyLinkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyLinkedinIcon) }}" alt="LinkedIn" class="w-full h-full object-cover">
+                </a>
+                <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Our History') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($historyShareIcon) }}" alt="Share" class="w-full h-full object-cover">
+                </a>
+            </div>
+            @endif
         </div>
 
         @php
-        $events = [
-            ['year'=>'1991','left'=>'Birth of Krousar Thmey with the opening of the orphanage of Dangrek, followed by the orphanage of O\'Bok in Site II.',
-                            'right'=>null],
-            ['year'=>'1993','left'=>'Repatriation of 154 children to Cambodia: a first permanent protection centre opens in Siem Reap.',
-                            'right'=>null],
-            ['year'=>'1994','left'=>'The first temporary street children centre opens in Phnom Penh.',
-                            'right'=>'The first school for blind children opens in Phnom Penh.'],
-            ['year'=>'1998','left'=>'Seamanship training starts for street children using trawlers in Sihanoukville.',
-                            'right'=>'Opening of the school of arts in Serey Sophon and rebirth of shadow theatre which had disappeared under the Khmer Rouge Regime.'],
-            ['year'=>'2000','left'=>'Construction and opening of the first family house in TukThlaa, in the suburb of Phnom Penh.',
-                            'right'=>null],
-            ['year'=>'2001','left'=>'Construction of the first school for deaf children in Chbar Ampov, in the suburb of Phnom Penh.',
-                            'right'=>'The first campaign for the prevention of child trafficking and prostitution is launched.'],
-            ['year'=>'2003','left'=>'First enrollment of blind student in public school.',
-                            'right'=>'First hearing aids for hearing-impaired children thanks to ENT doctors and hearing aid specialists of the organisation Enfants Sourds du Cambodge based in Toulon, France.'],
-            ['year'=>'2005','left'=>'First translation of national television news in Sign Language.',
-                            'right'=>'Beginning of the awareness-raising campaigns on education for children with disabilities.'],
-            ['year'=>'2008','left'=>'First deaf students awarded the baccalaureate.',
-                            'right'=>'A career and academic counselling department is created to facilitate access to higher education, professional training and employment.'],
-            ['year'=>'2011','left'=>'First blind students graduated from university.',
-                            'right'=>'All the teaching staff is registered as civil servant by the Ministry of Education.'],
-            ['year'=>'2013','left'=>'First deaf students go to university.',
-                            'right'=>'The Ministry of Education, Youth and Sports takes the financial responsibility of the Braille workshop and sign language committee.'],
-            ['year'=>'2016','left'=>'Signature of the agreement related to the transfer of the 5 special schools to the Cambodian Ministry of Education, Youth and Sport in the presence of His Majesty King Norodom Sihamoni on the occasion of the 25th anniversary of Krousar Thmey.',
-                            'right'=>'Creation of the first Resource center for deaf or blind students in Battambang.'],
-            ['year'=>'2019','left'=>'Official ceremony of the transfer of the 5 special schools to the ministry of Education, Youth and Sports (MoEYS).',
-                            'right'=>null],
-        ];
+            $timelineItems = [];
+            foreach ($historyEvents as $event) {
+                if ($event->left_text) {
+                    $timelineItems[] = ['year' => $event->year, 'text' => $event->left_text, 'image' => $event->image_url];
+                }
+                if ($event->right_text) {
+                    $timelineItems[] = ['year' => $event->year, 'text' => $event->right_text, 'image' => $event->left_text ? null : $event->image_url];
+                }
+                if (!$event->left_text && !$event->right_text && $event->image_url) {
+                    $timelineItems[] = ['year' => $event->year, 'text' => null, 'image' => $event->image_url];
+                }
+            }
+            $historyYears = collect($timelineItems)->pluck('year')->filter()->unique()->sort()->values();
         @endphp
+        
 
-        <div class="relative">
-            {{-- Vertical line --}}
-            <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-[#2d6fa3]/20 hidden md:block"></div>
-
-            <div class="space-y-8">
-                @foreach($events as $i => $event)
-                <div class="relative">
-                    {{-- Year badge --}}
-                    <div class="flex justify-center mb-4">
-                        <div class="relative z-10 bg-[#2d6fa3] text-white font-bold text-sm px-5 py-2 rounded-full shadow-lg ring-4 ring-[#f8f9fc]">
-                            {{ $event['year'] }}
-                        </div>
-                    </div>
-
-                    <div class="md:grid md:grid-cols-2 md:gap-8">
-                        {{-- Left event --}}
-                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-[#2d6fa3]/20 transition-all md:text-right mb-4 md:mb-0">
-                            <div class="flex items-start gap-3 md:flex-row-reverse">
-                                <div class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 flex items-center justify-center flex-shrink-0">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-[#2d6fa3]"></div>
-                                </div>
-                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event['left'] }}</p>
-                            </div>
-                        </div>
-
-                        {{-- Right event --}}
-                        @if($event['right'])
-                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-[#8da83a]/30 transition-all">
-                            <div class="flex items-start gap-3">
-                                <div class="w-8 h-8 rounded-full bg-[#8da83a]/10 flex items-center justify-center flex-shrink-0">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-[#8da83a]"></div>
-                                </div>
-                                <p class="text-gray-600 text-sm leading-relaxed">{{ $event['right'] }}</p>
-                            </div>
-                        </div>
-                        @else
-                        <div class="hidden md:block"></div>
-                        @endif
-                    </div>
-                </div>
-                @endforeach
+        <div class="flex items-start gap-8">
+            <x-timeline-year-nav :years="$historyYears" />
+            <div class="flex-1 min-w-0">
+                <x-timeline :items="$timelineItems" />
             </div>
+        </div>
+        <div class="mt-16 pt-14 text-center" data-reveal>
+            <p class="text-[#a67c3d] font-semibold text-xs uppercase tracking-[0.2em] mb-3">Present Day</p>
+            <h3 class="font-serif text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-4">The Story Continues</h3>
+            <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                Today, Krousar Thmey supports <strong class="text-[#1d4e7a]">{{ $settings['stat_children'] ?? '4,079' }} children</strong> across 15 Cambodian provinces — carrying forward the same promise made in 1991: that every child deserves the chance to grow, learn, and thrive.
+            </p>
         </div>
     </div>
 </section>
@@ -269,30 +84,72 @@
 {{-- ========================================================
      AWARDS
      ======================================================== --}}
-<section id="awards" class="py-20 bg-white scroll-mt-20">
+<section id="awards" class="pt-10 pb-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
-            <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Recognition</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Awards</h2>
+        @php
+            $sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
+            $facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
+            $twitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
+            $linkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
+            $shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
+            $facebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
+            $twitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
+            $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
+        @endphp
+        <div class="text-center mb-16" data-reveal>
+            <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">AWARDS</h2>
+            @if($sharingEnabled == '1')
+            <div class="flex items-center justify-center gap-3 mt-6">
+                <a href="{{ $facebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Awards') . '&linknote=' . urlencode('Krousar Thmey - Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($facebookIcon) }}" alt="Facebook" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $twitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Awards') . '&linknote=' . urlencode('Krousar Thmey - Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($twitterIcon) }}" alt="Twitter" class="w-full h-full object-cover">
+                </a>
+                <a href="{{ $linkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Awards') . '&linknote=' . urlencode('Krousar Thmey - Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($linkedinIcon) }}" alt="LinkedIn" class="w-full h-full object-cover">
+                </a>
+                <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Awards') }}"
+                   target="_blank" rel="noopener noreferrer" aria-label="Share"
+                   class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
+                    <img src="{{ asset($shareIcon) }}" alt="Share" class="w-full h-full object-cover">
+                </a>
+            </div>
+            @endif
         </div>
 
-        {{-- Awards from DB --}}
         @if($awards->isNotEmpty())
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            @foreach($awards as $award)
-            <div class="bg-[#f8f9fc] rounded-3xl p-6 border border-gray-100 hover:shadow-lg transition-shadow text-center">
-                <div class="text-4xl mb-4">{{ $award->icon }}</div>
-                @if($award->recipient)
-                <span class="text-[#8da83a] text-xs font-bold uppercase tracking-wider block mb-1">{{ $award->recipient }}</span>
-                @endif
-                <h3 class="text-sm font-bold text-[#2d6fa3] mb-2 leading-snug">{{ $award->title }}</h3>
-                <p class="text-[#8da83a] text-xs font-semibold mb-2">{{ $award->organization }}</p>
-                @if($award->description)
-                <p class="text-gray-400 text-xs leading-relaxed">{{ $award->description }}</p>
-                @endif
-            </div>
-            @endforeach
-        </div>
+        @php
+            $awardItems = $awards->map(function ($award) {
+                $cta = null;
+                $link = null;
+                if ($award->website_url) {
+                    $cta = 'Visit Website';
+                    $link = $award->website_url;
+                } elseif ($award->article_url) {
+                    $cta = 'Read Article';
+                    $link = $award->article_url;
+                } elseif ($award->video_url) {
+                    $cta = 'Watch Video';
+                    $link = $award->video_url;
+                }
+                return [
+                    'year' => $award->year,
+                    'image' => $award->image_url,
+                    'title' => $award->organization ? trim($award->organization) : $award->title,
+                    'description' => trim(($award->recipient ? $award->recipient . ' ' : '') . ($award->description ?? '')),
+                    'buttonText' => $cta,
+                    'buttonLink' => $link,
+                ];
+            });
+        @endphp
+        <x-award-grid :items="$awardItems" />
         @else
         <p class="text-gray-400 text-center py-8">No awards listed yet.</p>
         @endif
@@ -304,15 +161,17 @@
      ======================================================== --}}
 <section id="partners" class="py-20 bg-[#f8f9fc] scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
+        <div class="text-center mb-12" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support</p>
             <h2 class="text-4xl font-bold text-[#2d6fa3]">Partners</h2>
             <p class="text-gray-500 mt-4 max-w-3xl mx-auto text-sm leading-relaxed">
                 Since its creation, Krousar Thmey has set up long-term partnerships with Cambodian and international organizations. Donors can financially support a program or project of their choice. Technical partners allow us to benefit from specific expertise.
             </p>
+            <a href="{{ route('partners') }}" class="inline-flex items-center mt-6 px-5 py-2.5 border border-[#2d6fa3] text-[#2d6fa3] font-semibold text-sm rounded-full hover:bg-[#2d6fa3] hover:text-white transition-colors">
+                See all partners
+            </a>
         </div>
 
-        {{-- Partnerships with Cambodian Authorities --}}
         <div class="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-sm mb-8">
             <h3 class="text-xl font-bold text-[#2d6fa3] mb-4 flex items-center gap-3">
                 <span class="text-2xl">🇰🇭</span> Partnerships with the Cambodian Authorities
@@ -337,36 +196,125 @@
             </div>
         </div>
 
-        {{-- Partner lists from DB --}}
-        @foreach(['authorities' => ['title' => 'Cambodian Public Authorities', 'dot' => 'bg-[#2d6fa3]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-3', 'text' => 'text-sm'], 'organizations' => ['title' => 'Organizations, Foundations & Institutions', 'dot' => 'bg-[#8da83a]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-3', 'text' => 'text-sm'], 'companies' => ['title' => 'Companies', 'dot' => 'bg-[#1d4e7a]', 'cols' => 'sm:grid-cols-2 lg:grid-cols-4', 'text' => 'text-xs']] as $cat => $meta)
-        @if(isset($partners[$cat]) && $partners[$cat]->count())
+        @php
+            $financialPartnerGroups = [
+                [
+                    'title' => 'Cambodian Public Authorities',
+                    'dot' => 'bg-[#2d6fa3]',
+                    'items' => [
+                        'His Majesty the King NORODOM Sihamoni',
+                        'Her Majesty the Queen Mother NORODOM Monineath Sihanouk',
+                        'Prime Minister Samdech Moha Borvor Thipadei HUN Manet',
+                        'Samdech Akka Moha Sena Padei Techo Hun Sen, President of the Senate',
+                        'Samdech Dr. Bun Rany HUN Sen',
+                        'The Royal Government of Cambodia',
+                        'Ministry of Social Affairs',
+                        'Ministry of Education, Youth and Sport',
+                        'Ministry of Culture and Fine Arts',
+                        'Ministry of Defense',
+                        'Ministry of Information',
+                        'Ministry of Interior',
+                        'His Excellency the ambassador for Cambodia at UNESCO',
+                        'His Excellency the ambassador for Cambodia to France',
+                    ],
+                ],
+                [
+                    'title' => 'Organizations, Foundations and Institutions',
+                    'dot' => 'bg-[#8da83a]',
+                    'items' => [
+                        'DUBRULLE Family',
+                        'ENFANCE ESPOIR Foundation',
+                        'Fondation Amanjaya',
+                        'Fondation André & Cyprien',
+                        'Fondation Masalina',
+                        'Fonds Mécénat SIG',
+                        'Foundation Philantropique Famille Sandoz',
+                        'Gertrude Hirzel Foundation',
+                        'GREEN LEAVES EDUCATION Foundation',
+                        'Individual donor: Peter Tschofen',
+                        'Individual donor: Suzanne ROY, Grants Barbe.',
+                        'INTERNATIONAL COUNCIL FOR EDUCATION OF PEOPLE WITH VISUAL IMPAIRMENT (ICEVI)',
+                        "LA VOIX DE L'ENFANT Association",
+                        'LES AMIS DES ENFANTS DU MONDE Association',
+                        'MAY-OUI Foundation',
+                        'Miwako Fujiwara – Musica Felice Foundation',
+                        'Musica Felice',
+                        'OVERBROOK SCHOOL FOR THE BLIND (ONNET)',
+                        "PEOPLE'S ACTION FOR INCLUSIVE DEVELOPMENT (PAfID)",
+                        'Raksa Koma Organization',
+                        'ROTARY CLUB OF PERTH',
+                        'ROTARY CLUB OF PHNOM PENH',
+                        'STIFTUNG HIRTEN KINDER Foundation',
+                        'TALIKA',
+                        'UNICEF',
+                    ],
+                ],
+                [
+                    'title' => 'Companies',
+                    'dot' => 'bg-[#1d4e7a]',
+                    'items' => [
+                        'ABA BANK',
+                        'AMANJAYA HOTEL',
+                        'ANGKOR ARTWORK (Eric STOCKER)',
+                        'BAJAJ INTRACITY',
+                        'BRED BANK CAMBODIA',
+                        'BLIND MASSAGE CENTER',
+                        'BODIA NATURE',
+                        'CAMH Co. LTD',
+                        'CMDK',
+                        'D+Z URBAN HOTEL',
+                        'KHMER CERAMICS & FINE ARTS CENTER',
+                        'LONG RA Car mechanic',
+                        'PROMOTION FOR DISABILITY PROJECT',
+                        'PUNLEU THMEY Restaurant',
+                        'RADIO HAPPINESS VOICE FOR THE BLIND',
+                        'SAN FRANSISCO COMPANY',
+                        'SEIN LIM',
+                        'SENG POV Car mechanic',
+                        'SMART Cambodia',
+                        'SOCIAL COFFEE',
+                        'SOFITEL Phnom Penh Phokeethra',
+                        'SOFT SKILL PROFESSIONAL TRAINING SERVICE',
+                        'TEMPLATION ANGKOR BOUTIQUE',
+                        'THALIAS (Malis Restaurant, Khema, Arunreas Hotel)',
+                        'TOP STREET RESTAURANT',
+                        'VOICE OF THE BLIND Radio station',
+                    ],
+                ],
+                [
+                    'title' => 'Towns and Municipalities',
+                    'dot' => 'bg-[#2d6fa3]',
+                    'flag' => '🇨🇭',
+                    'items' => [
+                        'City of Geneva',
+                        'City of Meyrin',
+                        'Town of Hermance',
+                        'Towns of Collonge-Bellerive, Hermance and Vandoeuvres',
+                    ],
+                ],
+            ];
+        @endphp
+
+        @foreach ($financialPartnerGroups as $group)
         <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-8">
-            <h3 class="text-lg font-bold text-[#2d6fa3] mb-6">{{ $meta['title'] }}</h3>
-            <div class="grid {{ $meta['cols'] }} gap-2">
-                @foreach($partners[$cat] as $partner)
-                <div class="flex items-center gap-2 {{ $meta['text'] }} text-gray-600 py-1.5 border-b border-gray-50">
-                    <span class="w-1.5 h-1.5 rounded-full {{ $meta['dot'] }} flex-shrink-0"></span>{{ $partner->name }}
-                </div>
+            <h3 class="text-lg font-bold text-[#2d6fa3] mb-6 flex items-center gap-2">
+                @if (isset($group['flag']))
+                    <span>{{ $group['flag'] }}</span>
+                @endif
+                {{ $group['title'] }}
+            </h3>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2 text-sm text-gray-600">
+                @foreach ($group['items'] as $item)
+                <li class="flex items-start gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full {{ $group['dot'] }} mt-2 flex-shrink-0"></span>
+                    {{ $item }}
+                </li>
                 @endforeach
-            </div>
+            </ul>
         </div>
-        @endif
         @endforeach
 
-        {{-- Towns & Municipalities --}}
-        @if(isset($partners['towns']) && $partners['towns']->count())
-        <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mb-10">
-            <h3 class="text-lg font-bold text-[#2d6fa3] mb-6">🇨🇭 Towns and Municipalities — Switzerland</h3>
-            <div class="flex flex-wrap gap-3">
-                @foreach($partners['towns'] as $partner)
-                <span class="bg-[#2d6fa3]/10 text-[#2d6fa3] px-4 py-2 rounded-full text-sm font-medium">{{ $partner->name }}</span>
-                @endforeach
-            </div>
-        </div>
-        @endif
-
-        {{-- CTA --}}
-        <div class="text-center bg-[#2d6fa3] rounded-3xl p-10">
+        <div class="text-center bg-[#2d6fa3] rounded-3xl p-10" data-reveal="scale">
             <p class="text-white/80 text-lg mb-2">Many thanks to all our partners for their support!</p>
             <h3 class="text-white font-bold text-2xl mb-6">Do you wish to get involved with Krousar Thmey?</h3>
             <a href="{{ route('involved') }}" class="btn-primary text-base">Learn More</a>
@@ -379,15 +327,14 @@
      ======================================================== --}}
 <section id="transparency" class="py-20 bg-white scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
+        <div class="text-center mb-16" data-reveal>
             <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Accountability</p>
-            <h2 class="text-4xl font-bold text-[#2d6fa3]">Transparency &amp; Accountability</h2>
+            <h2 class="text-4xl font-bold text-[#2d6fa3]">Transparency & Accountability</h2>
         </div>
 
         <div class="grid lg:grid-cols-2 gap-12 mb-16">
 
-            {{-- Financial Transparency --}}
-            <div>
+            <div data-reveal="left">
                 <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M9 14h.01M12 14h.01M15 14h.01M3 6a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6z"/></svg>
@@ -418,8 +365,7 @@
                 </div>
             </div>
 
-            {{-- Audited Statements --}}
-            <div>
+            <div data-reveal="right">
                 <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-[#8da83a] flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -428,24 +374,26 @@
                 </h3>
                 <p class="text-gray-500 text-sm mb-6">Audited statements are available for download. Our French and Swiss organisations' accounts are also audited annually.</p>
                 <div class="space-y-3">
-                    @foreach([2021, 2020, 2019, 2018, 2017, 2016] as $year)
-                    <a href="{{ route('resources') }}"
+                    @forelse($reports as $report)
+                    <a href="{{ $report->download_url }}"
+                       {{ $report->download_url !== '#' ? 'target="_blank"' : '' }}
                        class="flex items-center justify-between bg-[#f8f9fc] border border-gray-100 rounded-xl px-5 py-4 hover:border-[#2d6fa3]/30 hover:shadow-sm transition-all group">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-lg bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             </div>
-                            <span class="text-gray-700 font-medium text-sm">Audited Financial Statement {{ $year }}</span>
+                            <span class="text-gray-700 font-medium text-sm">{{ $report->title }}</span>
                         </div>
                         <svg class="w-4 h-4 text-gray-300 group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     </a>
-                    @endforeach
+                    @empty
+                    <p class="text-gray-400 text-sm">No reports available yet. <a href="{{ route('resources') }}" class="text-[#2d6fa3] hover:underline">View resources page</a>.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
 
-        {{-- Origins of Funds --}}
-        <div class="bg-[#f8f9fc] rounded-3xl p-8 lg:p-10 border border-gray-100">
+        <div class="bg-[#f8f9fc] rounded-3xl p-8 lg:p-10 border border-gray-100" data-reveal>
             <h3 class="text-2xl font-bold text-[#2d6fa3] mb-5 flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-[#1d4e7a] flex items-center justify-center flex-shrink-0">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>

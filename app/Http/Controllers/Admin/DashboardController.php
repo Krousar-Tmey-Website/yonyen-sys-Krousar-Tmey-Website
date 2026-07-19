@@ -7,6 +7,8 @@ use App\Models\Award;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Program;
+use App\Models\Project;
+use App\Models\ProgramPageItem;
 
 class DashboardController extends Controller
 {
@@ -16,8 +18,10 @@ class DashboardController extends Controller
             'news_total'     => News::count(),
             'news_published' => News::published()->count(),
             'programs'       => Program::count(),
+            'projects'       => Project::count(),
             'partners'       => Partner::count(),
             'awards'         => Award::count(),
+            'page_items'     => ProgramPageItem::count(),
         ];
 
         $recentNews = News::latest()->take(5)->get();

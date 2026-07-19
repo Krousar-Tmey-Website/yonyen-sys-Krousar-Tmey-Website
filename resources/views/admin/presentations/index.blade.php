@@ -1,0 +1,469 @@
+@extends('admin.layouts.app')
+
+@section('title', 'Presentation')
+@section('page-title', 'Presentation Management')
+@section('breadcrumb', 'Manage all content for the Presentation page')
+
+@section('content')
+
+<div class="space-y-8" x-data="{ tab: 'intro' }">
+    {{-- Tab Navigation --}}
+    <div class="border-b border-gray-200">
+        <nav class="flex space-x-8 overflow-x-auto">
+            <button @click="tab = 'intro'"
+                    :class="tab === 'intro' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Intro / Mission / Vision
+            </button>
+            <button @click="tab = 'values'"
+                    :class="tab === 'values' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Our Portfolio
+            </button>
+            <button @click="tab = 'portfolio'"
+                    :class="tab === 'portfolio' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Our Portfolio
+            </button>
+            <button @click="tab = 'programs'"
+                    :class="tab === 'programs' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Programs
+            </button>
+            <button @click="tab = 'impact'"
+                    :class="tab === 'impact' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Key Figures
+            </button>
+        </nav>
+    </div>
+
+    {{-- INTRO / MISSION / VISION SECTION --}}
+    <div x-show="tab === 'intro'" class="space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-700 mb-1 text-sm">Intro Heading</h3>
+            <p class="text-gray-400 text-xs mb-4">The headline shown at the very top of the page.</p>
+            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <textarea name="intro_heading" rows="2"
+                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['intro_heading'] ?? 'Krousar Thmey, the first Cambodian organization helping disadvantaged children, born in 1991 in the Site II refugee camp in Thailand.' }}</textarea>
+                </div>
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Intro Heading</button>
+            </form>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+            {{-- Our Mission --}}
+            <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                <h3 class="font-bold text-gray-700 mb-4 text-sm">Our Mission</h3>
+                <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
+                        <input type="text" name="mission_title" value="{{ $settings['mission_title'] ?? 'Our Mission' }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Text (shown on hover)</label>
+                        <textarea name="mission_text" rows="4"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['mission_text'] ?? 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.' }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Photo</label>
+                        <div class="space-y-3">
+                            @if(!empty($settings['mission_image']))
+                            <div class="flex items-center gap-3">
+                                <img src="{{ str_starts_with($settings['mission_image'], 'http') ? $settings['mission_image'] : asset('storage/' . $settings['mission_image']) }}"
+                                     alt="Current mission image" class="w-20 h-14 object-cover rounded-lg border border-gray-200">
+                                <label class="flex items-center gap-1.5 text-xs text-gray-500">
+                                    <input type="checkbox" name="remove_mission_image" value="1" class="rounded border-gray-300">
+                                    Remove current image
+                                </label>
+                            </div>
+                            @endif
+                            <input type="file" name="mission_image_file" accept="image/*"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 h-px bg-gray-200"></div>
+                                <span class="text-xs text-gray-400">OR</span>
+                                <div class="flex-1 h-px bg-gray-200"></div>
+                            </div>
+                            <input type="url" name="mission_image" value="{{ $settings['mission_image'] ?? '' }}"
+                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                   placeholder="https://example.com/image.jpg">
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Upload an image (max 4MB) or paste an external URL. Upload takes priority.</p>
+                    </div>
+                    <button type="submit" class="btn-primary text-sm py-2.5">Save Our Mission</button>
+                </form>
+            </div>
+
+            {{-- Our Vision --}}
+            <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                <h3 class="font-bold text-gray-700 mb-4 text-sm">Our Vision</h3>
+                <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
+                        <input type="text" name="vision_title" value="{{ $settings['vision_title'] ?? 'Our Vision' }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Text (shown on hover)</label>
+                        <textarea name="vision_text" rows="4"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['vision_text'] ?? 'A world in which all children are empowered to grow into independent and responsible adults.' }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Photo</label>
+                        <div class="space-y-3">
+                            @if(!empty($settings['vision_image']))
+                            <div class="flex items-center gap-3">
+                                <img src="{{ str_starts_with($settings['vision_image'], 'http') ? $settings['vision_image'] : asset('storage/' . $settings['vision_image']) }}"
+                                     alt="Current vision image" class="w-20 h-14 object-cover rounded-lg border border-gray-200">
+                                <label class="flex items-center gap-1.5 text-xs text-gray-500">
+                                    <input type="checkbox" name="remove_vision_image" value="1" class="rounded border-gray-300">
+                                    Remove current image
+                                </label>
+                            </div>
+                            @endif
+                            <input type="file" name="vision_image_file" accept="image/*"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 h-px bg-gray-200"></div>
+                                <span class="text-xs text-gray-400">OR</span>
+                                <div class="flex-1 h-px bg-gray-200"></div>
+                            </div>
+                            <input type="url" name="vision_image" value="{{ $settings['vision_image'] ?? '' }}"
+                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                   placeholder="https://example.com/image.jpg">
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Upload an image (max 4MB) or paste an external URL. Upload takes priority.</p>
+                    </div>
+                    <button type="submit" class="btn-primary text-sm py-2.5">Save Our Vision</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- OUR VALUES SECTION --}}
+    <div x-show="tab === 'values'" class="space-y-6">
+        <p class="text-gray-400 text-xs">These values also appear on the About page. Need to set a photo per value? Use the full <a href="{{ route('admin.core-values.index') }}" class="text-[#2d6fa3] hover:underline">Our Values</a> manager.</p>
+
+        {{-- Supporting Description (Global) --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-700 mb-4 text-sm">Our Values Supporting Description</h3>
+            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
+                @csrf
+                <input type="hidden" name="section" value="values_supporting">
+                
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
+                    <textarea name="values_supporting_description" rows="3"
+                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                              placeholder="Krousar Thmey offers a portfolio of cross-cutting programs...">{{ old('values_supporting_description', $settings['values_supporting_description'] ?? '') }}</textarea>
+                    <p class="text-xs text-gray-400 mt-1">This text appears under the Our Values header on the presentation page.</p>
+                </div>
+                
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Supporting Description</button>
+            </form>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            {{-- Add value form --}}
+            <div class="bg-white rounded-2xl border border-gray-100 p-6">
+                <h3 class="font-bold text-gray-700 mb-4 text-sm">Add New Value</h3>
+                <form action="{{ route('admin.core-values.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                    @csrf
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Title <span class="text-red-400">*</span></label>
+                        <input type="text" name="title" value="{{ old('title') }}" required
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="e.g. Identity">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Headline (e.g. "Every child belongs.")</label>
+                        <input type="text" name="headline" value="{{ old('headline') }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Every child belongs.">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
+                        <textarea name="description" rows="2"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Full description...">{{ old('description') }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
+                        <textarea name="supporting_description" rows="2"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Supporting description...">{{ old('supporting_description') }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
+                        <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Image</label>
+                        <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <input type="url" name="image_url" value="{{ old('image_url') }}"
+                               class="w-full mt-2 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="...or paste an image URL">
+                    </div>
+                    <button type="submit" class="w-full btn-primary text-sm py-2.5">Add Value</button>
+                </form>
+            </div>
+
+            {{-- Values list --}}
+            <div class="lg:col-span-2">
+                @if($coreValues->isEmpty())
+                <div class="bg-white rounded-2xl border border-gray-100 py-12 text-center text-gray-400 text-sm">
+                    No values yet. Add your first one.
+                </div>
+                @else
+                <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                    <div class="px-5 py-3.5 bg-gray-50 border-b border-gray-100">
+                        <h4 class="font-semibold text-gray-700 text-sm">{{ $coreValues->count() }} Value(s)</h4>
+                    </div>
+                    <div class="divide-y divide-gray-50">
+                        @foreach($coreValues as $value)
+                        <div x-data="{ editing: false }">
+                            {{-- View row --}}
+                            <div class="flex items-start justify-between px-5 py-4 hover:bg-gray-50/50" x-show="!editing">
+                                <div class="flex items-start gap-3 min-w-0">
+                                    @if($value->image_url)
+                                    <img src="{{ $value->image_url }}" alt="" class="w-8 h-8 object-cover flex-shrink-0 mt-0.5 rounded-lg">
+                                    @else
+                                    <span class="text-2xl flex-shrink-0 mt-0.5">{{ $value->icon }}</span>
+                                    @endif
+                                    <div class="min-w-0">
+                                        <p class="font-semibold text-gray-700 text-sm">{{ $value->title }}</p>
+                                        @if($value->headline)
+                                        <p class="text-gray-500 text-xs font-medium mt-0.5">{{ $value->headline }}</p>
+                                        @endif
+                                        @if($value->description)
+                                        <p class="text-gray-400 text-xs mt-1 line-clamp-2">{{ $value->description }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-end gap-2">
+                                    <button @click="editing = true" title="Edit"
+                                            class="w-8 h-8 rounded-full bg-[#2d6fa3]/10 text-[#2d6fa3] hover:bg-[#2d6fa3]/20 flex items-center justify-center transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </button>
+                                    <form action="{{ route('admin.core-values.destroy', $value) }}" method="POST"
+                                          onsubmit="return confirm('Remove this value?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" title="Delete"
+                                                class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {{-- Edit form --}}
+                            <div class="px-5 py-4 bg-gray-50 border-t border-gray-100" x-show="editing" x-cloak>
+                                <form action="{{ route('admin.core-values.update', $value) }}" method="POST" class="space-y-3">
+                                    @csrf @method('PUT')
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
+                                        <input type="text" name="title" value="{{ $value->title }}" required
+                                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Headline (e.g. "Every child belongs.")</label>
+                                        <input type="text" name="headline" value="{{ $value->headline }}"
+                                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                                               placeholder="Every child belongs.">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
+                                        <textarea name="description" rows="2"
+                                                  class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $value->description }}</textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description</label>
+                                        <textarea name="supporting_description" rows="2"
+                                                  class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $value->supporting_description }}</textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Order</label>
+                                        <input type="number" name="sort_order" value="{{ $value->sort_order }}"
+                                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-600 mb-1">Image</label>
+                                        @if($value->image_url)
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <img src="{{ $value->image_url }}" alt="" class="w-10 h-10 object-cover rounded-lg border border-gray-200">
+                                            <label class="flex items-center gap-1.5 text-xs text-gray-500">
+                                                <input type="checkbox" name="remove_image" value="1" class="rounded border-gray-300">
+                                                Remove current image
+                                            </label>
+                                        </div>
+                                        @endif
+                                        <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-[#2d6fa3]">
+                                        <input type="url" name="image_url"
+                                               class="w-full mt-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                                               placeholder="...or paste an image URL">
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button type="submit" class="btn-primary text-xs px-4 py-2">Save</button>
+                                        <button type="button" @click="editing = false" class="text-gray-400 hover:text-gray-600 text-xs px-4 py-2">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    {{-- OUR PORTFOLIO SECTION --}}
+    <div x-show="tab === 'portfolio'" class="space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-700 mb-1 text-sm">Our Portfolio</h3>
+            <p class="text-gray-400 text-xs mb-4">The paragraph, pull-quote, and closing note shown between Our Values and the Programs strip.</p>
+            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Portfolio Paragraph</label>
+                    <textarea name="portfolio_text" rows="4"
+                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['portfolio_text'] ?? 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.' }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Pull-Quote</label>
+                    <textarea name="principle_quote" rows="2"
+                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Closing Note</label>
+                    <textarea name="portfolio_volunteers_text" rows="3"
+                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['portfolio_volunteers_text'] ?? 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.' }}</textarea>
+                </div>
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Our Portfolio</button>
+            </form>
+        </div>
+    </div>
+
+    {{-- PROGRAMS SECTION --}}
+    <div x-show="tab === 'programs'" class="space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-700 mb-4 text-sm">Manage Programs</h3>
+            <p class="text-gray-500 text-xs mb-4">Programs are managed in the Programs section. <a href="{{ route('admin.programs.index') }}" class="text-[#2d6fa3] hover:underline">Go to Programs Management</a></p>
+
+            @php
+            $adminPrograms = \App\Models\Program::active()->get();
+            @endphp
+
+            @if($adminPrograms->isEmpty())
+            <p class="text-gray-400 text-sm">No programs configured yet. <a href="{{ route('admin.programs.index') }}" class="text-[#2d6fa3] hover:underline">Add programs</a></p>
+            @else
+            <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
+                @foreach($adminPrograms as $program)
+                <div class="bg-gray-50 rounded-xl p-4 text-center">
+                    <div class="w-12 h-12 rounded-full bg-[#2d6fa3] flex items-center justify-center mx-auto mb-2 overflow-hidden">
+                        @if($program->image_url)
+                        <img src="{{ $program->image_url }}" alt="{{ $program->title }}" class="w-full h-full object-cover">
+                        @else
+                        <span class="text-xl">⭐</span>
+                        @endif
+                    </div>
+                    <p class="text-xs font-medium text-gray-700">{{ $program->title }}</p>
+                </div>
+                @endforeach
+            </div>
+            @endif
+
+            <div class="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-600">
+                <strong>Note:</strong> The Programs strip heading also shows the number of Cambodian provinces — set that under the Key Figures tab.
+            </div>
+        </div>
+    </div>
+
+    {{-- KEY FIGURES SECTION --}}
+    <div x-show="tab === 'impact'" class="space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-700 text-sm">Key Figures / Impact Statistics</h3>
+                <a href="{{ route('admin.impact-statistics.index') }}" class="text-xs text-[#2d6fa3] hover:underline">Manage All Statistics</a>
+            </div>
+
+            @php
+            $impactStats = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
+            @endphp
+
+            @if($impactStats->isEmpty())
+            <div class="bg-gray-50 rounded-xl py-12 text-center text-gray-400">
+                <p class="text-sm font-medium mb-2">No impact statistics configured yet.</p>
+                <a href="{{ route('admin.impact-statistics.index') }}" class="text-[#2d6fa3] text-sm underline">Add your first statistic</a>
+            </div>
+            @else
+            <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
+                @foreach($impactStats as $stat)
+                <div class="bg-gray-50 rounded-xl p-4 text-center">
+                    <div class="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center mx-auto mb-2">
+                        <img src="{{ $stat->image_url }}" alt="{{ $stat->label }}" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-xs font-bold text-gray-700">{{ $stat->value }}</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ $stat->label }}</p>
+                    @if($stat->is_featured)
+                    <span class="inline-block mt-1 text-[10px] font-semibold text-[#e8a020] uppercase tracking-wide">Featured</span>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+            <div class="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-600">
+                <strong>Tip:</strong> Click "Manage All Statistics" to edit values, images, and reorder statistics.
+            </div>
+            @endif
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-700 mb-1 text-sm">Organisation-wide Figures</h3>
+            <p class="text-gray-400 text-xs mb-4">Provinces, staff, budget, and administrative cost figures shown across the page.</p>
+            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
+                @csrf
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Provinces</label>
+                        <input type="text" name="stat_provinces" value="{{ $settings['stat_provinces'] ?? '15' }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Cambodian Staff</label>
+                        <input type="text" name="stat_employees" value="{{ $settings['stat_employees'] ?? '68' }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Expat Staff</label>
+                        <input type="text" name="stat_expats" value="{{ $settings['stat_expats'] ?? '2' }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Budget (K USD)</label>
+                        <input type="text" name="stat_budget" value="{{ $settings['stat_budget'] ?? '950' }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Admin Costs (%)</label>
+                        <input type="text" name="stat_admin_costs" value="{{ $settings['stat_admin_costs'] ?? '4' }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Organisation Figures</button>
+            </form>
+        </div>
+    </div>
+
+@endsection
