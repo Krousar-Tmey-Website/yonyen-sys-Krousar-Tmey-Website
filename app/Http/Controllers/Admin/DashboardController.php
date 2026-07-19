@@ -31,12 +31,23 @@ class DashboardController extends Controller
 
         $recentNews = News::latest()->take(5)->get();
 
-        // ── Article categories for pie chart ──
-        $categoryStats = News::select('category', DB::raw('COUNT(*) as count'))
-            ->whereNotNull('category')
+        // ── Partner categories for doughnut chart ──
+        $partnerStats = Partner::select('category', DB::raw('COUNT(*) as count'))
             ->groupBy('category')
-            ->orderByDesc('count')
             ->get();
+
+        $groupedPartners = [];
+        foreach ($partnerStats as $stat) {
+            $label = empty($stat->category) ? 'Uncategorized' : $stat->category;
+            if (!isset($groupedPartners[$label])) {
+                $groupedPartners[$label] = 0;
+            }
+            $groupedPartners[$label] += (int) $stat->count;
+        }
+        arsort($groupedPartners);
+
+        $partnerCategories = collect(array_values($groupedPartners));
+        $partnerCategoryLabels = collect(array_keys($groupedPartners));
 
         // ── Retrieve selected year & available years ──
         $year = request('year', now()->year);
@@ -88,14 +99,14 @@ class DashboardController extends Controller
         }
 
         $chartData = [
-            'donationMonths'    => $donationMonths,
-            'donationTotals'    => $donationTotals,
-            'categories'        => $categoryStats->pluck('count'),
-            'categoryLabels'    => $categoryStats->pluck('category'),
-            'chartSubtitle'     => $chartSubtitle,
-            'year'              => $year,
-            'availableYears'    => $availableYears,
-            'donationByType'    => $donationByType,
+            'donationMonths'         => $donationMonths,
+            'donationTotals'         => $donationTotals,
+            'partnerCategories'      => $partnerCategories,
+            'partnerCategoryLabels'  => $partnerCategoryLabels,
+            'chartSubtitle'          => $chartSubtitle,
+            'year'                   => $year,
+            'availableYears'         => $availableYears,
+            'donationByType'         => $donationByType,
         ];
 
         return view('admin.dashboard', compact('stats', 'recentNews', 'chartData', 'recentDonations', 'donationAmountStats'));
