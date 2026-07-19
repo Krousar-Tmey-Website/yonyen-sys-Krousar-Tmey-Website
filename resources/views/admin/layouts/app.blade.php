@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin') — Krousar Thmey</title>
+    <title>@yield('title', 'Admin') — {{ $settings['site_name'] ?? 'Krousar Thmey' }}</title>
     @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @stack('styles')
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.svg') }}">
+    @php $_logoPath = $settings['site_logo'] ?? 'images/logo.svg'; $_faviconUrl = str_starts_with($_logoPath, 'http') ? $_logoPath : (str_starts_with($_logoPath, 'logos/') ? asset('storage/' . $_logoPath) : asset($_logoPath)); @endphp
+    <link rel="icon" type="image/png" href="{{ $_faviconUrl }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -58,7 +59,7 @@
                     </div>
                 </div>
                 <div>
-                    <p class="text-white font-bold text-sm leading-tight">Krousar Thmey</p>
+                    <p class="text-white font-bold text-sm leading-tight">{{ $siteName }}</p>
                     <p class="text-white text-xs">Admin Panel</p>
                 </div>
             </div>

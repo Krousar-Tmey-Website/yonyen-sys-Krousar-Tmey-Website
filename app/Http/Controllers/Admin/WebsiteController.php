@@ -46,8 +46,8 @@ class WebsiteController extends Controller
         }
 
         // Handle share section icon uploads
-        $iconKeys = ['sharing_facebook_icon', 'sharing_twitter_icon', 'sharing_linkedin_icon', 'sharing_share_icon'];
-        foreach ($iconKeys as $iconKey) {
+        $shareIconKeys = ['sharing_facebook_icon', 'sharing_twitter_icon', 'sharing_linkedin_icon', 'sharing_share_icon'];
+        foreach ($shareIconKeys as $iconKey) {
             $fileKey = $iconKey . '_file';
             if ($request->hasFile($fileKey)) {
                 $request->validate([
