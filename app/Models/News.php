@@ -32,12 +32,13 @@ class News extends Model
     protected static function boot(): void
     {
         parent::boot();
-        
+
         static::creating(function (News $news) {
             if (empty($news->slug)) {
                 $baseSlug = Str::slug($news->title);
                 $slug = $baseSlug;
                 $counter = 1;
+
                 while (static::where('slug', $slug)->exists()) {
                     $slug = $baseSlug . '-' . $counter;
                     $counter++;
@@ -76,10 +77,12 @@ class News extends Model
         if (is_null($value) || $value === '') {
             return [];
         }
+
         if (is_string($value)) {
             $decoded = json_decode($value, true);
             return is_array($decoded) ? $decoded : [];
         }
+
         return (array) $value;
     }
 
@@ -88,10 +91,12 @@ class News extends Model
         if (is_null($value) || $value === '') {
             return [];
         }
+
         if (is_string($value)) {
             $decoded = json_decode($value, true);
             return is_array($decoded) ? $decoded : [];
         }
+
         return (array) $value;
     }
 
@@ -100,10 +105,12 @@ class News extends Model
         if (is_null($value) || $value === '') {
             return [];
         }
+
         if (is_string($value)) {
             $decoded = json_decode($value, true);
             return is_array($decoded) ? $decoded : [];
         }
+
         return (array) $value;
     }
 
@@ -120,10 +127,12 @@ class News extends Model
         if (is_null($value) || $value === '') {
             return [];
         }
+
         if (is_string($value)) {
             $decoded = json_decode($value, true);
             return is_array($decoded) ? $decoded : [];
         }
+
         return (array) $value;
     }
 

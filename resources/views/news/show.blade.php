@@ -49,6 +49,7 @@
             {!! $article->content !!}
         </div>
 
+
         {{-- Videos --}}
         @if(!empty($article->video_urls))
         <div data-reveal="scale" class="mt-8 flex flex-col gap-6">

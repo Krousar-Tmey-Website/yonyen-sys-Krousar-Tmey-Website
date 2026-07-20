@@ -296,6 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+
     const galleryInput = document.getElementById('galleryInput');
     if (galleryInput) {
         galleryInput.addEventListener('change', function(e) {
@@ -459,6 +460,38 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+rTagLinks();
+}
+
+function renderTagLinks() {
+    const container = document.getElementById('tagLinksContainer');
+    const tagLinksInput = document.getElementById('tagLinksInput');
+
+    if (tagLinks.length === 0) {
+        container.innerHTML = '<div class="no-links" id="noTagLinks">No tags added yet. Add one above.</div>';
+        tagLinksInput.value = '';
+        renderPresetButtons();
+        return;
+    }
+
+    let html = '';
+    tagLinks.forEach((tag, index) => {
+        html += `
+            <div class="link-item">
+                <span class="link-title">${escapeHtml(tag.label)}</span>
+                ${tag.url ? `<a href="${escapeHtml(tag.url)}" target="_blank" rel="noopener noreferrer" class="link-url">${escapeHtml(tag.url)}</a>` : '<span class="link-url" style="color:#9ca3af;">No link</span>'}
+                <span class="link-badge">Tag</span>
+                <button type="button" class="remove-link" onclick="removeTagLink(${index})" title="Remove tag">×</button>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+
+    tagLinksInput.value = JSON.stringify(tagLinks);
+    renderPresetButtons();
+}
+
+>>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
 renderPresetButtons();
 </script>
 

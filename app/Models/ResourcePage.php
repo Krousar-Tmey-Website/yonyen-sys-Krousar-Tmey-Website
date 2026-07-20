@@ -41,10 +41,12 @@ class ResourcePage extends Model
         if (is_null($value) || $value === '') {
             return [];
         }
+
         if (is_string($value)) {
             $decoded = json_decode($value, true);
             return is_array($decoded) ? $decoded : [];
         }
+
         return (array) $value;
     }
 
@@ -61,6 +63,7 @@ class ResourcePage extends Model
         if (!$path) {
             return null;
         }
+
         return str_starts_with($path, 'http') ? $path : asset('storage/' . $path);
     }
 }
