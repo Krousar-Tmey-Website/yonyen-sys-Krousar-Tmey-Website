@@ -50,7 +50,7 @@ class NewsController extends Controller
             ->orderBy('category')
             ->pluck('category');
 
-        return view('admin.news.index', compact('news', 'categories'));
+        return view('admin.news.index', compact('news', 'categories'))->with('articles', $news);
     }
 
     public function create()
