@@ -1208,6 +1208,15 @@ select.form-control {
     font-style: normal;
     color: #9ca3af;
 }
+/* Match the public article page's image sizing (.article-content img) so
+   what the editor shows is what visitors actually see. */
+[data-quill-root] .ql-editor img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 12px 0;
+    border-radius: 8px;
+}
 [data-quill-root] .ql-raw-html-block {
     position: relative;
     margin: 10px 0;

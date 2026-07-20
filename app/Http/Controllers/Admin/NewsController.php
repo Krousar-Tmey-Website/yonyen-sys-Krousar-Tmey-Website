@@ -31,7 +31,9 @@ class NewsController extends Controller
     public function uploadImage(Request $request)
     {
         $request->validate([
-            'image' => ['required', 'image', 'max:5120'],
+            'image' => ['required', 'image', 'max:5120', 'dimensions:min_width=1000,min_height=600'],
+        ], [
+            'image.dimensions' => 'This image is too small (min. 1000×600px) and will look blurry once it stretches to the paragraph width — please upload a larger photo.',
         ]);
 
         $path = $request->file('image')->store('news/gallery', 'public');
@@ -53,14 +55,17 @@ class NewsController extends Controller
             'excerpt'           => ['nullable', 'string'],
             'content'           => ['nullable', 'string'],
             'is_published'      => ['nullable', 'boolean'],
-            'image'             => ['nullable', 'image', 'max:2048'],
+            'image'             => ['nullable', 'image', 'max:2048', 'dimensions:min_width=1000,min_height=600'],
             'gallery'           => ['nullable', 'array'],
-            'gallery.*'         => ['image', 'max:2048'],
+            'gallery.*'         => ['image', 'max:2048', 'dimensions:min_width=1000,min_height=600'],
             'videos'            => ['nullable', 'array'],
             'videos.*'          => ['file', 'mimes:mp4,mov,webm', 'max:35000'],
             'video_url'         => ['nullable', 'url', 'max:500'],
             'links'             => ['nullable', 'json'],
             'tag_links'         => ['nullable', 'json'],
+        ], [
+            'image.dimensions'     => 'This image is too small (min. 1000×600px) and will look blurry when displayed — please upload a larger photo.',
+            'gallery.*.dimensions' => 'One of the gallery images is too small (min. 1000×600px) and will look blurry when displayed — please upload a larger photo.',
         ]);
 
         $data['is_published'] = $request->boolean('is_published');
@@ -103,21 +108,28 @@ class NewsController extends Controller
             $data['videos'] = $videos;
         }
 
-        // Handle links
-        if ($request->has('links') && !empty($request->input('links'))) {
-            $data['links'] = $request->input('links');
-        }
-
-        // Handle tag links
-        if ($request->has('tag_links') && !empty($request->input('tag_links'))) {
-            $data['tag_links'] = $request->input('tag_links');
-        }
+        $data['links'] = $this->jsonArrayInput($request, 'links');
+        $data['tag_links'] = $this->jsonArrayInput($request, 'tag_links');
 
         if ($data['is_published']) {
             $data['published_at'] = now();
         }
 
-        News::create($data);
+        $news = News::create($data);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Article created successfully.',
+                'news' => [
+                    'id' => $news->id,
+                    'title' => $news->title,
+                    'edit_url' => route('admin.news.edit', $news),
+                    'update_url' => route('admin.news.update', $news),
+                    'index_url' => route('admin.news.index'),
+                    'public_url' => route('news.show', $news->slug),
+                ],
+            ], 201);
+        }
 
         return redirect()->route('admin.news.index')->with('success', 'Article created successfully.');
     }
@@ -141,6 +153,22 @@ class NewsController extends Controller
         ])->all();
     }
 
+    private function jsonArrayInput(Request $request, string $key): ?array
+    {
+        if (!$request->has($key) || $request->input($key) === '') {
+            return null;
+        }
+
+        $value = $request->input($key);
+        if (is_array($value)) {
+            return $value;
+        }
+
+        $decoded = json_decode((string) $value, true);
+
+        return is_array($decoded) ? $decoded : null;
+    }
+
     public function update(Request $request, News $news)
     {
         $data = $request->validate([
@@ -148,9 +176,9 @@ class NewsController extends Controller
             'excerpt'           => ['nullable', 'string'],
             'content'           => ['nullable', 'string'],
             'is_published'      => ['nullable', 'boolean'],
-            'image'             => ['nullable', 'image', 'max:2048'],
+            'image'             => ['nullable', 'image', 'max:2048', 'dimensions:min_width=1000,min_height=600'],
             'gallery'           => ['nullable', 'array'],
-            'gallery.*'         => ['image', 'max:2048'],
+            'gallery.*'         => ['image', 'max:2048', 'dimensions:min_width=1000,min_height=600'],
             'remove_gallery'    => ['nullable', 'array'],
             'remove_gallery.*'  => ['string'],
             'videos'            => ['nullable', 'array'],
@@ -160,6 +188,9 @@ class NewsController extends Controller
             'remove_videos.*'   => ['string'],
             'links'             => ['nullable', 'json'],
             'tag_links'         => ['nullable', 'json'],
+        ], [
+            'image.dimensions'     => 'This image is too small (min. 1000×600px) and will look blurry when displayed — please upload a larger photo.',
+            'gallery.*.dimensions' => 'One of the gallery images is too small (min. 1000×600px) and will look blurry when displayed — please upload a larger photo.',
         ]);
 
         $data['is_published'] = $request->boolean('is_published');
@@ -223,21 +254,28 @@ class NewsController extends Controller
         $data['videos'] = $videos;
         unset($data['remove_videos'], $data['video_url']);
 
-        // Handle links
-        if ($request->has('links') && !empty($request->input('links'))) {
-            $data['links'] = $request->input('links');
-        }
-
-        // Handle tag links
-        if ($request->has('tag_links')) {
-            $data['tag_links'] = $request->input('tag_links') ?: null;
-        }
+        $data['links'] = $this->jsonArrayInput($request, 'links');
+        $data['tag_links'] = $this->jsonArrayInput($request, 'tag_links');
 
         if ($data['is_published'] && !$news->published_at) {
             $data['published_at'] = now();
         }
 
         $news->update($data);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Article updated successfully.',
+                'news' => [
+                    'id' => $news->id,
+                    'title' => $news->title,
+                    'edit_url' => route('admin.news.edit', $news),
+                    'update_url' => route('admin.news.update', $news),
+                    'index_url' => route('admin.news.index'),
+                    'public_url' => route('news.show', $news->slug),
+                ],
+            ]);
+        }
 
         return redirect()->route('admin.news.index')->with('success', 'Article updated successfully.');
     }

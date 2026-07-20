@@ -181,13 +181,15 @@ function initEditor(root) {
                     headers: { 'X-CSRF-TOKEN': token, 'Accept': 'application/json' },
                     body: formData,
                 });
-                if (!res.ok) throw new Error('Upload failed');
-                const data = await res.json();
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    throw new Error(data.errors?.image?.[0] || data.message || 'Upload failed');
+                }
 
                 const caption = prompt('Caption text (optional, shown centered under the image):') || '';
                 insertImage(data.url, caption);
             } catch (err) {
-                alert('Image upload failed. Please try again.');
+                alert(err.message || 'Image upload failed. Please try again.');
             } finally {
                 insertImageBtn.disabled = false;
                 insertImageBtn.innerHTML = originalLabel;

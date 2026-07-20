@@ -11,7 +11,7 @@
 @section('content')
 
 <div class="max-w-3xl mx-auto">
-    <form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form id="articleForm" action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-news-ajax-form>
         @csrf
 
         {{-- Article Details --}}
@@ -155,7 +155,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                             <div class="upload-title">Click to upload</div>
-                            <div class="upload-subtitle">Max 2MB. JPG, PNG, or WebP</div>
+                            <div class="upload-subtitle">Max 2MB. JPG, PNG, or WebP. At least 1000×600px so it stays sharp.</div>
                         </div>
                         <div id="imagePreview" class="hidden mt-3"></div>
                     </div>
@@ -170,7 +170,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                         <div class="upload-title">Click to upload photos</div>
-                        <div class="upload-subtitle">Max 2MB each. Select multiple files to add several at once.</div>
+                        <div class="upload-subtitle">Max 2MB each, at least 1000×600px. Select multiple files to add several at once.</div>
                     </div>
                     <div class="gallery-preview-grid" id="galleryPreviewGrid"></div>
                     @error('gallery')<div class="form-error">{{ $message }}</div>@enderror
@@ -233,7 +233,7 @@
                 Save Article
             </button>
             <a href="{{ route('admin.news.index') }}" class="btn-cancel">Cancel</a>
-            <span class="form-status">
+            <span class="form-status" data-news-form-status>
                 <span class="dot"></span>
                 Ready to save
             </span>
@@ -355,6 +355,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (articleForm) {
         articleForm.addEventListener('submit', function(e) {
             document.getElementById('linksInput').value = JSON.stringify(links);
+            document.getElementById('tagLinksInput').value = tagLinks.length ? JSON.stringify(tagLinks) : '';
         });
     }
 });
@@ -476,14 +477,19 @@ function renderPresetButtons() {
     const container = document.getElementById('presetTagButtons');
     if (!container) return;
 
-    container.innerHTML = PRESET_TAGS.map(preset => {
+    container.innerHTML = PRESET_TAGS.map((preset, index) => {
         const isAdded = tagLinks.some(t => t.label.toLowerCase() === preset.label.toLowerCase());
-        const urlAttr = preset.url ? preset.url.replace(/'/g, '&#39;') : '';
         return `<button type="button" class="preset-tag-btn${isAdded ? ' is-added' : ''}"
-                    onclick="quickAddTag('${escapeHtml(preset.label)}', '${urlAttr}')">
+                    onclick="quickAddPresetTag(${index})">
                     ${isAdded ? '✓' : '+'} ${escapeHtml(preset.label)}
                 </button>`;
     }).join('');
+}
+
+function quickAddPresetTag(index) {
+    const preset = PRESET_TAGS[index];
+    if (!preset) return;
+    quickAddTag(preset.label, preset.url);
 }
 
 function addTagLink() {
@@ -557,6 +563,6 @@ function renderTagLinks() {
 renderPresetButtons();
 </script>
 
-@vite(['resources/js/admin-news-editor.js'])
+@vite(['resources/js/admin-news-editor.js', 'resources/js/admin-news-form.js'])
 
 @endsection
