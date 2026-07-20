@@ -24,6 +24,7 @@ use App\Models\Partner;
 use App\Models\Program;
 use App\Models\ProgramPageItem;
 use App\Models\Project;
+use App\Http\Controllers\ResourcePageController;
 use App\Models\Slide;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
@@ -170,6 +171,9 @@ Route::get('/jobs/{jobOpportunity}', function (JobOpportunity $jobOpportunity) {
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
+Route::get('/topics', [ResourcePageController::class, 'index'])->name('resource-pages.index');
+Route::get('/topics/{slug}', [ResourcePageController::class, 'show'])->name('resource-pages.show');
+
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
 
@@ -193,6 +197,17 @@ Route::get('/reports/{report}/download', function (App\Models\AnnualReport $repo
         $report->original_filename ?? $report->title . '.pdf'
     );
 })->name('reports.download');
+
+Route::get('/storage/{path}', function (string $path) {
+    abort_if(str_contains($path, '..') || str_starts_with($path, '/') || str_starts_with($path, '\\'), 404);
+
+    $disk = Storage::disk('public');
+    abort_unless($disk->exists($path), 404);
+
+    return response($disk->get($path), 200, [
+        'Content-Type' => $disk->mimeType($path) ?: 'application/octet-stream',
+    ]);
+})->where('path', '.*')->name('storage.public');
 
 Route::get('/contact', function () {
     $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
@@ -249,9 +264,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('/donations/dashboard', [Admin\DonationDashboardController::class, 'index'])->name('donations.dashboard');
     Route::resource('donations', Admin\DonationController::class);
 
-    // News & Categories
+    // News
+    Route::post('news/upload-image', [Admin\NewsController::class, 'uploadImage'])->name('news.upload-image');
     Route::resource('news', Admin\NewsController::class);
-    Route::resource('categories', Admin\CategoryController::class)->except(['show']);
 
     // Programs & Projects
     Route::resource('programs', Admin\ProgramController::class)->except(['show']);
@@ -355,5 +370,3 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
 
 });
-
-
