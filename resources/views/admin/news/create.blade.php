@@ -11,7 +11,7 @@
 @section('content')
 
 <div class="max-w-3xl mx-auto">
-    <form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form id="articleForm" action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-news-ajax-form>
         @csrf
 
         {{-- Article Details --}}
@@ -191,7 +191,7 @@
                 Save Article
             </button>
             <a href="{{ route('admin.news.index') }}" class="btn-cancel">Cancel</a>
-            <span class="form-status">
+            <span class="form-status" data-news-form-status>
                 <span class="dot"></span>
                 Ready to save
             </span>
@@ -286,6 +286,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Form submission - ensure links are saved
+    const articleForm = document.getElementById('articleForm');
+    if (articleForm) {
+        articleForm.addEventListener('submit', function(e) {
+            document.getElementById('tagLinksInput').value = tagLinks.length ? JSON.stringify(tagLinks) : '';
+        });
+    }
 });
 
 // ====== TAG LINK MANAGEMENT ======
@@ -395,6 +402,6 @@ function escapeHtml(text) {
 }
 </script>
 
-@vite(['resources/js/admin-news-editor.js'])
+@vite(['resources/js/admin-news-editor.js', 'resources/js/admin-news-form.js'])
 
 @endsection

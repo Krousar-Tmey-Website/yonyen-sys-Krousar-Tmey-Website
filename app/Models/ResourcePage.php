@@ -16,6 +16,7 @@ class ResourcePage extends Model
     protected function casts(): array
     {
         return [
+            'items'     => 'array',
             'is_active' => 'boolean',
         ];
     }

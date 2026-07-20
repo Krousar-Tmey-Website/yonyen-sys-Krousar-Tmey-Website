@@ -7,7 +7,6 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\NewsletterController;
-use App\Http\Controllers\ResourcePageController;
 use App\Http\Controllers\VolunteerController;
 use App\Models\AnnualReport;
 use App\Models\Award;
@@ -206,6 +205,17 @@ Route::get('/reports/{report}/download', function (App\Models\AnnualReport $repo
     );
 })->name('reports.download');
 
+Route::get('/storage/{path}', function (string $path) {
+    abort_if(str_contains($path, '..') || str_starts_with($path, '/') || str_starts_with($path, '\\'), 404);
+
+    $disk = Storage::disk('public');
+    abort_unless($disk->exists($path), 404);
+
+    return response($disk->get($path), 200, [
+        'Content-Type' => $disk->mimeType($path) ?: 'application/octet-stream',
+    ]);
+})->where('path', '.*')->name('storage.public');
+
 Route::get('/contact', function () {
     $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
 
@@ -262,6 +272,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('donations', Admin\DonationController::class);
 
     // News
+    Route::post('news/upload-image', [Admin\NewsController::class, 'uploadImage'])->name('news.upload-image');
     Route::resource('news', Admin\NewsController::class);
     Route::resource('resource-pages', Admin\ResourcePageController::class)->except(['show']);
 
@@ -371,5 +382,3 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
 
 });
-
-

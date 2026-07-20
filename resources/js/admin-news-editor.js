@@ -154,11 +154,50 @@ function initEditor(root) {
         insertRawHtml(html);
     };
 
-    root.querySelector('[data-action="insert-image"]')?.addEventListener('click', () => {
-        const src = prompt('Image URL (e.g. /storage/news/gallery/xxx.jpg):');
-        if (!src) return;
-        const caption = prompt('Caption text (optional, shown centered under the image):') || '';
-        insertImage(src, caption);
+    const insertImageBtn = root.querySelector('[data-action="insert-image"]');
+    insertImageBtn?.addEventListener('click', () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+        document.body.appendChild(fileInput);
+
+        fileInput.addEventListener('change', async () => {
+            const file = fileInput.files[0];
+            fileInput.remove();
+            if (!file) return;
+
+            const originalLabel = insertImageBtn.innerHTML;
+            insertImageBtn.disabled = true;
+            insertImageBtn.style.opacity = '0.6';
+
+            try {
+                const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                const formData = new FormData();
+                formData.append('image', file);
+
+                const res = await fetch('/admin/news/upload-image', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': token, 'Accept': 'application/json' },
+                    body: formData,
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    throw new Error(data.errors?.image?.[0] || data.message || 'Upload failed');
+                }
+
+                const caption = prompt('Caption text (optional, shown centered under the image):') || '';
+                insertImage(data.url, caption);
+            } catch (err) {
+                alert(err.message || 'Image upload failed. Please try again.');
+            } finally {
+                insertImageBtn.disabled = false;
+                insertImageBtn.innerHTML = originalLabel;
+                insertImageBtn.style.opacity = '';
+            }
+        });
+
+        fileInput.click();
     });
 
     // ── Callout / pull-quote box ──

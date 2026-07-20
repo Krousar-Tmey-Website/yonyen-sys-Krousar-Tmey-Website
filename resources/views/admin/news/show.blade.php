@@ -116,6 +116,26 @@
                 </div>
             </div>
             @endif
+
+
+            {{-- Videos --}}
+            @if(!empty($news->videos))
+            <div class="border-t border-gray-100 pt-5">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Videos</p>
+                <div class="space-y-2">
+                    @foreach($news->video_urls as $index => $url)
+                    <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center gap-2 p-3 bg-gray-50 rounded-xl hover:bg-blue-50 transition group">
+                        <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                        <span class="text-sm font-medium text-gray-700 group-hover:text-blue-600">Video {{ $index + 1 }}</span>
+                    </a>
+                    @endforeach
+                </div>
+            </div>
+            @endif
         </div>
 
         {{-- Actions --}}

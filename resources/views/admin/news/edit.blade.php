@@ -13,7 +13,7 @@
 @section('content')
 
 <div class="max-w-3xl mx-auto">
-    <form id="articleEditForm" action="{{ route('admin.news.update', $news) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form id="articleEditForm" action="{{ route('admin.news.update', $news) }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-news-ajax-form>
         @csrf @method('PUT')
 
         {{-- Article Details --}}
@@ -262,6 +262,10 @@
                 Update Article
             </button>
             <a href="{{ route('admin.news.index') }}" class="btn-cancel">Cancel</a>
+            <span class="form-status" data-news-form-status>
+                <span class="dot"></span>
+                Ready to save
+            </span>
         </div>
     </form>
 </div>
@@ -367,6 +371,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Form submission - ensure links are saved
+    const articleForm = document.getElementById('articleEditForm');
+    if (articleForm) {
+        articleForm.addEventListener('submit', function(e) {
+            document.getElementById('tagLinksInput').value = tagLinks.length ? JSON.stringify(tagLinks) : '';
+        });
+    }
 });
 
 // ====== GALLERY REMOVAL (existing images) ======
@@ -528,9 +539,6 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
-
 </script>
-
-@vite(['resources/js/admin-news-editor.js'])
 
 @endsection

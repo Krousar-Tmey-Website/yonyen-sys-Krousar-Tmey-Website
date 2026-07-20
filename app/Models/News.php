@@ -20,7 +20,7 @@ class News extends Model
 {
     protected $fillable = [
         'title', 'slug', 'excerpt', 'content',
-        'image', 'gallery', 'videos', 'is_published', 'published_at',
+        'image', 'gallery', 'category', 'videos', 'is_published', 'published_at',
         'links', 'tag_links',
     ];
 
@@ -29,6 +29,10 @@ class News extends Model
         return [
             'is_published'  => 'boolean',
             'published_at'  => 'datetime',
+            'gallery'       => 'array',
+            'videos'        => 'array',
+            'links'         => 'array',
+            'tag_links'     => 'array',
         ];
     }
 
@@ -43,7 +47,7 @@ class News extends Model
                 $slug = $baseSlug;
                 $counter = 1;
                 
-                while (static::where('slug', $slug, '=', true)->exists()) {
+                while (static::where('slug', $slug)->exists()) {
                     $slug = $baseSlug . '-' . $counter;
                     $counter++;
                 }

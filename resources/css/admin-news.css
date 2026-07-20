@@ -961,6 +961,39 @@ select.form-control {
 .link-input-group .btn-add-link:hover {
     background: #1a4a7a;
 }
+.quick-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.quick-tags-row:empty::after {
+    content: "No topics available yet — add one under Admin \2192 Topics.";
+    font-size: 12px;
+    color: #94a3b8;
+}
+.preset-tag-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 14px;
+    background: #fff;
+    border: 1px solid #cbd8e4;
+    border-radius: 999px;
+    color: #2d6fa3;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.preset-tag-btn:hover {
+    background: #eef4f9;
+    border-color: #2d6fa3;
+}
+.preset-tag-btn.is-added {
+    background: #dbeafe;
+    border-color: #93c5fd;
+    color: #1e40af;
+}
 .links-container {
     margin-top: 10px;
     max-height: 200px;
@@ -1357,6 +1390,16 @@ select.form-control {
     font-style: normal;
     color: #9ca3af;
 }
+/* Match the public article page's image sizing (.article-content img) so
+   what the editor shows is what visitors actually see. */
+[data-quill-root] .ql-editor img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 12px 0;
+    border-radius: 8px;
+}
+
 [data-quill-root] .ql-raw-html-block {
     position: relative;
     margin: 10px 0;

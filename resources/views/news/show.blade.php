@@ -97,7 +97,7 @@
                         <div class="text-sm text-gray-500 break-all">{{ $link['url'] }}</div>
                     </div>
                     <svg class="w-4 h-4 text-gray-400 ml-auto group-hover:text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-4M14 4h6m0 0l-3-3m3 3L20 7"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v12a2 2 0 002-2h12a2 2 0 002-2v-4M14 4h6m0 0l-3-3m3 3L20 7"/>
                     </svg>
                 </a>
                 @endforeach
