@@ -343,6 +343,17 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('/', [Admin\NewsletterController::class, 'index'])->name('index');
         Route::get('export', [Admin\NewsletterController::class, 'export'])->name('export');
         Route::delete('{newsletterSubscriber}', [Admin\NewsletterController::class, 'destroy'])->name('destroy');
+
+        // Newsletter Campaigns
+        Route::get('campaigns', [Admin\NewsletterCampaignController::class, 'index'])->name('campaigns.index');
+        Route::get('campaigns/create', [Admin\NewsletterCampaignController::class, 'create'])->name('campaigns.create');
+        Route::post('campaigns', [Admin\NewsletterCampaignController::class, 'store'])->name('campaigns.store');
+        Route::get('campaigns/{campaign}', [Admin\NewsletterCampaignController::class, 'show'])->name('campaigns.show');
+        Route::get('campaigns/{campaign}/edit', [Admin\NewsletterCampaignController::class, 'edit'])->name('campaigns.edit');
+        Route::put('campaigns/{campaign}', [Admin\NewsletterCampaignController::class, 'update'])->name('campaigns.update');
+        Route::delete('campaigns/{campaign}', [Admin\NewsletterCampaignController::class, 'destroy'])->name('campaigns.destroy');
+        Route::get('campaigns/{campaign}/preview', [Admin\NewsletterCampaignController::class, 'preview'])->name('campaigns.preview');
+        Route::post('campaigns/{campaign}/send', [Admin\NewsletterCampaignController::class, 'send'])->name('campaigns.send');
     });
 
     // Volunteer Applications
