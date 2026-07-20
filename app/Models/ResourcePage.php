@@ -36,22 +36,18 @@ class ResourcePage extends Model
         return $this->resolveUrl($this->detail_image);
     }
 
-    // Ensure items is always an array of ['title' => ..., 'description' => ..., 'image' => ...]
     public function getItemsAttribute(mixed $value): array
     {
         if (is_null($value) || $value === '') {
             return [];
         }
-
         if (is_string($value)) {
             $decoded = json_decode($value, true);
             return is_array($decoded) ? $decoded : [];
         }
-
         return (array) $value;
     }
 
-    // Same items array, but with each image path resolved to a full URL for display
     public function getItemsForDisplayAttribute(): array
     {
         return array_map(function (array $item) {
@@ -65,7 +61,6 @@ class ResourcePage extends Model
         if (!$path) {
             return null;
         }
-
         return str_starts_with($path, 'http') ? $path : asset('storage/' . $path);
     }
 }

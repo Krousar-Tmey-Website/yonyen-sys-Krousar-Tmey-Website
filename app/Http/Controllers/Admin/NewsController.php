@@ -36,8 +36,6 @@ class NewsController extends Controller
 
         $path = $request->file('image')->store('news/gallery', 'public');
 
-        // Root-relative path (not Storage::url()/asset()) so this matches the
-        // dev server's actual host:port regardless of the configured APP_URL.
         return response()->json(['url' => '/storage/' . $path]);
     }
 
@@ -202,7 +200,6 @@ class NewsController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($news->image) {
                 Storage::disk('public')->delete($news->image);
             }

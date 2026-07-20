@@ -90,7 +90,7 @@
                         <input type="url" id="tagUrl" class="form-control" placeholder="Link URL (optional)">
                         <button type="button" class="btn-add-link" onclick="addTagLink()">Add Tag</button>
                     </div>
-                    <div class="form-helper">Shown on the article card and byline. The URL is optional — leave it blank for a plain (non-clickable) tag, or point it at an external page (e.g. a category on krousar-thmey.org).</div>
+                    <div class="form-helper">Shown on the article card and byline. The URL is optional - leave it blank for a plain (non-clickable) tag, or point it at an external page (e.g. a category on krousar-thmey.org).</div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
@@ -130,7 +130,6 @@
                 <h3>Image & Publishing</h3>
             </div>
             <div class="card-body">
-                {{-- Current Image --}}
                 @if($news->image)
                 <div class="form-group">
                     <label class="form-label">Current Image</label>
@@ -144,7 +143,6 @@
                 </div>
                 @endif
 
-                {{-- Image Upload --}}
                 <div class="form-group">
                     <label class="form-label">Cover Image <span class="optional">(optional)</span></label>
                     <div class="upload-area" onclick="document.getElementById('imageInput').click()">
@@ -161,7 +159,6 @@
                     @error('image')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
-                {{-- Current Gallery Images --}}
                 @if(!empty($news->gallery))
                 <div class="form-group">
                     <label class="form-label">Current Gallery Images</label>
@@ -179,7 +176,6 @@
                 </div>
                 @endif
 
-                {{-- Add Gallery Images --}}
                 <div class="form-group">
                     <label class="form-label">Add Gallery Images <span class="optional">(optional, multiple allowed)</span></label>
                     <div class="upload-area" onclick="document.getElementById('galleryInput').click()">
@@ -194,7 +190,6 @@
                     @error('gallery')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
-                {{-- Current Videos --}}
                 @if(!empty($news->videos))
                 <div class="form-group">
                     <label class="form-label">Current Videos</label>
@@ -211,7 +206,6 @@
                 </div>
                 @endif
 
-                {{-- Add Video --}}
                 <div class="form-group">
                     <label class="form-label">Add Video <span class="optional">(optional, multiple allowed)</span></label>
                     <div class="upload-area" onclick="document.getElementById('videosInput').click()">
@@ -227,7 +221,6 @@
                     @error('videos.*')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
-                {{-- Add Video by URL --}}
                 <div class="form-group">
                     <label class="form-label">Video Link <span class="optional">(optional)</span></label>
                     <input type="url" name="video_url" value="{{ old('video_url') }}"
@@ -237,7 +230,6 @@
                     <div class="form-helper">Paste a Facebook or YouTube video link to embed it on the article page.</div>
                 </div>
 
-                {{-- Publishing Options --}}
                 <div class="form-group form-group--no-margin">
                     <div class="form-grid">
                         <div class="publish-option">
@@ -270,10 +262,9 @@
     </form>
 </div>
 
-{{-- Delete Form (separate from main form) --}}
 <div class="form-actions form-actions--delete">
     <form action="{{ route('admin.news.destroy', $news) }}" method="POST"
-          onsubmit="return confirm('⚠️ Permanently delete this article?\n\nThis action cannot be undone.')"
+          onsubmit="return confirm('Permanently delete this article? This action cannot be undone.')"
           class="inline delete-form">
         @csrf @method('DELETE')
         <button type="submit" class="btn-danger delete-btn">
@@ -293,29 +284,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const preview = document.getElementById('imagePreview');
             const placeholder = document.getElementById('imagePlaceholder');
             const file = e.target.files[0];
-            
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     placeholder.classList.add('hidden');
                     preview.classList.remove('hidden');
-                    preview.innerHTML = `
-                        <div class="image-preview-wrapper">
-                            <img src="${e.target.result}" alt="Preview">
-                            <button type="button" class="remove-btn" 
-                                    onclick="document.getElementById('imageInput').value=''; preview.innerHTML=''; preview.classList.add('hidden'); placeholder.classList.remove('hidden');">
-                                ×
-                            </button>
-                            <div class="file-info">${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
-                        </div>
-                    `;
+                    preview.innerHTML = '<div class="image-preview-wrapper"><img src="' + e.target.result + '" alt="Preview"><button type="button" class="remove-btn" onclick="this.closest(\\'.image-preview-wrapper\\').remove();document.getElementById(\\'imageInput\\').value=\\'\\';document.getElementById(\\'imagePlaceholder\\').classList.remove(\\'hidden\\');">x</button><div class="file-info">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</div></div>';
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
 
-    // Gallery upload preview (multiple files)
     const galleryInput = document.getElementById('galleryInput');
     if (galleryInput) {
         galleryInput.addEventListener('change', function(e) {
@@ -326,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 reader.onload = function(ev) {
                     const div = document.createElement('div');
                     div.className = 'gallery-preview-item';
-                    div.innerHTML = `<img src="${ev.target.result}" alt="${file.name}">`;
+                    div.innerHTML = '<img src="' + ev.target.result + '" alt="' + file.name + '">';
                     grid.appendChild(div);
                 };
                 reader.readAsDataURL(file);
@@ -334,7 +314,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Video upload preview (multiple files, listed by name/size)
     const videosInput = document.getElementById('videosInput');
     if (videosInput) {
         videosInput.addEventListener('change', function(e) {
@@ -343,51 +322,37 @@ document.addEventListener('DOMContentLoaded', function() {
             [...e.target.files].forEach(function(file) {
                 const item = document.createElement('div');
                 item.className = 'video-preview-item';
-                item.textContent = `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB)`;
+                item.textContent = file.name + ' (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB)';
                 list.appendChild(item);
             });
         });
     }
 
-    // Enter key support for adding tags
     const tagLabel = document.getElementById('tagLabel');
     const tagUrl = document.getElementById('tagUrl');
-
     if (tagLabel) {
         tagLabel.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                addTagLink();
-            }
+            if (e.key === 'Enter') { e.preventDefault(); addTagLink(); }
         });
     }
-
     if (tagUrl) {
         tagUrl.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                addTagLink();
-            }
+            if (e.key === 'Enter') { e.preventDefault(); addTagLink(); }
         });
     }
 
-    // Form submission - ensure links are saved
     const articleForm = document.getElementById('articleEditForm');
     if (articleForm) {
-        articleForm.addEventListener('submit', function(e) {
+        articleForm.addEventListener('submit', function() {
             document.getElementById('tagLinksInput').value = tagLinks.length ? JSON.stringify(tagLinks) : '';
         });
     }
 });
 
-// ====== GALLERY REMOVAL (existing images) ======
-
 let galleryPathsMarkedForRemoval = [];
-
 function toggleRemoveGalleryItem(index, path) {
     const item = document.getElementById('galleryItem' + index);
     const alreadyMarked = galleryPathsMarkedForRemoval.includes(path);
-
     if (alreadyMarked) {
         galleryPathsMarkedForRemoval = galleryPathsMarkedForRemoval.filter(p => p !== path);
         item.classList.remove('is-marked-for-removal');
@@ -395,7 +360,6 @@ function toggleRemoveGalleryItem(index, path) {
         galleryPathsMarkedForRemoval.push(path);
         item.classList.add('is-marked-for-removal');
     }
-
     document.querySelectorAll('input[name="remove_gallery[]"]').forEach(el => el.remove());
     const form = document.getElementById('articleEditForm');
     galleryPathsMarkedForRemoval.forEach(function(p) {
@@ -407,14 +371,10 @@ function toggleRemoveGalleryItem(index, path) {
     });
 }
 
-// ====== VIDEO REMOVAL (existing videos) ======
-
 let videoPathsMarkedForRemoval = [];
-
 function toggleRemoveVideoItem(index, path) {
     const item = document.getElementById('videoItem' + index);
     const alreadyMarked = videoPathsMarkedForRemoval.includes(path);
-
     if (alreadyMarked) {
         videoPathsMarkedForRemoval = videoPathsMarkedForRemoval.filter(p => p !== path);
         item.classList.remove('is-marked-for-removal');
@@ -422,7 +382,6 @@ function toggleRemoveVideoItem(index, path) {
         videoPathsMarkedForRemoval.push(path);
         item.classList.add('is-marked-for-removal');
     }
-
     document.querySelectorAll('input[name="remove_videos[]"]').forEach(el => el.remove());
     const form = document.getElementById('articleEditForm');
     videoPathsMarkedForRemoval.forEach(function(p) {
@@ -434,18 +393,11 @@ function toggleRemoveVideoItem(index, path) {
     });
 }
 
-// ====== TAG LINK MANAGEMENT ======
-
-{{-- Sourced live from the Resource Pages table, so a tag always points at the
-     matching internal page and stays in sync with renames/additions there. --}}
 const PRESET_TAGS = @json($presetTags);
-
 let tagLinks = {!! !empty($news->tag_links) ? json_encode($news->tag_links) : '[]' !!};
 
 function quickAddTag(label, url) {
-    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
-        return; // already added — silently ignore, no need to interrupt with an alert
-    }
+    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) return;
     tagLinks.push({ label: label, url: url || null });
     renderTagLinks();
 }
@@ -453,47 +405,24 @@ function quickAddTag(label, url) {
 function renderPresetButtons() {
     const container = document.getElementById('presetTagButtons');
     if (!container) return;
-
-    container.innerHTML = PRESET_TAGS.map(preset => {
+    container.innerHTML = PRESET_TAGS.map(function(preset) {
         const isAdded = tagLinks.some(t => t.label.toLowerCase() === preset.label.toLowerCase());
-        const urlAttr = preset.url ? preset.url.replace(/'/g, '&#39;') : '';
-        return `<button type="button" class="preset-tag-btn${isAdded ? ' is-added' : ''}"
-                    onclick="quickAddTag('${escapeHtml(preset.label)}', '${urlAttr}')">
-                    ${isAdded ? '✓' : '+'} ${escapeHtml(preset.label)}
-                </button>`;
+        const label = preset.label.replace(/'/g, "\\'");
+        const url = (preset.url || '').replace(/'/g, "\\'");
+        return '<button type="button" class="preset-tag-btn' + (isAdded ? ' is-added' : '') + '" onclick="quickAddTag(\\'' + label + '\\', \\'' + url + '\\')">' + (isAdded ? '\\u2713' : '+') + ' ' + preset.label + '</button>';
     }).join('');
 }
 
 function addTagLink() {
     const labelInput = document.getElementById('tagLabel');
     const urlInput = document.getElementById('tagUrl');
-
     const label = labelInput.value.trim();
     const url = urlInput.value.trim();
-
-    if (!label) {
-        alert('Please enter a tag label.');
-        return;
-    }
-
-    if (url) {
-        try {
-            new URL(url);
-        } catch (e) {
-            alert('Please enter a valid URL (including http:// or https://), or leave it blank.');
-            return;
-        }
-    }
-
-    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
-        alert('This tag has already been added.');
-        return;
-    }
-
+    if (!label) { alert('Please enter a tag label.'); return; }
+    if (url) { try { new URL(url); } catch(e) { alert('Please enter a valid URL.'); return; } }
+    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) { alert('Tag already added.'); return; }
     tagLinks.push({ label: label, url: url || null });
-
     renderTagLinks();
-
     labelInput.value = '';
     urlInput.value = '';
     labelInput.focus();
@@ -506,39 +435,33 @@ function removeTagLink(index) {
 
 function renderTagLinks() {
     const container = document.getElementById('tagLinksContainer');
-    const tagLinksInput = document.getElementById('tagLinksInput');
-
+    const input = document.getElementById('tagLinksInput');
     if (tagLinks.length === 0) {
-        container.innerHTML = '<div class="no-links" id="noTagLinks">No tags added yet. Add one above.</div>';
-        tagLinksInput.value = '';
+        container.innerHTML = '<div class="no-links">No tags added yet. Add one above.</div>';
+        input.value = '';
         renderPresetButtons();
         return;
     }
-
     let html = '';
-    tagLinks.forEach((tag, index) => {
-        html += `
-            <div class="link-item">
-                <span class="link-title">${escapeHtml(tag.label)}</span>
-                ${tag.url ? `<a href="${escapeHtml(tag.url)}" target="_blank" rel="noopener noreferrer" class="link-url">${escapeHtml(tag.url)}</a>` : '<span class="link-url" style="color:#9ca3af;">No link</span>'}
-                <span class="link-badge">Tag</span>
-                <button type="button" class="remove-link" onclick="removeTagLink(${index})" title="Remove tag">×</button>
-            </div>
-        `;
+    tagLinks.forEach(function(tag, i) {
+        html += '<div class="link-item"><span class="link-title">' + escapeHtml(tag.label) + '</span>';
+        html += tag.url ? '<a href="' + escapeHtml(tag.url) + '" target="_blank" class="link-url">' + escapeHtml(tag.url) + '</a>' : '<span class="link-url" style="color:#9ca3af;">No link</span>';
+        html += '<span class="link-badge">Tag</span><button type="button" class="remove-link" onclick="removeTagLink(' + i + ')" title="Remove">x</button></div>';
     });
     container.innerHTML = html;
-
-    tagLinksInput.value = JSON.stringify(tagLinks);
+    input.value = JSON.stringify(tagLinks);
     renderPresetButtons();
 }
-
-renderPresetButtons();
 
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
 }
+
+renderPresetButtons();
 </script>
+
+@vite(['resources/js/admin-news-editor.js', 'resources/js/admin-news-form.js'])
 
 @endsection
