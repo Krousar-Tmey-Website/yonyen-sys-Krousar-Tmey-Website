@@ -69,12 +69,14 @@
                     </h1>
 
                     {{-- Price Display Box --}}
+                    @if($book->price && $book->price > 0)
                     <div class="inline-flex items-baseline gap-2 bg-gradient-to-r from-amber-500/10 to-amber-500/5 px-5 py-3 rounded-2xl border border-amber-500/20 mb-6">
                         <span class="text-xs uppercase font-bold text-slate-400">Price:</span>
                         <span class="text-3xl md:text-4xl font-black text-[#e8a020]">
                             ${{ number_format($book->price, 2) }}
                         </span>
                     </div>
+                    @endif
                 </div>
 
                 {{-- Description Box --}}

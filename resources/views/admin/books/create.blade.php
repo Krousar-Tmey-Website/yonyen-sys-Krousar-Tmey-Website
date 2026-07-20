@@ -23,7 +23,6 @@
                     </svg>
                 </div>
                 <h3>Book Details</h3>
-                <span class="badge">Required *</span>
             </div>
             <div class="card-body">
                 @include('admin.books._form', ['book' => null])

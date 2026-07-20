@@ -26,7 +26,6 @@
                     </svg>
                 </div>
                 <h3>Book Details</h3>
-                <span class="badge">Required *</span>
             </div>
             <div class="card-body">
                 <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -39,8 +38,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Price <span class="required">*</span></label>
-                        <input type="number" name="price" value="{{ old('price', $book->price) }}" required step="0.01" min="0"
+                        <label class="form-label">Price (USD) <span class="text-xs text-slate-400 font-normal">(optional)</span></label>
+                        <input type="number" name="price" value="{{ old('price', $book->price) }}" step="0.01" min="0"
                                class="form-control @error('price') error @enderror"
                                placeholder="e.g. 24.99">
                         @error('price')<div class="form-error">{{ $message }}</div>@enderror

@@ -152,68 +152,65 @@
         </div>
 
         @if($books->isNotEmpty())
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($books as $book)
-            <div data-reveal="pop" style="--reveal-delay: {{ $loop->index * 120 }}"
-                 class="group bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl border border-white/20 hover:-translate-y-2.5 transition-all duration-500 ease-out flex flex-col">
+            <a href="{{ route('books.show', $book) }}" data-reveal="pop" style="--reveal-delay: {{ ($loop->index % 3) * 120 }}"
+               class="group bg-white rounded-3xl p-5 border border-slate-100 shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex items-center gap-4 md:gap-5 overflow-hidden relative">
                 
-                {{-- 3D Book Cover Showcase Header --}}
-                <div class="relative bg-gradient-to-br from-slate-100 via-slate-50 to-slate-200/70 p-6 flex items-center justify-center h-64 overflow-hidden group-hover:from-sky-50 group-hover:to-slate-100 transition-colors duration-500">
-                    {{-- Ambient shadow halo behind cover --}}
-                    <div class="absolute w-36 h-48 bg-black/15 rounded-xl blur-xl group-hover:bg-[#2d6fa3]/20 group-hover:scale-110 transition-all duration-500"></div>
-
+                {{-- Left Image Container --}}
+                <div class="relative w-24 sm:w-28 md:w-32 h-36 md:h-40 shrink-0 bg-slate-50 rounded-2xl flex items-center justify-center p-2 shadow-inner border border-slate-100/80 overflow-hidden">
                     @if($book->cover_image_url)
                     <img src="{{ $book->cover_image_url }}" alt="{{ $book->title }}" 
-                         class="relative z-10 max-h-52 w-auto object-contain rounded-lg shadow-[0_12px_24px_-4px_rgba(0,0,0,0.28)] group-hover:shadow-[0_20px_35px_-4px_rgba(0,0,0,0.35)] group-hover:scale-105 group-hover:-rotate-1 transition-all duration-500 ease-out">
+                         class="max-h-full max-w-full object-contain rounded-lg shadow-md group-hover:scale-105 transition-transform duration-500">
                     @else
-                    <div class="relative z-10 w-32 h-44 rounded-xl bg-white border border-slate-200 shadow-md flex flex-col items-center justify-center text-slate-400 gap-2 group-hover:scale-105 transition-transform duration-500">
-                        <svg class="w-10 h-10 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                        <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Publication</span>
+                    <div class="flex flex-col items-center justify-center text-slate-300 gap-1">
+                        <svg class="w-8 h-8 text-[#2d6fa3]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span class="text-[8px] font-bold text-slate-400 uppercase">Book</span>
                     </div>
                     @endif
-
-                    {{-- Stock Badge --}}
-                    <div class="absolute top-3.5 right-3.5 z-20">
-                        <span class="inline-flex items-center gap-1 text-[9px] font-extrabold px-2.5 py-1 rounded-full backdrop-blur-md shadow-xs uppercase tracking-wider
-                            {{ $book->is_available ? 'bg-emerald-500/90 text-white border border-emerald-400/50' : 'bg-rose-500/90 text-white border border-rose-400/50' }}">
-                            <span class="w-1.5 h-1.5 rounded-full bg-white {{ $book->is_available ? 'animate-pulse' : '' }}"></span>
-                            {{ $book->is_available ? 'Available' : 'Sold Out' }}
-                        </span>
-                    </div>
                 </div>
 
-                {{-- Book Details Body --}}
-                <div class="p-6 flex flex-col flex-1 justify-between bg-white">
+                {{-- Right Content Column --}}
+                <div class="flex-1 min-w-0 flex flex-col justify-between h-36 md:h-40 py-0.5">
                     <div>
-                        <h3 class="font-extrabold text-slate-800 text-base md:text-lg mb-2 group-hover:text-[#2d6fa3] transition-colors duration-300 line-clamp-2 leading-snug">
-                            {{ $book->title }}
-                        </h3>
-
-                        @if($book->description)
-                        <p class="text-slate-500 text-xs leading-relaxed mb-6 line-clamp-3">
-                            {{ strip_tags($book->description) }}
-                        </p>
-                        @else
-                        <p class="text-slate-400 text-xs italic mb-6">Support Krousar Thmey by ordering this title.</p>
-                        @endif
-                    </div>
-
-                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-3 mt-auto">
-                        <div class="flex flex-col">
-                            <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Price</span>
-                            <span class="text-[#e8a020] font-black text-lg md:text-xl leading-none">
-                                ${{ number_format($book->price, 2) }}
+                        {{-- Top Badge --}}
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="inline-flex items-center text-[9px] font-extrabold px-2.5 py-0.5 rounded-full tracking-wider uppercase
+                                {{ $book->is_available ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-amber-50 text-amber-600 border border-amber-200' }}">
+                                {{ $book->is_available ? 'AVAILABLE' : 'OUT OF STOCK' }}
                             </span>
                         </div>
 
-                        <a href="{{ route('books.show', $book) }}" 
-                           class="inline-flex items-center gap-1.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-95 group/btn">
-                            <span>View Detail</span>
-                            <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                        </a>
+                        {{-- Title --}}
+                        <h3 class="font-extrabold text-slate-800 text-sm md:text-base uppercase tracking-wide group-hover:text-[#2d6fa3] transition-colors line-clamp-1 leading-snug mb-1">
+                            {{ $book->title }}
+                        </h3>
+
+                        {{-- Description --}}
+                        @if($book->description)
+                        <p class="text-slate-400 text-xs line-clamp-2 leading-relaxed">
+                            {{ strip_tags($book->description) }}
+                        </p>
+                        @else
+                        <p class="text-slate-300 text-xs italic">No description provided.</p>
+                        @endif
+                    </div>
+
+                    {{-- Bottom Row: Price & Stock --}}
+                    <div class="flex items-center justify-between border-t border-slate-100 pt-2.5 mt-auto">
+                        @if($book->price && $book->price > 0)
+                        <span class="text-xl md:text-2xl font-black text-slate-800 group-hover:text-[#2d6fa3] transition-colors">
+                            ${{ number_format($book->price, 2) }}
+                        </span>
+                        @else
+                        <span></span>
+                        @endif
+                        <span class="text-xs text-slate-400 font-semibold">
+                            Stock: <strong class="text-slate-600 font-bold">{{ $book->stock }}</strong>
+                        </span>
                     </div>
                 </div>
-            </div>
+            </a>
             @endforeach
         </div>
         @else
