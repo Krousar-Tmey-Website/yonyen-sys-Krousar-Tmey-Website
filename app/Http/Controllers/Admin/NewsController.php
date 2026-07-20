@@ -63,7 +63,6 @@ class NewsController extends Controller
 
         $data['is_published'] = $request->boolean('is_published');
 
-        // Generate slug with uniqueness check
         $baseSlug = Str::slug($data['title']);
         $slug = $baseSlug;
         $counter = 1;
@@ -133,11 +132,6 @@ class NewsController extends Controller
         return view('admin.news.edit', compact('news', 'presetTags'));
     }
 
-    /**
-     * Build the "quick add" tag preset list directly from the Resource Pages
-     * table, so a tag always points at the corresponding internal page and
-     * automatically reflects any renames/additions made there.
-     */
     private function presetTagsFromResourcePages(): array
     {
         return ResourcePage::active()->get(['title', 'slug'])->map(fn ($page) => [
@@ -185,7 +179,6 @@ class NewsController extends Controller
 
         $data['is_published'] = $request->boolean('is_published');
 
-        // Only update slug if title changed
         if ($news->title !== $data['title']) {
             $baseSlug = Str::slug($data['title']);
             $slug = $baseSlug;
@@ -206,7 +199,6 @@ class NewsController extends Controller
             $data['image'] = $request->file('image')->store('news', 'public');
         }
 
-        // Gallery: start from existing, drop anything marked for removal, append new uploads
         $gallery = $news->gallery;
         $toRemove = $request->input('remove_gallery', []);
         if (!empty($toRemove)) {
@@ -223,7 +215,6 @@ class NewsController extends Controller
         $data['gallery'] = $gallery;
         unset($data['remove_gallery']);
 
-        // Videos: start from existing, drop anything marked for removal, append new uploads
         $videos = $news->videos;
         $toRemoveVideos = $request->input('remove_videos', []);
         if (!empty($toRemoveVideos)) {
@@ -271,7 +262,6 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
-        // Delete image, gallery and video files if they exist
         if ($news->image) {
             Storage::disk('public')->delete($news->image);
         }
