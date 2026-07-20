@@ -219,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
     const galleryInput = document.getElementById('galleryInput');
     if (galleryInput) {
         galleryInput.addEventListener('change', function(e) {
