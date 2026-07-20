@@ -1324,118 +1324,7 @@ select.form-control {
     }
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-/* Gallery preview grid (create/edit article) */
-.gallery-preview-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 10px;
-    margin-top: 12px;
-}
-.gallery-preview-grid:empty {
-    display: none;
-}
-.gallery-preview-item {
-    position: relative;
-    aspect-ratio: 1;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #e2e8f0;
-    background: #f8fafc;
-}
-.gallery-preview-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-.gallery-preview-item .remove-gallery-item {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: rgba(15, 23, 42, 0.65);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 1;
-}
-.gallery-preview-item .remove-gallery-item:hover {
-    background: #ef4444;
-}
-.gallery-preview-item.is-marked-for-removal {
-    opacity: 0.35;
-}
-.gallery-preview-item .insert-gallery-item {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 4px 0;
-    background: rgba(45, 111, 163, 0.85);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    font-size: 11px;
-    font-weight: 600;
-    text-align: center;
-    transition: background 0.2s;
-}
-.gallery-preview-item .insert-gallery-item:hover {
-    background: #1a3c6e;
-}
 
-/* Video preview / current-videos list (create/edit article) */
-.video-preview-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 12px;
-}
-.video-preview-list:empty {
-    display: none;
-}
-.video-preview-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 10px 14px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 13px;
-    color: #334155;
-}
-.video-preview-item .remove-gallery-item {
-    position: static;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: #94a3b8;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-.video-preview-item .remove-gallery-item:hover {
-    background: #ef4444;
-}
-.video-preview-item.is-marked-for-removal {
-    opacity: 0.35;
-}
-
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
 /* Rich text content editor (Quill) — see resources/js/admin-news-editor.js */
 [data-quill-root] {
     border: 1px solid #e2e8f0;
@@ -1511,10 +1400,7 @@ select.form-control {
     margin: 12px 0;
     border-radius: 8px;
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
+
 [data-quill-root] .ql-raw-html-block {
     position: relative;
     margin: 10px 0;
@@ -1532,4 +1418,3 @@ select.form-control {
     letter-spacing: 0.03em;
     color: #94a3b8;
     margin-bottom: 6px;
-}

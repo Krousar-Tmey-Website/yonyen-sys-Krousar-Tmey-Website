@@ -113,18 +113,10 @@
                     </td>
                     <td>
                         @if(!empty($article->tag_links))
-<<<<<<< HEAD
-<<<<<<< HEAD
                         <span class="category-tag">
                             <span class="dot"></span>
                             {{ collect($article->tag_links)->pluck('label')->implode(', ') }}
                         </span>
-=======
-                        <span class="text-xs text-gray-600">{{ collect($article->tag_links)->pluck('label')->implode(', ') }}</span>
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
-=======
-                        <span class="text-xs text-gray-600">{{ collect($article->tag_links)->pluck('label')->implode(', ') }}</span>
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
                         @else
                         <span class="text-gray-400 text-xs">—</span>
                         @endif
