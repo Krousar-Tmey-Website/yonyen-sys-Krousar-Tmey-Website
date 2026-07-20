@@ -23,12 +23,6 @@
                        id="searchInput"
                        class="form-control pl-9">
             </div>
-            <select class="form-select" id="categoryFilter">
-                <option value="">All Categories</option>
-                @foreach($articles->pluck('category')->unique()->sort()->values() as $cat)
-                <option value="{{ $cat }}" class="capitalize">{{ str_replace('-', ' ', $cat) }}</option>
-                @endforeach
-            </select>
             <select class="form-select" id="statusFilter">
                 <option value="">All Status</option>
                 <option value="published">Published</option>
@@ -78,8 +72,8 @@
         <table class="table-custom">
             <thead>
                 <tr>
-                    <th class="th-width-40">Article</th>
-                    <th class="th-width-15">Category</th>
+                    <th class="th-width-35">Article</th>
+                    <th class="th-width-20">Tags</th>
                     <th class="th-width-13">Status</th>
                     <th class="th-width-17">Published</th>
                     <th class="th-width-15 th-text-right">Actions</th>
@@ -87,7 +81,7 @@
             </thead>
             <tbody>
                 @foreach($articles as $article)
-                <tr data-category="{{ $article->category }}" data-status="{{ $article->is_published ? 'published' : 'draft' }}">
+                <tr data-status="{{ $article->is_published ? 'published' : 'draft' }}">
                     <td>
                         <div class="flex items-center gap-3">
                             @if($article->image)
@@ -112,10 +106,11 @@
                         </div>
                     </td>
                     <td>
-                        <span class="category-tag">
-                            <span class="dot"></span>
-                            {{ $article->category_name ?? str_replace('-', ' ', $article->category) }}
-                        </span>
+                        @if(!empty($article->tag_links))
+                        <span class="text-xs text-gray-600">{{ collect($article->tag_links)->pluck('label')->implode(', ') }}</span>
+                        @else
+                        <span class="text-gray-400 text-xs">—</span>
+                        @endif
                     </td>
                     <td>
                         @if($article->is_published)
@@ -222,37 +217,31 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
-    const categoryFilter = document.getElementById('categoryFilter');
     const statusFilter = document.getElementById('statusFilter');
     const rows = document.querySelectorAll('tbody tr');
 
     function filterTable() {
         const search = searchInput.value.toLowerCase().trim();
-        const category = categoryFilter.value;
         const status = statusFilter.value;
 
         rows.forEach(row => {
             const title = row.querySelector('td:first-child .font-medium')?.textContent?.toLowerCase() || '';
             const excerpt = row.querySelector('td:first-child .text-xs')?.textContent?.toLowerCase() || '';
-            const rowCategory = row.dataset.category || '';
             const rowStatus = row.dataset.status || '';
 
             const matchesSearch = !search || title.includes(search) || excerpt.includes(search);
-            const matchesCategory = !category || rowCategory === category;
             const matchesStatus = !status || rowStatus === status;
 
-            row.style.display = (matchesSearch && matchesCategory && matchesStatus) ? '' : 'none';
+            row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
         });
     }
 
     searchInput.addEventListener('input', filterTable);
-    categoryFilter.addEventListener('change', filterTable);
     statusFilter.addEventListener('change', filterTable);
 });
 
 function resetFilters() {
     document.getElementById('searchInput').value = '';
-    document.getElementById('categoryFilter').value = '';
     document.getElementById('statusFilter').value = '';
     document.getElementById('searchInput').dispatchEvent(new Event('input'));
 }

@@ -14,13 +14,7 @@ class Category extends Model
     protected $fillable = [
         'CategoryName',
         'Description',
-        'CategoryStatus',
     ];
 
     public $timestamps = true;
-
-    public function news()
-    {
-        return $this->hasMany(News::class, 'category', 'CategoryName');
-    }
 }

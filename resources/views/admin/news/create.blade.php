@@ -11,7 +11,7 @@
 @section('content')
 
 <div class="max-w-3xl mx-auto">
-    <form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form id="articleForm" action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-news-ajax-form>
         @csrf
 
         {{-- Article Details --}}
@@ -33,29 +33,6 @@
                            placeholder="Enter article title...">
                     @error('title')<div class="form-error">{{ $message }}</div>@enderror
                     <div class="form-helper">Used as page title and URL slug.</div>
-                </div>
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Category <span class="required">*</span></label>
-                        <select name="category" required
-                                class="form-control @error('category') error @enderror">
-                            <option value="">Select a category</option>
-                            @foreach($categories as $category)
-<option value="{{ $category->CategoryName }}" {{ old('category') == $category->CategoryName ? 'selected' : '' }}>
-    {{ $category->CategoryName }}
-</option>
-                            @endforeach
-                        </select>
-                        @error('category')<div class="form-error">{{ $message }}</div>@enderror
-                        <div class="form-helper">Select from created categories, or <a href="{{ route('admin.categories.create') }}" target="_blank">create a new one</a>.</div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Tags <span class="optional">(comma separated)</span></label>
-                        <input type="text" name="tags" value="{{ old('tags') }}"
-                               class="form-control" placeholder="e.g. Cambodia, Child welfare">
-                        @error('tags')<div class="form-error">{{ $message }}</div>@enderror
-                    </div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
@@ -80,9 +57,47 @@
             </div>
             <div class="card-body">
                 <div class="form-group form-group--no-margin">
-                    <textarea name="content" rows="16" class="form-control content"
-                              placeholder="Write your article content here...">{{ old('content') }}</textarea>
+                    @include('admin.news._content-editor')
                     @error('content')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+        </div>
+
+        {{-- Tags Section --}}
+        <div class="form-card">
+            <div class="card-header">
+                <div class="icon purple">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                    </svg>
+                </div>
+                <h3>Tags</h3>
+                <span class="badge">Optional</span>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Quick Add <span class="optional">(common categories)</span></label>
+                    <div class="quick-tags-row" id="presetTagButtons"></div>
+                    <div class="form-helper">Click to instantly add a common category. You can still edit or remove it below.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Add a Custom Tag</label>
+                    <div class="link-input-group">
+                        <input type="text" id="tagLabel" class="form-control" placeholder="Tag label (e.g. Cambodia)">
+                        <input type="url" id="tagUrl" class="form-control" placeholder="Link URL (optional)">
+                        <button type="button" class="btn-add-link" onclick="addTagLink()">Add Tag</button>
+                    </div>
+                    <div class="form-helper">Shown on the article card and byline. The URL is optional — leave it blank for a plain (non-clickable) tag, or point it at an external page (e.g. a category on krousar-thmey.org).</div>
+                </div>
+
+                <div class="form-group form-group--no-margin">
+                    <label class="form-label">Added Tags</label>
+                    <div class="links-container" id="tagLinksContainer">
+                        <div class="no-links" id="noTagLinks">No tags added yet. Add one above.</div>
+                    </div>
+                    <input type="hidden" name="tag_links" id="tagLinksInput" value="">
+                    @error('tag_links')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
         </div>
@@ -147,10 +162,34 @@
                     @error('image')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
+                <div class="form-group">
+                    <label class="form-label">Video <span class="optional">(optional, multiple allowed)</span></label>
+                    <div class="upload-area" onclick="document.getElementById('videosInput').click()">
+                        <input type="file" name="videos[]" id="videosInput" accept="video/mp4,video/quicktime,video/webm" multiple class="hidden">
+                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                        <div class="upload-title">Click to upload a video</div>
+                        <div class="upload-subtitle">Max 35MB each. MP4, MOV, or WebM.</div>
+                    </div>
+                    <div class="video-preview-list" id="videoPreviewList"></div>
+                    @error('videos')<div class="form-error">{{ $message }}</div>@enderror
+                    @error('videos.*')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Video Link <span class="optional">(optional)</span></label>
+                    <input type="url" name="video_url" value="{{ old('video_url') }}"
+                           class="form-control @error('video_url') error @enderror"
+                           placeholder="https://www.facebook.com/watch/?v=...">
+                    @error('video_url')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Paste a Facebook or YouTube video link to embed it on the article page.</div>
+                </div>
+
                 <div class="form-group form-group--no-margin">
                     <div class="form-grid">
                         <div class="publish-option">
-                            <input type="checkbox" name="is_published" id="is_published" value="1" 
+                            <input type="checkbox" name="is_published" id="is_published" value="1"
                                    {{ old('is_published') ? 'checked' : '' }}>
                             <div>
                                 <div class="label">Publish immediately</div>
@@ -180,7 +219,7 @@
                 Save Article
             </button>
             <a href="{{ route('admin.news.index') }}" class="btn-cancel">Cancel</a>
-            <span class="form-status">
+            <span class="form-status" data-news-form-status>
                 <span class="dot"></span>
                 Ready to save
             </span>
@@ -219,10 +258,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Video upload preview (multiple files, listed by name/size)
+    const videosInput = document.getElementById('videosInput');
+    if (videosInput) {
+        videosInput.addEventListener('change', function(e) {
+            const list = document.getElementById('videoPreviewList');
+            list.innerHTML = '';
+            [...e.target.files].forEach(function(file) {
+                const item = document.createElement('div');
+                item.className = 'video-preview-item';
+                item.textContent = `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB)`;
+                list.appendChild(item);
+            });
+        });
+    }
+
     // Enter key support for adding links
     const linkUrl = document.getElementById('linkUrl');
     const linkTitle = document.getElementById('linkTitle');
-    
+
     if (linkUrl) {
         linkUrl.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
@@ -231,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     if (linkTitle) {
         linkTitle.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
@@ -240,12 +294,35 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
+    // Enter key support for adding tags
+    const tagLabel = document.getElementById('tagLabel');
+    const tagUrl = document.getElementById('tagUrl');
+
+    if (tagLabel) {
+        tagLabel.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addTagLink();
+            }
+        });
+    }
+
+    if (tagUrl) {
+        tagUrl.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addTagLink();
+            }
+        });
+    }
+
     // Form submission - ensure links are saved
     const articleForm = document.getElementById('articleForm');
     if (articleForm) {
         articleForm.addEventListener('submit', function(e) {
             document.getElementById('linksInput').value = JSON.stringify(links);
+            document.getElementById('tagLinksInput').value = tagLinks.length ? JSON.stringify(tagLinks) : '';
         });
     }
 });
@@ -346,6 +423,113 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
+
+// ====== TAG LINK MANAGEMENT ======
+
+{{-- Sourced live from the Resource Pages table, so a tag always points at the
+     matching internal page and stays in sync with renames/additions there. --}}
+const PRESET_TAGS = @json($presetTags ?? []);
+
+let tagLinks = [];
+
+function quickAddTag(label, url) {
+    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
+        return; // already added — silently ignore, no need to interrupt with an alert
+    }
+    tagLinks.push({ label: label, url: url || null });
+    renderTagLinks();
+}
+
+function renderPresetButtons() {
+    const container = document.getElementById('presetTagButtons');
+    if (!container) return;
+
+    container.innerHTML = PRESET_TAGS.map((preset, index) => {
+        const isAdded = tagLinks.some(t => t.label.toLowerCase() === preset.label.toLowerCase());
+        return `<button type="button" class="preset-tag-btn${isAdded ? ' is-added' : ''}"
+                    onclick="quickAddPresetTag(${index})">
+                    ${isAdded ? '✓' : '+'} ${escapeHtml(preset.label)}
+                </button>`;
+    }).join('');
+}
+
+function quickAddPresetTag(index) {
+    const preset = PRESET_TAGS[index];
+    if (!preset) return;
+    quickAddTag(preset.label, preset.url);
+}
+
+function addTagLink() {
+    const labelInput = document.getElementById('tagLabel');
+    const urlInput = document.getElementById('tagUrl');
+
+    const label = labelInput.value.trim();
+    const url = urlInput.value.trim();
+
+    if (!label) {
+        alert('Please enter a tag label.');
+        return;
+    }
+
+    if (url) {
+        try {
+            new URL(url);
+        } catch (e) {
+            alert('Please enter a valid URL (including http:// or https://), or leave it blank.');
+            return;
+        }
+    }
+
+    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
+        alert('This tag has already been added.');
+        return;
+    }
+
+    tagLinks.push({ label: label, url: url || null });
+
+    renderTagLinks();
+
+    labelInput.value = '';
+    urlInput.value = '';
+    labelInput.focus();
+}
+
+function removeTagLink(index) {
+    tagLinks.splice(index, 1);
+    renderTagLinks();
+}
+
+function renderTagLinks() {
+    const container = document.getElementById('tagLinksContainer');
+    const tagLinksInput = document.getElementById('tagLinksInput');
+
+    if (tagLinks.length === 0) {
+        container.innerHTML = '<div class="no-links" id="noTagLinks">No tags added yet. Add one above.</div>';
+        tagLinksInput.value = '';
+        renderPresetButtons();
+        return;
+    }
+
+    let html = '';
+    tagLinks.forEach((tag, index) => {
+        html += `
+            <div class="link-item">
+                <span class="link-title">${escapeHtml(tag.label)}</span>
+                ${tag.url ? `<a href="${escapeHtml(tag.url)}" target="_blank" rel="noopener noreferrer" class="link-url">${escapeHtml(tag.url)}</a>` : '<span class="link-url" style="color:#9ca3af;">No link</span>'}
+                <span class="link-badge">Tag</span>
+                <button type="button" class="remove-link" onclick="removeTagLink(${index})" title="Remove tag">×</button>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+
+    tagLinksInput.value = JSON.stringify(tagLinks);
+    renderPresetButtons();
+}
+
+renderPresetButtons();
 </script>
+
+@vite(['resources/js/admin-news-editor.js', 'resources/js/admin-news-form.js'])
 
 @endsection
