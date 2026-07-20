@@ -1324,6 +1324,7 @@ select.form-control {
     }
 }
 
+<<<<<<< HEAD
 /* Rich text content editor (Quill) — see resources/js/admin-news-editor.js */
 [data-quill-root] {
     border: 1px solid #e2e8f0;
@@ -1399,7 +1400,7 @@ select.form-control {
     margin: 12px 0;
     border-radius: 8px;
 }
-
+<<<<<<< HEAD
 [data-quill-root] .ql-raw-html-block {
     position: relative;
     margin: 10px 0;

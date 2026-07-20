@@ -4,11 +4,12 @@
     @vite(['resources/css/admin.css', 'resources/css/admin-news.css'])
 @endpush
 
-@section('title', 'New Article')
-@section('page-title', 'Create New Article')
-@section('breadcrumb', 'News → Create')
+@section('title', 'Create Article')
+@section('page-title', 'Create Article')
+@section('breadcrumb', 'News → Create Article')
 
 @section('content')
+@php use Illuminate\Support\Str; @endphp
 
 <div class="max-w-3xl mx-auto">
     <form id="articleForm" action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-news-ajax-form>
@@ -35,6 +36,19 @@
                     <div class="form-helper">Used as page title and URL slug.</div>
                 </div>
 
+                <div class="form-group">
+                    <label class="form-label">Category <span class="optional">(optional)</span></label>
+                    <select name="category" class="form-control @error('category') error @enderror">
+                        <option value="">Select a category...</option>
+                        @foreach($categories as $cat)
+                        <option value="{{ $cat->CategoryName }}" {{ old('category') == $cat->CategoryName ? 'selected' : '' }}>
+                            {{ $cat->CategoryName }}
+                        </option>
+                        @endforeach
+                    </select>
+                    @error('category')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+
                 <div class="form-group form-group--no-margin">
                     <label class="form-label">Excerpt <span class="optional">(optional)</span></label>
                     <textarea name="excerpt" rows="3" class="form-control textarea"
@@ -57,7 +71,7 @@
             </div>
             <div class="card-body">
                 <div class="form-group form-group--no-margin">
-                    @include('admin.news._content-editor')
+                    @include('admin.news._content-editor', ['contentValue' => ''])
                     @error('content')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
@@ -88,7 +102,7 @@
                         <input type="url" id="tagUrl" class="form-control" placeholder="Link URL (optional)">
                         <button type="button" class="btn-add-link" onclick="addTagLink()">Add Tag</button>
                     </div>
-                    <div class="form-helper">Shown on the article card and byline. The URL is optional - leave it blank for a plain (non-clickable) tag, or point it at an external page (e.g. a category on krousar-thmey.org).</div>
+                    <div class="form-helper">Shown on the article card and byline. The URL is optional — leave it blank for a plain (non-clickable) tag.</div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
@@ -102,7 +116,40 @@
             </div>
         </div>
 
-        {{-- Image & Publishing --}}
+        {{-- Links Section --}}
+        <div class="form-card">
+            <div class="card-header">
+                <div class="icon green">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                </div>
+                <h3>External Links</h3>
+                <span class="badge">Optional</span>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Add a Link</label>
+                    <div class="link-input-group">
+                        <input type="text" id="linkTitle" class="form-control" placeholder="Link title (e.g. Full Report PDF)">
+                        <input type="url" id="linkUrl" class="form-control" placeholder="Link URL">
+                        <button type="button" class="btn-add-link" onclick="addLink()">Add Link</button>
+                    </div>
+                    <div class="form-helper">Displayed as a list of related resources below the article content.</div>
+                </div>
+
+                <div class="form-group form-group--no-margin">
+                    <label class="form-label">Added Links</label>
+                    <div class="links-container" id="linksContainer">
+                        <div class="no-links" id="noLinks">No links added yet. Add one above.</div>
+                    </div>
+                    <input type="hidden" name="links" id="linksInput" value="">
+                    @error('links')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+        </div>
+
+        {{-- Image, Gallery, Videos & Publishing --}}
         <div class="form-card">
             <div class="card-header">
                 <div class="icon green">
@@ -110,7 +157,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                 </div>
-                <h3>Image & Publishing</h3>
+                <h3>Image, Gallery & Videos</h3>
             </div>
             <div class="card-body">
                 <div class="form-group">
@@ -137,20 +184,20 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                         <div class="upload-title">Click to upload photos</div>
-                        <div class="upload-subtitle">Max 2MB each. Select multiple files to add several at once.</div>
+                        <div class="upload-subtitle">Max 2MB each. Select multiple files.</div>
                     </div>
                     <div class="gallery-preview-grid" id="galleryPreviewGrid"></div>
                     @error('gallery')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Video <span class="optional">(optional, multiple allowed)</span></label>
+                    <label class="form-label">Videos <span class="optional">(optional, multiple allowed)</span></label>
                     <div class="upload-area" onclick="document.getElementById('videosInput').click()">
                         <input type="file" name="videos[]" id="videosInput" accept="video/mp4,video/quicktime,video/webm" multiple class="hidden">
                         <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                         </svg>
-                        <div class="upload-title">Click to upload a video</div>
+                        <div class="upload-title">Click to upload videos</div>
                         <div class="upload-subtitle">Max 35MB each. MP4, MOV, or WebM.</div>
                     </div>
                     <div class="video-preview-list" id="videoPreviewList"></div>
@@ -164,16 +211,15 @@
                            class="form-control @error('video_url') error @enderror"
                            placeholder="https://www.facebook.com/watch/?v=...">
                     @error('video_url')<div class="form-error">{{ $message }}</div>@enderror
-                    <div class="form-helper">Paste a Facebook or YouTube video link to embed it on the article page.</div>
+                    <div class="form-helper">Paste a Facebook or YouTube video link.</div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
                     <div class="form-grid">
                         <div class="publish-option">
-                            <input type="checkbox" name="is_published" id="is_published" value="1"
-                                   {{ old('is_published') ? 'checked' : '' }}>
+                            <input type="checkbox" name="is_published" id="is_published" value="1" {{ old('is_published') ? 'checked' : '' }}>
                             <div>
-                                <div class="label">Publish immediately</div>
+                                <div class="label">Published</div>
                                 <div class="description">Uncheck to save as draft</div>
                             </div>
                         </div>
@@ -186,9 +232,9 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                 </svg>
-                Save Article
+                Create Article
             </button>
             <a href="{{ route('admin.news.index') }}" class="btn-cancel">Cancel</a>
             <span class="form-status" data-news-form-status>
@@ -201,6 +247,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Image preview
     const imageInput = document.getElementById('imageInput');
     if (imageInput) {
         imageInput.addEventListener('change', function(e) {
@@ -209,16 +256,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function(ev) {
                     placeholder.classList.add('hidden');
                     preview.classList.remove('hidden');
-                    preview.innerHTML = '<div class="image-preview-wrapper"><img src="' + e.target.result + '" alt="Preview"><button type="button" class="remove-btn" onclick="this.parentElement.parentElement.innerHTML=\'\';document.getElementById(\'imagePlaceholder\').classList.remove(\'hidden\');document.getElementById(\'imageInput\').value=\'\';">×</button><div class="file-info">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</div></div>';
+                    preview.innerHTML = '<div class="image-preview-wrapper"><img src="' + ev.target.result + '" alt="Preview"><button type="button" class="remove-btn" onclick="this.closest(\'.image-preview-wrapper\').remove();document.getElementById(\'imageInput\').value=\'\';document.getElementById(\'imagePlaceholder\').classList.remove(\'hidden\');">x</button><div class="file-info">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</div></div>';
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
 
+    // Gallery preview
     const galleryInput = document.getElementById('galleryInput');
     if (galleryInput) {
         galleryInput.addEventListener('change', function(e) {
@@ -237,6 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Video preview
     const videosInput = document.getElementById('videosInput');
     if (videosInput) {
         videosInput.addEventListener('change', function(e) {
@@ -251,6 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Enter key support for tags
     const tagLabel = document.getElementById('tagLabel');
     const tagUrl = document.getElementById('tagUrl');
     if (tagLabel) {
@@ -264,14 +314,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Enter key support for links
+    const linkUrl = document.getElementById('linkUrl');
+    const linkTitle = document.getElementById('linkTitle');
+    if (linkUrl) {
+        linkUrl.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); addLink(); }
+        });
+    }
+    if (linkTitle) {
+        linkTitle.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); document.getElementById('linkUrl').focus(); }
+        });
+    }
+
+    // Form submission
     const articleForm = document.getElementById('articleForm');
     if (articleForm) {
         articleForm.addEventListener('submit', function() {
             document.getElementById('tagLinksInput').value = tagLinks.length ? JSON.stringify(tagLinks) : '';
+            document.getElementById('linksInput').value = links.length ? JSON.stringify(links) : '';
         });
     }
 });
 
+// Tag management
 const PRESET_TAGS = @json($presetTags);
 let tagLinks = [];
 
@@ -286,7 +353,9 @@ function renderPresetButtons() {
     if (!container) return;
     container.innerHTML = PRESET_TAGS.map(function(preset) {
         const isAdded = tagLinks.some(t => t.label.toLowerCase() === preset.label.toLowerCase());
-        return '<button type="button" class="preset-tag-btn' + (isAdded ? ' is-added' : '') + '" onclick="quickAddTag(\'' + preset.label.replace(/'/g, '\\\'') + '\', \'' + (preset.url || '').replace(/'/g, '\\\'') + '\')">' + (isAdded ? '\u2713' : '+') + ' ' + preset.label + '</button>';
+        const label = preset.label.replace(/'/g, "\\'");
+        const url = (preset.url || '').replace(/'/g, "\\'");
+        return '<button type="button" class="preset-tag-btn' + (isAdded ? ' is-added' : '') + '" onclick="quickAddTag(\'' + label + '\', \'' + url + '\')">' + (isAdded ? '\\u2713' : '+') + ' ' + preset.label + '</button>';
     }).join('');
 }
 
@@ -323,11 +392,51 @@ function renderTagLinks() {
     tagLinks.forEach(function(tag, i) {
         html += '<div class="link-item"><span class="link-title">' + escapeHtml(tag.label) + '</span>';
         html += tag.url ? '<a href="' + escapeHtml(tag.url) + '" target="_blank" class="link-url">' + escapeHtml(tag.url) + '</a>' : '<span class="link-url" style="color:#9ca3af;">No link</span>';
-        html += '<span class="link-badge">Tag</span><button type="button" class="remove-link" onclick="removeTagLink(' + i + ')" title="Remove">×</button></div>';
+        html += '<span class="link-badge">Tag</span><button type="button" class="remove-link" onclick="removeTagLink(' + i + ')" title="Remove">x</button></div>';
     });
     container.innerHTML = html;
     input.value = JSON.stringify(tagLinks);
     renderPresetButtons();
+}
+
+// Link management
+let links = [];
+
+function addLink() {
+    const titleInput = document.getElementById('linkTitle');
+    const urlInput = document.getElementById('linkUrl');
+    const title = titleInput.value.trim();
+    const url = urlInput.value.trim();
+    if (!title || !url) { alert('Please enter both a title and URL.'); return; }
+    try { new URL(url); } catch(e) { alert('Please enter a valid URL.'); return; }
+    links.push({ title: title, url: url });
+    renderLinks();
+    titleInput.value = '';
+    urlInput.value = '';
+    titleInput.focus();
+}
+
+function removeLink(index) {
+    links.splice(index, 1);
+    renderLinks();
+}
+
+function renderLinks() {
+    const container = document.getElementById('linksContainer');
+    const input = document.getElementById('linksInput');
+    if (links.length === 0) {
+        container.innerHTML = '<div class="no-links" id="noLinks">No links added yet. Add one above.</div>';
+        input.value = '';
+        return;
+    }
+    let html = '';
+    links.forEach(function(link, i) {
+        html += '<div class="link-item"><span class="link-title">' + escapeHtml(link.title) + '</span>';
+        html += '<a href="' + escapeHtml(link.url) + '" target="_blank" class="link-url">' + escapeHtml(link.url) + '</a>';
+        html += '<span class="link-badge">Link</span><button type="button" class="remove-link" onclick="removeLink(' + i + ')" title="Remove">x</button></div>';
+    });
+    container.innerHTML = html;
+    input.value = JSON.stringify(links);
 }
 
 function escapeHtml(text) {
