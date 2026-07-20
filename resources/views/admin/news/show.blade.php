@@ -117,19 +117,6 @@
             </div>
             @endif
 
-            {{-- Gallery --}}
-            @if(!empty($news->gallery))
-            <div class="border-t border-gray-100 pt-5">
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Gallery</p>
-                <div class="grid grid-cols-4 gap-3">
-                    @foreach($news->gallery_urls as $url)
-                    <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="block aspect-square rounded-xl overflow-hidden border border-gray-100">
-                        <img src="{{ $url }}" alt="Gallery image" class="w-full h-full object-cover">
-                    </a>
-                    @endforeach
-                </div>
-            </div>
-            @endif
 
             {{-- Videos --}}
             @if(!empty($news->videos))

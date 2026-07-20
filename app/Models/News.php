@@ -20,7 +20,7 @@ class News extends Model
 {
     protected $fillable = [
         'title', 'slug', 'excerpt', 'content',
-        'image', 'category', 'gallery', 'videos', 'is_published', 'published_at',
+        'image', 'category', 'videos', 'is_published', 'published_at',
         'links', 'tag_links',
     ];
 
@@ -29,7 +29,6 @@ class News extends Model
         return [
             'is_published'  => 'boolean',
             'published_at'  => 'datetime',
-            'gallery'       => 'array',
             'videos'        => 'array',
             'links'         => 'array',
             'tag_links'     => 'array',
@@ -117,30 +116,6 @@ class News extends Model
         }
 
         return (array) $value;
-    }
-
-    // Ensure gallery is always returned as an array of stored image paths
-    public function getGalleryAttribute(mixed $value): array
-    {
-        if (is_null($value) || $value === '') {
-            return [];
-        }
-
-        if (is_string($value)) {
-            $decoded = json_decode($value, true);
-            return is_array($decoded) ? $decoded : [];
-        }
-
-        return (array) $value;
-    }
-
-    // Resolve each stored gallery path to a full URL
-    public function getGalleryUrlsAttribute(): array
-    {
-        return array_map(
-            fn (string $path) => str_starts_with($path, 'http') ? $path : asset('storage/' . $path),
-            $this->gallery
-        );
     }
 
     // Ensure videos is always returned as an array of stored video paths

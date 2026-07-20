@@ -198,44 +198,11 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                             <div class="upload-title">{{ $news->image ? 'Replace image' : 'Click to upload' }}</div>
-                            <div class="upload-subtitle">Max 2MB. JPG, PNG, or WebP. At least 1000×600px so it stays sharp.</div>
+                            <div class="upload-subtitle">Max 2MB. JPG, PNG, or WebP</div>
                         </div>
                         <div id="imagePreview" class="hidden mt-3"></div>
                     </div>
                     @error('image')<div class="form-error">{{ $message }}</div>@enderror
-                </div>
-
-                {{-- Current Gallery Images --}}
-                @if(!empty($news->gallery))
-                <div class="form-group">
-                    <label class="form-label">Current Gallery Images</label>
-                    <div class="gallery-preview-grid">
-                        @foreach($news->gallery as $index => $path)
-                        <div class="gallery-preview-item" id="galleryItem{{ $index }}">
-                            <img src="{{ $news->gallery_urls[$index] ?? '' }}" alt="Gallery image {{ $index + 1 }}">
-                            <button type="button" class="remove-gallery-item"
-                                    onclick="toggleRemoveGalleryItem({{ $index }}, '{{ $path }}')" title="Remove">×</button>
-                            <button type="button" class="insert-gallery-item" data-insert-image-src="{{ $news->gallery_urls[$index] ?? '' }}" title="Insert into article content">+ Insert</button>
-                        </div>
-                        @endforeach
-                    </div>
-                    <div class="form-helper">Click × to mark an image for removal, or "+ Insert" to add it into the article content above. Changes apply when you save.</div>
-                </div>
-                @endif
-
-                {{-- Add Gallery Images --}}
-                <div class="form-group">
-                    <label class="form-label">Add Gallery Images <span class="optional">(optional, multiple allowed)</span></label>
-                    <div class="upload-area" onclick="document.getElementById('galleryInput').click()">
-                        <input type="file" name="gallery[]" id="galleryInput" accept="image/*" multiple class="hidden">
-                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <div class="upload-title">Click to upload photos</div>
-                        <div class="upload-subtitle">Max 2MB each, at least 1000×600px. Select multiple files to add several at once.</div>
-                    </div>
-                    <div class="gallery-preview-grid" id="galleryPreviewGrid"></div>
-                    @error('gallery')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
                 {{-- Current Videos --}}
@@ -373,25 +340,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Gallery upload preview (multiple files)
-    const galleryInput = document.getElementById('galleryInput');
-    if (galleryInput) {
-        galleryInput.addEventListener('change', function(e) {
-            const grid = document.getElementById('galleryPreviewGrid');
-            grid.innerHTML = '';
-            [...e.target.files].forEach(function(file) {
-                const reader = new FileReader();
-                reader.onload = function(ev) {
-                    const div = document.createElement('div');
-                    div.className = 'gallery-preview-item';
-                    div.innerHTML = `<img src="${ev.target.result}" alt="${file.name}">`;
-                    grid.appendChild(div);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-    }
-
     // Video upload preview (multiple files, listed by name/size)
     const videosInput = document.getElementById('videosInput');
     if (videosInput) {
@@ -556,33 +504,6 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
-}
-
-// ====== GALLERY REMOVAL (existing images) ======
-
-let galleryPathsMarkedForRemoval = [];
-
-function toggleRemoveGalleryItem(index, path) {
-    const item = document.getElementById('galleryItem' + index);
-    const alreadyMarked = galleryPathsMarkedForRemoval.includes(path);
-
-    if (alreadyMarked) {
-        galleryPathsMarkedForRemoval = galleryPathsMarkedForRemoval.filter(p => p !== path);
-        item.classList.remove('is-marked-for-removal');
-    } else {
-        galleryPathsMarkedForRemoval.push(path);
-        item.classList.add('is-marked-for-removal');
-    }
-
-    document.querySelectorAll('input[name="remove_gallery[]"]').forEach(el => el.remove());
-    const form = document.getElementById('articleEditForm');
-    galleryPathsMarkedForRemoval.forEach(function(p) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'remove_gallery[]';
-        input.value = p;
-        form.appendChild(input);
-    });
 }
 
 // ====== VIDEO REMOVAL (existing videos) ======

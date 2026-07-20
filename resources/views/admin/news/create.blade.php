@@ -155,25 +155,11 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                             <div class="upload-title">Click to upload</div>
-                            <div class="upload-subtitle">Max 2MB. JPG, PNG, or WebP. At least 1000×600px so it stays sharp.</div>
+                            <div class="upload-subtitle">Max 2MB. JPG, PNG, or WebP</div>
                         </div>
                         <div id="imagePreview" class="hidden mt-3"></div>
                     </div>
                     @error('image')<div class="form-error">{{ $message }}</div>@enderror
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Gallery Images <span class="optional">(optional, multiple allowed)</span></label>
-                    <div class="upload-area" onclick="document.getElementById('galleryInput').click()">
-                        <input type="file" name="gallery[]" id="galleryInput" accept="image/*" multiple class="hidden">
-                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <div class="upload-title">Click to upload photos</div>
-                        <div class="upload-subtitle">Max 2MB each, at least 1000×600px. Select multiple files to add several at once.</div>
-                    </div>
-                    <div class="gallery-preview-grid" id="galleryPreviewGrid"></div>
-                    @error('gallery')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-group">
@@ -272,25 +258,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Gallery upload preview (multiple files)
-    const galleryInput = document.getElementById('galleryInput');
-    if (galleryInput) {
-        galleryInput.addEventListener('change', function(e) {
-            const grid = document.getElementById('galleryPreviewGrid');
-            grid.innerHTML = '';
-            [...e.target.files].forEach(function(file) {
-                const reader = new FileReader();
-                reader.onload = function(ev) {
-                    const div = document.createElement('div');
-                    div.className = 'gallery-preview-item';
-                    div.innerHTML = `<img src="${ev.target.result}" alt="${file.name}">`;
-                    grid.appendChild(div);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-    }
-
     // Video upload preview (multiple files, listed by name/size)
     const videosInput = document.getElementById('videosInput');
     if (videosInput) {

@@ -49,18 +49,6 @@
             {!! $article->content !!}
         </div>
 
-        {{-- Gallery --}}
-        @if(!empty($article->gallery_urls))
-        <div data-reveal class="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3">
-            @foreach($article->gallery_urls as $url)
-            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
-               data-reveal="scale" style="--reveal-delay: {{ $loop->index * 70 }}"
-               class="block aspect-square rounded-lg overflow-hidden bg-gray-50 group">
-                <img src="{{ $url }}" alt="{{ $article->title }} — gallery image" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            </a>
-            @endforeach
-        </div>
-        @endif
 
         {{-- Videos --}}
         @if(!empty($article->video_urls))

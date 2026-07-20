@@ -31,9 +31,7 @@ class NewsController extends Controller
     public function uploadImage(Request $request)
     {
         $request->validate([
-            'image' => ['required', 'image', 'max:5120', 'dimensions:min_width=1000,min_height=600'],
-        ], [
-            'image.dimensions' => 'This image is too small (min. 1000×600px) and will look blurry once it stretches to the paragraph width — please upload a larger photo.',
+            'image' => ['required', 'image', 'max:5120'],
         ]);
 
         $path = $request->file('image')->store('news/gallery', 'public');
@@ -55,17 +53,12 @@ class NewsController extends Controller
             'excerpt'           => ['nullable', 'string'],
             'content'           => ['nullable', 'string'],
             'is_published'      => ['nullable', 'boolean'],
-            'image'             => ['nullable', 'image', 'max:2048', 'dimensions:min_width=1000,min_height=600'],
-            'gallery'           => ['nullable', 'array'],
-            'gallery.*'         => ['image', 'max:2048', 'dimensions:min_width=1000,min_height=600'],
+            'image'             => ['nullable', 'image', 'max:2048'],
             'videos'            => ['nullable', 'array'],
             'videos.*'          => ['file', 'mimes:mp4,mov,webm', 'max:35000'],
             'video_url'         => ['nullable', 'url', 'max:500'],
             'links'             => ['nullable', 'json'],
             'tag_links'         => ['nullable', 'json'],
-        ], [
-            'image.dimensions'     => 'This image is too small (min. 1000×600px) and will look blurry when displayed — please upload a larger photo.',
-            'gallery.*.dimensions' => 'One of the gallery images is too small (min. 1000×600px) and will look blurry when displayed — please upload a larger photo.',
         ]);
 
         $data['is_published'] = $request->boolean('is_published');
@@ -84,13 +77,6 @@ class NewsController extends Controller
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('news', 'public');
-        }
-
-        if ($request->hasFile('gallery')) {
-            $data['gallery'] = array_map(
-                fn ($file) => $file->store('news/gallery', 'public'),
-                $request->file('gallery')
-            );
         }
 
         $videos = [];
@@ -176,11 +162,7 @@ class NewsController extends Controller
             'excerpt'           => ['nullable', 'string'],
             'content'           => ['nullable', 'string'],
             'is_published'      => ['nullable', 'boolean'],
-            'image'             => ['nullable', 'image', 'max:2048', 'dimensions:min_width=1000,min_height=600'],
-            'gallery'           => ['nullable', 'array'],
-            'gallery.*'         => ['image', 'max:2048', 'dimensions:min_width=1000,min_height=600'],
-            'remove_gallery'    => ['nullable', 'array'],
-            'remove_gallery.*'  => ['string'],
+            'image'             => ['nullable', 'image', 'max:2048'],
             'videos'            => ['nullable', 'array'],
             'videos.*'          => ['file', 'mimes:mp4,mov,webm', 'max:35000'],
             'video_url'         => ['nullable', 'url', 'max:500'],
@@ -188,9 +170,6 @@ class NewsController extends Controller
             'remove_videos.*'   => ['string'],
             'links'             => ['nullable', 'json'],
             'tag_links'         => ['nullable', 'json'],
-        ], [
-            'image.dimensions'     => 'This image is too small (min. 1000×600px) and will look blurry when displayed — please upload a larger photo.',
-            'gallery.*.dimensions' => 'One of the gallery images is too small (min. 1000×600px) and will look blurry when displayed — please upload a larger photo.',
         ]);
 
         $data['is_published'] = $request->boolean('is_published');
@@ -216,23 +195,6 @@ class NewsController extends Controller
             }
             $data['image'] = $request->file('image')->store('news', 'public');
         }
-
-        // Gallery: start from existing, drop anything marked for removal, append new uploads
-        $gallery = $news->gallery;
-        $toRemove = $request->input('remove_gallery', []);
-        if (!empty($toRemove)) {
-            foreach ($toRemove as $path) {
-                Storage::disk('public')->delete($path);
-            }
-            $gallery = array_values(array_diff($gallery, $toRemove));
-        }
-        if ($request->hasFile('gallery')) {
-            foreach ($request->file('gallery') as $file) {
-                $gallery[] = $file->store('news/gallery', 'public');
-            }
-        }
-        $data['gallery'] = $gallery;
-        unset($data['remove_gallery']);
 
         // Videos: start from existing, drop anything marked for removal, append new uploads
         $videos = $news->videos;
@@ -282,12 +244,9 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
-        // Delete image, gallery, and video files if they exist
+        // Delete image and video files if they exist
         if ($news->image) {
             Storage::disk('public')->delete($news->image);
-        }
-        foreach ($news->gallery as $path) {
-            Storage::disk('public')->delete($path);
         }
         foreach ($news->videos as $path) {
             Storage::disk('public')->delete($path);
