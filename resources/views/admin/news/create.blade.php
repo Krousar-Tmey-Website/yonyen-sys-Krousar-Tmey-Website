@@ -65,42 +65,6 @@
 
         {{-- Tags Section --}}
         <div class="form-card">
-            <div class="card-header">
-                <div class="icon purple">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                    </svg>
-                </div>
-                <h3>Tags</h3>
-                <span class="badge">Optional</span>
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label class="form-label">Quick Add <span class="optional">(common categories)</span></label>
-                    <div class="quick-tags-row" id="presetTagButtons"></div>
-                    <div class="form-helper">Click to instantly add a common category. You can still edit or remove it below.</div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Add a Custom Tag</label>
-                    <div class="link-input-group">
-                        <input type="text" id="tagLabel" class="form-control" placeholder="Tag label (e.g. Cambodia)">
-                        <input type="url" id="tagUrl" class="form-control" placeholder="Link URL (optional)">
-                        <button type="button" class="btn-add-link" onclick="addTagLink()">Add Tag</button>
-                    </div>
-                    <div class="form-helper">Shown on the article card and byline. The URL is optional - leave it blank for a plain (non-clickable) tag, or point it at an external page (e.g. a category on krousar-thmey.org).</div>
-                </div>
-
-                <div class="form-group form-group--no-margin">
-                    <label class="form-label">Added Tags</label>
-                    <div class="links-container" id="tagLinksContainer">
-                        <div class="no-links" id="noTagLinks">No tags added yet. Add one above.</div>
-                    </div>
-                    <input type="hidden" name="tag_links" id="tagLinksInput" value="">
-                    @error('tag_links')<div class="form-error">{{ $message }}</div>@enderror
-                </div>
-            </div>
-        </div>
 
         {{-- Image & Publishing --}}
         <div class="form-card">
@@ -218,6 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
 
     const galleryInput = document.getElementById('galleryInput');
     if (galleryInput) {
