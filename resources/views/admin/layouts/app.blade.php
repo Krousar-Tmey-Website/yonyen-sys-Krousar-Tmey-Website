@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin') — Krousar Thmey</title>
     @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @stack('styles')
@@ -136,7 +137,6 @@
                 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z',
                 'children' => [
                 ['route' => 'admin.news.index', 'label' => 'News Articles'],
-                ['route' => 'admin.categories.index', 'label' => 'Categories'],
                 ['route' => 'admin.reports.index', 'label' => 'Annual Reports'],
                 ['route' => 'admin.media.index', 'label' => 'Media Gallery'],
                 ['route' => 'admin.downloads.index', 'label' => 'Downloads'],

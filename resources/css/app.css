@@ -90,6 +90,47 @@
  .impact-card-small {
      transition: all 0.3s ease;
  }
+
+ /* Article body: Tailwind's `prose` classes on .article-content are inert
+    (no @tailwindcss/typography plugin installed), so spacing is defined
+    explicitly here to keep visitor pages matching the admin editor preview. */
+ .article-content p {
+     @apply mb-6 leading-relaxed text-gray-700;
+ }
+
+ .article-content h2,
+ .article-content h3,
+ .article-content h4 {
+     @apply mt-10 mb-4 font-bold text-[#1a3c6e] leading-snug;
+ }
+
+ .article-content h2 { @apply text-2xl; }
+ .article-content h3 { @apply text-xl; }
+ .article-content h4 { @apply text-lg; }
+
+ .article-content blockquote {
+     @apply my-6 pl-5 py-1 border-l-4 border-[#8da83a] text-gray-600 italic;
+ }
+
+ .article-content ul,
+ .article-content ol {
+     @apply mb-6 pl-6 space-y-2 text-gray-700;
+ }
+
+ .article-content ul { @apply list-disc; }
+ .article-content ol { @apply list-decimal; }
+
+ .article-content img {
+     @apply rounded-lg my-6;
+ }
+
+ .article-content a {
+     @apply text-[#2d6fa3] underline hover:text-[#1a4a7a] transition-colors;
+ }
+
+ .article-content strong { @apply font-semibold; }
+
+ .article-content > *:last-child { @apply mb-0; }
 }
 
 @keyframes slideUp {

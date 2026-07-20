@@ -20,9 +20,6 @@
         {{-- Header --}}
         <div class="px-6 py-5 border-b border-gray-100">
             <div class="flex items-center gap-2 mb-3">
-                <span class="px-3 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-600">
-                    {{ $news->category_name }}
-                </span>
                 @if($news->is_published)
                     <span class="px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-xs font-semibold flex items-center gap-1">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
@@ -68,13 +65,10 @@
                     </div>
 
                     <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Category</p>
-                        <p class="text-sm font-medium text-gray-800">{{ $news->category_name }}</p>
-                    </div>
-
-                    <div>
                         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Tags</p>
-                        <p class="text-sm font-medium text-gray-800">{{ $news->tags ?? '—' }}</p>
+                        <p class="text-sm font-medium text-gray-800">
+                            {{ !empty($news->tag_links) ? collect($news->tag_links)->pluck('label')->implode(', ') : '—' }}
+                        </p>
                     </div>
 
                     <div>
@@ -117,6 +111,39 @@
                         </svg>
                         <span class="text-sm font-medium text-gray-700 group-hover:text-blue-600">{{ $link['title'] }}</span>
                         <span class="text-xs text-gray-400 ml-auto">{{ $link['url'] }}</span>
+                    </a>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            {{-- Gallery --}}
+            @if(!empty($news->gallery))
+            <div class="border-t border-gray-100 pt-5">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Gallery</p>
+                <div class="grid grid-cols-4 gap-3">
+                    @foreach($news->gallery_urls as $url)
+                    <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="block aspect-square rounded-xl overflow-hidden border border-gray-100">
+                        <img src="{{ $url }}" alt="Gallery image" class="w-full h-full object-cover">
+                    </a>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            {{-- Videos --}}
+            @if(!empty($news->videos))
+            <div class="border-t border-gray-100 pt-5">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Videos</p>
+                <div class="space-y-2">
+                    @foreach($news->video_urls as $index => $url)
+                    <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center gap-2 p-3 bg-gray-50 rounded-xl hover:bg-blue-50 transition group">
+                        <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                        <span class="text-sm font-medium text-gray-700 group-hover:text-blue-600">Video {{ $index + 1 }}</span>
                     </a>
                     @endforeach
                 </div>
