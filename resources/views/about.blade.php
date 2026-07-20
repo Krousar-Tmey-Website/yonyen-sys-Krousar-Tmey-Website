@@ -20,9 +20,8 @@
             $historyLinkedinIcon = str_starts_with($historyLinkedinIcon, 'social/') ? 'storage/' . $historyLinkedinIcon : $historyLinkedinIcon;
             $historyShareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
             $historyShareIcon = str_starts_with($historyShareIcon, 'social/') ? 'storage/' . $historyShareIcon : $historyShareIcon;
-            $historyFacebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
-            $historyTwitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
-            $historyLinkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
+            $historyFacebookLink = \App\Models\HomeSetting::getValue('social_facebook', '');
+            $historyLinkedinLink = \App\Models\HomeSetting::getValue('social_linkedin', '');
         @endphp
         <div class="text-center mb-16" data-reveal>
             <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">OUR HISTORY</h2>
@@ -33,7 +32,7 @@
                    class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
                     <img src="{{ asset($historyFacebookIcon) }}" alt="Facebook" class="w-full h-full object-cover">
                 </a>
-                <a href="{{ $historyTwitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
+                <a href="https://www.addtoany.com/add_to/twitter?linkurl={{ urlencode(url()->current()) }}&linkname={{ urlencode('Our History') }}&linknote={{ urlencode('Krousar Thmey - Our History') }}"
                    target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter"
                    class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
                     <img src="{{ asset($historyTwitterIcon) }}" alt="Twitter" class="w-full h-full object-cover">
@@ -100,9 +99,8 @@
             $linkedinIcon = str_starts_with($linkedinIcon, 'social/') ? 'storage/' . $linkedinIcon : $linkedinIcon;
             $shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
             $shareIcon = str_starts_with($shareIcon, 'social/') ? 'storage/' . $shareIcon : $shareIcon;
-            $facebookLink = \App\Models\HomeSetting::getValue('sharing_facebook_link', '');
-            $twitterLink = \App\Models\HomeSetting::getValue('sharing_twitter_link', '');
-            $linkedinLink = \App\Models\HomeSetting::getValue('sharing_linkedin_link', '');
+            $facebookLink = \App\Models\HomeSetting::getValue('social_facebook', '');
+            $linkedinLink = \App\Models\HomeSetting::getValue('social_linkedin', '');
         @endphp
         <div class="text-center mb-16" data-reveal>
             <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">AWARDS</h2>
@@ -113,7 +111,7 @@
                    class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
                     <img src="{{ asset($facebookIcon) }}" alt="Facebook" class="w-full h-full object-cover">
                 </a>
-                <a href="{{ $twitterLink ?: 'https://www.addtoany.com/add_to/twitter?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Awards') . '&linknote=' . urlencode('Krousar Thmey - Awards') }}"
+                <a href="https://www.addtoany.com/add_to/twitter?linkurl={{ urlencode(url()->current()) }}&linkname={{ urlencode('Awards') }}&linknote={{ urlencode('Krousar Thmey - Awards') }}"
                    target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter"
                    class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
                     <img src="{{ asset($twitterIcon) }}" alt="Twitter" class="w-full h-full object-cover">

@@ -2,7 +2,7 @@
 
 @section('title', 'Website Settings')
 @section('page-title', 'Website Settings')
-@section('breadcrumb', 'Manage your site name, logo, contact information, and footer content')
+@section('breadcrumb', 'Manage your site name, logo, social media, contact information, and footer content')
 
 @section('content')
 
@@ -10,16 +10,23 @@
     @csrf
 
     @php
-$order = ['website', 'social', 'media', 'sharing', 'contact', 'footer'];
+    $order = ['website', 'social', 'media', 'sharing', 'contact', 'footer'];
     $labels = [
         'website' => ['🌐', 'Website Identity'],
-        'social'  => ['🔗', 'Social Media Links'],
+        'social'  => ['📱', 'Social Media Links'],
         'media'   => ['📺', 'Media Page'],
         'sharing' => ['📤', 'Share our impact'],
         'contact' => ['📞', 'Contact Information'],
         'footer'  => ['📍', 'Footer Settings'],
     ];
 
+    $socialPlatforms = [
+        'facebook'  => ['label' => 'Facebook',  'color' => '#1877F2', 'icon' => 'F', 'key' => 'social_facebook',  'defaultUrl' => 'https://www.facebook.com/KrousarThmey'],
+        'instagram' => ['label' => 'Instagram', 'color' => '#E1306C', 'icon' => 'I', 'key' => 'social_instagram', 'defaultUrl' => 'https://www.instagram.com/krousarthmey/'],
+        'linkedin'  => ['label' => 'LinkedIn',  'color' => '#0A66C2', 'icon' => 'in', 'key' => 'social_linkedin',  'defaultUrl' => 'https://www.linkedin.com/company/krousar-thmey/'],
+        'youtube'   => ['label' => 'YouTube',   'color' => '#FF0000', 'icon' => '▶', 'key' => 'social_youtube',   'defaultUrl' => 'https://www.youtube.com/@KrousarThmey'],
+        'telegram'  => ['label' => 'Telegram',  'color' => '#0088CC', 'icon' => 'T', 'key' => 'social_telegram',  'defaultUrl' => 'https://t.me/krousarthmey'],
+    ];
     @endphp
 
     @foreach($order as $group)
@@ -159,30 +166,6 @@ $order = ['website', 'social', 'media', 'sharing', 'contact', 'footer'];
                     </div>
                 </div>
 
-                <div class="pt-3 border-t border-gray-100">
-                    <p class="text-xs font-medium text-gray-700 mb-1">Share Link Overrides</p>
-                    <p class="text-xs text-gray-400 mb-3">Optional — leave blank to auto-generate a "share this page" link for whichever page the buttons appear on (Presentation, Awards, ...).</p>
-
-                    @php
-                    $linkSettings = [
-                        'sharing_facebook_link' => 'Facebook Link',
-                        'sharing_twitter_link'  => 'Twitter Link',
-                        'sharing_linkedin_link' => 'LinkedIn Link',
-                    ];
-                    @endphp
-
-                    <div class="grid grid-cols-1 gap-4">
-                        @foreach($linkSettings as $key => $label)
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 mb-1">{{ $label }}</label>
-                            <input type="text" name="settings[{{ $key }}]"
-                                   value="{{ old('settings.'.$key, $items->firstWhere('key', $key)->value ?? '') }}"
-                                   placeholder="https://..."
-                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
             </div>
 
         @elseif($group === 'contact')
@@ -248,6 +231,7 @@ $order = ['website', 'social', 'media', 'sharing', 'contact', 'footer'];
                 </div>
                 @endif
             </div>
+
 
         @else
             {{-- ====== Standard field rendering ====== --}}

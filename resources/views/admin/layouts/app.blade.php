@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin') — Krousar Thmey</title>
+    <title>@yield('title', 'Admin') — {{ $settings['site_name'] ?? 'Krousar Thmey' }}</title>
     @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @stack('styles')
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.svg') }}">
+    @php $_logoPath = $settings['site_logo'] ?? 'images/logo.svg'; $_faviconUrl = str_starts_with($_logoPath, 'http') ? $_logoPath : (str_starts_with($_logoPath, 'logos/') ? asset('storage/' . $_logoPath) : asset($_logoPath)); @endphp
+    <link rel="icon" type="image/png" href="{{ $_faviconUrl }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -58,7 +59,7 @@
                     </div>
                 </div>
                 <div>
-                    <p class="text-white font-bold text-sm leading-tight">Krousar Thmey</p>
+                    <p class="text-white font-bold text-sm leading-tight">{{ $siteName }}</p>
                     <p class="text-white text-xs">Admin Panel</p>
                 </div>
             </div>
@@ -99,7 +100,7 @@
                 'M10.707 2.293a1 1 0 00-1.414 0l-7 7A1 1 0 002 10h.5v8a2 2 0 002 2h15a2 2 0 002-2v-8h.5a1 1 0 00.707-1.707l-7-7z',
                 'children' => [
                 ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
-                ['route' => 'admin.home.index', 'label' => 'Key Statistics'],
+                ['route' => 'admin.home.index', 'label' => 'Home Settings'],
                 ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
                 ['route' => 'admin.impact-statistics.index', 'label' => 'Impact Statistics'],
                 ['route' => 'admin.sponsors.index', 'label' => 'Sponsors'],
@@ -168,7 +169,7 @@
                 'communication' => [
                 'label' => 'Communication',
                 'icon' =>
-                'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.57...',
+                'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
                 'children' => [
                 ['route' => 'admin.contacts.index', 'label' => 'Contact Messages'],
                 ['route' => 'admin.newsletter.index', 'label' => 'Subscribers'],
@@ -340,7 +341,7 @@
             @endif
 
             {{-- Content --}}
-            
+
             <main class="flex-1 overflow-y-auto p-6">
                 @yield('content')
             </main>

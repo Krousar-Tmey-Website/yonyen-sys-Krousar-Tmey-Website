@@ -360,7 +360,7 @@ $structureImage = $settings['structure_image'] ?? null;
             {{-- Left Side - Map --}}
             <div class="flex justify-center">
                 <img
-                    src="{{ $structureImage ? (str_starts_with($structureImage, 'http') ? $structureImage : asset('storage/' . $structureImage)) : asset('images/cambodia-map.png') }}"
+                    src="{{ asset('images/cambodia-map.png') }}"
                     alt="Cambodia Program Map"
                     class="w-full max-w-2xl object-contain">
             </div>

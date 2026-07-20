@@ -21,8 +21,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('partners', function (Blueprint $table) {
-            $table->string('category')->nullable()->after('name');
-            $table->string('subcategory')->nullable()->after('category');
+            if (!Schema::hasColumn('partners', 'category')) {
+                $table->string('category')->nullable()->after('name');
+            }
+            if (!Schema::hasColumn('partners', 'subcategory')) {
+                $table->string('subcategory')->nullable()->after('category');
+            }
         });
 
         if (Schema::hasTable('partner_categories') && Schema::hasColumn('partners', 'category_id')) {

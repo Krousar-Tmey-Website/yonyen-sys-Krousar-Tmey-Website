@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login — Krousar Thmey</title>
+    <title>Admin Login — {{ $settings['site_name'] ?? 'Krousar Thmey' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <h1 class="text-white font-bold text-2xl">Krousar Thmey</h1>
+            <h1 class="text-white font-bold text-2xl">{{ $siteName }}</h1>
             <p class="text-white/50 text-sm mt-1">Admin Panel</p>
         </div>
 

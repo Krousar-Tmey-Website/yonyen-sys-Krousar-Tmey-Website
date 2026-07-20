@@ -31,6 +31,14 @@ class AdminSeeder extends Seeder
 
         // ── Home settings ─────────────────────────────────────
         $homeSettings = [
+            // Website identity group
+            ['key' => 'site_name',        'label' => 'Website Name',           'group' => 'website', 'value' => 'Krousar Thmey'],
+            ['key' => 'site_tagline',     'label' => 'Website Tagline',        'group' => 'website', 'value' => 'គ្រួសារថ្មី · New Family'],
+            ['key' => 'site_logo',        'label' => 'Site Logo (path)',       'group' => 'website', 'value' => 'images/logo.png'],
+            ['key' => 'site_description', 'label' => 'Meta Description',       'group' => 'website', 'value' => "Krousar Thmey is Cambodia's first organization dedicated to helping disadvantaged children — through child welfare, special education, and cultural development."],
+            // Footer website settings (also in footer group for footer card)
+            ['key' => 'footer_copyright',  'label' => 'Footer Copyright Text',  'group' => 'footer', 'value' => 'Krousar Thmey. All rights reserved.'],
+            ['key' => 'footer_description','label' => 'Footer Brand Description', 'group' => 'footer', 'value' => "Cambodia's first organization helping disadvantaged children — building a world where every child grows into an independent, responsible adult."],
             // Stats group
             ['key' => 'stat_children',   'label' => 'Children Supported',        'group' => 'stats', 'value' => '4,079'],
             ['key' => 'stat_employees',  'label' => 'Employees',                  'group' => 'stats', 'value' => '70'],
@@ -85,6 +93,17 @@ class AdminSeeder extends Seeder
             ['key' => 'footer_address', 'label' => 'Footer Address', 'group' => 'footer', 'value' => '#58, Street 478, Phnom Penh, Cambodia'],
             ['key' => 'footer_phone',   'label' => 'Footer Phone',   'group' => 'footer', 'value' => '+855 (0)23 211 955'],
             ['key' => 'footer_email',   'label' => 'Footer Email',   'group' => 'footer', 'value' => 'info@krousar-thmey.org'],
+            // Social media links (header & footer)
+            ['key' => 'social_facebook',   'label' => 'Facebook URL',    'group' => 'social', 'value' => 'https://www.facebook.com/KrousarThmey'],
+            ['key' => 'social_instagram',  'label' => 'Instagram URL',   'group' => 'social', 'value' => 'https://www.instagram.com/krousarthmey/'],
+            ['key' => 'social_linkedin',   'label' => 'LinkedIn URL',    'group' => 'social', 'value' => 'https://www.linkedin.com/company/krousar-thmey/'],
+            ['key' => 'social_youtube',    'label' => 'YouTube URL',     'group' => 'social', 'value' => 'https://www.youtube.com/@KrousarThmey'],
+            ['key' => 'social_telegram',   'label' => 'Telegram URL',    'group' => 'social', 'value' => 'https://t.me/krousarthmey'],
+            ['key' => 'social_facebook_icon',  'label' => 'Facebook Icon',  'group' => 'social', 'value' => 'images/social/facebook.svg'],
+            ['key' => 'social_instagram_icon', 'label' => 'Instagram Icon', 'group' => 'social', 'value' => 'images/social/instagram.svg'],
+            ['key' => 'social_linkedin_icon',  'label' => 'LinkedIn Icon',  'group' => 'social', 'value' => 'images/social/linkedin.svg'],
+            ['key' => 'social_youtube_icon',   'label' => 'YouTube Icon',   'group' => 'social', 'value' => 'images/social/youtube.svg'],
+            ['key' => 'social_telegram_icon',  'label' => 'Telegram Icon',  'group' => 'social', 'value' => 'images/social/telegram.svg'],
             // Hero slides (models still control the carousel)
             ['key' => 'hero_slide_1_title',    'label' => 'Slide 1 — Title',    'group' => 'hero', 'value' => 'Education Without Borders'],
             ['key' => 'hero_slide_1_subtitle', 'label' => 'Slide 1 — Subtitle', 'group' => 'hero', 'value' => 'Krousar Thmey supports 4,079 disadvantaged children across 15 Cambodian provinces'],

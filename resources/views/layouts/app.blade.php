@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', ($settings['site_name'] ?? 'Krousar Thmey') . ' — ' . ($settings['site_tagline'] ?? 'Helping Children in Cambodia'))</title>
     <meta name="description" content="@yield('description', $settings['site_description'] ?? 'Krousar Thmey is Cambodia\'s first organization dedicated to helping disadvantaged children — through child welfare, special education, and cultural development.')">
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.svg') }}">
+    @php $_logoPath = $settings['site_logo'] ?? 'images/logo.png'; $_faviconUrl = str_starts_with($_logoPath, 'http') ? $_logoPath : (str_starts_with($_logoPath, 'logos/') ? asset('storage/' . $_logoPath) : asset($_logoPath)); @endphp
+    <link rel="icon" type="image/png" href="{{ $_faviconUrl }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -216,7 +217,7 @@ function googleTranslateElementInit() {
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
                             <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl">{{ __('Presentation') }}</a>
                             <a href="{{ route('about') }}#history" class="dropdown-item">{{ __('History') }}</a>
-                            <a href="{{ route('about') }}#values" class="dropdown-item">{{ __('Our Values') }}</a>
+                            <a href="{{ route('about') }}#awards" class="dropdown-item">{{ __('Awards') }}</a>
                             <a href="{{ route('about') }}#partners" class="dropdown-item">{{ __('Partners') }}</a>
                             <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl">{{ __('Transparency') }}</a>
                         </div>

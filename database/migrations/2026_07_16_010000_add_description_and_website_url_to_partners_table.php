@@ -12,7 +12,7 @@ return new class extends Migration
             if (!Schema::hasColumn('partners', 'description')) {
                 $table->text('description')->nullable()->after('subcategory');
             }
-            if (!Schema::hasColumn('partners', 'website_url')) {
+            if (!Schema::hasColumn('partners', 'website_url') && !Schema::hasColumn('partners', 'WebsiteURL')) {
                 $table->string('website_url')->nullable()->after('description');
             }
         });
