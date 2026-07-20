@@ -193,15 +193,22 @@ function googleTranslateElementInit() {
                 </a>
 
                 {{-- Desktop Nav --}}
+                @php
+                    $isWhoWeAre  = request()->routeIs('about') || request()->routeIs('presentation') || request()->routeIs('transparency') || request()->routeIs('partners') || request()->routeIs('core-values.*');
+                    $isPrograms  = request()->routeIs('programs') || request()->routeIs('programs.*') || request()->routeIs('program-page-items.*') || request()->routeIs('projects.*');
+                    $isInvolved  = request()->routeIs('involved') || request()->routeIs('jobs.*') || request()->routeIs('volunteer') || request()->routeIs('books.*');
+                    $isNews      = request()->routeIs('news') || request()->routeIs('news.*');
+                    $isResources = request()->routeIs('resources') || request()->routeIs('reports.*') || request()->routeIs('resource-pages.*');
+                    $isContact   = request()->routeIs('contact');
+                @endphp
                 <div class="hidden lg:flex items-center gap-1">
 
                     {{-- Who We Are --}}
-                    @php $isWhoWeAre = request()->routeIs('about') || request()->routeIs('presentation') || request()->routeIs('transparency'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('about') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                        <a href="{{ route('about') }}" class="nav-link {{ $isWhoWeAre ? 'active' : '' }} flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
                             {{ __('Who We Are') }}
-                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                            <svg class="w-4 h-4 {{ $isWhoWeAre ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -212,21 +219,20 @@ function googleTranslateElementInit() {
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
                             class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl">{{ __('Presentation') }}</a>
+                            <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl {{ request()->routeIs('presentation') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Presentation') }}</a>
                             <a href="{{ route('about') }}#history" class="dropdown-item">{{ __('History') }}</a>
                             <a href="{{ route('about') }}#awards" class="dropdown-item">{{ __('Awards') }}</a>
                             <a href="{{ route('about') }}#partners" class="dropdown-item">{{ __('Partners') }}</a>
-                            <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl">{{ __('Transparency') }}</a>
+                            <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl {{ request()->routeIs('transparency') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Transparency') }}</a>
                         </div>
                     </div>
 
                     {{-- Our Programs --}}
-                    @php $isPrograms = request()->routeIs('programs') || request()->routeIs('programs.*') || request()->routeIs('program-page-items.*') || request()->routeIs('projects.*'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('programs') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                        <a href="{{ route('programs') }}" class="nav-link {{ $isPrograms ? 'active' : '' }} flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
                             {{ __('Our Programs') }}
-                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                            <svg class="w-4 h-4 {{ $isPrograms ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -247,12 +253,11 @@ function googleTranslateElementInit() {
                     </div>
 
                     {{-- Get Involved --}}
-                    @php $isInvolved = request()->routeIs('involved') || request()->routeIs('jobs.*') || request()->routeIs('volunteer') || request()->routeIs('books.*'); @endphp
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('involved') }}" class="nav-link flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                        <a href="{{ route('involved') }}" class="nav-link {{ $isInvolved ? 'active' : '' }} flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
                             {{ __('Get Involved') }}
-                            <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                            <svg class="w-4 h-4 {{ $isInvolved ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open"
@@ -270,9 +275,9 @@ function googleTranslateElementInit() {
                         </div>
                     </div>
 
-                    <a href="{{ route('news') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('News') }}</a>
-                    <a href="{{ route('resources') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Resources') }}</a>
-                    <a href="{{ route('contact') }}" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Contact') }}</a>
+                    <a href="{{ route('news') }}" class="nav-link {{ $isNews ? 'active' : '' }} px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('News') }}</a>
+                    <a href="{{ route('resources') }}" class="nav-link {{ $isResources ? 'active' : '' }} px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Resources') }}</a>
+                    <a href="{{ route('contact') }}" class="nav-link {{ $isContact ? 'active' : '' }} px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Contact') }}</a>
                 </div>
 
                 {{-- CTA + Mobile toggle --}}
@@ -337,12 +342,12 @@ function googleTranslateElementInit() {
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="lg:hidden border-t border-gray-100 bg-white">
             <div class="max-w-7xl mx-auto px-6 py-4 space-y-1">
-                <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Who We Are') }}</a>
-                <a href="{{ route('programs') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Our Programs') }}</a>
-                <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Get Involved') }}</a>
-                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('News') }}</a>
-                <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Resources') }}</a>
-                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Contact') }}</a>
+                <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg {{ $isWhoWeAre ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Who We Are') }}</a>
+                <a href="{{ route('programs') }}" class="block px-3 py-2 rounded-lg {{ $isPrograms ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Our Programs') }}</a>
+                <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg {{ $isInvolved ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Get Involved') }}</a>
+                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg {{ $isNews ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('News') }}</a>
+                <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg {{ $isResources ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Resources') }}</a>
+                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg {{ $isContact ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Contact') }}</a>
                 <div class="pt-3 pb-1 border-t border-gray-100 mt-2">
                     <div class="flex items-center gap-2 mb-4" x-data="{ lang: getCurrentLang() }">
                         <button @click="switchLang('en')" :class="lang === 'en' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
