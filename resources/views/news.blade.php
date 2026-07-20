@@ -41,6 +41,9 @@
                 <a href="{{ route('news.show', $article->slug) }}" class="relative overflow-hidden h-44 block bg-gray-50">
                     <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
                          class="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500">
+                <a href="{{ route('news.show', $article->slug) }}" class="relative overflow-hidden h-44 block">
+                    <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
+                         class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
                 </a>
                 @endif
                 <div class="p-5 flex flex-col flex-1">

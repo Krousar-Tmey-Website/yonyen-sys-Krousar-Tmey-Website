@@ -66,8 +66,6 @@
         </div>
 
         {{-- Tags Section --}}
-<<<<<<< HEAD
-=======
         <div class="form-card">
             <div class="card-header">
                 <div class="icon purple">
@@ -92,7 +90,7 @@
                         <input type="url" id="tagUrl" class="form-control" placeholder="Link URL (optional)">
                         <button type="button" class="btn-add-link" onclick="addTagLink()">Add Tag</button>
                     </div>
-                    <div class="form-helper">Shown on the article card and byline. The URL is optional — leave it blank for a plain (non-clickable) tag, or point it at an external page (e.g. a category on krousar-thmey.org).</div>
+                    <div class="form-helper">Shown on the article card and byline. The URL is optional — leave it blank for a plain (non-clickable) tag.</div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
@@ -122,56 +120,45 @@
         </div>
 
         {{-- Links Section --}}
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
         <div class="form-card">
             <div class="card-header">
-                <div class="icon purple">
+                <div class="icon green">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
                     </svg>
                 </div>
-                <h3>Tags</h3>
+                <h3>External Links</h3>
                 <span class="badge">Optional</span>
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <label class="form-label">Quick Add <span class="optional">(common categories)</span></label>
-                    <div class="quick-tags-row" id="presetTagButtons"></div>
-                    <div class="form-helper">Click to instantly add a common category. You can still edit or remove it below.</div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Add a Custom Tag</label>
+                    <label class="form-label">Add a Link</label>
                     <div class="link-input-group">
-                        <input type="text" id="tagLabel" class="form-control" placeholder="Tag label (e.g. Cambodia)">
-                        <input type="url" id="tagUrl" class="form-control" placeholder="Link URL (optional)">
-                        <button type="button" class="btn-add-link" onclick="addTagLink()">Add Tag</button>
+                        <input type="text" id="linkTitle" class="form-control" placeholder="Link title (e.g. Full Report PDF)">
+                        <input type="url" id="linkUrl" class="form-control" placeholder="Link URL">
+                        <button type="button" class="btn-add-link" onclick="addLink()">Add Link</button>
                     </div>
-                    <div class="form-helper">Shown on the article card and byline. The URL is optional - leave it blank for a plain (non-clickable) tag, or point it at an external page (e.g. a category on krousar-thmey.org).</div>
+                    <div class="form-helper">Displayed as a list of related resources below the article content.</div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
-                    <label class="form-label">Added Tags</label>
-                    <div class="links-container" id="tagLinksContainer">
-                        @if(!empty($news->tag_links))
-                            @foreach($news->tag_links as $tag)
+                    <label class="form-label">Added Links</label>
+                    <div class="links-container" id="linksContainer">
+                        @if(!empty($news->links))
+                            @foreach($news->links as $link)
                             <div class="link-item">
-                                <span class="link-title">{{ $tag['label'] ?? '' }}</span>
-                                @if(!empty($tag['url']))
-                                <a href="{{ $tag['url'] }}" target="_blank" rel="noopener noreferrer" class="link-url">{{ $tag['url'] }}</a>
-                                @else
-                                <span class="link-url" style="color:#9ca3af;">No link</span>
-                                @endif
-                                <span class="link-badge">Tag</span>
-                                <button type="button" class="remove-link" onclick="removeTagLink({{ $loop->index }})" title="Remove tag">×</button>
+                                <span class="link-title">{{ $link['title'] ?? '' }}</span>
+                                <a href="{{ $link['url'] ?? '#' }}" target="_blank" rel="noopener noreferrer" class="link-url">{{ $link['url'] ?? '' }}</a>
+                                <span class="link-badge">Link</span>
+                                <button type="button" class="remove-link" onclick="removeLink({{ $loop->index }})" title="Remove link">×</button>
                             </div>
                             @endforeach
                         @else
-                            <div class="no-links" id="noTagLinks">No tags added yet. Add one above.</div>
+                            <div class="no-links" id="noLinks">No links added yet. Add one above.</div>
                         @endif
                     </div>
-                    <input type="hidden" name="tag_links" id="tagLinksInput" value="{{ !empty($news->tag_links) ? json_encode($news->tag_links) : '' }}">
-                    @error('tag_links')<div class="form-error">{{ $message }}</div>@enderror
+                    <input type="hidden" name="links" id="linksInput" value="{{ !empty($news->links) ? json_encode($news->links) : '' }}">
+                    @error('links')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
         </div>
@@ -216,7 +203,7 @@
                     @error('image')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
-<<<<<<< HEAD
+                {{-- Current Gallery Images --}}
                 @if(!empty($news->gallery))
                 <div class="form-group">
                     <label class="form-label">Current Gallery Images</label>
@@ -234,6 +221,7 @@
                 </div>
                 @endif
 
+                {{-- Add Gallery Images --}}
                 <div class="form-group">
                     <label class="form-label">Add Gallery Images <span class="optional">(optional, multiple allowed)</span></label>
                     <div class="upload-area" onclick="document.getElementById('galleryInput').click()">
@@ -248,9 +236,7 @@
                     @error('gallery')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
-=======
                 {{-- Current Videos --}}
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
                 @if(!empty($news->videos))
                 <div class="form-group">
                     <label class="form-label">Current Videos</label>
@@ -267,10 +253,7 @@
                 </div>
                 @endif
 
-<<<<<<< HEAD
-=======
                 {{-- Add Video --}}
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
                 <div class="form-group">
                     <label class="form-label">Add Video <span class="optional">(optional, multiple allowed)</span></label>
                     <div class="upload-area" onclick="document.getElementById('videosInput').click()">
@@ -286,10 +269,7 @@
                     @error('videos.*')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
-<<<<<<< HEAD
-=======
-                {{-- Add Video by URL --}}
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
+                {{-- Video Link --}}
                 <div class="form-group">
                     <label class="form-label">Video Link <span class="optional">(optional)</span></label>
                     <input type="url" name="video_url" value="{{ old('video_url') }}"
@@ -299,10 +279,7 @@
                     <div class="form-helper">Paste a Facebook or YouTube video link to embed it on the article page.</div>
                 </div>
 
-<<<<<<< HEAD
-=======
                 {{-- Publishing Options --}}
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
                 <div class="form-group form-group--no-margin">
                     <div class="form-grid">
                         <div class="publish-option">
@@ -351,6 +328,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Image preview
     const imageInput = document.getElementById('imageInput');
     if (imageInput) {
         imageInput.addEventListener('change', function(e) {
@@ -359,17 +337,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function(ev) {
                     placeholder.classList.add('hidden');
                     preview.classList.remove('hidden');
-                    preview.innerHTML = '<div class="image-preview-wrapper"><img src="' + e.target.result + '" alt="Preview"><button type="button" class="remove-btn" onclick="this.closest(\\'.image-preview-wrapper\\').remove();document.getElementById(\\'imageInput\\').value=\\'\\';document.getElementById(\\'imagePlaceholder\\').classList.remove(\\'hidden\\');">x</button><div class="file-info">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</div></div>';
+                    preview.innerHTML = '<div class="image-preview-wrapper"><img src="' + ev.target.result + '" alt="Preview"><button type="button" class="remove-btn" onclick="this.closest(\'.image-preview-wrapper\').remove();document.getElementById(\'imageInput\').value=\'\';document.getElementById(\'imagePlaceholder\').classList.remove(\'hidden\');">x</button><div class="file-info">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</div></div>';
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
-<<<<<<< HEAD
 
+    // Gallery preview
     const galleryInput = document.getElementById('galleryInput');
     if (galleryInput) {
         galleryInput.addEventListener('change', function(e) {
@@ -388,6 +366,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Video upload preview
     const videosInput = document.getElementById('videosInput');
     if (videosInput) {
         videosInput.addEventListener('change', function(e) {
@@ -402,6 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Enter key support for tags
     const tagLabel = document.getElementById('tagLabel');
     const tagUrl = document.getElementById('tagUrl');
     if (tagLabel) {
@@ -415,82 +395,34 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Enter key support for links
+    const linkUrl = document.getElementById('linkUrl');
+    const linkTitle = document.getElementById('linkTitle');
+    if (linkUrl) {
+        linkUrl.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); addLink(); }
+        });
+    }
+    if (linkTitle) {
+        linkTitle.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); document.getElementById('linkUrl').focus(); }
+        });
+    }
+
+    // Form submission
     const articleForm = document.getElementById('articleEditForm');
     if (articleForm) {
         articleForm.addEventListener('submit', function() {
-=======
-    
-    // Video upload preview (multiple files, listed by name/size)
-    const videosInput = document.getElementById('videosInput');
-    if (videosInput) {
-        videosInput.addEventListener('change', function(e) {
-            const list = document.getElementById('videoPreviewList');
-            list.innerHTML = '';
-            [...e.target.files].forEach(function(file) {
-                const item = document.createElement('div');
-                item.className = 'video-preview-item';
-                item.textContent = `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB)`;
-                list.appendChild(item);
-            });
-        });
-    }
-
-    // Enter key support for adding links
-    const linkUrl = document.getElementById('linkUrl');
-    const linkTitle = document.getElementById('linkTitle');
-
-    if (linkUrl) {
-        linkUrl.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                addLink();
-            }
-        });
-    }
-
-    if (linkTitle) {
-        linkTitle.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                document.getElementById('linkUrl').focus();
-            }
-        });
-    }
-
-    // Enter key support for adding tags
-    const tagLabel = document.getElementById('tagLabel');
-    const tagUrl = document.getElementById('tagUrl');
-
-    if (tagLabel) {
-        tagLabel.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                addTagLink();
-            }
-        });
-    }
-
-    if (tagUrl) {
-        tagUrl.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                addTagLink();
-            }
-        });
-    }
-
-    // Form submission - ensure links are saved
-    const articleForm = document.getElementById('articleEditForm');
-    if (articleForm) {
-        articleForm.addEventListener('submit', function(e) {
-            document.getElementById('linksInput').value = JSON.stringify(links);
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
             document.getElementById('tagLinksInput').value = tagLinks.length ? JSON.stringify(tagLinks) : '';
+            document.getElementById('linksInput').value = links.length ? JSON.stringify(links) : '';
         });
     }
 });
 
+// Gallery removal
 let galleryPathsMarkedForRemoval = [];
+let videoPathsMarkedForRemoval = [];
+
 function toggleRemoveGalleryItem(index, path) {
     const item = document.getElementById('galleryItem' + index);
     const alreadyMarked = galleryPathsMarkedForRemoval.includes(path);
@@ -512,7 +444,6 @@ function toggleRemoveGalleryItem(index, path) {
     });
 }
 
-let videoPathsMarkedForRemoval = [];
 function toggleRemoveVideoItem(index, path) {
     const item = document.getElementById('videoItem' + index);
     const alreadyMarked = videoPathsMarkedForRemoval.includes(path);
@@ -534,6 +465,7 @@ function toggleRemoveVideoItem(index, path) {
     });
 }
 
+// Tag management
 const PRESET_TAGS = @json($presetTags);
 let tagLinks = {!! !empty($news->tag_links) ? json_encode($news->tag_links) : '[]' !!};
 
@@ -550,7 +482,7 @@ function renderPresetButtons() {
         const isAdded = tagLinks.some(t => t.label.toLowerCase() === preset.label.toLowerCase());
         const label = preset.label.replace(/'/g, "\\'");
         const url = (preset.url || '').replace(/'/g, "\\'");
-        return '<button type="button" class="preset-tag-btn' + (isAdded ? ' is-added' : '') + '" onclick="quickAddTag(\\'' + label + '\\', \\'' + url + '\\')">' + (isAdded ? '\\u2713' : '+') + ' ' + preset.label + '</button>';
+        return '<button type="button" class="preset-tag-btn' + (isAdded ? ' is-added' : '') + '" onclick="quickAddTag(\'' + label + '\', \'' + url + '\')">' + (isAdded ? '\\u2713' : '+') + ' ' + preset.label + '</button>';
     }).join('');
 }
 
@@ -594,145 +526,52 @@ function renderTagLinks() {
     renderPresetButtons();
 }
 
+// Link management
+let links = {!! !empty($news->links) ? json_encode($news->links) : '[]' !!};
+
+function addLink() {
+    const titleInput = document.getElementById('linkTitle');
+    const urlInput = document.getElementById('linkUrl');
+    const title = titleInput.value.trim();
+    const url = urlInput.value.trim();
+    if (!title || !url) { alert('Please enter both a title and URL.'); return; }
+    try { new URL(url); } catch(e) { alert('Please enter a valid URL.'); return; }
+    links.push({ title: title, url: url });
+    renderLinks();
+    titleInput.value = '';
+    urlInput.value = '';
+    titleInput.focus();
+}
+
+function removeLink(index) {
+    links.splice(index, 1);
+    renderLinks();
+}
+
+function renderLinks() {
+    const container = document.getElementById('linksContainer');
+    const input = document.getElementById('linksInput');
+    if (links.length === 0) {
+        container.innerHTML = '<div class="no-links" id="noLinks">No links added yet. Add one above.</div>';
+        input.value = '';
+        return;
+    }
+    let html = '';
+    links.forEach(function(link, i) {
+        html += '<div class="link-item"><span class="link-title">' + escapeHtml(link.title) + '</span>';
+        html += '<a href="' + escapeHtml(link.url) + '" target="_blank" class="link-url">' + escapeHtml(link.url) + '</a>';
+        html += '<span class="link-badge">Link</span><button type="button" class="remove-link" onclick="removeLink(' + i + ')" title="Remove">x</button></div>';
+    });
+    container.innerHTML = html;
+    input.value = JSON.stringify(links);
+}
+
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
 }
 
-<<<<<<< HEAD
-=======
-// ====== VIDEO REMOVAL (existing videos) ======
-
-let videoPathsMarkedForRemoval = [];
-
-function toggleRemoveVideoItem(index, path) {
-    const item = document.getElementById('videoItem' + index);
-    const alreadyMarked = videoPathsMarkedForRemoval.includes(path);
-
-    if (alreadyMarked) {
-        videoPathsMarkedForRemoval = videoPathsMarkedForRemoval.filter(p => p !== path);
-        item.classList.remove('is-marked-for-removal');
-    } else {
-        videoPathsMarkedForRemoval.push(path);
-        item.classList.add('is-marked-for-removal');
-    }
-
-    document.querySelectorAll('input[name="remove_videos[]"]').forEach(el => el.remove());
-    const form = document.getElementById('articleEditForm');
-    videoPathsMarkedForRemoval.forEach(function(p) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'remove_videos[]';
-        input.value = p;
-        form.appendChild(input);
-    });
-}
-
-// ====== TAG LINK MANAGEMENT ======
-
-{{-- Sourced live from the Resource Pages table, so a tag always points at the
-     matching internal page and stays in sync with renames/additions there. --}}
-const PRESET_TAGS = @json($presetTags ?? []);
-
-let tagLinks = {!! !empty($news->tag_links) ? json_encode($news->tag_links) : '[]' !!};
-
-function quickAddTag(label, url) {
-    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
-        return; // already added — silently ignore, no need to interrupt with an alert
-    }
-    tagLinks.push({ label: label, url: url || null });
-    renderTagLinks();
-}
-
-function renderPresetButtons() {
-    const container = document.getElementById('presetTagButtons');
-    if (!container) return;
-
-    container.innerHTML = PRESET_TAGS.map((preset, index) => {
-        const isAdded = tagLinks.some(t => t.label.toLowerCase() === preset.label.toLowerCase());
-        return `<button type="button" class="preset-tag-btn${isAdded ? ' is-added' : ''}"
-                    onclick="quickAddPresetTag(${index})">
-                    ${isAdded ? '✓' : '+'} ${escapeHtml(preset.label)}
-                </button>`;
-    }).join('');
-}
-
-function quickAddPresetTag(index) {
-    const preset = PRESET_TAGS[index];
-    if (!preset) return;
-    quickAddTag(preset.label, preset.url);
-}
-
-function addTagLink() {
-    const labelInput = document.getElementById('tagLabel');
-    const urlInput = document.getElementById('tagUrl');
-
-    const label = labelInput.value.trim();
-    const url = urlInput.value.trim();
-
-    if (!label) {
-        alert('Please enter a tag label.');
-        return;
-    }
-
-    if (url) {
-        try {
-            new URL(url);
-        } catch (e) {
-            alert('Please enter a valid URL (including http:// or https://), or leave it blank.');
-            return;
-        }
-    }
-
-    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
-        alert('This tag has already been added.');
-        return;
-    }
-
-    tagLinks.push({ label: label, url: url || null });
-
-    renderTagLinks();
-
-    labelInput.value = '';
-    urlInput.value = '';
-    labelInput.focus();
-}
-
-function removeTagLink(index) {
-    tagLinks.splice(index, 1);
-    renderTagLinks();
-}
-
-function renderTagLinks() {
-    const container = document.getElementById('tagLinksContainer');
-    const tagLinksInput = document.getElementById('tagLinksInput');
-
-    if (tagLinks.length === 0) {
-        container.innerHTML = '<div class="no-links" id="noTagLinks">No tags added yet. Add one above.</div>';
-        tagLinksInput.value = '';
-        renderPresetButtons();
-        return;
-    }
-
-    let html = '';
-    tagLinks.forEach((tag, index) => {
-        html += `
-            <div class="link-item">
-                <span class="link-title">${escapeHtml(tag.label)}</span>
-                ${tag.url ? `<a href="${escapeHtml(tag.url)}" target="_blank" rel="noopener noreferrer" class="link-url">${escapeHtml(tag.url)}</a>` : '<span class="link-url" style="color:#9ca3af;">No link</span>'}
-                <span class="link-badge">Tag</span>
-                <button type="button" class="remove-link" onclick="removeTagLink(${index})" title="Remove tag">×</button>
-            </div>
-        `;
-    });
-    container.innerHTML = html;
-
-    tagLinksInput.value = JSON.stringify(tagLinks);
-    renderPresetButtons();
-}
-
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
 renderPresetButtons();
 </script>
 
