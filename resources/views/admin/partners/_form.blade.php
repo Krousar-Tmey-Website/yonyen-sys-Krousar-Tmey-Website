@@ -104,6 +104,41 @@
     </div>
 </div>
 
+@if ($isEdit)
+{{-- DISPLAY ORDER & STATUS --}}
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <label for="sort_order" class="block text-sm font-semibold text-gray-700 mb-1.5">
+            Display Order
+        </label>
+        <div class="relative">
+            <svg class="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+            </svg>
+            <input type="number" id="sort_order" name="sort_order"
+                value="{{ old('sort_order', $partner->sort_order ?? 0) }}"
+                class="w-full pl-11 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none">
+        </div>
+    </div>
+
+    <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Status</label>
+        <label class="flex items-center justify-between px-4 py-3 bg-white border-2 border-gray-200 rounded-xl cursor-pointer select-none transition-all hover:border-gray-300">
+            <span class="text-sm font-medium text-gray-600">Active</span>
+            <span class="relative inline-flex items-center">
+                <input type="hidden" name="is_active" value="0">
+                <input type="checkbox" name="is_active" value="1" class="sr-only peer"
+                       {{ old('is_active', $partner->is_active ?? true) ? 'checked' : '' }}>
+                <span class="w-10 h-5.5 bg-gray-200 peer-checked:bg-blue-600 rounded-full transition-colors duration-200"></span>
+                <span class="absolute top-[2px] left-[2px] w-[19px] h-[19px] bg-white rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-[19px]"></span>
+            </span>
+        </label>
+    </div>
+</div>
+@endif
+
 {{-- HAS LOGO TOGGLE --}}
 <div x-data="{ hasLogo: {{ $isEdit && $partner->logo ? 'true' : 'false' }} }">
     <label class="relative inline-flex items-center cursor-pointer gap-3">

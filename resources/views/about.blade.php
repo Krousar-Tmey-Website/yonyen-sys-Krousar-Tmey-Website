@@ -404,7 +404,7 @@
                         </svg>
                     </div>
                     <p class="font-bold text-lg text-[#11568c] mb-4">Do you wish to get involved with Krousar Thmey?</p>
-                    <a href="{{ route('involved') }}"
+                    <a href="{{ route('involved') }}#partner"
                        class="inline-flex items-center gap-2 px-6 py-3 bg-[#11568c] text-white font-semibold rounded-full hover:bg-[#1d6fa3] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                         Learn More
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
