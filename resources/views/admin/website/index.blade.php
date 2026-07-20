@@ -2,7 +2,7 @@
 
 @section('title', 'Website Settings')
 @section('page-title', 'Website Settings')
-@section('breadcrumb', 'Manage your site name, logo, contact information, and footer content')
+@section('breadcrumb', 'Manage your site name, logo, social media, contact information, and footer content')
 
 @section('content')
 
@@ -10,14 +10,22 @@
     @csrf
 
     @php
-    $order = ['website', 'sharing', 'contact', 'footer'];
+    $order = ['website', 'sharing', 'social', 'contact', 'footer'];
     $labels = [
         'website' => ['🌐', 'Website Identity'],
         'sharing' => ['📤', 'Share our impact'],
+        'social'  => ['📱', 'Social Media Links'],
         'contact' => ['📞', 'Contact Information'],
         'footer'  => ['📍', 'Footer Settings'],
     ];
 
+    $socialPlatforms = [
+        'facebook'  => ['label' => 'Facebook',  'color' => '#1877F2', 'icon' => 'F', 'key' => 'social_facebook',  'defaultUrl' => 'https://www.facebook.com/KrousarThmey'],
+        'instagram' => ['label' => 'Instagram', 'color' => '#E1306C', 'icon' => 'I', 'key' => 'social_instagram', 'defaultUrl' => 'https://www.instagram.com/krousarthmey/'],
+        'linkedin'  => ['label' => 'LinkedIn',  'color' => '#0A66C2', 'icon' => 'in', 'key' => 'social_linkedin',  'defaultUrl' => 'https://www.linkedin.com/company/krousar-thmey/'],
+        'youtube'   => ['label' => 'YouTube',   'color' => '#FF0000', 'icon' => '▶', 'key' => 'social_youtube',   'defaultUrl' => 'https://www.youtube.com/@KrousarThmey'],
+        'telegram'  => ['label' => 'Telegram',  'color' => '#0088CC', 'icon' => 'T', 'key' => 'social_telegram',  'defaultUrl' => 'https://t.me/krousarthmey'],
+    ];
     @endphp
 
     @foreach($order as $group)
@@ -92,30 +100,6 @@
                     </div>
                 </div>
 
-                <div class="pt-3 border-t border-gray-100">
-                    <p class="text-xs font-medium text-gray-700 mb-1">Share Link Overrides</p>
-                    <p class="text-xs text-gray-400 mb-3">Optional — leave blank to auto-generate a "share this page" link for whichever page the buttons appear on (Presentation, Awards, ...).</p>
-
-                    @php
-                    $linkSettings = [
-                        'sharing_facebook_link' => 'Facebook Link',
-                        'sharing_twitter_link'  => 'Twitter Link',
-                        'sharing_linkedin_link' => 'LinkedIn Link',
-                    ];
-                    @endphp
-
-                    <div class="grid grid-cols-1 gap-4">
-                        @foreach($linkSettings as $key => $label)
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 mb-1">{{ $label }}</label>
-                            <input type="text" name="settings[{{ $key }}]"
-                                   value="{{ old('settings.'.$key, $items->firstWhere('key', $key)->value ?? '') }}"
-                                   placeholder="https://..."
-                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
             </div>
 
         @elseif($group === 'contact')
@@ -206,6 +190,49 @@
                 </div>
             </div>
             @endif
+
+        @elseif($group === 'social')
+            {{-- ====== Social Media Links (Header / Footer) ====== --}}
+            <div class="space-y-4">
+                <p class="text-xs text-gray-500 mb-3">Manage the social media links displayed in the top bar and footer of your website.</p>
+
+                @php
+                    $urlItems = $items->filter(fn($s) => !str_contains($s->key, '_icon'));
+                @endphp
+
+                <div class="space-y-4">
+                    @foreach($socialPlatforms as $name => $platform)
+                    @php
+                        $urlSetting = $urlItems->firstWhere('key', $platform['key']);
+                        $urlValue = $urlSetting->value ?? '';
+                    @endphp
+                    <div class="flex items-center gap-4 p-3 rounded-xl border border-gray-50 bg-gray-50/50 hover:border-gray-200 transition-colors">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm"
+                             style="background-color: {{ $platform['color'] }}15; color: {{ $platform['color'] }};">
+                            {{ $platform['icon'] }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <label class="block text-xs font-medium text-gray-500 mb-1">{{ $platform['label'] }} URL</label>
+                            <div class="flex items-center gap-2">
+                                <input type="text" name="settings[{{ $platform['key'] }}]"
+                                       value="{{ old('settings.'.$platform['key'], $urlValue) }}"
+                                       placeholder="{{ $platform['defaultUrl'] }}"
+                                       class="flex-1 min-w-0 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                                @if($urlValue)
+                                <a href="{{ $urlValue }}" target="_blank" rel="noopener noreferrer"
+                                   class="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center border border-gray-200 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all"
+                                   title="Open {{ $platform['label'] }} link">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                    </svg>
+                                </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
 
         @else
             {{-- ====== Standard field rendering ====== --}}

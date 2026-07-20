@@ -378,37 +378,149 @@
 </section>
 
 {{-- Volunteer --}}
-<section id="volunteer" class="py-20 bg-[#f8f9fc] scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <div class="relative order-2 lg:order-1" data-reveal="left">
-                <img src="{{ asset('images/special-ed.jpg') }}" alt="Special education volunteering"
-                     class="rounded-3xl shadow-2xl w-full h-[420px] object-cover object-center">
-                <div class="absolute inset-0 rounded-3xl bg-gradient-to-t from-[#1d4e7a]/40 to-transparent"></div>
-                <div class="absolute top-5 left-5 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2.5 shadow-lg">
-                    <p class="text-[#2d6fa3] font-bold text-xs uppercase tracking-wide">Hands-on Impact</p>
-                    <p class="text-gray-500 text-[11px]">Work directly with children</p>
+{{-- Volunteer --}}
+<section id="volunteer" class="py-24 bg-gradient-to-b from-[#f8f9fc] to-[#f1f3f9] relative overflow-hidden scroll-mt-20">
+    {{-- Decorative Background Patterns --}}
+    <div class="absolute inset-0 pointer-events-none opacity-20">
+        <svg class="absolute top-10 right-10 w-80 h-80 text-gray-300" fill="currentColor" viewBox="0 0 100 100">
+            <defs>
+                <pattern id="dotPattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1.5" />
+                </pattern>
+            </defs>
+            <rect width="100" height="100" fill="url(#dotPattern)" />
+        </svg>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 relative">
+        {{-- Intro Grid --}}
+        <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+            <div data-reveal="left">
+                <span class="inline-flex items-center gap-2 bg-[#e8a020]/15 border border-[#e8a020]/25 text-[#e8a020] text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 shadow-xs">
+                    Give Your Time
+                </span>
+                <h2 class="text-3xl md:text-5xl font-black tracking-tight text-[#1d4e7a] uppercase mb-4">
+                    Volunteer <span class="text-[#2d6fa3]">With Us</span>
+                </h2>
+                <div class="w-16 h-1.5 bg-[#d32f2f] rounded-full mb-6"></div>
+                <p class="text-gray-600 leading-relaxed text-base max-w-xl">
+                    Volunteering with Krousar Thmey is an opportunity to contribute meaningfully, transfer crucial know-how, or raise resources that directly impact the lives of children in Cambodia. We offer two distinct tracks based on your location and expertise.
+                </p>
+            </div>
+            <div class="relative" data-reveal="right">
+                {{-- Modern landscape image frame with background offset decoration --}}
+                <div class="absolute inset-0 rounded-3xl bg-gradient-to-tr from-[#2d6fa3] to-[#8da83a] opacity-80 translate-x-2 translate-y-2 blur-xs"></div>
+                <div class="relative h-[280px] rounded-3xl overflow-hidden shadow-xl border-4 border-white bg-slate-100">
+                    <img src="{{ asset('images/special-ed.jpg') }}" alt="Special education volunteering" class="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 shadow-md">
+                        <p class="text-[#2d6fa3] font-bold text-[10px] uppercase tracking-wide">Hands-on Impact</p>
+                        <p class="text-gray-500 text-[9px]">Work directly with children</p>
+                    </div>
                 </div>
             </div>
-            <div class="order-1 lg:order-2" data-reveal="right">
-                <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">Give Your Time</span>
-                <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-[#2d6fa3] mb-2">Volunteer With Us</h2>
-                <div class="w-12 h-1 bg-[#d32f2f] rounded-full mb-6"></div>
-                <p class="text-gray-600 leading-relaxed mb-5">
-                    Krousar Thmey operates primarily with Cambodian staff, but we welcome volunteers who bring specialized skills that complement our team's work. Volunteering is an opportunity to contribute meaningfully while experiencing Cambodia's culture.
-                </p>
-                <p class="text-gray-600 leading-relaxed mb-6">
-                    We look for volunteers with skills in education, communications, fundraising, social work, or healthcare — for a minimum commitment of 3 months.
-                </p>
-                <div class="grid grid-cols-2 gap-3 mb-8">
-                    @foreach(['Education', 'Communications', 'Fundraising', 'Healthcare', 'Social Work', 'IT & Technology'] as $skill)
-                    <div class="flex items-center gap-2 text-gray-600 text-sm bg-white rounded-xl px-4 py-2.5 border border-gray-100 shadow-sm">
-                        <span class="w-2 h-2 rounded-full bg-[#8da83a] flex-shrink-0"></span>
-                        {{ $skill }}
+        </div>
+
+        {{-- Side-by-Side Track Cards --}}
+        <div class="grid md:grid-cols-2 gap-8 items-stretch">
+            {{-- Card 1: Cambodia --}}
+            <div class="group/card relative rounded-3xl p-8 border border-slate-200/60 hover:border-slate-300 shadow-md hover:shadow-xl transition-all duration-500 flex flex-col justify-between" data-reveal="left" data-glow-card style="background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(255, 255, 255, 0.85), transparent 80%), #f9fafb;">
+                {{-- Top Border Accent Gradient --}}
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#2d6fa3] to-[#8da83a] rounded-t-3xl"></div>
+                
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-[#2d6fa3]/10 flex items-center justify-center text-[#2d6fa3] shadow-inner group-hover/card:scale-110 transition-transform duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-black text-[#1d4e7a] text-lg uppercase tracking-wide">Volunteering in Cambodia</h3>
+                            <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mt-0.5">Locational Track</p>
+                        </div>
                     </div>
-                    @endforeach
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                        At Krousar Thmey, our priority is for all work to be done by Cambodians. However, the organization welcomes foreign volunteers with a specific project involving knowledge and know-how lacking in Cambodia, that they would be willing to transfer to our Cambodian team.
+                    </p>
+                    
+                    {{-- Requirements & Process details --}}
+                    <div class="space-y-3 mb-8">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Requirements & Process:</h4>
+                        <div class="flex items-start gap-2.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 flex-shrink-0"></span>
+                            <p class="text-gray-500 text-xs">Specific project outline focused on knowledge and skills transfer.</p>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 flex-shrink-0"></span>
+                            <p class="text-gray-500 text-xs">Cooperation with the existing local Cambodian staff.</p>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 flex-shrink-0"></span>
+                            <p class="text-gray-500 text-xs">Direct review and validation by the communications office.</p>
+                        </div>
+                    </div>
                 </div>
-                <button type="button" id="openVolunteerModal" class="btn-blue">Apply to Volunteer</button>
+                
+                <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <span class="text-xs text-gray-400 font-medium">To submit a volunteering project:</span>
+                    <a href="mailto:communication@krousar-thmey.org" class="group/mail inline-flex items-center gap-2 px-5 py-3 bg-[#2d6fa3] text-white hover:bg-[#1d4e7a] rounded-2xl text-xs font-bold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L23 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        communication@krousar-thmey.org
+                    </a>
+                </div>
+            </div>
+
+            {{-- Card 2: International --}}
+            <div class="group/card relative rounded-3xl p-8 border border-slate-200/60 hover:border-slate-300 shadow-md hover:shadow-xl transition-all duration-500 flex flex-col justify-between" data-reveal="right" data-glow-card style="background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(255, 255, 255, 0.85), transparent 80%), #f9fafb; --reveal-delay: 150;">
+                {{-- Top Border Accent Gradient --}}
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#e8a020] to-[#f8bb86] rounded-t-3xl"></div>
+                
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-[#e8a020]/10 flex items-center justify-center text-[#e8a020] shadow-inner group-hover/card:scale-110 transition-transform duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h2.913M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-black text-[#1d4e7a] text-lg uppercase tracking-wide">Volunteering Internationally</h3>
+                            <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mt-0.5">International structures</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                        Krousar Thmey does not hire any employee in Europe or Singapore. Fundraising, which is the main activity of our international entities, is handled by volunteers.
+                    </p>
+                    
+                    {{-- Possibilities details --}}
+                    <div class="space-y-3 mb-8">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Ways to help in our entities:</h4>
+                        <div class="flex gap-2.5 items-start">
+                            <span class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center text-green-600 text-xs font-bold mt-0.5 flex-shrink-0">✓</span>
+                            <p class="text-gray-500 text-xs leading-relaxed">
+                                <strong>Voluntary Actions:</strong> Participate within your available time in internal & external communication, funding, mobilization, or administration.
+                            </p>
+                        </div>
+                        <div class="flex gap-2.5 items-start">
+                            <span class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center text-green-600 text-xs font-bold mt-0.5 flex-shrink-0">✓</span>
+                            <p class="text-gray-500 text-xs leading-relaxed">
+                                <strong>Fundraising Support:</strong> Mobilize people in your company, host presentation meetings, share films, photos & posters.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <span class="text-xs text-gray-400 font-medium">To learn more and get involved:</span>
+                    <button type="button" id="openVolunteerModal" class="btn-blue py-3 px-6 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 group/btn">
+                        <span>Apply to Volunteer</span>
+                        <svg class="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -692,33 +804,8 @@
             <p class="text-gray-500 max-w-2xl mx-auto text-sm leading-relaxed">Join a dedicated team making a real difference in Cambodia. We hire primarily Cambodian professionals across a range of disciplines.</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-5 mb-10">
-            @foreach([
-                ['icon' => '🏫', 'title' => 'Education',      'desc' => 'Teachers and specialists for deaf and blind children programs.', 'img' => 'special-ed.jpg'],
-                ['icon' => '📢', 'title' => 'Communications', 'desc' => 'Content, social media, and donor relations roles.',               'img' => 'cultural.jpg'],
-                ['icon' => '🤲', 'title' => 'Social Work',    'desc' => 'Child welfare officers and community outreach staff.',            'img' => 'children.jpg'],
-            ] as $dept)
-            <div class="bg-[#f8f9fc] rounded-2xl overflow-hidden border border-gray-100 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all group"
-                 data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
-                <div class="relative h-32 overflow-hidden">
-                    <img src="{{ asset('images/'.$dept['img']) }}" alt="{{ $dept['title'] }}"
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#1d4e7a]/70 to-transparent"></div>
-                    <div class="absolute bottom-3 left-3 flex items-center gap-2">
-                        <span class="text-xl">{{ $dept['icon'] }}</span>
-                        <span class="text-white font-black text-xs uppercase tracking-wide">{{ $dept['title'] }}</span>
-                    </div>
-                </div>
-                <div class="p-5">
-                    <p class="text-gray-500 text-xs leading-relaxed">{{ $dept['desc'] }}</p>
-                </div>
-            </div>
-            @endforeach
-        </div>
-
         @if($jobs->isNotEmpty())
-        <div class="mb-8">
-            <h3 class="text-xl font-black text-[#2d6fa3] uppercase tracking-wide mb-6 text-center">Open Positions</h3>
+        <div class="mb-8 mt-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             @foreach($jobs as $job)
             <div class="group bg-[#f8f9fc] rounded-2xl border border-gray-100 hover:border-[#2d6fa3]/30 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col">
@@ -912,6 +999,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 hideModal(volunteerModal);
             }
         }
+    });
+
+    // ── Cursor-Tracking Spotlight Glow Animation on Volunteer Cards ──
+    document.querySelectorAll('[data-glow-card]').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+            card.style.transform = 'translateY(-6px) scale(1.015)';
+            card.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.08)';
+            card.style.transition = 'transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0) scale(1)';
+            card.style.boxShadow = '';
+            card.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s ease';
+        });
     });
 
     // ── Clean up body scroll on page unload (just in case) ──
