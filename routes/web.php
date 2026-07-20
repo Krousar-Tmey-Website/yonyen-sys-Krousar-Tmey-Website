@@ -268,6 +268,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('news/upload-image', [Admin\NewsController::class, 'uploadImage'])->name('news.upload-image');
     Route::resource('news', Admin\NewsController::class);
 
+    // Topics (Resource Pages) — the categories News tags link to
+    Route::resource('resource-pages', Admin\ResourcePageController::class)
+        ->except(['show'])
+        ->parameters(['resource-pages' => 'resourcePage']);
+
     // Programs & Projects
     Route::resource('programs', Admin\ProgramController::class)->except(['show']);
     Route::resource('program-pages', Admin\ProgramPageController::class)->parameters(['program-pages' => 'item']);

@@ -57,7 +57,6 @@ class NewsController extends Controller
             'videos'            => ['nullable', 'array'],
             'videos.*'          => ['file', 'mimes:mp4,mov,webm', 'max:35000'],
             'video_url'         => ['nullable', 'url', 'max:500'],
-            'links'             => ['nullable', 'json'],
             'tag_links'         => ['nullable', 'json'],
         ]);
 
@@ -94,7 +93,6 @@ class NewsController extends Controller
             $data['videos'] = $videos;
         }
 
-        $data['links'] = $this->jsonArrayInput($request, 'links');
         $data['tag_links'] = $this->jsonArrayInput($request, 'tag_links');
 
         if ($data['is_published']) {
@@ -128,8 +126,8 @@ class NewsController extends Controller
 
     /**
      * Build the "quick add" tag preset list directly from the Resource Pages
-     * table, so a tag always points at the corresponding internal page and
-     * automatically reflects any renames/additions made there.
+     * table, so a tag always points at the corresponding internal Topic page
+     * and automatically reflects any renames/additions made there.
      */
     private function presetTagsFromResourcePages(): array
     {
@@ -168,7 +166,6 @@ class NewsController extends Controller
             'video_url'         => ['nullable', 'url', 'max:500'],
             'remove_videos'     => ['nullable', 'array'],
             'remove_videos.*'   => ['string'],
-            'links'             => ['nullable', 'json'],
             'tag_links'         => ['nullable', 'json'],
         ]);
 
@@ -216,7 +213,6 @@ class NewsController extends Controller
         $data['videos'] = $videos;
         unset($data['remove_videos'], $data['video_url']);
 
-        $data['links'] = $this->jsonArrayInput($request, 'links');
         $data['tag_links'] = $this->jsonArrayInput($request, 'tag_links');
 
         if ($data['is_published'] && !$news->published_at) {

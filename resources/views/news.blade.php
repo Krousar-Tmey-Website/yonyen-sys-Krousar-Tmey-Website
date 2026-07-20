@@ -27,11 +27,21 @@
 {{-- News Grid --}}
 <section class="bg-[#f8f9fc] py-14">
     <div class="max-w-7xl mx-auto px-6">
+        @if($activeTag ?? null)
+        <div data-reveal class="flex items-center flex-wrap gap-2 mb-8 text-sm">
+            <span class="text-gray-500">Showing articles tagged</span>
+            <span class="inline-flex items-center gap-1.5 bg-[#2d6fa3]/10 text-[#2d6fa3] font-semibold px-3 py-1 rounded-full">{{ $activeTag }}</span>
+            <a href="{{ route('news') }}" class="text-gray-400 hover:text-[#2d6fa3] font-medium inline-flex items-center gap-1 transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                Clear filter
+            </a>
+        </div>
+        @endif
         @if($articles->isEmpty())
         <div class="text-center py-20 text-gray-400">
             <svg class="w-12 h-12 mx-auto mb-4 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
-            <p class="text-lg font-semibold text-gray-500 mb-2">No articles yet</p>
-            <p class="text-sm">Check back soon for news and updates.</p>
+            <p class="text-lg font-semibold text-gray-500 mb-2">{{ ($activeTag ?? null) ? 'No articles found for this tag' : 'No articles yet' }}</p>
+            <p class="text-sm">{{ ($activeTag ?? null) ? 'Try clearing the filter to see all news.' : 'Check back soon for news and updates.' }}</p>
         </div>
         @else
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -59,11 +69,8 @@
                         @if(!empty($article->tag_links))
                         <span class="text-gray-300 mx-1">|</span>
                         @foreach($article->tag_links as $tag)
-                            @if(!empty($tag['url']))
-                            <a href="{{ $tag['url'] }}" class="text-[#2d6fa3] hover:underline">{{ $tag['label'] }}</a>
-                            @else
-                            <span class="text-[#2d6fa3]">{{ $tag['label'] }}</span>
-                            @endif
+                            @php $topicPage = $topicPagesByTitle[strtolower($tag['label'])] ?? null; @endphp
+                            <a href="{{ $topicPage ? route('resource-pages.show', $topicPage->slug) : (!empty($tag['url']) ? $tag['url'] : route('news', ['tag' => $tag['label']])) }}" class="text-[#2d6fa3] hover:underline">{{ $tag['label'] }}</a>
                             @if(!$loop->last)<span class="text-gray-400">,</span> @endif
                         @endforeach
                         @endif
