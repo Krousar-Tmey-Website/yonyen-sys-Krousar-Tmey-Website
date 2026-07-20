@@ -169,10 +169,13 @@ Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Media — dedicated page
 Route::get('/media', [MediaController::class, 'index'])->name('media');
 Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show');
 
+=======
+>>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
 =======
 >>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
 Route::get('/topics', [ResourcePageController::class, 'index'])->name('resource-pages.index');
@@ -278,7 +281,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // News
     Route::post('news/upload-image', [Admin\NewsController::class, 'uploadImage'])->name('news.upload-image');
     Route::resource('news', Admin\NewsController::class);
+<<<<<<< HEAD
     Route::resource('resource-pages', Admin\ResourcePageController::class)->except(['show']);
+=======
+>>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
 
     // Programs & Projects
     Route::resource('programs', Admin\ProgramController::class)->except(['show']);

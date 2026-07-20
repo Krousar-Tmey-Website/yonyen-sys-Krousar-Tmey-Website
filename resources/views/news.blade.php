@@ -38,12 +38,6 @@
             @foreach($articles as $article)
             <article data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 80, 480) }}" class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col group hover:-translate-y-1 transition-all duration-300">
                 @if($article->image)
-<<<<<<< HEAD
-                <a href="{{ route('news.show', $article->slug) }}" class="relative overflow-hidden h-44 block bg-gray-50">
-                    <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
-                         class="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500">
-=======
->>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
                 <a href="{{ route('news.show', $article->slug) }}" class="relative overflow-hidden h-44 block">
                     <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
                          class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">

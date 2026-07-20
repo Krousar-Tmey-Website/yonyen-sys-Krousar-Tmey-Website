@@ -2,122 +2,134 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class News extends Model
 {
-    use HasFactory;
-
-    protected $table = 'news';
-
     protected $fillable = [
-        'title',
-        'slug',
-        'excerpt',
-        'content',
-        'category',
-        'image',
-        'gallery',
-        'videos',
-        'links',
-        'tag_links',
-        'is_published',
-        'author',
-        'published_at',
+        'title', 'slug', 'excerpt', 'content',
+        'image', 'category', 'videos', 'is_published', 'published_at',
+        'links', 'tag_links',
     ];
 
-    protected $casts = [
-        'is_published' => 'boolean',
-        'published_at' => 'datetime',
-        'gallery'      => 'array',
-        'videos'       => 'array',
-        'links'        => 'array',
-        'tag_links'    => 'array',
-    ];
-
-    protected static function booted()
+    protected function casts(): array
     {
-        static::creating(function ($news) {
-            if (empty($news->slug) && !empty($news->title)) {
-                $news->slug = Str::slug($news->title);
+        return [
+            'is_published'  => 'boolean',
+            'published_at'  => 'datetime',
+            'videos'        => 'array',
+            'links'         => 'array',
+            'tag_links'     => 'array',
+        ];
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (News $news) {
+            if (empty($news->slug)) {
+                $baseSlug = Str::slug($news->title);
+                $slug = $baseSlug;
+                $counter = 1;
+                while (static::where('slug', $slug)->exists()) {
+                    $slug = $baseSlug . '-' . $counter;
+                    $counter++;
+                }
+                $news->slug = $slug;
+            }
+            if ($news->is_published && empty($news->published_at)) {
+                $news->published_at = now();
+            }
+        });
+
+        static::updating(function (News $news) {
+            if ($news->is_published && empty($news->published_at)) {
+                $news->published_at = now();
             }
         });
     }
 
-    public function getImageUrlAttribute()
+    public function scopePublished(Builder $query)
     {
-        if (empty($this->image)) {
-            return asset('images/placeholder.jpg');
-        }
-
-        if (Str::startsWith($this->image, ['http://', 'https://'])) {
-            return $this->image;
-        }
-
-        if (Str::startsWith($this->image, 'news/')) {
-            return Storage::url($this->image);
-        }
-
-        return Storage::url($this->image);
+        return $query->where('is_published', true);
     }
 
-    public function getGalleryUrlsAttribute()
+    public function getImageUrlAttribute(): string
     {
-        if (empty($this->gallery)) {
+        if (!$this->image) {
+            return asset('images/cover.jpg');
+        }
+        return str_starts_with($this->image, 'http')
+            ? $this->image
+            : asset('storage/' . $this->image);
+    }
+
+    public function getLinksAttribute(mixed $value)
+    {
+        if (is_null($value) || $value === '') {
             return [];
         }
 
-        return array_map(function ($path) {
-            if (Str::startsWith($path, ['http://', 'https://'])) {
-                return $path;
-            }
-            return Storage::url($path);
-        }, $this->gallery);
-    }
-
-    public function getVideosAttribute($value)
-    {
         if (is_string($value)) {
-            return json_decode($value, true) ?? [];
+            $decoded = json_decode($value, true);
+            return is_array($decoded) ? $decoded : [];
         }
-        return $value ?? [];
+        return (array) $value;
     }
 
-    public function getVideoUrlsAttribute()
+    public function getGalleryAttribute(mixed $value): array
     {
-        if (empty($this->videos)) {
+        if (is_null($value) || $value === '') {
             return [];
         }
 
-        return array_map(function ($path) {
-            if (Str::startsWith($path, ['http://', 'https://'])) {
-                return $path;
-            }
-            return Storage::url($path);
-        }, $this->videos);
-    }
-
-    public function getTagLinksAttribute($value)
-    {
         if (is_string($value)) {
-            return json_decode($value, true) ?? [];
+            $decoded = json_decode($value, true);
+            return is_array($decoded) ? $decoded : [];
         }
-        return $value ?? [];
+
+        return (array) $value;
     }
 
-    public function getLinksAttribute($value)
+    // Ensure tag_links is always returned as an array of ['label' => ..., 'url' => ...]
+    public function getTagLinksAttribute(mixed $value): array
     {
+        if (is_null($value) || $value === '') {
+            return [];
+        }
+
         if (is_string($value)) {
-            return json_decode($value, true) ?? [];
+            $decoded = json_decode($value, true);
+            return is_array($decoded) ? $decoded : [];
         }
-        return $value ?? [];
+
+        return (array) $value;
     }
 
-    public function category()
+    // Ensure videos is always returned as an array of stored video paths
+    public function getVideosAttribute(mixed $value): array
     {
-        return $this->belongsTo(Category::class, 'category', 'CategoryName');
+        if (is_null($value) || $value === '') {
+            return [];
+        }
+
+        if (is_string($value)) {
+            $decoded = json_decode($value, true);
+            return is_array($decoded) ? $decoded : [];
+        }
+
+        return (array) $value;
+    }
+
+    // Resolve each stored video path to a full URL (external video links pass through unchanged)
+    public function getVideoUrlsAttribute(): array
+    {
+        return array_map(
+            fn (string $path) => str_starts_with($path, 'http') ? $path : asset('storage/' . $path),
+            $this->videos
+        );
     }
 }

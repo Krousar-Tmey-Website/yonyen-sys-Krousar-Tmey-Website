@@ -2,62 +2,58 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class ResourcePage extends Model
 {
-    protected $table = 'resource_pages';
-
     protected $fillable = [
-        'title',
-        'slug',
-        'description',
-        'image',
-        'items',
-        'is_active',
-        'sort_order',
+        'title', 'slug', 'description',
+        'image', 'header_text', 'detail_image', 'detail_description',
+        'items', 'sort_order', 'is_active',
     ];
 
-    protected $casts = [
-        'is_active'  => 'boolean',
-        'items'      => 'array',
-        'sort_order' => 'integer',
-    ];
-
-    public function scopeActive($query)
+    protected function casts(): array
     {
-        return $query->where('is_active', true)->orderBy('sort_order')->orderBy('title');
+        return [
+            'items'     => 'array',
+            'is_active' => 'boolean',
+        ];
     }
 
-    public function getRouteKeyName()
+    public function scopeActive(Builder $query)
     {
-        return 'slug';
+        return $query->where('is_active', true);
     }
 
-    public function resolveUrl(): string
+    public function getImageUrlAttribute(): ?string
     {
-        return route('resources.show', $this->slug);
-    }
-
-    public function getItemsAttribute($value)
-    {
-        if (is_string($value)) {
-            return json_decode($value, true) ?? [];
+        if (!$this->image) {
+            return null;
         }
-        return $value ?? [];
+        return str_starts_with($this->image, 'http')
+            ? $this->image
+            : asset('storage/' . $this->image);
     }
 
+    public function getDetailImageUrlAttribute(): ?string
+    {
+        if (!$this->detail_image) {
+            return null;
+        }
+        return str_starts_with($this->detail_image, 'http')
+            ? $this->detail_image
+            : asset('storage/' . $this->detail_image);
+    }
+
+    // Feature items with their stored image paths resolved to full URLs
     public function getItemsForDisplayAttribute(): array
     {
-        $items = $this->items;
-
-        return array_map(function ($item) {
-            return [
-                'title'       => $item['title'] ?? '',
-                'description' => $item['description'] ?? '',
-                'url'         => $this->resolveUrl(),
-            ];
-        }, $items);
+        return array_map(function (array $item) {
+            $item['image_url'] = !empty($item['image'])
+                ? (str_starts_with($item['image'], 'http') ? $item['image'] : asset('storage/' . $item['image']))
+                : null;
+            return $item;
+        }, $this->items ?? []);
     }
 }

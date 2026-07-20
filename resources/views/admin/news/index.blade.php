@@ -24,8 +24,8 @@
                 <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <input type="text" 
-                       placeholder="Search articles..." 
+                <input type="text"
+                       placeholder="Search articles..."
                        id="searchInput"
                        class="form-control pl-9">
             </div>
@@ -78,8 +78,8 @@
         <table class="table-custom">
             <thead>
                 <tr>
-                    <th class="th-width-40">Article</th>
-                    <th class="th-width-15">Tags</th>
+                    <th class="th-width-35">Article</th>
+                    <th class="th-width-20">Tags</th>
                     <th class="th-width-13">Status</th>
                     <th class="th-width-17">Published</th>
                     <th class="th-width-15 th-text-right">Actions</th>
@@ -114,10 +114,14 @@
                     <td>
                         @if(!empty($article->tag_links))
 <<<<<<< HEAD
+<<<<<<< HEAD
                         <span class="category-tag">
                             <span class="dot"></span>
                             {{ collect($article->tag_links)->pluck('label')->implode(', ') }}
                         </span>
+=======
+                        <span class="text-xs text-gray-600">{{ collect($article->tag_links)->pluck('label')->implode(', ') }}</span>
+>>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
 =======
                         <span class="text-xs text-gray-600">{{ collect($article->tag_links)->pluck('label')->implode(', ') }}</span>
 >>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
@@ -153,7 +157,7 @@
                             {{-- View Button --}}
                             @if(Route::has('news.show'))
                             <a href="{{ route('news.show', $article->slug) }}" target="_blank" rel="noopener"
-                               class="action-btn btn-view" 
+                               class="action-btn btn-view"
                                title="View on site">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -164,8 +168,8 @@
                             @endif
 
                             {{-- Edit Button --}}
-                            <a href="{{ route('admin.news.edit', ['news' => $article->id]) }}" 
-                               class="action-btn btn-edit" 
+                            <a href="{{ route('admin.news.edit', ['news' => $article->id]) }}"
+                               class="action-btn btn-edit"
                                title="Edit article">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -178,7 +182,7 @@
                                   onsubmit="return confirm('⚠️ Permanently delete this article?\n\nThis action cannot be undone.')"
                                   class="inline">
                                 @csrf @method('DELETE')
-                                <button type="submit" 
+                                <button type="submit"
                                         class="action-btn btn-delete"
                                         title="Delete article">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -197,8 +201,8 @@
 
     <div class="pagination-wrapper">
         <div class="pagination-info">
-            Showing <strong>{{ $articles->firstItem() ?? 0 }}</strong> to 
-            <strong>{{ $articles->lastItem() ?? 0 }}</strong> of 
+            Showing <strong>{{ $articles->firstItem() ?? 0 }}</strong> to
+            <strong>{{ $articles->lastItem() ?? 0 }}</strong> of
             <strong>{{ $articles->total() }}</strong> articles
         </div>
         <div class="pagination-links">

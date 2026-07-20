@@ -36,19 +36,6 @@
                     <div class="form-helper">Used as page title and URL slug.</div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Category <span class="optional">(optional)</span></label>
-                    <select name="category" class="form-control @error('category') error @enderror">
-                        <option value="">Select a category...</option>
-                        @foreach($categories as $cat)
-                        <option value="{{ $cat->CategoryName }}" {{ old('category') == $cat->CategoryName ? 'selected' : '' }}>
-                            {{ $cat->CategoryName }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('category')<div class="form-error">{{ $message }}</div>@enderror
-                </div>
-
                 <div class="form-group form-group--no-margin">
                     <label class="form-label">Excerpt <span class="optional">(optional)</span></label>
                     <textarea name="excerpt" rows="3" class="form-control textarea"
@@ -71,7 +58,7 @@
             </div>
             <div class="card-body">
                 <div class="form-group form-group--no-margin">
-                    @include('admin.news._content-editor', ['contentValue' => ''])
+                    @include('admin.news._content-editor')
                     @error('content')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
@@ -177,27 +164,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Gallery Images <span class="optional">(optional, multiple allowed)</span></label>
-                    <div class="upload-area" onclick="document.getElementById('galleryInput').click()">
-                        <input type="file" name="gallery[]" id="galleryInput" accept="image/*" multiple class="hidden">
-                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <div class="upload-title">Click to upload photos</div>
-                        <div class="upload-subtitle">Max 2MB each. Select multiple files.</div>
-                    </div>
-                    <div class="gallery-preview-grid" id="galleryPreviewGrid"></div>
-                    @error('gallery')<div class="form-error">{{ $message }}</div>@enderror
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Videos <span class="optional">(optional, multiple allowed)</span></label>
+                    <label class="form-label">Video <span class="optional">(optional, multiple allowed)</span></label>
                     <div class="upload-area" onclick="document.getElementById('videosInput').click()">
                         <input type="file" name="videos[]" id="videosInput" accept="video/mp4,video/quicktime,video/webm" multiple class="hidden">
                         <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                         </svg>
-                        <div class="upload-title">Click to upload videos</div>
+                        <div class="upload-title">Click to upload a video</div>
                         <div class="upload-subtitle">Max 35MB each. MP4, MOV, or WebM.</div>
                     </div>
                     <div class="video-preview-list" id="videoPreviewList"></div>
@@ -211,13 +184,14 @@
                            class="form-control @error('video_url') error @enderror"
                            placeholder="https://www.facebook.com/watch/?v=...">
                     @error('video_url')<div class="form-error">{{ $message }}</div>@enderror
-                    <div class="form-helper">Paste a Facebook or YouTube video link.</div>
+                    <div class="form-helper">Paste a Facebook or YouTube video link to embed it on the article page.</div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
                     <div class="form-grid">
                         <div class="publish-option">
-                            <input type="checkbox" name="is_published" id="is_published" value="1" {{ old('is_published') ? 'checked' : '' }}>
+                            <input type="checkbox" name="is_published" id="is_published" value="1"
+                                   {{ old('is_published') ? 'checked' : '' }}>
                             <div>
                                 <div class="label">Published</div>
                                 <div class="description">Uncheck to save as draft</div>
@@ -266,26 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Gallery preview
-    const galleryInput = document.getElementById('galleryInput');
-    if (galleryInput) {
-        galleryInput.addEventListener('change', function(e) {
-            const grid = document.getElementById('galleryPreviewGrid');
-            grid.innerHTML = '';
-            [...e.target.files].forEach(function(file) {
-                const reader = new FileReader();
-                reader.onload = function(ev) {
-                    const div = document.createElement('div');
-                    div.className = 'gallery-preview-item';
-                    div.innerHTML = '<img src="' + ev.target.result + '" alt="' + file.name + '">';
-                    grid.appendChild(div);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-    }
-
-    // Video preview
+    // Video upload preview (multiple files, listed by name/size)
     const videosInput = document.getElementById('videosInput');
     if (videosInput) {
         videosInput.addEventListener('change', function(e) {
@@ -294,29 +249,16 @@ document.addEventListener('DOMContentLoaded', function() {
             [...e.target.files].forEach(function(file) {
                 const item = document.createElement('div');
                 item.className = 'video-preview-item';
-                item.textContent = file.name + ' (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB)';
+                item.textContent = `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB)`;
                 list.appendChild(item);
             });
         });
     }
 
-    // Enter key support for tags
-    const tagLabel = document.getElementById('tagLabel');
-    const tagUrl = document.getElementById('tagUrl');
-    if (tagLabel) {
-        tagLabel.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault(); addTagLink(); }
-        });
-    }
-    if (tagUrl) {
-        tagUrl.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault(); addTagLink(); }
-        });
-    }
-
-    // Enter key support for links
+    // Enter key support for adding links
     const linkUrl = document.getElementById('linkUrl');
     const linkTitle = document.getElementById('linkTitle');
+
     if (linkUrl) {
         linkUrl.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') { e.preventDefault(); addLink(); }
@@ -328,12 +270,34 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Form submission
+    // Enter key support for adding tags
+    const tagLabel = document.getElementById('tagLabel');
+    const tagUrl = document.getElementById('tagUrl');
+
+    if (tagLabel) {
+        tagLabel.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addTagLink();
+            }
+        });
+    }
+
+    if (tagUrl) {
+        tagUrl.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addTagLink();
+            }
+        });
+    }
+
+    // Form submission - ensure links are saved
     const articleForm = document.getElementById('articleForm');
     if (articleForm) {
-        articleForm.addEventListener('submit', function() {
+        articleForm.addEventListener('submit', function(e) {
+            document.getElementById('linksInput').value = JSON.stringify(links);
             document.getElementById('tagLinksInput').value = tagLinks.length ? JSON.stringify(tagLinks) : '';
-            document.getElementById('linksInput').value = links.length ? JSON.stringify(links) : '';
         });
     }
 });
@@ -445,6 +409,112 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+<<<<<<< HEAD
+=======
+// ====== TAG LINK MANAGEMENT ======
+
+{{-- Sourced live from the Resource Pages table, so a tag always points at the
+     matching internal page and stays in sync with renames/additions there. --}}
+const PRESET_TAGS = @json($presetTags ?? []);
+
+let tagLinks = [];
+
+function quickAddTag(label, url) {
+    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
+        return; // already added — silently ignore, no need to interrupt with an alert
+    }
+    tagLinks.push({ label: label, url: url || null });
+    renderTagLinks();
+}
+
+function renderPresetButtons() {
+    const container = document.getElementById('presetTagButtons');
+    if (!container) return;
+
+    container.innerHTML = PRESET_TAGS.map((preset, index) => {
+        const isAdded = tagLinks.some(t => t.label.toLowerCase() === preset.label.toLowerCase());
+        return `<button type="button" class="preset-tag-btn${isAdded ? ' is-added' : ''}"
+                    onclick="quickAddPresetTag(${index})">
+                    ${isAdded ? '✓' : '+'} ${escapeHtml(preset.label)}
+                </button>`;
+    }).join('');
+}
+
+function quickAddPresetTag(index) {
+    const preset = PRESET_TAGS[index];
+    if (!preset) return;
+    quickAddTag(preset.label, preset.url);
+}
+
+function addTagLink() {
+    const labelInput = document.getElementById('tagLabel');
+    const urlInput = document.getElementById('tagUrl');
+
+    const label = labelInput.value.trim();
+    const url = urlInput.value.trim();
+
+    if (!label) {
+        alert('Please enter a tag label.');
+        return;
+    }
+
+    if (url) {
+        try {
+            new URL(url);
+        } catch (e) {
+            alert('Please enter a valid URL (including http:// or https://), or leave it blank.');
+            return;
+        }
+    }
+
+    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
+        alert('This tag has already been added.');
+        return;
+    }
+
+    tagLinks.push({ label: label, url: url || null });
+
+    renderTagLinks();
+
+    labelInput.value = '';
+    urlInput.value = '';
+    labelInput.focus();
+}
+
+function removeTagLink(index) {
+    tagLinks.splice(index, 1);
+    renderTagLinks();
+}
+
+function renderTagLinks() {
+    const container = document.getElementById('tagLinksContainer');
+    const tagLinksInput = document.getElementById('tagLinksInput');
+
+    if (tagLinks.length === 0) {
+        container.innerHTML = '<div class="no-links" id="noTagLinks">No tags added yet. Add one above.</div>';
+        tagLinksInput.value = '';
+        renderPresetButtons();
+        return;
+    }
+
+    let html = '';
+    tagLinks.forEach((tag, index) => {
+        html += `
+            <div class="link-item">
+                <span class="link-title">${escapeHtml(tag.label)}</span>
+                ${tag.url ? `<a href="${escapeHtml(tag.url)}" target="_blank" rel="noopener noreferrer" class="link-url">${escapeHtml(tag.url)}</a>` : '<span class="link-url" style="color:#9ca3af;">No link</span>'}
+                <span class="link-badge">Tag</span>
+                <button type="button" class="remove-link" onclick="removeTagLink(${index})" title="Remove tag">×</button>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+
+    tagLinksInput.value = JSON.stringify(tagLinks);
+    renderPresetButtons();
+}
+
+>>>>>>> 800660e43a88458eb3443a24c5e94c15e7f3b795
 renderPresetButtons();
 </script>
 

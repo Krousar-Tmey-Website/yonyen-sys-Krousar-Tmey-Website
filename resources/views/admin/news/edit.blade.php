@@ -572,6 +572,136 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// ====== VIDEO REMOVAL (existing videos) ======
+
+let videoPathsMarkedForRemoval = [];
+
+function toggleRemoveVideoItem(index, path) {
+    const item = document.getElementById('videoItem' + index);
+    const alreadyMarked = videoPathsMarkedForRemoval.includes(path);
+
+    if (alreadyMarked) {
+        videoPathsMarkedForRemoval = videoPathsMarkedForRemoval.filter(p => p !== path);
+        item.classList.remove('is-marked-for-removal');
+    } else {
+        videoPathsMarkedForRemoval.push(path);
+        item.classList.add('is-marked-for-removal');
+    }
+
+    document.querySelectorAll('input[name="remove_videos[]"]').forEach(el => el.remove());
+    const form = document.getElementById('articleEditForm');
+    videoPathsMarkedForRemoval.forEach(function(p) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'remove_videos[]';
+        input.value = p;
+        form.appendChild(input);
+    });
+}
+
+// ====== TAG LINK MANAGEMENT ======
+
+{{-- Sourced live from the Resource Pages table, so a tag always points at the
+     matching internal page and stays in sync with renames/additions there. --}}
+const PRESET_TAGS = @json($presetTags ?? []);
+
+let tagLinks = {!! !empty($news->tag_links) ? json_encode($news->tag_links) : '[]' !!};
+
+function quickAddTag(label, url) {
+    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
+        return; // already added — silently ignore, no need to interrupt with an alert
+    }
+    tagLinks.push({ label: label, url: url || null });
+    renderTagLinks();
+}
+
+function renderPresetButtons() {
+    const container = document.getElementById('presetTagButtons');
+    if (!container) return;
+
+    container.innerHTML = PRESET_TAGS.map((preset, index) => {
+        const isAdded = tagLinks.some(t => t.label.toLowerCase() === preset.label.toLowerCase());
+        return `<button type="button" class="preset-tag-btn${isAdded ? ' is-added' : ''}"
+                    onclick="quickAddPresetTag(${index})">
+                    ${isAdded ? '✓' : '+'} ${escapeHtml(preset.label)}
+                </button>`;
+    }).join('');
+}
+
+function quickAddPresetTag(index) {
+    const preset = PRESET_TAGS[index];
+    if (!preset) return;
+    quickAddTag(preset.label, preset.url);
+}
+
+function addTagLink() {
+    const labelInput = document.getElementById('tagLabel');
+    const urlInput = document.getElementById('tagUrl');
+
+    const label = labelInput.value.trim();
+    const url = urlInput.value.trim();
+
+    if (!label) {
+        alert('Please enter a tag label.');
+        return;
+    }
+
+    if (url) {
+        try {
+            new URL(url);
+        } catch (e) {
+            alert('Please enter a valid URL (including http:// or https://), or leave it blank.');
+            return;
+        }
+    }
+
+    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
+        alert('This tag has already been added.');
+        return;
+    }
+
+    tagLinks.push({ label: label, url: url || null });
+
+    renderTagLinks();
+
+    labelInput.value = '';
+    urlInput.value = '';
+    labelInput.focus();
+}
+
+function removeTagLink(index) {
+    tagLinks.splice(index, 1);
+    renderTagLinks();
+}
+
+function renderTagLinks() {
+    const container = document.getElementById('tagLinksContainer');
+    const tagLinksInput = document.getElementById('tagLinksInput');
+
+    if (tagLinks.length === 0) {
+        container.innerHTML = '<div class="no-links" id="noTagLinks">No tags added yet. Add one above.</div>';
+        tagLinksInput.value = '';
+        renderPresetButtons();
+        return;
+    }
+
+    let html = '';
+    tagLinks.forEach((tag, index) => {
+        html += `
+            <div class="link-item">
+                <span class="link-title">${escapeHtml(tag.label)}</span>
+                ${tag.url ? `<a href="${escapeHtml(tag.url)}" target="_blank" rel="noopener noreferrer" class="link-url">${escapeHtml(tag.url)}</a>` : '<span class="link-url" style="color:#9ca3af;">No link</span>'}
+                <span class="link-badge">Tag</span>
+                <button type="button" class="remove-link" onclick="removeTagLink(${index})" title="Remove tag">×</button>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+
+    tagLinksInput.value = JSON.stringify(tagLinks);
+    renderPresetButtons();
+}
+
 renderPresetButtons();
 </script>
 
