@@ -3,6 +3,9 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+# ALWAYS bring the application back online when the script exits (success or fail)
+trap 'echo "=> Bringing application online..."; php artisan up || true' EXIT
+
 echo "================================================="
 echo "🚀 Starting Krousar Thmey Performance Deployment"
 echo "================================================="
@@ -48,10 +51,6 @@ echo "=> Setting correct permissions..."
 sudo chown -R ubuntu:ubuntu .
 sudo chown -R www-data:www-data storage bootstrap/cache
 sudo chmod -R 775 storage bootstrap/cache
-
-# 9. Bring application back online
-echo "=> Bringing application online..."
-php artisan up
 
 echo "================================================="
 echo "✅ Deployment & Performance Boost Complete!"
