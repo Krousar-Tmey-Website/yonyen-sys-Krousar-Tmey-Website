@@ -12,7 +12,7 @@
         $buttonText  = $item['buttonText'] ?? null;
         $buttonLink  = $item['buttonLink'] ?? null;
     @endphp
-    <article class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 p-8 text-center flex flex-col items-center transition-all duration-300 hover:shadow-[0_15px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 relative overflow-hidden group"
+    <article class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border-2 border-gray-200 p-8 text-center flex flex-col items-center transition-all duration-300 hover:shadow-[0_15px_40px_rgb(0,0,0,0.12)] hover:border-gray-300 hover:-translate-y-2 relative overflow-hidden group"
              data-reveal="scale" style="--reveal-delay: {{ min($index * 80, 400) }}">
 
         @if($year)
