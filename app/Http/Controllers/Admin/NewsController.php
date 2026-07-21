@@ -301,7 +301,6 @@ class NewsController extends Controller
         return response()->json($tags);
     }
 
-     */
     private function jsonArrayInput(Request $request, string $key): array
     {
         if (!$request->filled($key)) {
