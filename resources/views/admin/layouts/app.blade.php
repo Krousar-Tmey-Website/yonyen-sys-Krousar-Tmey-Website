@@ -61,10 +61,6 @@
                         </div>
                     </div>
                 </div>
-                <div :class="!sidebarOpen && 'lg:hidden'">
-                    <p class="text-white font-bold text-sm leading-tight">{{ $siteName }}</p>
-                    <p class="text-white text-xs">Admin Panel</p>
-                </div>
             </div>
 
             {{-- Nav with accordion groups --}}
