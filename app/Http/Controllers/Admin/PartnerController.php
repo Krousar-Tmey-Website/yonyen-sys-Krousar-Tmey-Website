@@ -69,10 +69,7 @@ class PartnerController extends Controller
      */
     public function edit(Partner $partner)
     {
-        $viewData = $this->buildListViewData(request());
-        $viewData['editPartner'] = $partner;
-
-        return view('admin.partners.index', $viewData);
+        return view('admin.partners.edit', compact('partner'));
     }
 
     /**

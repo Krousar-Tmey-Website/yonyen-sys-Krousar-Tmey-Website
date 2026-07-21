@@ -443,7 +443,7 @@
             @foreach($programs as $program)
             <div class="card group flex flex-col card-hover" data-reveal="up" style="--reveal-delay: {{ $loop->index * 120 }}">
                 <div class="relative overflow-hidden h-56">
-                    <img src="{{ $program->image_url }}"
+                    <img src="{{ $program->slug === 'education-for-deaf-or-blind-children' ? 'https://www.krousar-thmey.org/wp-content/uploads/2023/03/Transfer.webp' : $program->image_url }}"
                         alt="{{ $program->title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>

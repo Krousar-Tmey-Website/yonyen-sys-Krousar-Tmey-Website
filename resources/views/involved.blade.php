@@ -417,7 +417,7 @@
                         <p class="text-[#1d4e7a] font-bold text-lg md:text-xl mb-2">Interested in becoming a partner?</p>
                         <p class="text-gray-500 text-sm mb-6">Let's build together our future cooperation</p>
                         <a href="{{ route('contact') }}"
-                           class="group/btn inline-flex items-center gap-2 bg-white text-[#1d4e7a] font-bold text-sm px-7 py-2.5 rounded-xl border-2 border-[#1d4e7a] hover:bg-[#1d4e7a] hover:text-white hover:gap-3 transition-all duration-300 active:scale-[0.97] shadow-sm hover:shadow-md">
+                           class="group/btn mt-4 inline-flex items-center gap-2 bg-white text-[#1d4e7a] font-bold text-sm px-7 py-2.5 rounded-xl border-2 border-[#1d4e7a] hover:bg-[#1d4e7a] hover:text-white hover:gap-3 transition-all duration-300 active:scale-[0.97] shadow-sm hover:shadow-md">
                             <span>Contact us</span>
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                         </a>
@@ -470,11 +470,47 @@
                                 'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/></svg>',
                             ]
                         ];
+
+                        $staticDescriptions = [
+                            'Organizations from associative sector' =>
+                                '<p class="font-bold text-[#1d4e7a] mb-1">Associations/ local NGOs</p>
+                                <p class="mb-4">Can be of any size, from the small local association benefiting from a local fort, to the professional NGO (basic organizations that have structured and professionalized).</p>
+                                <p class="font-bold text-[#1d4e7a] mb-1">Platforms/ thematic networks (locals)</p>
+                                <p class="mb-4">The thematic platforms or networks are clusters of local and / or international NGOs working on specific fields and / or international and UN agencies. They are places of reflection, exchange of practices and experiences and pooling of the stakes in targeted fields, in order to define strategies and actions to raise awareness and advocate with stakeholders.</p>
+                                <p class="font-bold text-[#1d4e7a] mb-1">NGOs or local branches of international organizations</p>
+                                <p>A partnership with these international organizations and bilateral and multilateral agencies (eg United Nations Agencies or European Union) can be developed from Cambodia or Europe.</p>',
+
+                            'Local education structures' =>
+                                '<p class="font-bold text-[#1d4e7a] mb-1">Research institutes</p>
+                                <p class="mb-4">Les ONG et les chercheurs, du fait de cultures professionnelles très différentes, n’ont a priori ni les mêmes intérêts, ni les mêmes connaissances de la réalité terrain ou de la démarche scientifique. Cependant, il y a, du côté de la recherche comme celui des ONG, une volonté et des intérêts à coopérer pour améliorer de part et d’autre l’efficacité, l’ancrage terrain, la connaissance et le plaidoyer.</p>
+                                <p class="font-bold text-[#1d4e7a] mb-1">Universities / Training institutes</p>
+                                <p>Due to very different professional cultures, NGOs and researchers have neither the same interests nor the same knowledge of the field reality or the scientific approach at first glance. However, there is both willingness and interest on the part of researchers and NGOs to work together to improve effectiveness, anchoring, knowledge and advocacy.</p>',
+
+                            'Public services' =>
+                                '<p class="font-bold text-[#1d4e7a] mb-1">Centralized or decentralized state services</p>
+                                <p class="mb-4">Local services related to Krousar Thmey fields of intervention (inclusive education and child welfare) can be relevant partners in experimenting and disseminating good practice at the local level. Collaboration with the decision-making level (Ministry of Education / Ministry of Social Affairs, for example) should allow scaling up at a provincial or even national level.</p>
+                                <p class="font-bold text-[#1d4e7a] mb-1">Local authorities</p>
+                                <p>Municipalities, districts or provinces have often defined policies of international solidarity cooperation with substantial financing. They also undertake a project selection procedure.</p>',
+
+                            'Companies and foundations from private sector' =>
+                                '<p class="font-bold text-[#1d4e7a] mb-1">Companies</p>
+                                <p class="mb-4">Beside the financial aspect of a partnership with the economic sector, it can also allow empowering the employees of Krousar Thmey. In addition, it can also involve volunteering by the company’s employees, such as Khmer or English classes.</p>
+                                <p class="font-bold text-[#1d4e7a] mb-1">Foundations</p>
+                                <p>The requirement level of some foundations has reached an almost equivalent level of international donors. They are increasingly interested in committing not only financially but also technically to projects with long-term impact.</p>',
+                        ];
+
+                        // Research institutes / Universities & Training institutes are shown as
+                        // sub-items inside "Local education structures" above, not as their own cards.
+                        $visibleCategories = $partnershipCategories->whereNotIn('name', [
+                            'Research institutes',
+                            'Universities / Training institutes',
+                        ])->values();
                     @endphp
 
-                    @foreach($partnershipCategories as $index => $category)
+                    @foreach($visibleCategories as $index => $category)
                         @php
                             $style = $catStyles[$index % count($catStyles)];
+                            $description = $staticDescriptions[$category->name] ?? $category->description;
                         @endphp
                         <div data-reveal-card style="--reveal-card-delay: {{ ($index % 4) * 150 }}" class="group/cat relative bg-white border-l-4 {{ $style['border'] }} rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
                             <div class="absolute inset-0 rounded-2xl bg-gradient-to-r {{ $style['bg'] }} to-transparent pointer-events-none"></div>
@@ -485,11 +521,11 @@
                                     </div>
                                     <h4 class="font-black text-[#1d4e7a] text-sm uppercase tracking-wide">{{ $category->name }}</h4>
                                 </div>
-                                @if($category->description)
+                                @if($description)
                                     <div class="space-y-4">
                                         <div class="pl-4 border-l-2 border-gray-100 hover:border-gray-300 transition-colors">
                                             <div class="text-gray-500 text-sm leading-relaxed prose prose-sm max-w-none">
-                                                {!! $category->description !!}
+                                                {!! $description !!}
                                             </div>
                                         </div>
                                     </div>
