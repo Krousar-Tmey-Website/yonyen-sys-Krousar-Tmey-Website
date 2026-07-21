@@ -97,6 +97,8 @@ iframe.goog-te-banner-frame { display: none !important; }
 .VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; } /* New GT classes */
 body > .skiptranslate > iframe.skiptranslate { display: none !important; visibility: hidden !important; }
 
+[x-cloak] { display: none !important; }
+
 html { margin-top: 0 !important; top: 0 !important; }
 body { margin-top: 0 !important; top: 0 !important; position: static !important; }
 
@@ -258,19 +260,21 @@ function googleTranslateElementInit() {
                             <svg class="w-4 h-4 {{ $isWhoWeAre ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
-                        <div x-show="open"
+                        <div x-show="open" x-cloak
                             x-transition:enter="transition ease-out duration-150"
                             x-transition:enter-start="opacity-0 translate-y-1"
                             x-transition:enter-end="opacity-100 translate-y-0"
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
-                            class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl {{ request()->routeIs('presentation') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Presentation') }}</a>
-                            <a href="{{ route('about') }}#history" class="dropdown-item">{{ __('History') }}</a>
-                            <a href="{{ route('about') }}#awards" class="dropdown-item">{{ __('Awards') }}</a>
-                            <a href="{{ route('about') }}#partners" class="dropdown-item">{{ __('Partners') }}</a>
-                            <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl {{ request()->routeIs('transparency') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Transparency') }}</a>
+                            class="absolute top-full left-0 pt-1 w-52 z-50">
+                            <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-1">
+                                <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl {{ request()->routeIs('presentation') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Presentation') }}</a>
+                                <a href="{{ route('about') }}#history" class="dropdown-item">{{ __('History') }}</a>
+                                <a href="{{ route('about') }}#awards" class="dropdown-item">{{ __('Awards') }}</a>
+                                <a href="{{ route('about') }}#partners" class="dropdown-item">{{ __('Partners') }}</a>
+                                <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl {{ request()->routeIs('transparency') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Transparency') }}</a>
+                            </div>
                         </div>
                     </div>
 
@@ -282,20 +286,24 @@ function googleTranslateElementInit() {
                             <svg class="w-4 h-4 {{ $isPrograms ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
-                        <div x-show="open"
+                        <div x-show="open" x-cloak
                              x-transition:enter="transition ease-out duration-150"
                              x-transition:enter-start="opacity-0 translate-y-1"
                              x-transition:enter-end="opacity-100 translate-y-0"
                              x-transition:leave="transition ease-in duration-100"
                              x-transition:leave-start="opacity-100 translate-y-0"
                              x-transition:leave-end="opacity-0 translate-y-1"
-                             class="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                             @php 
-                                 $navProgramsList = \App\Models\Program::active()->take(3)->get(); 
-                             @endphp
-                             @foreach($navProgramsList as $index => $navProg)
-                             <a href="{{ route('programs.show', $navProg->slug) }}" class="dropdown-item {{ $index === 0 ? 'rounded-t-xl' : '' }} {{ $index === count($navProgramsList) - 1 ? 'rounded-b-xl' : '' }}">{{ $navProg->title }}</a>
-                             @endforeach
+                             class="absolute top-full left-0 pt-1 w-64 z-50">
+                             <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-1">
+                                 @php 
+                                     $navProgramsList = \Illuminate\Support\Facades\Cache::remember('nav_programs_list', 3600, function() {
+                                         return \App\Models\Program::active()->take(3)->get();
+                                     }); 
+                                 @endphp
+                                 @foreach($navProgramsList as $index => $navProg)
+                                 <a href="{{ route('programs.show', $navProg->slug) }}" class="dropdown-item {{ $index === 0 ? 'rounded-t-xl' : '' }} {{ $index === count($navProgramsList) - 1 ? 'rounded-b-xl' : '' }}">{{ $navProg->title }}</a>
+                                 @endforeach
+                             </div>
                         </div>
                     </div>
 
@@ -307,18 +315,20 @@ function googleTranslateElementInit() {
                             <svg class="w-4 h-4 {{ $isInvolved ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
-                        <div x-show="open"
+                        <div x-show="open" x-cloak
                             x-transition:enter="transition ease-out duration-150"
                             x-transition:enter-start="opacity-0 translate-y-1"
                             x-transition:enter-end="opacity-100 translate-y-0"
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
-                            class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">{{ __('Become a Partner') }}</a>
-                            <a href="{{ route('involved') }}#volunteer" class="dropdown-item">{{ __('Volunteering') }}</a>
-                            <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">{{ __('Book for Sales') }}</a>
-                            <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">{{ __('Job Opportunities') }}</a>
+                            class="absolute top-full left-0 pt-1 w-52 z-50">
+                            <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-1">
+                                <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">{{ __('Become a Partner') }}</a>
+                                <a href="{{ route('involved') }}#volunteer" class="dropdown-item">{{ __('Volunteering') }}</a>
+                                <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">{{ __('Book for Sales') }}</a>
+                                <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">{{ __('Job Opportunities') }}</a>
+                            </div>
                         </div>
                     </div>
 
@@ -332,14 +342,14 @@ function googleTranslateElementInit() {
                             <svg class="w-4 h-4 {{ $isResources ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
-                        <div x-show="open"
+                        <div x-show="open" x-cloak
                             x-transition:enter="transition ease-out duration-150"
                             x-transition:enter-start="opacity-0 translate-y-1"
                             x-transition:enter-end="opacity-100 translate-y-0"
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
-                            class="absolute top-full left-0 pt-2 w-52 z-50">
+                            class="absolute top-full left-0 pt-1 w-52 z-50">
                             <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-1">
                                 <a href="{{ route('resources') }}#annual-reports" @click="open = false" class="dropdown-item rounded-t-xl">{{ __('Annual Reports') }}</a>
                                 <a href="{{ route('resources') }}#media-resources" @click="open = false" class="dropdown-item">{{ __('Media Resources') }}</a>
@@ -361,7 +371,7 @@ function googleTranslateElementInit() {
                                 <svg class="w-3 h-3 transition-transform duration-200 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
                             
-                            <div x-show="open" 
+                            <div x-show="open" x-cloak
                                  x-transition:enter="transition ease-out duration-100"
                                  x-transition:enter-start="opacity-0 scale-95"
                                  x-transition:enter-end="opacity-100 scale-100"
@@ -403,7 +413,7 @@ function googleTranslateElementInit() {
         </div>
 
         {{-- Mobile Menu --}}
-        <div x-show="open"
+        <div x-show="open" x-cloak
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 -translate-y-2"
             x-transition:enter-end="opacity-100 translate-y-0"
@@ -533,7 +543,11 @@ function googleTranslateElementInit() {
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Programs</h4>
                     <ul class="space-y-3">
-                        @php $footerPrograms = \App\Models\Program::active()->take(3)->get(); @endphp
+                        @php 
+                            $footerPrograms = \Illuminate\Support\Facades\Cache::remember('nav_programs_list', 3600, function() {
+                                return \App\Models\Program::active()->take(3)->get();
+                            }); 
+                        @endphp
                         @foreach($footerPrograms as $footerProg)
                         <li><a href="{{ route('programs') }}#{{ $footerProg->slug }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ $footerProg->title }}</a></li>
                         @endforeach
