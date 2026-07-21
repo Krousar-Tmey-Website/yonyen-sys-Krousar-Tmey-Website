@@ -652,17 +652,30 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
         </div>
         <div class="grid md:grid-cols-3 gap-6">
             @foreach($projects as $project)
-            <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 card-hover-light group" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
+            <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 card-hover-light group relative flex flex-col h-full" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
+                {{-- Main Card Link --}}
+                <a href="{{ route('projects.show', $project) }}" class="absolute inset-0 z-10" aria-label="View {{ $project->title }}"></a>
+                
                 @if($project->image)
-                <img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset('storage/' . $project->image) }}" class="w-full h-40 object-cover rounded-xl mb-5 group-hover:opacity-90 transition-opacity">
+                <img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset('storage/' . $project->image) }}" class="w-full h-40 object-cover rounded-xl mb-5 group-hover:opacity-90 transition-opacity relative z-0">
                 @endif
-                <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $project->title }}</h3>
-                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5">{{ $project->description }}</p>                        <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300 link-arrow" style="color: #e8a020; font-weight: bold;">
-                    {{ $settings['projects_read_more'] ?? 'Read More Detail' }}
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                </a>
+                <h3 class="text-xl font-bold text-[#1a3c6e] mb-3 relative z-0">{{ $project->title }}</h3>
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5 flex-1 relative z-0">{{ $project->description }}</p>
+                
+                <div class="mt-auto flex items-center justify-between border-t border-gray-200/50 pt-5">
+                    <span class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm group-hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300 pointer-events-none">
+                        {{ $settings['projects_read_more'] ?? 'Read More Detail' }}
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </span>
+                    
+                    {{-- Donate Button (Z-20 to sit above stretched link) --}}
+                    <a href="{{ route('donate') }}" class="relative z-20 px-4 py-2 bg-[#8da83a] hover:bg-[#a3c04a] text-white text-[11px] font-black uppercase tracking-widest rounded-xl shadow-sm hover:shadow-md transition-all flex items-center gap-1.5" title="Donate to {{ $project->title }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        Donate
+                    </a>
+                </div>
             </div>
             @endforeach
         </div>
