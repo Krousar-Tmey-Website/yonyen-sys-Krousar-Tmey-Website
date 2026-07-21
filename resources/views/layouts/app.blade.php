@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -39,18 +39,20 @@ function getCurrentLang() {
     // Fall back to Laravel session locale
     return '{{ session("locale", "en") }}';
 }
-function setGTCookie(value) {
-    let domain = window.location.hostname;
-    document.cookie = 'googtrans=' + value + '; path=/';
-    document.cookie = 'googtrans=' + value + '; path=/; domain=' + domain;
-    document.cookie = 'googtrans=' + value + '; path=/; domain=.' + domain;
-}
-
 function clearGTCookie() {
     let domain = window.location.hostname;
+    // Clear all possible variations of the cookie
     document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
     document.cookie = 'googtrans=; path=/; domain=' + domain + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
     document.cookie = 'googtrans=; path=/; domain=.' + domain + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+}
+
+function setGTCookie(value) {
+    clearGTCookie(); // Clear first to avoid duplicates
+    let domain = window.location.hostname;
+    document.cookie = 'googtrans=' + value + '; path=/; domain=' + domain;
+    document.cookie = 'googtrans=' + value + '; path=/; domain=.' + domain;
+    document.cookie = 'googtrans=' + value + '; path=/';
 }
 
 function switchLang(lang) {
@@ -60,8 +62,10 @@ function switchLang(lang) {
         clearGTCookie();
     }
     
-    // Force a hard reload if redirecting doesn't apply the cookie instantly
-    window.location.href = '{{ url("/lang") }}/' + lang;
+    // Slight delay to ensure cookie is written before navigating away
+    setTimeout(() => {
+        window.location.href = '{{ url("/lang") }}/' + lang;
+    }, 50);
 }
 </script>
 
