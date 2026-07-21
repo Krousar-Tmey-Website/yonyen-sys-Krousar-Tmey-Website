@@ -60,26 +60,6 @@
         @error('name')<div class="payment-form-error">{{ $message }}</div>@enderror
     </div>
 
-    {{-- Code --}}
-    <div class="payment-form-group">
-        <label class="payment-form-label">Code <span class="required">*</span></label>
-        <div class="payment-form-hint-input">
-            <input type="text" name="code" value="{{ $val('code') }}" required
-                   class="payment-form-input @error('code') error @enderror"
-                   placeholder="e.g. ABA" style="max-width:200px;">
-            <span class="payment-form-hint">Short identifier for internal use</span>
-        </div>
-        @error('code')<div class="payment-form-error">{{ $message }}</div>@enderror
-    </div>
-
-    {{-- Description --}}
-    <div class="payment-form-group">
-        <label class="payment-form-label">Description <span class="optional">(optional)</span></label>
-        <textarea name="description" rows="2"
-                  class="payment-form-input payment-form-textarea @error('description') error @enderror"
-                  placeholder="Brief description or instructions for donors...">{{ $val('description') }}</textarea>
-        @error('description')<div class="payment-form-error">{{ $message }}</div>@enderror
-    </div>
 </div>
 
 {{-- ===== SECTION 2: Account Details ===== --}}

@@ -32,7 +32,6 @@
                     <tr>
                         <th class="col-id">#</th>
                         <th class="col-name">Name</th>
-                        <th class="col-code">Code</th>
                         <th class="col-qr">QR Code</th>
                         <th class="col-status">Status</th>
                         <th class="col-sort">Sort</th>
@@ -48,13 +47,7 @@
                         <td class="col-name">
                             <div class="payments-name-cell">
                                 <span class="payments-name">{{ $method->name }}</span>
-                                @if($method->description)
-                                    <span class="payments-desc">{{ Str::limit($method->description, 50) }}</span>
-                                @endif
                             </div>
-                        </td>
-                        <td class="col-code">
-                            <span class="payments-code">{{ $method->code }}</span>
                         </td>
                         <td class="col-qr">
                             @if($method->qr_code)

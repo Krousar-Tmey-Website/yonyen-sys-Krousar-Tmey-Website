@@ -59,8 +59,8 @@
             @php
                 $primary = $method->brand_color ?: '#2d6fa3';
                 $initial = collect(explode(' ', $method->name))->map(fn($w) => substr($w, 0, 1))->take(2)->implode('');
-                $shortLabel = strlen($method->code) > 8 ? $initial : $method->code;
-                $subtitle = $method->description ?: $method->name . ' · Cambodia';
+                $shortLabel = $initial;
+                $subtitle = $method->name . ' · Cambodia';
             @endphp
 
             {{-- Payment Method Card --}}
