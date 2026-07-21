@@ -40,16 +40,17 @@ function getCurrentLang() {
     return '{{ session("locale", "en") }}';
 }
 function switchLang(lang) {
+    let domain = window.location.hostname;
     if (lang === 'km' || lang === 'fr') {
-        // Use Google Translate for non-English
-        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + window.location.hostname;
+        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + domain;
+        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + domain;
         document.cookie = 'googtrans=/en/' + lang + '; path=/';
     } else {
-        // Clear Google Translate cookie for English
-        document.cookie = 'googtrans=; path=/; domain=' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        document.cookie = 'googtrans=; path=/; domain=' + domain + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        document.cookie = 'googtrans=; path=/; domain=.' + domain + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
         document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
     }
-    window.location.href = '{{ url("/lang") }}/' + lang + '?redirect=' + encodeURIComponent(window.location.href);
+    window.location.href = '{{ url("/lang") }}/' + lang;
 }
 </script>
 
