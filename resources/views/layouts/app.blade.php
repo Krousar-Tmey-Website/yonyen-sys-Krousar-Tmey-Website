@@ -25,47 +25,50 @@ function openEmail(email) {
     window.location.href = 'mailto:' + email;
   }
 }
-function changeGTranslate(lang) {
-    document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + window.location.hostname;
-    document.cookie = 'googtrans=/en/' + lang + '; path=/';
-    window.location.reload();
-}
+
 function getCurrentLang() {
     let match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
     if (match) {
         let parts = match[2].split('/');
         if (parts.length === 3 && parts[2] !== 'en') return parts[2];
     }
-    // Fall back to Laravel session locale
     return '{{ session("locale", "en") }}';
 }
-function clearGTCookie() {
-    let domain = window.location.hostname;
-    // Clear all possible variations of the cookie
-    document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-    document.cookie = 'googtrans=; path=/; domain=' + domain + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-    document.cookie = 'googtrans=; path=/; domain=.' + domain + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-}
-
-function setGTCookie(value) {
-    clearGTCookie(); // Clear first to avoid duplicates
-    let domain = window.location.hostname;
-    document.cookie = 'googtrans=' + value + '; path=/; domain=' + domain;
-    document.cookie = 'googtrans=' + value + '; path=/; domain=.' + domain;
-    document.cookie = 'googtrans=' + value + '; path=/';
-}
-
 function switchLang(lang) {
-    if (lang === 'km' || lang === 'fr') {
-        setGTCookie('/en/' + lang);
+    // 1. Trigger Google Translate natively
+    let gtCombo = document.querySelector('.goog-te-combo');
+    if (gtCombo) {
+        gtCombo.value = lang === 'en' ? 'en' : lang;
+        if (lang === 'en') {
+            document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+            document.cookie = 'googtrans=; path=/; domain=' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+            document.cookie = 'googtrans=; path=/; domain=.' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        }
+        gtCombo.dispatchEvent(new Event('change'));
     } else {
-        clearGTCookie();
+        // Fallback if widget hasn't loaded yet
+        if (lang === 'en') {
+            document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+            document.cookie = 'googtrans=; path=/; domain=' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+            document.cookie = 'googtrans=; path=/; domain=.' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        } else {
+            let domain = window.location.hostname;
+            document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + domain;
+            document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + domain;
+            document.cookie = 'googtrans=/en/' + lang + '; path=/';
+        }
     }
-    
-    // Slight delay to ensure cookie is written before navigating away
-    setTimeout(() => {
+
+    // 2. Update Laravel backend session and reload
+    fetch('{{ url("/lang") }}/' + lang, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(() => {
+        setTimeout(() => {
+            window.location.reload();
+        }, 200);
+    }).catch(() => {
         window.location.href = '{{ url("/lang") }}/' + lang;
-    }, 50);
+    });
 }
 </script>
 
@@ -84,13 +87,25 @@ body { margin-top: 0 !important; top: 0 !important; position: static !important;
 .goog-tooltip { display: none !important; }
 .goog-tooltip:hover { display: none !important; }
 .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
-#google_translate_element { display: none !important; }
+#google_translate_element { 
+    position: absolute !important;
+    opacity: 0 !important;
+    z-index: -10 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
 </style>
 
 <div id="google_translate_element"></div>
 <script type="text/javascript">
 function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,km,fr', autoDisplay: false}, 'google_translate_element');
+  new google.translate.TranslateElement({
+    pageLanguage: 'en', 
+    includedLanguages: 'en,km,fr', 
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+  }, 'google_translate_element');
 }
 </script>
 <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
