@@ -45,7 +45,7 @@
                 @if($isFirstForYear)
                 <span class="absolute z-10 w-4 h-4 rounded-full bg-[#1d4e7a] border-4 border-white shadow
                              top-6 left-5 -translate-x-1/2
-                             {{ $isLeft ? 'md:-right-8 md:left-auto md:translate-x-0' : 'md:-left-8 md:translate-x-0' }}"></span>
+                             {{ $isLeft ? 'md:-right-8 md:left-auto md:translate-x-1/2' : 'md:-left-8 md:-translate-x-1/2' }}"></span>
                 @endif
 
                 <x-timeline-item :item="$item" :is-left="$isLeft" :index="$index" />
