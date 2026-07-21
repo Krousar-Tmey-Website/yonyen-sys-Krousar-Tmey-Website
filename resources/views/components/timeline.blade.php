@@ -37,17 +37,16 @@
                  predictable rhythum row-to-row regardless of how tall any one caption gets. --}}
             <li class="relative pl-12 md:pl-0 scroll-mt-28"
                 @if($isFirstForYear) id="year-{{ $year }}" data-year-anchor="{{ $year }}" @endif>
-                {{-- Marker dot on the center rail --}}
+                {{-- Mobile Marker Dot --}}
                 @if($isFirstForYear)
-                <style>
-                    @media (min-width: 768px) {
-                        .timeline-dot-left-{{ $year }} { left: auto !important; right: -40px !important; transform: translateX(0) !important; }
-                        .timeline-dot-right-{{ $year }} { left: -40px !important; transform: translateX(0) !important; }
-                    }
-                </style>
-                <span class="absolute z-10 w-4 h-4 rounded-full bg-[#1d4e7a] border-4 border-white shadow
-                             top-6 left-5 -translate-x-1/2
-                             {{ $isLeft ? 'timeline-dot-left-'.$year : 'timeline-dot-right-'.$year }}"></span>
+                <div class="md:hidden absolute top-6 left-5 -translate-x-1/2 z-10">
+                    <span class="block w-4 h-4 rounded-full bg-[#1d4e7a] border-4 border-white shadow"></span>
+                </div>
+                {{-- Desktop Marker Dot --}}
+                <div class="hidden md:block absolute top-6 z-10" 
+                     style="left: {{ $isLeft ? 'calc(100% + 32px)' : '-32px' }}; transform: translateX(-50%);">
+                    <span class="block w-4 h-4 rounded-full bg-[#1d4e7a] border-4 border-white shadow"></span>
+                </div>
                 @endif
 
                 <x-timeline-item :item="$item" :is-left="$isLeft" :index="$index" />
