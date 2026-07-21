@@ -13,11 +13,11 @@
     $delay       = min($index * 90, 400);
 @endphp
 
-<div class="group bg-white rounded-lg shadow-md overflow-hidden w-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+<div class="group bg-white rounded-lg shadow-md overflow-hidden w-full max-w-[420px] mx-auto md:mx-0 {{ $isLeft ? 'md:ml-auto md:mr-0' : 'md:mr-auto md:ml-0' }} transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
      data-reveal="scale" style="--reveal-delay: {{ $delay }}">
     @if($image)
     <div class="relative w-full">
-        <div class="w-full aspect-[4/3] overflow-hidden bg-gray-100">
+        <div class="w-full aspect-video overflow-hidden bg-gray-100">
             <img src="{{ $image }}" alt="{{ $title ?? ($year ? 'Historical photo, '.$year : 'Historical photo') }}"
                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
         </div>
