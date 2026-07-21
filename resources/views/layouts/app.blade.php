@@ -35,23 +35,23 @@ function getCurrentLang() {
     return '{{ session("locale", "en") }}';
 }
 function switchLang(lang) {
-    // 1. Trigger Google Translate natively
-    let gtCombo = document.querySelector('.goog-te-combo');
-    if (gtCombo) {
-        gtCombo.value = lang === 'en' ? 'en' : lang;
-        if (lang === 'en') {
-            document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-            document.cookie = 'googtrans=; path=/; domain=' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-            document.cookie = 'googtrans=; path=/; domain=.' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-        }
-        gtCombo.dispatchEvent(new Event('change'));
+    if (lang === 'en') {
+        // Revert to English (base language) by clearing all Google Translate cookies
+        document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        document.cookie = 'googtrans=; path=/; domain=' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        document.cookie = 'googtrans=; path=/; domain=.' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        
+        // Also clear any sub-path cookies just to be extremely thorough
+        document.cookie = 'googtrans=; path=/about; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        document.cookie = 'googtrans=; path=/programs; expires=Thu, 01 Jan 1970 00:00:00 UTC';
     } else {
-        // Fallback if widget hasn't loaded yet
-        if (lang === 'en') {
-            document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-            document.cookie = 'googtrans=; path=/; domain=' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-            document.cookie = 'googtrans=; path=/; domain=.' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        // For other languages, try native Google Translate dropdown first
+        let gtCombo = document.querySelector('.goog-te-combo');
+        if (gtCombo) {
+            gtCombo.value = lang;
+            gtCombo.dispatchEvent(new Event('change'));
         } else {
+            // Fallback: manually set cookies if widget isn't ready
             let domain = window.location.hostname;
             document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + domain;
             document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + domain;
@@ -59,7 +59,7 @@ function switchLang(lang) {
         }
     }
 
-    // 2. Update Laravel backend session and reload
+    // Update Laravel backend session and reload to apply the new state
     fetch('{{ url("/lang") }}/' + lang, {
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     }).then(() => {
