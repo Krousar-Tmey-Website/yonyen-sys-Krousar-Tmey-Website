@@ -16,9 +16,6 @@ class UpdatePaymentMethodRequest extends FormRequest
     {
         return [
             'name'             => ['required', 'string', 'max:255'],
-
-            'code'             => ['required', 'string', 'max:50', Rule::unique('payment_methods', 'code')->ignore($this->payment_method)],
-            'description'      => ['nullable', 'string'],
             'bank_type'        => ['nullable', 'string', 'max:50'],
             'account_name'     => ['nullable', 'string', 'max:255'],
 
