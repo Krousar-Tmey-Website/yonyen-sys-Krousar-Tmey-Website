@@ -323,6 +323,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('worldwide-partners', Admin\WorldwidePartnerController::class)
         ->parameters(['worldwide-partners' => 'worldwidePartner']);
 
+    Route::post('transparency-content', [Admin\TransparencyController::class, 'updateContent'])->name('transparency.content.update');
     Route::resource('transparency', Admin\TransparencyController::class)
         ->except(['show'])
         ->parameters(['transparency' => 'report']);

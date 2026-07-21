@@ -6,7 +6,137 @@
 
 @section('content')
 
-<div class="space-y-6">
+<div class="space-y-8" x-data="{ tab: 'reports' }">
+    {{-- Tab Navigation --}}
+    <div class="border-b border-gray-200">
+        <nav class="flex space-x-8 overflow-x-auto">
+            <button @click="tab = 'reports'"
+                    :class="tab === 'reports' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Audited Statements (PDFs)
+            </button>
+            <button @click="tab = 'content'"
+                    :class="tab === 'content' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Page Text
+            </button>
+        </nav>
+    </div>
+
+{{-- ========================================================
+     TAB: PAGE TEXT — everything shown on /who-we-are/transparency
+     ======================================================== --}}
+<div x-show="tab === 'content'" class="space-y-6">
+    <form action="{{ route('admin.transparency.content.update') }}" method="POST" class="space-y-6">
+        @csrf
+
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-700 mb-4 text-sm">Page Title</h3>
+            <input type="text" name="transparency_title" value="{{ $settings['transparency_title'] ?? 'Transparency and Accountability' }}"
+                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+            <h3 class="font-bold text-gray-700 text-sm">Financial Transparency</h3>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Section Heading</label>
+                <input type="text" name="transparency_financial_heading" value="{{ $settings['transparency_financial_heading'] ?? 'Financial Transparency' }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 1</label>
+                <textarea name="transparency_financial_p1" rows="2"
+                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_financial_p1'] ?? 'Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used.' }}</textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 2</label>
+                <textarea name="transparency_financial_p2" rows="2"
+                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_financial_p2'] ?? 'The implementation of programs and projects is our priority.' }}</textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 3</label>
+                <textarea name="transparency_financial_p3" rows="2"
+                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_financial_p3'] ?? 'Thanks to the strict financial management and the involvement of European volunteers, all administrative costs remain under 4% of the total budget.' }}</textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 4 (Audit firm)</label>
+                <textarea name="transparency_financial_p4" rows="3"
+                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_financial_p4'] ?? "Krousar Thmey Cambodia's accounts are all audited and certified each year by an independent audit firm (PricewaterhouseCoopers since 2013 and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes in order to provide greater efficiency to the organization and transparency to its partners." }}</textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Line Before Report List</label>
+                <input type="text" name="transparency_financial_list_intro" value="{{ $settings['transparency_financial_list_intro'] ?? 'Audited financial statements are available here:' }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                <p class="text-xs text-gray-400 mt-1">The list of PDF links itself is managed in the "Audited Statements (PDFs)" tab.</p>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Closing Line</label>
+                <textarea name="transparency_financial_outro" rows="2"
+                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_financial_outro'] ?? "Our French and Swiss organisations' accounts are also audited annually." }}</textarea>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+            <h3 class="font-bold text-gray-700 text-sm">Origins Of The Funds</h3>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Section Heading</label>
+                <input type="text" name="transparency_origins_heading" value="{{ $settings['transparency_origins_heading'] ?? 'Origins Of The Funds' }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 1 (International support)</label>
+                <textarea name="transparency_origins_p1" rows="3"
+                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_origins_p1'] ?? 'In support of its local activity in Cambodia, Krousar Thmey benefits from the involvement of volunteers in international entities: Krousar Thmey France, Krousar Thmey Switzerland and Krousar Thmey Singapore. As their main activity is fundraising, these branches are a privileged relay to donors outside of Cambodia. They enable Krousar Thmey to receive institutional funding and support from individual donors.' }}</textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 2 (Local support)</label>
+                <textarea name="transparency_origins_p2" rows="2"
+                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_origins_p2'] ?? 'Donations received in Cambodia come mainly from non-governmental organizations and to a lesser extent from private donors and the Cambodian authorities.' }}</textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 3</label>
+                <textarea name="transparency_origins_p3" rows="3"
+                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_origins_p3'] ?? "Financial or in-kind donations from the Cambodian authorities have increased steadily over the past few years, accounting for nearly 8% of Krousar Thmey's resources. All staff of special schools for deaf or blind children are civil servants of the Ministry of Education, Youth and Sports who pay their salary (excluding complements paid by Krousar Thmey). For the time being, this contribution is not included in the expenditure and income statement." }}</textarea>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+            <h3 class="font-bold text-gray-700 text-sm">Award Line</h3>
+            <p class="text-xs text-gray-400">Renders as: "{prefix} {link label} {suffix}" — e.g. Krousar Thmey won the <span class="text-[#2d6fa3] underline">label Ideas</span> in 2010.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Prefix</label>
+                    <input type="text" name="transparency_award_prefix" value="{{ $settings['transparency_award_prefix'] ?? 'Krousar Thmey won the' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Suffix</label>
+                    <input type="text" name="transparency_award_suffix" value="{{ $settings['transparency_award_suffix'] ?? 'in 2010.' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Link Label</label>
+                    <input type="text" name="transparency_award_link_label" value="{{ $settings['transparency_award_link_label'] ?? 'label Ideas' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Link URL</label>
+                    <input type="url" name="transparency_award_link_url" value="{{ $settings['transparency_award_link_url'] ?? 'https://ideas.asso.fr/' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="px-6 py-2.5 bg-[#2d6fa3] text-white rounded-xl text-sm font-semibold hover:bg-[#1d4e7a] transition">
+            Save Page Text
+        </button>
+    </form>
+</div>
+
+{{-- ========================================================
+     TAB: AUDITED STATEMENTS (PDFs)
+     ======================================================== --}}
+<div x-show="tab === 'reports'" class="space-y-6">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h3 class="text-xl font-bold text-gray-900">Transparency Reports</h3>
@@ -38,12 +168,15 @@
                             <p class="font-semibold text-gray-800 truncate">{{ $report->title }}</p>
                             <p class="text-xs text-gray-500 mt-1">
                                 {{ $report->year }} · {{ $report->description ?? 'PDF' }}
-                                @if($report->file_path)
+                                @if($report->download_url)
                                     · <a href="{{ $report->download_url }}" target="_blank" class="text-[#2d6fa3] hover:underline">View</a>
                                 @endif
                                 @unless($report->is_active)
                                     <span class="inline-flex items-center rounded-full bg-orange-50 text-orange-600 px-2 py-0.5 text-[11px] uppercase tracking-[.18em]">Hidden</span>
                                 @endunless
+                                @if($report->file_path && !$report->download_url)
+                                    <span class="inline-flex items-center rounded-full bg-red-50 text-red-600 px-2 py-0.5 text-[11px] uppercase tracking-[.18em]">Missing file — re-upload</span>
+                                @endif
                             </p>
                         </div>
                         <div class="flex items-center gap-2 flex-wrap">
@@ -66,97 +199,6 @@
         @endif
     </div>
 </div>
-    <div class="lg:col-span-2">
-        @if($reports->isEmpty())
-        <div class="bg-white rounded-2xl border border-gray-100 py-12 text-center text-gray-400 text-sm">
-            No reports yet. Add your first one.
-        </div>
-        @else
-        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div class="px-5 py-3.5 bg-gray-50 border-b border-gray-100">
-                <h4 class="font-semibold text-gray-700 text-sm">{{ $reports->count() }} Report(s)</h4>
-            </div>
-            <div class="divide-y divide-gray-50">
-                @foreach($reports as $report)
-                <div x-data="{ editing: false }">
-                    {{-- View row --}}
-                    <div class="flex items-center justify-between px-5 py-4 hover:bg-gray-50/50" x-show="!editing">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <div class="w-9 h-9 rounded-lg bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-gray-700 text-sm">{{ $report->title }}</p>
-                                <p class="text-gray-400 text-xs">{{ $report->year }} · {{ $report->description ?? 'PDF' }}
-                                    @if($report->download_url)
-                                    · <a href="{{ $report->download_url }}" target="_blank" class="text-[#2d6fa3] hover:underline">View</a>
-                                    @endif
-                                    @if(!$report->is_active)<span class="ml-1 text-orange-400">hidden</span>@endif
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 flex-shrink-0 ml-3">
-                            <button @click="editing = true" class="text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-medium p-1">Edit</button>
-                            <form action="{{ route('admin.transparency.destroy', $report) }}" method="POST"
-                                  onsubmit="return confirm('Remove this report?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="text-red-300 hover:text-red-500 transition-colors p-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    {{-- Edit form --}}
-                    <div class="px-5 py-4 bg-gray-50 border-t border-gray-100" x-show="editing" x-cloak>
-                        <form action="{{ route('admin.transparency.update', $report) }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                            @csrf @method('PUT')
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
-                                    <input type="text" name="title" value="{{ $report->title }}" required
-                                           class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-600 mb-1">Year</label>
-                                    <input type="number" name="year" value="{{ $report->year }}" required
-                                           class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
-                                <input type="text" name="description" value="{{ $report->description }}"
-                                       class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Replace PDF</label>
-                                <input type="file" name="file" accept=".pdf"
-                                       class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-[#2d6fa3]/10 file:text-[#2d6fa3]">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">External URL</label>
-                                <input type="url" name="file_url" value="{{ $report->file_url }}"
-                                       class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]">
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" name="is_active" value="1" {{ $report->is_active ? 'checked' : '' }}
-                                           class="rounded accent-[#2d6fa3] w-4 h-4">
-                                    <span class="text-xs text-gray-600">Active</span>
-                                </label>
-                            </div>
-                            <div class="flex gap-2">
-                                <button type="submit" class="btn-primary text-xs px-4 py-2">Save</button>
-                                <button type="button" @click="editing = false" class="text-gray-400 hover:text-gray-600 text-xs px-4 py-2">Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-        @endif
-    </div>
 </div>
 
 @endsection
