@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Form submission
+    // Form submission - ensure tags are saved
     const articleForm = document.getElementById('articleEditForm');
     if (articleForm) {
         articleForm.addEventListener('submit', function() {

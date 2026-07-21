@@ -266,11 +266,13 @@ function quickAddTag(label, url) {
 function renderPresetButtons() {
     const container = document.getElementById('presetTagButtons');
     if (!container) return;
+
     // Combine preset tags with custom added tags (custom tags first, then presets)
     const allTags = [
         ...tagLinks.filter(t => !PRESET_TAGS.some(p => p.label.toLowerCase() === t.label.toLowerCase())),
         ...PRESET_TAGS
     ];
+
     container.innerHTML = allTags.map((tag, index) => {
         const isAdded = tagLinks.some(t => t.label.toLowerCase() === tag.label.toLowerCase());
         return `<button type="button" class="preset-tag-btn${isAdded ? ' is-added' : ''}"
