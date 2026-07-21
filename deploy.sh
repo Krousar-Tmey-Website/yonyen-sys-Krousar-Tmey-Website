@@ -20,8 +20,7 @@ git pull origin develop-fix
 
 # 3. Set correct permissions early (prevents 500 errors if script crashes later)
 echo "=> Setting correct permissions..."
-sudo chown -R ubuntu:ubuntu .
-sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chown -R ubuntu:www-data .
 sudo chmod -R 775 storage bootstrap/cache
 
 # 4. Install/Update PHP Dependencies (Optimized for Production)
