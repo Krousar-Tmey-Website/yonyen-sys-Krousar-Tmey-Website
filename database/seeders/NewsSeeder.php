@@ -1792,6 +1792,9 @@ President-Founder',
 );
 
         foreach ($articles as $article) {
+            if (empty($article['category'])) {
+                $article['category'] = 'general';
+            }
             News::updateOrCreate(['slug' => $article['slug']], $article);
         }
     }
