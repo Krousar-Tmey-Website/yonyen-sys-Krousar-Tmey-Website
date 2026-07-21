@@ -44,7 +44,7 @@
                 </div>
                 {{-- Desktop Marker Dot --}}
                 <div class="hidden md:block absolute top-6 z-10" 
-                     style="left: {{ $isLeft ? 'calc(100% + 32px)' : '-32px' }}; transform: translateX(-50%);">
+                     style="left: {{ $isLeft ? 'calc(100% + 2rem)' : '-2rem' }}; transform: translateX(-50%);">
                     <span class="block w-4 h-4 rounded-full bg-[#1d4e7a] border-4 border-white shadow"></span>
                 </div>
                 @endif
