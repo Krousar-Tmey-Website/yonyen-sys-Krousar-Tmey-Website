@@ -41,8 +41,8 @@
                 @if($isFirstForYear)
                 <style>
                     @media (min-width: 768px) {
-                        .timeline-dot-left-{{ $year }} { left: auto !important; right: -40px !important; transform: translateX(0) !important; background-color: red !important; }
-                        .timeline-dot-right-{{ $year }} { left: -40px !important; transform: translateX(0) !important; background-color: red !important; }
+                        .timeline-dot-left-{{ $year }} { left: auto !important; right: -40px !important; transform: translateX(0) !important; }
+                        .timeline-dot-right-{{ $year }} { left: -40px !important; transform: translateX(0) !important; }
                     }
                 </style>
                 <span class="absolute z-10 w-4 h-4 rounded-full bg-[#1d4e7a] border-4 border-white shadow
