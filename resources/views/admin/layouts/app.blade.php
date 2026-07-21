@@ -52,7 +52,7 @@
                     @endphp
                     <img src="{{ $logoUrl }}"
                         alt="{{ $siteName }}"
-                        class="max-h-8 lg:max-h-10 w-auto max-w-full object-contain transition-all duration-300"
+                        class="h-8 lg:h-10 w-auto max-w-full object-contain transition-all duration-300"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     {{-- Fallback if image not yet placed --}}
                     <div class="hidden items-center gap-3">
