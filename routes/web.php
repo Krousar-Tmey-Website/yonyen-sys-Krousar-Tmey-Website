@@ -124,9 +124,8 @@ Route::get('/our-programs', function () {
 })->name('programs');
 
 Route::get('/our-programs/{slug}', function ($slug) {
-    $program = Program::where('slug', $slug)->firstOrFail();
-
-    return redirect()->to(route('programs') . '#' . $program->slug);
+    // Redirect all old individual program links to the main programs page anchor
+    return redirect()->to(route('programs') . '#' . $slug);
 })->name('programs.show');
 
 Route::get('/programs/item/{id}', function ($id) {
