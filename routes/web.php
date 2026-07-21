@@ -24,6 +24,7 @@ use App\Models\Partner;
 use App\Models\Program;
 use App\Models\ProgramPageItem;
 use App\Models\Project;
+use App\Models\ResourcePage;
 use App\Http\Controllers\ResourcePageController;
 use App\Models\Slide;
 use App\Models\Testimonial;
@@ -180,6 +181,14 @@ Route::get('/resources', function () {
     return view('resources', compact('reports'));
 })->name('resources');
 
+Route::get('/media', function () {
+    $settings = HomeSetting::allKeyed();
+    $latestNews = News::published()->latest('published_at')->take(3)->get();
+    $topicPagesByTitle = ResourcePage::active()->get(['title', 'slug'])->keyBy(fn ($page) => strtolower($page->title));
+
+    return view('media', compact('settings', 'latestNews', 'topicPagesByTitle'));
+})->name('media');
+
 // Secure PDF view/download with graceful error handling
 Route::get('/reports/{report}/view', function (App\Models\AnnualReport $report) {
     if (!$report->has_pdf_file) {
@@ -267,6 +276,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // News
     Route::post('news/upload-image', [Admin\NewsController::class, 'uploadImage'])->name('news.upload-image');
     Route::resource('news', Admin\NewsController::class);
+
+    // Media page (public /media)
+    Route::get('media-page', [Admin\MediaPageController::class, 'index'])->name('media-page.index');
+    Route::post('media-page', [Admin\MediaPageController::class, 'update'])->name('media-page.update');
 
     // Topics (Resource Pages) — the categories News tags link to
     Route::resource('resource-pages', Admin\ResourcePageController::class)

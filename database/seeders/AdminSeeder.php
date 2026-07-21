@@ -140,6 +140,18 @@ class AdminSeeder extends Seeder
             // About page
             ['key' => 'about_worldwide_title', 'label' => 'Worldwide Section Title', 'group' => 'about', 'value' => 'Krousar Thmey Worldwide'],
             ['key' => 'about_worldwide_desc',  'label' => 'Worldwide Section Description', 'group' => 'about', 'value' => 'Krousar Thmey benefits from the support of various entities around the world. Their fundraising and communication networks greatly contribute to the success of all programs and projects.'],
+            // Media page
+            ['key' => 'media_title', 'label' => 'Media — Page Title', 'group' => 'media', 'value' => 'Media'],
+            ['key' => 'media_contact_email', 'label' => 'Media — Communication Officer Email', 'group' => 'media', 'value' => 'communication@krousar-thmey.org'],
+            ['key' => 'media_press_heading', 'label' => 'Media — Press Section Heading', 'group' => 'media', 'value' => 'Krousar Thmey In The News'],
+            ['key' => 'media_press_source_label', 'label' => 'Media — Press Source Label', 'group' => 'media', 'value' => 'Press Article'],
+            ['key' => 'media_press_source_name', 'label' => 'Media — Press Publication Name', 'group' => 'media', 'value' => 'The Phnom Penh Post'],
+            ['key' => 'media_press_headline', 'label' => 'Media — Press Headline', 'group' => 'media', 'value' => 'Classical arts not a priority in schools today'],
+            ['key' => 'media_press_date', 'label' => 'Media — Press Published Date', 'group' => 'media', 'value' => '07.25.17'],
+            ['key' => 'media_press_excerpt', 'label' => 'Media — Press Excerpt', 'group' => 'media', 'value' => "Traditional Cambodian art forms such as classical dance and music have been passed down throughout the generations as a way for children to learn and preserve the meaning of their culture. However, as the education sector changes, gaining knowledge of the arts at a young age is proving less essential for the Kingdom's public schools…"],
+            ['key' => 'media_press_article_url', 'label' => 'Media — Press Article URL', 'group' => 'media', 'value' => 'https://phnompenhpost.com/lifestyle/classical-arts-not-priority-schools-today/'],
+            ['key' => 'media_latest_heading', 'label' => 'Media — Latest News Heading', 'group' => 'media', 'value' => 'Latest News'],
+            ['key' => 'media_latest_intro', 'label' => 'Media — Latest News Intro Link', 'group' => 'media', 'value' => "Visit our News section to find more of Krousar Thmey's news"],
         ];
 
         foreach ($homeSettings as $setting) {
