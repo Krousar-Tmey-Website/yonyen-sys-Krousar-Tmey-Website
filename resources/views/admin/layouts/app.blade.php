@@ -43,8 +43,8 @@
         <aside x-cloak :class="sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-64 lg:translate-x-0 lg:w-[4.5rem]'"
             class="fixed inset-y-0 left-0 z-50 flex flex-col bg-[#1d4e7a] transition-all duration-300 ease-in-out lg:relative flex-shrink-0">
             {{-- Logo --}}
-            <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10 whitespace-nowrap" :class="!sidebarOpen && 'lg:justify-center lg:px-3'">
-                <div class="bg-white rounded-xl px-3 py-1.5 flex-shrink-0" :class="!sidebarOpen && 'lg:px-2'">
+            <div class="flex items-center px-5 py-5 border-b border-white/10 transition-all duration-300" :class="!sidebarOpen && 'lg:justify-center lg:px-2'">
+                <div class="bg-white rounded-xl px-3 py-1.5 w-full flex justify-center items-center overflow-hidden transition-all duration-300" :class="!sidebarOpen && 'lg:px-1'">
                     @php
                     $logoPath = $settings['site_logo'] ?? 'images/logo.svg';
                     $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
