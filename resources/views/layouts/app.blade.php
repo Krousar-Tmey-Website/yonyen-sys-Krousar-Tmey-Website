@@ -34,25 +34,41 @@ function getCurrentLang() {
     }
     return '{{ session("locale", "en") }}';
 }
+
+function manageGTCookies(action, lang = '') {
+    let hostname = window.location.hostname;
+    let parts = hostname.split('.');
+    let domains = [hostname, '.' + hostname];
+    
+    // If on a subdomain (e.g. krousar-thmey.sreydeth.site), also target the parent domain (.sreydeth.site)
+    // because Google Translate sometimes leaks cookies up to the parent domain, causing conflicts!
+    if (parts.length > 2) {
+        domains.push('.' + parts.slice(1).join('.'));
+    }
+    
+    // 1. ALWAYS obliterate all existing cookies to prevent duplicates
+    let wipe = '=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    document.cookie = 'googtrans' + wipe;
+    domains.forEach(d => {
+        document.cookie = 'googtrans' + wipe + '; domain=' + d;
+    });
+
+    // 2. If setting a new language, set it aggressively on all domains
+    if (action === 'set' && lang !== 'en') {
+        let val = '=/en/' + lang + '; path=/';
+        document.cookie = 'googtrans' + val;
+        domains.forEach(d => {
+            document.cookie = 'googtrans' + val + '; domain=' + d;
+        });
+    }
+}
+
 function switchLang(lang) {
     if (lang === 'en') {
-        // Revert to English (base language) by clearing all Google Translate cookies
-        document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-        document.cookie = 'googtrans=; path=/; domain=' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-        document.cookie = 'googtrans=; path=/; domain=.' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-        
-        // Also clear any sub-path cookies just to be extremely thorough
-        document.cookie = 'googtrans=; path=/about; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-        document.cookie = 'googtrans=; path=/programs; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        manageGTCookies('clear');
     } else {
-        // Always manually set the cookies to guarantee the change persists across the reload
-        // (Google Translate sometimes ignores synthetic 'change' events on hidden dropdowns)
-        let domain = window.location.hostname;
-        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + domain;
-        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + domain;
-        document.cookie = 'googtrans=/en/' + lang + '; path=/';
-
-        // Also try native Google Translate dropdown for instantaneous switch before reload
+        manageGTCookies('set', lang);
+        
         let gtCombo = document.querySelector('.goog-te-combo');
         if (gtCombo) {
             gtCombo.value = lang;
@@ -60,12 +76,11 @@ function switchLang(lang) {
         }
     }
 
-    // Update Laravel backend session and reload to apply the new state
     fetch('{{ url("/lang") }}/' + lang, {
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     }).then(() => {
         setTimeout(() => {
-            window.location.reload();
+            window.location.reload(true);
         }, 200);
     }).catch(() => {
         window.location.href = '{{ url("/lang") }}/' + lang;
