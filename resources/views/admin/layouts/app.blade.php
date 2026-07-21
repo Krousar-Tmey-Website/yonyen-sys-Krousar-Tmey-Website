@@ -20,7 +20,7 @@
     </style>
 </head>
 
-<body class="h-full" x-data="{ sidebarOpen: false }">
+<body class="h-full" x-data="{ sidebarOpen: window.innerWidth >= 1024 }">
 
     <script>
         function openEmail(email) {
@@ -34,11 +34,17 @@
 
     <div class="flex h-full">
 
+        {{-- Mobile sidebar backdrop --}}
+        <div x-cloak x-show="sidebarOpen" @click="sidebarOpen = false"
+            class="fixed inset-0 z-40 bg-gray-900/50 lg:hidden"
+            x-transition.opacity></div>
+
         {{-- ── Sidebar ──────────────────────────────── --}}
-        <aside class="hidden lg:flex lg:flex-col w-64 bg-[#1d4e7a] flex-shrink-0">
+        <aside x-cloak :class="sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-64 lg:translate-x-0 lg:w-[4.5rem]'"
+            class="fixed inset-y-0 left-0 z-50 flex flex-col bg-[#1d4e7a] transition-all duration-300 ease-in-out lg:relative flex-shrink-0">
             {{-- Logo --}}
-            <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
-                <div class="bg-white rounded-xl px-3 py-1.5 flex-shrink-0">
+            <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10 whitespace-nowrap" :class="!sidebarOpen && 'lg:justify-center lg:px-3'">
+                <div class="bg-white rounded-xl px-3 py-1.5 flex-shrink-0" :class="!sidebarOpen && 'lg:px-2'">
                     @php
                     $logoPath = $settings['site_logo'] ?? 'images/logo.svg';
                     $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
@@ -54,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div :class="!sidebarOpen && 'lg:hidden'">
                     <p class="text-white font-bold text-sm leading-tight">{{ $siteName }}</p>
                     <p class="text-white text-xs">Admin Panel</p>
                 </div>
@@ -95,7 +101,6 @@
                 ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
                 ['route' => 'admin.home.index', 'label' => 'Home Settings'],
                 ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
-                ['route' => 'admin.impact-statistics.index', 'label' => 'Impact Statistics'],
                 ['route' => 'admin.sponsors.index', 'label' => 'Sponsors'],
                 ['route' => 'admin.stories.index', 'label' => 'Success Stories'],
                 ],
@@ -128,6 +133,7 @@
                 'icon' => 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z',
                 'children' => [
                 ['route' => 'admin.news.index', 'label' => 'News Articles'],
+                ['route' => 'admin.resource-pages.index', 'label' => 'Topics'],
                 ['route' => 'admin.reports.index', 'label' => 'Annual Reports'],
                 ['route' => 'admin.media.index', 'label' => 'Media Gallery'],
                 ['route' => 'admin.downloads.index', 'label' => 'Downloads'],
@@ -184,30 +190,38 @@
                 @if (isset($group['single']))
                 @php $exists = $routeExists($group['route']); @endphp
                 <a href="{{ $exists ? route($group['route']) : '#' }}"
-                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
-                              {{ $childActive($group['route']) ? 'bg-white/15 text-white' : 'text-white hover:bg-white/10' }}">
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap
+                              {{ $childActive($group['route']) ? 'bg-white/15 text-white' : 'text-white hover:bg-white/10' }}"
+                    :class="!sidebarOpen && 'lg:justify-center lg:px-0'"
+                    title="{{ $group['label'] }}">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $group['icon'] }}" />
                     </svg>
-                    {{ $group['label'] }}
+                    <span :class="!sidebarOpen && 'lg:hidden'">{{ $group['label'] }}</span>
                 </a>
                 @else
                 @php $isGroupActive = $groupActive($group['children']); @endphp
                 <div x-data="{ open: {{ $isGroupActive ? 'true' : 'false' }} }" class="space-y-0.5">
-                    <button @click="open = !open"
-                        class="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all
-                                       {{ $isGroupActive ? 'bg-white/15 text-white' : 'text-white hover:bg-white/10' }}">
-                        <span class="flex items-center gap-3">
-                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $group['icon'] }}" />
+                    <button @click="sidebarOpen ? (open = !open) : (sidebarOpen = true, open = true)"
+                        class="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap
+                                       {{ $isGroupActive ? 'bg-white/15 text-white' : 'text-white hover:bg-white/10' }}"
+                        :class="!sidebarOpen && 'lg:justify-center lg:px-0'"
+                        title="{{ $group['label'] }}">
+                        <span class="flex items-center gap-3" :class="!sidebarOpen && 'lg:gap-0'">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="{{ $group['icon'] }}" />
                             </svg>
-                            {{ $group['label'] }}
+                            <span :class="!sidebarOpen && 'lg:hidden'">{{ $group['label'] }}</span>
                         </span>
-                        <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        <svg class="w-4 h-4 transition-transform duration-200 flex-shrink-0" :class="{ 'rotate-180': open, 'lg:hidden': !sidebarOpen }"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="open" x-transition:enter="transition ease-out duration-150"
+                    <div x-show="sidebarOpen && open" x-transition:enter="transition ease-out duration-150"
                         x-transition:enter-start="opacity-0 -translate-y-1"
                         x-transition:enter-end="opacity-100 translate-y-0"
                         x-transition:leave="transition ease-in duration-100"
@@ -234,16 +248,16 @@
             </nav>
 
             {{-- User --}}
-            <div class="px-4 py-4 border-t border-white/10">
-                <div class="flex items-center justify-between">
-                    <div>
+            <div class="px-4 py-4 border-t border-white/10" :class="!sidebarOpen && 'lg:px-2'">
+                <div class="flex items-center justify-between" :class="!sidebarOpen && 'lg:justify-center'">
+                    <div :class="!sidebarOpen && 'lg:hidden'">
                         <p class="text-white text-xs font-medium truncate max-w-[120px]">{{ auth()->user()->name }}</p>
                         <p class="text-white text-xs truncate max-w-[120px]">{{ auth()->user()->email }}</p>
                     </div>
-                    <form action="{{ route('admin.logout') }}" method="POST">
+                    <form action="{{ route('admin.logout') }}" method="POST" :class="!sidebarOpen && 'lg:mx-auto'">
                         @csrf
                         <button type="submit" title="Logout"
-                            class="text-white hover:text-white/80 transition-colors p-1.5 rounded-lg hover:bg-white/10">
+                            class="text-white hover:text-white/80 transition-colors p-1.5 rounded-lg hover:bg-white/10 flex items-center justify-center">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>
@@ -251,16 +265,31 @@
                     </form>
                 </div>
             </div>
+
+            {{-- Sidebar Toggle Button (Middle Edge) --}}
+            <button @click="sidebarOpen = !sidebarOpen"
+                    class="hidden lg:flex items-center justify-center absolute -right-3.5 top-1/2 -translate-y-1/2 bg-white text-[#1d4e7a] hover:text-[#2d6fa3] hover:scale-110 shadow-[0_2px_10px_rgba(29,78,122,0.2)] hover:shadow-[0_4px_15px_rgba(29,78,122,0.3)] w-7 h-7 rounded-full z-50 transition-all duration-300 focus:outline-none border border-gray-100">
+                <svg class="w-4 h-4 transition-transform duration-300" :class="!sidebarOpen && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
         </aside>
 
         {{-- ── Main area ────────────────────────────── --}}
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <header class="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between flex-shrink-0">
-                <div>
-                    <h1 class="text-lg font-bold text-gray-800">@yield('page-title', 'Admin Panel')</h1>
-                    @hasSection('breadcrumb')
-                    <p class="text-xs text-gray-400 mt-0.5">@yield('breadcrumb')</p>
-                    @endif
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = !sidebarOpen" class="p-1.5 -ml-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-lg font-bold text-gray-800">@yield('page-title', 'Admin Panel')</h1>
+                        @hasSection('breadcrumb')
+                        <p class="text-xs text-gray-400 mt-0.5">@yield('breadcrumb')</p>
+                        @endif
+                    </div>
                 </div>
                 <div class="flex items-center gap-3">
                     <a href="{{ route('home') }}" target="_blank"

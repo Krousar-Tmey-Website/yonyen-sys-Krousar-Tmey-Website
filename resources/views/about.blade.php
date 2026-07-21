@@ -185,15 +185,140 @@
             <p class="text-gray-500 text-sm leading-relaxed mb-6">
                 Krousar Thmey constantly seeks to develop and maintain lasting relations with the Cambodian authorities. «&nbsp;Memorandums of understanding&nbsp;» are regularly renewed between Krousar Thmey and governing authorities:
             </p>
-            <div class="grid md:grid-cols-3 gap-4 mb-6">
-                @foreach([
-                    ['ministry'=>'Ministry of Education, Youth and Sport','prog'=>'Education for Deaf or Blind Children Program'],
-                    ['ministry'=>'Ministry of Social Affairs',            'prog'=>'Child Welfare Program'],
-                    ['ministry'=>'Ministry of Culture and Fine Arts',     'prog'=>'Cultural and Artistic Development Program'],
-                ] as $mou)
-                <div class="bg-[#2d6fa3]/5 border border-[#2d6fa3]/15 rounded-xl p-5">
-                    <p class="text-[#2d6fa3] font-bold text-sm mb-1">{{ $mou['ministry'] }}</p>
-                    <p class="text-gray-500 text-xs">{{ $mou['prog'] }}</p>
+            
+            {{-- MoU box --}}
+            <div class="bg-[#f8f9fc] rounded-2xl border border-gray-100 p-8 mb-10">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-xl bg-[#1d4e7a] flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-[#1d4e7a] font-semibold text-sm">Memorandums of Understanding</p>
+                </div>
+                <p class="text-gray-500 text-sm mb-5">
+                    &laquo;&nbsp;Memorandums of understanding&nbsp;&raquo; are regularly renewed between Krousar Thmey and governing authorities:
+                </p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3 text-gray-600 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a] mt-2 shrink-0"></span>
+                        <span>the Ministry of Education, Youth and Sport regarding the Education for Deaf or Blind Children Program</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-gray-600 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a] mt-2 shrink-0"></span>
+                        <span>the Ministry of Social Affairs regarding the Child Welfare Program</span>
+                    </li>
+                    <li class="flex items-start gap-3 text-gray-600 text-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a] mt-2 shrink-0"></span>
+                        <span>the Ministry of Culture and Fine Arts regarding the Cultural and Artistic Development Program</span>
+                    </li>
+                </ul>
+            </div>
+            
+            {{-- Royal support --}}
+            <p class="text-center text-gray-500 text-sm leading-relaxed max-w-2xl mx-auto mb-10 italic">
+                Whether for an inauguration or to show their support, H.M. the King, the Prime Minister and his wife, as well as members of the royal family, regularly visit Krousar Thmey&rsquo;s structures.
+            </p>
+            
+            {{-- Image + CTA row --}}
+            <div class="flex flex-col md:flex-row items-center gap-8 bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
+                <div class="shrink-0">
+                    <div class="w-28 h-28 rounded-2xl bg-[#f8f9fc] border border-gray-100 flex items-center justify-center overflow-hidden">
+                        <img src="{{ asset('images/partners/university.png') }}" alt="" class="w-20 h-20 object-contain">
+                    </div>
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                    <p class="text-gray-600 text-sm leading-relaxed mb-5">
+                        From 2020 onwards, Krousar Thmey will work collaboratively with the Ministry of Education, Youth and Sport on the Education for Deaf or Blind Children Program.
+                    </p>
+                    <a href="{{ $transferProgramItem ? route('program-page-items.show', $transferProgramItem->id) : route('programs.show', 'special-education') }}"
+                       class="inline-flex items-center gap-2 px-6 py-3 bg-[#2d6fa3] text-white font-semibold rounded-full shadow-md hover:bg-[#3a82bb] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                        Know More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ========================================================
+         THANKS BANNER / GET INVOLVED
+         ======================================================== --}}
+    <section class="py-16 md:py-20 bg-[#f8f9fc]/60" data-reveal>
+        <div class="max-w-5xl mx-auto px-5 md:px-8">
+            <h2 class="text-center text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-10">
+                Many thanks to all our partners for their support!
+            </h2>
+            
+            <div class="grid md:grid-cols-3 rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                {{-- Left image --}}
+                <div class="aspect-[4/3] md:aspect-auto overflow-hidden bg-gray-100">
+                    <img src="{{ asset('images/partners/partner_image1.webp') }}" alt=""
+                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                </div>
+                
+                {{-- Center CTA --}}
+                <div class="bg-white flex flex-col items-center justify-center text-center px-8 py-10 md:py-12">
+                    <div class="w-14 h-14 rounded-full bg-[#11568c]/10 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6 text-[#11568c]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                        </svg>
+                    </div>
+                    <p class="font-bold text-lg text-[#11568c] mb-4">Do you wish to get involved with Krousar Thmey?</p>
+                    <a href="{{ route('involved') }}#partner"
+                       class="inline-flex items-center gap-2 px-6 py-3 bg-[#11568c] text-white font-semibold rounded-full hover:bg-[#1d6fa3] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                        Learn More
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                {{-- Right image --}}
+                <div class="aspect-[4/3] md:aspect-auto overflow-hidden bg-gray-100">
+                    <img src="{{ asset('images/partners/partner_image2.webp') }}" alt=""
+                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ========================================================
+         TECHNICAL PARTNERS
+         ======================================================== --}}
+    <section class="py-16 md:py-20 relative">
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#8da83a]/30 to-transparent"></div>
+        
+        <div class="relative max-w-4xl mx-auto px-5 md:px-8" data-reveal>
+            {{-- Section header --}}
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <span class="w-8 h-px bg-[#8da83a]/40"></span>
+                <span class="w-2 h-2 rounded-full bg-[#8da83a]/60"></span>
+                <span class="w-8 h-px bg-[#8da83a]/40"></span>
+            </div>
+            
+            <h2 class="text-center text-3xl md:text-4xl font-extrabold tracking-tight text-[#0A5EA8] mb-3">Technical Partners</h2>
+            
+            <div class="flex items-center justify-center gap-2 mb-10">
+                <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
+                <span class="w-4 h-0.5 bg-[#8da83a] rounded-full"></span>
+                <span class="w-10 h-0.5 bg-[#0A5EA8]/30 rounded-full"></span>
+            </div>
+            
+            {{-- Logo grid --}}
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-5 mb-10">
+                @foreach($technicalPartners as $partner)
+                    @continue(!$partner->logo_url)
+                <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+                    @if($partner->website_url)
+                    <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="w-full h-full flex items-center justify-center" title="{{ $partner->description ?? $partner->name }}">
+                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                    </a>
+                    @else
+                    <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" title="{{ $partner->description ?? $partner->name }}" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                    @endif
                 </div>
                 @endforeach
             </div>

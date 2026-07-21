@@ -285,9 +285,9 @@ class NewsController extends Controller
 
         $path = $request->file('image')->store('news/content-images', 'public');
 
-        return response()->json([
-            'url' => Storage::url($path),
-        ]);
+        // Root-relative path (not Storage::url()/asset()) so this matches the
+        // dev server's actual host:port regardless of the configured APP_URL.
+        return response()->json(['url' => '/storage/' . $path]);
     }
 
     public function presetTagsFromResourcePages()
@@ -301,8 +301,6 @@ class NewsController extends Controller
         return response()->json($tags);
     }
 
-    /**
-     * Safely parse a JSON array input (e.g. links, tag_links).
      */
     private function jsonArrayInput(Request $request, string $key): array
     {

@@ -8,43 +8,23 @@
 
 <div class="space-y-6"
      x-data="{
-        showModal: false,
-        editing: false,
-        editingId: null,
-        form: {},
+        viewing: false,
+        viewPartner: {},
 
-        openAddModal() {
-            this.editing = false;
-            this.editingId = null;
-            this.form = {};
-            this.showModal = true;
-            this.$nextTick(() => {
-                const fileInput = document.getElementById('modal-logo-input');
-                if (fileInput) fileInput.value = '';
-                document.getElementById('modal-logo-placeholder')?.classList.remove('hidden');
-                document.getElementById('modal-logo-selected')?.classList.add('hidden');
-                document.getElementById('modal-logo-selected')?.classList.remove('flex');
-            });
+        openViewModal(partner) {
+            this.viewPartner = partner;
+            this.viewing = true;
         },
 
-        openEditModal(partner) {
-            this.editing = true;
-            this.editingId = partner.id;
-            this.form = partner;
-            this.showModal = true;
-            this.$nextTick(() => {
-                const fileInput = document.getElementById('modal-logo-input');
-                if (fileInput) fileInput.value = '';
-                document.getElementById('modal-logo-placeholder')?.classList.remove('hidden');
-                document.getElementById('modal-logo-selected')?.classList.add('hidden');
-                document.getElementById('modal-logo-selected')?.classList.remove('flex');
-            });
+        closeView() {
+            this.viewing = false;
         },
 
-        closeModal() {
-            this.showModal = false;
-            this.editing = false;
-            this.editingId = null;
+        formatDate(value) {
+            if (!value) return '—';
+            const d = new Date(value);
+            if (isNaN(d)) return '—';
+            return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
         },
      }">
 
@@ -121,7 +101,7 @@
                     </svg>
                     <input type="text" name="search" value="{{ $filters['search'] ?? '' }}"
                            x-model.debounce.400ms="search"
-                           placeholder="Search by name or country..."
+                           placeholder="Search by name..."
                            autocomplete="off"
                            class="w-full bg-gray-50 border border-gray-300 rounded-full pl-10 pr-4 py-2.5 text-sm text-gray-700 placeholder:text-gray-400 transition-all duration-150 hover:border-gray-400 focus:outline-none focus:bg-white focus:border-[#2d6fa3] focus:ring-4 focus:ring-[#2d6fa3]/15">
                 </div>
@@ -175,17 +155,15 @@
         </div>
     </div>
 
-    {{-- Modal Backdrop & Container --}}
+    {{-- View Partner Details Modal --}}
     <template x-teleport="body">
-        <div x-show="showModal"
+        <div x-show="viewing"
              x-cloak
              class="fixed inset-0 z-50 flex items-center justify-center p-4"
-             @keydown.escape.window="closeModal()">
-            {{-- Backdrop --}}
-            <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" @click="closeModal()"></div>
+             @keydown.escape.window="closeView()">
+            <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" @click="closeView()"></div>
 
-            {{-- Modal panel --}}
-            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto z-10"
+            <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-[700px] max-h-[90vh] overflow-y-auto z-10"
                  @click.stop
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 scale-95"
@@ -195,156 +173,119 @@
                  x-transition:leave-end="opacity-0 scale-95">
 
                 {{-- Header --}}
-                <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
-                    <h3 class="font-bold text-gray-800" x-text="editing ? 'Edit Partner' : 'Add New Partner'"></h3>
-                    <button @click="closeModal()" type="button"
-                            class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
+                <div class="sticky top-0 bg-white border-b border-gray-100 px-8 py-6 flex items-start justify-between rounded-t-3xl z-10">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900" x-text="viewPartner.name"></h3>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
+                                  :class="viewPartner.category === 'Financial Partners' ? 'bg-amber-50 text-amber-700' : 'bg-blue-50 text-[#2d6fa3]'"
+                                  x-text="viewPartner.subcategory || viewPartner.category"></span>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold"
+                                  :class="viewPartner.is_active ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-500'"
+                                  x-text="viewPartner.is_active ? 'Active' : 'Hidden'"></span>
+                        </div>
+                    </div>
+                    <button @click="closeView()" type="button"
+                            class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-150 flex-shrink-0">
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
                 </div>
 
-                {{-- Form (exact same layout as original inline form) --}}
-                <form :action="editing ? '{{ route('admin.partners.update', '__ID__') }}'.replace('__ID__', editingId) : '{{ route('admin.partners.store') }}'"
-                      method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
-                    @csrf
-                    <template x-if="editing">
-                        <input type="hidden" name="_method" value="PUT">
-                    </template>
-
-                    {{-- NAME --}}
-                    <div>
-                        <label for="modal-name" class="form-label">
-                            Partner Name <span class="text-red-400 font-normal">*</span>
-                        </label>
-                        <input type="text" id="modal-name" name="name" required autocomplete="off"
-                               :value="form.name ?? ''"
-                               class="form-input"
-                               placeholder="Enter partner name">
-                    </div>
-
-                    {{-- CATEGORY --}}
-                    <div>
-                        <label for="modal-category" class="form-label">
-                            Main Category <span class="text-red-400 font-normal">*</span>
-                        </label>
-                        <div class="relative">
-                            <select id="modal-category" name="category" x-model="form.category"
-                                    @change="if (form.category !== 'Financial Partners') form.subcategory = ''"
-                                    class="form-input appearance-none pr-9 cursor-pointer">
-                                <option value="">Select a category</option>
-                                @foreach(\App\Enums\PartnerCategory::cases() as $cat)
-                                    <option value="{{ $cat->value }}">{{ $cat->value }}</option>
-                                @endforeach
-                            </select>
-                            <svg class="w-4 h-4 text-gray-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
-                    </div>
-
-                    {{-- SUBCATEGORY — only for Financial Partners --}}
-                    <div x-show="form.category === 'Financial Partners'" x-cloak>
-                        <label for="modal-subcategory" class="form-label">
-                            Subcategory <span class="text-red-400 font-normal">*</span>
-                        </label>
-                        <div class="relative">
-                            <select id="modal-subcategory" name="subcategory" x-model="form.subcategory"
-                                    :disabled="form.category !== 'Financial Partners'"
-                                    class="form-input appearance-none pr-9 cursor-pointer">
-                                <option value="">Select a subcategory</option>
-                                @foreach(\App\Enums\PartnerSubcategory::cases() as $sub)
-                                    <option value="{{ $sub->value }}">{{ $sub->value }}</option>
-                                @endforeach
-                            </select>
-                            <svg class="w-4 h-4 text-gray-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        {{-- SORT ORDER --}}
-                        <div>
-                            <label for="modal-sort_order" class="form-label">Order</label>
-                            <input type="number" id="modal-sort_order" name="sort_order"
-                                   :value="form.sort_order ?? 0"
-                                   class="form-input">
-                        </div>
-
-                        {{-- ACTIVE (edit only) --}}
-                        <template x-if="editing">
-                            <div class="flex items-end pb-1.5">
-                                <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2.5 rounded-xl border border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-white transition-all duration-150 w-full">
-                                    <input type="hidden" name="is_active" value="0">
-                                    <input type="checkbox" name="is_active" value="1"
-                                           :checked="form.is_active"
-                                           class="w-4 h-4 accent-[#2d6fa3] cursor-pointer">
-                                    <span class="text-xs font-semibold text-gray-600">Active</span>
-                                </label>
+                <div class="p-8 space-y-6">
+                    {{-- Logo --}}
+                    <div class="flex items-center justify-center">
+                        <template x-if="viewPartner.logo_url">
+                            <div class="w-28 h-28 bg-[#F8FAFC] rounded-2xl border border-gray-100 flex items-center justify-center overflow-hidden">
+                                <img :src="viewPartner.logo_url" class="max-w-full max-h-full object-contain p-3">
+                            </div>
+                        </template>
+                        <template x-if="!viewPartner.logo_url">
+                            <div class="w-28 h-28 bg-[#F8FAFC] rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-1.5 text-center px-2">
+                                <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <p class="text-[11px] text-gray-400 font-medium leading-tight">No Logo Available</p>
                             </div>
                         </template>
                     </div>
 
-                    {{-- LOGO --}}
-                    <div>
-                        <label class="form-label">Partner Logo</label>
-                        <p class="text-xs text-gray-400 mb-2.5">PNG, JPG or SVG (max 2MB) — optional</p>
-
-                        <label for="modal-logo-input" id="modal-logo-dropzone"
-                               class="group flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer bg-gray-50 hover:bg-[#2d6fa3]/5 hover:border-[#2d6fa3] transition-all duration-200">
-                            <div class="flex flex-col items-center justify-center" id="modal-logo-placeholder">
-                                <div class="w-11 h-11 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center mb-2.5 group-hover:scale-110 group-hover:border-[#2d6fa3]/30 transition-all duration-200">
-                                    <svg class="w-5 h-5 text-gray-400 group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1117.9 9H18a4 4 0 010 8h-1m-4-4l-3-3m0 0l-3 3m3-3v12" />
-                                    </svg>
-                                </div>
-                                <p class="text-sm font-semibold text-[#2d6fa3]">Click to upload logo</p>
-                                <p class="text-xs text-gray-400 mt-0.5">or drag and drop — PNG, JPG, SVG</p>
+                    {{-- Info card --}}
+                    <div class="bg-[#F8FAFC] border border-gray-100 rounded-2xl divide-y divide-gray-100">
+                        <div class="flex items-center justify-between px-5 py-4">
+                            <div class="flex items-center gap-3 text-gray-500">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                </svg>
+                                <span class="text-sm font-medium">Main Category</span>
                             </div>
-                            <div class="hidden flex-col items-center justify-center gap-1.5" id="modal-logo-selected">
-                                <div class="w-11 h-11 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <span class="text-sm font-semibold text-gray-800" x-text="viewPartner.category"></span>
+                        </div>
+                        <template x-if="viewPartner.subcategory">
+                            <div class="flex items-center justify-between px-5 py-4">
+                                <div class="flex items-center gap-3 text-gray-500">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                     </svg>
+                                    <span class="text-sm font-medium">Subcategory</span>
                                 </div>
-                                <p class="text-sm font-medium text-gray-700 px-4 text-center truncate max-w-full" id="modal-logo-filename"></p>
-                                <p class="text-xs text-[#2d6fa3]">Click to choose a different file</p>
-                            </div>
-                            <input id="modal-logo-input" type="file" name="logo" accept="image/*" class="hidden"
-                                   onchange="
-                                       const f = this.files[0];
-                                       if (f) {
-                                           document.getElementById('modal-logo-placeholder').classList.add('hidden');
-                                           document.getElementById('modal-logo-selected').classList.remove('hidden');
-                                           document.getElementById('modal-logo-selected').classList.add('flex');
-                                           document.getElementById('modal-logo-filename').textContent = f.name;
-                                       }
-                                   ">
-                        </label>
-
-                        {{-- Current logo (edit mode) --}}
-                        <template x-if="editing && form.logo_url">
-                            <div class="mt-4 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl p-3">
-                                <div class="w-12 h-12 bg-white rounded-lg border border-gray-100 flex items-center justify-center overflow-hidden">
-                                    <img :src="form.logo_url" class="max-w-full max-h-full object-contain p-1">
-                                </div>
-                                <p class="text-xs text-gray-400">Current logo</p>
+                                <span class="text-sm font-semibold text-gray-800" x-text="viewPartner.subcategory"></span>
                             </div>
                         </template>
+                        <div class="flex items-center justify-between px-5 py-4">
+                            <div class="flex items-center gap-3 text-gray-500">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                                </svg>
+                                <span class="text-sm font-medium">Display Order</span>
+                            </div>
+                            <span class="text-sm font-semibold text-gray-800" x-text="viewPartner.sort_order ?? 0"></span>
+                        </div>
+                        <div class="flex items-center justify-between px-5 py-4">
+                            <div class="flex items-center gap-3 text-gray-500">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="text-sm font-medium">Status</span>
+                            </div>
+                            <span class="text-sm font-semibold" :class="viewPartner.is_active ? 'text-emerald-600' : 'text-gray-500'" x-text="viewPartner.is_active ? 'Active' : 'Hidden'"></span>
+                        </div>
+                        <div class="flex items-center justify-between px-5 py-4">
+                            <div class="flex items-center gap-3 text-gray-500">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span class="text-sm font-medium">Created At</span>
+                            </div>
+                            <span class="text-sm font-semibold text-gray-800" x-text="formatDate(viewPartner.created_at)"></span>
+                        </div>
+                        <div class="flex items-center justify-between px-5 py-4">
+                            <div class="flex items-center gap-3 text-gray-500">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="text-sm font-medium">Last Updated</span>
+                            </div>
+                            <span class="text-sm font-semibold text-gray-800" x-text="formatDate(viewPartner.updated_at)"></span>
+                        </div>
                     </div>
+                </div>
 
-
-                    <button type="submit" class="w-full btn-primary justify-center text-sm py-2.5"
-                            x-text="editing ? 'Update Partner' : 'Add Partner'">
+                {{-- Footer --}}
+                <div class="sticky bottom-0 bg-white border-t border-gray-100 px-8 py-5 flex items-center justify-between rounded-b-3xl">
+                    <button type="button" @click="closeView()"
+                            class="text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors duration-150">
+                        Close
                     </button>
-
-                    <button type="button" @click="closeModal()"
-                            class="block w-full text-center text-xs text-gray-400 hover:text-gray-600 transition-colors">
-                        Cancel
-                    </button>
-                </form>
+                    <a :href="'{{ route('admin.partners.edit', '__ID__') }}'.replace('__ID__', viewPartner.id)"
+                       class="h-[52px] w-[180px] inline-flex items-center justify-center gap-2 bg-[#2563EB] hover:bg-blue-700 active:bg-blue-800 text-white rounded-2xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Edit Partner
+                    </a>
+                </div>
             </div>
         </div>
     </template>

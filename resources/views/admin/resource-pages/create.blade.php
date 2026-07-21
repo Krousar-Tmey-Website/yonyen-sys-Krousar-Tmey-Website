@@ -4,9 +4,9 @@
     @vite(['resources/css/admin.css', 'resources/css/admin-news.css'])
 @endpush
 
-@section('title', 'New Resource Page')
-@section('page-title', 'Create Resource Page')
-@section('breadcrumb', 'News & Resources → Resource Pages → Create')
+@section('title', 'New Topic')
+@section('page-title', 'Create New Topic')
+@section('breadcrumb', 'Topics → Create')
 
 @section('content')
 
@@ -14,7 +14,7 @@
     <form action="{{ route('admin.resource-pages.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
 
-        {{-- Card Details --}}
+        {{-- Basic Info --}}
         <div class="form-card">
             <div class="card-header">
                 <div class="icon blue">
@@ -22,7 +22,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
                 </div>
-                <h3>Card Details</h3>
+                <h3>Basic Info</h3>
                 <span class="badge">Required *</span>
             </div>
             <div class="card-body">
@@ -32,18 +32,70 @@
                            class="form-control @error('title') error @enderror"
                            placeholder="e.g. Cambodia">
                     @error('title')<div class="form-error">{{ $message }}</div>@enderror
-                    <div class="form-helper">Used as the card heading and the URL slug.</div>
+                    <div class="form-helper">Also the label News tags match against to link here.</div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Description <span class="optional">(optional)</span></label>
-                    <textarea name="description" rows="3" class="form-control textarea"
-                              placeholder="Short summary shown on the card...">{{ old('description') }}</textarea>
-                    @error('description')<div class="form-error">{{ $message }}</div>@enderror
+                    <label class="form-label">Slug <span class="optional">(optional)</span></label>
+                    <input type="text" name="slug" value="{{ old('slug') }}"
+                           class="form-control @error('slug') error @enderror"
+                           placeholder="Auto-generated from title if left blank">
+                    @error('slug')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Used in the URL: /topics/your-slug</div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
-                    <label class="form-label">Card Image <span class="optional">(optional)</span></label>
+                    <label class="form-label">Short Description <span class="optional">(optional)</span></label>
+                    <textarea name="description" rows="2" class="form-control textarea @error('description') error @enderror"
+                              placeholder="Shown on the Topics listing card...">{{ old('description') }}</textarea>
+                    @error('description')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+        </div>
+
+        {{-- Detail Page Content --}}
+        <div class="form-card">
+            <div class="card-header">
+                <div class="icon purple">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
+                    </svg>
+                </div>
+                <h3>Detail Page Content</h3>
+                <span class="badge">Optional</span>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Header Text <span class="optional">(optional)</span></label>
+                    <input type="text" name="header_text" value="{{ old('header_text') }}"
+                           class="form-control @error('header_text') error @enderror"
+                           placeholder="Overrides the title as the page heading">
+                    @error('header_text')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+
+                <div class="form-group form-group--no-margin">
+                    <label class="form-label">Full Description <span class="optional">(optional)</span></label>
+                    <textarea name="detail_description" rows="6" class="form-control textarea @error('detail_description') error @enderror"
+                              placeholder="The main body text shown on the topic's detail page...">{{ old('detail_description') }}</textarea>
+                    @error('detail_description')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+        </div>
+
+        {{-- Images --}}
+        <div class="form-card">
+            <div class="card-header">
+                <div class="icon green">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <h3>Images</h3>
+                <span class="badge">Optional</span>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Card Image <span class="optional">(shown on the Topics listing)</span></label>
                     <div class="upload-area" onclick="document.getElementById('imageInput').click()">
                         <input type="file" name="image" id="imageInput" accept="image/*" class="hidden">
                         <div id="imagePlaceholder">
@@ -57,38 +109,9 @@
                     </div>
                     @error('image')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
-            </div>
-        </div>
-
-        {{-- View Detail Page --}}
-        <div class="form-card">
-            <div class="card-header">
-                <div class="icon purple">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                    </svg>
-                </div>
-                <h3>"View Detail" Page</h3>
-                <span class="badge">Optional</span>
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label class="form-label">Header Text <span class="optional">(optional)</span></label>
-                    <input type="text" name="header_text" value="{{ old('header_text') }}"
-                           class="form-control" placeholder="Heading shown at the top of the detail page">
-                    @error('header_text')<div class="form-error">{{ $message }}</div>@enderror
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Detail Description <span class="optional">(optional)</span></label>
-                    <textarea name="detail_description" rows="4" class="form-control textarea"
-                              placeholder="Full description shown on the detail page...">{{ old('detail_description') }}</textarea>
-                    @error('detail_description')<div class="form-error">{{ $message }}</div>@enderror
-                </div>
 
                 <div class="form-group form-group--no-margin">
-                    <label class="form-label">Detail Picture <span class="optional">(optional)</span></label>
+                    <label class="form-label">Detail Page Hero Image <span class="optional">(shown on the topic's own page)</span></label>
                     <div class="upload-area" onclick="document.getElementById('detailImageInput').click()">
                         <input type="file" name="detail_image" id="detailImageInput" accept="image/*" class="hidden">
                         <div id="detailImagePlaceholder">
@@ -96,7 +119,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                             <div class="upload-title">Click to upload</div>
-                            <div class="upload-subtitle">Max 2MB. JPG, PNG, or WebP</div>
+                            <div class="upload-subtitle">Max 4MB. JPG, PNG, or WebP</div>
                         </div>
                         <div id="detailImagePreview" class="hidden mt-3"></div>
                     </div>
@@ -105,72 +128,68 @@
             </div>
         </div>
 
-        {{-- Feature Items (3 photos) --}}
+        {{-- Feature Items --}}
         <div class="form-card">
             <div class="card-header">
                 <div class="icon orange">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/>
                     </svg>
                 </div>
                 <h3>Feature Items</h3>
-                <span class="badge">Optional — up to 3</span>
+                <span class="badge">Optional, up to 3</span>
             </div>
-            <div class="card-body space-y-6">
-                @for ($i = 1; $i <= 3; $i++)
-                <div class="{{ $i < 3 ? 'pb-6 border-b border-gray-100' : '' }}">
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Item {{ $i }}</p>
-                    <div class="form-group">
-                        <label class="form-label">Title</label>
-                        <input type="text" name="item_{{ $i }}_title" value="{{ old('item_'.$i.'_title') }}"
-                               class="form-control" placeholder="Item {{ $i }} title">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Description</label>
-                        <textarea name="item_{{ $i }}_description" rows="2" class="form-control textarea"
-                                  placeholder="Item {{ $i }} description...">{{ old('item_'.$i.'_description') }}</textarea>
-                    </div>
-                    <div class="form-group form-group--no-margin">
-                        <label class="form-label">Image</label>
-                        <div class="upload-area" onclick="document.getElementById('item{{ $i }}ImageInput').click()">
-                            <input type="file" name="item_{{ $i }}_image" id="item{{ $i }}ImageInput" accept="image/*" class="hidden">
-                            <div id="item{{ $i }}ImagePlaceholder">
-                                <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                                <div class="upload-title">Click to upload</div>
-                                <div class="upload-subtitle">Max 2MB</div>
-                            </div>
-                            <div id="item{{ $i }}ImagePreview" class="hidden mt-3"></div>
+            <div class="card-body">
+                @for ($i = 0; $i < 3; $i++)
+                <div class="form-group {{ $i < 2 ? '' : 'form-group--no-margin' }}" style="padding-bottom: 1rem; {{ $i < 2 ? 'border-bottom: 1px solid #f1f5f9; margin-bottom: 1rem;' : '' }}">
+                    <label class="form-label">Item {{ $i + 1 }}</label>
+                    <input type="text" name="items[{{ $i }}][title]" value="{{ old("items.$i.title") }}"
+                           class="form-control mb-2" placeholder="Item title">
+                    <textarea name="items[{{ $i }}][description]" rows="2" class="form-control textarea mb-2"
+                              placeholder="Item description">{{ old("items.$i.description") }}</textarea>
+                    <div class="upload-area" onclick="document.getElementById('itemImageInput{{ $i }}').click()">
+                        <input type="file" name="items[{{ $i }}][image]" id="itemImageInput{{ $i }}" accept="image/*" class="hidden">
+                        <div id="itemImagePlaceholder{{ $i }}">
+                            <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <div class="upload-title">Click to upload image</div>
                         </div>
+                        <div id="itemImagePreview{{ $i }}" class="hidden mt-3"></div>
                     </div>
+                    @error("items.$i.title")<div class="form-error">{{ $message }}</div>@enderror
+                    @error("items.$i.description")<div class="form-error">{{ $message }}</div>@enderror
+                    @error("items.$i.image")<div class="form-error">{{ $message }}</div>@enderror
                 </div>
                 @endfor
             </div>
         </div>
 
-        {{-- Publishing --}}
+        {{-- Settings --}}
         <div class="form-card">
             <div class="card-header">
-                <div class="icon green">
+                <div class="icon blue">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                     </svg>
                 </div>
-                <h3>Publishing</h3>
+                <h3>Settings</h3>
             </div>
             <div class="card-body">
                 <div class="form-group">
                     <label class="form-label">Sort Order</label>
-                    <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}" class="form-control" style="max-width:140px">
-                    <div class="form-helper">Lower numbers appear first in the list.</div>
+                    <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}"
+                           class="form-control @error('sort_order') error @enderror" placeholder="0">
+                    @error('sort_order')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Lower numbers appear first on the Topics listing.</div>
                 </div>
+
                 <div class="form-group form-group--no-margin">
                     <div class="publish-option">
                         <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}>
                         <div>
                             <div class="label">Active</div>
-                            <div class="description">Uncheck to hide this page from visitors</div>
+                            <div class="description">Uncheck to hide from the public site and the tag quick-add list</div>
                         </div>
                     </div>
                 </div>
@@ -183,7 +202,7 @@
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                 </svg>
-                Save Page
+                Save Topic
             </button>
             <a href="{{ route('admin.resource-pages.index') }}" class="btn-cancel">Cancel</a>
         </div>
@@ -191,39 +210,40 @@
 </div>
 
 <script>
-function setupImagePreview(inputId, placeholderId, previewId) {
+function initImagePreview(inputId, placeholderId, previewId) {
     const input = document.getElementById(inputId);
     if (!input) return;
     input.addEventListener('change', function(e) {
         const preview = document.getElementById(previewId);
         const placeholder = document.getElementById(placeholderId);
         const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-            placeholder.classList.add('hidden');
-            preview.classList.remove('hidden');
-            preview.innerHTML = `
-                <div class="image-preview-wrapper">
-                    <img src="${ev.target.result}" alt="Preview">
-                    <button type="button" class="remove-btn"
-                            onclick="document.getElementById('${inputId}').value=''; document.getElementById('${previewId}').innerHTML=''; document.getElementById('${previewId}').classList.add('hidden'); document.getElementById('${placeholderId}').classList.remove('hidden');">
-                        ×
-                    </button>
-                    <div class="file-info">${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
-                </div>
-            `;
-        };
-        reader.readAsDataURL(file);
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                placeholder.classList.add('hidden');
+                preview.classList.remove('hidden');
+                preview.innerHTML = `
+                    <div class="image-preview-wrapper">
+                        <img src="${e.target.result}" alt="Preview">
+                        <button type="button" class="remove-btn"
+                                onclick="document.getElementById('${inputId}').value=''; document.getElementById('${previewId}').innerHTML=''; document.getElementById('${previewId}').classList.add('hidden'); document.getElementById('${placeholderId}').classList.remove('hidden');">
+                            ×
+                        </button>
+                        <div class="file-info">${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
+                    </div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
     });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    setupImagePreview('imageInput', 'imagePlaceholder', 'imagePreview');
-    setupImagePreview('detailImageInput', 'detailImagePlaceholder', 'detailImagePreview');
-    setupImagePreview('item1ImageInput', 'item1ImagePlaceholder', 'item1ImagePreview');
-    setupImagePreview('item2ImageInput', 'item2ImagePlaceholder', 'item2ImagePreview');
-    setupImagePreview('item3ImageInput', 'item3ImagePlaceholder', 'item3ImagePreview');
+    initImagePreview('imageInput', 'imagePlaceholder', 'imagePreview');
+    initImagePreview('detailImageInput', 'detailImagePlaceholder', 'detailImagePreview');
+    for (let i = 0; i < 3; i++) {
+        initImagePreview('itemImageInput' + i, 'itemImagePlaceholder' + i, 'itemImagePreview' + i);
+    }
 });
 </script>
 

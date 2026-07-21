@@ -13,6 +13,8 @@ class ResourcePageController extends Controller
     public function index()
     {
         $resourcePages = ResourcePage::orderBy('sort_order')->orderBy('title')->get();
+
+
         return view('admin.resource-pages.index', compact('resourcePages'));
     }
 
@@ -23,8 +25,12 @@ class ResourcePageController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->validateRequest($request);
-        $data['slug'] = $this->uniqueSlug($data['title']);
+        $data = $this->validateData($request);
+
+        $baseSlug = Str::slug($request->filled('slug') ? $request->input('slug') : $data['title']);
+        $data['slug'] = $this->uniqueSlug($baseSlug);
+        $data['is_active'] = $request->boolean('is_active', true);
+        $data['sort_order'] = $data['sort_order'] ?? 0;
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('resource-pages', 'public');
@@ -33,32 +39,43 @@ class ResourcePageController extends Controller
             $data['detail_image'] = $request->file('detail_image')->store('resource-pages', 'public');
         }
 
-        $data['items'] = $this->buildItems($request, []);
-        $data['is_active'] = $request->boolean('is_active', true);
+        $data['items'] = $this->buildItems($request);
 
         ResourcePage::create($data);
 
-        return redirect()->route('admin.resource-pages.index')->with('success', 'Resource page created.');
+        return redirect()->route('admin.resource-pages.index')
+            ->with('success', 'Topic created successfully.');
     }
 
     public function edit(ResourcePage $resourcePage)
     {
-        return view('admin.resource-pages.edit', ['page' => $resourcePage]);
+        return view('admin.resource-pages.edit', ['resourcePage' => $resourcePage]);
     }
 
     public function update(Request $request, ResourcePage $resourcePage)
     {
-        $data = $this->validateRequest($request);
+        $data = $this->validateData($request, $resourcePage->id);
 
-        if ($resourcePage->title !== $data['title']) {
-            $data['slug'] = $this->uniqueSlug($data['title'], $resourcePage->id);
+        if ($request->filled('slug') || $resourcePage->title !== $data['title']) {
+            $baseSlug = Str::slug($request->filled('slug') ? $request->input('slug') : $data['title']);
+            $data['slug'] = $this->uniqueSlug($baseSlug, $resourcePage->id);
+        } else {
+            unset($data['slug']);
         }
 
+        $data['is_active'] = $request->boolean('is_active', true);
         if ($request->hasFile('image')) {
             if ($resourcePage->image) {
                 Storage::disk('public')->delete($resourcePage->image);
             }
             $data['image'] = $request->file('image')->store('resource-pages', 'public');
+        } elseif ($request->boolean('remove_image')) {
+            if ($resourcePage->image) {
+                Storage::disk('public')->delete($resourcePage->image);
+            }
+            $data['image'] = null;
+        } else {
+            unset($data['image']);
         }
 
         if ($request->hasFile('detail_image')) {
@@ -66,14 +83,21 @@ class ResourcePageController extends Controller
                 Storage::disk('public')->delete($resourcePage->detail_image);
             }
             $data['detail_image'] = $request->file('detail_image')->store('resource-pages', 'public');
+        } elseif ($request->boolean('remove_detail_image')) {
+            if ($resourcePage->detail_image) {
+                Storage::disk('public')->delete($resourcePage->detail_image);
+            }
+            $data['detail_image'] = null;
+        } else {
+            unset($data['detail_image']);
         }
 
-        $data['items'] = $this->buildItems($request, $resourcePage->items);
-        $data['is_active'] = $request->boolean('is_active');
+        $data['items'] = $this->buildItems($request, $resourcePage);
 
         $resourcePage->update($data);
 
-        return redirect()->route('admin.resource-pages.index')->with('success', 'Resource page updated.');
+        return redirect()->route('admin.resource-pages.index')
+            ->with('success', 'Topic updated successfully.');
     }
 
     public function destroy(ResourcePage $resourcePage)
@@ -84,7 +108,7 @@ class ResourcePageController extends Controller
         if ($resourcePage->detail_image) {
             Storage::disk('public')->delete($resourcePage->detail_image);
         }
-        foreach ($resourcePage->items as $item) {
+        foreach ($resourcePage->items ?? [] as $item) {
             if (!empty($item['image'])) {
                 Storage::disk('public')->delete($item['image']);
             }
@@ -92,72 +116,67 @@ class ResourcePageController extends Controller
 
         $resourcePage->delete();
 
-        return redirect()->route('admin.resource-pages.index')->with('success', 'Resource page deleted.');
+        return redirect()->route('admin.resource-pages.index')
+            ->with('success', 'Topic deleted.');
     }
 
-    private function validateRequest(Request $request): array
+    private function validateData(Request $request, ?int $ignoreId = null): array
     {
         return $request->validate([
             'title'              => ['required', 'string', 'max:255'],
-            'description'        => ['nullable', 'string'],
-            'image'              => ['nullable', 'image', 'max:2048'],
+            'slug'               => ['nullable', 'string', 'max:255'],
+            'description'        => ['nullable', 'string', 'max:1000'],
             'header_text'        => ['nullable', 'string', 'max:255'],
-            'detail_image'       => ['nullable', 'image', 'max:2048'],
             'detail_description' => ['nullable', 'string'],
+            'image'              => ['nullable', 'image', 'max:2048'],
+            'detail_image'       => ['nullable', 'image', 'max:4096'],
             'sort_order'         => ['nullable', 'integer'],
-            'item_1_title'       => ['nullable', 'string', 'max:255'],
-            'item_1_description' => ['nullable', 'string'],
-            'item_1_image'       => ['nullable', 'image', 'max:2048'],
-            'item_2_title'       => ['nullable', 'string', 'max:255'],
-            'item_2_description' => ['nullable', 'string'],
-            'item_2_image'       => ['nullable', 'image', 'max:2048'],
-            'item_3_title'       => ['nullable', 'string', 'max:255'],
-            'item_3_description' => ['nullable', 'string'],
-            'item_3_image'       => ['nullable', 'image', 'max:2048'],
+            'is_active'          => ['nullable', 'boolean'],
+            'items'              => ['nullable', 'array', 'max:3'],
+            'items.*.title'      => ['nullable', 'string', 'max:255'],
+            'items.*.description' => ['nullable', 'string', 'max:500'],
+            'items.*.image'      => ['nullable', 'image', 'max:2048'],
         ]);
     }
 
-    /**
-     * Build the 3-slot items array from the individual item_N_* form fields,
-     * uploading any new images and falling back to each existing item's stored
-     * image when no replacement file was submitted.
-     */
-    private function buildItems(Request $request, array $existingItems): array
+    private function buildItems(Request $request, ?ResourcePage $resourcePage = null): array
     {
+        $existing = $resourcePage->items ?? [];
         $items = [];
 
-        for ($i = 1; $i <= 3; $i++) {
-            $title = $request->input("item_{$i}_title");
-            $description = $request->input("item_{$i}_description");
-            $existingImage = $existingItems[$i - 1]['image'] ?? null;
+        foreach (range(0, 2) as $i) {
+            $title = trim((string) $request->input("items.$i.title"));
+            $description = trim((string) $request->input("items.$i.description"));
+            $imagePath = $existing[$i]['image'] ?? null;
 
-            $image = $existingImage;
-            if ($request->hasFile("item_{$i}_image")) {
-                if ($existingImage) {
-                    Storage::disk('public')->delete($existingImage);
+            if ($request->hasFile("items.$i.image")) {
+                if ($imagePath) {
+                    Storage::disk('public')->delete($imagePath);
                 }
-                $image = $request->file("item_{$i}_image")->store('resource-pages/items', 'public');
+                $imagePath = $request->file("items.$i.image")->store('resource-pages/items', 'public');
+            } elseif ($request->boolean("remove_item_image.$i")) {
+                if ($imagePath) {
+                    Storage::disk('public')->delete($imagePath);
+                }
+                $imagePath = null;
             }
 
-            if ($title || $description || $image) {
-                $items[] = ['title' => $title, 'description' => $description, 'image' => $image];
+            if ($title === '' && $description === '' && !$imagePath) {
+                continue;
             }
+
+            $items[] = ['title' => $title, 'description' => $description, 'image' => $imagePath];
         }
 
         return $items;
     }
 
-    private function uniqueSlug(string $title, ?int $ignoreId = null): string
+    private function uniqueSlug(string $baseSlug, ?int $ignoreId = null): string
     {
-        $baseSlug = Str::slug($title);
         $slug = $baseSlug;
         $counter = 1;
 
-        while (
-            ResourcePage::where('slug', $slug)
-                ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
-                ->exists()
-        ) {
+        while (ResourcePage::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
             $slug = $baseSlug . '-' . $counter;
             $counter++;
         }

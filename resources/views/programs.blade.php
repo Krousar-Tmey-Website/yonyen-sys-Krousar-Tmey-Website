@@ -160,7 +160,7 @@
                     <div class="lg:col-span-6 {{ $isEven ? 'lg:order-1' : '' }} relative hidden md:block group" data-reveal="{{ $isEven ? 'left' : 'right' }}">
                         <div class="absolute inset-0 bg-[#1a3c6e]/5 rounded-3xl transform rotate-3 scale-105 group-hover:rotate-6 transition-transform duration-700"></div>
                         <div class="relative w-full h-[350px] rounded-3xl overflow-hidden shadow-xl shadow-[#1a3c6e]/20 border-[6px] border-white z-10">
-                            <img src="{{ $program->image_url }}" alt="{{ $program->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <img src="{{ $program->slug === 'education-for-deaf-or-blind-children' ? 'https://www.krousar-thmey.org/wp-content/uploads/2023/03/Transfer.webp' : $program->image_url }}" alt="{{ $program->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         </div>
                     </div>
                 </div>

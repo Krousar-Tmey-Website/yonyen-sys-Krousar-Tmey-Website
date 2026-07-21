@@ -27,11 +27,8 @@
             @if(!empty($article->tag_links))
             <span class="text-gray-300 mx-1.5">|</span>
             @foreach($article->tag_links as $tag)
-                @if(!empty($tag['url']))
-                <a href="{{ $tag['url'] }}" class="text-[#8da83a] hover:underline">{{ $tag['label'] }}</a>
-                @else
-                <span class="text-[#8da83a]">{{ $tag['label'] }}</span>
-                @endif
+                @php $topicPage = $topicPagesByTitle[strtolower($tag['label'])] ?? null; @endphp
+                <a href="{{ $topicPage ? route('resource-pages.show', $topicPage->slug) : (!empty($tag['url']) ? $tag['url'] : route('news', ['tag' => $tag['label']])) }}" class="text-[#8da83a] hover:underline">{{ $tag['label'] }}</a>
                 @if(!$loop->last)<span class="text-gray-400">,</span>@endif
             @endforeach
             @endif
