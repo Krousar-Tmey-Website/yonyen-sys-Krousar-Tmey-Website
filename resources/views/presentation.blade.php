@@ -319,9 +319,9 @@
 
                         {{-- Supporting text --}}
                         <div class="flex-1">
-                            <p class="text-sm font-bold text-gray-900 leading-snug line-clamp-2 mb-2">{{ $stat->label }}</p>
+                            <p class="text-sm font-bold text-gray-900 leading-snug mb-2">{{ $stat->label }}</p>
                             @if($stat->description)
-                            <p class="text-xs text-gray-500 leading-relaxed line-clamp-2">{{ $stat->description }}</p>
+                            <p class="text-xs text-gray-500 leading-relaxed">{{ $stat->description }}</p>
                             @endif
                         </div>
                     </div>
