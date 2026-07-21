@@ -21,7 +21,7 @@ composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
 # 4. Install/Update Node Dependencies & Build Assets
 echo "=> Building frontend assets..."
-npm ci
+npm install
 npm run build
 
 # 5. Clear all old caches
