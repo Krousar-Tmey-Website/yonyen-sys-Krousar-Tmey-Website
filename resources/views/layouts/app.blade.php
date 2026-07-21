@@ -39,17 +39,28 @@ function getCurrentLang() {
     // Fall back to Laravel session locale
     return '{{ session("locale", "en") }}';
 }
-function switchLang(lang) {
+function setGTCookie(value) {
     let domain = window.location.hostname;
+    document.cookie = 'googtrans=' + value + '; path=/';
+    document.cookie = 'googtrans=' + value + '; path=/; domain=' + domain;
+    document.cookie = 'googtrans=' + value + '; path=/; domain=.' + domain;
+}
+
+function clearGTCookie() {
+    let domain = window.location.hostname;
+    document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    document.cookie = 'googtrans=; path=/; domain=' + domain + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    document.cookie = 'googtrans=; path=/; domain=.' + domain + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+}
+
+function switchLang(lang) {
     if (lang === 'km' || lang === 'fr') {
-        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + domain;
-        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + domain;
-        document.cookie = 'googtrans=/en/' + lang + '; path=/';
+        setGTCookie('/en/' + lang);
     } else {
-        document.cookie = 'googtrans=; path=/; domain=' + domain + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-        document.cookie = 'googtrans=; path=/; domain=.' + domain + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-        document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        clearGTCookie();
     }
+    
+    // Force a hard reload if redirecting doesn't apply the cookie instantly
     window.location.href = '{{ url("/lang") }}/' + lang;
 }
 </script>
@@ -307,7 +318,7 @@ function googleTranslateElementInit() {
                 {{-- CTA + Mobile toggle --}}
                 <div class="flex items-center gap-4">
                     {{-- Translate Dropdown --}}
-                    <div class="hidden lg:block border-r border-gray-200 pr-4" x-data="{ open: false, lang: getCurrentLang() }">
+                    <div class="hidden lg:block border-r border-gray-200 pr-4 notranslate" x-data="{ open: false, lang: getCurrentLang() }">
                         <div class="relative">
                             <button @click="open = !open" @click.away="open = false" class="flex items-center gap-2 text-gray-700 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-3 rounded-lg hover:bg-gray-50 border border-gray-100 shadow-sm bg-white">
                                 <img :src="lang === 'km' ? 'https://flagcdn.com/w20/kh.png' : (lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png')" class="w-4 h-auto rounded-sm" alt="Flag">
@@ -373,7 +384,7 @@ function googleTranslateElementInit() {
                 <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg {{ $isResources ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Resources') }}</a>
                 <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg {{ $isContact ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Contact') }}</a>
                 <div class="pt-3 pb-1 border-t border-gray-100 mt-2">
-                    <div class="flex items-center gap-2 mb-4" x-data="{ lang: getCurrentLang() }">
+                    <div class="flex items-center gap-2 mb-4 notranslate" x-data="{ lang: getCurrentLang() }">
                         <button @click="switchLang('en')" :class="lang === 'en' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
                             <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt="English"> EN
                         </button>
