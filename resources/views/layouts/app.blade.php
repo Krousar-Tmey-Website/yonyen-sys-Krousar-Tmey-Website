@@ -276,7 +276,30 @@ function googleTranslateElementInit() {
                     </div>
 
                     <a href="{{ route('news') }}" class="nav-link {{ $isNews ? 'active' : '' }} px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('News') }}</a>
-                    <a href="{{ route('resources') }}" class="nav-link {{ $isResources ? 'active' : '' }} px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Resources') }}</a>
+                    
+                    {{-- Resources --}}
+                    <div class="relative" x-data="{ open: false }"
+                         @mouseenter="open = true" @mouseleave="open = false">
+                        <a href="{{ route('resources') }}" class="nav-link {{ $isResources ? 'active' : '' }} flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                            {{ __('Resources') }}
+                            <svg class="w-4 h-4 {{ $isResources ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </a>
+                        <div x-show="open"
+                            x-transition:enter="transition ease-out duration-150"
+                            x-transition:enter-start="opacity-0 translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-100"
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 translate-y-1"
+                            class="absolute top-full left-0 pt-2 w-52 z-50">
+                            <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-1">
+                                <a href="{{ route('resources') }}#annual-reports" @click="open = false" class="dropdown-item rounded-t-xl">{{ __('Annual Reports') }}</a>
+                                <a href="{{ route('resources') }}#media-resources" @click="open = false" class="dropdown-item">{{ __('Media Resources') }}</a>
+                                <a href="{{ route('resources') }}#words-and-pictures-application" @click="open = false" class="dropdown-item rounded-b-xl">{{ __('Words and Pictures application') }}</a>
+                            </div>
+                        </div>
+                    </div>
                     <a href="{{ route('contact') }}" class="nav-link {{ $isContact ? 'active' : '' }} px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Contact') }}</a>
                 </div>
 

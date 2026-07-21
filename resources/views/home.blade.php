@@ -436,8 +436,8 @@
         <div class="text-center mb-14">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">{{ $settings['programs_badge'] ?? 'WHAT WE DO' }}</span>
             <h2 class="section-title mt-3 mx-auto">{{ $settings['programs_heading'] ?? 'Two Programs, One Mission' }}</h2>
+            <p class="section-subtitle mx-auto text-center">{{ $settings['programs_subtitle'] ?? 'Operating across 15 Cambodian provinces, our programs address the most pressing needs of vulnerable children.' }}</p>
         </div>
-        <p class="section-subtitle mx-auto text-center">{{ $settings['programs_subtitle'] ?? 'Operating across 15 Cambodian provinces, our programs address the most pressing needs of vulnerable children.' }}</p>
 
         <div class="grid lg:grid-cols-3 gap-8">
             @foreach($programs as $program)

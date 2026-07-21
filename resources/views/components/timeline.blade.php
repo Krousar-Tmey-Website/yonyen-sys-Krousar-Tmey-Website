@@ -37,15 +37,16 @@
                  predictable rhythum row-to-row regardless of how tall any one caption gets. --}}
             <li class="relative pl-12 md:pl-0 scroll-mt-28"
                 @if($isFirstForYear) id="year-{{ $year }}" data-year-anchor="{{ $year }}" @endif>
-                {{-- Marker dot on the center rail: one circle per unique year, not per card —
-                     shown only the first time a year appears, even if that year has a second
-                     card from left_text/right_text or a duplicate year row. Pulled in to -8
-                     (not -10) so a left/right pair of DIFFERENT years sits tangent to each
-                     other beside the rail instead of fully overlapping into one blob. --}}
+                {{-- Mobile Marker Dot --}}
                 @if($isFirstForYear)
-                <span class="absolute z-10 w-4 h-4 rounded-full bg-[#1d4e7a] border-4 border-white shadow
-                             top-6 left-5 -translate-x-1/2
-                             {{ $isLeft ? 'md:-right-8 md:left-auto md:translate-x-0' : 'md:-left-8 md:translate-x-0' }}"></span>
+                <div class="md:hidden absolute top-6 left-5 -translate-x-1/2 z-10">
+                    <span class="block w-4 h-4 rounded-full bg-[#1d4e7a] border-4 border-white shadow"></span>
+                </div>
+                {{-- Desktop Marker Dot --}}
+                <div class="hidden md:block absolute top-6 z-10" 
+                     style="left: {{ $isLeft ? 'calc(100% + 2rem)' : '-2rem' }}; transform: translateX(-50%);">
+                    <span class="block w-4 h-4 rounded-full bg-[#1d4e7a] border-4 border-white shadow"></span>
+                </div>
                 @endif
 
                 <x-timeline-item :item="$item" :is-left="$isLeft" :index="$index" />
