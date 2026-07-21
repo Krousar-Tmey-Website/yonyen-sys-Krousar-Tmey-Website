@@ -150,6 +150,32 @@ class ResourcePageSeeder extends Seeder
     'sort_order' => 8,
     'is_active' => true,
   ),
+  9 => 
+  array (
+    'title' => 'Media Resources',
+    'slug' => 'media-resources',
+    'description' => 'Find our press kits, official media resources, and brand guidelines here.',
+    'image' => NULL,
+    'header_text' => NULL,
+    'detail_image' => NULL,
+    'detail_description' => NULL,
+    'items' => array(),
+    'sort_order' => 9,
+    'is_active' => true,
+  ),
+  10 => 
+  array (
+    'title' => 'Words and Pictures application',
+    'slug' => 'words-and-pictures-application',
+    'description' => 'Information and downloads for the Words and Pictures application.',
+    'image' => NULL,
+    'header_text' => NULL,
+    'detail_image' => NULL,
+    'detail_description' => NULL,
+    'items' => array(),
+    'sort_order' => 10,
+    'is_active' => true,
+  ),
 );
 
         foreach ($pages as $page) {

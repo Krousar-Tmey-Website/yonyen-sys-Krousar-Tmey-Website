@@ -23,7 +23,7 @@
 
 
 {{-- Annual Reports --}}
-<section class="py-20 bg-white">
+<section id="annual-reports" class="py-20 bg-white scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
         <div class="mb-14">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Accountability</span>
@@ -66,7 +66,7 @@
 </section>
 
 {{-- Media --}}
-<section class="py-20 bg-[#f8f9fc]">
+<section id="media-resources" class="py-20 bg-[#f8f9fc] scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
         <div class="mb-14">
             <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Press</span>
@@ -90,6 +90,21 @@
                 </a>
             </div>
             @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- Words and Pictures application --}}
+<section id="words-and-pictures-application" class="py-20 bg-white scroll-mt-24">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-14">
+            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Application</span>
+            <h2 class="section-title mt-3 mb-3">Words and Pictures</h2>
+            <p class="text-gray-500">Information and downloads for the Words and Pictures application.</p>
+        </div>
+
+        <div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-8 text-center text-gray-500">
+            More content coming soon.
         </div>
     </div>
 </section>
