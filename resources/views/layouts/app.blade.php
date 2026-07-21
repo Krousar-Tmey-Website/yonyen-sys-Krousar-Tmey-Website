@@ -45,17 +45,18 @@ function switchLang(lang) {
         document.cookie = 'googtrans=; path=/about; expires=Thu, 01 Jan 1970 00:00:00 UTC';
         document.cookie = 'googtrans=; path=/programs; expires=Thu, 01 Jan 1970 00:00:00 UTC';
     } else {
-        // For other languages, try native Google Translate dropdown first
+        // Always manually set the cookies to guarantee the change persists across the reload
+        // (Google Translate sometimes ignores synthetic 'change' events on hidden dropdowns)
+        let domain = window.location.hostname;
+        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + domain;
+        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + domain;
+        document.cookie = 'googtrans=/en/' + lang + '; path=/';
+
+        // Also try native Google Translate dropdown for instantaneous switch before reload
         let gtCombo = document.querySelector('.goog-te-combo');
         if (gtCombo) {
             gtCombo.value = lang;
             gtCombo.dispatchEvent(new Event('change'));
-        } else {
-            // Fallback: manually set cookies if widget isn't ready
-            let domain = window.location.hostname;
-            document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + domain;
-            document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=.' + domain;
-            document.cookie = 'googtrans=/en/' + lang + '; path=/';
         }
     }
 
@@ -88,12 +89,13 @@ body { margin-top: 0 !important; top: 0 !important; position: static !important;
 .goog-tooltip:hover { display: none !important; }
 .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
 #google_translate_element { 
-    position: fixed !important;
-    bottom: -100px !important;
-    left: 0 !important;
-    opacity: 0.001 !important;
+    position: absolute !important;
+    opacity: 0 !important;
     z-index: -10 !important;
     pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
 }
 </style>
 
