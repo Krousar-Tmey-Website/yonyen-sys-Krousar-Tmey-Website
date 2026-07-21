@@ -180,6 +180,10 @@ Route::get('/resources', function () {
     return view('resources', compact('reports'));
 })->name('resources');
 
+Route::get('/words-and-pictures', function () {
+    return view('words-and-pictures');
+})->name('words-pictures');
+
 // Secure PDF view/download with graceful error handling
 Route::get('/reports/{report}/view', function (App\Models\AnnualReport $report) {
     if (!$report->has_pdf_file) {
@@ -267,6 +271,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // News
     Route::post('news/upload-image', [Admin\NewsController::class, 'uploadImage'])->name('news.upload-image');
     Route::resource('news', Admin\NewsController::class);
+
+    // Words and Pictures application (public /words-and-pictures)
+    Route::get('words-pictures', [Admin\WordsPicturesController::class, 'index'])->name('words-pictures.index');
+    Route::post('words-pictures', [Admin\WordsPicturesController::class, 'update'])->name('words-pictures.update');
 
     // Topics (Resource Pages) — the categories News tags link to
     Route::resource('resource-pages', Admin\ResourcePageController::class)
