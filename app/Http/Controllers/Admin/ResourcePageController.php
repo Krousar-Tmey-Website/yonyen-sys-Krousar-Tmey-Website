@@ -14,7 +14,6 @@ class ResourcePageController extends Controller
     {
         $resourcePages = ResourcePage::orderBy('sort_order')->orderBy('title')->get();
 
-
         return view('admin.resource-pages.index', compact('resourcePages'));
     }
 
@@ -64,6 +63,7 @@ class ResourcePageController extends Controller
         }
 
         $data['is_active'] = $request->boolean('is_active', true);
+
         if ($request->hasFile('image')) {
             if ($resourcePage->image) {
                 Storage::disk('public')->delete($resourcePage->image);
@@ -139,6 +139,12 @@ class ResourcePageController extends Controller
         ]);
     }
 
+    /**
+     * Fixed 3 "feature item" slots (title, description, image). Keeps the
+     * existing stored image for a slot unless a new file is uploaded or the
+     * admin explicitly removes it — mirrors how the top-level image fields
+     * behave so partially-filled items don't lose their picture on save.
+     */
     private function buildItems(Request $request, ?ResourcePage $resourcePage = null): array
     {
         $existing = $resourcePage->items ?? [];
