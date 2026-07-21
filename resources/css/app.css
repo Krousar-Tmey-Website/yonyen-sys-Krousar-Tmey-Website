@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -231,6 +232,19 @@
 [data-reveal="line"]  { transform: scaleY(0); transform-origin: top; }
 [data-reveal="pop"]   { transform: translateY(40px) scale(0.90); transition: opacity 0.75s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1); }
 [data-reveal].is-revealed { opacity: 1; transform: none; }
+
+/* ── Article body media ──
+   Subtle hover zoom on inline images/embeds within news article content,
+   applies uniformly across every article without touching stored HTML. */
+.article-content img {
+    transition: transform 0.5s ease;
+}
+.article-content img:hover {
+    transform: scale(1.02);
+}
+.article-content iframe {
+    border-radius: 0.5rem;
+}
 
 /* ── Timeline year navigator ──
    Active state toggled by the scrollspy IntersectionObserver in resources/js/app.js. */
@@ -547,3 +561,11 @@
         transform: none !important;
     }
 }
+
+/* Article body videos: match the contained width/rounding used for article images */
+.article-content video {
+    width: 100%;
+    border-radius: 0.5rem;
+    display: block;
+}
+

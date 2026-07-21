@@ -2,43 +2,127 @@
 
 @section('title', 'Edit Annual Report')
 @section('page-title', 'Edit Annual Report')
-@section('breadcrumb', 'Update an existing annual report PDF')
+@section('breadcrumb', 'Reports → Edit')
 
 @section('content')
-    <div class="mx-auto max-w-3xl rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-        <h2 class="text-xl font-semibold text-gray-800">Edit Report</h2>
-        <p class="mt-1 text-sm text-gray-500">Update the report details and optionally replace the PDF file.</p>
 
-        <form action="{{ route('admin.reports.update', $report) }}" method="POST" enctype="multipart/form-data" class="mt-6 space-y-5">
-            @csrf
-            @method('PUT')
-
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
             <div>
-                <label for="title" class="mb-1 block text-sm font-semibold text-gray-700">Report Title <span class="text-red-500">*</span></label>
-                <input id="title" name="title" type="text" value="{{ old('title', $report->title) }}" required class="w-full rounded-xl border {{ $errors->has('title') ? 'border-red-300 focus:ring-red-400' : 'border-gray-200 focus:ring-[#1d4e7a]' }} px-4 py-2.5 text-sm focus:border-[#1d4e7a] focus:outline-none focus:ring-2">
-                @error('title')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
+                <h3 class="font-bold text-gray-800">Edit Report</h3>
+                <p class="text-sm text-gray-400 mt-0.5">Update the report details and optionally replace the PDF file.</p>
+            </div>
+            <a href="{{ route('admin.reports.index') }}"
+               class="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition">
+                Back to reports
+            </a>
+        </div>
+
+        <form action="{{ route('admin.reports.update', $report) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf @method('PUT')
+
+            <div class="space-y-4">
+                {{-- Report Title --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Report Title <span class="text-red-400">*</span></label>
+                    <input type="text" name="title" value="{{ old('title', $report->title) }}" required
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="e.g. Annual Report 2025">
+                    @error('title')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                </div>
+
+                {{-- Year --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Year <span class="text-red-400">*</span></label>
+                    <input type="number" name="year" value="{{ old('year', $report->year) }}" min="1900" max="2100" required
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    @error('year')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                </div>
+
+                {{-- PDF File --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">PDF File</label>
+
+                    {{-- Current file --}}
+                    @if ($report->file_path)
+                    <div class="mb-4 flex items-center gap-4 bg-gray-50 border border-gray-200 rounded-2xl p-4">
+                        <div class="w-12 h-12 bg-blue-50 rounded-xl border border-blue-100 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">Current file</p>
+                            <p class="text-xs text-gray-500 mt-0.5">{{ $report->original_filename ?? basename($report->file_path) }}</p>
+                        </div>
+                    </div>
+                    @endif
+
+                    <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 bg-gray-50/30 text-center cursor-pointer hover:border-[#2d6fa3]/40 transition-colors"
+                         onclick="document.getElementById('fileInput').click()">
+                        <input type="file" name="file" id="fileInput" accept=".pdf,application/pdf" class="hidden">
+                        <div id="filePlaceholder">
+                            <svg class="mx-auto h-10 w-10 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Click to upload new PDF</p>
+                            <p class="text-xs text-gray-400">Leave empty to keep the current file. Only PDF up to 10MB.</p>
+                        </div>
+                        <div id="fileInfo" class="hidden mt-3"></div>
+                    </div>
+                    @error('file')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                </div>
             </div>
 
-            <div>
-                <label for="year" class="mb-1 block text-sm font-semibold text-gray-700">Year <span class="text-red-500">*</span></label>
-                <input id="year" name="year" type="number" min="1900" max="2100" value="{{ old('year', $report->year) }}" required class="w-full rounded-xl border {{ $errors->has('year') ? 'border-red-300 focus:ring-red-400' : 'border-gray-200 focus:ring-[#1d4e7a]' }} px-4 py-2.5 text-sm focus:border-[#1d4e7a] focus:outline-none focus:ring-2">
-                @error('year')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
-            </div>
-
-            <div>
-                <label for="file" class="mb-1 block text-sm font-semibold text-gray-700">PDF File</label>
-                <input id="file" name="file" type="file" accept=".pdf,application/pdf" class="block w-full rounded-xl border {{ $errors->has('file') ? 'border-red-300 focus:ring-red-400' : 'border-gray-200' }} text-sm file:mr-4 file:rounded-full file:border-0 file:bg-[#1d4e7a] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white">
-                @if ($report->file_path)
-                    <p class="mt-2 text-sm text-gray-500">Current file: {{ $report->original_filename ?? basename($report->file_path) }}</p>
-                @endif
-                <p class="mt-1 text-xs text-gray-500">Leave empty to keep the current PDF. Only PDF files up to 10MB are allowed.</p>
-                @error('file')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
-            </div>
-
-            <div class="flex gap-3">
-                <button type="submit" class="rounded-xl bg-[#1d4e7a] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#173e63]">Update Report</button>
-                <a href="{{ route('admin.reports.index') }}" class="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">Cancel</a>
+            {{-- Actions --}}
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-100">
+                <a href="{{ route('admin.reports.index') }}"
+                   class="px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition">
+                    Cancel
+                </a>
+                <button type="submit"
+                        class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow-md">
+                    Update Report
+                </button>
             </div>
         </form>
     </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const info = document.getElementById('fileInfo');
+            const placeholder = document.getElementById('filePlaceholder');
+            const file = e.target.files[0];
+
+            if (file) {
+                placeholder.classList.add('hidden');
+                info.classList.remove('hidden');
+                info.innerHTML = `
+                    <div class="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-lg px-4 py-2">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <div class="text-left">
+                            <p class="text-sm font-medium text-blue-700">${file.name}</p>
+                            <p class="text-xs text-blue-500">${(file.size / 1024).toFixed(1)} KB</p>
+                        </div>
+                        <button type="button" class="ml-2 text-blue-400 hover:text-blue-600"
+                                onclick="document.getElementById('fileInput').value=''; info.innerHTML=''; info.classList.add('hidden'); placeholder.classList.remove('hidden');">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+            }
+        });
+    }
+});
+</script>
+
 @endsection

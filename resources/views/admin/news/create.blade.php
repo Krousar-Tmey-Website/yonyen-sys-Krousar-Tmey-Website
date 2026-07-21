@@ -4,11 +4,12 @@
     @vite(['resources/css/admin.css', 'resources/css/admin-news.css'])
 @endpush
 
-@section('title', 'New Article')
-@section('page-title', 'Create New Article')
-@section('breadcrumb', 'News → Create')
+@section('title', 'Create Article')
+@section('page-title', 'Create Article')
+@section('breadcrumb', 'News → Create Article')
 
 @section('content')
+@php use Illuminate\Support\Str; @endphp
 
 <div class="max-w-3xl mx-auto">
     <form id="articleForm" action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-news-ajax-form>
@@ -88,7 +89,7 @@
                         <input type="url" id="tagUrl" class="form-control" placeholder="Link URL (optional)">
                         <button type="button" class="btn-add-link" onclick="addTagLink()">Add Tag</button>
                     </div>
-                    <div class="form-helper">Shown on the article card and byline. The URL is optional — leave it blank for a plain (non-clickable) tag, or point it at an external page (e.g. a category on krousar-thmey.org).</div>
+                    <div class="form-helper">Shown on the article card and byline. The URL is optional — leave it blank for a plain (non-clickable) tag.</div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
@@ -102,7 +103,7 @@
             </div>
         </div>
 
-        {{-- Image & Publishing --}}
+        {{-- Image, Gallery, Videos & Publishing --}}
         <div class="form-card">
             <div class="card-header">
                 <div class="icon green">
@@ -110,7 +111,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                 </div>
-                <h3>Image & Publishing</h3>
+                <h3>Image, Gallery & Videos</h3>
             </div>
             <div class="card-body">
                 <div class="form-group">
@@ -159,17 +160,8 @@
                             <input type="checkbox" name="is_published" id="is_published" value="1"
                                    {{ old('is_published') ? 'checked' : '' }}>
                             <div>
-                                <div class="label">Publish immediately</div>
+                                <div class="label">Published</div>
                                 <div class="description">Uncheck to save as draft</div>
-                            </div>
-                        </div>
-                        <div class="info-box">
-                            <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <div>
-                                <div class="info-title">Draft vs Published</div>
-                                <div class="info-desc">Drafts are only visible to admins.</div>
                             </div>
                         </div>
                     </div>
@@ -181,9 +173,9 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                 </svg>
-                Save Article
+                Create Article
             </button>
             <a href="{{ route('admin.news.index') }}" class="btn-cancel">Cancel</a>
             <span class="form-status" data-news-form-status>
@@ -196,35 +188,25 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Image upload preview
+    // Image preview
     const imageInput = document.getElementById('imageInput');
     if (imageInput) {
         imageInput.addEventListener('change', function(e) {
             const preview = document.getElementById('imagePreview');
             const placeholder = document.getElementById('imagePlaceholder');
             const file = e.target.files[0];
-            
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function(ev) {
                     placeholder.classList.add('hidden');
                     preview.classList.remove('hidden');
-                    preview.innerHTML = `
-                        <div class="image-preview-wrapper">
-                            <img src="${e.target.result}" alt="Preview">
-                            <button type="button" class="remove-btn" 
-                                    onclick="document.getElementById('imageInput').value=''; preview.innerHTML=''; preview.classList.add('hidden'); placeholder.classList.remove('hidden');">
-                                ×
-                            </button>
-                            <div class="file-info">${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
-                        </div>
-                    `;
+                    preview.innerHTML = '<div class="image-preview-wrapper"><img src="' + ev.target.result + '" alt="Preview"><button type="button" class="remove-btn" onclick="this.closest(\'.image-preview-wrapper\').remove();document.getElementById(\'imageInput\').value=\'\';document.getElementById(\'imagePlaceholder\').classList.remove(\'hidden\');">x</button><div class="file-info">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</div></div>';
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
-    
+
     // Video upload preview (multiple files, listed by name/size)
     const videosInput = document.getElementById('videosInput');
     if (videosInput) {
@@ -239,6 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
 
     // Enter key support for adding tags
     const tagLabel = document.getElementById('tagLabel');
@@ -271,23 +254,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// ====== TAG LINK MANAGEMENT ======
-
-{{-- Hardcoded common categories for quick tag addition --}}
-const PRESET_TAGS = @json($presetTags ?? []);
-
+const PRESET_TAGS = @json($presetTags);
 let tagLinks = [];
 
 function quickAddTag(label, url) {
-    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
-        return; // already added — silently ignore, no need to interrupt with an alert
-    }
+    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) return;
     tagLinks.push({ label: label, url: url || null });
     renderTagLinks();
 }
@@ -322,36 +293,17 @@ function quickAddTagFromAll(index) {
     quickAddTag(tag.label, tag.url);
 }
 
+
 function addTagLink() {
     const labelInput = document.getElementById('tagLabel');
     const urlInput = document.getElementById('tagUrl');
-
     const label = labelInput.value.trim();
     const url = urlInput.value.trim();
-
-    if (!label) {
-        alert('Please enter a tag label.');
-        return;
-    }
-
-    if (url) {
-        try {
-            new URL(url);
-        } catch (e) {
-            alert('Please enter a valid URL (including http:// or https://), or leave it blank.');
-            return;
-        }
-    }
-
-    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) {
-        alert('This tag has already been added.');
-        return;
-    }
-
+    if (!label) { alert('Please enter a tag label.'); return; }
+    if (url) { try { new URL(url); } catch(e) { alert('Please enter a valid URL.'); return; } }
+    if (tagLinks.some(t => t.label.toLowerCase() === label.toLowerCase())) { alert('Tag already added.'); return; }
     tagLinks.push({ label: label, url: url || null });
-
     renderTagLinks();
-
     labelInput.value = '';
     urlInput.value = '';
     labelInput.focus();
@@ -364,30 +316,68 @@ function removeTagLink(index) {
 
 function renderTagLinks() {
     const container = document.getElementById('tagLinksContainer');
-    const tagLinksInput = document.getElementById('tagLinksInput');
-
+    const input = document.getElementById('tagLinksInput');
     if (tagLinks.length === 0) {
-        container.innerHTML = '<div class="no-links" id="noTagLinks">No tags added yet. Add one above.</div>';
-        tagLinksInput.value = '';
+        container.innerHTML = '<div class="no-links">No tags added yet. Add one above.</div>';
+        input.value = '';
         renderPresetButtons();
         return;
     }
-
     let html = '';
-    tagLinks.forEach((tag, index) => {
-        html += `
-            <div class="link-item">
-                <span class="link-title">${escapeHtml(tag.label)}</span>
-                ${tag.url ? `<a href="${escapeHtml(tag.url)}" target="_blank" rel="noopener noreferrer" class="link-url">${escapeHtml(tag.url)}</a>` : '<span class="link-url" style="color:#9ca3af;">No link</span>'}
-                <span class="link-badge">Tag</span>
-                <button type="button" class="remove-link" onclick="removeTagLink(${index})" title="Remove tag">×</button>
-            </div>
-        `;
+    tagLinks.forEach(function(tag, i) {
+        html += '<div class="link-item"><span class="link-title">' + escapeHtml(tag.label) + '</span>';
+        html += tag.url ? '<a href="' + escapeHtml(tag.url) + '" target="_blank" class="link-url">' + escapeHtml(tag.url) + '</a>' : '<span class="link-url" style="color:#9ca3af;">No link</span>';
+        html += '<span class="link-badge">Tag</span><button type="button" class="remove-link" onclick="removeTagLink(' + i + ')" title="Remove">x</button></div>';
     });
     container.innerHTML = html;
-
-    tagLinksInput.value = JSON.stringify(tagLinks);
+    input.value = JSON.stringify(tagLinks);
     renderPresetButtons();
+}
+
+// Link management
+let links = [];
+
+function addLink() {
+    const titleInput = document.getElementById('linkTitle');
+    const urlInput = document.getElementById('linkUrl');
+    const title = titleInput.value.trim();
+    const url = urlInput.value.trim();
+    if (!title || !url) { alert('Please enter both a title and URL.'); return; }
+    try { new URL(url); } catch(e) { alert('Please enter a valid URL.'); return; }
+    links.push({ title: title, url: url });
+    renderLinks();
+    titleInput.value = '';
+    urlInput.value = '';
+    titleInput.focus();
+}
+
+function removeLink(index) {
+    links.splice(index, 1);
+    renderLinks();
+}
+
+function renderLinks() {
+    const container = document.getElementById('linksContainer');
+    const input = document.getElementById('linksInput');
+    if (links.length === 0) {
+        container.innerHTML = '<div class="no-links" id="noLinks">No links added yet. Add one above.</div>';
+        input.value = '';
+        return;
+    }
+    let html = '';
+    links.forEach(function(link, i) {
+        html += '<div class="link-item"><span class="link-title">' + escapeHtml(link.title) + '</span>';
+        html += '<a href="' + escapeHtml(link.url) + '" target="_blank" class="link-url">' + escapeHtml(link.url) + '</a>';
+        html += '<span class="link-badge">Link</span><button type="button" class="remove-link" onclick="removeLink(' + i + ')" title="Remove">x</button></div>';
+    });
+    container.innerHTML = html;
+    input.value = JSON.stringify(links);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 renderPresetButtons();

@@ -6,12 +6,10 @@ use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\Book;
 use App\Models\Campaign;
-use App\Models\Category;
 use App\Models\Child;
 use App\Models\ContactInquiry;
 use App\Models\CoreValue;
 use App\Models\Donation;
-use App\Models\Gallery;
 use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
 use App\Models\ImpactStatistic;
@@ -57,12 +55,10 @@ class AppServiceProvider extends ServiceProvider
             Award::class,
             Book::class,
             Campaign::class,
-            Category::class,
             Child::class,
             ContactInquiry::class,
             CoreValue::class,
             Donation::class,
-            Gallery::class,
             HistoryEvent::class,
             HomeSetting::class,
             ImpactStatistic::class,

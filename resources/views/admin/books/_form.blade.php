@@ -18,7 +18,7 @@
 {{-- Description --}}
 <div class="form-group">
     <label class="form-label">Description</label>
-    <textarea name="description" rows="3" class="form-control textarea @error('description') error @enderror"
+    <textarea name="description" rows="3" class="form-control content @error('description') error @enderror"
               placeholder="Write a short description or synopsis for the book...">{{ $bookDescription }}</textarea>
     @error('description')<div class="form-error">{{ $message }}</div>@enderror
 </div>

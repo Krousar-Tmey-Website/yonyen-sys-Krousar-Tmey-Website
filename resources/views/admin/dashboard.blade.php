@@ -4,60 +4,24 @@
 @section('page-title', 'Dashboard')
 @section('breadcrumb', 'Welcome back, ' . auth()->user()->name)
 
-@push('styles')
-<style>
-    .chart-container { position: relative; height: 220px; width: 100%; }
-    .hover-lift { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .hover-lift:hover { transform: translateY(-3px); box-shadow: 0 16px 32px -10px rgba(0,0,0,0.12); }
-    .fade-in-up { animation: fadeInUp 0.6s ease-out both; }
-    .fade-in-up:nth-child(2) { animation-delay: 0.08s; }
-    .fade-in-up:nth-child(3) { animation-delay: 0.16s; }
-    .fade-in-up:nth-child(4) { animation-delay: 0.24s; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-</style>
-@endpush
-
 @section('content')
 
-{{-- ── Stat Cards Row ── --}}
+{{-- Stat cards --}}
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-    @php
-    $statCards = [
-        ['label' => 'Total Articles', 'value' => $stats['news_total'], 'border' => 'border-l-[#2d6fa3]', 'route' => 'admin.news.index', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>'],
-        ['label' => 'Programs',      'value' => $stats['programs'],       'border' => 'border-l-[#8da83a]', 'route' => 'admin.programs.index', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>'],
-        ['label' => 'Projects',      'value' => $stats['projects'],       'border' => 'border-l-[#1d4e7a]', 'route' => 'admin.projects.index', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>'],
-        ['label' => 'Donations',     'value' => $stats['donations'],      'border' => 'border-l-[#e8a020]', 'route' => 'admin.donations.index', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'],
-    ];
-    @endphp
-
-    @foreach($statCards as $card)
+    @foreach([
+        ['label' => 'Total Articles',   'value' => $stats['news_total'],     'color' => 'bg-[#2d6fa3]', 'route' => 'admin.news.index'],
+        ['label' => 'Published',        'value' => $stats['news_published'], 'color' => 'bg-[#8da83a]', 'route' => 'admin.news.index'],
+        ['label' => 'Programs',         'value' => $stats['programs'],       'color' => 'bg-[#1d4e7a]', 'route' => 'admin.programs.index'],
+        ['label' => 'Projects',         'value' => $stats['projects'],       'color' => 'bg-[#2d6fa3]', 'route' => 'admin.projects.index'],
+        ['label' => 'Additional Pages', 'value' => $stats['page_items'],     'color' => 'bg-[#e8a020]', 'route' => 'admin.program-pages.index'],
+        ['label' => 'Partners',         'value' => $stats['partners'],       'color' => 'bg-[#2d6fa3]', 'route' => 'admin.partners.index'],
+        ['label' => 'Awards',           'value' => $stats['awards'],         'color' => 'bg-[#8da83a]', 'route' => 'admin.awards.index'],
+    ] as $card)
     <a href="{{ route($card['route']) }}"
-       class="fade-in-up bg-white rounded-2xl p-4 border border-gray-100 {{ $card['border'] }} border-l-4 hover-lift relative group">
-        <div class="flex items-start justify-between">
-            <div>
-                <div class="text-3xl font-black text-gray-800 mb-1 tracking-tight">{{ $card['value'] }}</div>
-                <div class="text-gray-400 text-xs font-medium tracking-wide">{{ $card['label'] }}</div>
-                @if($card['label'] === 'Donations')
-                <div class="mt-2 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    ${{ number_format($stats['donations_amount'], 0) }}
-                </div>
-                @endif
-            </div>
-            <div class="w-8 h-8 rounded-lg {{ str_replace('border-l-[', 'bg-[', $card['border']) }}/10 flex items-center justify-center flex-shrink-0">
-                <svg class="w-4.5 h-4.5 {{ str_replace('border-l-', 'text-', $card['border']) }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {!! $card['icon'] !!}
-                </svg>
-            </div>
-        </div>
-        <div class="mt-2 flex items-center gap-1 text-gray-300 text-xs group-hover:text-gray-500 transition-colors">
-            <span>View details</span>
-            <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-        </div>
+       class="bg-white rounded-2xl p-5 border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="text-3xl font-black text-gray-800 mb-1">{{ $card['value'] }}</div>
+        <div class="text-gray-400 text-xs">{{ $card['label'] }}</div>
+        <div class="h-1 {{ $card['color'] }} rounded-full mt-3 w-8"></div>
     </a>
     @endforeach
 </div>

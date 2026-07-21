@@ -5,20 +5,18 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\VolunteerController;
 use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\Book;
 use App\Models\CoreValue;
-use App\Models\Gallery;
 use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
 use App\Models\JobOpportunity;
+use App\Models\MediaItem;
 use App\Models\News;
-use App\Enums\PartnerCategory;
-use App\Enums\PartnerSubcategory;
-use App\Models\Office;
 use App\Models\PageSection;
 use App\Models\Partner;
 use App\Models\Program;
@@ -51,13 +49,12 @@ Route::get('/', function () {
     $slides = Slide::active()->get();
     $projects = Project::where('is_active', true)->take(3)->get();
     $testimonials = Testimonial::where('is_active', true)->take(3)->get();
-    $galleries = Gallery::where('is_active', true)->latest()->take(6)->get();
     $programs = Program::active()->take(3)->get();
     $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
     $sponsors = \App\Models\Sponsor::active()->orderBy('sort_order')->get();
 
-    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics', 'sponsors'));
+return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'programs', 'pageSections', 'impactStatistics', 'sponsors'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -171,13 +168,23 @@ Route::get('/jobs/{jobOpportunity}', function (JobOpportunity $jobOpportunity) {
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
+// Media — dedicated page
+Route::get('/media', [MediaController::class, 'index'])->name('media');
+Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show');
 Route::get('/topics', [ResourcePageController::class, 'index'])->name('resource-pages.index');
 Route::get('/topics/{slug}', [ResourcePageController::class, 'show'])->name('resource-pages.show');
 
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
 
-    return view('resources', compact('reports'));
+    // Media items from the Media Gallery
+    $featuredMedia = MediaItem::published()->ordered()->first();
+    $mediaItems = MediaItem::published()
+        ->when($featuredMedia, fn ($q) => $q->where('id', '!=', $featuredMedia->id))
+        ->ordered()
+        ->get();
+
+    return view('resources', compact('reports', 'featuredMedia', 'mediaItems'));
 })->name('resources');
 
 // Secure PDF view/download with graceful error handling
@@ -267,6 +274,22 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // News
     Route::post('news/upload-image', [Admin\NewsController::class, 'uploadImage'])->name('news.upload-image');
     Route::resource('news', Admin\NewsController::class);
+    Route::resource('resource-pages', Admin\ResourcePageController::class)->except(['show']);
+
+    // Topics (Resource Pages) — the categories News tags link to
+    Route::resource('resource-pages', Admin\ResourcePageController::class)
+        ->except(['show'])
+        ->parameters(['resource-pages' => 'resourcePage']);
+
+    // Topics (Resource Pages) — the categories News tags link to
+    Route::resource('resource-pages', Admin\ResourcePageController::class)
+        ->except(['show'])
+        ->parameters(['resource-pages' => 'resourcePage']);
+
+    // Topics (Resource Pages) — the categories News tags link to
+    Route::resource('resource-pages', Admin\ResourcePageController::class)
+        ->except(['show'])
+        ->parameters(['resource-pages' => 'resourcePage']);
 
     // Topics (Resource Pages) — the categories News tags link to
     Route::resource('resource-pages', Admin\ResourcePageController::class)
@@ -292,6 +315,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
     Route::resource('page-sections', Admin\PageSectionController::class)->except(['show']);
     Route::resource('slides', Admin\SlideController::class)->except(['show']);
+
     Route::resource('impact-statistics', Admin\ImpactStatisticController::class)
         ->except(['show', 'create', 'edit'])
         ->parameters(['impact-statistics' => 'impactStatistic']);
@@ -334,6 +358,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('activity-logs/{activityLog}', [Admin\Reports\ActivityLogController::class, 'show'])
             ->name('activity-logs.show');
     });
+
+    // Media Gallery
+    Route::resource('media', Admin\MediaController::class)->except(['show'])->parameters(['media' => 'media']);
 
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);

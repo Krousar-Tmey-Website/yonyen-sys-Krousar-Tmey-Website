@@ -90,7 +90,7 @@
                         <input type="url" id="tagUrl" class="form-control" placeholder="Link URL (optional)">
                         <button type="button" class="btn-add-link" onclick="addTagLink()">Add Tag</button>
                     </div>
-                    <div class="form-helper">Shown on the article card and byline. The URL is optional — leave it blank for a plain (non-clickable) tag, or point it at an external page (e.g. a category on krousar-thmey.org).</div>
+                    <div class="form-helper">Shown on the article card and byline. The URL is optional — leave it blank for a plain (non-clickable) tag.</div>
                 </div>
 
                 <div class="form-group form-group--no-margin">
@@ -119,6 +119,7 @@
             </div>
         </div>
 
+
         {{-- Image & Publishing --}}
         <div class="form-card">
             <div class="card-header">
@@ -130,7 +131,6 @@
                 <h3>Image & Publishing</h3>
             </div>
             <div class="card-body">
-                {{-- Current Image --}}
                 @if($news->image)
                 <div class="form-group">
                     <label class="form-label">Current Image</label>
@@ -144,7 +144,6 @@
                 </div>
                 @endif
 
-                {{-- Image Upload --}}
                 <div class="form-group">
                     <label class="form-label">Cover Image <span class="optional">(optional)</span></label>
                     <div class="upload-area" onclick="document.getElementById('imageInput').click()">
@@ -159,6 +158,39 @@
                         <div id="imagePreview" class="hidden mt-3"></div>
                     </div>
                     @error('image')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+
+                {{-- Current Gallery Images --}}
+                @if(!empty($news->gallery))
+                <div class="form-group">
+                    <label class="form-label">Current Gallery Images</label>
+                    <div class="gallery-preview-grid">
+                        @foreach($news->gallery as $index => $path)
+                        <div class="gallery-preview-item" id="galleryItem{{ $index }}">
+                            <img src="{{ $news->gallery_urls[$index] ?? '' }}" alt="Gallery image {{ $index + 1 }}">
+                            <button type="button" class="remove-gallery-item"
+                                    onclick="toggleRemoveGalleryItem({{ $index }}, '{{ $path }}')" title="Remove">×</button>
+                            <button type="button" class="insert-gallery-item" data-insert-image-src="{{ $news->gallery_urls[$index] ?? '' }}" title="Insert into article content">+ Insert</button>
+                        </div>
+                        @endforeach
+                    </div>
+                    <div class="form-helper">Click × to mark an image for removal, or "+ Insert" to add it into the article content above. Changes apply when you save.</div>
+                </div>
+                @endif
+
+                {{-- Add Gallery Images --}}
+                <div class="form-group">
+                    <label class="form-label">Add Gallery Images <span class="optional">(optional, multiple allowed)</span></label>
+                    <div class="upload-area" onclick="document.getElementById('galleryInput').click()">
+                        <input type="file" name="gallery[]" id="galleryInput" accept="image/*" multiple class="hidden">
+                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <div class="upload-title">Click to upload photos</div>
+                        <div class="upload-subtitle">Max 2MB each. Select multiple files.</div>
+                    </div>
+                    <div class="gallery-preview-grid" id="galleryPreviewGrid"></div>
+                    @error('gallery')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
                 {{-- Current Videos --}}
@@ -194,7 +226,7 @@
                     @error('videos.*')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
-                {{-- Add Video by URL --}}
+                {{-- Video Link --}}
                 <div class="form-group">
                     <label class="form-label">Video Link <span class="optional">(optional)</span></label>
                     <input type="url" name="video_url" value="{{ old('video_url') }}"
@@ -208,25 +240,11 @@
                 <div class="form-group form-group--no-margin">
                     <div class="form-grid">
                         <div class="publish-option">
-                            <input type="checkbox" name="is_published" id="is_published" value="1" 
+                            <input type="checkbox" name="is_published" id="is_published" value="1"
                                    {{ old('is_published', $news->is_published) ? 'checked' : '' }}>
                             <div>
                                 <div class="label">Published</div>
                                 <div class="description">Uncheck to save as draft</div>
-                            </div>
-                        </div>
-                        <div class="info-box">
-                            <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <div>
-                                <div class="info-title">Draft vs Published</div>
-                                <div class="info-desc">Drafts are only visible to admins.</div>
-                                @if($news->published_at)
-                                <div class="text-published-date">
-                                    Published since {{ $news->published_at->format('d M Y') }}
-                                </div>
-                                @endif
                             </div>
                         </div>
                     </div>
@@ -251,10 +269,9 @@
     </form>
 </div>
 
-{{-- Delete Form (separate from main form) --}}
 <div class="form-actions form-actions--delete">
     <form action="{{ route('admin.news.destroy', $news) }}" method="POST"
-          onsubmit="return confirm('⚠️ Permanently delete this article?\n\nThis action cannot be undone.')"
+          onsubmit="return confirm('Permanently delete this article? This action cannot be undone.')"
           class="inline delete-form">
         @csrf @method('DELETE')
         <button type="submit" class="btn-danger delete-btn">
@@ -268,35 +285,45 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Image preview
     const imageInput = document.getElementById('imageInput');
     if (imageInput) {
         imageInput.addEventListener('change', function(e) {
             const preview = document.getElementById('imagePreview');
             const placeholder = document.getElementById('imagePlaceholder');
             const file = e.target.files[0];
-            
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function(ev) {
                     placeholder.classList.add('hidden');
                     preview.classList.remove('hidden');
-                    preview.innerHTML = `
-                        <div class="image-preview-wrapper">
-                            <img src="${e.target.result}" alt="Preview">
-                            <button type="button" class="remove-btn" 
-                                    onclick="document.getElementById('imageInput').value=''; preview.innerHTML=''; preview.classList.add('hidden'); placeholder.classList.remove('hidden');">
-                                ×
-                            </button>
-                            <div class="file-info">${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
-                        </div>
-                    `;
+                    preview.innerHTML = '<div class="image-preview-wrapper"><img src="' + ev.target.result + '" alt="Preview"><button type="button" class="remove-btn" onclick="this.closest(\'.image-preview-wrapper\').remove();document.getElementById(\'imageInput\').value=\'\';document.getElementById(\'imagePlaceholder\').classList.remove(\'hidden\');">x</button><div class="file-info">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</div></div>';
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
-    
-    // Video upload preview (multiple files, listed by name/size)
+
+    // Gallery preview
+    const galleryInput = document.getElementById('galleryInput');
+    if (galleryInput) {
+        galleryInput.addEventListener('change', function(e) {
+            const grid = document.getElementById('galleryPreviewGrid');
+            grid.innerHTML = '';
+            [...e.target.files].forEach(function(file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const div = document.createElement('div');
+                    div.className = 'gallery-preview-item';
+                    div.innerHTML = '<img src="' + ev.target.result + '" alt="' + file.name + '">';
+                    grid.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    }
+
+    // Video upload preview
     const videosInput = document.getElementById('videosInput');
     if (videosInput) {
         videosInput.addEventListener('change', function(e) {
@@ -305,39 +332,32 @@ document.addEventListener('DOMContentLoaded', function() {
             [...e.target.files].forEach(function(file) {
                 const item = document.createElement('div');
                 item.className = 'video-preview-item';
-                item.textContent = `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB)`;
+                item.textContent = file.name + ' (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB)';
                 list.appendChild(item);
             });
         });
     }
 
-    // Enter key support for adding tags
+    // Enter key support for tags
     const tagLabel = document.getElementById('tagLabel');
     const tagUrl = document.getElementById('tagUrl');
-
     if (tagLabel) {
         tagLabel.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                addTagLink();
-            }
+            if (e.key === 'Enter') { e.preventDefault(); addTagLink(); }
         });
     }
-
     if (tagUrl) {
         tagUrl.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                addTagLink();
-            }
+            if (e.key === 'Enter') { e.preventDefault(); addTagLink(); }
         });
     }
 
     // Form submission - ensure tags are saved
     const articleForm = document.getElementById('articleEditForm');
     if (articleForm) {
-        articleForm.addEventListener('submit', function(e) {
+        articleForm.addEventListener('submit', function() {
             document.getElementById('tagLinksInput').value = tagLinks.length ? JSON.stringify(tagLinks) : '';
+            document.getElementById('linksInput').value = links.length ? JSON.stringify(links) : '';
         });
     }
 });

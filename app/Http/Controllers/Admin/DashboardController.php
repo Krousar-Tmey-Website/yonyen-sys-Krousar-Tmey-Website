@@ -10,7 +10,6 @@ use App\Models\Partner;
 use App\Models\Program;
 use App\Models\Project;
 use App\Models\ProgramPageItem;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -18,15 +17,13 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'news_total'        => News::count(),
-            'news_published'    => News::published()->count(),
-            'programs'          => Program::count(),
-            'projects'          => Project::count(),
-            'partners'          => Partner::count(),
-            'awards'            => Award::count(),
-            'page_items'        => ProgramPageItem::count(),
-            'donations'         => Donation::count(),
-            'donations_amount'  => Donation::sum('DonationAmount') + Donation::sum('Amount'),
+            'news_total'     => News::count(),
+            'news_published' => News::published()->count(),
+            'programs'       => Program::count(),
+            'projects'       => Project::count(),
+            'partners'       => Partner::count(),
+            'awards'         => Award::count(),
+            'page_items'     => ProgramPageItem::count(),
         ];
 
         $recentNews = News::latest()->take(5)->get();
