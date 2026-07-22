@@ -19,6 +19,7 @@ class UpdatePaymentMethodRequest extends FormRequest
             'bank_type'        => ['nullable', 'string', 'max:50'],
             'account_name'     => ['nullable', 'string', 'max:255'],
 
+            'code'             => ['nullable', 'string', 'max:50', Rule::unique('payment_methods', 'code')->ignore($this->route('payment'))],
             'account_no'       => ['nullable', 'string', 'max:100'],
             'currency'         => ['nullable', 'string', 'in:USD,KHR,Both'],
             'brand_color'      => ['nullable', 'string', 'max:10'],

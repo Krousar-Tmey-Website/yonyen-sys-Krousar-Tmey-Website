@@ -18,6 +18,7 @@ class StorePaymentMethodRequest extends FormRequest
             'bank_type'        => ['required', 'string', 'max:100'],
             'account_name'     => ['required', 'string', 'max:255'],
 
+            'code'             => ['nullable', 'string', 'max:50', 'unique:payment_methods,code'],
             'account_no'       => ['nullable', 'string', 'max:100'],
             'currency'         => ['nullable', 'string', 'in:USD,KHR,Both'],
             'brand_color'      => ['nullable', 'string', 'max:10'],
