@@ -31,8 +31,6 @@ class StorePaymentMethodRequest extends FormRequest
     {
         return [
             'name.required'     => 'The payment method name is required.',
-            'code.required'     => 'A unique code is required (e.g. ABA, ACLEDA).',
-            'code.unique'       => 'This code is already taken.',
             'qr_code.image'     => 'The file must be an image.',
             'qr_code.mimes'     => 'Supported formats: JPG, PNG, GIF, WebP.',
             'qr_code.max'       => 'The QR code image may not be larger than 2 MB.',
