@@ -8,7 +8,7 @@
 {{-- ========================================================
      OUR HISTORY
      ======================================================== --}}
-<section id="history" class="pt-10 pb-20 bg-white scroll-mt-20">
+<section id="history" class="pt-20 md:pt-28 pb-24 bg-white scroll-mt-20">
     <div class="max-w-[1400px] mx-auto px-5 md:px-12 lg:px-20">
         @php
             $historySharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
@@ -25,6 +25,7 @@
         @endphp
         <div class="text-center mb-16" data-reveal>
             <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-[#0A5EA8]">OUR HISTORY</h2>
+            
             @if($historySharingEnabled == '1')
             <div class="flex items-center justify-center gap-3 mt-6 mb-12">
                 <a href="{{ $historyFacebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Our History') . '&linknote=' . urlencode('Krousar Thmey - Our History') }}"
@@ -64,17 +65,26 @@
                     $timelineItems[] = ['year' => $event->year, 'text' => null, 'image' => $event->image_url];
                 }
             }
-            $historyYears = collect($timelineItems)->pluck('year')->filter()->unique()->sort()->values();
-        @endphp
-        
 
-        <div class="flex items-start gap-8">
-            <x-timeline-year-nav :years="$historyYears" />
-            <div class="flex-1 min-w-0">
-                <x-timeline :items="$timelineItems" />
-            </div>
-        </div>
-        <div class="mt-16 pt-14 text-center" data-reveal>
+            // Some history rows were entered more than once (e.g. once with a photo,
+            // once without). Merge entries that share the same year and the same text
+            // so the timeline doesn't show the same moment twice.
+            $deduped = [];
+            foreach ($timelineItems as $entry) {
+                $normalizedText = $entry['text'] ? strtolower(trim(strip_tags($entry['text']))) : null;
+                $key = $entry['year'] . '|' . ($normalizedText ?? 'img:' . $entry['image']);
+                if (isset($deduped[$key])) {
+                    $deduped[$key]['image'] = $deduped[$key]['image'] ?: $entry['image'];
+                } else {
+                    $deduped[$key] = $entry;
+                }
+            }
+
+            $timelineItems = collect($deduped)->sortBy('year')->values()->all();
+        @endphp
+
+        <x-timeline-horizontal :items="$timelineItems" />
+        <div class="mt-10 pt-0 text-center" data-reveal>
             <p class="text-[#a67c3d] font-semibold text-xs uppercase tracking-[0.2em] mb-3">Present Day</p>
             <h3 class="font-serif text-2xl md:text-3xl font-bold text-[#1d4e7a] mb-4">The Story Continues</h3>
             <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
