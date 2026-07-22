@@ -311,6 +311,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show'])->parameters(['principle-slides' => 'slide']);
     Route::resource('partners', Admin\PartnerController::class)->except(['show']);
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
+    Route::get('history-banner', [Admin\HistoryBannerController::class, 'index'])->name('history-banner.index');
+    Route::post('history-banner', [Admin\HistoryBannerController::class, 'update'])->name('history-banner.update');
+    Route::post('history-events/reorder', [Admin\HistoryEventController::class, 'reorder'])->name('history-events.reorder');
+    Route::post('history-events/{historyEvent}/toggle', [Admin\HistoryEventController::class, 'toggleActive'])->name('history-events.toggle');
     Route::resource('history-events', Admin\HistoryEventController::class)
         ->except(['show', 'create'])
         ->parameters(['history-events' => 'historyEvent']);

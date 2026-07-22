@@ -5,6 +5,47 @@
 
 @section('content')
 
+@php
+$heroImage = $settings['history_banner_image'] ?? null;
+$heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/children.jpg');
+$heroTitle = $settings['history_banner_title'] ?? 'Help a Child Build Their Future';
+$heroSubtitle = $settings['history_banner_subtitle'] ?? 'Discover the inspiring journey of Krousar Thmey, from our humble beginnings in 1991 to our ongoing mission supporting children across Cambodia.';
+$heroBadge = $settings['history_banner_badge'] ?? 'Our History';
+$heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
+@endphp
+
+{{-- ========================================================
+     HERO BACKGROUND IMAGE
+     ======================================================== --}}
+<section class="relative py-24 overflow-hidden" data-reveal="scale">
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $heroImageUrl }}');"></div>
+    <div class="absolute inset-0" style="background-color: {{ $heroOverlayColor }}; opacity: 0.55;"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+        <span class="inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $heroBadge }}</span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
+            {{ $heroTitle }}
+        </h2>
+        <p class="text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md">
+            {{ $heroSubtitle }}
+        </p>
+        <div class="flex flex-col sm:flex-row flex-wrap gap-6 justify-center">
+            <a href="{{ route('donate') }}" class="btn-primary text-base btn-micro">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                Donate Now
+            </a>
+            <a href="{{ route('involved') }}" class="btn-outline text-base btn-micro">Get Involved</a>
+            <a href="{{ route('resources') }}#annual-reports" class="btn-outline text-base btn-micro">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Annual Report
+            </a>
+        </div>
+        </div>
+</section>
+
 {{-- ========================================================
      OUR HISTORY
      ======================================================== --}}

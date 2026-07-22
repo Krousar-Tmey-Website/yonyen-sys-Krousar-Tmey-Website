@@ -24,19 +24,25 @@ class HistoryEventController extends Controller
             ->get();
 
         $totalEvents = $events->count();
+        $activeCount = $events->where('is_active', true)->count();
+        $hiddenCount = $totalEvents - $activeCount;
 
         $viewData = [
             'events'      => $events,
             'filters'     => ['search' => $search],
             'totalEvents' => $totalEvents,
+            'activeCount' => $activeCount,
+            'hiddenCount' => $hiddenCount,
         ];
 
         if ($request->ajax() || $request->wantsJson()) {
             $html = view('admin.history_events._results', $viewData)->render();
 
             return response()->json([
-                'html'  => $html,
-                'total' => $totalEvents,
+                'html'        => $html,
+                'total'       => $totalEvents,
+                'activeCount' => $activeCount,
+                'hiddenCount' => $hiddenCount,
             ]);
         }
 
@@ -56,13 +62,13 @@ class HistoryEventController extends Controller
             'right_text' => ['nullable', 'required_without:left_text', 'string'],
             'image'      => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
             'image_url'  => ['nullable', 'url', 'max:2048'],
-            'sort_order' => ['nullable', 'integer'],
         ], [
             'left_text.required_without'  => 'Enter either Left Column Text or Right Column Text.',
             'right_text.required_without' => 'Enter either Left Column Text or Right Column Text.',
         ]);
 
-        $data['sort_order'] = $data['sort_order'] ?? 0;
+        // New events are appended to the end of the timeline; reordering happens via drag-and-drop.
+        $data['sort_order'] = (int) (HistoryEvent::max('sort_order') ?? -1) + 1;
         $data['is_active']  = true;
         $data['image']      = $this->resolveImage($request, $data);
         unset($data['image_url']);
@@ -102,7 +108,6 @@ class HistoryEventController extends Controller
             'image'      => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
             'image_url'  => ['nullable', 'url', 'max:2048'],
             'remove_image' => ['nullable', 'boolean'],
-            'sort_order'   => ['nullable', 'integer'],
             'is_active'    => ['nullable', 'boolean'],
         ], [
             'left_text.required_without'  => 'Enter either Left Column Text or Right Column Text.',
@@ -123,9 +128,9 @@ class HistoryEventController extends Controller
         }
         unset($data['image_url'], $data['remove_image']);
 
-        $data['is_active']  = $request->boolean('is_active');
-        $data['sort_order'] = $data['sort_order'] ?? 0;
-        
+        // sort_order is managed exclusively via drag-and-drop reordering (see reorder()), never here.
+        $data['is_active'] = $request->boolean('is_active');
+
         // Convert empty strings to null so blank fields don't render as content
         if (array_key_exists('left_text', $data) && $data['left_text'] === '') {
             $data['left_text'] = null;
@@ -152,6 +157,36 @@ class HistoryEventController extends Controller
         $this->deleteStoredImage($historyEvent->image);
         $historyEvent->delete();
         return redirect()->route('admin.history-events.index')->with('success', 'History event deleted.');
+    }
+
+    /**
+     * Persist a new drag-and-drop order for the full (unfiltered) timeline.
+     */
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            'order'   => ['required', 'array', 'min:1'],
+            'order.*' => ['integer', 'distinct', 'exists:history_events,id'],
+        ]);
+
+        foreach ($data['order'] as $index => $id) {
+            HistoryEvent::where('id', $id)->update(['sort_order' => $index]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * One-click Active/Hidden toggle from the list, without opening the edit modal.
+     */
+    public function toggleActive(HistoryEvent $historyEvent)
+    {
+        $historyEvent->update(['is_active' => !$historyEvent->is_active]);
+
+        return response()->json([
+            'success'   => true,
+            'is_active' => $historyEvent->is_active,
+        ]);
     }
 
     /**

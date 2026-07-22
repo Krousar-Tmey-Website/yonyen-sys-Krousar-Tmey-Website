@@ -5,6 +5,14 @@
 @section('breadcrumb', 'Who We Are → Our History')
 
 @section('content')
+
+<div class="flex justify-end mb-5">
+    <a href="{{ route('admin.history-banner.index') }}"
+       class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-[#2d6fa3]/40 text-gray-700 hover:text-[#2d6fa3] rounded-full text-sm font-semibold transition-colors shadow-sm">
+        <span class="text-base">🎨</span> Edit History Page Banner
+    </a>
+</div>
+
 <div class="space-y-5"
      x-data="{
         showModal: false,
@@ -15,7 +23,6 @@
             year: '',
             left_text: '',
             right_text: '',
-            sort_order: 0,
             is_active: true,
         },
         imageFile: null,
@@ -25,7 +32,10 @@
         toast: { show: false, message: '', type: 'success' },
         search: @js($filters['search'] ?? ''),
         total: @js($totalEvents),
+        activeCount: @js($activeCount),
+        hiddenCount: @js($hiddenCount),
         loading: false,
+        draggedEl: null,
 
         get modalTitle() {
             return this.editing ? 'Edit History Event' : 'Add History Event';
@@ -38,7 +48,7 @@
         openAddModal() {
             this.editing = false;
             this.editingId = null;
-            this.form = { year: '', left_text: '', right_text: '', sort_order: 0, is_active: true };
+            this.form = { year: '', left_text: '', right_text: '', is_active: true };
             this.imageFile = null;
             this.removeCurrentImage = false;
             this.currentImageUrl = null;
@@ -60,7 +70,6 @@
                 year: eventData.year ?? '',
                 left_text: eventData.left_text ?? '',
                 right_text: eventData.right_text ?? '',
-                sort_order: eventData.sort_order ?? 0,
                 is_active: Boolean(eventData.is_active),
             };
             this.imageFile = null;
@@ -121,7 +130,6 @@
             formData.append('year', this.form.year);
             formData.append('left_text', this.form.left_text);
             formData.append('right_text', this.form.right_text);
-            formData.append('sort_order', this.form.sort_order);
 
             if (this.editing) {
                 formData.append('is_active', this.form.is_active ? '1' : '0');
@@ -189,6 +197,8 @@
                 .then(data => {
                     this.$refs.results.innerHTML = data.html;
                     this.total = data.total;
+                    this.activeCount = data.activeCount;
+                    this.hiddenCount = data.hiddenCount;
                     history.replaceState(null, '', url);
                     this.loading = false;
                 })
@@ -211,16 +221,94 @@
             const qs = params.toString();
             return '{{ route('admin.history-events.index') }}' + (qs ? '?' + qs : '');
         },
+
+        startDrag(event) {
+            this.draggedEl = event.currentTarget;
+            event.dataTransfer.effectAllowed = 'move';
+            event.currentTarget.classList.add('opacity-40');
+        },
+
+        endDrag(event) {
+            event.currentTarget.classList.remove('opacity-40');
+            this.draggedEl = null;
+        },
+
+        dragOverRow(event, targetRow) {
+            if (!this.draggedEl || this.draggedEl === targetRow) return;
+            const rect = targetRow.getBoundingClientRect();
+            const shouldBeAfter = (event.clientY - rect.top) > rect.height / 2;
+            targetRow.parentNode.insertBefore(this.draggedEl, shouldBeAfter ? targetRow.nextSibling : targetRow);
+        },
+
+        dropRow() {
+            const ids = Array.from(document.querySelectorAll('#history-events-tbody tr[data-id]')).map(tr => tr.dataset.id);
+            fetch('{{ route('admin.history-events.reorder') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({ order: ids }),
+            })
+            .then(response => { if (!response.ok) throw new Error(); })
+            .then(() => this.showToast('Order updated.', 'success'))
+            .catch(() => this.showToast('Failed to save the new order.', 'error'));
+        },
+
+        toggleActive(id, event) {
+            const btn = event.currentTarget;
+            const knob = btn.firstElementChild;
+            const wasActive = btn.classList.contains('bg-emerald-500');
+            const nowActive = !wasActive;
+
+            const applyState = (active) => {
+                btn.classList.toggle('bg-emerald-500', active);
+                btn.classList.toggle('bg-gray-300', !active);
+                knob.classList.toggle('translate-x-6', active);
+                knob.classList.toggle('translate-x-1', !active);
+                btn.title = active ? 'Active — click to hide' : 'Hidden — click to activate';
+            };
+
+            // Instant, animated flip — don't wait on the network to move the knob.
+            applyState(nowActive);
+            this.activeCount += nowActive ? 1 : -1;
+            this.hiddenCount += nowActive ? -1 : 1;
+
+            const url = '{{ route('admin.history-events.toggle', '__ID__') }}'.replace('__ID__', id);
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            })
+            .then(response => { if (!response.ok) throw new Error(); })
+            .catch(() => {
+                // Revert if the save failed.
+                applyState(wasActive);
+                this.activeCount += wasActive ? 1 : -1;
+                this.hiddenCount += wasActive ? -1 : 1;
+                this.showToast('Failed to update status.', 'error');
+            });
+        },
      }"
      x-init="$watch('search', () => applyFilters())">
 
     {{-- Toolbar --}}
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
         <div class="flex items-center justify-between flex-wrap gap-4 mb-4">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
                 <h3 class="font-bold text-gray-800">All Events</h3>
                 <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
-                    Showing <span x-text="total">{{ $totalEvents }}</span>
+                    <span x-text="total">{{ $totalEvents }}</span> total
+                </span>
+                <span class="px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-semibold">
+                    <span x-text="activeCount">{{ $activeCount }}</span> active
+                </span>
+                <span class="px-2.5 py-1 bg-gray-100 text-gray-500 rounded-full text-xs font-semibold">
+                    <span x-text="hiddenCount">{{ $hiddenCount }}</span> hidden
+                </span>
+                <span x-show="!search" class="text-xs text-gray-400 flex items-center gap-1" x-cloak>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9h8M8 15h8"/></svg>
+                    Drag rows to reorder
                 </span>
             </div>
 
@@ -297,25 +385,18 @@
                 <form @submit.prevent="submitForm()" class="p-5 space-y-3" enctype="multipart/form-data">
                     @csrf
 
-                    <div class="grid grid-cols-2 gap-3">
-                        {{-- YEAR --}}
-                        <div>
-                            <label class="text-xs font-medium text-gray-600">
-                                Year <span class="text-red-400 font-normal">*</span>
-                            </label>
-                            <input type="text" x-model="form.year" required
-                                   autocomplete="off"
-                                   class="form-input text-sm"
-                                   :class="errors.year ? 'form-input-error' : ''"
-                                   placeholder="e.g. 1991">
-                            <p class="text-xs text-red-500 mt-1" x-show="errors.year" x-text="errors.year" x-cloak></p>
-                        </div>
-
-                        {{-- SORT ORDER --}}
-                        <div>
-                            <label class="text-xs font-medium text-gray-600">Order</label>
-                            <input type="number" x-model="form.sort_order" class="form-input text-sm">
-                        </div>
+                    {{-- YEAR --}}
+                    <div>
+                        <label class="text-xs font-medium text-gray-600">
+                            Year <span class="text-red-400 font-normal">*</span>
+                        </label>
+                        <input type="text" x-model="form.year" required
+                               autocomplete="off"
+                               class="form-input text-sm"
+                               :class="errors.year ? 'form-input-error' : ''"
+                               placeholder="e.g. 1991">
+                        <p class="text-xs text-red-500 mt-1" x-show="errors.year" x-text="errors.year" x-cloak></p>
+                        <p class="text-xs text-gray-400 mt-1" x-show="!editing">New events are added to the end of the timeline — drag rows in the list to reorder.</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
