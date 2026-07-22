@@ -23,7 +23,7 @@
         <div class="overflow-hidden flex-1 min-w-0">
             <div class="flex transition-transform duration-500 ease-out" :style="`transform: translateX(-${slide * 100}%)`">
                 @foreach($slides as $slideItems)
-                <div class="w-full flex-shrink-0">
+                <div  class="w-full flex-shrink-0">
                     <div class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 sm:gap-x-6 gap-y-10 sm:gap-y-12 lg:gap-y-0 px-2">
                         {{-- Dashed connector spanning this slide, centered on the year/dot row --}}
                         <div class="hidden lg:block absolute left-0 right-0 top-[252px] border-t-2 border-dashed border-gray-300" aria-hidden="true"></div>
@@ -38,10 +38,10 @@
                         @endphp
                         <div class="relative flex flex-col items-center" data-reveal="up" style="--reveal-delay: {{ min($i * 100, 200) }}">
                             {{-- Top slot --}}
-                            <div class="order-2 lg:order-1 relative z-10 flex flex-col justify-end items-center h-auto lg:h-56 pb-4 lg:pb-0 text-center px-3">
+                            <div  class="order-2 lg:order-1 relative z-10 flex flex-col justify-end items-center h-auto lg:h-56 pb-4 lg:pb-0 text-center px-3">
                                 @if($photoTop)
                                     @if($image)
-                                    <img src="{{ $image }}" alt="{{ $year }}" class="w-28 h-28 sm:w-36 sm:h-36 lg:w-56 lg:h-100 rounded-2xl object-contain bg-gray-100 shrink-0 transition-all duration-300 hover:scale-105 hover:shadow-lg" onerror="this.remove()">
+                                    <img src="{{ $image }}" alt="{{ $year }}" class="w-100 h-28 sm:w-36 sm:h-36 lg:w-56 lg:h-[100px] rounded-2xl object-contain bg-gray-100 shrink-0 transition-all duration-300 hover:scale-105 hover:shadow-lg" onerror="this.remove()">
                                     {{-- Straight connector: photo down to the year dot --}}
                                     <span class="hidden lg:block w-px h-[75px] shrink-0 bg-gray-300" aria-hidden="true"></span>
                                     @endif
@@ -70,7 +70,7 @@
                                     @if($image)
                                     {{-- Straight connector: year dot down to the photo --}}
                                     <span class="hidden lg:block w-px h-[75px] shrink-0 bg-gray-300" aria-hidden="true"></span>
-                                    <img src="{{ $image }}" alt="{{ $year }}" class="w-28 h-28 sm:w-36 sm:h-36 lg:w-56 lg:h-100 rounded-2xl object-contain bg-gray-100 shrink-0 transition-all duration-300 hover:scale-105 hover:shadow-lg" onerror="this.remove()">
+                                    <img src="{{ $image }}" alt="{{ $year }}" class="w-28 h-28 sm:w-36 sm:h-36 lg:w-56 lg:h-[100px] rounded-2xl object-contain bg-gray-100 shrink-0 transition-all duration-300 hover:scale-105 hover:shadow-lg" onerror="this.remove()">
                                     @endif
                                 @endif
                             </div>
