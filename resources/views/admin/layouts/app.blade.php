@@ -99,9 +99,9 @@
                 'children' => [
                 ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
                 ['route' => 'admin.home.index', 'label' => 'Home Settings'],
+                ['route' => 'admin.map-projects.index', 'label' => 'Map Structure'],
                 ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
                 ['route' => 'admin.sponsors.index', 'label' => 'Sponsors'],
-                ['route' => 'admin.stories.index', 'label' => 'Success Stories'],
                 ],
                 ],
                 'about' => [
