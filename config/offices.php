@@ -23,17 +23,7 @@ return [
         'accent_color' => 'border-[#2d6fa3]',
         'badge_color' => 'bg-[#2d6fa3] text-white',
     ],
-    [
-        'country' => 'Singapore',
-        'city' => 'Krousar Thmey Singapore',
-        'flag' => '🇸🇬',
-        'badge' => null,
-        'address' => "Krousar Thmey Singapore\n29 Leonie Hill, Horizon Towers West\nApt 13-04\nSingapore",
-        'phone' => '+65 98 506 438',
-        'email' => 'singapore@krousar-thmey.org',
-        'accent_color' => 'border-[#2d6fa3]',
-        'badge_color' => 'bg-[#2d6fa3] text-white',
-    ],
+
     [
         'country' => 'Switzerland',
         'city' => 'Krousar Thmey Switzerland',
