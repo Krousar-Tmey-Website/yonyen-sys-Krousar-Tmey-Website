@@ -18,6 +18,7 @@ class StorePaymentMethodRequest extends FormRequest
             'bank_type'        => ['required', 'string', 'max:100'],
             'account_name'     => ['required', 'string', 'max:255'],
 
+            'code'             => ['nullable', 'string', 'max:50', 'unique:payment_methods,code'],
             'account_no'       => ['nullable', 'string', 'max:100'],
             'currency'         => ['nullable', 'string', 'in:USD,KHR,Both'],
             'brand_color'      => ['nullable', 'string', 'max:10'],
@@ -31,7 +32,6 @@ class StorePaymentMethodRequest extends FormRequest
     {
         return [
             'name.required'     => 'The payment method name is required.',
-            'code.required'     => 'A unique code is required (e.g. ABA, ACLEDA).',
             'code.unique'       => 'This code is already taken.',
             'qr_code.image'     => 'The file must be an image.',
             'qr_code.mimes'     => 'Supported formats: JPG, PNG, GIF, WebP.',
