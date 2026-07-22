@@ -8,6 +8,7 @@ use App\Http\Requests\UpdatePaymentMethodRequest;
 use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PaymentMethodController extends Controller
 {
@@ -66,6 +67,9 @@ class PaymentMethodController extends Controller
         $data['is_active']  = $request->boolean('is_active');
         $data['sort_order'] = $data['sort_order'] ?? 0;
 
+        // Auto-generate a unique code from the name if not provided
+        $data['code'] = $data['code'] ?? $this->generateUniqueCode($data['name']);
+
         PaymentMethod::create($data);
 
         return redirect()->route('admin.payments.index')
@@ -97,6 +101,9 @@ class PaymentMethodController extends Controller
 
         $data['is_active'] = $request->boolean('is_active');
 
+        // Preserve existing code; it's auto-generated on create and not editable
+        unset($data['code']);
+
         $payment->update($data);
 
         return redirect()->route('admin.payments.index')
@@ -113,5 +120,49 @@ class PaymentMethodController extends Controller
 
         return redirect()->route('admin.payments.index')
             ->with('success', 'Payment method removed successfully.');
+    }
+
+    /**
+     * Auto-generate a unique short code from a payment method name.
+     *
+     * Examples:
+     *   "ABA Bank"       → "ABA"
+     *   "ACLEDA Bank"    → "ACLEDA"
+     *   "Wing Bank"      → "WING"
+     *   "Sathapana Bank" → "SATHAPANA"
+     *   "CAB Bank"       → "CAB"
+     */
+    private function generateUniqueCode(string $name): string
+    {
+        // Strip common suffixes and clean the name
+        $code = strtoupper(Str::of($name)
+            ->replace([' Bank', ' Banking', ' Ltd', ' PLC', '.', ','], '')
+            ->trim()
+            ->toString());
+
+        // Remove special characters, replace with underscore
+        $code = preg_replace('/[^A-Z0-9_\-]/', '_', $code);
+        $code = trim($code, '_');
+
+        // Limit to column length (50 chars)
+        $code = mb_substr($code, 0, 50);
+
+        // Fallback if name produced nothing
+        if (empty($code)) {
+            $code = 'PM';
+        }
+
+        // Ensure uniqueness by appending a suffix if needed
+        $original = $code;
+        $counter = 1;
+
+        while (PaymentMethod::where('code', $code)->exists()) {
+            $suffix = (string) $counter;
+            $maxPrefixLen = 50 - strlen($suffix) - 1;
+            $code = mb_substr($original, 0, max($maxPrefixLen, 0)) . '_' . $suffix;
+            $counter++;
+        }
+
+        return $code;
     }
 }

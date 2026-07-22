@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\Storage;
 // ──────────────────────────────────────────────
 
 Route::get('/lang/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'km', 'fr'])) {
+    if (in_array($locale, ['en', 'fr'])) {
         session()->put('locale', $locale);
     }
     return redirect()->back();

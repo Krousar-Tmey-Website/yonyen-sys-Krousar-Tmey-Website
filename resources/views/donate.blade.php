@@ -6,8 +6,12 @@
 @section('content')
 
 {{-- Header --}}
-<div class="bg-[#2d6fa3] pt-14 pb-20 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
+<div class="relative overflow-hidden bg-[#2d6fa3] pt-20 pb-28">
+    <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80"
+         alt="Children smiling together"
+         class="absolute inset-0 h-full w-full object-cover">
+    <div class="absolute inset-0 bg-[#2d6fa3]/75"></div>
+    <div class="absolute inset-0 opacity-15">
         <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
         <div class="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-[#8da83a] translate-y-1/2 -translate-x-1/3"></div>
     </div>
@@ -25,139 +29,145 @@
     </div>
 </div>
 
-{{-- Trust strip --}}
-<div class="bg-[#8da83a]">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12 text-white text-sm font-medium">
-        <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            100% goes to children
-        </div>
-        <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-            Annual independent audit
-        </div>
-        <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Team replies within 1–2 days
-        </div>
-    </div>
-</div>
 
 {{-- Main section --}}
-<section class="py-16 lg:py-24 bg-[#f8f9fc]">
-    <div class="max-w-6xl mx-auto px-6">
+<section class="pt-16 pb-14 bg-[#f8f9fc]">
+    <div class="max-w-[1040px] mx-auto px-4 sm:px-6 2xl:px-0">
 
-        {{-- Section Title --}}
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-[#2d6fa3]">Donate Locally in Cambodia</h2>
-            <p class="text-gray-500 mt-2 text-sm">Scan with your banking app · No internet transfer fees</p>
+        <div class="sr-only">
+            <h2>Donate Locally in Cambodia</h2>
+            <p>Scan with your banking app. No internet transfer fees.</p>
         </div>
 
         @if($paymentMethods->isNotEmpty())
-        <div class="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            @foreach($paymentMethods as $method)
-            @php
-                $primary = $method->brand_color ?: '#2d6fa3';
-                $initial = collect(explode(' ', $method->name))->map(fn($w) => substr($w, 0, 1))->take(2)->implode('');
-                $shortLabel = $initial;
-                $subtitle = $method->name . ' · Cambodia';
-            @endphp
-
-            {{-- Payment Method Card --}}
-            <div class="relative bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 flex flex-col">
-
-                {{-- Header Band --}}
-                <div class="px-6 py-5 flex items-center gap-4" style="background-color: {{ $primary }};">
-                    <div class="w-11 h-11 rounded-lg bg-white flex items-center justify-center flex-shrink-0 shadow-sm">
-                        <span class="font-bold text-sm" style="color: {{ $primary }};">{{ $shortLabel }}</span>
+        @php
+            $logoPath = $settings['site_logo'] ?? 'images/logo.png';
+            $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
+        @endphp
+        <div class="max-w-[1040px] mx-auto bg-white rounded-[30px] shadow-[0_26px_70px_rgba(15,23,42,0.13)] overflow-hidden">
+            <div class="grid lg:grid-cols-[430px_minmax(0,1fr)] gap-0 lg:min-h-[520px]">
+                <div class="relative bg-white pb-7 lg:min-h-[520px] lg:pb-0">
+                    <div class="relative h-[345px] overflow-hidden sm:h-[365px] lg:h-[305px]">
+                        <img src="https://pbs.twimg.com/media/DSCk7u6XcAA0hrt.jpg"
+                             alt="Children supported by Krousar Thmey"
+                             class="absolute inset-0 w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-transparent"></div>
                     </div>
-                    <div class="min-w-0 flex-1">
-                        <h3 class="text-white font-bold text-base leading-tight truncate">{{ $method->name }}</h3>
-                        <p class="text-white/70 text-xs mt-0.5 truncate">{{ $subtitle }}</p>
+
+                    <div class="relative z-20 mx-7 -mt-16 mb-1 bg-white rounded-[18px] p-5 shadow-[0_16px_32px_rgba(15,23,42,0.14)] sm:mx-10 sm:-mt-20 lg:absolute lg:left-[24px] lg:right-auto lg:bottom-[24px] lg:mx-0 lg:mt-0 lg:mb-0 lg:w-[382px] lg:min-h-[220px]">
+                        <div class="flex items-center gap-3 mb-3.5">
+                            <img src="{{ $logoUrl }}" alt="Krousar Thmey" class="w-10 h-10 rounded-full object-contain bg-gray-50 border border-gray-100">
+                            <div class="min-w-0">
+                                <p class="text-sm font-bold text-slate-900 leading-tight truncate">Krousar Thmey</p>
+                                <p class="text-xs text-slate-500">Cambodia · Since 1991</p>
+                            </div>
+                        </div>
+                        <h3 class="text-[19px] font-extrabold text-slate-950 leading-tight mb-2.5">Your gift gives a child a home, a school, a future.</h3>
+                        <p class="text-[14px] leading-relaxed text-slate-600">Every donation goes directly to supporting disadvantaged children across Cambodia — 100% of funds reach the children in our care.</p>
                     </div>
                 </div>
 
-                {{-- Card Body --}}
-                <div class="p-6 flex flex-col flex-1">
-
-                    {{-- QR Code Area --}}
-                    <div class="relative mb-5">
-                        <div class="aspect-square max-w-[220px] mx-auto rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden"
-                             style="border-color: {{ $primary }}25; background-color: {{ $primary }}04;">
-                            @if($method->qr_code_url)
-                            <a href="{{ $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}"
-                               target="_blank" rel="noopener"
-                               class="w-full h-full flex items-center justify-center p-3"
-                               aria-label="Open {{ $method->name }} QR code">
-                                <img src="{{ $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}"
-                                     alt="{{ $method->name }} QR"
-                                     class="max-h-full max-w-full object-contain drop-shadow-sm"
-                                     loading="lazy">
-                            </a>
-                            @else
-                            <div class="flex flex-col items-center justify-center gap-2 p-6 text-center">
-                                <svg class="w-8 h-8" style="color: {{ $primary }}40;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
-                                </svg>
-                                <p class="text-xs leading-snug" style="color: {{ $primary }}50;">Add your QR file in admin</p>
-                            </div>
-                            @endif
-                        </div>
-
-                        {{-- Badge in bottom-right corner --}}
-                        <div class="absolute -bottom-1.5 -right-1.5 rounded-lg px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm"
-                             style="background-color: {{ $primary }};">
-                            {{ $method->code }}
-                        </div>
-                    </div>
-
-                    {{-- Info Rows --}}
-                    <div class="space-y-0 mb-5">
-                        {{-- Account Holder --}}
-                        <div class="flex items-center justify-between py-2.5 border-b border-gray-100">
-                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Account Holder</span>
-                            <span class="text-sm font-semibold text-gray-800 text-right">{{ $method->account_name ?: '—' }}</span>
-                        </div>
-                        {{-- Account No. --}}
-                        <div class="flex items-center justify-between py-2.5 border-b border-gray-100">
-                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Account No.</span>
-                            <span class="text-sm font-semibold text-gray-800 text-right font-mono">{{ $method->account_no ?: '—' }}</span>
-                        </div>
-                        {{-- Currency --}}
-                        <div class="flex items-center justify-between py-2.5">
-                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">Currency</span>
-                            <span class="text-sm font-semibold text-gray-800 text-right">
-                                @if($method->currency === 'Both')
-                                    <span class="inline-flex items-center gap-1">
-                                        <span class="px-1.5 py-0.5 bg-gray-100 rounded text-xs">USD</span>
-                                        <span class="text-gray-400">/</span>
-                                        <span class="px-1.5 py-0.5 bg-gray-100 rounded text-xs">KHR</span>
-                                    </span>
-                                @else
-                                    {{ $method->currency ?: '—' }}
-                                @endif
-                            </span>
-                        </div>
-                    </div>
-
-                    {{-- HOW TO PAY Section --}}
-                    <div class="rounded-xl p-4 mt-auto" style="background-color: {{ $primary }}10;">
-                        <h4 class="text-xs font-extrabold uppercase tracking-widest mb-3" style="color: {{ $primary }};">How to Pay</h4>
-                        <ol class="space-y-2.5">
-                            @php $steps = ['Open '.$method->name, 'Tap Pay → QR Payment', 'Scan the code above', 'Enter amount & confirm']; @endphp
-                            @foreach($steps as $i => $step)
-                            <li class="flex items-start gap-3">
-                                <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white flex-shrink-0"
-                                      style="background-color: {{ $primary }};">{{ $i + 1 }}</span>
-                                <span class="text-xs leading-relaxed" style="color: {{ $primary }}dd;">{{ $step }}</span>
-                            </li>
+                <div class="px-6 py-8 sm:p-9 lg:pt-[34px] lg:pr-[34px] lg:pb-[34px] lg:pl-[36px]">
+                    <div x-data="{ active: 0 }" class="w-full">
+                        <div class="inline-flex flex-wrap items-center gap-1 bg-slate-100 rounded-full p-1 mb-7 shadow-inner">
+                            @foreach($paymentMethods as $i => $method)
+                            @php $accent = '#2d6fa3'; @endphp
+                            <button type="button"
+                                    @click="active = {{ $i }}"
+                                    :class="active === {{ $i }} ? 'text-white shadow-[0_8px_18px_rgba(45,111,163,0.28)]' : 'text-slate-600 hover:text-slate-900'"
+                                    class="min-w-[82px] px-4 py-1.5 rounded-full text-[15px] font-bold transition-all duration-200"
+                                    :style="active === {{ $i }} ? 'background-color: {{ $accent }}' : ''">
+                                {{ $method->name }}
+                            </button>
                             @endforeach
-                        </ol>
-                    </div>
+                        </div>
 
+                        @foreach($paymentMethods as $i => $method)
+                        @php
+                            $accent = '#2d6fa3';
+                        @endphp
+                        <div x-show="active === {{ $i }}" x-cloak class="space-y-5">
+                            <div class="grid gap-5 xl:grid-cols-[190px_minmax(0,1fr)] items-start">
+                                <div class="rounded-[22px] border-2 border-dashed border-[#cfe0ef] bg-white p-3.5 flex flex-col items-center justify-center gap-3 min-h-[205px]">
+                                    @if($method->qr_code_url)
+                                    <a href="{{ $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}"
+                                       target="_blank" rel="noopener"
+                                       class="inline-flex w-full items-center justify-center p-1"
+                                       aria-label="Open {{ $method->name }} QR code">
+                                        <img src="{{ $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}"
+                                             alt="{{ $method->name }} QR"
+                                             class="max-h-[158px] max-w-full object-contain rounded-xl shadow-[0_16px_30px_rgba(15,23,42,0.11)]"
+                                             loading="lazy">
+                                    </a>
+                                    @else
+                                    <div class="flex min-h-[158px] w-full flex-col items-center justify-center gap-3 rounded-[18px] border border-dashed border-slate-200 bg-slate-50 p-5 text-center">
+                                        <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                                        </svg>
+                                        <p class="text-xs leading-snug text-slate-500">Add your QR file in admin</p>
+                                    </div>
+                                    @endif
+                                    <p class="text-center text-sm font-bold text-slate-400">Scan with {{ $method->name }}</p>
+                                </div>
+
+                                <div class="space-y-3.5">
+                                    <div class="grid gap-3 sm:grid-cols-2">
+                                        <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3.5 min-h-[68px]">
+                                            <p class="text-[12px] uppercase tracking-[0.12em] text-slate-400 mb-2 font-bold">Account holder</p>
+                                            <p class="text-base font-bold text-slate-900 leading-none">{{ $method->account_name ?: '—' }}</p>
+                                        </div>
+                                        <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3.5 min-h-[68px]">
+                                            <p class="text-[12px] uppercase tracking-[0.12em] text-slate-400 mb-2 font-bold">Currency</p>
+                                            <p class="text-base font-bold text-slate-900 leading-none">
+                                                @if($method->currency === 'Both')
+                                                    <span class="inline-flex items-center gap-2">
+                                                        <span class="rounded-full bg-slate-100 px-2 py-1 text-[11px] uppercase tracking-[0.2em]">USD</span>
+                                                        <span class="rounded-full bg-slate-100 px-2 py-1 text-[11px] uppercase tracking-[0.2em]">KHR</span>
+                                                    </span>
+                                                @else
+                                                    {{ $method->currency ?: '—' }}
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="rounded-2xl border-2 border-[#cfe0ef] bg-slate-50/60 px-4 py-3.5 min-h-[80px]">
+                                        <p class="text-[12px] uppercase tracking-[0.12em] text-slate-400 mb-2.5 font-bold">Account No.</p>
+                                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                            <span class="text-base font-bold text-slate-900 font-mono break-words">{{ $method->account_no ?: '—' }}</span>
+                                            @if($method->code)
+                                            <span style="background-color: {{ $accent }}" class="inline-flex items-center rounded-[10px] px-3.5 py-1.5 text-[13px] font-extrabold text-white">{{ $method->code }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="pt-2">
+                                        <h4 class="text-[16px] font-extrabold uppercase tracking-[0.14em] text-slate-400 mb-3.5">How to pay</h4>
+                                        <ol class="space-y-2.5">
+                                            @php $steps = ['Open '.$method->name, 'Tap Pay → QR Payment', 'Scan the code above', 'Enter amount & confirm']; @endphp
+                                            @foreach($steps as $index => $step)
+                                            <li class="flex items-start gap-3">
+                                                <span style="background-color: {{ $accent }}" class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white">{{ $index + 1 }}</span>
+                                                <span class="text-[14px] leading-relaxed text-slate-700">{{ $step }}</span>
+                                            </li>
+                                            @endforeach
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="{{ $method->qr_code_url ? $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) : '#' }}"
+                               target="_blank" rel="noopener"
+                               style="background-color: {{ $accent }}"
+                               class="inline-flex w-full items-center justify-center gap-3 rounded-[13px] px-5 py-3.5 text-[15px] font-extrabold text-white shadow-[0_12px_20px_rgba(45,111,163,0.26)] transition hover:-translate-y-0.5 hover:brightness-105 xl:ml-[215px] xl:w-[320px]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                                Scan QR to Donate via {{ $method->name }}
+                            </a>
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
-            @endforeach
         </div>
         @else
         {{-- Empty state --}}
