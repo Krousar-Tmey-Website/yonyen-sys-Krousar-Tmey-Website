@@ -190,11 +190,11 @@
                 'icon' =>
                 'M10.707 2.293a1 1 0 00-1.414 0l-7 7A1 1 0 002 10h.5v8a2 2 0 002 2h15a2 2 0 002-2v-8h.5a1 1 0 00.707-1.707l-7-7z',
                 'children' => [
-                ['route' => 'admin.slides.index', 'label' => __('Slideshow')],
-                ['route' => 'admin.home.index', 'label' => __('Home Settings')],
-                ['route' => 'admin.page-sections.index', 'label' => __('Page Sections')],
-                ['route' => 'admin.sponsors.index', 'label' => __('Sponsors')],
-                ['route' => 'admin.stories.index', 'label' => __('Success Stories')],
+                ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
+                ['route' => 'admin.home.index', 'label' => 'Home Settings'],
+                ['route' => 'admin.map-projects.index', 'label' => 'Map Structure'],
+                ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
+                ['route' => 'admin.sponsors.index', 'label' => 'Sponsors'],
                 ],
                 ],
                 'about' => [

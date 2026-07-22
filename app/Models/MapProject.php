@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class MapProject extends Model
+{
+    protected $fillable = [
+        'province_key',
+        'province_label',
+        'location_name',
+        'project_type',
+        'sort_order',
+    ];
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order')->orderBy('id');
+    }
+
+    /**
+     * Get all map projects grouped and structured for the frontend.
+     */
+    public static function getFrontendData(): array
+    {
+        $records = static::ordered()->get();
+        $grouped = [];
+
+        foreach ($records as $record) {
+            $key = $record->province_key;
+
+            if (!isset($grouped[$key])) {
+                $grouped[$key] = [
+                    'label' => $record->province_label,
+                    'locations' => [],
+                ];
+            }
+
+            // Find or create location
+            $locIdx = null;
+            foreach ($grouped[$key]['locations'] as $i => $loc) {
+                if ($loc['name'] === $record->location_name) {
+                    $locIdx = $i;
+                    break;
+                }
+            }
+
+            if ($locIdx === null) {
+                $locIdx = count($grouped[$key]['locations']);
+                $grouped[$key]['locations'][] = [
+                    'name' => $record->location_name,
+                    'projects' => [],
+                ];
+            }
+
+            $grouped[$key]['locations'][$locIdx]['projects'][] = $record->project_type;
+        }
+
+        return $grouped;
+    }
+}
