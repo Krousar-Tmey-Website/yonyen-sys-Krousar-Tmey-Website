@@ -16,6 +16,18 @@ class DonationController extends Controller
         return view('donate', compact('paymentMethods'));
     }
 
+    public function showInternational()
+    {
+        $raisedFromDb = (float) \App\Models\Donation::sum(\Illuminate\Support\Facades\DB::raw('COALESCE(DonationAmount, Amount, 0)'));
+        $countFromDb = (int) \App\Models\Donation::count();
+
+        $raised = $raisedFromDb + 160.00;
+        $count = $countFromDb + 8;
+        $goal = 1000.00;
+
+        return view('donate-international', compact('raised', 'count', 'goal'));
+    }
+
     public function send(Request $request)
     {
         $data = $request->validate([
@@ -37,7 +49,7 @@ class DonationController extends Controller
             ->send(new DonationRequestMail($data, forTeam: false));
 
         return back()
-            ->with('success', true)
+            ->with('success', 'Declaration submitted successfully! Please check your email.')
             ->with('donor_name', $data['name']);
     }
 }

@@ -33,10 +33,23 @@
 {{-- Main section --}}
 <section class="pt-16 pb-14 bg-[#f8f9fc]">
     <div class="max-w-[1040px] mx-auto px-4 sm:px-6 2xl:px-0">
-
-        <div class="sr-only">
-            <h2>Donate Locally in Cambodia</h2>
-            <p>Scan with your banking app. No internet transfer fees.</p>
+        {{-- Switcher Tabs --}}
+        <div class="flex justify-center gap-4 mb-8">
+            <a href="{{ route('donate') }}"
+               class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-[#2d6fa3] text-white shadow-[0_8px_18px_rgba(45,111,163,0.28)] flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Local Donation (Cambodia)
+            </a>
+            <a href="{{ route('donate.international') }}"
+               class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                </svg>
+                International Donation
+            </a>
         </div>
 
         @if($paymentMethods->isNotEmpty())
@@ -68,6 +81,8 @@
                 </div>
 
                 <div class="px-6 py-8 sm:p-9 lg:pt-[34px] lg:pr-[34px] lg:pb-[34px] lg:pl-[36px]">
+
+                    {{-- Local Donation --}}
                     <div x-data="{ active: 0 }" class="w-full">
                         <div class="inline-flex flex-wrap items-center gap-1 bg-slate-100 rounded-full p-1 mb-7 shadow-inner">
                             @foreach($paymentMethods as $i => $method)
@@ -166,7 +181,6 @@
                         </div>
                         @endforeach
                     </div>
-                </div>
             </div>
         </div>
         @else
