@@ -439,7 +439,12 @@
             <p class="section-subtitle mx-auto text-center">{{ $settings['programs_subtitle'] ?? 'Operating across 15 Cambodian provinces, our programs address the most pressing needs of vulnerable children.' }}</p>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-8">
+        @php 
+            $programs = collect($programs);
+            $progCount = $programs->count(); 
+            $gridCols = $progCount === 1 ? 'lg:grid-cols-1 max-w-md mx-auto' : ($progCount === 2 ? 'lg:grid-cols-2 max-w-4xl mx-auto' : 'lg:grid-cols-3');
+        @endphp
+        <div class="grid md:grid-cols-2 {{ $gridCols }} gap-8 justify-center">
             @foreach($programs as $program)
             <div class="card group flex flex-col card-hover" data-reveal="up" style="--reveal-delay: {{ $loop->index * 120 }}">
                 <div class="relative overflow-hidden h-56">
