@@ -375,6 +375,4 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::patch('{volunteer}/status', [Admin\VolunteerController::class, 'updateStatus'])->name('status');
         Route::delete('{volunteer}', [Admin\VolunteerController::class, 'destroy'])->name('destroy');
     });
-
-
 });
