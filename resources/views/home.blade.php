@@ -267,20 +267,20 @@
 
         // ── Project Location Markers ─────────────────
         const locationData = [
-            { name: 'Poipet', cx: 55, cy: 30, province: 'Banteay Meanchey', projects: ['Child Welfare Structure', 'Outside Cases'] },
-            { name: 'Serei Sophorn', cx: 70, cy: 42, province: 'Banteay Meanchey', projects: ['School of Khmer Arts and Culture'] },
-            { name: 'Battambang', cx: 25, cy: 100, province: 'Battambang', projects: ['Outside Cases', 'School for Deaf or Blind Children'] },
-            { name: 'Siem Reap', cx: 85, cy: 60, province: 'Siem Reap', projects: ['Child Welfare Structure', 'Outside Cases', 'School for Deaf or Blind Children'] },
-            { name: 'Kampong Thom', cx: 285, cy: 95, province: 'Kampong Thom', projects: ['Outside Cases'] },
-            { name: 'Pursat', cx: 140, cy: 155, province: 'Pursat', projects: ['Outside Cases'] },
-            { name: 'Phnom Penh', cx: 240, cy: 288, province: 'Phnom Penh', projects: ['Child Welfare Structure', 'Outside Cases', 'School for Deaf or Blind Children'] },
-            { name: 'Takhmao', cx: 238, cy: 298, province: 'Kandal', projects: ['Child Welfare Structure', 'Outside Cases', 'School for Deaf or Blind Children'] },
-            { name: 'Kampong Cham', cx: 305, cy: 200, province: 'Kampong Cham', projects: ['Child Welfare Structure', 'Outside Cases', 'School for Deaf or Blind Children'] },
-            { name: 'Thbong Khmum', cx: 310, cy: 225, province: 'Tboung Khmum', projects: ['Outside Cases'] },
-            { name: 'Prey Veng', cx: 265, cy: 280, province: 'Prey Veng', projects: ['Outside Cases'] },
-            { name: 'Svay Rieng', cx: 315, cy: 296, province: 'Svay Rieng', projects: ['Outside Cases'] },
-            { name: 'Kampong Speu', cx: 172, cy: 245, province: 'Kampong Speu', projects: ['Outside Cases'] },
-            { name: 'Takeo', cx: 225, cy: 315, province: 'Takeo', projects: ['Outside Cases'] },
+            { name: 'Poipet', cx: 24, cy: 113, province: 'Banteay Meanchey', projects: ['Child Welfare Structure', 'Outside Cases'] },
+            { name: 'Serei Sophorn', cx: 65, cy: 121, province: 'Banteay Meanchey', projects: ['School of Khmer Arts and Culture'] },
+            { name: 'Battambang', cx: 86, cy: 174, province: 'Battambang', projects: ['Outside Cases', 'School for Deaf or Blind Children'] },
+            { name: 'Siem Reap', cx: 149, cy: 146, province: 'Siem Reap', projects: ['Child Welfare Structure', 'Outside Cases', 'School for Deaf or Blind Children'] },
+            { name: 'Kampong Thom', cx: 256, cy: 212, province: 'Kampong Thom', projects: ['Outside Cases'] },
+            { name: 'Pursat', cx: 155, cy: 236, province: 'Pursat', projects: ['Outside Cases'] },
+            { name: 'Phnom Penh', cx: 246, cy: 314, province: 'Phnom Penh', projects: ['Child Welfare Structure', 'Outside Cases', 'School for Deaf or Blind Children'] },
+            { name: 'Takhmao', cx: 260, cy: 350, province: 'Kandal', projects: ['Child Welfare Structure', 'Outside Cases', 'School for Deaf or Blind Children'] },
+            { name: 'Kampong Cham', cx: 292, cy: 276, province: 'Kampong Cham', projects: ['Child Welfare Structure', 'Outside Cases', 'School for Deaf or Blind Children'] },
+            { name: 'Thbong Khmum', cx: 327, cy: 277, province: 'Tboung Khmum', projects: ['Outside Cases'] },
+            { name: 'Prey Veng', cx: 289, cy: 349, province: 'Prey Veng', projects: ['Outside Cases'] },
+            { name: 'Svay Rieng', cx: 342, cy: 374, province: 'Svay Rieng', projects: ['Outside Cases'] },
+            { name: 'Kampong Speu', cx: 213, cy: 350, province: 'Kampong Speu', projects: ['Outside Cases'] },
+            { name: 'Takeo', cx: 239, cy: 404, province: 'Takeo', projects: ['Outside Cases'] },
         ];
 
         const markersContainer = document.getElementById('projectMarkers');
