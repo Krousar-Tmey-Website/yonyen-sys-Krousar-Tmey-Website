@@ -41,7 +41,9 @@
                             <div  class="order-2 lg:order-1 relative z-10 flex flex-col justify-end items-center h-auto lg:h-56 pb-4 lg:pb-0 text-center px-3">
                                 @if($photoTop)
                                     @if($image)
-                                    <img src="{{ $image }}" alt="{{ $year }}" class="w-100 h-28 sm:w-36 sm:h-36 lg:w-56 lg:h-[100px] rounded-2xl object-contain bg-gray-100 shrink-0 transition-all duration-300 hover:scale-105 hover:shadow-lg" onerror="this.remove()">
+                                    <div class="w-full h-full rounded-2xl overflow-hidden">
+                                        <img src="{{ $image }}" alt="{{ $year }}" class="w-full h-full object-cover transition-all duration-300 hover:scale-105 hover:shadow-lg" onerror="this.remove()">
+                                    </div>
                                     {{-- Straight connector: photo down to the year dot --}}
                                     <span class="hidden lg:block w-px h-[75px] shrink-0 bg-gray-300" aria-hidden="true"></span>
                                     @endif
@@ -70,7 +72,9 @@
                                     @if($image)
                                     {{-- Straight connector: year dot down to the photo --}}
                                     <span class="hidden lg:block w-px h-[75px] shrink-0 bg-gray-300" aria-hidden="true"></span>
-                                    <img src="{{ $image }}" alt="{{ $year }}" class="w-28 h-28 sm:w-36 sm:h-36 lg:w-56 lg:h-[100px] rounded-2xl object-contain bg-gray-100 shrink-0 transition-all duration-300 hover:scale-105 hover:shadow-lg" onerror="this.remove()">
+                                    <div class="w-full h-full rounded-2xl overflow-hidden">
+                                        <img src="{{ $image }}" alt="{{ $year }}" class="w-full h-full object-cover transition-all duration-300 hover:scale-105 hover:shadow-lg" onerror="this.remove()">
+                                    </div>
                                     @endif
                                 @endif
                             </div>
