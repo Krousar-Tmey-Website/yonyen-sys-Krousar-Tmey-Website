@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payment_methods', function (Blueprint $table) {
-            $table->dropColumn(['code', 'description']);
+            $table->dropColumn(['description']);
         });
     }
 
@@ -22,7 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payment_methods', function (Blueprint $table) {
-            $table->string('code', 50)->nullable()->unique();
             $table->text('description')->nullable();
         });
     }
