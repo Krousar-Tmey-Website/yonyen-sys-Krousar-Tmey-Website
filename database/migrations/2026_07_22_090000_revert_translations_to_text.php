@@ -20,7 +20,7 @@ return new class extends Migration
             'title', 'short_content', 'objective', 'detail_content', 'activities',
         ],
         'news' => [
-            'title', 'slug', 'excerpt', 'content',
+            'title', 'excerpt', 'content',
         ],
         'resource_pages' => [
             'title', 'description', 'header_text', 'detail_description',
