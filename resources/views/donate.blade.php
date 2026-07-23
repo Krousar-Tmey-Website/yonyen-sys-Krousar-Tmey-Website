@@ -6,11 +6,11 @@
 @section('content')
 
 {{-- Header --}}
-<div class="relative overflow-hidden bg-[#1f3f66] pt-24 pb-28">
+<div class="relative overflow-hidden bg-[#1f3f66] pt-20 pb-24">
     <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80"
          alt="Children smiling together"
-         class="absolute inset-0 h-full w-full object-cover opacity-80">
-    <div class="absolute inset-0 bg-slate-950/75"></div>
+         class="absolute inset-0 h-full w-full object-cover opacity-70">
+    <div class="absolute inset-0 bg-slate-950/30 backdrop-blur-[2px]"></div>
     <div class="absolute inset-0 opacity-30">
         <div class="absolute top-10 left-10 w-72 h-72 rounded-full bg-[#8da83a]/40 blur-3xl"></div>
         <div class="absolute bottom-12 right-8 w-56 h-56 rounded-full bg-white/10 blur-3xl"></div>
@@ -30,8 +30,27 @@
     </div>
 </div>
 
-<section class="pt-14 pb-16 bg-[#f6f7fb]">
-    <div class="max-w-[1040px] mx-auto px-4 sm:px-6">
+{{-- Main section --}}
+<section class="pt-16 pb-14 bg-[#f8f9fc]">
+    <div class="max-w-[1040px] mx-auto px-4 sm:px-6 2xl:px-0">
+        {{-- Switcher Tabs --}}
+        <div class="flex justify-center gap-4 mb-8">
+            <a href="{{ route('donate') }}"
+               class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-[#2d6fa3] text-white shadow-[0_8px_18px_rgba(45,111,163,0.28)] flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Local Donation (Cambodia)
+            </a>
+            <a href="{{ route('donate.international') }}"
+               class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                </svg>
+                International Donation
+            </a>
+        </div>
 
         @if($paymentMethods->isNotEmpty())
         @php
@@ -44,8 +63,8 @@
                 {{-- Left column --}}
                 <div class="flex flex-col justify-between gap-6 lg:min-h-[560px]">
                     <img src="https://pbs.twimg.com/media/DSCk7u6XcAA0hrt.jpg"
-                         alt="Children supported by Krousar Thmey"
-                         class="h-[230px] w-full rounded-tl-[24px] object-cover sm:h-[300px]">
+                          alt="Children supported by Krousar Thmey"
+                          class="h-[230px] w-full rounded-tl-[24px] object-cover sm:h-[300px]">
 
                     <div class="mx-auto mb-0 w-full max-w-[385px] rounded-[18px] bg-white p-5 shadow-[0_16px_38px_rgba(15,23,42,0.08)]">
                         <div class="flex items-center gap-3 mb-3.5">
@@ -94,7 +113,7 @@
                                 @else
                                 <div class="flex flex-col items-center justify-center gap-2">
                                     <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
                                     </svg>
                                     <p class="text-xs text-gray-400">No QR code uploaded</p>
                                 </div>
@@ -152,7 +171,7 @@
                            target="{{ $method->qr_code_url ? '_blank' : '_self' }}" rel="noopener"
                            class="mt-auto w-full inline-flex items-center justify-center gap-3 rounded-[10px] bg-[#1c3a5e] px-5 py-[13px] text-[14px] font-extrabold text-white shadow-[0_2px_0_rgba(0,0,0,0.8)] transition-colors hover:bg-[#152d4a] active:bg-[#0f2238]">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
                             </svg>
                             Scan QR to donate via {{ $method->name }}
                         </a>
@@ -160,14 +179,13 @@
                     @endforeach
                     </div>
                 </div>
-
             </div>
         </div>
         @else
         <div class="bg-white rounded-2xl border border-gray-100 p-12 text-center shadow-sm max-w-lg mx-auto">
             <div class="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
                 <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
                 </svg>
             </div>
             <p class="text-gray-500 text-sm font-medium">No local payment methods are available at this time.</p>
