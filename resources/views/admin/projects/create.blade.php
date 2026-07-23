@@ -44,7 +44,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Short Description</label>
-                <textarea name="description" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description') }}</textarea>
+                <textarea name="description" data-ckeditor rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description') }}</textarea>
                 <p class="mt-1 text-xs text-gray-400">Shown as subtitle in the page header banner.</p>
             </div>
         </div>
@@ -81,15 +81,15 @@
             <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Detailed Content</h3>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective</label>
-                <textarea name="objective" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('objective') }}</textarea>
+                <textarea name="objective" data-ckeditor rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('objective') }}</textarea>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content (HTML Supported)</label>
-                <textarea name="content" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Full content (HTML is supported)...">{{ old('content') }}</textarea>
+                <textarea name="content" data-ckeditor rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Full content (HTML is supported)...">{{ old('content') }}</textarea>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Activities</label>
-                <textarea name="activities" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Activity 1&#10;Activity 2">{{ old('activities') }}</textarea>
+                <textarea name="activities" data-ckeditor rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Activity 1&#10;Activity 2">{{ old('activities') }}</textarea>
                 <p class="mt-1 text-xs text-gray-400">Each new line will be displayed as a bullet point on the public page.</p>
             </div>
         </div>
@@ -140,7 +140,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Story / Quote</label>
-                <textarea name="testimony_story" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ old('testimony_story') }}</textarea>
+                <textarea name="testimony_story" data-ckeditor rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ old('testimony_story') }}</textarea>
             </div>
         </div>
 

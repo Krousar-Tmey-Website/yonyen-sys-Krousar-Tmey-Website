@@ -140,6 +140,21 @@
  .article-content strong { @apply font-semibold; }
 
  .article-content > *:last-child { @apply mb-0; }
+
+ /* ── CKEditor rich-text list styling ──
+    Tailwind's prose classes are inert (no @tailwindcss/typography
+    installed), and the base reset removes list-style. These restore
+    proper bullet/number display inside prose containers which hold
+    content written with CKEditor. */
+ .prose ul,
+ .prose ol {
+     @apply mb-6 pl-6 space-y-2 text-gray-700;
+ }
+ .prose ul { @apply list-disc; }
+ .prose ol { @apply list-decimal; }
+ .prose li {
+     @apply leading-relaxed;
+ }
 }
 
 @keyframes slideUp {

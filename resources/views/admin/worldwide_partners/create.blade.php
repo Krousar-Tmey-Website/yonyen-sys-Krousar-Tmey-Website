@@ -55,7 +55,7 @@
 
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Short Description <span class="text-red-400">*</span></label>
-                <textarea name="description" rows="3" required
+                <textarea name="description" data-ckeditor rows="3" required
                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
                           placeholder="Supports fundraising, volunteer engagement, and international partnerships...">{{ old('description', $worldwidePartner->description ?? '') }}</textarea>
             </div>

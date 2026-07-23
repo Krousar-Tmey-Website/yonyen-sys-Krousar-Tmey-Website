@@ -46,7 +46,7 @@
                     @if($project->description)
                     <div class="text-xl font-medium text-[#1a3c6e] leading-relaxed relative" data-reveal="up">
                         <svg class="absolute -top-4 -left-4 w-12 h-12 text-[#8da83a]/10 transform -rotate-12" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                        <p class="relative z-10">{{ $project->description }}</p>
+                        <p class="relative z-10">{!! $project->description !!}</p>
                     </div>
                     @endif
 
@@ -60,7 +60,7 @@
                             </div>
                             <h3 class="text-lg font-black text-[#1a3c6e] uppercase tracking-widest m-0">Objective</h3>
                         </div>
-                        <p class="text-gray-700 text-[16px] leading-relaxed relative z-10 whitespace-pre-line">{{ $project->objective }}</p>
+                        <p class="text-gray-700 text-[16px] leading-relaxed relative z-10 whitespace-pre-line">{!! $project->objective !!}</p>
                     </div>
                     @endif
 
@@ -77,7 +77,7 @@
                                     prose-a:text-[#2d6fa3] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
                                     prose-strong:text-[#1a3c6e]
                                     prose-ul:text-gray-600 prose-ul:text-[16px] prose-li:marker:text-[#8da83a]">
-                            <p class="whitespace-pre-line">{{ $project->content }}</p>
+                            <div class="whitespace-pre-line">{!! $project->content !!}</div>
                         </div>
                     </div>
                     @endif
@@ -318,7 +318,7 @@
                         </button>
                         <div x-show="open" style="display: none;" class="px-8 pb-8 md:px-10 md:pb-10 pt-2 border-t border-gray-200/50" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
                             <svg class="absolute -top-5 -left-5 w-16 h-16 text-[#1a3c6e]/5" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                            <p class="text-gray-700 leading-relaxed text-[16px] whitespace-pre-line font-medium relative z-10">{{ $project->testimony_story }}</p>
+                            <p class="text-gray-700 leading-relaxed text-[16px] whitespace-pre-line font-medium relative z-10">{!! $project->testimony_story !!}</p>
                         </div>
                     </div>
                 </div>

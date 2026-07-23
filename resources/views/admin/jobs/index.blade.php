@@ -58,7 +58,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
-                    <textarea name="description" rows="3"
+                    <textarea name="description" data-ckeditor rows="3"
                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
                               placeholder="Brief job description...">{{ old('description') }}</textarea>
                 </div>
@@ -241,9 +241,8 @@
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                         <div class="md:col-span-2">
-                                            <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Description</label>
-                                            <textarea name="description" rows="2"
-                                                      class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $job->description }}</textarea>
+                                            <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Description</label><textarea name="description" data-ckeditor rows="2"
+                                                       class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $job->description }}</textarea>
                                         </div>
                                         <div>
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Status</label>

@@ -49,7 +49,7 @@
 
                 <div class="form-group form-group--no-margin">
                     <label class="form-label">Short Description <span class="optional">(optional)</span></label>
-                    <textarea name="description" rows="2" class="form-control textarea @error('description') error @enderror">{{ old('description', $resourcePage->description) }}</textarea>
+                    <textarea name="description" data-ckeditor rows="2" class="form-control textarea @error('description') error @enderror">{{ old('description', $resourcePage->description) }}</textarea>
                     @error('description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
@@ -77,7 +77,7 @@
 
                 <div class="form-group form-group--no-margin">
                     <label class="form-label">Full Description <span class="optional">(optional)</span></label>
-                    <textarea name="detail_description" rows="6" class="form-control textarea @error('detail_description') error @enderror">{{ old('detail_description', $resourcePage->detail_description) }}</textarea>
+                    <textarea name="detail_description" data-ckeditor rows="6" class="form-control textarea @error('detail_description') error @enderror">{{ old('detail_description', $resourcePage->detail_description) }}</textarea>
                     @error('detail_description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
@@ -169,7 +169,7 @@
                     <label class="form-label">Item {{ $i + 1 }}</label>
                     <input type="text" name="items[{{ $i }}][title]" value="{{ old("items.$i.title", $existingItem['title'] ?? '') }}"
                            class="form-control mb-2" placeholder="Item title">
-                    <textarea name="items[{{ $i }}][description]" rows="2" class="form-control textarea mb-2"
+                    <textarea name="items[{{ $i }}][description]" data-ckeditor rows="2" class="form-control textarea mb-2"
                               placeholder="Item description">{{ old("items.$i.description", $existingItem['description'] ?? '') }}</textarea>
 
                     @if(!empty($existingItem['image']))

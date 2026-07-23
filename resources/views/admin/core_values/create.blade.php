@@ -31,7 +31,7 @@
 
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Description <span class="text-gray-400">(optional)</span></label>
-                    <textarea name="description" rows="3"
+                    <textarea name="description" data-ckeditor rows="3"
                               class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
                               placeholder="Describe the value">{{ old('description') }}</textarea>
                     @error('description')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror

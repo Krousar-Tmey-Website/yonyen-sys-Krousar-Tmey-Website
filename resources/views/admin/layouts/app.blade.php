@@ -496,6 +496,7 @@
 
     </div>
 
+    @vite(['resources/js/admin-news-editor.js'])
     @stack('scripts')
 </body>
 

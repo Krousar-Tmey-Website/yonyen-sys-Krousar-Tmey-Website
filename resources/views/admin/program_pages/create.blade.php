@@ -25,7 +25,7 @@
         {{-- Short Content --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Short Content <span class="text-gray-400 font-normal">(shown on card preview)</span></label>
-            <textarea name="short_content" rows="3"
+            <textarea name="short_content" data-ckeditor rows="3"
                       class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
                       placeholder="Brief description that appears on the card listing...">{{ old('short_content') }}</textarea>
             @error('short_content')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
@@ -34,7 +34,7 @@
         {{-- Objective --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Objective</label>
-            <textarea name="objective" rows="3"
+            <textarea name="objective" data-ckeditor rows="3"
                       class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
                       placeholder="e.g. To protect the health of Cambodian children...">{{ old('objective') }}</textarea>
             @error('objective')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
@@ -43,7 +43,7 @@
         {{-- Detail Content (The Project) --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">The Project (Detail Content)</label>
-            <textarea name="detail_content" rows="10"
+            <textarea name="detail_content" data-ckeditor rows="10"
                       class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm font-mono"
                       placeholder="Full content (HTML is supported)...">{{ old('detail_content') }}</textarea>
             @error('detail_content')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
@@ -52,7 +52,7 @@
         {{-- Activities --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Activities</label>
-            <textarea name="activities" rows="5"
+            <textarea name="activities" data-ckeditor rows="5"
                       class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
                       placeholder="Activity 1&#10;Activity 2...">{{ old('activities') }}</textarea>
             <p class="text-xs text-gray-500 mt-1.5">Each new line will be displayed as a bullet point on the public page.</p>

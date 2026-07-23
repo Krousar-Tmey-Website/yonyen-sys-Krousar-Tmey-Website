@@ -61,7 +61,7 @@
             
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
-                <textarea name="settings[worldwide_description]" rows="3"
+                <textarea name="settings[worldwide_description]" data-ckeditor rows="3"
                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('settings.worldwide_description', \App\Models\HomeSetting::getValue('worldwide_description', 'Krousar Thmey benefits from the support of partner organizations around the world. Their fundraising, advocacy, communication, and volunteer networks greatly contribute to the success of our education, child protection, and disability inclusion programs.')) }}</textarea>
             </div>
             

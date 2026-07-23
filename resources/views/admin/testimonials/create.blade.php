@@ -17,7 +17,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Content</label>
-                <textarea name="content" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('content') }}</textarea>
+                <textarea name="content" data-ckeditor rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('content') }}</textarea>
             </div>
             
             <div class="flex items-end pb-1">

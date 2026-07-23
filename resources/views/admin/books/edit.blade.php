@@ -60,7 +60,7 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <textarea name="description" rows="3" class="form-control textarea"
+                    <textarea name="description" data-ckeditor rows="3" class="form-control textarea"
                               placeholder="Write a short description or synopsis for the book...">{{ old('description', $book->description) }}</textarea>
                     @error('description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>

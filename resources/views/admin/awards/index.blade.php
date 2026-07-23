@@ -202,7 +202,7 @@
                     {{-- DESCRIPTION --}}
                     <div>
                         <label for="modal-description" class="text-xs font-medium text-gray-600">Description</label>
-                        <textarea id="modal-description" name="description" rows="2"
+                        <textarea id="modal-description" name="description" data-ckeditor rows="2"
                                   class="form-input text-sm resize-none"
                                   placeholder="Short description..."
                                   x-model="form.description"></textarea>

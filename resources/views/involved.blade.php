@@ -383,7 +383,7 @@
                             <div class="p-6 flex flex-col flex-grow relative z-20 bg-white">
                                 <h4 class="font-black text-[#1d4e7a] text-xl mb-3">{{ $wwp->country_name }}</h4>
                                 <p class="text-gray-500 text-sm leading-relaxed mb-6 flex-grow">
-                                    {{ $wwp->description }}
+                                    {!! $wwp->description !!}
                                 </p>
                                 @if($wwp->learn_more_url)
                                     <a href="{{ $wwp->learn_more_url }}" target="_blank" rel="noopener"
@@ -1023,7 +1023,7 @@
 
                             @if($job->description)
                             <p class="text-slate-500 text-xs leading-relaxed mb-5 line-clamp-3">
-                                {{ $job->description }}
+                                {!! $job->description !!}
                             </p>
                             @endif
                         </div>

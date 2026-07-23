@@ -75,7 +75,7 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <textarea name="description" rows="4" class="form-control textarea @error('description') error @enderror"
+                    <textarea name="description" data-ckeditor rows="4" class="form-control textarea @error('description') error @enderror"
                               placeholder="Describe the campaign goal, who it helps, and why donations are needed...">{{ old('description') }}</textarea>
                     @error('description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>

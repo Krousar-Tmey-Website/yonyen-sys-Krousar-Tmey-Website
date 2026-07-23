@@ -102,14 +102,14 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective Text</label>
-                <textarea name="description" rows="3"
+                <textarea name="description" data-ckeditor rows="3"
                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description') }}</textarea>
                 <p class="mt-2 text-xs text-gray-400">This fills the Objective paragraph on the public program section.</p>
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Program Text</label>
-                <textarea name="full_description" rows="6"
+                <textarea name="full_description" data-ckeditor rows="6"
                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('full_description') }}</textarea>
                 <p class="mt-2 text-xs text-gray-400">This fills the main Program content block on the public page.</p>
             </div>
@@ -144,7 +144,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Story Content</label>
-                    <textarea name="testimony_story" rows="4" placeholder="Enter testimony story text here..."
+                    <textarea name="testimony_story" data-ckeditor rows="4" placeholder="Enter testimony story text here..."
                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('testimony_story') }}</textarea>
                 </div>
             </div>

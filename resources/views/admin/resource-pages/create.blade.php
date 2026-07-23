@@ -46,7 +46,7 @@
 
                 <div class="form-group form-group--no-margin">
                     <label class="form-label">Short Description <span class="optional">(optional)</span></label>
-                    <textarea name="description" rows="2" class="form-control textarea @error('description') error @enderror"
+                    <textarea name="description" data-ckeditor rows="2" class="form-control textarea @error('description') error @enderror"
                               placeholder="Shown on the Topics listing card...">{{ old('description') }}</textarea>
                     @error('description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
@@ -75,7 +75,7 @@
 
                 <div class="form-group form-group--no-margin">
                     <label class="form-label">Full Description <span class="optional">(optional)</span></label>
-                    <textarea name="detail_description" rows="6" class="form-control textarea @error('detail_description') error @enderror"
+                    <textarea name="detail_description" data-ckeditor rows="6" class="form-control textarea @error('detail_description') error @enderror"
                               placeholder="The main body text shown on the topic's detail page...">{{ old('detail_description') }}</textarea>
                     @error('detail_description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
@@ -145,7 +145,7 @@
                     <label class="form-label">Item {{ $i + 1 }}</label>
                     <input type="text" name="items[{{ $i }}][title]" value="{{ old("items.$i.title") }}"
                            class="form-control mb-2" placeholder="Item title">
-                    <textarea name="items[{{ $i }}][description]" rows="2" class="form-control textarea mb-2"
+                    <textarea name="items[{{ $i }}][description]" data-ckeditor rows="2" class="form-control textarea mb-2"
                               placeholder="Item description">{{ old("items.$i.description") }}</textarea>
                     <div class="upload-area" onclick="document.getElementById('itemImageInput{{ $i }}').click()">
                         <input type="file" name="items[{{ $i }}][image]" id="itemImageInput{{ $i }}" accept="image/*" class="hidden">

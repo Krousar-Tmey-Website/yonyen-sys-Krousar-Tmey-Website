@@ -186,7 +186,7 @@
                         <div class="flex-1">
                             <p class="text-sm font-bold text-gray-900 leading-snug mb-2">{{ $stat->label }}</p>
                             @if($stat->description)
-                            <p class="text-xs text-gray-500 leading-relaxed">{{ $stat->description }}</p>
+                            <p class="text-xs text-gray-500 leading-relaxed">{!! $stat->description !!}</p>
                             @endif
                         </div>
                     </div>
@@ -394,7 +394,7 @@
                 </div>
                 <h3 class="text-xl font-black uppercase tracking-wider text-[#1d4e7a] mb-4">{{ $value->title }}</h3>
                 <p class="text-gray-600 leading-relaxed">
-                    {{ $value->description }}
+                    {!! $value->description !!}
                 </p>
             </div>
             @empty
