@@ -202,12 +202,13 @@
                 'icon' =>
                 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
                 'children' => [
-                ['route' => 'admin.presentation.index', 'label' => __('Presentation')],
-                ['route' => 'admin.core-values.index', 'label' => __('Our Values')],
-                ['route' => 'admin.history-events.index', 'label' => __('Our History')],
-                ['route' => 'admin.awards.index', 'label' => __('Awards')],
-                ['route' => 'admin.partners.index', 'label' => __('Partners')],
-                ['route' => 'admin.transparency.index', 'label' => __('Transparency')],
+                ['route' => 'admin.presentation.index', 'label' => 'Presentation'],
+                ['route' => 'admin.core-values.index', 'label' => 'Our Values'],
+                ['route' => 'admin.history-banner.index', 'label' => 'History Banner'],
+                ['route' => 'admin.history-events.index', 'label' => 'Our History'],
+                ['route' => 'admin.awards.index', 'label' => 'Awards'],
+                ['route' => 'admin.partners.index', 'label' => 'Partners'],
+                ['route' => 'admin.transparency.index', 'label' => 'Transparency'],
                 ],
                 ],
                 'programs' => [
