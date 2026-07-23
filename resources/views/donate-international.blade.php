@@ -6,25 +6,26 @@
 @section('content')
 
 {{-- Header --}}
-<div class="relative overflow-hidden bg-[#2d6fa3] pt-20 pb-28">
+<div class="relative overflow-hidden bg-[#1f3f66] pt-20 pb-24">
     <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80"
          alt="Children smiling together"
-         class="absolute inset-0 h-full w-full object-cover">
-    <div class="absolute inset-0 bg-[#2d6fa3]/75"></div>
-    <div class="absolute inset-0 opacity-15">
-        <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
-        <div class="absolute bottom-0 left-0 w-56 h-56 rounded-full bg-[#8da83a] translate-y-1/2 -translate-x-1/3"></div>
+         class="absolute inset-0 h-full w-full object-cover opacity-70">
+    <div class="absolute inset-0 bg-slate-950/30 backdrop-blur-[2px]"></div>
+    <div class="absolute inset-0 opacity-30">
+        <div class="absolute top-10 left-10 w-72 h-72 rounded-full bg-[#8da83a]/40 blur-3xl"></div>
+        <div class="absolute bottom-12 right-8 w-56 h-56 rounded-full bg-white/10 blur-3xl"></div>
     </div>
-    <div class="relative max-w-7xl mx-auto px-6 text-center">
-        <div class="w-16 h-16 rounded-2xl bg-white/15 flex items-center justify-center mx-auto mb-5">
-            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+    <div class="relative max-w-6xl mx-auto px-6 text-center">
+        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.26em] text-slate-200 mb-6">
+            <svg class="w-4 h-4 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
             </svg>
-        </div>
-        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Support Our Mission</h1>
-        <p class="text-white/75 text-lg max-w-2xl mx-auto leading-relaxed">
-            Every donation goes directly to supporting children across Cambodia.<br>
-            <span class="font-semibold text-white">100% of funds reach the children.</span>
+            International donations
+        </span>
+        <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight sm:text-6xl">Support Khmer children with an international donation.</h1>
+        <p class="mt-6 text-base sm:text-lg text-slate-200 max-w-3xl mx-auto leading-8">
+            Every gift helps a child access education, shelter, and medical care in Cambodia.
+            Set up a secure bank wire transfer to help us build a brighter future.
         </p>
     </div>
 </div>

@@ -6,11 +6,11 @@
 @section('content')
 
 {{-- Header --}}
-<div class="relative overflow-hidden bg-[#1f3f66] pt-24 pb-28">
+<div class="relative overflow-hidden bg-[#1f3f66] pt-20 pb-24">
     <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80"
          alt="Children smiling together"
-         class="absolute inset-0 h-full w-full object-cover opacity-80">
-    <div class="absolute inset-0 bg-slate-950/75"></div>
+         class="absolute inset-0 h-full w-full object-cover opacity-70">
+    <div class="absolute inset-0 bg-slate-950/30 backdrop-blur-[2px]"></div>
     <div class="absolute inset-0 opacity-30">
         <div class="absolute top-10 left-10 w-72 h-72 rounded-full bg-[#8da83a]/40 blur-3xl"></div>
         <div class="absolute bottom-12 right-8 w-56 h-56 rounded-full bg-white/10 blur-3xl"></div>
