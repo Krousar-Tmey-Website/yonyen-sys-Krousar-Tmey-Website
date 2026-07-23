@@ -306,13 +306,6 @@
                 <form @submit.prevent="submitForm()" class="p-5 space-y-3" enctype="multipart/form-data">
                     @csrf
 
-                    {{-- Language toggle --}}
-                    <div class="flex justify-end">
-                        <div class="lang-tabs">
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                        </div>
-                    </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         {{-- YEAR --}}
@@ -335,7 +328,14 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3" x-show="lang === 'en'">
+                    
+                <div class="flex justify-end w-full mb-3 -mt-2">
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
+<div class="grid grid-cols-2 gap-3" x-show="lang === 'en'">
                         {{-- LEFT COLUMN TEXT --}}
                         <div>
                             <label class="text-xs font-medium text-gray-600">

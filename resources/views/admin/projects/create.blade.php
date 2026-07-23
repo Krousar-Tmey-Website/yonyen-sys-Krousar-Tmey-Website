@@ -13,12 +13,17 @@
     </div>
     @endif
 
-    <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+    <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5" x-data="bilingualForm()">
         @csrf
 
         {{-- Basic Info --}}
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Basic Information</h3>
+            <div class="flex items-center justify-between mb-4"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Basic Information</h3>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Parent Program</label>
@@ -37,14 +42,10 @@
                     </div>
                 </div>
             </div>
-            <div x-data="{ lang: 'en' }">
+            <div x-data="bilingualForm()">
                 <div class="flex justify-end mb-1.5">
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
-                <div x-show="lang === 'en'">
+<div x-show="lang === 'en'">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-400">*</span></label>
                     <input type="text" name="title" value="{{ old('title') }}"
                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
@@ -97,14 +98,10 @@
         </div>
 
         {{-- Detailed Content --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="{ lang: 'en' }">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="bilingualForm()">
             <div class="flex items-center justify-between">
                 <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Detailed Content</h3>
                 <div class="header-actions">
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
 
@@ -158,14 +155,10 @@
         </div>
 
         {{-- Testimony --}}
-        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4" x-data="{ lang: 'en' }">
+        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4" x-data="bilingualForm()">
             <div class="flex items-center justify-between">
                 <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-wider">Testimony</h3>
                 <div class="header-actions">
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
             <div class="grid md:grid-cols-2 gap-4">

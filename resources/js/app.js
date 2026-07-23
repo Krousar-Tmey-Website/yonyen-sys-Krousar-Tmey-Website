@@ -4,6 +4,47 @@ import focus from '@alpinejs/focus';
 
 Alpine.plugin(focus);
 window.Alpine = Alpine;
+
+document.addEventListener('alpine:init', () => {
+    Alpine.store('bilingualForms', {
+        currentPageLang: {},
+    });
+
+    Alpine.data('bilingualForm', (initialState = {}) => ({
+        ...initialState,
+        lang: initialState.lang ?? 'en',
+
+        init() {
+            const pageKey = window.location.pathname;
+            const storedLang = Alpine.store('bilingualForms').currentPageLang[pageKey];
+
+            this.lang = storedLang ?? this.lang ?? 'en';
+
+            this.$watch('lang', (value) => {
+                Alpine.store('bilingualForms').currentPageLang[pageKey] = value;
+            });
+
+            document.addEventListener('gt-lang:change', (event) => {
+                if (event.detail?.pageKey === pageKey) {
+                    this.lang = event.detail.lang;
+                }
+            });
+        },
+    }));
+});
+
+window.switchGTLang = (lang) => {
+    const pageKey = window.location.pathname;
+
+    if (window.Alpine?.store('bilingualForms')) {
+        window.Alpine.store('bilingualForms').currentPageLang[pageKey] = lang;
+    }
+
+    document.dispatchEvent(new CustomEvent('gt-lang:change', {
+        detail: { pageKey, lang },
+    }));
+};
+
 Alpine.start();
 
 // ── Scroll-reveal animations ──

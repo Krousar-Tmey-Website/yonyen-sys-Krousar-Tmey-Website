@@ -190,7 +190,12 @@
 
                 {{-- Header --}}
                 <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
-                    <h3 class="font-bold text-gray-800" x-text="modalTitle"></h3>
+                    <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-gray-800" x-text="modalTitle"></h3>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
                     <button @click="closeModal()" type="button"
                             class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,16 +212,9 @@
                         <input type="hidden" name="_method" value="PUT">
                     </template>
 
-                    {{-- Language toggle --}}
-                    <div class="flex justify-end">
-                        <div class="lang-tabs">
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                        </div>
-                    </div>
 
                     {{-- Title --}}
-                    <div x-show="lang === 'en'">
+<div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">
                             Title <span class="text-red-400">*</span>
                         </label>

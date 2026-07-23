@@ -7,18 +7,24 @@
 @section('content')
 
 <div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6" x-data="bilingualForm()">
         {{-- Header --}}
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h3 class="font-bold text-gray-800">New Partner</h3>
                 <p class="text-sm text-gray-400 mt-0.5">Add a new partner organisation to the website.</p>
             </div>
-            <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
+            <div class="flex items-center gap-3">
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </div>
             </div>
         </div>
 

@@ -19,7 +19,7 @@
         @csrf
         @method('PUT')
 
-        <div x-data="{ lang: 'en' }">
+        <div x-data="bilingualForm()">
         {{-- Basic Info --}}
         <div class="form-card">
             <div class="card-header">
@@ -28,17 +28,18 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
                 </div>
-                <h3>Basic Info</h3>
+                <div class="flex items-center justify-between mb-4"><h3>Basic Info</h3>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
                 <div class="header-actions">
                     <span class="badge">Required *</span>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
             <div class="card-body">
-                <div class="form-group" x-show="lang === 'en'">
+<div class="form-group" x-show="lang === 'en'">
                     <label class="form-label">Title <span class="required">*</span></label>
                     <input type="text" name="title" value="{{ old('title', $resourcePage->title) }}"
                            class="form-control @error('title') error @enderror">
@@ -88,10 +89,6 @@
                 <h3>Detail Page Content</h3>
                 <div class="header-actions">
                     <span class="badge">Optional</span>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
             <div class="card-body">
@@ -206,10 +203,6 @@
                 <h3>Feature Items</h3>
                 <div class="header-actions">
                     <span class="badge">Optional, up to 3</span>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
             <div class="card-body">

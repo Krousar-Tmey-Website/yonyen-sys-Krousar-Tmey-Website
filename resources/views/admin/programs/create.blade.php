@@ -82,16 +82,17 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5" x-data="{ lang: 'en' }">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5" x-data="bilingualForm()">
 
             {{-- Public page content --}}
             <div class="flex items-center justify-between">
                 <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Public Page Content</h3>
-                <div class="lang-tabs">
-                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+            
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
                 </div>
-            </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
@@ -155,10 +156,6 @@
             <div class="pt-4 mt-2 border-t border-gray-100">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">Testimony</h3>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>

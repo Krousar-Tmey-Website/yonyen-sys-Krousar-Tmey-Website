@@ -7,12 +7,13 @@
     <form action="{{ route('admin.gallery.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-                        <div x-data="{ lang: 'en' }">
+                        <div x-data="bilingualForm()">
                 <div class="flex items-center justify-between mb-1.5">
                     <label class="block text-sm font-medium text-gray-700">Title / Caption</label>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                     </div>
                 </div>
                 <div x-show="lang === 'en'">

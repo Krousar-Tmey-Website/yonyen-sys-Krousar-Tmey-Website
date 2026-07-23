@@ -30,7 +30,7 @@
     </div>
     @endif
 
-    <form action="{{ route('admin.projects.update', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+    <form action="{{ route('admin.projects.update', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-5" x-data="bilingualForm()">
         @csrf @method('PUT')
 
         {{-- Banner Image --}}
@@ -116,14 +116,17 @@
                     </div>
                 </div>
             </div>
-            <div x-data="{ lang: 'en' }">
+            <div x-data="bilingualForm()">
                 <div class="flex justify-end mb-1.5">
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                </div>
+                
+                <div class="flex justify-end w-full mb-3 -mt-2">
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                     </div>
                 </div>
-                <div x-show="lang === 'en'">
+<div x-show="lang === 'en'">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-400">*</span></label>
                     <input type="text" name="title" value="{{ old('title', $item->title) }}"
                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
@@ -149,14 +152,10 @@
         </div>
 
         {{-- Detailed Content --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="{ lang: 'en' }">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="bilingualForm()">
             <div class="flex items-center justify-between">
                 <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Detailed Content</h3>
                 <div class="header-actions">
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
 
@@ -226,14 +225,10 @@
         </div>
 
         {{-- Testimony --}}
-        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4" x-data="{ lang: 'en' }">
+        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4" x-data="bilingualForm()">
             <div class="flex items-center justify-between">
                 <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-wider">Testimony</h3>
                 <div class="header-actions">
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
             <div class="grid md:grid-cols-2 gap-4">
@@ -362,10 +357,6 @@
                 <form action="{{ route('admin.projects.grants.update', [$item, $grant]) }}" method="POST" class="space-y-3">
                     @csrf @method('PUT')
                     <div class="flex justify-end mb-1">
-                        <div class="lang-tabs">
-                            <button type="button" class="lang-tab" :class="{ active: gLang === 'en' }" @click="gLang = 'en'">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: gLang === 'fr' }" @click="gLang = 'fr'">FR</button>
-                        </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div x-show="gLang === 'en'">
@@ -427,10 +418,6 @@
                 <form action="{{ route('admin.projects.grants.store', $item) }}" method="POST" class="space-y-3">
                     @csrf
                     <div class="flex justify-end mb-1">
-                        <div class="lang-tabs">
-                            <button type="button" class="lang-tab" :class="{ active: gLang === 'en' }" @click="gLang = 'en'">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: gLang === 'fr' }" @click="gLang = 'fr'">FR</button>
-                        </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div x-show="gLang === 'en'">

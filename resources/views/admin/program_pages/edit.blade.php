@@ -14,16 +14,17 @@
     @method('PUT')
     <div class="p-6 space-y-6">
 
-        <div x-data="{ lang: 'en' }" class="space-y-6">
+        <div x-data="bilingualForm()" class="space-y-6">
 
         {{-- Language Tabs --}}
         <div class="flex items-center justify-between">
             <span class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Translatable Fields</span>
-            <div class="lang-tabs">
-                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-            </div>
-        </div>
+        
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
 
         {{-- Title --}}
         <div x-show="lang === 'en'">

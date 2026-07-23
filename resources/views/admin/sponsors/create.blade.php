@@ -21,19 +21,20 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                 </div>
-                <h3>Sponsor Details</h3>
+                <div class="flex items-center justify-between mb-4"><h3>Sponsor Details</h3>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
                 <div class="header-actions">
                     <span class="badge">Required *</span>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
 
             <div class="card-body space-y-6">
                 <!-- Sponsor Name -->
-                <div class="form-group" x-show="lang === 'en'">
+<div class="form-group" x-show="lang === 'en'">
                     <label class="form-label">Sponsor Name <span class="required">*</span></label>
                     <input type="text" name="name" value="{{ old('name') }}"
                            class="form-control @error('name') error @enderror"

@@ -18,7 +18,7 @@
         @method('PUT')
 
         {{-- Book Details --}}
-        <div x-data="{ lang: 'en' }">
+        <div x-data="bilingualForm()">
         <div class="form-card">
             <div class="card-header">
                 <div class="icon blue">
@@ -26,18 +26,19 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253\"/>
                     </svg>
                 </div>
-                <h3>Book Details</h3>
+                <div class="flex items-center justify-between mb-4"><h3>Book Details</h3>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
                 <div class="header-actions">
                     <span class="badge">Required *</span>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="form-group" x-show="lang === 'en'">
+<div class="form-group" x-show="lang === 'en'">
                         <label class="form-label">Title <span class="required">*</span></label>
                         <input type="text" name="title" value="{{ old('title', $book->title) }}"
                                class="form-control @error('title') error @enderror"
@@ -75,10 +76,6 @@
                 </div>
                 <h3>Description</h3>
                 <div class="header-actions">
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
             <div class="card-body">

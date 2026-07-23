@@ -173,7 +173,13 @@
 
                 {{-- Header --}}
                 <div class="sticky top-0 bg-white border-b border-gray-100 px-5 py-3 flex items-center justify-between rounded-t-2xl z-10">
-                    <h3 class="font-bold text-gray-800 text-sm" x-text="modalTitle"></h3>
+                    <div class="flex items-center justify-between flex-1 pr-4">
+                        <h3 class="font-bold text-gray-800 text-sm" x-text="modalTitle"></h3>
+                        <div class="lang-tabs" title="Toggle editing language (English / French)">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                        </div>
+                    </div>
                     <button @click="closeModal()" type="button"
                             class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
                         <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -190,13 +196,6 @@
                         <input type="hidden" name="_method" value="PUT">
                     </template>
 
-                    {{-- Language toggle --}}
-                    <div class="flex justify-end">
-                        <div class="lang-tabs">
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                        </div>
-                    </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         {{-- YEAR --}}
@@ -218,7 +217,8 @@
                     </div>
 
                     {{-- TITLE --}}
-                    <div x-show="lang === 'en'">
+                    
+<div x-show="lang === 'en'">
                         <label for="modal-title" class="text-xs font-medium text-gray-600">Title <span class="text-gray-400 font-normal">(optional)</span></label>
                         <input type="text" id="modal-title" name="title" autocomplete="off"
                                x-model="form.title"

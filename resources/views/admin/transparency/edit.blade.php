@@ -27,17 +27,18 @@
                 @csrf
                 @method('PUT')
 
-                <div x-data="{ lang: 'en' }">
+                <div x-data="bilingualForm()">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-sm font-semibold text-gray-700">Report Language</span>
                         <div class="header-actions">
                             <span class="badge">Required *</span>
-                            <div class="lang-tabs">
-                                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                            </div>
                         </div>
+                    
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                     </div>
+                </div>
 
                     <div x-show="lang === 'en'">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Report Title <span class="text-red-400">*</span></label>

@@ -14,12 +14,13 @@
             @csrf
 
             {{-- Slide Text --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="{ lang: 'en' }">
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="bilingualForm()">
                 <div class="flex items-center justify-between">
                     <h3 class="font-semibold text-gray-700 text-sm">Slide Content</h3>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                     </div>
                 </div>
 
@@ -113,13 +114,9 @@
             </div>
 
             {{-- CTAs --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="{ lang: 'en' }">
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="bilingualForm()">
                 <div class="flex items-center justify-between">
                     <h3 class="font-semibold text-gray-700 text-sm">Call-to-Action Buttons</h3>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">

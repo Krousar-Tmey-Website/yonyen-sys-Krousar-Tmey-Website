@@ -12,12 +12,13 @@
         <form action="{{ route('admin.reports.store') }}" method="POST" enctype="multipart/form-data" class="mt-6 space-y-5">
             @csrf
 
-            <div x-data="{ lang: 'en' }">
+            <div x-data="bilingualForm()">
                 <div class="mb-1 flex items-center justify-between">
                     <span class="text-sm font-semibold text-gray-700">Report Title <span class="text-red-500">*</span></span>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                     </div>
                 </div>
 

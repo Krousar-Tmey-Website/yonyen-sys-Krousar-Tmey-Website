@@ -9,6 +9,13 @@
     $bookAvailable   = old('is_available', $book->is_available ?? true);
 @endphp
 
+
+                <div class="flex justify-end w-full mb-3 -mt-2">
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
 <div class="form-group" x-show="lang === 'en'">
     <label class="form-label">Title <span class="required">*</span></label>
     <input type="text" name="title" value="{{ $bookTitle }}"

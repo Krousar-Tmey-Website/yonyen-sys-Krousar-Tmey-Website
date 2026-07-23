@@ -7,13 +7,14 @@
 @section('content')
 
 <div class="max-w-3xl mx-auto">
-    <div class="bg-white rounded-2xl border border-gray-100 p-6" x-data="{ lang: 'en' }">
+    <div class="bg-white rounded-2xl border border-gray-100 p-6" x-data="bilingualForm()">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="font-bold text-gray-700 text-sm">Country Information</h3>
-            <div class="lang-tabs">
-                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-            </div>
+            <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-gray-700 text-sm">Country Information</h3>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
         </div>
 
         <form action="{{ isset($worldwidePartner) ? route('admin.worldwide-partners.update', $worldwidePartner) : route('admin.worldwide-partners.store') }}"
@@ -22,8 +23,7 @@
             @if(isset($worldwidePartner))
                 @method('PUT')
             @endif
-
-            <div x-show="lang === 'en'">
+<div x-show="lang === 'en'">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Country Name <span class="text-red-400">*</span></label>
                 <input type="text" name="country_name" value="{{ old('country_name', $worldwidePartner->country_name ?? '') }}"
                        class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"

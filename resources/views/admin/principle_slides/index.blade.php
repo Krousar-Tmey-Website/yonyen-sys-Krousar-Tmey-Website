@@ -12,12 +12,13 @@
         <h3 class="font-bold text-gray-700 mb-4 text-sm">Add New Slide</h3>
         <form action="{{ route('admin.principle-slides.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
             @csrf
-            <div x-data="{ lang: 'en' }">
+            <div x-data="bilingualForm()">
                 <div class="flex items-center justify-between mb-1">
                     <label class="block text-xs font-medium text-gray-600">Title (optional)</label>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                     </div>
                 </div>
                 <div x-show="lang === 'en'">
@@ -107,13 +108,9 @@
                     <div class="px-5 py-4 bg-gray-50 border-t border-gray-100" x-show="editing" x-cloak>
                         <form action="{{ route('admin.principle-slides.update', $slide) }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                             @csrf @method('PUT')
-                            <div x-data="{ lang: 'en' }">
+                            <div x-data="bilingualForm()">
                                 <div class="flex items-center justify-between mb-1">
                                     <label class="block text-xs font-medium text-gray-600">Title (optional)</label>
-                                    <div class="lang-tabs">
-                                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                                    </div>
                                 </div>
                                 <div x-show="lang === 'en'">
                                     <input type="text" name="title" value="{{ $slide->title }}"

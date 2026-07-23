@@ -15,7 +15,7 @@
         @csrf
 
         {{-- Book Details --}}
-        <div x-data="{ lang: 'en' }">
+        <div x-data="bilingualForm()">
         <div class="form-card">
             <div class="card-header">
                 <div class="icon blue">
@@ -26,10 +26,6 @@
                 <h3>Book Details</h3>
                 <div class="header-actions">
                     <span class="badge">Required *</span>
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                    </div>
                 </div>
             </div>
             <div class="card-body">

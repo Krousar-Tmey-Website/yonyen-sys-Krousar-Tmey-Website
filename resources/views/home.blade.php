@@ -1220,7 +1220,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
                     @if($sectionImage)
                     <img src="{{ str_starts_with($sectionImage->path, 'http') ? $sectionImage->path : asset('storage/' . $sectionImage->path) }}"
-                        alt="{{ $sectionImage->alt ?? $section->title }}"
+                        alt="{{ $sectionImage->alt ?? $section->localized_title }}"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                         class="w-full h-[340px] lg:h-[420px] object-cover rounded-2xl shadow-xl
                                 group-hover:shadow-2xl transition-all duration-700
@@ -1259,13 +1259,13 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
                 {{-- Title --}}
                 <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 leading-tight mb-6">
-                    {{ $section->title }}
+                    {{ $section->localized_title }}
                 </h2>
 
                 {{-- Description --}}
-                @if($section->description)
+                @if($section->localized_description)
                 <div class="text-gray-600 leading-relaxed space-y-4 mb-8">
-                    @foreach(explode("\n\n", $section->description) as $paragraph)
+                    @foreach(explode("\n\n", $section->localized_description) as $paragraph)
                     <p>{{ $paragraph }}</p>
                     @endforeach
                 </div>
@@ -1282,7 +1282,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                                   ? 'bg-[#2d6fa3] text-white hover:bg-[#1d4e7a] shadow-md hover:shadow-lg'
                                   : 'bg-white text-[#2d6fa3] border-2 border-[#2d6fa3]/20 hover:border-[#2d6fa3] hover:bg-[#2d6fa3]/5'
                               }}">
-                        <span>{{ $link->text }}</span>
+                        <span>{{ $link->localized_text }}</span>
                         <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />

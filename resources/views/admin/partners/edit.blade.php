@@ -7,22 +7,28 @@
 @section('content')
 
 <div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6" x-data="bilingualForm()">
         {{-- Header --}}
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h3 class="font-bold text-gray-800">Edit Partner</h3>
                 <p class="text-sm text-gray-400 mt-0.5">Update partner information and website display settings.</p>
             </div>
-            @if ($partner->logo)
-                <img src="{{ asset('storage/' . $partner->logo) }}"
-                     alt="{{ $partner->name }}"
-                     class="w-10 h-10 rounded-xl object-cover border border-gray-100 bg-white">
-            @else
-                <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 text-sm font-bold">
-                    {{ Str::substr($partner->name, 0, 1) }}
+            <div class="flex items-center gap-3">
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                 </div>
-            @endif
+                @if ($partner->logo)
+                    <img src="{{ asset('storage/' . $partner->logo) }}"
+                         alt="{{ $partner->name }}"
+                         class="w-10 h-10 rounded-xl object-cover border border-gray-100 bg-white">
+                @else
+                    <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 text-sm font-bold">
+                        {{ Str::substr($partner->name, 0, 1) }}
+                    </div>
+                @endif
+            </div>
         </div>
 
         <form action="{{ route('admin.partners.update', $partner) }}" method="POST" enctype="multipart/form-data" class="space-y-6">

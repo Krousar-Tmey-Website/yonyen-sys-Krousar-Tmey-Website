@@ -286,10 +286,6 @@
                 <div>
                     <div class="flex items-center justify-between mb-1.5">
                         <label class="block text-sm font-medium text-gray-700">Location / City</label>
-                        <div class="lang-tabs">
-                            <button type="button" class="lang-tab" :class="{ active: locationLang === 'en' }" @click="locationLang = 'en'">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: locationLang === 'fr' }" @click="locationLang = 'fr'">FR</button>
-                        </div>
                     </div>
                     <div x-show="locationLang === 'en'">
                         <input type="text" name="location_name" x-model="formLocation"

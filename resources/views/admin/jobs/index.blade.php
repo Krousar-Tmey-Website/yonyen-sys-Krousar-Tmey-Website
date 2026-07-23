@@ -21,13 +21,6 @@
             <form action="{{ route('admin.jobs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
 
-                {{-- Language toggle --}}
-                <div class="flex justify-end">
-                    <div class="lang-tabs">
-                        <button type="button" class="lang-tab" :class="{ active: addLang === 'en' }" @click="addLang = 'en'">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: addLang === 'fr' }" @click="addLang = 'fr'">FR</button>
-                    </div>
-                </div>
 
                 <div x-show="addLang === 'en'">
                     <label class="block text-xs font-medium text-gray-600 mb-1">Job Title <span class="text-red-400">*</span></label>
@@ -231,12 +224,13 @@
                                 <form action="{{ route('admin.jobs.update', $job) }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                                     @csrf @method('PUT')
                                     <div class="flex items-center justify-between border-b border-gray-100 pb-2">
-                                        <span class="text-xs font-bold text-gray-700">Edit Job: {{ $job->title }}</span>
+                                        <div class="flex items-center justify-between mb-4"><span class="text-xs font-bold text-gray-700">Edit Job: {{ $job->title }}</span>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
                                         <div class="flex items-center gap-3">
-                                            <div class="lang-tabs">
-                                                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
-                                                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
-                                            </div>
                                             <button type="button" @click="editing = false" class="text-gray-400 hover:text-gray-600">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -245,7 +239,7 @@
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-                                        <div x-show="lang === 'en'">
+<div x-show="lang === 'en'">
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Job Title</label>
                                             <input type="text" name="title" value="{{ $job->title }}" :required="lang === 'en'"
                                                    class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3]">
