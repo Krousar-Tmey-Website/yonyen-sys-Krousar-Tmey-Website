@@ -190,11 +190,11 @@
                 'icon' =>
                 'M10.707 2.293a1 1 0 00-1.414 0l-7 7A1 1 0 002 10h.5v8a2 2 0 002 2h15a2 2 0 002-2v-8h.5a1 1 0 00.707-1.707l-7-7z',
                 'children' => [
-                ['route' => 'admin.slides.index', 'label' => __('Slideshow')],
-                ['route' => 'admin.home.index', 'label' => __('Home Settings')],
-                ['route' => 'admin.page-sections.index', 'label' => __('Page Sections')],
-                ['route' => 'admin.sponsors.index', 'label' => __('Sponsors')],
-                ['route' => 'admin.stories.index', 'label' => __('Success Stories')],
+                ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
+                ['route' => 'admin.home.index', 'label' => 'Home Settings'],
+                ['route' => 'admin.map-projects.index', 'label' => 'Map Structure'],
+                ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
+                ['route' => 'admin.sponsors.index', 'label' => 'Sponsors'],
                 ],
                 ],
                 'about' => [
@@ -202,12 +202,13 @@
                 'icon' =>
                 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
                 'children' => [
-                ['route' => 'admin.presentation.index', 'label' => __('Presentation')],
-                ['route' => 'admin.core-values.index', 'label' => __('Our Values')],
-                ['route' => 'admin.history-events.index', 'label' => __('Our History')],
-                ['route' => 'admin.awards.index', 'label' => __('Awards')],
-                ['route' => 'admin.partners.index', 'label' => __('Partners')],
-                ['route' => 'admin.transparency.index', 'label' => __('Transparency')],
+                ['route' => 'admin.presentation.index', 'label' => 'Presentation'],
+                ['route' => 'admin.core-values.index', 'label' => 'Our Values'],
+                ['route' => 'admin.history-banner.index', 'label' => 'History Banner'],
+                ['route' => 'admin.history-events.index', 'label' => 'Our History'],
+                ['route' => 'admin.awards.index', 'label' => 'Awards'],
+                ['route' => 'admin.partners.index', 'label' => 'Partners'],
+                ['route' => 'admin.transparency.index', 'label' => 'Transparency'],
                 ],
                 ],
                 'programs' => [

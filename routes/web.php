@@ -14,6 +14,7 @@ use App\Models\CoreValue;
 use App\Models\Gallery;
 use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
+use App\Models\MapProject;
 use App\Models\JobOpportunity;
 use App\Models\News;
 use App\Enums\PartnerCategory;
@@ -56,8 +57,9 @@ Route::get('/', function () {
     $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
     $sponsors = \App\Models\Sponsor::active()->orderBy('sort_order')->get();
+    $mapProjects = MapProject::getFrontendData();
 
-    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics', 'sponsors'));
+    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics', 'sponsors', 'mapProjects'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -300,6 +302,13 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     Route::resource('sponsors', Admin\SponsorController::class)->except(['show']);
 
+    // Map Structure
+    Route::resource('map-projects', Admin\MapProjectController::class)
+        ->except(['show', 'create', 'edit'])
+        ->parameters(['map-projects' => 'mapProject']);
+    Route::post('map-projects/settings', [Admin\MapProjectController::class, 'updateSettings'])
+        ->name('map-projects.settings');
+
     // Programs banner
     Route::get('programs-banner', [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');
     Route::post('programs-banner', [Admin\ProgramsBannerController::class, 'update'])->name('programs-banner.update');
@@ -314,6 +323,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show'])->parameters(['principle-slides' => 'slide']);
     Route::resource('partners', Admin\PartnerController::class)->except(['show']);
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
+    Route::get('history-banner', [Admin\HistoryBannerController::class, 'index'])->name('history-banner.index');
+    Route::post('history-banner', [Admin\HistoryBannerController::class, 'update'])->name('history-banner.update');
     Route::resource('history-events', Admin\HistoryEventController::class)
         ->except(['show', 'create'])
         ->parameters(['history-events' => 'historyEvent']);
