@@ -230,6 +230,7 @@ Route::get('/donate', [DonationController::class, 'show'])->name('donate');
 Route::post('/donate', [DonationController::class, 'send'])->name('donate.send');
 Route::get('/donate/international', [DonationController::class, 'showInternational'])->name('donate.international');
 Route::post('/donate/international', [DonationController::class, 'send'])->name('donate.international.send');
+Route::post('/donation/continue', [DonationController::class, 'continueDonation']);
 
 Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
 Route::get('/newsletter/unsubscribe/{email}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');

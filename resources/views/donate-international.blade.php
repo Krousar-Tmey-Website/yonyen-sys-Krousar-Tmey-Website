@@ -55,43 +55,63 @@
         {{-- Twin Columns Layout --}}
         <div class="grid md:grid-cols-2 gap-8 items-start">
             
-            {{-- LEFT CARD: Campaign Metrics --}}
+            {{-- LEFT CARD: Impact Text --}}
             <div class="bg-white rounded-2xl border border-slate-200/80 p-8 shadow-sm flex flex-col justify-between min-h-[460px]">
-                <div class="text-center space-y-4">
-                    <h2 class="text-3xl font-black text-slate-805">Support Our Cause</h2>
-                    <p class="text-sm text-slate-500 leading-relaxed max-w-md mx-auto">
-                        Help our organization by donating today! Donations go to making a difference for our cause.
-                    </p>
+                <div class="space-y-6">
+                    <div class="text-center md:text-left space-y-3">
+                        <span class="text-xs font-bold text-[#2d6fa3] tracking-widest uppercase block">Make a Difference</span>
+                        <h2 class="text-3xl font-black text-slate-800 leading-tight">Support Children in Cambodia</h2>
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            At Krousar Thmey, we believe every child deserves a family, a quality education, and the opportunity to succeed. Your donations directly support our projects across Cambodia.
+                        </p>
+                    </div>
+
+                    {{-- Highlighted bullet points --}}
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-50 text-[#2d6fa3] flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800">Special Education</h4>
+                                <p class="text-xs text-slate-400 leading-relaxed">Funding specialized schools and materials for deaf or blind children to learn and communicate.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800">Child Welfare</h4>
+                                <p class="text-xs text-slate-400 leading-relaxed">Providing protection, safe housing, and family integration for street-involved and vulnerable kids.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800">Cultural & Artistic Development</h4>
+                                <p class="text-xs text-slate-400 leading-relaxed">Supporting visual arts, traditional Khmer music, dance, and creative expression classes.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                {{-- Metric grid with borders --}}
-                <div class="border border-slate-200 rounded-xl overflow-hidden bg-white grid grid-cols-3 divide-x divide-slate-250 py-4 my-8">
-                    <div class="text-center">
-                        <span class="block text-lg font-extrabold text-slate-900">${{ number_format($raised, 2) }}</span>
-                        <span class="text-xs text-slate-450 mt-1 block">Raised</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="block text-lg font-extrabold text-slate-900">{{ $count }}</span>
-                        <span class="text-xs text-slate-450 mt-1 block">Donations</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="block text-lg font-extrabold text-slate-900">${{ number_format($goal, 2) }}</span>
-                        <span class="text-xs text-slate-450 mt-1 block">Goal</span>
-                    </div>
-                </div>
-
-                {{-- Progress Bar --}}
-                @php
-                    $percent = min(100, ($raised / $goal) * 100);
-                @endphp
-                <div class="space-y-2">
-                    <div class="h-4 bg-slate-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-emerald-500 rounded-full" style="width: {{ $percent }}%"></div>
-                    </div>
-                    <div class="flex items-center justify-between text-xs font-bold text-slate-500">
-                        <span>${{ number_format($raised, 2) }} amount</span>
-                        <span>${{ number_format($goal, 2) }} amount</span>
-                    </div>
+                {{-- Guarantee Note --}}
+                <div class="border-t border-slate-100 pt-4 mt-6 flex items-center gap-2.5 text-[11px] text-slate-450 font-bold">
+                    <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                    <span>100% of your funds go directly to supporting the children in Cambodia.</span>
                 </div>
             </div>
 
@@ -109,6 +129,8 @@
                     email: '{{ old('email') }}',
                     phone: '{{ old('phone') }}',
                     message: '{{ old('message') }}',
+                    sending: false,
+                    error_message: '',
                     get presets() {
                         return this.currency === 'KHR'
                             ? [20000, 40000, 80000, 200000, 400000, 1000000]
@@ -122,6 +144,57 @@
                         } else {
                             return '$' + val.toFixed(2);
                         }
+                    },
+                    get impactMessage() {
+                        if (this.amount <= 0) return '';
+                        let amtUsd = this.currency === 'KHR' ? this.amount / 4000 : (this.currency === 'EUR' ? this.amount * 1.08 : this.amount);
+                        if (amtUsd <= 5) return 'Covers clean water for a child for one week.';
+                        if (amtUsd <= 15) return 'Provides books and art supplies for a student.';
+                        if (amtUsd <= 30) return 'Covers educational games & toys for children.';
+                        if (amtUsd <= 60) return 'Covers food and primary healthcare for a month.';
+                        if (amtUsd <= 150) return 'Supports vocational training for a young adult.';
+                        return 'Directly funds special education projects for deaf/blind students.';
+                    },
+                    submitDonation() {
+                        if (!this.first_name || !this.last_name || !this.email) {
+                            this.error_message = 'Please fill in all required fields.';
+                            return;
+                        }
+                        this.sending = true;
+                        this.error_message = '';
+                        
+                        fetch('{{ url('/donation/continue') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                first_name: this.first_name,
+                                last_name: this.last_name,
+                                email: this.email,
+                                amount: this.amount,
+                                currency: this.currency,
+                                frequency: this.frequency,
+                                message: this.message
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(err => { throw err; });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            this.step = 3;
+                        })
+                        .catch(err => {
+                            this.error_message = err.message || 'Failed to send donation declaration. Please try again.';
+                        })
+                        .finally(() => {
+                            this.sending = false;
+                        });
                     }
                  }"
                  x-init="
@@ -134,7 +207,6 @@
                         activePreset = amount;
                     }
                  ">
-                
                 {{-- STEP 1: Choose Amount --}}
                 <div x-show="step === 1" class="flex flex-col h-full justify-between">
                     {{-- Header --}}
@@ -258,13 +330,7 @@
                             We'll never share this information with anyone.
                         </p>
 
-                        <form action="{{ route('donate.international.send') }}" method="POST" class="space-y-4">
-                            @csrf
-                            <input type="hidden" name="frequency" value="one-time">
-                            <input type="hidden" name="currency" :value="currency">
-                            <input type="hidden" name="amount" :value="amount">
-                            <input type="hidden" name="name" :value="first_name + ' ' + last_name">
-
+                        <form @submit.prevent="submitDonation()" class="space-y-4">
                             {{-- First name --}}
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">First name <span class="text-red-500">*</span></label>
@@ -286,19 +352,17 @@
                                        class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#0070ba]">
                             </div>
 
-                            {{-- Optional parameters --}}
-                            <div class="sr-only">
-                                <input type="text" name="phone" x-model="phone">
-                                <textarea name="message" x-model="message"></textarea>
-                            </div>
+                            {{-- Error message if any --}}
+                            <div x-show="error_message" x-cloak class="text-xs text-red-500 font-bold bg-red-50 p-2.5 rounded-lg border border-red-100" x-text="error_message"></div>
 
                             {{-- Footer Button --}}
                             <div class="pt-4 border-t border-slate-100">
-                                <button type="submit"
-                                        class="inline-flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-bold text-white transition hover:brightness-105 focus:outline-none"
+                                <button type="submit" :disabled="sending"
+                                        class="inline-flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-bold text-white transition hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
                                         style="background-color: #0070ba">
-                                    <span>Continue</span>
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <span x-show="!sending">Continue</span>
+                                    <span x-show="sending">processing donation ....</span>
+                                    <svg x-show="!sending" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                                     </svg>
                                 </button>
@@ -315,70 +379,61 @@
                     </div>
                 </div>
 
+                {{-- STEP 3: Thank You & Success --}}
+                <div x-show="step === 3" x-cloak class="flex flex-col h-full justify-between">
+                    {{-- Header --}}
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                        <div class="w-5"></div>
+                        <span class="text-sm font-bold text-slate-800">Declaration Complete</span>
+                        <div class="w-5"></div>
+                    </div>
+
+                    {{-- Green horizontal step progress --}}
+                    <div class="h-1 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-emerald-500" style="width: 100%"></div>
+                    </div>
+
+                    {{-- Body form --}}
+                    <div class="p-6 space-y-5 text-center flex-1 flex flex-col justify-center">
+                        <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-2 text-emerald-600">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <h3 class="text-xl font-extrabold text-slate-900">Thank you, <span x-text="first_name"></span>!</h3>
+                            <p class="text-sm md:text-base text-slate-600 font-semibold leading-relaxed">
+                                We have sent a confirmation email to <span class="font-bold text-slate-850" x-text="email"></span>.
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-xl text-left border border-slate-150 space-y-2.5">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Wire transfer details</span>
+                            <div class="grid grid-cols-2 gap-y-1.5 text-[11px] font-mono">
+                                <span class="text-slate-400">Amount:</span>
+                                <span class="text-slate-800 font-bold text-right" x-text="formatPreset(amount)"></span>
+                            </div>
+                        </div>
+
+                        <p class="text-[10px] text-slate-450 leading-relaxed italic">
+                            Your donation details have been shared with our regional entities. Thank you for your support.
+                        </p>
+                    </div>
+
+                    {{-- Footer badge --}}
+                    <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-center gap-1.5 text-[10px] text-slate-400 font-bold">
+                        <button type="button" @click="step = 1; first_name=''; last_name=''; email=''; custom_amount=''; amount=5; activePreset=5;" class="text-[#0070ba] hover:underline font-bold">
+                            Make another donation
+                        </button>
+                    </div>
+                </div>
+
             </div>
 
         </div>
 
-        {{-- Bank Wire instructions and national entities --}}
-        <div class="grid md:grid-cols-2 gap-6 mt-12">
-            
-            {{-- SWIFT Info Card --}}
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                <div class="w-10 h-10 rounded-xl bg-[#2d6fa3]/10 flex items-center justify-center mb-4">
-                    <svg class="w-5 h-5 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-bold text-slate-900 mb-2">Direct SWIFT Transfer</h3>
-                <p class="text-xs text-slate-500 leading-relaxed mb-4">You can wire your donation directly to Krousar Thmey's main bank account in Cambodia using these credentials:</p>
-                
-                <div class="space-y-2.5 font-mono text-xs bg-slate-50 p-4 rounded-xl">
-                    <div>
-                        <span class="text-slate-400 block uppercase font-sans text-[9px] font-bold">Bank Name</span>
-                        <span class="text-slate-800 font-bold">ABA Bank (Cambodia)</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-400 block uppercase font-sans text-[9px] font-bold">Account Name</span>
-                        <span class="text-slate-800 font-bold">KROUSAR THMEY</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-400 block uppercase font-sans text-[9px] font-bold">Account Number (USD)</span>
-                        <span class="text-slate-800 font-bold">000 765 432</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-400 block uppercase font-sans text-[9px] font-bold">SWIFT / BIC</span>
-                        <span class="text-slate-800 font-bold">ABAKKHPPXXX</span>
-                    </div>
-                </div>
-            </div>
 
-            {{-- Regional Offices Card --}}
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                <div class="w-10 h-10 rounded-xl bg-[#8da83a]/10 flex items-center justify-center mb-4">
-                    <svg class="w-5 h-5 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-bold text-slate-900 mb-2">Regional Offices</h3>
-                <p class="text-xs text-slate-500 leading-relaxed mb-4">If you are donating from Europe or Singapore, please contact our regional entities to benefit from local tax deductions:</p>
-                
-                <ul class="space-y-3 text-xs">
-                    <li class="flex items-center justify-between border-b border-slate-100 pb-2">
-                        <span class="font-bold text-slate-700">Krousar Thmey France</span>
-                        <a href="https://www.krousar-thmey.org/fr" target="_blank" class="text-[#2d6fa3] hover:underline font-bold">Visit Site ↗</a>
-                    </li>
-                    <li class="flex items-center justify-between border-b border-slate-100 pb-2">
-                        <span class="font-bold text-slate-700">Krousar Thmey Switzerland</span>
-                        <a href="https://www.krousar-thmey.ch" target="_blank" class="text-[#2d6fa3] hover:underline font-bold">Visit Site ↗</a>
-                    </li>
-                    <li class="flex flex-col gap-0.5">
-                        <span class="font-bold text-slate-700">Krousar Thmey Singapore</span>
-                        <span class="text-slate-400 italic text-[11px]">singapore@krousar-thmey.org</span>
-                    </li>
-                </ul>
-            </div>
-
-        </div>
 
     </div>
 </section>
