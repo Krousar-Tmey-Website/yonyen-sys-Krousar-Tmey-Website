@@ -1319,7 +1319,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                 <img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset('storage/' . $project->image) }}" class="w-full h-40 object-cover rounded-xl mb-5 group-hover:opacity-90 transition-opacity relative z-0">
                 @endif
                 <h3 class="text-xl font-bold text-[#1a3c6e] mb-3 relative z-0">{{ $project->title }}</h3>
-                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5 flex-1 relative z-0">{!! $project->description !!}</p>
+                <div class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5 flex-1 relative z-0 prose prose-sm max-w-none">{!! strip_tags($project->description) !!}</div>
                 
                 <div class="mt-auto flex items-center justify-between border-t border-gray-200/50 pt-5">
                     <span class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm group-hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300 pointer-events-none">

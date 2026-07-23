@@ -143,9 +143,9 @@
                                         </div>
                                         <h3 class="text-sm font-black text-[#e8a020] uppercase tracking-widest">Objective</h3>
                                     </div>
-                                    <p class="text-gray-800 leading-relaxed text-lg md:text-[1.15rem] font-medium pl-1">
+                                    <div class="text-gray-800 leading-relaxed text-lg md:text-[1.15rem] font-medium pl-1 prose prose-lg max-w-none">
                                         {!! $program->description !!}
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -214,7 +214,7 @@
                                 </svg>
                             </button>
                             <div x-show="open" class="px-8 pb-8 pt-4 border-t border-white/10" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-                                <p class="text-white/90 leading-loose text-lg whitespace-pre-line italic font-medium drop-shadow-sm">{!! $program->testimony_story !!}</p>
+                                <div class="text-white/90 leading-loose text-lg whitespace-pre-line italic font-medium drop-shadow-sm prose prose-lg max-w-none">{!! $program->testimony_story !!}</div>
                             </div>
                         </div>
                     </div>
@@ -302,7 +302,7 @@
                             @endif
                             
                             <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-wide mb-3 relative z-10">{{ $program->title }}</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line relative z-10 font-medium">{!! $program->description !!}</p>
+                            <div class="text-gray-600 text-sm leading-relaxed whitespace-pre-line relative z-10 font-medium prose prose-sm max-w-none">{!! $program->description !!}</div>
                         </div>
                     @endforeach
                 </div>

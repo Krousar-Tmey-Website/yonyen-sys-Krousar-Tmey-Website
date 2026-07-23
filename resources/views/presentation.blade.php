@@ -186,7 +186,7 @@
                         <div class="flex-1">
                             <p class="text-sm font-bold text-gray-900 leading-snug mb-2">{{ $stat->label }}</p>
                             @if($stat->description)
-                            <p class="text-xs text-gray-500 leading-relaxed">{!! $stat->description !!}</p>
+                            <div class="text-xs text-gray-500 leading-relaxed prose prose-sm max-w-none">{!! $stat->description !!}</div>
                             @endif
                         </div>
                     </div>

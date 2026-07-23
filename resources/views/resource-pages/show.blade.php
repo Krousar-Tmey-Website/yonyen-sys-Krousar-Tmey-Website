@@ -33,7 +33,7 @@
         {{-- Description --}}
         @if($page->detail_description)
         <div data-reveal style="--reveal-delay: 180" class="prose prose-lg max-w-none text-justify prose-p:text-gray-700 mb-8">
-            {!! nl2br(e($page->detail_description)) !!}
+            {!! $page->detail_description !!}
         </div>
         @endif
 

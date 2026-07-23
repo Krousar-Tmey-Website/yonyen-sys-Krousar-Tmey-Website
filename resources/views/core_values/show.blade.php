@@ -51,7 +51,7 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
                     @endif
                     @if($value->description)
                     <p class="text-white/60 text-sm bg-white/10 px-3 py-1 rounded-full inline-block">
-                        {{ $value->description }}
+                        {!! $value->description !!}
                     </p>
                     @endif
                 </div>
@@ -82,7 +82,7 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
                 @endif
                 @if($value->description)
                 <p class="text-lg text-white/70 max-w-2xl">
-                    {{ $value->description }}
+                    {!! $value->description !!}
                 </p>
                 @endif
             </div>
@@ -146,14 +146,14 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
                     @if($value->description)
                     <div class="border-l-4 border-[#2d6fa3] pl-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-4">Overview</h3>
-                        <p class="text-gray-600 leading-relaxed text-lg">{{ $value->description }}</p>
+                        <p class="text-gray-600 leading-relaxed text-lg">{!! $value->description !!}</p>
                     </div>
                     @endif
                     
                     @if($value->supporting_description)
                     <div class="border-l-4 border-[#8da83a] pl-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-4">Supporting Description</h3>
-                        <p class="text-gray-600 leading-relaxed text-lg">{{ $value->supporting_description }}</p>
+                        <p class="text-gray-600 leading-relaxed text-lg">{!! $value->supporting_description !!}</p>
                     </div>
                     @endif
                 </div>

@@ -57,11 +57,11 @@
                         </div>
                         <div class="mb-6">
                             <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-widest mb-2">Objective</h3>
-                            <p class="text-gray-700 leading-relaxed">{{ $previewObjective ?: 'Objective text will appear here.' }}</p>
+                            <div class="text-gray-700 leading-relaxed prose prose-sm max-w-none">{!! $previewObjective ?: 'Objective text will appear here.' !!}</div>
                         </div>
                         <div class="mb-6">
                             <h3 class="text-xs font-bold text-[#8da83a] uppercase tracking-widest mb-2">Program</h3>
-                            <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ $previewProgramText ?: 'Program text will appear here.' }}</p>
+                            <div class="text-gray-700 leading-relaxed whitespace-pre-line prose prose-sm max-w-none">{!! $previewProgramText ?: 'Program text will appear here.' !!}</div>
                         </div>
                         <div class="flex flex-col sm:flex-row gap-3">
                             <div class="btn-blue justify-center text-center w-full sm:w-auto opacity-90">Know more about the projects</div>
