@@ -46,6 +46,48 @@ class TransparencyController extends Controller
         return redirect()->route('admin.transparency.index')->with('success', 'Page content updated.');
     }
 
+    public function updateBanner(Request $request)
+    {
+        $request->validate([
+            'transparency_title'                => ['nullable', 'string', 'max:255'],
+            'transparency_banner_badge'         => ['nullable', 'string', 'max:255'],
+            'transparency_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
+            'transparency_banner_overlay_color' => ['nullable', 'string', 'max:20'],
+            'transparency_banner_blur'          => ['nullable', 'integer', 'min:0', 'max:20'],
+            'transparency_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
+            'transparency_banner_image_url'     => ['nullable', 'url', 'max:2048'],
+        ]);
+
+        HomeSetting::setValue('transparency_title', $request->input('transparency_title', ''));
+        HomeSetting::setValue('transparency_banner_badge', $request->input('transparency_banner_badge', ''));
+        HomeSetting::setValue('transparency_banner_subtitle', $request->input('transparency_banner_subtitle', ''));
+        HomeSetting::setValue('transparency_banner_overlay_color', $request->input('transparency_banner_overlay_color', ''));
+        HomeSetting::setValue('transparency_banner_blur', (string) $request->input('transparency_banner_blur', 0));
+
+        if ($request->hasFile('transparency_banner_image')) {
+            $existing = HomeSetting::getValue('transparency_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            $path = $request->file('transparency_banner_image')->store('transparency_banner', 'public');
+            HomeSetting::setValue('transparency_banner_image', $path);
+        } elseif ($request->filled('transparency_banner_image_url')) {
+            $existing = HomeSetting::getValue('transparency_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            HomeSetting::setValue('transparency_banner_image', $request->input('transparency_banner_image_url'));
+        } elseif ($request->boolean('transparency_banner_image_clear')) {
+            $existing = HomeSetting::getValue('transparency_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            HomeSetting::setValue('transparency_banner_image', '');
+        }
+
+        return redirect()->route('admin.transparency.index')->with('success', 'Transparency banner updated.');
+    }
+
     public function create()
     {
         return view('admin.transparency.create');
