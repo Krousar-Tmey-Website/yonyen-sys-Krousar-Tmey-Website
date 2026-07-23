@@ -45,21 +45,3 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'Intersect
         document.querySelectorAll('[data-reveal-card]').forEach((el) => cardRevealObserver.observe(el));
     });
 }
-
-// ── Timeline year navigator scrollspy ──
-// Highlights the year in the sidebar nav that matches the card currently in view.
-if ('IntersectionObserver' in window) {
-    const yearNavObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            const year = entry.target.getAttribute('data-year-anchor');
-            const link = document.querySelector(`[data-year-nav="${year}"]`);
-            if (link) {
-                link.classList.toggle('is-active', entry.isIntersecting);
-            }
-        });
-    }, { rootMargin: '-20% 0px -60% 0px' });
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('[data-year-anchor]').forEach((el) => yearNavObserver.observe(el));
-    });
-}

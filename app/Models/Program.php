@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Program extends Model
 {
+
     protected $fillable = [
         'title', 'slug', 'description', 'full_description',
         'image', 'icon_image', 'is_active', 'Status',

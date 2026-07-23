@@ -366,8 +366,8 @@ function googleTranslateElementInit() {
                     <div class="hidden lg:block border-r border-gray-200 pr-4 notranslate" x-data="{ open: false, lang: getCurrentLang() }">
                         <div class="relative">
                             <button @click="open = !open" @click.away="open = false" class="flex items-center gap-2 text-gray-700 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-3 rounded-lg hover:bg-gray-50 border border-gray-100 shadow-sm bg-white">
-                                <img :src="lang === 'km' ? 'https://flagcdn.com/w20/kh.png' : (lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png')" class="w-4 h-auto rounded-sm" alt="Flag">
-                                <span x-text="lang === 'km' ? 'ខ្មែរ' : (lang === 'fr' ? 'FR' : 'EN')">EN</span>
+                                <img :src="lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png'" class="w-4 h-auto rounded-sm" alt="Flag">
+                                <span x-text="lang === 'fr' ? 'FR' : 'EN'">EN</span>
                                 <svg class="w-3 h-3 transition-transform duration-200 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
                             
@@ -385,9 +385,7 @@ function googleTranslateElementInit() {
                                 <button @click="switchLang('fr')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2" :class="lang === 'fr' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : ''">
                                     <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt="Français"> Français
                                 </button>
-                                <button @click="switchLang('km')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2" :class="lang === 'km' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : ''">
-                                    <img src="https://flagcdn.com/w20/kh.png" class="w-4 h-auto rounded-sm" alt="Khmer"> ខ្មែរ
-                                </button>
+
                             </div>
                         </div>
                     </div>
@@ -436,9 +434,7 @@ function googleTranslateElementInit() {
                         <button @click="switchLang('fr')" :class="lang === 'fr' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
                             <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt="Français"> FR
                         </button>
-                        <button @click="switchLang('km')" :class="lang === 'km' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
-                            <img src="https://flagcdn.com/w20/kh.png" class="w-4 h-auto rounded-sm" alt="Khmer"> KM
-                        </button>
+
                     </div>
                     <a href="{{ route('donate') }}" class="btn-primary w-full justify-center py-3">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
