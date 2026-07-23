@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -25,31 +25,66 @@ function openEmail(email) {
     window.location.href = 'mailto:' + email;
   }
 }
-function changeGTranslate(lang) {
-    document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + window.location.hostname;
-    document.cookie = 'googtrans=/en/' + lang + '; path=/';
-    window.location.reload();
-}
+
 function getCurrentLang() {
     let match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
     if (match) {
         let parts = match[2].split('/');
         if (parts.length === 3 && parts[2] !== 'en') return parts[2];
     }
-    // Fall back to Laravel session locale
     return '{{ session("locale", "en") }}';
 }
-function switchLang(lang) {
-    if (lang === 'km' || lang === 'fr') {
-        // Use Google Translate for non-English
-        document.cookie = 'googtrans=/en/' + lang + '; path=/; domain=' + window.location.hostname;
-        document.cookie = 'googtrans=/en/' + lang + '; path=/';
-    } else {
-        // Clear Google Translate cookie for English
-        document.cookie = 'googtrans=; path=/; domain=' + window.location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-        document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+
+function manageGTCookies(action, lang = '') {
+    let hostname = window.location.hostname;
+    let parts = hostname.split('.');
+    let domains = [hostname, '.' + hostname];
+    
+    // If on a subdomain (e.g. krousar-thmey.sreydeth.site), also target the parent domain (.sreydeth.site)
+    // because Google Translate sometimes leaks cookies up to the parent domain, causing conflicts!
+    if (parts.length > 2) {
+        domains.push('.' + parts.slice(1).join('.'));
     }
-    window.location.href = '{{ url("/lang") }}/' + lang + '?redirect=' + encodeURIComponent(window.location.href);
+    
+    // 1. ALWAYS obliterate all existing cookies to prevent duplicates
+    let wipe = '=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    document.cookie = 'googtrans' + wipe;
+    domains.forEach(d => {
+        document.cookie = 'googtrans' + wipe + '; domain=' + d;
+    });
+
+    // 2. If setting a new language, set it aggressively on all domains
+    if (action === 'set' && lang !== 'en') {
+        let val = '=/en/' + lang + '; path=/';
+        document.cookie = 'googtrans' + val;
+        domains.forEach(d => {
+            document.cookie = 'googtrans' + val + '; domain=' + d;
+        });
+    }
+}
+
+function switchLang(lang) {
+    if (lang === 'en') {
+        manageGTCookies('clear');
+    } else {
+        manageGTCookies('set', lang);
+        
+        let gtCombo = document.querySelector('.goog-te-combo');
+        if (gtCombo) {
+            gtCombo.value = lang;
+            gtCombo.dispatchEvent(new Event('change'));
+        }
+    }
+
+    fetch('{{ url("/lang") }}/' + lang, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(() => {
+        setTimeout(() => {
+            window.location.reload(true);
+        }, 200);
+    }).catch(() => {
+        window.location.href = '{{ url("/lang") }}/' + lang;
+    });
 }
 </script>
 
@@ -62,19 +97,33 @@ iframe.goog-te-banner-frame { display: none !important; }
 .VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; } /* New GT classes */
 body > .skiptranslate > iframe.skiptranslate { display: none !important; visibility: hidden !important; }
 
+[x-cloak] { display: none !important; }
+
 html { margin-top: 0 !important; top: 0 !important; }
 body { margin-top: 0 !important; top: 0 !important; position: static !important; }
 
 .goog-tooltip { display: none !important; }
 .goog-tooltip:hover { display: none !important; }
 .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
-#google_translate_element { display: none !important; }
+#google_translate_element { 
+    position: absolute !important;
+    opacity: 0 !important;
+    z-index: -10 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
 </style>
 
 <div id="google_translate_element"></div>
 <script type="text/javascript">
 function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,km,fr', autoDisplay: false}, 'google_translate_element');
+  new google.translate.TranslateElement({
+    pageLanguage: 'en', 
+    includedLanguages: 'en,km,fr', 
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+  }, 'google_translate_element');
 }
 </script>
 <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
@@ -211,19 +260,21 @@ function googleTranslateElementInit() {
                             <svg class="w-4 h-4 {{ $isWhoWeAre ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
-                        <div x-show="open"
+                        <div x-show="open" x-cloak
                             x-transition:enter="transition ease-out duration-150"
                             x-transition:enter-start="opacity-0 translate-y-1"
                             x-transition:enter-end="opacity-100 translate-y-0"
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
-                            class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl {{ request()->routeIs('presentation') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Presentation') }}</a>
-                            <a href="{{ route('about') }}#history" class="dropdown-item">{{ __('History') }}</a>
-                            <a href="{{ route('about') }}#awards" class="dropdown-item">{{ __('Awards') }}</a>
-                            <a href="{{ route('about') }}#partners" class="dropdown-item">{{ __('Partners') }}</a>
-                            <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl {{ request()->routeIs('transparency') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Transparency') }}</a>
+                            class="absolute top-full left-0 pt-1 w-52 z-50">
+                            <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-1">
+                                <a href="{{ route('presentation') }}" class="dropdown-item rounded-t-xl {{ request()->routeIs('presentation') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Presentation') }}</a>
+                                <a href="{{ route('about') }}#history" class="dropdown-item">{{ __('History') }}</a>
+                                <a href="{{ route('about') }}#awards" class="dropdown-item">{{ __('Awards') }}</a>
+                                <a href="{{ route('about') }}#partners" class="dropdown-item">{{ __('Partners') }}</a>
+                                <a href="{{ route('transparency') }}" class="dropdown-item rounded-b-xl {{ request()->routeIs('transparency') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Transparency') }}</a>
+                            </div>
                         </div>
                     </div>
 
@@ -235,20 +286,24 @@ function googleTranslateElementInit() {
                             <svg class="w-4 h-4 {{ $isPrograms ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
-                        <div x-show="open"
+                        <div x-show="open" x-cloak
                              x-transition:enter="transition ease-out duration-150"
                              x-transition:enter-start="opacity-0 translate-y-1"
                              x-transition:enter-end="opacity-100 translate-y-0"
                              x-transition:leave="transition ease-in duration-100"
                              x-transition:leave-start="opacity-100 translate-y-0"
                              x-transition:leave-end="opacity-0 translate-y-1"
-                             class="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                             @php 
-                                 $navProgramsList = \App\Models\Program::active()->take(3)->get(); 
-                             @endphp
-                             @foreach($navProgramsList as $index => $navProg)
-                             <a href="{{ route('programs.show', $navProg->slug) }}" class="dropdown-item {{ $index === 0 ? 'rounded-t-xl' : '' }} {{ $index === count($navProgramsList) - 1 ? 'rounded-b-xl' : '' }}">{{ $navProg->title }}</a>
-                             @endforeach
+                             class="absolute top-full left-0 pt-1 w-64 z-50">
+                             <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-1">
+                                 @php 
+                                     $navProgramsList = \Illuminate\Support\Facades\Cache::remember('nav_programs_list', 3600, function() {
+                                         return \App\Models\Program::active()->take(3)->get();
+                                     }); 
+                                 @endphp
+                                 @foreach($navProgramsList as $index => $navProg)
+                                 <a href="{{ route('programs.show', $navProg->slug) }}" class="dropdown-item {{ $index === 0 ? 'rounded-t-xl' : '' }} {{ $index === count($navProgramsList) - 1 ? 'rounded-b-xl' : '' }}">{{ $navProg->title }}</a>
+                                 @endforeach
+                             </div>
                         </div>
                     </div>
 
@@ -260,18 +315,20 @@ function googleTranslateElementInit() {
                             <svg class="w-4 h-4 {{ $isInvolved ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
-                        <div x-show="open"
+                        <div x-show="open" x-cloak
                             x-transition:enter="transition ease-out duration-150"
                             x-transition:enter-start="opacity-0 translate-y-1"
                             x-transition:enter-end="opacity-100 translate-y-0"
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
-                            class="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
-                            <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">{{ __('Become a Partner') }}</a>
-                            <a href="{{ route('involved') }}#volunteer" class="dropdown-item">{{ __('Volunteering') }}</a>
-                            <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">{{ __('Book for Sales') }}</a>
-                            <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">{{ __('Job Opportunities') }}</a>
+                            class="absolute top-full left-0 pt-1 w-52 z-50">
+                            <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-1">
+                                <a href="{{ route('involved') }}#partner" class="dropdown-item rounded-t-xl">{{ __('Become a Partner') }}</a>
+                                <a href="{{ route('involved') }}#volunteer" class="dropdown-item">{{ __('Volunteering') }}</a>
+                                <a href="{{ route('involved') }}#book-for-sales" class="dropdown-item">{{ __('Book for Sales') }}</a>
+                                <a href="{{ route('involved') }}#jobs" class="dropdown-item rounded-b-xl">{{ __('Job Opportunities') }}</a>
+                            </div>
                         </div>
                     </div>
 
@@ -285,14 +342,14 @@ function googleTranslateElementInit() {
                             <svg class="w-4 h-4 {{ $isResources ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
-                        <div x-show="open"
+                        <div x-show="open" x-cloak
                             x-transition:enter="transition ease-out duration-150"
                             x-transition:enter-start="opacity-0 translate-y-1"
                             x-transition:enter-end="opacity-100 translate-y-0"
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
-                            class="absolute top-full left-0 pt-2 w-52 z-50">
+                            class="absolute top-full left-0 pt-1 w-52 z-50">
                             <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-1">
                                 <a href="{{ route('resources') }}#annual-reports" @click="open = false" class="dropdown-item rounded-t-xl">{{ __('Annual Reports') }}</a>
                                 <a href="{{ route('resources') }}#media-resources" @click="open = false" class="dropdown-item">{{ __('Media Resources') }}</a>
@@ -306,15 +363,15 @@ function googleTranslateElementInit() {
                 {{-- CTA + Mobile toggle --}}
                 <div class="flex items-center gap-4">
                     {{-- Translate Dropdown --}}
-                    <div class="hidden lg:block border-r border-gray-200 pr-4" x-data="{ open: false, lang: getCurrentLang() }">
+                    <div class="hidden lg:block border-r border-gray-200 pr-4 notranslate" x-data="{ open: false, lang: getCurrentLang() }">
                         <div class="relative">
                             <button @click="open = !open" @click.away="open = false" class="flex items-center gap-2 text-gray-700 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-3 rounded-lg hover:bg-gray-50 border border-gray-100 shadow-sm bg-white">
-                                <img :src="lang === 'km' ? 'https://flagcdn.com/w20/kh.png' : (lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png')" class="w-4 h-auto rounded-sm" alt="Flag">
-                                <span x-text="lang === 'km' ? 'ខ្មែរ' : (lang === 'fr' ? 'FR' : 'EN')">EN</span>
+                                <img :src="lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png'" class="w-4 h-auto rounded-sm" alt="Flag">
+                                <span x-text="lang === 'fr' ? 'FR' : 'EN'">EN</span>
                                 <svg class="w-3 h-3 transition-transform duration-200 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
                             
-                            <div x-show="open" 
+                            <div x-show="open" x-cloak
                                  x-transition:enter="transition ease-out duration-100"
                                  x-transition:enter-start="opacity-0 scale-95"
                                  x-transition:enter-end="opacity-100 scale-100"
@@ -328,9 +385,7 @@ function googleTranslateElementInit() {
                                 <button @click="switchLang('fr')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2" :class="lang === 'fr' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : ''">
                                     <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt="Français"> Français
                                 </button>
-                                <button @click="switchLang('km')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] transition-colors flex items-center gap-2" :class="lang === 'km' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : ''">
-                                    <img src="https://flagcdn.com/w20/kh.png" class="w-4 h-auto rounded-sm" alt="Khmer"> ខ្មែរ
-                                </button>
+
                             </div>
                         </div>
                     </div>
@@ -356,7 +411,7 @@ function googleTranslateElementInit() {
         </div>
 
         {{-- Mobile Menu --}}
-        <div x-show="open"
+        <div x-show="open" x-cloak
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 -translate-y-2"
             x-transition:enter-end="opacity-100 translate-y-0"
@@ -372,16 +427,14 @@ function googleTranslateElementInit() {
                 <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg {{ $isResources ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Resources') }}</a>
                 <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg {{ $isContact ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Contact') }}</a>
                 <div class="pt-3 pb-1 border-t border-gray-100 mt-2">
-                    <div class="flex items-center gap-2 mb-4" x-data="{ lang: getCurrentLang() }">
+                    <div class="flex items-center gap-2 mb-4 notranslate" x-data="{ lang: getCurrentLang() }">
                         <button @click="switchLang('en')" :class="lang === 'en' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
                             <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt="English"> EN
                         </button>
                         <button @click="switchLang('fr')" :class="lang === 'fr' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
                             <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt="Français"> FR
                         </button>
-                        <button @click="switchLang('km')" :class="lang === 'km' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
-                            <img src="https://flagcdn.com/w20/kh.png" class="w-4 h-auto rounded-sm" alt="Khmer"> KM
-                        </button>
+
                     </div>
                     <a href="{{ route('donate') }}" class="btn-primary w-full justify-center py-3">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -486,7 +539,11 @@ function googleTranslateElementInit() {
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">Programs</h4>
                     <ul class="space-y-3">
-                        @php $footerPrograms = \App\Models\Program::active()->take(3)->get(); @endphp
+                        @php 
+                            $footerPrograms = \Illuminate\Support\Facades\Cache::remember('nav_programs_list', 3600, function() {
+                                return \App\Models\Program::active()->take(3)->get();
+                            }); 
+                        @endphp
                         @foreach($footerPrograms as $footerProg)
                         <li><a href="{{ route('programs') }}#{{ $footerProg->slug }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ $footerProg->title }}</a></li>
                         @endforeach

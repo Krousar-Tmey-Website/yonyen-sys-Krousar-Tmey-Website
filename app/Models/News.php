@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
  */
 class News extends Model
 {
+
     protected $fillable = [
         'title', 'slug', 'excerpt', 'content',
         'image', 'category', 'videos', 'is_published', 'published_at',

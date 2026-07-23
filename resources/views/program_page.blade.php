@@ -50,26 +50,31 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($page->items as $item)
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full group hover:-translate-y-1">
-                <div class="h-44 overflow-hidden relative bg-gray-100">
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full group hover:-translate-y-1 relative">
+                
+                {{-- Main Card Link --}}
+                <a href="{{ route('program-page-items.show', $item->id) }}" class="absolute inset-0 z-10" aria-label="View {{ $item->title }}"></a>
+                
+                <div class="h-44 overflow-hidden relative bg-gray-100 relative z-0">
                     <img src="{{ $item->image_url }}" alt="{{ $item->title }}"
                          class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#1a3c6e]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                <div class="p-5 flex flex-col flex-1">
+                <div class="p-5 flex flex-col flex-1 relative z-0">
                     <h3 class="text-base font-bold text-[#1a3c6e] mb-2 leading-snug group-hover:text-[#2d6fa3] transition-colors">{{ $item->title }}</h3>
                     @if($item->short_content)
                     <p class="text-gray-500 text-sm leading-relaxed flex-1 mb-4">{{ Str::limit($item->short_content, 120) }}</p>
                     @endif
                     <div class="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
-                        <a href="{{ route('donate') }}"
-                           class="inline-flex items-center gap-1 text-[#d32f2f] text-xs font-bold hover:text-red-700 transition-colors">
-                            ↗ Donate
-                        </a>
-                        <a href="{{ route('program-page-items.show', $item->id) }}"
-                           class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-xs font-bold transition-colors">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-bold transition-colors pointer-events-none group-hover:bg-[#2d6fa3] group-hover:text-white">
                             Read More
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </span>
+                        
+                        {{-- Donate Button (Z-20 to sit above stretched link) --}}
+                        <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $item->title }}">
+                            <svg class="w-4 h-4 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                            <span>Donate Now</span>
                         </a>
                     </div>
                 </div>

@@ -7,6 +7,7 @@
 
     {{-- Per-program icon helper --}}
     @php
+        $programs = collect($programs);
         $programIconFor = function (string $title, string $size = 'w-5 h-5') {
             $t = strtolower($title);
             $attrs = "class=\"{$size}\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"";
@@ -74,8 +75,11 @@
     {{-- Program Overview Anchors --}}
     <section class="relative -mt-20 z-20 pb-16">
         <div class="max-w-7xl mx-auto px-6">
-            @php $progCount = $programs->take(3)->count(); @endphp
-            <div class="grid md:grid-cols-{{ $progCount }} gap-6 {{ $progCount < 3 ? 'max-w-4xl mx-auto' : '' }}">
+            @php 
+                $progCount = $programs->take(3)->count(); 
+                $gridCols = $progCount === 1 ? 'md:grid-cols-1 max-w-md mx-auto' : ($progCount === 2 ? 'md:grid-cols-2 max-w-4xl mx-auto' : 'md:grid-cols-3');
+            @endphp
+            <div class="grid {{ $gridCols }} gap-6 justify-center">
                 @php $colors = ['from-[#1a3c6e] to-[#2d6fa3]', 'from-[#e8a020] to-[#f4b642]', 'from-[#2d6fa3] to-[#458bc2]']; @endphp
                 @foreach($programs->take(3) as $index => $prog)
                     <a href="#{{ $prog->slug }}"
@@ -126,9 +130,23 @@
                         </div>
 
                         @if($program->description)
-                            <div class="mb-8" data-reveal="{{ $isEven ? 'right' : 'left' }}" style="--reveal-delay: 100">
-                                <h3 class="text-sm font-black text-[#8da83a] uppercase tracking-widest mb-4">Objective</h3>
-                                <p class="text-gray-700 leading-relaxed text-lg font-medium">{{ $program->description }}</p>
+                            <div class="mb-10" data-reveal="{{ $isEven ? 'right' : 'left' }}" style="--reveal-delay: 100">
+                                <div class="relative bg-[#fffdf8] border border-[#f2e6c9] rounded-2xl p-7 md:p-8 shadow-sm overflow-hidden">
+                                    <!-- Clean left accent bar -->
+                                    <div class="absolute top-0 left-0 w-[6px] h-full bg-gradient-to-b from-[#e8a020] to-[#d32f2f]"></div>
+                                    
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="w-9 h-9 rounded-full bg-[#e8a020]/10 flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-[#e8a020]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-sm font-black text-[#e8a020] uppercase tracking-widest">Objective</h3>
+                                    </div>
+                                    <p class="text-gray-800 leading-relaxed text-lg md:text-[1.15rem] font-medium pl-1">
+                                        {{ $program->description }}
+                                    </p>
+                                </div>
                             </div>
                         @endif
 
@@ -149,9 +167,9 @@
                                 </a>
                             @endif
                             <a href="{{ route('donate') }}"
-                                class="bg-[#8da83a] text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-[#7a932d] hover:shadow-lg transition-all text-center flex items-center justify-center gap-2">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                                Donate
+                                class="group bg-transparent text-[#8da83a] border-2 border-[#8da83a] px-8 py-4 rounded-full text-[15px] font-black uppercase tracking-widest hover:bg-[#8da83a] hover:text-white hover:shadow-[0_8px_20px_rgba(141,168,58,0.4)] transition-all duration-300 text-center flex items-center justify-center gap-2.5">
+                                <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                                Donate Now
                             </a>
                         </div>
                     </div>
@@ -215,7 +233,10 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             @foreach($program->projects as $project)
-                                <a href="{{ route('projects.show', $project) }}" class="group bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col h-full relative" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
+                                <div class="group bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col h-full relative" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
+                                    {{-- Main Card Link --}}
+                                    <a href="{{ route('projects.show', $project) }}" class="absolute inset-0 z-10" aria-label="View {{ $project->title }}"></a>
+
                                     <div class="absolute -top-20 -right-20 w-40 h-40 bg-[#1a3c6e]/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
                                     <div class="h-48 overflow-hidden relative">
                                         <img src="{{ $project->image_url }}" alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
@@ -224,18 +245,24 @@
                                             <h4 class="text-lg font-black text-white uppercase tracking-wide leading-snug drop-shadow-md">{{ $project->title }}</h4>
                                         </div>
                                     </div>
-                                    <div class="p-8 flex flex-col flex-1 relative z-10">
+                                    <div class="p-8 flex flex-col flex-1 relative">
                                         @if($project->description)
                                             <p class="text-gray-600 text-[15px] leading-relaxed flex-1 mb-8">{{ Str::limit($project->description, 130) }}</p>
                                         @endif
                                         <div class="mt-auto flex items-center justify-between">
-                                            <span class="inline-flex items-center gap-2 text-[#2d6fa3] text-xs font-black uppercase tracking-widest group-hover:gap-3 transition-all">
+                                            <span class="inline-flex items-center gap-2 text-[#2d6fa3] text-xs font-black uppercase tracking-widest group-hover:text-[#1a3c6e] transition-colors duration-300">
                                                 Read More
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                                <svg class="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                                             </span>
+                                            
+                                            {{-- Donate Button (Z-20 to sit above stretched link) --}}
+                                            <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $project->title }}">
+                                                <svg class="w-4 h-4 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                                                <span>Donate Now</span>
+                                            </a>
                                         </div>
                                     </div>
-                                </a>
+                                </div>
                             @endforeach
                         </div>
                     </div>
@@ -301,10 +328,11 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($additionalItems as $item)
-                        <a href="{{ route('program-page-items.show', $item->id) }}"
-                            class="group bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 flex flex-col h-full hover:-translate-y-2 relative"
-                            data-reveal="up" style="--reveal-delay: {{ min($loop->index * 90, 360) }}">
+                        <div class="group bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 flex flex-col h-full hover:-translate-y-2 relative" data-reveal="up" style="--reveal-delay: {{ min($loop->index * 90, 360) }}">
                             
+                            {{-- Main Card Link --}}
+                            <a href="{{ route('program-page-items.show', $item->id) }}" class="absolute inset-0 z-10" aria-label="View {{ $item->title }}"></a>
+
                             <div class="absolute -top-20 -right-20 w-40 h-40 bg-[#2d6fa3]/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
 
                             @if($item->image)
@@ -319,7 +347,7 @@
                                 </div>
                             @endif
 
-                            <div class="p-8 flex flex-col flex-1 relative z-10">
+                            <div class="p-8 flex flex-col flex-1 relative">
                                 <h3 class="text-lg font-black text-[#1a3c6e] mb-3 uppercase tracking-wide group-hover:text-[#2d6fa3] transition-colors">{{ $item->title }}</h3>
                                 
                                 @if($item->short_content)
@@ -327,13 +355,19 @@
                                 @endif
 
                                 <div class="mt-auto flex items-center justify-between pt-6 border-t border-gray-100">
-                                    <span class="inline-flex items-center gap-2 text-[#2d6fa3] text-xs font-black uppercase tracking-widest group-hover:gap-3 transition-all">
+                                    <span class="inline-flex items-center gap-2 text-[#2d6fa3] text-xs font-black uppercase tracking-widest group-hover:text-[#1a3c6e] transition-colors duration-300">
                                         Read More
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                        <svg class="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                                     </span>
+                                    
+                                    {{-- Donate Button (Z-20 to sit above stretched link) --}}
+                                    <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $item->title }}">
+                                        <svg class="w-4 h-4 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                                        <span>Donate Now</span>
+                                    </a>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     @endforeach
                 </div>
             </div>
