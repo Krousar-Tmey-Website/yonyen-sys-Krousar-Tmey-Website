@@ -27,6 +27,14 @@
             ],
         ],
 
+        'cta' => [
+            'icon'   => '📣',
+            'title'  => 'Homepage Call-To-Action Banner',
+            'fields' => [
+                ['key' => 'cta_background_image', 'label' => 'Background Image', 'type' => 'image'],
+            ],
+        ],
+
 
 
 

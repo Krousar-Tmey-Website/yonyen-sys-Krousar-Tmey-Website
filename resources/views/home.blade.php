@@ -793,8 +793,12 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 @endif
 
 {{-- ===== CALL TO ACTION ===== --}}
+@php
+    $ctaImage = $settings['cta_background_image'] ?? null;
+    $ctaImageUrl = $ctaImage ? (str_starts_with($ctaImage, 'http') ? $ctaImage : asset('storage/' . $ctaImage)) : 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80';
+@endphp
 <section class="relative py-24 overflow-hidden" data-reveal="scale">
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80')] bg-cover bg-center"></div>
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $ctaImageUrl }}');"></div>
     <div class="absolute inset-0 bg-[#1a3c6e]/85"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
         <span class="inline-block bg-[#e8a020] text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $settings['cta_label'] ?? 'Support Our Work' }}</span>
