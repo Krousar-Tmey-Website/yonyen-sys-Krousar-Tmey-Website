@@ -27,11 +27,6 @@ class AnnualReport extends Model
         return !empty($this->file_path) && Storage::disk('public')->exists($this->file_path);
     }
 
-    public function getFileUrlAttribute(): string
-    {
-        return $this->has_pdf_file ? Storage::disk('public')->url($this->file_path) : '';
-    }
-
     protected function casts(): array
     {
         return ['is_active' => 'boolean'];
@@ -44,8 +39,14 @@ class AnnualReport extends Model
 
     public function getDownloadUrlAttribute(): ?string
     {
-        if ($this->file_url) return $this->file_url;
-        if ($this->file_path) return asset('storage/' . $this->file_path);
+        if ($this->has_pdf_file) {
+            return route('reports.view', $this);
+        }
+
+        if ($this->file_path && preg_match('#^https?://#i', $this->file_path)) {
+            return $this->file_path;
+        }
+
         return null;
     }
 
