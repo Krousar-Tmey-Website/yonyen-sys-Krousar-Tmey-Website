@@ -23,11 +23,14 @@ class WorldwidePartnerController extends Controller
     {
         $data = $request->validate([
             'country_name' => ['required', 'string', 'max:255'],
+            'country_name_fr' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'image_url' => ['nullable', 'url', 'max:2048'],
             'learn_more_url' => ['nullable', 'url', 'max:2048'],
             'button_text' => ['nullable', 'string', 'max:255'],
+            'button_text_fr' => ['nullable', 'string', 'max:255'],
             'display_order' => ['nullable', 'integer'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
@@ -59,11 +62,14 @@ class WorldwidePartnerController extends Controller
     {
         $data = $request->validate([
             'country_name' => ['required', 'string', 'max:255'],
+            'country_name_fr' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'image_url' => ['nullable', 'url', 'max:2048'],
             'learn_more_url' => ['nullable', 'url', 'max:2048'],
             'button_text' => ['nullable', 'string', 'max:255'],
+            'button_text_fr' => ['nullable', 'string', 'max:255'],
             'display_order' => ['nullable', 'integer'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],

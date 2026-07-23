@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', $article->title . ' — Krousar Thmey')
-@section('description', $article->excerpt ?? 'Read the latest news from Krousar Thmey.')
+@section('title', $article->localized_title . ' — Krousar Thmey')
+@section('description', $article->localized_excerpt ?? 'Read the latest news from Krousar Thmey.')
 
 @php use Illuminate\Support\Str; @endphp
 
@@ -15,11 +15,11 @@
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <a href="{{ route('news') }}" class="hover:text-[#1a3c6e] transition-colors">News</a>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-gray-600">{{ Str::limit($article->title, 40) }}</span>
+            <span class="text-gray-600">{{ Str::limit($article->localized_title, 40) }}</span>
         </nav>
 
         {{-- Title --}}
-        <h1 data-reveal style="--reveal-delay: 60" class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#1a3c6e] leading-tight mb-3">{{ $article->title }}</h1>
+        <h1 data-reveal style="--reveal-delay: 60" class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#1a3c6e] leading-tight mb-3">{{ $article->localized_title }}</h1>
 
         {{-- Byline: date | tags --}}
         <div data-reveal style="--reveal-delay: 120" class="text-sm mb-8">
@@ -37,13 +37,13 @@
         {{-- Cover Image --}}
         @if($article->image)
         <div data-reveal="scale" style="--reveal-delay: 180" class="mb-8 overflow-hidden rounded-lg">
-            <img src="{{ $article->image_url }}" alt="{{ $article->title }}" class="w-full rounded-lg object-cover transition-transform duration-700 ease-out hover:scale-105">
+            <img src="{{ $article->image_url }}" alt="{{ $article->localized_title }}" class="w-full rounded-lg object-cover transition-transform duration-700 ease-out hover:scale-105">
         </div>
         @endif
 
         {{-- Content --}}
         <div class="article-content prose prose-lg max-w-none text-justify prose-p:text-gray-700 prose-headings:text-[#1a3c6e] prose-a:text-[#2d6fa3] prose-a:hover:text-[#1a4a7a] prose-img:rounded-lg">
-            {!! $article->content !!}
+            {!! $article->localized_content !!}
         </div>
 
 

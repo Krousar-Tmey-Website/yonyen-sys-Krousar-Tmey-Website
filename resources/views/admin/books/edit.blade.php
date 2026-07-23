@@ -18,6 +18,7 @@
         @method('PUT')
 
         {{-- Book Details --}}
+        <div x-data="{ lang: 'en' }">
         <div class="form-card">
             <div class="card-header">
                 <div class="icon blue">
@@ -26,18 +27,34 @@
                     </svg>
                 </div>
                 <h3>Book Details</h3>
+                <div class="header-actions">
+                    <span class="badge">Required *</span>
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="form-group">
+                    <div class="form-group" x-show="lang === 'en'">
                         <label class="form-label">Title <span class="required">*</span></label>
-                        <input type="text" name="title" value="{{ old('title', $book->title) }}" required
+                        <input type="text" name="title" value="{{ old('title', $book->title) }}"
                                class="form-control @error('title') error @enderror"
                                placeholder="e.g. The Silent Patient">
                         @error('title')<div class="form-error">{{ $message }}</div>@enderror
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" x-show="lang === 'fr'" x-cloak>
+                        <label class="form-label">Title (French) <span class="optional">(optional)</span></label>
+                        <input type="text" name="title_fr" value="{{ old('title_fr', $book->title_fr) }}"
+                               class="form-control @error('title_fr') error @enderror"
+                               placeholder="ex. Le Patient Silencieux">
+                        @error('title_fr')<div class="form-error">{{ $message }}</div>@enderror
+                        <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English title.</div>
+                    </div>
+
+                    <div class="form-group" x-show="lang === 'en'">
                         <label class="form-label">Price (USD) <span class="text-xs text-slate-400 font-normal">(optional)</span></label>
                         <input type="number" name="price" value="{{ old('price', $book->price) }}" step="0.01" min="0"
                                class="form-control @error('price') error @enderror"
@@ -57,14 +74,28 @@
                     </svg>
                 </div>
                 <h3>Description</h3>
+                <div class="header-actions">
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
-                <div class="form-group">
+                <div class="form-group" x-show="lang === 'en'">
                     <textarea name="description" rows="3" class="form-control textarea"
                               placeholder="Write a short description or synopsis for the book...">{{ old('description', $book->description) }}</textarea>
                     @error('description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
+
+                <div class="form-group" x-show="lang === 'fr'" x-cloak>
+                    <textarea name="description_fr" rows="3" class="form-control textarea"
+                              placeholder="Rédigez une courte description ou un résumé du livre en français...">{{ old('description_fr', $book->description_fr) }}</textarea>
+                    @error('description_fr')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English description.</div>
+                </div>
             </div>
+        </div>
         </div>
 
         {{-- Cover & Publishing --}}

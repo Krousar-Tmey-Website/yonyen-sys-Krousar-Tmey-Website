@@ -97,10 +97,10 @@ $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
             $timelineItems = [];
             foreach ($historyEvents as $event) {
                 if ($event->left_text) {
-                    $timelineItems[] = ['year' => $event->year, 'text' => $event->left_text, 'image' => $event->image_url];
+                    $timelineItems[] = ['year' => $event->year, 'text' => $event->localized_left_text, 'image' => $event->image_url];
                 }
                 if ($event->right_text) {
-                    $timelineItems[] = ['year' => $event->year, 'text' => $event->right_text, 'image' => $event->left_text ? null : $event->image_url];
+                    $timelineItems[] = ['year' => $event->year, 'text' => $event->localized_right_text, 'image' => $event->left_text ? null : $event->image_url];
                 }
                 if (!$event->left_text && !$event->right_text && $event->image_url) {
                     $timelineItems[] = ['year' => $event->year, 'text' => null, 'image' => $event->image_url];
@@ -199,8 +199,8 @@ $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
                 return [
                     'year' => $award->year,
                     'image' => $award->image_url,
-                    'title' => $award->organization ? trim($award->organization) : $award->title,
-                    'description' => trim(($award->recipient ? $award->recipient . ' ' : '') . ($award->description ?? '')),
+                    'title' => $award->organization ? trim($award->organization) : $award->localized_title,
+                    'description' => trim(($award->recipient ? $award->recipient . ' ' : '') . ($award->localized_description ?? '')),
                     'buttonText' => $cta,
                     'buttonLink' => $link,
                 ];
@@ -501,11 +501,11 @@ $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
                     @continue(!$partner->logo_url)
                 <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
                     @if($partner->website_url)
-                    <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="w-full h-full flex items-center justify-center" title="{{ $partner->description ?? $partner->name }}">
+                    <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="w-full h-full flex items-center justify-center" title="{{ $partner->localized_description ?? $partner->name }}">
                         <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
                     </a>
                     @else
-                    <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" title="{{ $partner->description ?? $partner->name }}" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                    <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" title="{{ $partner->localized_description ?? $partner->name }}" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
                     @endif
                 </div>
                 @endforeach
@@ -805,7 +805,7 @@ $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
                             <div class="w-9 h-9 rounded-lg bg-[#2d6fa3] flex items-center justify-center flex-shrink-0">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             </div>
-                            <span class="text-gray-700 font-medium text-sm">{{ $report->title }}</span>
+                            <span class="text-gray-700 font-medium text-sm">{{ $report->localized_title }}</span>
                         </div>
                         <svg class="w-4 h-4 text-gray-300 group-hover:text-[#2d6fa3] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     </a>

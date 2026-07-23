@@ -11,15 +11,34 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Name</label>
                 <input type="text" name="name" value="{{ old('name') }}" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Role / Affiliation</label>
-                <input type="text" name="role" value="{{ old('role') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            <div x-data="{ lang: 'en' }">
+                <div class="flex items-center justify-between mb-1.5">
+                    <label class="block text-sm font-medium text-gray-700">Role / Affiliation</label>
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
+                </div>
+                <div x-show="lang === 'en'">
+                    <input type="text" name="role" value="{{ old('role') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <input type="text" name="role_fr" value="{{ old('role_fr') }}" placeholder="Rôle (français)..." class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+                </div>
+
+                <div class="mt-5">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Content</label>
+                    <div x-show="lang === 'en'">
+                        <textarea name="content" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('content') }}</textarea>
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <textarea name="content_fr" rows="4" placeholder="Contenu (français)..." class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('content_fr') }}</textarea>
+                        <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+                    </div>
+                </div>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Content</label>
-                <textarea name="content" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('content') }}</textarea>
-            </div>
-            
+
             <div class="flex items-end pb-1">
                 <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl w-full">
                     <input type="checkbox" name="is_active" id="is_active" value="1" checked

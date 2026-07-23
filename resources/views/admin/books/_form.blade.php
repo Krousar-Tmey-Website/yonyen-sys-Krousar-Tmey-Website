@@ -1,26 +1,45 @@
 @php
     $isEdit = isset($book);
     $bookTitle       = old('title', $book->title ?? '');
+    $bookTitleFr     = old('title_fr', $book->title_fr ?? '');
     $bookDescription = old('description', $book->description ?? '');
+    $bookDescriptionFr = old('description_fr', $book->description_fr ?? '');
     $bookPrice       = old('price', $book->price ?? '');
     $bookStock       = old('stock', $book->stock ?? '');
     $bookAvailable   = old('is_available', $book->is_available ?? true);
 @endphp
 
-<div class="form-group">
+<div class="form-group" x-show="lang === 'en'">
     <label class="form-label">Title <span class="required">*</span></label>
-    <input type="text" name="title" value="{{ $bookTitle }}" required
+    <input type="text" name="title" value="{{ $bookTitle }}"
            class="form-control @error('title') error @enderror"
            placeholder="e.g. The Silent Patient">
     @error('title')<div class="form-error">{{ $message }}</div>@enderror
 </div>
 
+<div class="form-group" x-show="lang === 'fr'" x-cloak>
+    <label class="form-label">Title (French) <span class="optional">(optional)</span></label>
+    <input type="text" name="title_fr" value="{{ $bookTitleFr }}"
+           class="form-control @error('title_fr') error @enderror"
+           placeholder="ex. Le Patient Silencieux">
+    @error('title_fr')<div class="form-error">{{ $message }}</div>@enderror
+    <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English title.</div>
+</div>
+
 {{-- Description --}}
-<div class="form-group">
+<div class="form-group" x-show="lang === 'en'">
     <label class="form-label">Description</label>
     <textarea name="description" rows="3" class="form-control textarea @error('description') error @enderror"
               placeholder="Write a short description or synopsis for the book...">{{ $bookDescription }}</textarea>
     @error('description')<div class="form-error">{{ $message }}</div>@enderror
+</div>
+
+<div class="form-group" x-show="lang === 'fr'" x-cloak>
+    <label class="form-label">Description (French) <span class="optional">(optional)</span></label>
+    <textarea name="description_fr" rows="3" class="form-control textarea @error('description_fr') error @enderror"
+              placeholder="Rédigez une courte description ou un résumé du livre en français...">{{ $bookDescriptionFr }}</textarea>
+    @error('description_fr')<div class="form-error">{{ $message }}</div>@enderror
+    <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English description.</div>
 </div>
 
 <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">

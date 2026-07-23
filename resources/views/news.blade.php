@@ -49,13 +49,13 @@
             <article data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 80, 480) }}" class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col group hover:-translate-y-1 transition-all duration-300">
                 @if($article->image)
                 <a href="{{ route('news.show', $article->slug) }}" class="relative overflow-hidden h-44 block">
-                    <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
+                    <img src="{{ $article->image_url }}" alt="{{ $article->localized_title }}"
                          class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
                 </a>
                 @endif
                 <div class="p-5 flex flex-col flex-1">
                     <h3 class="font-bold text-gray-800 text-base mb-1.5 leading-snug">
-                        <a href="{{ route('news.show', $article->slug) }}" class="group-hover:text-[#1a3c6e] transition-colors">{{ $article->title }}</a>
+                        <a href="{{ route('news.show', $article->slug) }}" class="group-hover:text-[#1a3c6e] transition-colors">{{ $article->localized_title }}</a>
                     </h3>
                     <p class="text-xs mb-3 leading-relaxed">
                         <span class="text-gray-500">by</span>
@@ -75,7 +75,7 @@
                         @endforeach
                         @endif
                     </p>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-4 flex-1">{{ Str::limit($article->excerpt, 120) }}</p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-4 flex-1">{{ Str::limit($article->localized_excerpt, 120) }}</p>
                     <div class="mt-auto pt-3 border-t border-gray-100">
                         <a href="{{ route('news.show', $article->slug) }}" class="inline-flex items-center gap-1.5 text-[#2d6fa3] text-xs font-bold group-hover:gap-2.5 transition-all">
                             Read More

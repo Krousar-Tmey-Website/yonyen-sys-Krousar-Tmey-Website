@@ -80,6 +80,44 @@
     color: #991b1b;
 }
 
+/* Language (EN/FR) tabs — shared across all bilingual admin forms */
+.card-header .header-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.card-header .header-actions .badge {
+    margin-left: 0;
+}
+.lang-tabs {
+    display: inline-flex;
+    gap: 2px;
+    background: #f1f4f9;
+    border-radius: 8px;
+    padding: 3px;
+    flex-shrink: 0;
+}
+.lang-tab {
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.lang-tab:hover {
+    color: #2d6fa3;
+}
+.lang-tab.active {
+    background: #2d6fa3;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(45, 111, 163, 0.3);
+}
+
 /* Card Body */
 .card-body {
     padding: 20px 24px;

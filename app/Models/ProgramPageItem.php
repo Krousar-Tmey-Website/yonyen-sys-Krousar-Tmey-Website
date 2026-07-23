@@ -9,10 +9,15 @@ class ProgramPageItem extends Model
 
     protected $fillable = [
         'title',
+        'title_fr',
         'short_content',
+        'short_content_fr',
         'objective',
+        'objective_fr',
         'detail_content',
+        'detail_content_fr',
         'activities',
+        'activities_fr',
         'image',
         'image_2',
         'image_3',
@@ -30,6 +35,41 @@ class ProgramPageItem extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    // French text falls back to the English field whenever it hasn't been filled in yet.
+    public function getLocalizedTitleAttribute(): ?string
+    {
+        return $this->localized('title');
+    }
+
+    public function getLocalizedObjectiveAttribute(): ?string
+    {
+        return $this->localized('objective');
+    }
+
+    public function getLocalizedShortContentAttribute(): ?string
+    {
+        return $this->localized('short_content');
+    }
+
+    public function getLocalizedDetailContentAttribute(): ?string
+    {
+        return $this->localized('detail_content');
+    }
+
+    public function getLocalizedActivitiesAttribute(): ?string
+    {
+        return $this->localized('activities');
+    }
+
+    private function localized(string $field): ?string
+    {
+        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+            return $this->{$field . '_fr'};
+        }
+
+        return $this->{$field};
     }
 
     public function getImageUrlAttribute(): string

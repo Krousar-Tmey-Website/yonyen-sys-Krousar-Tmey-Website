@@ -27,27 +27,59 @@
                 @csrf
                 @method('PUT')
 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Report Title <span class="text-red-400">*</span></label>
-                    <input type="text" name="title" value="{{ old('title', $report->title) }}" required
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                           placeholder="Annual Report 2025">
-                    @error('title')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
-                </div>
-
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Year <span class="text-red-400">*</span></label>
-                        <input type="number" name="year" value="{{ old('year', $report->year) }}" required min="1990" max="2100"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        @error('year')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                <div x-data="{ lang: 'en' }">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-semibold text-gray-700">Report Language</span>
+                        <div class="header-actions">
+                            <span class="badge">Required *</span>
+                            <div class="lang-tabs">
+                                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
-                        <input type="text" name="description" value="{{ old('description', $report->description) }}"
+
+                    <div x-show="lang === 'en'">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Report Title <span class="text-red-400">*</span></label>
+                        <input type="text" name="title" value="{{ old('title', $report->title) }}"
                                class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="PDF · Full Report">
-                        @error('description')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                               placeholder="Annual Report 2025">
+                        @error('title')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Report Title (French) <span class="optional">(optional)</span></label>
+                        <input type="text" name="title_fr" value="{{ old('title_fr', $report->title_fr) }}"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Rapport annuel 2025">
+                        @error('title_fr')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                        <p class="text-xs text-gray-400 mt-2">Shown to French-language visitors. Leave blank to reuse the English title.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Year <span class="text-red-400">*</span></label>
+                            <input type="number" name="year" value="{{ old('year', $report->year) }}" required min="1990" max="2100"
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            @error('year')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                        </div>
+                        <div>
+                            <div x-show="lang === 'en'">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                                <input type="text" name="description" value="{{ old('description', $report->description) }}"
+                                       class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                       placeholder="PDF · Full Report">
+                                @error('description')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Description (French) <span class="optional">(optional)</span></label>
+                                <input type="text" name="description_fr" value="{{ old('description_fr', $report->description_fr) }}"
+                                       class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                       placeholder="PDF · Rapport complet">
+                                @error('description_fr')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                                <p class="text-xs text-gray-400 mt-2">Shown to French-language visitors. Leave blank to reuse the English description.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

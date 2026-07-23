@@ -106,47 +106,97 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5" x-data="{ lang: 'en' }">
 
             {{-- Public page content --}}
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Section Title <span class="text-red-400">*</span></label>
-                    <input type="text" name="title" value="{{ old('title', $program->title) }}" required
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    <p class="mt-2 text-xs text-gray-400">Shown as the large blue heading on the public Our Programs page.</p>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Overview Card Status</label>
-                    <input type="text" name="Status" value="{{ old('Status', $program->Status) }}" placeholder="e.g. Active, Ongoing..."
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    <p class="mt-2 text-xs text-gray-400">Used on the small program card near the top of the public page.</p>
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Public Page Content</h3>
+                <div class="lang-tabs">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
                 </div>
             </div>
 
-            <div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <div x-show="lang === 'en'">
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Section Title <span class="text-red-400">*</span></label>
+                        <input type="text" name="title" value="{{ old('title', $program->title) }}"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <p class="mt-2 text-xs text-gray-400">Shown as the large blue heading on the public Our Programs page.</p>
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Section Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="title_fr" value="{{ old('title_fr', $program->title_fr) }}"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+                    </div>
+                </div>
+                <div>
+                    <div x-show="lang === 'en'">
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Overview Card Status</label>
+                        <input type="text" name="Status" value="{{ old('Status', $program->Status) }}" placeholder="e.g. Active, Ongoing..."
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <p class="mt-2 text-xs text-gray-400">Used on the small program card near the top of the public page.</p>
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Overview Card Status (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="Status_fr" value="{{ old('Status_fr', $program->Status_fr) }}" placeholder="e.g. En cours, Terminé..."
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective Text</label>
                 <textarea name="description" rows="3"
                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description', $program->description) }}</textarea>
                 <p class="mt-2 text-xs text-gray-400">This fills the Objective paragraph on the public program section.</p>
             </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="description_fr" rows="3"
+                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description_fr', $program->description_fr) }}</textarea>
+                <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+            </div>
 
-            <div>
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Program Text</label>
                 <textarea name="full_description" rows="6"
                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('full_description', $program->full_description) }}</textarea>
                 <p class="mt-2 text-xs text-gray-400">This fills the main Program content block on the public page.</p>
             </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Program Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="full_description_fr" rows="6"
+                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('full_description_fr', $program->full_description_fr) }}</textarea>
+                <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+            </div>
 
 
             {{-- Testimony Settings --}}
             <div class="pt-4 mt-2 border-t border-gray-100">
-                <h3 class="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wider">Testimony</h3>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">Testimony</h3>
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Name & Subtitle</label>
-                        <input type="text" name="testimony_name" value="{{ old('testimony_name', $program->testimony_name) }}" placeholder="e.g. Davann, 17, welcomed in Siem Reap..."
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <div x-show="lang === 'en'">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Name & Subtitle</label>
+                            <input type="text" name="testimony_name" value="{{ old('testimony_name', $program->testimony_name) }}" placeholder="e.g. Davann, 17, welcomed in Siem Reap..."
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
+                        <div x-show="lang === 'fr'" x-cloak>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Name & Subtitle (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <input type="text" name="testimony_name_fr" value="{{ old('testimony_name_fr', $program->testimony_name_fr) }}" placeholder="ex. Davann, 17 ans, accueilli à Siem Reap..."
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+                        </div>
                     </div>
                     <div x-data="{ testImage: '{{ str_starts_with($program->testimony_image ?? '', 'http') ? 'url' : 'upload' }}' }">
                         @if($program->testimony_image)
@@ -181,10 +231,16 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div x-show="lang === 'en'">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Story Content</label>
                     <textarea name="testimony_story" rows="4" placeholder="Enter testimony story text here..."
                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('testimony_story', $program->testimony_story) }}</textarea>
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Story Content (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <textarea name="testimony_story_fr" rows="4" placeholder="Saisissez le texte du témoignage en français..."
+                              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('testimony_story_fr', $program->testimony_story_fr) }}</textarea>
+                    <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
                 </div>
             </div>
 

@@ -7,21 +7,35 @@
 @section('content')
 
 <div class="max-w-3xl mx-auto">
-    <div class="bg-white rounded-2xl border border-gray-100 p-6">
-        <h3 class="font-bold text-gray-700 mb-4 text-sm">Country Information</h3>
-        
-        <form action="{{ isset($worldwidePartner) ? route('admin.worldwide-partners.update', $worldwidePartner) : route('admin.worldwide-partners.store') }}" 
+    <div class="bg-white rounded-2xl border border-gray-100 p-6" x-data="{ lang: 'en' }">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-gray-700 text-sm">Country Information</h3>
+            <div class="lang-tabs">
+                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+            </div>
+        </div>
+
+        <form action="{{ isset($worldwidePartner) ? route('admin.worldwide-partners.update', $worldwidePartner) : route('admin.worldwide-partners.store') }}"
               method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             @if(isset($worldwidePartner))
                 @method('PUT')
             @endif
 
-            <div>
+            <div x-show="lang === 'en'">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Country Name <span class="text-red-400">*</span></label>
-                <input type="text" name="country_name" value="{{ old('country_name', $worldwidePartner->country_name ?? '') }}" required
+                <input type="text" name="country_name" value="{{ old('country_name', $worldwidePartner->country_name ?? '') }}"
                        class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
                        placeholder="e.g. France">
+            </div>
+
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Country Name (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <input type="text" name="country_name_fr" value="{{ old('country_name_fr', $worldwidePartner->country_name_fr ?? '') }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                       placeholder="ex. France">
+                <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English name.</p>
             </div>
 
             <div>
@@ -53,11 +67,19 @@
                 <p class="text-xs text-gray-400 mt-1">Recommended: 1600 × 900 px (16:9). Max 5MB. JPG, PNG, or WebP.</p>
             </div>
 
-            <div>
+            <div x-show="lang === 'en'">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Short Description <span class="text-red-400">*</span></label>
-                <textarea name="description" rows="3" required
+                <textarea name="description" rows="3"
                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
                           placeholder="Supports fundraising, volunteer engagement, and international partnerships...">{{ old('description', $worldwidePartner->description ?? '') }}</textarea>
+            </div>
+
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Short Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="description_fr" rows="3"
+                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                          placeholder="Description courte en français...">{{ old('description_fr', $worldwidePartner->description_fr ?? '') }}</textarea>
+                <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English description.</p>
             </div>
 
             <div>
@@ -67,10 +89,18 @@
                        placeholder="https://www.krousar-thmey.org/france">
             </div>
 
-            <div>
+            <div x-show="lang === 'en'">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Button Text</label>
                 <input type="text" name="button_text" value="{{ old('button_text', $worldwidePartner->button_text ?? 'Learn More') }}"
                        class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            </div>
+
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Button Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <input type="text" name="button_text_fr" value="{{ old('button_text_fr', $worldwidePartner->button_text_fr ?? '') }}"
+                       placeholder="En savoir plus"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English button text.</p>
             </div>
 
             <div class="grid grid-cols-2 gap-4">

@@ -23,11 +23,16 @@ class ProgramPageController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'          => 'required|string|max:255',
-            'short_content'  => 'nullable|string',
-            'objective'      => 'nullable|string',
-            'detail_content' => 'nullable|string',
-            'activities'     => 'nullable|string',
+            'title'              => 'required|string|max:255',
+            'title_fr'           => 'nullable|string|max:255',
+            'short_content'      => 'nullable|string',
+            'short_content_fr'   => 'nullable|string',
+            'objective'          => 'nullable|string',
+            'objective_fr'       => 'nullable|string',
+            'detail_content'     => 'nullable|string',
+            'detail_content_fr'  => 'nullable|string',
+            'activities'         => 'nullable|string',
+            'activities_fr'      => 'nullable|string',
             'image'          => 'nullable|image|max:4096',
             'image_url'      => 'nullable|url|max:2048',
             'image_2'        => 'nullable|image|max:4096',
@@ -69,11 +74,16 @@ class ProgramPageController extends Controller
     public function update(Request $request, ProgramPageItem $item)
     {
         $data = $request->validate([
-            'title'          => 'required|string|max:255',
-            'short_content'  => 'nullable|string',
-            'objective'      => 'nullable|string',
-            'detail_content' => 'nullable|string',
-            'activities'     => 'nullable|string',
+            'title'              => 'required|string|max:255',
+            'title_fr'           => 'nullable|string|max:255',
+            'short_content'      => 'nullable|string',
+            'short_content_fr'   => 'nullable|string',
+            'objective'          => 'nullable|string',
+            'objective_fr'       => 'nullable|string',
+            'detail_content'     => 'nullable|string',
+            'detail_content_fr'  => 'nullable|string',
+            'activities'         => 'nullable|string',
+            'activities_fr'      => 'nullable|string',
             'image'          => 'nullable|image|max:4096',
             'image_url'      => 'nullable|url|max:2048',
             'image_2'        => 'nullable|image|max:4096',

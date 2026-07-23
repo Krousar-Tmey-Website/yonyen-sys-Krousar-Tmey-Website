@@ -298,6 +298,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->parameters(['impact-statistics' => 'impactStatistic']);
 
     Route::resource('sponsors', Admin\SponsorController::class)->except(['show']);
+    Route::resource('gallery', Admin\GalleryController::class)->except(['show']);
+    Route::resource('testimonials', Admin\TestimonialController::class)->except(['show']);
 
     // Map Structure
     Route::resource('map-projects', Admin\MapProjectController::class)

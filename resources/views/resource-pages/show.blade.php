@@ -2,8 +2,8 @@
 
 @php use Illuminate\Support\Str; @endphp
 
-@section('title', $page->title . ' — Krousar Thmey')
-@section('description', $page->description ?? $page->title)
+@section('title', $page->localized_title . ' — Krousar Thmey')
+@section('description', $page->localized_description ?? $page->localized_title)
 
 @section('content')
 
@@ -15,25 +15,25 @@
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <a href="{{ route('resource-pages.index') }}" class="hover:text-[#1a3c6e] transition-colors">Topics</a>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-gray-600">{{ $page->title }}</span>
+            <span class="text-gray-600">{{ $page->localized_title }}</span>
         </nav>
 
         {{-- Header --}}
         <h1 data-reveal style="--reveal-delay: 60" class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#1a3c6e] leading-tight mb-8">
-            {{ $page->header_text ?: $page->title }}
+            {{ $page->localized_header_text ?: $page->localized_title }}
         </h1>
 
         {{-- Main picture --}}
         @if($page->detail_image)
         <div data-reveal="scale" style="--reveal-delay: 120" class="mb-8 -mx-6 md:mx-0 overflow-hidden">
-            <img src="{{ $page->detail_image_url }}" alt="{{ $page->title }}" class="w-full object-cover transition-transform duration-700 ease-out hover:scale-105">
+            <img src="{{ $page->detail_image_url }}" alt="{{ $page->localized_title }}" class="w-full object-cover transition-transform duration-700 ease-out hover:scale-105">
         </div>
         @endif
 
         {{-- Description --}}
-        @if($page->detail_description)
+        @if($page->localized_detail_description)
         <div data-reveal style="--reveal-delay: 180" class="prose prose-lg max-w-none text-justify prose-p:text-gray-700 mb-8">
-            {!! nl2br(e($page->detail_description)) !!}
+            {!! nl2br(e($page->localized_detail_description)) !!}
         </div>
         @endif
 

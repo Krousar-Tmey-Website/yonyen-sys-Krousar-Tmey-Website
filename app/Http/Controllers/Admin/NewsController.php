@@ -50,8 +50,11 @@ class NewsController extends Controller
     {
         $data = $request->validate([
             'title'             => ['required', 'string', 'max:255'],
+            'title_fr'          => ['nullable', 'string', 'max:255'],
             'excerpt'           => ['nullable', 'string'],
+            'excerpt_fr'        => ['nullable', 'string'],
             'content'           => ['nullable', 'string'],
+            'content_fr'        => ['nullable', 'string'],
             'is_published'      => ['nullable', 'boolean'],
             'image'             => ['nullable', 'image', 'max:2048'],
             'videos'            => ['nullable', 'array'],
@@ -157,8 +160,11 @@ class NewsController extends Controller
     {
         $data = $request->validate([
             'title'             => ['required', 'string', 'max:255'],
+            'title_fr'          => ['nullable', 'string', 'max:255'],
             'excerpt'           => ['nullable', 'string'],
+            'excerpt_fr'        => ['nullable', 'string'],
             'content'           => ['nullable', 'string'],
+            'content_fr'        => ['nullable', 'string'],
             'is_published'      => ['nullable', 'boolean'],
             'image'             => ['nullable', 'image', 'max:2048'],
             'videos'            => ['nullable', 'array'],

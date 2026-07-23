@@ -24,6 +24,7 @@ class PrincipleSlideController extends Controller
     {
         $data = $request->validate([
             'title' => 'nullable|string|max:255',
+            'title_fr' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:2048',
             'image_url' => 'nullable|url|max:2048',
             'sort_order' => 'nullable|integer',
@@ -49,6 +50,7 @@ class PrincipleSlideController extends Controller
     {
         $data = $request->validate([
             'title' => 'nullable|string|max:255',
+            'title_fr' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:2048',
             'image_url' => 'nullable|url|max:2048',
             'remove_image' => 'nullable|boolean',

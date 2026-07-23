@@ -11,9 +11,13 @@
         showModal: false,
         editing: false,
         editingId: null,
+        lang: 'en',
         form: {
+            title: '',
+            title_fr: '',
             year: '',
             description: '',
+            description_fr: '',
             website_url: '',
             article_url: '',
             video_url: '',
@@ -36,8 +40,10 @@
         openAddModal() {
             this.editing = false;
             this.editingId = null;
+            this.lang = 'en';
             this.form = {
-                year: '', description: '',
+                title: '', title_fr: '',
+                year: '', description: '', description_fr: '',
                 website_url: '', article_url: '', video_url: '', sort_order: 0,
                 is_active: true, image_url: null,
             };
@@ -48,9 +54,13 @@
         openEditModal(award) {
             this.editing = true;
             this.editingId = award.id;
+            this.lang = 'en';
             this.form = {
+                title: award.title ?? '',
+                title_fr: award.title_fr ?? '',
                 year: award.year ?? '',
                 description: award.description ?? '',
+                description_fr: award.description_fr ?? '',
                 website_url: award.website_url ?? '',
                 article_url: award.article_url ?? '',
                 video_url: award.video_url ?? '',
@@ -180,6 +190,14 @@
                         <input type="hidden" name="_method" value="PUT">
                     </template>
 
+                    {{-- Language toggle --}}
+                    <div class="flex justify-end">
+                        <div class="lang-tabs">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-3">
                         {{-- YEAR --}}
                         <div>
@@ -199,13 +217,36 @@
                         </div>
                     </div>
 
+                    {{-- TITLE --}}
+                    <div x-show="lang === 'en'">
+                        <label for="modal-title" class="text-xs font-medium text-gray-600">Title <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" id="modal-title" name="title" autocomplete="off"
+                               x-model="form.title"
+                               class="form-input text-sm"
+                               placeholder="e.g. Best NGO Award">
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label for="modal-title_fr" class="text-xs font-medium text-gray-600">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" id="modal-title_fr" name="title_fr" autocomplete="off"
+                               x-model="form.title_fr"
+                               class="form-input text-sm"
+                               placeholder="ex. Meilleur prix ONG">
+                    </div>
+
                     {{-- DESCRIPTION --}}
-                    <div>
+                    <div x-show="lang === 'en'">
                         <label for="modal-description" class="text-xs font-medium text-gray-600">Description</label>
                         <textarea id="modal-description" name="description" rows="2"
                                   class="form-input text-sm resize-none"
                                   placeholder="Short description..."
                                   x-model="form.description"></textarea>
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label for="modal-description_fr" class="text-xs font-medium text-gray-600">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <textarea id="modal-description_fr" name="description_fr" rows="2"
+                                  class="form-input text-sm resize-none"
+                                  placeholder="Description courte..."
+                                  x-model="form.description_fr"></textarea>
                     </div>
 
                     {{-- LINKS --}}

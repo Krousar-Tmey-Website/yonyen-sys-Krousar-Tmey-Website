@@ -42,23 +42,23 @@
                     x-transition:enter="transition ease-out duration-700 delay-300"
                     x-transition:enter-start="opacity-0 translate-y-8"
                     x-transition:enter-end="opacity-100 translate-y-0">
-                    @if($slide->badge_text)
-                    <span class="inline-block bg-[#e8a020] text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-5 uppercase tracking-wider">{{ $slide->badge_text }}</span>
+                    @if($slide->localized_badge_text)
+                    <span class="inline-block bg-[#e8a020] text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-5 uppercase tracking-wider">{{ $slide->localized_badge_text }}</span>
                     @endif
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-                        {!! nl2br(e($slide->title)) !!}
+                        {!! nl2br(e($slide->localized_title)) !!}
                     </h1>
-                    @if($slide->subtitle)
-                    <p class="text-white/80 text-lg mb-8 leading-relaxed">{{ $slide->subtitle }}</p>
+                    @if($slide->localized_subtitle)
+                    <p class="text-white/80 text-lg mb-8 leading-relaxed">{{ $slide->localized_subtitle }}</p>
                     @endif
 
-                    @if($slide->cta_primary_text || $slide->cta_secondary_text)
+                    @if($slide->localized_cta_primary_text || $slide->localized_cta_secondary_text)
                     <div class="flex flex-wrap gap-6">
-                        @if($slide->cta_primary_text)
-                        <a href="{{ $slide->cta_primary_url ?? '#' }}" class="btn-primary btn-micro">{{ $slide->cta_primary_text }}</a>
+                        @if($slide->localized_cta_primary_text)
+                        <a href="{{ $slide->cta_primary_url ?? '#' }}" class="btn-primary btn-micro">{{ $slide->localized_cta_primary_text }}</a>
                         @endif
-                        @if($slide->cta_secondary_text)
-                        <a href="{{ $slide->cta_secondary_url ?? route('donate') }}" class="btn-outline btn-micro">{{ $slide->cta_secondary_text }}</a>
+                        @if($slide->localized_cta_secondary_text)
+                        <a href="{{ $slide->cta_secondary_url ?? route('donate') }}" class="btn-outline btn-micro">{{ $slide->localized_cta_secondary_text }}</a>
                         @endif
                     </div>
                     @endif
@@ -831,7 +831,7 @@
             <div class="card group flex flex-col card-hover" data-reveal="up" style="--reveal-delay: {{ $loop->index * 120 }}">
                 <div class="relative overflow-hidden h-56">
                     <img src="{{ $program->image_url }}"
-                        alt="{{ $program->title }}"
+                        alt="{{ $program->localized_title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>
                     @if($program->stats && count($program->stats) > 0)
@@ -841,9 +841,9 @@
 
                 {{-- Content --}}
                 <div class="p-6 flex flex-col flex-1">
-                    <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $program->title }}</h3>
+                    <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $program->localized_title }}</h3>
                     <p class="text-gray-600 text-sm leading-relaxed mb-5 line-clamp-3">
-                        {{ $program->description }}
+                        {{ $program->localized_description }}
                     </p>
                     <ul class="space-y-1.5 mb-6">
                         @if($program->stats && count($program->stats) > 1)
@@ -1313,13 +1313,13 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
             @foreach($projects as $project)
             <div class="bg-[#f8f9fc] rounded-2xl p-7 border border-gray-100 card-hover-light group relative flex flex-col h-full" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
                 {{-- Main Card Link --}}
-                <a href="{{ route('projects.show', $project) }}" class="absolute inset-0 z-10" aria-label="View {{ $project->title }}"></a>
-                
+                <a href="{{ route('projects.show', $project) }}" class="absolute inset-0 z-10" aria-label="View {{ $project->localized_title }}"></a>
+
                 @if($project->image)
                 <img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset('storage/' . $project->image) }}" class="w-full h-40 object-cover rounded-xl mb-5 group-hover:opacity-90 transition-opacity relative z-0">
                 @endif
-                <h3 class="text-xl font-bold text-[#1a3c6e] mb-3 relative z-0">{{ $project->title }}</h3>
-                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5 flex-1 relative z-0">{{ $project->description }}</p>
+                <h3 class="text-xl font-bold text-[#1a3c6e] mb-3 relative z-0">{{ $project->localized_title }}</h3>
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5 flex-1 relative z-0">{{ $project->localized_description }}</p>
                 
                 <div class="mt-auto flex items-center justify-between border-t border-gray-200/50 pt-5">
                     <span class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm group-hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300 pointer-events-none">
@@ -1330,7 +1330,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                     </span>
                     
                     {{-- Donate Button (Z-20 to sit above stretched link) --}}
-                    <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $project->title }}">
+                    <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $project->localized_title }}">
                         <svg class="w-4 h-4 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                         <span>Donate Now</span>
                     </a>
@@ -1354,10 +1354,10 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
             @foreach($galleries as $photo)
             <div class="group relative overflow-hidden rounded-xl aspect-square bg-white/5 gallery-overlay" data-reveal="scale" style="--reveal-delay: {{ $loop->index * 80 }}">
                 @if($photo->image)
-                <img src="{{ str_starts_with($photo->image, 'http') ? $photo->image : asset('storage/' . $photo->image) }}" alt="{{ $photo->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <img src="{{ str_starts_with($photo->image, 'http') ? $photo->image : asset('storage/' . $photo->image) }}" alt="{{ $photo->localized_title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                 @endif
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-                    <p class="text-white font-medium text-sm">{{ $photo->title }}</p>
+                    <p class="text-white font-medium text-sm">{{ $photo->localized_title }}</p>
                 </div>
             </div>
             @endforeach
@@ -1387,7 +1387,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
             @forelse($latestNews as $article)
             <article class="card group flex flex-col card-hover" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
                 <div class="relative overflow-hidden h-52">
-                    <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
+                    <img src="{{ $article->image_url }}" alt="{{ $article->localized_title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#1a3c6e] text-xs font-semibold px-3 py-1 rounded-full capitalize">{{ str_replace('-', ' ', $article->category) }}</span>
                 </div>
@@ -1398,8 +1398,8 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                         </svg>
                         {{ $article->published_at?->format('F Y') ?? $article->created_at->format('F Y') }}
                     </time>
-                    <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug group-hover:text-[#1a3c6e] transition-colors">{{ $article->title }}</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $article->excerpt }}</p>
+                    <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug group-hover:text-[#1a3c6e] transition-colors">{{ $article->localized_title }}</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $article->localized_excerpt }}</p>
                     <a href="{{ route('news') }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors link-arrow">
                         Read More
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1440,10 +1440,10 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                     @endif
                     <div>
                         <h4 class="font-bold text-gray-800">{{ $testimony->name }}</h4>
-                        <p class="text-xs text-gray-500">{{ $testimony->role }}</p>
+                        <p class="text-xs text-gray-500">{{ $testimony->localized_role }}</p>
                     </div>
                 </div>
-                <p class="text-gray-600 leading-relaxed text-sm italic line-clamp-4 relative z-10">"{{ $testimony->content }}"</p>
+                <p class="text-gray-600 leading-relaxed text-sm italic line-clamp-4 relative z-10">"{{ $testimony->localized_content }}"</p>
             </div>
             @endforeach
         </div>
@@ -1516,15 +1516,15 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                             <div class="flex-grow flex items-center justify-center w-full mb-4">
                                 @if($sponsor->logo)
                                 <img src="{{ str_starts_with($sponsor->logo, 'http') ? $sponsor->logo : asset('storage/' . $sponsor->logo) }}"
-                                    alt="{{ $sponsor->name }}"
+                                    alt="{{ $sponsor->localized_name }}"
                                     class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
                                 @else
-                                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->name, 0, 1) }}</div>
+                                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->localized_name, 0, 1) }}</div>
                                 @endif
                             </div>
 
                             <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
-                                <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->name }}</h4>
+                                <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->localized_name }}</h4>
                             </div>
                         </a>
                     </div>
@@ -1539,15 +1539,15 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                             <div class="flex-grow flex items-center justify-center w-full mb-4">
                                 @if($sponsor->logo)
                                 <img src="{{ str_starts_with($sponsor->logo, 'http') ? $sponsor->logo : asset('storage/' . $sponsor->logo) }}"
-                                    alt="{{ $sponsor->name }}"
+                                    alt="{{ $sponsor->localized_name }}"
                                     class="max-h-20 max-w-full object-contain transition-transform duration-500 transform group-hover:scale-110 group-hover:brightness-110">
                                 @else
-                                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->name, 0, 1) }}</div>
+                                <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1a3c6e] font-bold text-2xl transition-transform duration-500 group-hover:scale-110">{{ substr($sponsor->localized_name, 0, 1) }}</div>
                                 @endif
                             </div>
 
                             <div class="h-12 flex items-center justify-center w-full border-t border-gray-50 pt-3">
-                                <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->name }}</h4>
+                                <h4 class="text-gray-600 font-medium text-sm text-center leading-snug transition-colors duration-300 group-hover:text-[#1a3c6e] line-clamp-2">{{ $sponsor->localized_name }}</h4>
                             </div>
                         </a>
                     </div>

@@ -6,39 +6,74 @@
 
 @section('content')
 
-<div class="max-w-5xl mx-auto grid lg:grid-cols-3 gap-6">
+<div class="max-w-3xl mx-auto">
 
     {{-- Form --}}
-    <div class="lg:col-span-2">
+    <div>
         <form action="{{ route('admin.presentation-slides.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
             @csrf
 
             {{-- Slide Text --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-                <h3 class="font-semibold text-gray-700 text-sm">Slide Content</h3>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Badge Label <span class="text-gray-400 font-normal">(optional — e.g. "Our Mission")</span>
-                    </label>
-                    <input type="text" name="badge_text" value="{{ old('badge_text') }}"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                           placeholder="Our Mission">
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="{ lang: 'en' }">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-semibold text-gray-700 text-sm">Slide Content</h3>
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-400">*</span></label>
-                    <textarea name="title" rows="2" required
-                              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                              placeholder="Empowering&#10;Cambodia's Children">{{ old('title') }}</textarea>
-                    <p class="text-xs text-gray-400 mt-1">Use line breaks to split the title onto two lines on the slide.</p>
+                <div x-show="lang === 'en'" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                            Badge Label <span class="text-gray-400 font-normal">(optional — e.g. "Our Mission")</span>
+                        </label>
+                        <input type="text" name="badge_text" value="{{ old('badge_text') }}"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Our Mission">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-400">*</span></label>
+                        <textarea name="title" rows="2"
+                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Empowering&#10;Cambodia's Children">{{ old('title') }}</textarea>
+                        <p class="text-xs text-gray-400 mt-1">Use line breaks to split the title onto two lines on the slide.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle</label>
+                        <textarea name="subtitle" rows="3"
+                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Supporting disadvantaged children through education, culture, and welfare programs...">{{ old('subtitle') }}</textarea>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle</label>
-                    <textarea name="subtitle" rows="3"
-                              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                              placeholder="Supporting disadvantaged children through education, culture, and welfare programs...">{{ old('subtitle') }}</textarea>
+                <div x-show="lang === 'fr'" x-cloak class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                            Badge Label (French) <span class="text-gray-400 font-normal">(optional)</span>
+                        </label>
+                        <input type="text" name="badge_text_fr" value="{{ old('badge_text_fr') }}"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Notre Mission">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <textarea name="title_fr" rows="2"
+                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Titre en français...">{{ old('title_fr') }}</textarea>
+                        <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English title.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <textarea name="subtitle_fr" rows="3"
+                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Sous-titre en français...">{{ old('subtitle_fr') }}</textarea>
+                        <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English subtitle.</p>
+                    </div>
                 </div>
             </div>
 
@@ -78,13 +113,25 @@
             </div>
 
             {{-- CTAs --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-                <h3 class="font-semibold text-gray-700 text-sm">Call-to-Action Buttons</h3>
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="{ lang: 'en' }">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-semibold text-gray-700 text-sm">Call-to-Action Buttons</h3>
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
+                </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Primary Button Text</label>
                         <input type="text" name="cta_primary_text" value="{{ old('cta_primary_text', 'Learn More') }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Primary Button Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="cta_primary_text_fr" value="{{ old('cta_primary_text_fr') }}"
+                               placeholder="En savoir plus"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
                     <div>
@@ -92,9 +139,15 @@
                         <input type="text" name="cta_primary_url" value="{{ old('cta_primary_url', '/our-programs') }}"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
-                    <div>
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Secondary Button Text</label>
                         <input type="text" name="cta_secondary_text" value="{{ old('cta_secondary_text', 'Donate Now') }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Secondary Button Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="cta_secondary_text_fr" value="{{ old('cta_secondary_text_fr') }}"
+                               placeholder="Faire un don"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
                     <div>
@@ -103,6 +156,7 @@
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
                 </div>
+                <p class="text-xs text-gray-400">French text is shown to French-language visitors. Leave blank to reuse the English button text.</p>
             </div>
 
             {{-- Settings --}}
@@ -127,28 +181,6 @@
                 <a href="{{ route('admin.presentation-slides.index') }}" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</a>
             </div>
         </form>
-    </div>
-
-    {{-- Tips --}}
-    <div class="space-y-4">
-        <div class="bg-[#2d6fa3]/5 rounded-2xl p-5 border border-[#2d6fa3]/10">
-            <h4 class="font-bold text-[#2d6fa3] text-sm mb-3">📐 Image Tips</h4>
-            <ul class="space-y-2 text-xs text-gray-600">
-                <li>• Recommended size: <strong>1400 × 800px</strong> or larger</li>
-                <li>• Landscape (wide) orientation works best</li>
-                <li>• High contrast subjects — the left side gets text overlay</li>
-                <li>• JPG or PNG, max 4 MB</li>
-            </ul>
-        </div>
-        <div class="bg-[#8da83a]/5 rounded-2xl p-5 border border-[#8da83a]/10">
-            <h4 class="font-bold text-[#8da83a] text-sm mb-3">✏️ Content Tips</h4>
-            <ul class="space-y-2 text-xs text-gray-600">
-                <li>• Keep title short — 3–6 words per line</li>
-                <li>• Badge adds a coloured pill above the title</li>
-                <li>• Leave CTA fields blank to hide that button</li>
-                <li>• Lower sort order = appears earlier in rotation</li>
-            </ul>
-        </div>
     </div>
 
 </div>

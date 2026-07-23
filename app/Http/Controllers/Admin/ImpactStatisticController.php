@@ -19,7 +19,9 @@ class ImpactStatisticController extends Controller
         $data = $request->validate([
             'value' => 'required|string|max:255',
             'label' => 'required|string|max:255',
+            'label_fr' => 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'description_fr' => 'nullable|string',
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
@@ -38,7 +40,9 @@ class ImpactStatisticController extends Controller
         $data = $request->validate([
             'value' => 'required|string|max:255',
             'label' => 'required|string|max:255',
+            'label_fr' => 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'description_fr' => 'nullable|string',
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',

@@ -8,6 +8,7 @@ class PrincipleSlide extends Model
 {
     protected $fillable = [
         'title',
+        'title_fr',
         'image',
         'sort_order',
         'is_active',
@@ -21,6 +22,21 @@ class PrincipleSlide extends Model
     public static function active()
     {
         return static::where('is_active', true)->orderBy('sort_order');
+    }
+
+    // French text falls back to the English field whenever it hasn't been filled in yet.
+    public function getLocalizedTitleAttribute(): ?string
+    {
+        return $this->localized('title');
+    }
+
+    private function localized(string $field): ?string
+    {
+        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+            return $this->{$field . '_fr'};
+        }
+
+        return $this->{$field};
     }
 
     public function getImageUrlAttribute(): string

@@ -12,10 +12,26 @@
         <form action="{{ route('admin.reports.store') }}" method="POST" enctype="multipart/form-data" class="mt-6 space-y-5">
             @csrf
 
-            <div>
-                <label for="title" class="mb-1 block text-sm font-semibold text-gray-700">Report Title <span class="text-red-500">*</span></label>
-                <input id="title" name="title" type="text" value="{{ old('title') }}" required class="w-full rounded-xl border {{ $errors->has('title') ? 'border-red-300 focus:ring-red-400' : 'border-gray-200 focus:ring-[#1d4e7a]' }} px-4 py-2.5 text-sm focus:border-[#1d4e7a] focus:outline-none focus:ring-2">
-                @error('title')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
+            <div x-data="{ lang: 'en' }">
+                <div class="mb-1 flex items-center justify-between">
+                    <span class="text-sm font-semibold text-gray-700">Report Title <span class="text-red-500">*</span></span>
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
+                </div>
+
+                <div x-show="lang === 'en'">
+                    <input id="title" name="title" type="text" value="{{ old('title') }}" class="w-full rounded-xl border {{ $errors->has('title') ? 'border-red-300 focus:ring-red-400' : 'border-gray-200 focus:ring-[#1d4e7a]' }} px-4 py-2.5 text-sm focus:border-[#1d4e7a] focus:outline-none focus:ring-2">
+                    @error('title')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
+                </div>
+
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label for="title_fr" class="mb-1 block text-sm font-semibold text-gray-700">Report Title (French) <span class="optional">(optional)</span></label>
+                    <input id="title_fr" name="title_fr" type="text" value="{{ old('title_fr') }}" class="w-full rounded-xl border {{ $errors->has('title_fr') ? 'border-red-300 focus:ring-red-400' : 'border-gray-200 focus:ring-[#1d4e7a]' }} px-4 py-2.5 text-sm focus:border-[#1d4e7a] focus:outline-none focus:ring-2">
+                    @error('title_fr')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
+                    <p class="mt-1 text-xs text-gray-500">Shown to French-language visitors. Leave blank to reuse the English title.</p>
+                </div>
             </div>
 
             <div>

@@ -1,6 +1,10 @@
 {{-- Rich text editor for the article content field, with one-click buttons
      for the site's recurring custom blocks. See resources/js/admin-news-editor.js. --}}
-<div data-quill-root>
+@php
+    $name = $name ?? 'content';
+    $placeholder = $placeholder ?? 'Write your article content here...';
+@endphp
+<div data-quill-root data-quill-placeholder="{{ $placeholder }}">
     <div data-quill-toolbar>
         <span class="ql-formats">
             <button class="ql-bold"></button>
@@ -43,5 +47,5 @@
         </button>
     </div>
     <div data-quill-editor></div>
-    <textarea name="content" data-quill-content class="hidden">{{ old('content', $contentValue ?? '') }}</textarea>
+    <textarea name="{{ $name }}" data-quill-content class="hidden">{{ old($name, $contentValue ?? '') }}</textarea>
 </div>

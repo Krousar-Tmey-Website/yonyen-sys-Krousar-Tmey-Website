@@ -13,50 +13,103 @@
     @csrf
     <div class="p-6 space-y-6">
 
+        <div x-data="{ lang: 'en' }" class="space-y-6">
+
+        {{-- Language Tabs --}}
+        <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Translatable Fields</span>
+            <div class="lang-tabs">
+                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+            </div>
+        </div>
+
         {{-- Title --}}
-        <div>
+        <div x-show="lang === 'en'">
             <label class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
-            <input type="text" name="title" value="{{ old('title') }}" required
+            <input type="text" name="title" value="{{ old('title') }}"
                    class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
                    placeholder="e.g. Child Protection Services">
             @error('title')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
+        <div x-show="lang === 'fr'" x-cloak>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+            <input type="text" name="title_fr" value="{{ old('title_fr') }}"
+                   class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
+                   placeholder="Titre en français...">
+            @error('title_fr')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            <p class="text-xs text-gray-400 mt-1.5">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+        </div>
 
         {{-- Short Content --}}
-        <div>
+        <div x-show="lang === 'en'">
             <label class="block text-sm font-medium text-gray-700 mb-1">Short Content <span class="text-gray-400 font-normal">(shown on card preview)</span></label>
             <textarea name="short_content" rows="3"
                       class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
                       placeholder="Brief description that appears on the card listing...">{{ old('short_content') }}</textarea>
             @error('short_content')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
+        <div x-show="lang === 'fr'" x-cloak>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Short Content (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+            <textarea name="short_content_fr" rows="3"
+                      class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
+                      placeholder="Brève description en français...">{{ old('short_content_fr') }}</textarea>
+            @error('short_content_fr')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            <p class="text-xs text-gray-400 mt-1.5">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+        </div>
 
         {{-- Objective --}}
-        <div>
+        <div x-show="lang === 'en'">
             <label class="block text-sm font-medium text-gray-700 mb-1">Objective</label>
             <textarea name="objective" rows="3"
                       class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
                       placeholder="e.g. To protect the health of Cambodian children...">{{ old('objective') }}</textarea>
             @error('objective')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
+        <div x-show="lang === 'fr'" x-cloak>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Objective (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+            <textarea name="objective_fr" rows="3"
+                      class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
+                      placeholder="Objectif en français...">{{ old('objective_fr') }}</textarea>
+            @error('objective_fr')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            <p class="text-xs text-gray-400 mt-1.5">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+        </div>
 
         {{-- Detail Content (The Project) --}}
-        <div>
+        <div x-show="lang === 'en'">
             <label class="block text-sm font-medium text-gray-700 mb-1">The Project (Detail Content)</label>
             <textarea name="detail_content" rows="10"
                       class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm font-mono"
                       placeholder="Full content (HTML is supported)...">{{ old('detail_content') }}</textarea>
             @error('detail_content')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
+        <div x-show="lang === 'fr'" x-cloak>
+            <label class="block text-sm font-medium text-gray-700 mb-1">The Project (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+            <textarea name="detail_content_fr" rows="10"
+                      class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm font-mono"
+                      placeholder="Contenu complet en français (HTML pris en charge)...">{{ old('detail_content_fr') }}</textarea>
+            @error('detail_content_fr')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            <p class="text-xs text-gray-400 mt-1.5">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+        </div>
 
         {{-- Activities --}}
-        <div>
+        <div x-show="lang === 'en'">
             <label class="block text-sm font-medium text-gray-700 mb-1">Activities</label>
             <textarea name="activities" rows="5"
                       class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
                       placeholder="Activity 1&#10;Activity 2...">{{ old('activities') }}</textarea>
             <p class="text-xs text-gray-500 mt-1.5">Each new line will be displayed as a bullet point on the public page.</p>
             @error('activities')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+        </div>
+        <div x-show="lang === 'fr'" x-cloak>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Activities (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+            <textarea name="activities_fr" rows="5"
+                      class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
+                      placeholder="Activité 1&#10;Activité 2...">{{ old('activities_fr') }}</textarea>
+            <p class="text-xs text-gray-400 mt-1.5">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+            @error('activities_fr')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+        </div>
+
         </div>
 
         <hr class="border-gray-100">

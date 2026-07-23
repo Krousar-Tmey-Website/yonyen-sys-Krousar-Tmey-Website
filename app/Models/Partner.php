@@ -14,6 +14,7 @@ class Partner extends Model
         'logo',
         'country',
         'description',
+        'description_fr',
         'website_url',
         'sort_order',
         'is_active',
@@ -62,5 +63,20 @@ class Partner extends Model
         return str_starts_with($this->logo, 'http')
             ? $this->logo
             : asset('storage/' . $this->logo);
+    }
+
+    // French text falls back to the English field whenever it hasn't been filled in yet.
+    public function getLocalizedDescriptionAttribute(): ?string
+    {
+        return $this->localized('description');
+    }
+
+    private function localized(string $field): ?string
+    {
+        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+            return $this->{$field . '_fr'};
+        }
+
+        return $this->{$field};
     }
 }

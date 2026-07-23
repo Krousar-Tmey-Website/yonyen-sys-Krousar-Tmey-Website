@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', $book->title . ' — Books for Sale')
-@section('description', $book->description ? Str::limit(strip_tags($book->description), 160) : 'Support children in Cambodia by purchasing ' . $book->title . '.')
+@section('title', $book->localized_title . ' — Books for Sale')
+@section('description', $book->localized_description ? Str::limit(strip_tags($book->localized_description), 160) : 'Support children in Cambodia by purchasing ' . $book->localized_title . '.')
 
 @section('content')
 <section class="py-16 md:py-24 bg-gradient-to-br from-slate-50 via-sky-50/20 to-slate-100/50 min-h-screen relative overflow-hidden">
@@ -30,7 +30,7 @@
                     <div class="absolute -inset-4 bg-gradient-to-r from-[#2d6fa3]/15 to-[#8da83a]/15 rounded-3xl blur-2xl opacity-60 group-hover/cover:opacity-90 transition-opacity duration-500"></div>
 
                     @if($book->cover_image_url)
-                    <img src="{{ $book->cover_image_url }}" alt="{{ $book->title }}" 
+                    <img src="{{ $book->cover_image_url }}" alt="{{ $book->localized_title }}"
                          class="relative z-10 max-h-[28rem] md:max-h-[32rem] w-auto object-contain rounded-xl shadow-[0_20px_45px_-8px_rgba(0,0,0,0.3)] group-hover/cover:scale-[1.02] group-hover:-rotate-1 transition-all duration-500 ease-out">
                     @else
                     <div class="relative z-10 w-48 h-64 rounded-2xl bg-white border border-slate-200 shadow-xl flex flex-col items-center justify-center text-slate-400 gap-3">
@@ -65,7 +65,7 @@
                     </div>
 
                     <h1 class="text-3xl md:text-4xl lg:text-5xl font-black text-slate-800 leading-tight tracking-wide mb-4">
-                        {{ $book->title }}
+                        {{ $book->localized_title }}
                     </h1>
 
                     {{-- Price Display Box --}}
@@ -80,14 +80,14 @@
                 </div>
 
                 {{-- Description Box --}}
-                @if($book->description)
+                @if($book->localized_description)
                 <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-slate-200/70 shadow-sm">
                     <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2 border-b border-slate-100 pb-2">
                         <svg class="w-4 h-4 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         About this Book
                     </h2>
                     <div class="text-slate-600 text-sm md:text-base leading-relaxed whitespace-pre-line prose max-w-none">
-                        {!! e($book->description) !!}
+                        {!! e($book->localized_description) !!}
                     </div>
                 </div>
                 @endif

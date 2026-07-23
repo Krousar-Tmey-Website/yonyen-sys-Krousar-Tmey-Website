@@ -64,10 +64,12 @@ class AwardController extends Controller
     {
         $data = $request->validate([
             'title'          => ['nullable', 'string', 'max:255'],
+            'title_fr'       => ['nullable', 'string', 'max:255'],
             'year'           => ['nullable', 'string', 'max:10'],
             'recipient'      => ['nullable', 'string', 'max:255'],
             'organization'   => ['nullable', 'string', 'max:255'],
             'description'    => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
             'image'          => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
             'image_url'      => ['nullable', 'url', 'max:2048'],
             'website_url'    => ['nullable', 'url', 'max:2048'],
@@ -90,10 +92,12 @@ class AwardController extends Controller
     {
         $data = $request->validate([
             'title'             => ['nullable', 'string', 'max:255'],
+            'title_fr'          => ['nullable', 'string', 'max:255'],
             'year'              => ['nullable', 'string', 'max:10'],
             'recipient'         => ['nullable', 'string', 'max:255'],
             'organization'      => ['nullable', 'string', 'max:255'],
             'description'       => ['nullable', 'string'],
+            'description_fr'    => ['nullable', 'string'],
             'image'             => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
             'image_url'         => ['nullable', 'url', 'max:2048'],
             'website_url'       => ['nullable', 'url', 'max:2048'],

@@ -17,28 +17,6 @@
         [x-cloak] {
             display: none !important;
         }
-        {{-- Google Translate styling --}}
-        iframe.goog-te-banner-frame { display: none !important; }
-        .goog-te-banner-frame { display: none !important; }
-        .goog-logo-link { display: none !important; }
-        .goog-te-gadget { color: transparent !important; }
-        .VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; }
-        body > .skiptranslate > iframe.skiptranslate { display: none !important; visibility: hidden !important; }
-        html { margin-top: 0 !important; top: 0 !important; }
-        body { margin-top: 0 !important; top: 0 !important; position: static !important; }
-        .goog-tooltip { display: none !important; }
-        .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
-        #google_translate_element {
-            position: absolute !important;
-            opacity: 0 !important;
-            z-index: -10 !important;
-            pointer-events: none !important;
-            width: 0 !important;
-            height: 0 !important;
-            overflow: hidden !important;
-        }
-
-
     </style>
 </head>
 
@@ -52,78 +30,7 @@
                 window.location.href = 'mailto:' + email;
             }
         }
-
-        {{-- Google Translate helpers --}}
-        function getCurrentLang() {
-            let match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
-            if (match) {
-                let parts = match[2].split('/');
-                if (parts.length === 3 && parts[2] !== 'en') return parts[2];
-            }
-            return '{{ session("locale", "en") }}';
-        }
-
-        function manageGTCookies(action, lang = '') {
-            let hostname = window.location.hostname;
-            let parts = hostname.split('.');
-            let domains = [hostname, '.' + hostname];
-
-            if (parts.length > 2) {
-                domains.push('.' + parts.slice(1).join('.'));
-            }
-
-            let wipe = '=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-            document.cookie = 'googtrans' + wipe;
-            domains.forEach(d => {
-                document.cookie = 'googtrans' + wipe + '; domain=' + d;
-            });
-
-            if (action === 'set' && lang !== 'en') {
-                let val = '=/en/' + lang + '; path=/';
-                document.cookie = 'googtrans' + val;
-                domains.forEach(d => {
-                    document.cookie = 'googtrans' + val + '; domain=' + d;
-                });
-            }
-        }
-
-        function switchLang(lang) {
-            if (lang === 'en') {
-                manageGTCookies('clear');
-            } else {
-                manageGTCookies('set', lang);
-
-                let gtCombo = document.querySelector('.goog-te-combo');
-                if (gtCombo) {
-                    gtCombo.value = lang;
-                    gtCombo.dispatchEvent(new Event('change'));
-                }
-            }
-
-            fetch('{{ url("/lang") }}/' + lang, {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            }).then(() => {
-                setTimeout(() => {
-                    window.location.reload(true);
-                }, 200);
-            }).catch(() => {
-                window.location.href = '{{ url("/lang") }}/' + lang;
-            });
-        }
     </script>
-
-    {{-- Google Translate Element (hidden) --}}
-    <div id="google_translate_element"></div>
-    <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,fr',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      }, 'google_translate_element');
-    }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <div class="flex h-full">
 
@@ -195,6 +102,8 @@
                 ['route' => 'admin.map-projects.index', 'label' => 'Map Structure'],
                 ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
                 ['route' => 'admin.sponsors.index', 'label' => 'Sponsors'],
+                ['route' => 'admin.gallery.index', 'label' => 'Photo Gallery'],
+                ['route' => 'admin.testimonials.index', 'label' => 'Testimonials'],
                 ],
                 ],
                 'about' => [
@@ -402,43 +311,6 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    {{-- Language Switcher — compact, like visitor site --}}
-                    <div class="hidden lg:block notranslate" x-data="{ open: false, lang: getCurrentLang() }">
-                        <div class="relative">
-                            <button @click="open = !open" @click.away="open = false"
-                                    class="flex items-center gap-2 text-gray-600 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-3 rounded-lg hover:bg-gray-50 border border-gray-200 shadow-sm bg-white">
-                                <img :src="lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png'"
-                                     class="w-4 h-auto rounded-sm" alt="">
-                                <span x-text="lang === 'fr' ? 'FR' : 'EN'">EN</span>
-                                <svg class="w-3 h-3 transition-transform duration-200 text-gray-400"
-                                     :class="open ? 'rotate-180' : ''"
-                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </button>
-
-                            <div x-show="open" x-cloak
-                                 x-transition:enter="transition ease-out duration-100"
-                                 x-transition:enter-start="opacity-0 scale-95"
-                                 x-transition:enter-end="opacity-100 scale-100"
-                                 x-transition:leave="transition ease-in duration-75"
-                                 x-transition:leave-start="opacity-100 scale-100"
-                                 x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[100] overflow-hidden">
-                                <button @click="switchLang('en')"
-                                        :class="lang === 'en' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : 'text-gray-600 hover:bg-gray-50 hover:text-[#2d6fa3]'"
-                                        class="w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2">
-                                    <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt=""> English
-                                </button>
-                                <button @click="switchLang('fr')"
-                                        :class="lang === 'fr' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : 'text-gray-600 hover:bg-gray-50 hover:text-[#2d6fa3]'"
-                                        class="w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2">
-                                    <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt=""> Français
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
                     <a href="{{ route('home') }}" target="_blank"
                         class="flex items-center gap-2 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50 border border-gray-200">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

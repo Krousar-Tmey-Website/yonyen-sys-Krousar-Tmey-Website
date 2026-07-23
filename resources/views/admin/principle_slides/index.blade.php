@@ -12,11 +12,25 @@
         <h3 class="font-bold text-gray-700 mb-4 text-sm">Add New Slide</h3>
         <form action="{{ route('admin.principle-slides.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
             @csrf
-            <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Title (optional)</label>
-                <input type="text" name="title" value="{{ old('title') }}"
-                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                       placeholder="e.g. Community Support">
+            <div x-data="{ lang: 'en' }">
+                <div class="flex items-center justify-between mb-1">
+                    <label class="block text-xs font-medium text-gray-600">Title (optional)</label>
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
+                </div>
+                <div x-show="lang === 'en'">
+                    <input type="text" name="title" value="{{ old('title') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="e.g. Community Support">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <input type="text" name="title_fr" value="{{ old('title_fr') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="Titre (français)...">
+                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English title.</p>
+                </div>
             </div>
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Image <span class="text-red-400">*</span></label>
@@ -93,11 +107,25 @@
                     <div class="px-5 py-4 bg-gray-50 border-t border-gray-100" x-show="editing" x-cloak>
                         <form action="{{ route('admin.principle-slides.update', $slide) }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                             @csrf @method('PUT')
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Title (optional)</label>
-                                <input type="text" name="title" value="{{ $slide->title }}"
-                                       class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
-                                       placeholder="e.g. Community Support">
+                            <div x-data="{ lang: 'en' }">
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="block text-xs font-medium text-gray-600">Title (optional)</label>
+                                    <div class="lang-tabs">
+                                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                                    </div>
+                                </div>
+                                <div x-show="lang === 'en'">
+                                    <input type="text" name="title" value="{{ $slide->title }}"
+                                           class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                                           placeholder="e.g. Community Support">
+                                </div>
+                                <div x-show="lang === 'fr'" x-cloak>
+                                    <input type="text" name="title_fr" value="{{ $slide->title_fr }}"
+                                           class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#2d6fa3]"
+                                           placeholder="Titre (français)...">
+                                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English title.</p>
+                                </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1">Image</label>

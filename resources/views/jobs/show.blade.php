@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', $jobOpportunity->title . ' — Krousar Thmey')
-@section('description', $jobOpportunity->description ?? 'Job opportunity at Krousar Thmey')
+@section('title', $jobOpportunity->localized_title . ' — Krousar Thmey')
+@section('description', $jobOpportunity->localized_description ?? 'Job opportunity at Krousar Thmey')
 
 @section('content')
 
@@ -21,7 +21,7 @@
             
             <div class="flex flex-wrap items-start gap-3">
                 <h1 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-800 leading-tight uppercase tracking-wide">
-                    {{ $jobOpportunity->title }}
+                    {{ $jobOpportunity->localized_title }}
                 </h1>
                 <span class="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full border shadow-sm mt-1.5 uppercase tracking-wider transition-transform duration-300 hover:scale-105
                     {{ $jobOpportunity->status === 'open' ? 'bg-green-50 text-green-700 border-green-200' : ($jobOpportunity->status === 'filled' ? 'bg-yellow-50 text-yellow-700 border-yellow-200' : 'bg-red-50 text-red-700 border-red-200') }}">
@@ -68,7 +68,7 @@
                     
                     {{-- Creative Gradient Ring Frame --}}
                     <div class="relative p-1 bg-gradient-to-tr from-[#2d6fa3]/30 via-white to-[#8da83a]/30 rounded-3xl shadow-lg border border-white/80 overflow-hidden bg-white">
-                        <img src="{{ asset('storage/' . $jobOpportunity->image) }}" alt="{{ $jobOpportunity->title }}"
+                        <img src="{{ asset('storage/' . $jobOpportunity->image) }}" alt="{{ $jobOpportunity->localized_title }}"
                              class="max-h-64 md:max-h-72 w-auto object-contain rounded-2xl group-hover/img:scale-[1.025] transition-transform duration-500 ease-out"
                              onerror="this.closest('.group\\/img').style.display='none';">
                         
@@ -91,7 +91,7 @@
                     
                     @if($jobOpportunity->description)
                     <div class="text-slate-600 text-sm leading-relaxed whitespace-pre-line prose max-w-none">
-                        {{ $jobOpportunity->description }}
+                        {{ $jobOpportunity->localized_description }}
                     </div>
                     @else
                     <p class="text-slate-400 text-sm italic">No description provided for this opening.</p>
@@ -115,7 +115,7 @@
                     </h3>
                     
                     <p class="text-white/85 text-xs leading-relaxed mb-6">
-                        Send your CV and a cover letter detailing your qualifications and experience to our HR department. Please specify the job title <strong>"{{ $jobOpportunity->title }}"</strong> in the subject line of your email.
+                        Send your CV and a cover letter detailing your qualifications and experience to our HR department. Please specify the job title <strong>"{{ $jobOpportunity->localized_title }}"</strong> in the subject line of your email.
                     </p>
                     
                     {{-- Contact info grid --}}
@@ -150,7 +150,7 @@
                         </div>
                     </div>
 
-                    <a href="#" onclick="event.preventDefault(); window.location.href = 'mailto:hr@krousar-thmey.org?subject=' + encodeURIComponent('Application for ' + '{{ $jobOpportunity->title }}');"
+                    <a href="#" onclick="event.preventDefault(); window.location.href = 'mailto:hr@krousar-thmey.org?subject=' + encodeURIComponent('Application for ' + '{{ $jobOpportunity->localized_title }}');"
                        class="block w-full text-center bg-[#8da83a] hover:bg-[#a3c04a] text-white font-bold text-xs uppercase tracking-wider py-3.5 px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] border border-[#a3c04a]/10">
                         Apply via Email
                     </a>

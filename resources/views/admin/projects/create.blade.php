@@ -37,15 +37,35 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-400">*</span></label>
-                <input type="text" name="title" value="{{ old('title') }}" required
-                       class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Short Description</label>
-                <textarea name="description" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description') }}</textarea>
-                <p class="mt-1 text-xs text-gray-400">Shown as subtitle in the page header banner.</p>
+            <div x-data="{ lang: 'en' }">
+                <div class="flex justify-end mb-1.5">
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
+                </div>
+                <div x-show="lang === 'en'">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-400">*</span></label>
+                    <input type="text" name="title" value="{{ old('title') }}"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text" name="title_fr" value="{{ old('title_fr') }}"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+                </div>
+
+                <div x-show="lang === 'en'">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5 mt-4">Short Description</label>
+                    <textarea name="description" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description') }}</textarea>
+                    <p class="mt-1 text-xs text-gray-400">Shown as subtitle in the page header banner.</p>
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5 mt-4">Short Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <textarea name="description_fr" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description_fr') }}</textarea>
+                    <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+                </div>
             </div>
         </div>
 
@@ -77,20 +97,46 @@
         </div>
 
         {{-- Detailed Content --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Detailed Content</h3>
-            <div>
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="{ lang: 'en' }">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Detailed Content</h3>
+                <div class="header-actions">
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective</label>
                 <textarea name="objective" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('objective') }}</textarea>
             </div>
-            <div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="objective_fr" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('objective_fr') }}</textarea>
+                <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+            </div>
+
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content (HTML Supported)</label>
                 <textarea name="content" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Full content (HTML is supported)...">{{ old('content') }}</textarea>
             </div>
-            <div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="content_fr" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Contenu complet (HTML pris en charge)...">{{ old('content_fr') }}</textarea>
+                <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+            </div>
+
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Activities</label>
                 <textarea name="activities" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Activity 1&#10;Activity 2">{{ old('activities') }}</textarea>
                 <p class="mt-1 text-xs text-gray-400">Each new line will be displayed as a bullet point on the public page.</p>
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Activities (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="activities_fr" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Activité 1&#10;Activité 2">{{ old('activities_fr') }}</textarea>
+                <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
         </div>
 
@@ -112,14 +158,29 @@
         </div>
 
         {{-- Testimony --}}
-        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4">
-            <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-wider">Testimony</h3>
+        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4" x-data="{ lang: 'en' }">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-wider">Testimony</h3>
+                <div class="header-actions">
+                    <div class="lang-tabs">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'">FR</button>
+                    </div>
+                </div>
+            </div>
             <div class="grid md:grid-cols-2 gap-4">
-                <div>
+                <div x-show="lang === 'en'">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Name &amp; Role</label>
                     <input type="text" name="testimony_name" value="{{ old('testimony_name') }}"
                            placeholder="e.g., Sam March, 17 years old"
                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Name &amp; Role (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text" name="testimony_name_fr" value="{{ old('testimony_name_fr') }}"
+                           placeholder="e.g., Sam March, 17 ans"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
                 </div>
                 <div x-data="{ testyMode: 'upload' }">
                     <div class="flex items-center justify-between mb-1.5">
@@ -138,9 +199,14 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Story / Quote</label>
                 <textarea name="testimony_story" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ old('testimony_story') }}</textarea>
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Story / Quote (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="testimony_story_fr" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ old('testimony_story_fr') }}</textarea>
+                <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
         </div>
 

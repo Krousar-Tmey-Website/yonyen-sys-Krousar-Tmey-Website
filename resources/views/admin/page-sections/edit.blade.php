@@ -8,10 +8,10 @@
 
 @section('content')
 
-<div class="grid lg:grid-cols-3 gap-6">
+<div class="max-w-3xl mx-auto">
 
     {{-- Form --}}
-    <div class="lg:col-span-2">
+    <div>
         <form action="{{ route('admin.page-sections.update', $page_section) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
             @csrf @method('PUT')
 
@@ -202,26 +202,6 @@
               onsubmit="return confirm('⚠️ Delete this section permanently? All images and links will also be removed.')">
             @csrf @method('DELETE')
         </form>
-    </div>
-
-    {{-- Tips sidebar --}}
-    <div class="space-y-4">
-        <div class="bg-[#2d6fa3]/5 rounded-2xl p-5 border border-[#2d6fa3]/10">
-            <h4 class="font-bold text-[#2d6fa3] text-sm mb-3">📐 Section Tips</h4>
-            <ul class="space-y-2 text-xs text-gray-600">
-                <li>• The <strong>Order</strong> determines position on the homepage</li>
-                <li>• Use double line breaks in the description for paragraphs</li>
-                <li>• Uploading a new image replaces the current one</li>
-            </ul>
-        </div>
-        <div class="bg-[#8da83a]/5 rounded-2xl p-5 border border-[#8da83a]/10">
-            <h4 class="font-bold text-[#8da83a] text-sm mb-3">🔗 Link Tips</h4>
-            <ul class="space-y-2 text-xs text-gray-600">
-                <li>• The <strong>first link</strong> becomes the primary CTA button</li>
-                <li>• Additional links become secondary buttons</li>
-                <li>• Links are saved when you click "Save Changes"</li>
-            </ul>
-        </div>
     </div>
 
 </div>
