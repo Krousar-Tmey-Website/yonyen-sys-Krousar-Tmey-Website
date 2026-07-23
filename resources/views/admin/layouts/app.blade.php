@@ -17,6 +17,28 @@
         [x-cloak] {
             display: none !important;
         }
+        {{-- Google Translate styling --}}
+        iframe.goog-te-banner-frame { display: none !important; }
+        .goog-te-banner-frame { display: none !important; }
+        .goog-logo-link { display: none !important; }
+        .goog-te-gadget { color: transparent !important; }
+        .VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; }
+        body > .skiptranslate > iframe.skiptranslate { display: none !important; visibility: hidden !important; }
+        html { margin-top: 0 !important; top: 0 !important; }
+        body { margin-top: 0 !important; top: 0 !important; position: static !important; }
+        .goog-tooltip { display: none !important; }
+        .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+        #google_translate_element {
+            position: absolute !important;
+            opacity: 0 !important;
+            z-index: -10 !important;
+            pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+        }
+
+
     </style>
 </head>
 
@@ -30,7 +52,78 @@
                 window.location.href = 'mailto:' + email;
             }
         }
+
+        {{-- Google Translate helpers --}}
+        function getCurrentLang() {
+            let match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
+            if (match) {
+                let parts = match[2].split('/');
+                if (parts.length === 3 && parts[2] !== 'en') return parts[2];
+            }
+            return '{{ session("locale", "en") }}';
+        }
+
+        function manageGTCookies(action, lang = '') {
+            let hostname = window.location.hostname;
+            let parts = hostname.split('.');
+            let domains = [hostname, '.' + hostname];
+
+            if (parts.length > 2) {
+                domains.push('.' + parts.slice(1).join('.'));
+            }
+
+            let wipe = '=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+            document.cookie = 'googtrans' + wipe;
+            domains.forEach(d => {
+                document.cookie = 'googtrans' + wipe + '; domain=' + d;
+            });
+
+            if (action === 'set' && lang !== 'en') {
+                let val = '=/en/' + lang + '; path=/';
+                document.cookie = 'googtrans' + val;
+                domains.forEach(d => {
+                    document.cookie = 'googtrans' + val + '; domain=' + d;
+                });
+            }
+        }
+
+        function switchLang(lang) {
+            if (lang === 'en') {
+                manageGTCookies('clear');
+            } else {
+                manageGTCookies('set', lang);
+
+                let gtCombo = document.querySelector('.goog-te-combo');
+                if (gtCombo) {
+                    gtCombo.value = lang;
+                    gtCombo.dispatchEvent(new Event('change'));
+                }
+            }
+
+            fetch('{{ url("/lang") }}/' + lang, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(() => {
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 200);
+            }).catch(() => {
+                window.location.href = '{{ url("/lang") }}/' + lang;
+            });
+        }
     </script>
+
+    {{-- Google Translate Element (hidden) --}}
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,fr',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <div class="flex h-full">
 
@@ -86,31 +179,32 @@
 
                 $navGroups = [
                 'dashboard' => [
-                'label' => 'Dashboard',
+                'label' => __('Dashboard'),
                 'icon' =>
                 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
                 'single' => true,
                 'route' => 'admin.dashboard',
                 ],
                 'homepage' => [
-                'label' => 'Homepage',
+                'label' => __('Homepage'),
                 'icon' =>
                 'M10.707 2.293a1 1 0 00-1.414 0l-7 7A1 1 0 002 10h.5v8a2 2 0 002 2h15a2 2 0 002-2v-8h.5a1 1 0 00.707-1.707l-7-7z',
                 'children' => [
                 ['route' => 'admin.slides.index', 'label' => 'Slideshow'],
                 ['route' => 'admin.home.index', 'label' => 'Home Settings'],
+                ['route' => 'admin.map-projects.index', 'label' => 'Map Structure'],
                 ['route' => 'admin.page-sections.index', 'label' => 'Page Sections'],
                 ['route' => 'admin.sponsors.index', 'label' => 'Sponsors'],
-                ['route' => 'admin.stories.index', 'label' => 'Success Stories'],
                 ],
                 ],
                 'about' => [
-                'label' => 'Who We Are',
+                'label' => __('Who We Are'),
                 'icon' =>
                 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
                 'children' => [
                 ['route' => 'admin.presentation.index', 'label' => 'Presentation'],
                 ['route' => 'admin.core-values.index', 'label' => 'Our Values'],
+                ['route' => 'admin.history-banner.index', 'label' => 'History Banner'],
                 ['route' => 'admin.history-events.index', 'label' => 'Our History'],
                 ['route' => 'admin.awards.index', 'label' => 'Awards'],
                 ['route' => 'admin.partners.index', 'label' => 'Partners'],
@@ -118,76 +212,77 @@
                 ],
                 ],
                 'programs' => [
-                'label' => 'Our Programs',
+                'label' => __('Our Programs'),
                 'icon' =>
                 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
                 'children' => [
-                ['route' => 'admin.programs-banner.index', 'label' => 'Page Banner'],
-                ['route' => 'admin.project-defaults.index', 'label' => 'Project Defaults'],
-                ['route' => 'admin.programs.index', 'label' => 'Programs'],
-                ['route' => 'admin.projects.index', 'label' => 'Projects'],
-                ['route' => 'admin.program-pages.index', 'label' => 'Additional Info'],
+                ['route' => 'admin.programs-banner.index', 'label' => __('Page Banner')],
+                ['route' => 'admin.project-defaults.index', 'label' => __('Project Defaults')],
+                ['route' => 'admin.programs.index', 'label' => __('Programs')],
+                ['route' => 'admin.projects.index', 'label' => __('Projects')],
+                ['route' => 'admin.program-pages.index', 'label' => __('Additional Info')],
                 ],
                 ],
                 'news' => [
-                'label' => 'News & Resources',
+                'label' => __('News & Resources'),
                 'icon' =>
                 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z',
                 'children' => [
-                ['route' => 'admin.news.index', 'label' => 'News Articles'],
-                ['route' => 'admin.resource-pages.index', 'label' => 'Topics'],
-                ['route' => 'admin.reports.index', 'label' => 'Annual Reports'],
-                ['route' => 'admin.media-page.index', 'label' => 'Media Page'],
+                ['route' => 'admin.news.index', 'label' => __('News Articles')],
+                ['route' => 'admin.resource-pages.index', 'label' => __('Topics')],
+                ['route' => 'admin.reports.index', 'label' => __('Annual Reports')],
+                ['route' => 'admin.media.index', 'label' => __('Media Gallery')],
+                ['route' => 'admin.downloads.index', 'label' => __('Downloads')],
                 ],
                 ],
                 'involved' => [
-                'label' => 'Get Involved',
+                'label' => __('Get Involved'),
                 'icon' =>
                 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
                 'children' => [
-                ['route' => 'admin.volunteers.index', 'label' => 'Volunteer Applications'],
-                ['route' => 'admin.jobs.index', 'label' => 'Job Opportunities'],
-                ['route' => 'admin.books.index', 'label' => 'Book for Sales'],
+                ['route' => 'admin.volunteers.index', 'label' => __('Volunteer Applications')],
+                ['route' => 'admin.jobs.index', 'label' => __('Job Opportunities')],
+                ['route' => 'admin.books.index', 'label' => __('Book for Sales')],
                 ],
                 ],
                 'donations' => [
-                'label' => 'Donations',
+                'label' => __('Donations'),
                 'icon' =>
                 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
                 'children' => [
-                ['route' => 'admin.donations.dashboard', 'label' => 'Dashboard'],
-                ['route' => 'admin.donations.index', 'label' => 'Donations'],
-                ['route' => 'admin.campaigns.index', 'label' => 'Donation Campaigns'],
-                ['route' => 'admin.payments.index', 'label' => 'Payment Methods'],
-                ['route' => 'admin.donations.reports', 'label' => 'Donation Reports'],
+                ['route' => 'admin.donations.dashboard', 'label' => __('Dashboard')],
+                ['route' => 'admin.donations.index', 'label' => __('Donations')],
+                ['route' => 'admin.campaigns.index', 'label' => __('Donation Campaigns')],
+                ['route' => 'admin.payments.index', 'label' => __('Payment Methods')],
+                ['route' => 'admin.donations.reports', 'label' => __('Donation Reports')],
                 ],
                 ],
                 'communication' => [
-                'label' => 'Communication',
+                'label' => __('Communication'),
                 'icon' =>
                 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
                 'children' => [
-                ['route' => 'admin.contacts.index', 'label' => 'Contact Messages'],
-                ['route' => 'admin.newsletter.index', 'label' => 'Subscribers'],
+                ['route' => 'admin.contacts.index', 'label' => __('Contact Messages')],
+                ['route' => 'admin.newsletter.index', 'label' => __('Subscribers')],
                 ],
                 ],
                 'settings' => [
-                'label' => 'Website Management',
+                'label' => __('Website Management'),
                 'icon' =>
                 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z',
                 'children' => [
-                ['route' => 'admin.website.index', 'label' => 'Website Settings'],
-                ['route' => 'admin.seo.index', 'label' => 'SEO Settings'],
-                ['route' => 'admin.media.library', 'label' => 'Media Library'],
+                ['route' => 'admin.website.index', 'label' => __('Website Settings')],
+                ['route' => 'admin.seo.index', 'label' => __('SEO Settings')],
+                ['route' => 'admin.media.library', 'label' => __('Media Library')],
                 ],
                 ],
                 'reports' => [
-                'label' => 'Reports',
+                'label' => __('Reports'),
                 'icon' =>
                 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
                 'children' => [
-                ['route' => 'admin.analytics.index', 'label' => 'Analytics'],
-                ['route' => 'admin.reports.activity-logs.index', 'label' => 'Activity Logs'],
+                ['route' => 'admin.analytics.index', 'label' => __('Analytics')],
+                ['route' => 'admin.reports.activity-logs.index', 'label' => __('Activity Logs')],
                 ],
                 ],
                 ];
@@ -300,13 +395,50 @@
                         </svg>
                     </button>
                     <div>
-                        <h1 class="text-lg font-bold text-gray-800">@yield('page-title', 'Admin Panel')</h1>
+                        <h1 class="text-lg font-bold text-gray-800">@yield('page-title', __('Admin Panel'))</h1>
                         @hasSection('breadcrumb')
                         <p class="text-xs text-gray-400 mt-0.5">@yield('breadcrumb')</p>
                         @endif
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
+                    {{-- Language Switcher — compact, like visitor site --}}
+                    <div class="hidden lg:block notranslate" x-data="{ open: false, lang: getCurrentLang() }">
+                        <div class="relative">
+                            <button @click="open = !open" @click.away="open = false"
+                                    class="flex items-center gap-2 text-gray-600 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-3 rounded-lg hover:bg-gray-50 border border-gray-200 shadow-sm bg-white">
+                                <img :src="lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png'"
+                                     class="w-4 h-auto rounded-sm" alt="">
+                                <span x-text="lang === 'fr' ? 'FR' : 'EN'">EN</span>
+                                <svg class="w-3 h-3 transition-transform duration-200 text-gray-400"
+                                     :class="open ? 'rotate-180' : ''"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            <div x-show="open" x-cloak
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="opacity-0 scale-95"
+                                 x-transition:enter-end="opacity-100 scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="opacity-100 scale-100"
+                                 x-transition:leave-end="opacity-0 scale-95"
+                                 class="absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[100] overflow-hidden">
+                                <button @click="switchLang('en')"
+                                        :class="lang === 'en' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : 'text-gray-600 hover:bg-gray-50 hover:text-[#2d6fa3]'"
+                                        class="w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2">
+                                    <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt=""> English
+                                </button>
+                                <button @click="switchLang('fr')"
+                                        :class="lang === 'fr' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : 'text-gray-600 hover:bg-gray-50 hover:text-[#2d6fa3]'"
+                                        class="w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2">
+                                    <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt=""> Français
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="{{ route('home') }}" target="_blank"
                         class="flex items-center gap-2 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50 border border-gray-200">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

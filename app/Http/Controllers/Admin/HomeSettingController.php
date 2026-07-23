@@ -56,6 +56,33 @@ class HomeSettingController extends Controller
             unset($data['settings']['structure_image']);
         }
 
+        // Handle cta_background_image file upload
+        if ($request->hasFile('cta_background_image')) {
+            $request->validate([
+                'cta_background_image' => ['image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
+            ]);
+
+            $oldValue = HomeSetting::getValue('cta_background_image', '');
+            if ($oldValue && !str_starts_with($oldValue, 'http')) {
+                Storage::disk('public')->delete($oldValue);
+            }
+
+            $path = $request->file('cta_background_image')->store('cta', 'public');
+            HomeSetting::setValue('cta_background_image', $path);
+
+            unset($data['settings']['cta_background_image']);
+        }
+
+        // Handle cta_background_image removal
+        if ($request->boolean('clear_cta_background_image')) {
+            $oldValue = HomeSetting::getValue('cta_background_image', '');
+            if ($oldValue && !str_starts_with($oldValue, 'http')) {
+                Storage::disk('public')->delete($oldValue);
+            }
+            HomeSetting::setValue('cta_background_image', '');
+            unset($data['settings']['cta_background_image']);
+        }
+
         foreach ($data['settings'] as $key => $value) {
             // programs_banner keys are managed by ProgramsBannerController — skip here
             if (str_starts_with($key, 'programs_banner_')) continue;

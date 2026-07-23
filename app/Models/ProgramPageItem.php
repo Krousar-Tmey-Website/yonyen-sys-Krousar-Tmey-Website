@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProgramPageItem extends Model
 {
+
     protected $fillable = [
         'title',
         'short_content',
