@@ -138,7 +138,7 @@ $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
 {{-- ========================================================
      AWARDS
      ======================================================== --}}
-<section id="awards" class="pt-10 pb-20 bg-white scroll-mt-20">
+<section id="awards" class="pt-10 pb-20 bg-[#f8f9fc] scroll-mt-20">
     <div class="max-w-7xl mx-auto px-6">
         @php
             $sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
