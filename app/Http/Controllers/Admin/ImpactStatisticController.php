@@ -29,7 +29,7 @@ class ImpactStatisticController extends Controller
 
         ImpactStatistic::create($data);
 
-        return redirect()->route('admin.presentation.index')
+        return redirect()->route('admin.presentation.index', ['tab' => 'impact'])
             ->with('success', 'Impact statistic created successfully.');
     }
 
@@ -46,7 +46,7 @@ class ImpactStatisticController extends Controller
 
         $impactStatistic->update($data);
 
-        return redirect()->route('admin.presentation.index')
+        return redirect()->route('admin.presentation.index', ['tab' => 'impact'])
             ->with('success', 'Impact statistic updated successfully.');
     }
 
@@ -55,7 +55,7 @@ class ImpactStatisticController extends Controller
         $this->deleteStoredImage($impactStatistic->image);
         $impactStatistic->delete();
 
-        return redirect()->route('admin.presentation.index')
+        return redirect()->route('admin.presentation.index', ['tab' => 'impact'])
             ->with('success', 'Impact statistic deleted successfully.');
     }
 

@@ -14,6 +14,7 @@ use App\Models\CoreValue;
 use App\Models\Gallery;
 use App\Models\HistoryEvent;
 use App\Models\HomeSetting;
+use App\Models\MapProject;
 use App\Models\JobOpportunity;
 use App\Models\News;
 use App\Enums\PartnerCategory;
@@ -39,7 +40,7 @@ use Illuminate\Support\Facades\Storage;
 // ──────────────────────────────────────────────
 
 Route::get('/lang/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'km', 'fr'])) {
+    if (in_array($locale, ['en', 'fr'])) {
         session()->put('locale', $locale);
     }
     return redirect()->back();
@@ -56,8 +57,9 @@ Route::get('/', function () {
     $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
     $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
     $sponsors = \App\Models\Sponsor::active()->orderBy('sort_order')->get();
+    $mapProjects = MapProject::getFrontendData();
 
-    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics', 'sponsors'));
+    return view('home', compact('settings', 'latestNews', 'slides', 'projects', 'testimonials', 'galleries', 'programs', 'pageSections', 'impactStatistics', 'sponsors', 'mapProjects'));
 })->name('home');
 
 Route::get('/who-we-are', function () {
@@ -296,6 +298,13 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->parameters(['impact-statistics' => 'impactStatistic']);
 
     Route::resource('sponsors', Admin\SponsorController::class)->except(['show']);
+
+    // Map Structure
+    Route::resource('map-projects', Admin\MapProjectController::class)
+        ->except(['show', 'create', 'edit'])
+        ->parameters(['map-projects' => 'mapProject']);
+    Route::post('map-projects/settings', [Admin\MapProjectController::class, 'updateSettings'])
+        ->name('map-projects.settings');
 
     // Programs banner
     Route::get('programs-banner', [Admin\ProgramsBannerController::class, 'index'])->name('programs-banner.index');

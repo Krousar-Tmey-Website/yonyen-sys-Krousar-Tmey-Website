@@ -1,8 +1,8 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Homepage Statistics')
-@section('page-title', 'Homepage Statistics')
-@section('breadcrumb', 'Configure key statistics numbers displayed on the homepage')
+@section('title', 'Homepage Settings')
+@section('page-title', 'Homepage Settings')
+@section('breadcrumb', 'Configure homepage content — stats, map text, and more')
 
 @section('content')
 
@@ -26,17 +26,6 @@
                 ['key' => 'stat_provinces',      'label' => 'Provinces in Cambodia',                  'type' => 'number', 'placeholder' => 'e.g. 15'],
             ],
         ],
-
-        'cta' => [
-            'icon'   => '📣',
-            'title'  => 'Homepage Call-To-Action Banner',
-            'fields' => [
-                ['key' => 'cta_background_image', 'label' => 'Background Image', 'type' => 'image'],
-            ],
-        ],
-
-
-
 
     ];
     @endphp
