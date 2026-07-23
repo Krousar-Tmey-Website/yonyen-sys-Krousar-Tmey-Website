@@ -39,7 +39,6 @@ return new class extends Migration
         ],
         'news' => [
             'title',
-            'slug',
             'excerpt',
             'content',
         ],

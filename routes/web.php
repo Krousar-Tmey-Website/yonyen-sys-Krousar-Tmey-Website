@@ -234,6 +234,9 @@ Route::get('/partners', function () {
 
 Route::get('/donate', [DonationController::class, 'show'])->name('donate');
 Route::post('/donate', [DonationController::class, 'send'])->name('donate.send');
+Route::get('/donate/international', [DonationController::class, 'showInternational'])->name('donate.international');
+Route::post('/donate/international', [DonationController::class, 'send'])->name('donate.international.send');
+Route::post('/donation/continue', [DonationController::class, 'continueDonation']);
 
 Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
 Route::get('/newsletter/unsubscribe/{email}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
@@ -341,6 +344,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('worldwide-partners', Admin\WorldwidePartnerController::class)
         ->parameters(['worldwide-partners' => 'worldwidePartner']);
 
+    Route::post('transparency-content', [Admin\TransparencyController::class, 'updateContent'])->name('transparency.content.update');
+    Route::post('transparency-banner', [Admin\TransparencyController::class, 'updateBanner'])->name('transparency.banner.update');
     Route::resource('transparency', Admin\TransparencyController::class)
         ->except(['show'])
         ->parameters(['transparency' => 'report']);
