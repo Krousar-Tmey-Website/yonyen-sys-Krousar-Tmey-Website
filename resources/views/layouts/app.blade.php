@@ -247,7 +247,7 @@ function googleTranslateElementInit() {
                     $isPrograms  = request()->routeIs('programs') || request()->routeIs('programs.*') || request()->routeIs('program-page-items.*') || request()->routeIs('projects.*');
                     $isInvolved  = request()->routeIs('involved') || request()->routeIs('jobs.*') || request()->routeIs('volunteer') || request()->routeIs('books.*');
                     $isNews      = request()->routeIs('news') || request()->routeIs('news.*');
-                    $isResources = request()->routeIs('resources') || request()->routeIs('reports.*') || request()->routeIs('resource-pages.*') || request()->routeIs('media');
+                    $isResources = request()->routeIs('resources') || request()->routeIs('reports.*') || request()->routeIs('resource-pages.*') || request()->routeIs('media') || request()->routeIs('words-pictures');
                     $isContact   = request()->routeIs('contact');
                 @endphp
                 <div class="hidden lg:flex items-center gap-1">
@@ -353,7 +353,7 @@ function googleTranslateElementInit() {
                             <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-1">
                                 <a href="{{ route('resources') }}#annual-reports" @click="open = false" class="dropdown-item rounded-t-xl">{{ __('Annual Reports') }}</a>
                                 <a href="{{ route('media') }}" @click="open = false" class="dropdown-item {{ request()->routeIs('media') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Media Resources') }}</a>
-                                <a href="{{ route('resources') }}#words-and-pictures-application" @click="open = false" class="dropdown-item rounded-b-xl">{{ __('Words and Pictures application') }}</a>
+                                <a href="{{ route('words-pictures') }}" @click="open = false" class="dropdown-item rounded-b-xl {{ request()->routeIs('words-pictures') ? 'bg-blue-50 text-[#2d6fa3] font-medium' : '' }}">{{ __('Words and Pictures application') }}</a>
                             </div>
                         </div>
                     </div>

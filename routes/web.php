@@ -189,6 +189,9 @@ Route::get('/media', function () {
 
     return view('media', compact('settings', 'latestNews', 'topicPagesByTitle'));
 })->name('media');
+Route::get('/words-and-pictures', function () {
+    return view('words-and-pictures');
+})->name('words-pictures');
 
 // Secure PDF view/download with graceful error handling
 Route::get('/reports/{report}/view', function (App\Models\AnnualReport $report) {
@@ -284,6 +287,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Media page (public /media)
     Route::get('media-page', [Admin\MediaPageController::class, 'index'])->name('media-page.index');
     Route::post('media-page', [Admin\MediaPageController::class, 'update'])->name('media-page.update');
+    // Words and Pictures application (public /words-and-pictures)
+    Route::get('words-pictures', [Admin\WordsPicturesController::class, 'index'])->name('words-pictures.index');
+    Route::post('words-pictures', [Admin\WordsPicturesController::class, 'update'])->name('words-pictures.update');
 
     // Topics (Resource Pages) — the categories News tags link to
     Route::resource('resource-pages', Admin\ResourcePageController::class)
