@@ -41,12 +41,12 @@ class PrincipleSlideController extends Controller
             ->with('success', 'Principle slide created successfully.');
     }
 
-    public function edit(PrincipleSlide $principleSlide)
+    public function edit(PrincipleSlide $slide)
     {
-        return view('admin.principle_slides.edit', compact('principleSlide'));
+        return view('admin.principle_slides.edit', ['principleSlide' => $slide]);
     }
 
-    public function update(Request $request, PrincipleSlide $principleSlide)
+    public function update(Request $request, PrincipleSlide $slide)
     {
         $data = $request->validate([
             'title' => 'nullable|string|max:255',
@@ -59,12 +59,12 @@ class PrincipleSlideController extends Controller
         ]);
 
         if ($request->boolean('remove_image')) {
-            $this->deleteStoredImage($principleSlide->image);
+            $this->deleteStoredImage($slide->image);
             $data['image'] = null;
         } else {
             $newImage = $this->resolveImage($request, $data);
             if ($newImage !== null) {
-                $this->deleteStoredImage($principleSlide->image);
+                $this->deleteStoredImage($slide->image);
                 $data['image'] = $newImage;
             } else {
                 unset($data['image']);
@@ -72,16 +72,16 @@ class PrincipleSlideController extends Controller
         }
         unset($data['image_url'], $data['remove_image']);
 
-        $principleSlide->update($data);
+        $slide->update($data);
 
         return redirect()->route('admin.principle-slides.index')
             ->with('success', 'Principle slide updated successfully.');
     }
 
-    public function destroy(PrincipleSlide $principleSlide)
+    public function destroy(PrincipleSlide $slide)
     {
-        $this->deleteStoredImage($principleSlide->image);
-        $principleSlide->delete();
+        $this->deleteStoredImage($slide->image);
+        $slide->delete();
 
         return redirect()->route('admin.principle-slides.index')
             ->with('success', 'Principle slide deleted successfully.');

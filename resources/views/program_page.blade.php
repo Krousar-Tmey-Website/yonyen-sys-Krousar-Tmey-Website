@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', $page->title . ' — Krousar Thmey')
-@section('description', $page->short_content ?? $page->title)
+@section('title', $page->localized_title . ' — Krousar Thmey')
+@section('description', $page->localized_short_content ?? $page->localized_title)
 
 @section('content')
 
@@ -15,22 +15,22 @@
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <a href="{{ route('programs') }}" class="hover:text-white transition-colors">Our Programs</a>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-white/80">{{ $page->title }}</span>
+            <span class="text-white/80">{{ $page->localized_title }}</span>
         </nav>
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-4">
             <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
             <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">Our Programs</span>
         </div>
-        <h1 class="text-3xl md:text-4xl font-black text-white mb-0 max-w-3xl leading-tight uppercase tracking-wide">{{ $page->title }}</h1>
+        <h1 class="text-3xl md:text-4xl font-black text-white mb-0 max-w-3xl leading-tight uppercase tracking-wide">{{ $page->localized_title }}</h1>
     </div>
 </div>
 
 {{-- Main Page Content --}}
-@if($page->content)
+@if($page->localized_content)
 <section class="py-12 bg-white">
     <div class="max-w-4xl mx-auto px-6">
         <div class="prose prose-sm max-w-none prose-headings:text-[#1a3c6e] prose-a:text-[#2d6fa3] prose-img:rounded-xl prose-img:max-h-64 prose-img:object-cover">
-            {!! $page->content !!}
+            {!! $page->localized_content !!}
         </div>
     </div>
 </section>
@@ -38,7 +38,7 @@
 
 {{-- Items Grid --}}
 @if($page->items->count() > 0)
-<section class="py-14 {{ $page->content ? 'bg-[#f8f9fc]' : 'bg-white' }}">
+<section class="py-14 {{ $page->localized_content ? 'bg-[#f8f9fc]' : 'bg-white' }}">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/10 border border-[#e8a020]/20 mb-4">
@@ -53,17 +53,17 @@
             <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full group hover:-translate-y-1 relative">
                 
                 {{-- Main Card Link --}}
-                <a href="{{ route('program-page-items.show', $item->id) }}" class="absolute inset-0 z-10" aria-label="View {{ $item->title }}"></a>
+                <a href="{{ route('program-page-items.show', $item->id) }}" class="absolute inset-0 z-10" aria-label="View {{ $item->localized_title }}"></a>
                 
                 <div class="h-44 overflow-hidden relative bg-gray-100 relative z-0">
-                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}"
+                    <img src="{{ $item->image_url }}" alt="{{ $item->localized_title }}"
                          class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#1a3c6e]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 <div class="p-5 flex flex-col flex-1 relative z-0">
-                    <h3 class="text-base font-bold text-[#1a3c6e] mb-2 leading-snug group-hover:text-[#2d6fa3] transition-colors">{{ $item->title }}</h3>
-                    @if($item->short_content)
-                    <p class="text-gray-500 text-sm leading-relaxed flex-1 mb-4">{{ Str::limit($item->short_content, 120) }}</p>
+                    <h3 class="text-base font-bold text-[#1a3c6e] mb-2 leading-snug group-hover:text-[#2d6fa3] transition-colors">{{ $item->localized_title }}</h3>
+                    @if($item->localized_short_content)
+                    <p class="text-gray-500 text-sm leading-relaxed flex-1 mb-4">{{ Str::limit($item->localized_short_content, 120) }}</p>
                     @endif
                     <div class="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
                         <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-bold transition-colors pointer-events-none group-hover:bg-[#2d6fa3] group-hover:text-white">
@@ -72,7 +72,7 @@
                         </span>
                         
                         {{-- Donate Button (Z-20 to sit above stretched link) --}}
-                        <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $item->title }}">
+                        <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $item->localized_title }}">
                             <svg class="w-4 h-4 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                             <span>Donate Now</span>
                         </a>

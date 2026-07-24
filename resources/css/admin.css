@@ -2,6 +2,20 @@
    ADMIN - GLOBAL STYLES
 ============================================ */
 
+[data-admin-shell] #admin-main-content {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+[data-admin-shell].admin-shell-loading #admin-sidebar-nav {
+    pointer-events: none;
+}
+
+[data-admin-shell] #admin-main-content.admin-main-loading {
+    opacity: 0.72;
+    transform: translateY(4px);
+    pointer-events: none;
+}
+
 /* Form Container */
 .form-container {
     max-width: 100%;

@@ -235,19 +235,18 @@
                             @foreach($program->projects as $project)
                                 <div class="group bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col h-full relative" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
                                     {{-- Main Card Link --}}
-                                    <a href="{{ route('projects.show', $project) }}" class="absolute inset-0 z-10" aria-label="View {{ $project->title }}"></a>
+                                    <a href="{{ route('projects.show', $project) }}" class="absolute inset-0 z-10" aria-label="View {{ $project->localized_title }}"></a>
 
                                     <div class="absolute -top-20 -right-20 w-40 h-40 bg-[#1a3c6e]/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
                                     <div class="h-48 overflow-hidden relative">
-                                        <img src="{{ $project->image_url }}" alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                        <img src="{{ $project->image_url }}" alt="{{ $project->localized_title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                                         <div class="absolute inset-0 bg-gradient-to-t from-[#1a3c6e]/90 via-[#1a3c6e]/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
                                         <div class="absolute bottom-6 left-6 right-6">
-                                            <h4 class="text-lg font-black text-white uppercase tracking-wide leading-snug drop-shadow-md">{{ $project->title }}</h4>
+                                            <h4 class="text-lg font-black text-white uppercase tracking-wide leading-snug drop-shadow-md">{{ $project->localized_title }}</h4>
                                         </div>
                                     </div>
                                     <div class="p-8 flex flex-col flex-1 relative">
-                                        @if($project->description)
-                                            <p class="text-gray-600 text-[15px] leading-relaxed flex-1 mb-8">{{ Str::limit($project->description, 130) }}</p>
+                                            <p class="text-gray-600 text-[15px] leading-relaxed flex-1 mb-8">{{ Str::limit($project->localized_description, 130) }}</p>
                                         @endif
                                         <div class="mt-auto flex items-center justify-between">
                                             <span class="inline-flex items-center gap-2 text-[#2d6fa3] text-xs font-black uppercase tracking-widest group-hover:text-[#1a3c6e] transition-colors duration-300">
@@ -256,7 +255,7 @@
                                             </span>
                                             
                                             {{-- Donate Button (Z-20 to sit above stretched link) --}}
-                                            <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $project->title }}">
+                                            <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $project->localized_title }}">
                                                 <svg class="w-4 h-4 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                                                 <span>Donate Now</span>
                                             </a>

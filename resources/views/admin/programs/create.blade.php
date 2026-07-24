@@ -7,14 +7,24 @@
 @section('content')
 
 @php
-    $previewTitle = old('title');
-    $previewObjective = old('description');
-    $previewProgramText = old('full_description');
-    $previewImage = old('image_url') ?: asset('images/program.jpg');
+    $fallbackPreviewImage = asset('images/program.jpg');
+    $programFormState = [
+        'title' => old('title', ''),
+        'titleFr' => old('title_fr', ''),
+        'description' => old('description', ''),
+        'descriptionFr' => old('description_fr', ''),
+        'fullDescription' => old('full_description', ''),
+        'fullDescriptionFr' => old('full_description_fr', ''),
+        'imageUrl' => old('image_url', ''),
+        'previewImage' => old('image_url', $fallbackPreviewImage),
+        'fallbackImage' => $fallbackPreviewImage,
+    ];
 @endphp
 
 <div class="max-w-3xl mx-auto">
-    <form action="{{ route('admin.programs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('admin.programs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6"
+          data-program-form-state="{{ e(json_encode($programFormState, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT)) }}"
+          x-data="programForm(JSON.parse($el.dataset.programFormState || '{}'))">
         @csrf
 
         @if($errors->any())
@@ -26,8 +36,14 @@
         @endif
 
         <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4">
-            <div>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <h3 class="text-sm font-bold text-[#1a3c6e] uppercase tracking-wider">Public Page Mapping</h3>
+                <div class="lang-tabs self-start" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" data-lang="en" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" data-lang="fr" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+            </div>
+            <div>
                 <p class="mt-1 text-sm text-gray-600">This form controls the main program section on the public <strong>Our Programs</strong> page.</p>
             </div>
             <div class="grid md:grid-cols-2 gap-3 text-sm text-gray-600">
@@ -53,23 +69,23 @@
                     <div>
                         <div class="flex items-center gap-4 mb-6">
                             <div class="w-1.5 h-14 bg-[#d32f2f] rounded-full"></div>
-                            <h2 class="text-3xl font-black text-[#1a3c6e] uppercase tracking-wide leading-tight">{{ $previewTitle ?: 'Program Title' }}</h2>
+                            <h2 class="text-3xl font-black text-[#1a3c6e] uppercase tracking-wide leading-tight" data-program-preview="title" x-text="previewTitle"></h2>
                         </div>
                         <div class="mb-6">
-                            <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-widest mb-2">Objective</h3>
-                            <p class="text-gray-700 leading-relaxed">{{ $previewObjective ?: 'Objective text will appear here.' }}</p>
+                            <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-widest mb-2" data-program-preview-label="objectiveLabel" x-text="previewLabels.objectiveLabel">Objective</h3>
+                            <p class="text-gray-700 leading-relaxed whitespace-pre-line" data-program-preview="objective" x-text="previewObjective"></p>
                         </div>
                         <div class="mb-6">
-                            <h3 class="text-xs font-bold text-[#8da83a] uppercase tracking-widest mb-2">Program</h3>
-                            <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ $previewProgramText ?: 'Program text will appear here.' }}</p>
+                            <h3 class="text-xs font-bold text-[#8da83a] uppercase tracking-widest mb-2" data-program-preview-label="programLabel" x-text="previewLabels.programLabel">Program</h3>
+                            <p class="text-gray-700 leading-relaxed whitespace-pre-line" data-program-preview="program" x-text="previewProgramText"></p>
                         </div>
                         <div class="flex flex-col sm:flex-row gap-3">
-                            <div class="btn-blue justify-center text-center w-full sm:w-auto opacity-90">Know more about the projects</div>
-                            <div class="btn-primary justify-center text-center w-full sm:w-auto opacity-90">Donate now</div>
+                            <div class="btn-blue justify-center text-center w-full sm:w-auto opacity-90" data-program-preview-label="projectsButton" x-text="previewLabels.projectsButton">Know more about the projects</div>
+                            <div class="btn-primary justify-center text-center w-full sm:w-auto opacity-90" data-program-preview-label="donateButton" x-text="previewLabels.donateButton">Donate now</div>
                         </div>
                     </div>
                     <div class="space-y-5">
-                        <img src="{{ $previewImage }}" alt="{{ $previewTitle ?: 'Program preview' }}" class="w-full rounded-3xl border-4 border-white shadow-xl object-cover max-h-[420px]">
+                        <img :src="previewImageSrc" :alt="previewTitle" class="w-full rounded-3xl border-4 border-white shadow-xl object-cover max-h-[420px]">
                         <div class="flex items-center justify-center gap-2">
                             <span class="w-9 h-9 rounded-lg bg-[#1877f2]"></span>
                             <span class="w-9 h-9 rounded-lg bg-[#0088cc]"></span>
@@ -82,29 +98,26 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5" x-data="bilingualForm()">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
 
             {{-- Public page content --}}
             <div class="flex items-center justify-between">
                 <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Public Page Content</h3>
             
-                    <div class="lang-tabs" title="Toggle editing language (English / French)">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                    </div>
+                    <span class="text-xs text-gray-400">Editing <span class="font-semibold" x-text="lang === 'fr' ? 'French' : 'English'"></span> content</span>
                 </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <div x-show="lang === 'en'">
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">Section Title <span class="text-red-400">*</span></label>
-                        <input type="text" name="title" value="{{ old('title') }}"
+                        <input type="text" name="title" x-model="title" value="{{ old('title') }}"
                                class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         <p class="mt-2 text-xs text-gray-400">Shown as the large blue heading on the public Our Programs page.</p>
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">Section Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <input type="text" name="title_fr" value="{{ old('title_fr') }}"
+                        <input type="text" name="title_fr" x-model="titleFr" value="{{ old('title_fr') }}"
                                class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
                     </div>
@@ -127,26 +140,26 @@
 
             <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective Text</label>
-                <textarea name="description" rows="3"
+                <textarea name="description" rows="3" x-model="description"
                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description') }}</textarea>
                 <p class="mt-2 text-xs text-gray-400">This fills the Objective paragraph on the public program section.</p>
             </div>
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <textarea name="description_fr" rows="3"
+                <textarea name="description_fr" rows="3" x-model="descriptionFr"
                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description_fr') }}</textarea>
                 <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
 
             <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Program Text</label>
-                <textarea name="full_description" rows="6"
+                <textarea name="full_description" rows="6" x-model="fullDescription"
                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('full_description') }}</textarea>
                 <p class="mt-2 text-xs text-gray-400">This fills the main Program content block on the public page.</p>
             </div>
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Program Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <textarea name="full_description_fr" rows="6"
+                <textarea name="full_description_fr" rows="6" x-model="fullDescriptionFr"
                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('full_description_fr') }}</textarea>
                 <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
@@ -252,13 +265,13 @@
                 <p class="text-xs text-gray-400 mb-3">This is the large image shown on the right side of this program on the public Our Programs page.</p>
 
                 <div x-show="imageType === 'upload'">
-                    <input type="file" name="image" accept="image/*"
+                    <input type="file" name="image" accept="image/*" @change="handlePreviewImage"
                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#2d6fa3]/10 file:text-[#2d6fa3] hover:file:bg-[#2d6fa3]/20">
                     <p class="mt-2 text-xs text-gray-400">Max 2MB. Recommended: 800×600px or wider.</p>
                 </div>
 
                 <div x-show="imageType === 'url'" style="display: none;">
-                    <input type="url" name="image_url" placeholder="https://example.com/image.jpg"
+                    <input type="url" name="image_url" x-model="imageUrl" @input="updatePreviewImageFromUrl($event.target.value)" placeholder="https://example.com/image.jpg"
                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     <p class="mt-2 text-xs text-gray-400">Enter a direct link to the image.</p>
                 </div>

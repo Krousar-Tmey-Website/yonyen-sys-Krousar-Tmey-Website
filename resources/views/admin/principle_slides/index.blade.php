@@ -111,6 +111,10 @@
                             <div x-data="bilingualForm()">
                                 <div class="flex items-center justify-between mb-1">
                                     <label class="block text-xs font-medium text-gray-600">Title (optional)</label>
+                                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                                    </div>
                                 </div>
                                 <div x-show="lang === 'en'">
                                     <input type="text" name="title" value="{{ $slide->title }}"

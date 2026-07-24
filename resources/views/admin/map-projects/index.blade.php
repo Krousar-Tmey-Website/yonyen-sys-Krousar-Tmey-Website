@@ -286,14 +286,18 @@
                 <div>
                     <div class="flex items-center justify-between mb-1.5">
                         <label class="block text-sm font-medium text-gray-700">Location / City</label>
+                        <div class="lang-tabs" title="Toggle editing language (English / French)">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                        </div>
                     </div>
-                    <div x-show="locationLang === 'en'">
+                    <div x-show="lang === 'en'">
                         <input type="text" name="location_name" x-model="formLocation"
                                placeholder="e.g. Poipet"
                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               :required="locationLang === 'en'">
+                               :required="lang === 'en'">
                     </div>
-                    <div x-show="locationLang === 'fr'" x-cloak>
+                    <div x-show="lang === 'fr'" x-cloak>
                         <input type="text" name="location_name_fr" x-model="formLocationFr"
                                placeholder="ex. Poipet"
                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
@@ -507,7 +511,7 @@ function mapProjectsManager() {
         formProvinceLabel: '',
         formLocation: '',
         formLocationFr: '',
-        locationLang: 'en',
+        lang: 'en',
         formProjectType: '',
         formOrder: 0,
 
@@ -523,7 +527,7 @@ function mapProjectsManager() {
             this.formProvinceLabel = '';
             this.formLocation = '';
             this.formLocationFr = '';
-            this.locationLang = 'en';
+            this.lang = 'en';
             this.formProjectType = '';
             this.formOrder = 0;
             this.addEditModalOpen = true;
@@ -535,7 +539,7 @@ function mapProjectsManager() {
             this.formProvinceLabel = provinceLabel;
             this.formLocation = location;
             this.formLocationFr = locationFr;
-            this.locationLang = 'en';
+            this.lang = 'en';
             this.formProjectType = projectType;
             this.formOrder = order;
             this.addEditModalOpen = true;

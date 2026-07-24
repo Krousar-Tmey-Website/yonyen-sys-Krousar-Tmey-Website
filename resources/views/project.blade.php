@@ -19,7 +19,7 @@
                 </span>
                 @if($project->program)
                 <span class="w-1.5 h-1.5 rounded-full bg-[#d32f2f]"></span>
-                <a href="{{ route('programs') }}#{{ $project->program->slug }}" class="text-xs font-semibold text-gray-500 hover:text-[#1a3c6e] uppercase tracking-wider transition-colors">{{ $project->program->title }}</a>
+                <a href="{{ route('programs') }}#{{ $project->program->slug }}" class="text-xs font-semibold text-gray-500 hover:text-[#1a3c6e] uppercase tracking-wider transition-colors">{{ $project->program->localized_title }}</a>
                 @endif
             </div>
 

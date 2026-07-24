@@ -96,13 +96,13 @@ $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
         @php
             $timelineItems = [];
             foreach ($historyEvents as $event) {
-                if ($event->left_text) {
+                if ($event->localized_left_text) {
                     $timelineItems[] = ['year' => $event->year, 'text' => $event->localized_left_text, 'image' => $event->image_url];
                 }
-                if ($event->right_text) {
-                    $timelineItems[] = ['year' => $event->year, 'text' => $event->localized_right_text, 'image' => $event->left_text ? null : $event->image_url];
+                if ($event->localized_right_text) {
+                    $timelineItems[] = ['year' => $event->year, 'text' => $event->localized_right_text, 'image' => $event->localized_left_text ? null : $event->image_url];
                 }
-                if (!$event->left_text && !$event->right_text && $event->image_url) {
+                if (!$event->localized_left_text && !$event->localized_right_text && $event->image_url) {
                     $timelineItems[] = ['year' => $event->year, 'text' => null, 'image' => $event->image_url];
                 }
             }

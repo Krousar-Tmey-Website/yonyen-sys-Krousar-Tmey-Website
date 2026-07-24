@@ -41,7 +41,7 @@
                 <div class="lg:w-7/12 space-y-12">
                     
                     {{-- Objective Block --}}
-                    @if($item->objective)
+                    @if($item->localized_objective)
                     <div class="bg-blue-50/50 rounded-3xl p-8 border border-blue-100/50 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-[#1a3c6e]/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-xl group-hover:scale-110 transition-transform duration-700"></div>
                         <div class="flex items-center gap-3 mb-5 relative z-10">
@@ -55,7 +55,7 @@
                     @endif
 
                     {{-- The Project (Detail) --}}
-                    @if($item->detail_content)
+                    @if($item->localized_detail_content)
                     <div class="bg-white">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-2 h-2 rounded-full bg-[#8da83a]"></div>
@@ -76,7 +76,7 @@
                     @endif
 
                     {{-- Activities --}}
-                    @if($item->activities)
+                    @if($item->localized_activities)
                     <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 shadow-sm">
                         <div class="flex items-center gap-3 mb-8">
                             <div class="w-2 h-2 rounded-full bg-[#e8a020]"></div>

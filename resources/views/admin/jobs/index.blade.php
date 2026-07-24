@@ -17,7 +17,13 @@
                 </svg>
             </button>
 
-            <h3 class="font-bold text-gray-800 text-lg mb-4">Add New Job</h3>
+            <div class="flex items-center justify-between mb-4 pr-8">
+                <h3 class="font-bold text-gray-800 text-lg">Add New Job</h3>
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: addLang === 'en' }" @click="addLang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: addLang === 'fr' }" @click="addLang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+            </div>
             <form action="{{ route('admin.jobs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
 
