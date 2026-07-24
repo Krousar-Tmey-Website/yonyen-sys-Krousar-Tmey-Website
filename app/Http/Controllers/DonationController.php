@@ -10,15 +10,10 @@ use Illuminate\Support\Facades\Mail;
 
 class DonationController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
         $paymentMethods = PaymentMethod::active()->ordered()->get();
 
-        return view('donate', compact('paymentMethods'));
-    }
-
-    public function showInternational()
-    {
         $raisedFromDb = (float) \App\Models\Donation::sum(\Illuminate\Support\Facades\DB::raw('COALESCE(DonationAmount, Amount, 0)'));
         $countFromDb = (int) \App\Models\Donation::count();
 
@@ -26,7 +21,13 @@ class DonationController extends Controller
         $count = $countFromDb + 8;
         $goal = 1000.00;
 
-        return view('donate-international', compact('raised', 'count', 'goal'));
+        return view('donate', compact('paymentMethods', 'raised', 'count', 'goal'));
+    }
+
+    public function showInternational(Request $request)
+    {
+        $residency = $request->query('residency', 'france');
+        return redirect()->route('donate', ['residency' => $residency]);
     }
 
     public function send(Request $request)
