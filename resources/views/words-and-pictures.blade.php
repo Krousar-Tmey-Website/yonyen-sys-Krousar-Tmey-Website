@@ -54,12 +54,12 @@
                 @endif
 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
-                    <a href="{{ $wp('words_pictures_learn_more_url', route('programs.show', 'special-education')) }}"
+                    <a href="{{ route('programs') }}"
                        class="inline-flex items-center justify-center px-5 py-2 border border-[#2d6fa3] text-[#2d6fa3] text-sm font-medium rounded hover:bg-[#2d6fa3] hover:text-white transition-colors">
                         {{ $wp('words_pictures_learn_more_text', 'Learn more about the projects of this program') }}
                     </a>
-                    <a href="{{ $wp('words_pictures_donate_url', route('donate')) }}"
-                       class="inline-flex items-center justify-center gap-1.5 px-5 py-2 border border-red-500 text-red-600 text-sm font-bold uppercase rounded hover:bg-red-500 hover:text-white transition-colors">
+                    <a href="{{ route('donate') }}"
+                       class="inline-flex items-center justify-center gap-1.5 px-5 py-2 border border-[#35a752] text-[#35a752] text-sm font-bold uppercase rounded hover:bg-[#35a752] hover:text-white transition-colors">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                         Donate Now
                     </a>
