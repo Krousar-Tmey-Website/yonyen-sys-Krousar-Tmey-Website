@@ -125,8 +125,7 @@
                 ['route' => 'admin.resource-pages.index', 'label' => 'Topics'],
                 ['route' => 'admin.reports.index', 'label' => 'Annual Reports'],
                 ['route' => 'admin.words-pictures.index', 'label' => 'Words and Pictures'],
-                ['route' => 'admin.media.index', 'label' => 'Media Gallery'],
-                ['route' => 'admin.downloads.index', 'label' => 'Downloads'],
+                ['route' => 'admin.media-page.index', 'label' => 'Media Page'],
                 ],
                 ],
                 'involved' => [
@@ -166,6 +165,7 @@
                 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z',
                 'children' => [
                 ['route' => 'admin.website.index', 'label' => __('Website Settings')],
+                ['route' => 'admin.localization.index', 'label' => __('Localization')],
                 ['route' => 'admin.seo.index', 'label' => __('SEO Settings')],
                 ['route' => 'admin.media.library', 'label' => __('Media Library')],
                 ],
@@ -334,6 +334,31 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
+                    @if(!empty($availableLocales) && count($availableLocales) > 1)
+                    <div x-data="{ openLocale: false }" class="relative">
+                        <button @click="openLocale = !openLocale" @click.outside="openLocale = false" type="button"
+                            title="Admin panel language"
+                            class="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#2d6fa3] transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50 border border-gray-200">
+                            @php $currentMeta = collect($availableLocales)->firstWhere('code', $currentLocale); @endphp
+                            <span>{{ $currentMeta['flag'] ?? '🌐' }}</span>
+                            <span class="hidden sm:inline">{{ $currentMeta['native'] ?? strtoupper($currentLocale) }}</span>
+                            <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': openLocale }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="openLocale" x-cloak x-transition
+                            class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 z-20">
+                            @foreach($availableLocales as $loc)
+                            <a href="{{ route('lang.switch', $loc['code']) }}"
+                                class="flex items-center gap-2 px-3 py-2 text-xs transition-colors
+                                          {{ $loc['code'] === $currentLocale ? 'bg-gray-50 text-[#2d6fa3] font-semibold' : 'text-gray-600 hover:bg-gray-50' }}">
+                                <span>{{ $loc['flag'] ?? '🌐' }}</span>
+                                <span>{{ $loc['native'] ?? strtoupper($loc['code']) }}</span>
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
                     <a href="{{ route('home') }}" target="_blank"
                         class="flex items-center gap-2 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50 border border-gray-200">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

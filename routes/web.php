@@ -25,9 +25,11 @@ use App\Models\Partner;
 use App\Models\Program;
 use App\Models\ProgramPageItem;
 use App\Models\Project;
+use App\Models\ResourcePage;
 use App\Http\Controllers\ResourcePageController;
 use App\Models\Slide;
 use App\Models\Testimonial;
+use App\Services\LocalizationManager;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -39,8 +41,8 @@ use Illuminate\Support\Facades\Storage;
 // Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
 
-Route::get('/lang/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'fr'])) {
+Route::get('/lang/{locale}', function (string $locale, LocalizationManager $localization) {
+    if (in_array($locale, $localization->locales(), true)) {
         session()->put('locale', $locale);
     }
     return redirect()->back();
@@ -181,6 +183,14 @@ Route::get('/resources', function () {
     return view('resources', compact('reports'));
 })->name('resources');
 
+Route::get('/media', function () {
+    $settings = HomeSetting::allKeyed();
+    $latestNews = News::published()->latest('published_at')->take(3)->get();
+    $topicPagesByTitle = ResourcePage::active()->get(['title', 'slug'])->keyBy(fn ($page) => strtolower($page->title));
+    $mediaGallery = \App\Models\MediaGallery::active()->ordered()->get();
+
+    return view('media', compact('settings', 'latestNews', 'topicPagesByTitle', 'mediaGallery'));
+})->name('media');
 Route::get('/words-and-pictures', function () {
     return view('words-and-pictures');
 })->name('words-pictures');
@@ -276,6 +286,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('news/upload-image', [Admin\NewsController::class, 'uploadImage'])->name('news.upload-image');
     Route::resource('news', Admin\NewsController::class);
 
+    // Media page (public /media)
+    Route::get('media-page', [Admin\MediaPageController::class, 'index'])->name('media-page.index');
+    Route::post('media-page', [Admin\MediaPageController::class, 'update'])->name('media-page.update');
     // Words and Pictures application (public /words-and-pictures)
     Route::get('words-pictures', [Admin\WordsPicturesController::class, 'index'])->name('words-pictures.index');
     Route::post('words-pictures', [Admin\WordsPicturesController::class, 'update'])->name('words-pictures.update');
@@ -298,6 +311,21 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Website Settings
     Route::get('website', [Admin\WebsiteController::class, 'index'])->name('website.index');
     Route::post('website', [Admin\WebsiteController::class, 'update'])->name('website.update');
+    // SEO Settings
+    Route::get('seo', [Admin\SeoController::class, 'index'])->name('seo.index');
+    Route::post('seo', [Admin\SeoController::class, 'update'])->name('seo.update');
+    // Media Library
+    Route::get('media/library', [Admin\MediaLibraryController::class, 'index'])->name('media.library');
+
+    // Localization (native Laravel lang/*.json translation manager)
+    Route::prefix('localization')->name('localization.')->group(function () {
+        Route::get('/', [Admin\LocalizationController::class, 'index'])->name('index');
+        Route::post('/', [Admin\LocalizationController::class, 'update'])->name('update');
+        Route::post('keys', [Admin\LocalizationController::class, 'storeKey'])->name('keys.store');
+        Route::delete('keys', [Admin\LocalizationController::class, 'destroyKey'])->name('keys.destroy');
+        Route::post('locales', [Admin\LocalizationController::class, 'storeLocale'])->name('locales.store');
+        Route::delete('locales/{locale}', [Admin\LocalizationController::class, 'destroyLocale'])->name('locales.destroy');
+    });
 
     // Homepage
     Route::get('home', [Admin\HomeSettingController::class, 'index'])->name('home.index');
@@ -362,6 +390,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);
+
+    // Analytics
+    Route::get('analytics', [Admin\AnalyticsController::class, 'index'])->name('analytics.index');
 
     // Books for Sale
     Route::resource('books', Admin\BookController::class)->except(['show']);

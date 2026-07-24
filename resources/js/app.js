@@ -316,6 +316,45 @@ function initializeAdminShell() {
 
     shell.dataset.adminShellInitialized = 'true';
 
+    // Many admin pages register `document.addEventListener('DOMContentLoaded', ...)`
+    // to run their own setup (Chart.js init, search filters, etc). The shell fires a
+    // synthetic DOMContentLoaded after every SPA navigation so that pattern still
+    // works — but without tracking, those listeners pile up on `document`/`window`
+    // forever, so every later navigation re-runs every previous page's setup against
+    // whatever DOM happens to exist (duplicate Chart.js instances, "reading
+    // addEventListener of null" for elements that only exist on the old page, etc).
+    // We track listeners added *while a fragment's own scripts are running* and
+    // release the previous navigation's batch before the next one starts.
+    let pageOwnedListeners = [];
+
+    const releasePageOwnedListeners = () => {
+        pageOwnedListeners.forEach(({ target, type, listener, options }) => {
+            target.removeEventListener(type, listener, options);
+        });
+        pageOwnedListeners = [];
+    };
+
+    const runScriptsTrackingGlobalListeners = async (scripts) => {
+        const origDocAdd = document.addEventListener.bind(document);
+        const origWinAdd = window.addEventListener.bind(window);
+
+        document.addEventListener = (type, listener, options) => {
+            pageOwnedListeners.push({ target: document, type, listener, options });
+            return origDocAdd(type, listener, options);
+        };
+        window.addEventListener = (type, listener, options) => {
+            pageOwnedListeners.push({ target: window, type, listener, options });
+            return origWinAdd(type, listener, options);
+        };
+
+        try {
+            await runScripts(scripts);
+        } finally {
+            document.addEventListener = origDocAdd;
+            window.addEventListener = origWinAdd;
+        }
+    };
+
     const selectors = {
         nav: '#admin-sidebar-nav',
         header: '#admin-page-header',
@@ -354,15 +393,20 @@ function initializeAdminShell() {
         initializeRevealAnimations(element);
     };
 
-    const swapFragment = (currentNode, nextNode) => {
-        if (!currentNode || !nextNode) return [];
+    const swapFragment = async (currentNode, nextNode) => {
+        if (!currentNode || !nextNode) return;
 
         const clonedNode = nextNode.cloneNode(true);
         const scripts = extractScripts(clonedNode);
         currentNode.innerHTML = clonedNode.innerHTML;
-        initializeFragment(currentNode);
 
-        return scripts;
+        // Run this fragment's own inline scripts (e.g. a page defining an Alpine
+        // component function) before Alpine scans it — otherwise x-data="foo()"
+        // fails with "foo is not defined" because the swap happens via fetch,
+        // not a normal top-to-bottom document parse.
+        await runScriptsTrackingGlobalListeners(scripts);
+
+        initializeFragment(currentNode);
     };
 
     const applyDocument = async (nextDocument, url, pushState = true) => {
@@ -373,14 +417,16 @@ function initializeAdminShell() {
             return;
         }
 
-        const scripts = [
-            ...swapFragment(getShellNode('nav'), nextDocument.querySelector(selectors.nav)),
-            ...swapFragment(getShellNode('header'), nextDocument.querySelector(selectors.header)),
-            ...swapFragment(getShellNode('flash'), nextDocument.querySelector(selectors.flash)),
-            ...swapFragment(getShellNode('styles'), nextDocument.querySelector(selectors.styles)),
-            ...swapFragment(getShellNode('main'), nextMain),
-            ...swapFragment(getShellNode('scripts'), nextDocument.querySelector(selectors.scripts)),
-        ];
+        // Tear down whatever the page we're leaving registered on document/window
+        // before the next page's scripts get a chance to register their own.
+        releasePageOwnedListeners();
+
+        await swapFragment(getShellNode('nav'), nextDocument.querySelector(selectors.nav));
+        await swapFragment(getShellNode('header'), nextDocument.querySelector(selectors.header));
+        await swapFragment(getShellNode('flash'), nextDocument.querySelector(selectors.flash));
+        await swapFragment(getShellNode('styles'), nextDocument.querySelector(selectors.styles));
+        await swapFragment(getShellNode('main'), nextMain);
+        await swapFragment(getShellNode('scripts'), nextDocument.querySelector(selectors.scripts));
 
         document.title = nextDocument.title;
 
@@ -391,8 +437,6 @@ function initializeAdminShell() {
         }
 
         state.currentUrl = url;
-
-        await runScripts(scripts);
 
         document.dispatchEvent(new Event('DOMContentLoaded'));
         document.dispatchEvent(new CustomEvent('admin:navigation:end', {
