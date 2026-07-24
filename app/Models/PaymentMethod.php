@@ -17,6 +17,9 @@ class PaymentMethod extends Model
         'qr_code',
         'sort_order',
         'is_active',
+        'tag',
+        'redirect_url',
+        'description',
     ];
 
     protected function casts(): array

@@ -15,8 +15,8 @@ class StorePaymentMethodRequest extends FormRequest
     {
         return [
             'name'             => ['required', 'string', 'max:255'],
-            'bank_type'        => ['required', 'string', 'max:100'],
-            'account_name'     => ['required', 'string', 'max:255'],
+            'bank_type'        => [$this->input('tag') === 'cambodia' ? 'required' : 'nullable', 'string', 'max:100'],
+            'account_name'     => [$this->input('tag') === 'cambodia' ? 'required' : 'nullable', 'string', 'max:255'],
 
             'code'             => ['nullable', 'string', 'max:50', 'unique:payment_methods,code'],
             'account_no'       => ['nullable', 'string', 'max:100'],
@@ -25,6 +25,9 @@ class StorePaymentMethodRequest extends FormRequest
             'qr_code'          => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'],
             'sort_order'       => ['nullable', 'integer', 'min:0'],
             'is_active'        => ['nullable', 'boolean'],
+            'tag'              => ['required', 'string', 'in:cambodia,france,switzerland,elsewhere'],
+            'redirect_url'     => ['nullable', 'url', 'max:500'],
+            'description'      => ['nullable', 'string', 'max:1000'],
         ];
     }
 

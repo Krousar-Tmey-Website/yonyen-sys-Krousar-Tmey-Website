@@ -186,7 +186,29 @@
         </div>
     </div>
 
-    {{-- QR Code Upload --}}
+    {{-- Residency Tag & Redirect URL --}}
+    <div class="payment-form-grid" style="margin-top:16px; border-top:1px solid #f1f5f9; padding-top:20px;">
+        <div class="payment-form-group">
+            <label class="payment-form-label">Residency Tag <span class="required">*</span></label>
+            <select name="tag" required class="payment-form-input @error('tag') error @enderror">
+                <option value="cambodia" {{ $val('tag', 'cambodia') === 'cambodia' ? 'selected' : '' }}>Cambodia 🇰🇭</option>
+                <option value="france" {{ $val('tag') === 'france' ? 'selected' : '' }}>France 🇫🇷</option>
+                <option value="switzerland" {{ $val('tag') === 'switzerland' ? 'selected' : '' }}>Switzerland 🇨🇭</option>
+                <option value="elsewhere" {{ $val('tag') === 'elsewhere' ? 'selected' : '' }}>Elsewhere 🌐</option>
+            </select>
+            @error('tag')<div class="payment-form-error">{{ $message }}</div>@enderror
+        </div>
+        <div class="payment-form-group">
+            <label class="payment-form-label">Redirect URL <span class="optional">(optional)</span></label>
+            <input type="url" name="redirect_url" value="{{ $val('redirect_url') }}"
+                   class="payment-form-input @error('redirect_url') error @enderror"
+                   placeholder="e.g. https://www.helloasso.com/...">
+            <span style="font-size: 11px; color: #64748b; margin-top: 4px; display: block;">For external links like HelloAsso/PayPal. Overrides QR code action.</span>
+            @error('redirect_url')<div class="payment-form-error">{{ $message }}</div>@enderror
+        </div>
+    </div>
+
+    {{-- Upload Image --}}
     <div class="payment-form-group" style="margin-top:8px;">
         <label class="payment-form-label">
             @if($isEdit && $method?->qr_code)
@@ -200,7 +222,7 @@
         @if($isEdit && $method?->qr_code)
         <div class="payment-form-current-file">
             <img src="{{ $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}"
-                 alt="Current QR" class="current-file-thumb">
+                 alt="Current image" class="current-file-thumb">
             <div class="current-file-info">
                 <strong>Current QR code</strong>
                 <span>{{ $method->qr_code }}</span>
@@ -222,7 +244,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
                     </svg>
                 </div>
-                <div class="upload-label">Click to upload QR code</div>
+                <div class="upload-label">Click to upload QR Code</div>
                 <div class="upload-hint">JPG, PNG, GIF or WebP · Max 2MB</div>
             </div>
             <div id="qrPreview" class="hidden"></div>

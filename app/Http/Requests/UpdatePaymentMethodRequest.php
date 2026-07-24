@@ -27,6 +27,9 @@ class UpdatePaymentMethodRequest extends FormRequest
             'remove_qr'        => ['nullable', 'boolean'],
             'sort_order'       => ['nullable', 'integer', 'min:0'],
             'is_active'        => ['nullable', 'boolean'],
+            'tag'              => ['required', 'string', 'in:cambodia,france,switzerland,elsewhere'],
+            'redirect_url'     => ['nullable', 'url', 'max:500'],
+            'description'      => ['nullable', 'string', 'max:1000'],
         ];
     }
 

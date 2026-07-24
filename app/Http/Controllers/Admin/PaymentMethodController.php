@@ -16,6 +16,7 @@ class PaymentMethodController extends Controller
     {
         $search = trim((string) $request->query('search', ''));
         $status = $request->query('status');
+        $tag = $request->query('tag');
 
         $perPage = $request->query('per_page', 10);
 
@@ -25,15 +26,20 @@ class PaymentMethodController extends Controller
             })
             ->when($status === 'active', fn ($query) => $query->where('is_active', true))
             ->when($status === 'inactive', fn ($query) => $query->where('is_active', false))
+            ->when(filled($tag), fn ($query) => $query->where('tag', $tag))
             ->orderBy('sort_order')
             ->orderBy('name')
             ->paginate($perPage);
 
-        $activeFilters = (filled($search) ? 1 : 0) + (filled($status) ? 1 : 0);
+        $activeFilters = (filled($search) ? 1 : 0) + (filled($status) ? 1 : 0) + (filled($tag) ? 1 : 0);
 
         $viewData = [
             'paymentMethods' => $paymentMethods,
-            'filters'        => ['search' => $search, 'status' => $status ?? ''],
+            'filters'        => [
+                'search' => $search,
+                'status' => $status ?? '',
+                'tag'    => $tag ?? '',
+            ],
             'totalMethods'   => $paymentMethods->total(),
             'activeCount'    => $activeFilters,
         ];
