@@ -20,7 +20,7 @@ class News extends Model
 {
 
     protected $fillable = [
-        'title', 'slug', 'excerpt', 'content',
+        'title', 'title_fr', 'slug', 'excerpt', 'excerpt_fr', 'content', 'content_fr',
         'image', 'category', 'videos', 'is_published', 'published_at',
         'links', 'tag_links',
     ];
@@ -71,6 +71,31 @@ class News extends Model
     public function scopePublished(Builder $query)
     {
         return $query->where('is_published', true);
+    }
+
+    // French text falls back to the English field whenever it hasn't been filled in yet.
+    public function getLocalizedTitleAttribute(): string
+    {
+        return $this->localized('title');
+    }
+
+    public function getLocalizedExcerptAttribute(): ?string
+    {
+        return $this->localized('excerpt');
+    }
+
+    public function getLocalizedContentAttribute(): ?string
+    {
+        return $this->localized('content');
+    }
+
+    private function localized(string $field): ?string
+    {
+        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+            return $this->{$field . '_fr'};
+        }
+
+        return $this->{$field};
     }
 
     public function getImageUrlAttribute(): string

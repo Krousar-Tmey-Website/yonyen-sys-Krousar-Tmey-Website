@@ -10,6 +10,7 @@ class MapProject extends Model
         'province_key',
         'province_label',
         'location_name',
+        'location_name_fr',
         'project_type',
         'sort_order',
     ];
@@ -17,6 +18,21 @@ class MapProject extends Model
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order')->orderBy('id');
+    }
+
+    // French text falls back to the English field whenever it hasn't been filled in yet.
+    public function getLocalizedLocationNameAttribute(): ?string
+    {
+        return $this->localized('location_name');
+    }
+
+    private function localized(string $field): ?string
+    {
+        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+            return $this->{$field . '_fr'};
+        }
+
+        return $this->{$field};
     }
 
     /**
@@ -49,7 +65,7 @@ class MapProject extends Model
             if ($locIdx === null) {
                 $locIdx = count($grouped[$key]['locations']);
                 $grouped[$key]['locations'][] = [
-                    'name' => $record->location_name,
+                    'name' => $record->localized_location_name,
                     'projects' => [],
                 ];
             }

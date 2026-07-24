@@ -139,21 +139,27 @@
          x-data="{
              showStatsModal: false,
              editMode: false,
+             lang: 'en',
              actionUrl: '{{ route('admin.impact-statistics.store') }}',
              statId: '',
              statValue: '',
              statLabel: '',
+             statLabelFr: '',
              statDescription: '',
+             statDescriptionFr: '',
              statSortOrder: 0,
              statIsActive: true,
              statIsFeatured: false,
              openAddModal() {
                  this.editMode = false;
+                 this.lang = 'en';
                  this.actionUrl = '{{ route('admin.impact-statistics.store') }}';
                  this.statId = '';
                  this.statValue = '';
                  this.statLabel = '';
+                 this.statLabelFr = '';
                  this.statDescription = '';
+                 this.statDescriptionFr = '';
                  this.statSortOrder = 0;
                  this.statIsActive = true;
                  this.statIsFeatured = false;
@@ -161,11 +167,14 @@
              },
              openEditModal(stat) {
                  this.editMode = true;
+                 this.lang = 'en';
                  this.actionUrl = `/admin/impact-statistics/${stat.id}`;
                  this.statId = stat.id;
                  this.statValue = stat.value;
                  this.statLabel = stat.label;
+                 this.statLabelFr = stat.label_fr || '';
                  this.statDescription = stat.description || '';
+                 this.statDescriptionFr = stat.description_fr || '';
                  this.statSortOrder = stat.sort_order;
                  this.statIsActive = !!stat.is_active;
                  this.statIsFeatured = !!stat.is_featured;
@@ -344,6 +353,7 @@
                             @csrf
                             <input type="hidden" name="_method" value="PUT" x-bind:disabled="!editMode">
 
+
                             {{-- Value --}}
                             <div>
                                 <label class="block text-xs font-medium text-gray-600 mb-1.5">
@@ -355,16 +365,43 @@
                             </div>
 
                             {{-- Label --}}
-                            <div>
+                            
+                <div class="flex justify-end w-full mb-3 -mt-2">
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
+<div x-show="lang === 'en'">
                                 <label class="block text-xs font-medium text-gray-600 mb-1.5">
                                     Label <span class="text-red-400">*</span>
                                 </label>
-                                <input type="text" name="label" x-model="statLabel" required
+                                <input type="text" name="label" x-model="statLabel" :required="lang === 'en'"
                                        class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow"
                                        placeholder="e.g. Children Supported in 2025">
                             </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <label class="block text-xs font-medium text-gray-600 mb-1.5">
+                                    Label (French) <span class="text-gray-400 font-normal">(optional)</span>
+                                </label>
+                                <input type="text" name="label_fr" x-model="statLabelFr"
+                                       class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow"
+                                       placeholder="ex. Enfants soutenus en 2025">
+                            </div>
 
-
+                            {{-- Description --}}
+                            <div x-show="lang === 'en'">
+                                <label class="block text-xs font-medium text-gray-600 mb-1.5">Description <span class="text-gray-400 font-normal">(optional)</span></label>
+                                <textarea name="description" x-model="statDescription" rows="2"
+                                          class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow resize-none"
+                                          placeholder="Short supporting detail..."></textarea>
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <label class="block text-xs font-medium text-gray-600 mb-1.5">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                                <textarea name="description_fr" x-model="statDescriptionFr" rows="2"
+                                          class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow resize-none"
+                                          placeholder="Détail supplémentaire..."></textarea>
+                            </div>
 
                             {{-- Sort order + Active --}}
                             <div class="grid grid-cols-2 gap-4">

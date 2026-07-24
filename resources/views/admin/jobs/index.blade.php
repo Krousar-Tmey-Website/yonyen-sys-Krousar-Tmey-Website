@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div x-data="{ openAddModal: {{ $errors->any() ? 'true' : 'false' }} }">
+<div x-data="{ openAddModal: {{ $errors->any() ? 'true' : 'false' }}, addLang: 'en' }">
     {{-- Add form modal --}}
     <div x-show="openAddModal" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" x-cloak>
         <div class="bg-white rounded-2xl border border-gray-100 p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl relative" @click.away="openAddModal = false">
@@ -17,14 +17,28 @@
                 </svg>
             </button>
 
-            <h3 class="font-bold text-gray-800 text-lg mb-4">Add New Job</h3>
+            <div class="flex items-center justify-between mb-4 pr-8">
+                <h3 class="font-bold text-gray-800 text-lg">Add New Job</h3>
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: addLang === 'en' }" @click="addLang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: addLang === 'fr' }" @click="addLang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+            </div>
             <form action="{{ route('admin.jobs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
-                <div>
+
+
+                <div x-show="addLang === 'en'">
                     <label class="block text-xs font-medium text-gray-600 mb-1">Job Title <span class="text-red-400">*</span></label>
-                    <input type="text" name="title" value="{{ old('title') }}" required
+                    <input type="text" name="title" value="{{ old('title') }}" :required="addLang === 'en'"
                            class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
                            placeholder="e.g. Social Worker">
+                </div>
+                <div x-show="addLang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Job Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text" name="title_fr" value="{{ old('title_fr') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="ex. Travailleur social">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -56,11 +70,17 @@
                         </select>
                     </div>
                 </div>
-                <div>
+                <div x-show="addLang === 'en'">
                     <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
                     <textarea name="description" rows="3"
                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
                               placeholder="Brief job description...">{{ old('description') }}</textarea>
+                </div>
+                <div x-show="addLang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <textarea name="description_fr" rows="3"
+                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                              placeholder="Description sommaire du poste...">{{ old('description_fr') }}</textarea>
                 </div>
                 {{-- Active checkbox --}}
                 <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 hover:border-gray-300 transition-all">
@@ -146,7 +166,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-50">
                         @foreach($jobs as $job)
-                        <tr x-data="{ editing: false }" class="hover:bg-slate-50/40 transition-colors">
+                        <tr x-data="{ editing: false, lang: 'en' }" class="hover:bg-slate-50/40 transition-colors">
                             {{-- View Row --}}
                             <td class="px-5 py-4 min-w-[250px]" x-show="!editing">
                                 <div class="flex items-center gap-3">
@@ -210,17 +230,29 @@
                                 <form action="{{ route('admin.jobs.update', $job) }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                                     @csrf @method('PUT')
                                     <div class="flex items-center justify-between border-b border-gray-100 pb-2">
-                                        <span class="text-xs font-bold text-gray-700">Edit Job: {{ $job->title }}</span>
-                                        <button type="button" @click="editing = false" class="text-gray-400 hover:text-gray-600">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                            </svg>
-                                        </button>
+                                        <div class="flex items-center justify-between mb-4"><span class="text-xs font-bold text-gray-700">Edit Job: {{ $job->title }}</span>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
+                                        <div class="flex items-center gap-3">
+                                            <button type="button" @click="editing = false" class="text-gray-400 hover:text-gray-600">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-                                        <div>
+<div x-show="lang === 'en'">
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Job Title</label>
-                                            <input type="text" name="title" value="{{ $job->title }}" required
+                                            <input type="text" name="title" value="{{ $job->title }}" :required="lang === 'en'"
+                                                   class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3]">
+                                        </div>
+                                        <div x-show="lang === 'fr'" x-cloak>
+                                            <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Job Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                                            <input type="text" name="title_fr" value="{{ $job->title_fr }}"
                                                    class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3]">
                                         </div>
                                         <div>
@@ -240,10 +272,15 @@
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                        <div class="md:col-span-2">
+                                        <div class="md:col-span-2" x-show="lang === 'en'">
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Description</label>
                                             <textarea name="description" rows="2"
                                                       class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $job->description }}</textarea>
+                                        </div>
+                                        <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
+                                            <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                                            <textarea name="description_fr" rows="2"
+                                                      class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $job->description_fr }}</textarea>
                                         </div>
                                         <div>
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Status</label>

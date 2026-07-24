@@ -30,7 +30,7 @@
     </div>
     @endif
 
-    <form action="{{ route('admin.projects.update', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+    <form action="{{ route('admin.projects.update', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-5" x-data="bilingualForm()">
         @csrf @method('PUT')
 
         {{-- Banner Image --}}
@@ -116,33 +116,78 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-400">*</span></label>
-                <input type="text" name="title" value="{{ old('title', $item->title) }}" required
-                       class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Short Description</label>
-                <textarea name="description" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description', $item->description) }}</textarea>
-                <p class="mt-1 text-xs text-gray-400">Shown as subtitle in the page header banner.</p>
+            <div x-data="bilingualForm()">
+                <div class="flex justify-end mb-1.5">
+                </div>
+                
+                <div class="flex justify-end w-full mb-3 -mt-2">
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
+<div x-show="lang === 'en'">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-400">*</span></label>
+                    <input type="text" name="title" value="{{ old('title', $item->title) }}"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text" name="title_fr" value="{{ old('title_fr', $item->title_fr) }}"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+                </div>
+
+                <div x-show="lang === 'en'">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5 mt-4">Short Description</label>
+                    <textarea name="description" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description', $item->description) }}</textarea>
+                    <p class="mt-1 text-xs text-gray-400">Shown as subtitle in the page header banner.</p>
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5 mt-4">Short Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <textarea name="description_fr" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description_fr', $item->description_fr) }}</textarea>
+                    <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+                </div>
             </div>
         </div>
 
         {{-- Detailed Content --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Detailed Content</h3>
-            <div>
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="bilingualForm()">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Detailed Content</h3>
+                <div class="header-actions">
+                </div>
+            </div>
+
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective</label>
                 <textarea name="objective" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('objective', $item->objective) }}</textarea>
             </div>
-            <div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="objective_fr" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('objective_fr', $item->objective_fr) }}</textarea>
+                <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+            </div>
+
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content (HTML Supported)</label>
                 <textarea name="content" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Full content (HTML is supported)...">{{ old('content', $item->content) }}</textarea>
             </div>
-            <div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="content_fr" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Contenu complet (HTML pris en charge)...">{{ old('content_fr', $item->content_fr) }}</textarea>
+                <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
+            </div>
+
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Activities</label>
                 <textarea name="activities" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Activity 1&#10;Activity 2">{{ old('activities', $item->activities) }}</textarea>
                 <p class="mt-1 text-xs text-gray-400">Each new line will be displayed as a bullet point on the public page.</p>
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Activities (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="activities_fr" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Activité 1&#10;Activité 2">{{ old('activities_fr', $item->activities_fr) }}</textarea>
+                <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
         </div>
 
@@ -180,14 +225,25 @@
         </div>
 
         {{-- Testimony --}}
-        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4">
-            <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-wider">Testimony</h3>
+        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4" x-data="bilingualForm()">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-wider">Testimony</h3>
+                <div class="header-actions">
+                </div>
+            </div>
             <div class="grid md:grid-cols-2 gap-4">
-                <div>
+                <div x-show="lang === 'en'">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Name &amp; Role</label>
                     <input type="text" name="testimony_name" value="{{ old('testimony_name', $item->testimony_name) }}"
                            placeholder="e.g., Sam March, 17 years old"
                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Name &amp; Role (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text" name="testimony_name_fr" value="{{ old('testimony_name_fr', $item->testimony_name_fr) }}"
+                           placeholder="e.g., Sam March, 17 ans"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
                 </div>
                 <div x-data="{ testyMode: '{{ str_starts_with($item->testimony_image ?? '', 'http') ? 'url' : 'upload' }}' }">
                     @if($item->testimony_image)
@@ -213,9 +269,14 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Story / Quote</label>
                 <textarea name="testimony_story" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ old('testimony_story', $item->testimony_story) }}</textarea>
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Story / Quote (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <textarea name="testimony_story_fr" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ old('testimony_story_fr', $item->testimony_story_fr) }}</textarea>
+                <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
         </div>
 
@@ -263,7 +324,7 @@
 
         {{-- Existing grants --}}
         @forelse($grants as $grant)
-        <div class="bg-white rounded-xl border border-[#8da83a]/20 p-4" x-data="{ editing: false }">
+        <div class="bg-white rounded-xl border border-[#8da83a]/20 p-4" x-data="{ editing: false, gLang: 'en' }">
             {{-- View row --}}
             <div x-show="!editing" class="flex items-center gap-4">
                 <div class="w-10 h-10 rounded-lg bg-[#8da83a] flex items-center justify-center flex-shrink-0">
@@ -295,11 +356,19 @@
             <div x-show="editing" style="display:none">
                 <form action="{{ route('admin.projects.grants.update', [$item, $grant]) }}" method="POST" class="space-y-3">
                     @csrf @method('PUT')
+                    <div class="flex justify-end mb-1">
+                    </div>
                     <div class="grid grid-cols-2 gap-3">
-                        <div>
+                        <div x-show="gLang === 'en'">
                             <label class="block text-xs font-medium text-gray-600 mb-1">Section Title <span class="text-gray-400 font-normal">(optional)</span></label>
                             <input type="text" name="title" value="{{ $grant->title }}"
                                    placeholder="e.g. Income Generation"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                        <div x-show="gLang === 'fr'" x-cloak>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Section Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <input type="text" name="title_fr" value="{{ $grant->title_fr }}"
+                                   placeholder="ex. Génération de revenus"
                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
                         </div>
                         <div>
@@ -307,10 +376,16 @@
                             <input type="number" name="amount" value="{{ $grant->amount }}" step="0.01" min="0" required
                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
                         </div>
-                        <div>
+                        <div x-show="gLang === 'en'">
                             <label class="block text-xs font-medium text-gray-600 mb-1">Label</label>
                             <input type="text" name="label" value="{{ $grant->label }}"
                                    placeholder="e.g. Initial grant"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                        <div x-show="gLang === 'fr'" x-cloak>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Label (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <input type="text" name="label_fr" value="{{ $grant->label_fr }}"
+                                   placeholder="ex. Subvention initiale"
                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
                         </div>
                         <div>
@@ -320,6 +395,7 @@
                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
                         </div>
                     </div>
+                    <p class="text-xs text-gray-400">French fields are optional and shown to French-language visitors. Leave blank to reuse the English value.</p>
                     <div class="flex items-center gap-2">
                         <button type="submit" class="px-4 py-1.5 bg-[#8da83a] hover:bg-[#7a9232] text-white text-xs font-semibold rounded-lg transition-colors">Save</button>
                         <button type="button" @click="editing = false" class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
@@ -332,7 +408,7 @@
         @endforelse
 
         {{-- Add new grant --}}
-        <div x-data="{ open: {{ $grants->isEmpty() ? 'true' : 'false' }} }">
+        <div x-data="{ open: {{ $grants->isEmpty() ? 'true' : 'false' }}, gLang: 'en' }">
             <button type="button" @click="open = !open"
                     class="w-full flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-dashed border-[#8da83a]/40 hover:border-[#8da83a] text-[#8da83a] text-xs font-semibold rounded-xl transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -341,11 +417,19 @@
             <div x-show="open" style="display:none" class="mt-3 bg-white rounded-xl border border-[#8da83a]/20 p-4">
                 <form action="{{ route('admin.projects.grants.store', $item) }}" method="POST" class="space-y-3">
                     @csrf
+                    <div class="flex justify-end mb-1">
+                    </div>
                     <div class="grid grid-cols-2 gap-3">
-                        <div>
+                        <div x-show="gLang === 'en'">
                             <label class="block text-xs font-medium text-gray-600 mb-1">Section Title <span class="text-gray-400 font-normal">(optional)</span></label>
                             <input type="text" name="title" value="{{ old('title') }}"
                                    placeholder="e.g. Income Generation"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                        <div x-show="gLang === 'fr'" x-cloak>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Section Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <input type="text" name="title_fr" value="{{ old('title_fr') }}"
+                                   placeholder="ex. Génération de revenus"
                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
                         </div>
                         <div>
@@ -354,10 +438,16 @@
                                    placeholder="e.g. 779.50"
                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
                         </div>
-                        <div>
+                        <div x-show="gLang === 'en'">
                             <label class="block text-xs font-medium text-gray-600 mb-1">Label</label>
                             <input type="text" name="label" value="{{ old('label') }}"
                                    placeholder="e.g. Initial grant"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
+                        </div>
+                        <div x-show="gLang === 'fr'" x-cloak>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Label (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <input type="text" name="label_fr" value="{{ old('label_fr') }}"
+                                   placeholder="ex. Subvention initiale"
                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
                         </div>
                         <div>
@@ -367,6 +457,7 @@
                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8da83a]/20 focus:border-[#8da83a]">
                         </div>
                     </div>
+                    <p class="text-xs text-gray-400">French fields are optional and shown to French-language visitors. Leave blank to reuse the English value.</p>
                     <div class="flex items-center gap-2">
                         <button type="submit" class="px-4 py-1.5 bg-[#8da83a] hover:bg-[#7a9232] text-white text-xs font-semibold rounded-lg transition-colors">Add Grant</button>
                         <button type="button" @click="open = false" class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>

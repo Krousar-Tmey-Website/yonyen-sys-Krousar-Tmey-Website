@@ -6,35 +6,67 @@
 
 @section('content')
 
-<div class="max-w-5xl mx-auto grid lg:grid-cols-3 gap-6">
+<div class="max-w-3xl mx-auto">
 
     {{-- Form --}}
-    <div class="lg:col-span-2">
+    <div>
         <form action="{{ route('admin.slides.update', $slide) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
             @csrf @method('PUT')
 
             {{-- Slide Text --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-                <h3 class="font-semibold text-gray-700 text-sm">Slide Content</h3>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Badge Label</label>
-                    <input type="text" name="badge_text" value="{{ old('badge_text', $slide->badge_text) }}"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                           placeholder="Cultural Arts">
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="bilingualForm()">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-semibold text-gray-700 text-sm">Slide Content</h3>
+                
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-400">*</span></label>
-                    <textarea name="title" rows="2" required
-                              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('title', $slide->title) }}</textarea>
-                    <p class="text-xs text-gray-400 mt-1">Line breaks split the title on the slide.</p>
+                <div x-show="lang === 'en'" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Badge Label</label>
+                        <input type="text" name="badge_text" value="{{ old('badge_text', $slide->badge_text) }}"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Cultural Arts">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-400">*</span></label>
+                        <textarea name="title" rows="2"
+                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('title', $slide->title) }}</textarea>
+                        <p class="text-xs text-gray-400 mt-1">Line breaks split the title on the slide.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle</label>
+                        <textarea name="subtitle" rows="3"
+                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('subtitle', $slide->subtitle) }}</textarea>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle</label>
-                    <textarea name="subtitle" rows="3"
-                              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('subtitle', $slide->subtitle) }}</textarea>
+                <div x-show="lang === 'fr'" x-cloak class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Badge Label (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="badge_text_fr" value="{{ old('badge_text_fr', $slide->badge_text_fr) }}"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Arts Culturels">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <textarea name="title_fr" rows="2"
+                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('title_fr', $slide->title_fr) }}</textarea>
+                        <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English title.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <textarea name="subtitle_fr" rows="3"
+                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('subtitle_fr', $slide->subtitle_fr) }}</textarea>
+                        <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English subtitle.</p>
+                    </div>
                 </div>
             </div>
 
@@ -73,12 +105,20 @@
             </div>
 
             {{-- CTAs --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-                <h3 class="font-semibold text-gray-700 text-sm">Call-to-Action Buttons</h3>
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="bilingualForm()">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-semibold text-gray-700 text-sm">Call-to-Action Buttons</h3>
+                </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Primary Button Text</label>
                         <input type="text" name="cta_primary_text" value="{{ old('cta_primary_text', $slide->cta_primary_text) }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Primary Button Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="cta_primary_text_fr" value="{{ old('cta_primary_text_fr', $slide->cta_primary_text_fr) }}"
+                               placeholder="En savoir plus"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
                     <div>
@@ -86,9 +126,15 @@
                         <input type="text" name="cta_primary_url" value="{{ old('cta_primary_url', $slide->cta_primary_url) }}"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
-                    <div>
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Secondary Button Text</label>
                         <input type="text" name="cta_secondary_text" value="{{ old('cta_secondary_text', $slide->cta_secondary_text) }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Secondary Button Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="cta_secondary_text_fr" value="{{ old('cta_secondary_text_fr', $slide->cta_secondary_text_fr) }}"
+                               placeholder="Faire un don"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
                     <div>
@@ -97,6 +143,7 @@
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
                 </div>
+                <p class="text-xs text-gray-400">French text is shown to French-language visitors. Leave blank to reuse the English button text.</p>
             </div>
 
             {{-- Settings --}}
@@ -127,18 +174,6 @@
               onsubmit="return confirm('Delete this slide permanently?')">
             @csrf @method('DELETE')
         </form>
-    </div>
-
-    {{-- Tips --}}
-    <div class="space-y-4">
-        <div class="bg-[#2d6fa3]/5 rounded-2xl p-5 border border-[#2d6fa3]/10">
-            <h4 class="font-bold text-[#2d6fa3] text-sm mb-3">📐 Image Tips</h4>
-            <ul class="space-y-2 text-xs text-gray-600">
-                <li>• Recommended: <strong>1400 × 800px</strong> or wider</li>
-                <li>• High contrast is best for the text overlay</li>
-                <li>• If no image is set, a default is used</li>
-            </ul>
-        </div>
     </div>
 
 </div>

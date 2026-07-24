@@ -29,6 +29,7 @@ use App\Models\ResourcePage;
 use App\Http\Controllers\ResourcePageController;
 use App\Models\Slide;
 use App\Models\Testimonial;
+use App\Services\LocalizationManager;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -40,8 +41,8 @@ use Illuminate\Support\Facades\Storage;
 // Admin — Auth (no middleware)
 // ──────────────────────────────────────────────
 
-Route::get('/lang/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'fr'])) {
+Route::get('/lang/{locale}', function (string $locale, LocalizationManager $localization) {
+    if (in_array($locale, $localization->locales(), true)) {
         session()->put('locale', $locale);
     }
     return redirect()->back();
@@ -316,6 +317,16 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Media Library
     Route::get('media/library', [Admin\MediaLibraryController::class, 'index'])->name('media.library');
 
+    // Localization (native Laravel lang/*.json translation manager)
+    Route::prefix('localization')->name('localization.')->group(function () {
+        Route::get('/', [Admin\LocalizationController::class, 'index'])->name('index');
+        Route::post('/', [Admin\LocalizationController::class, 'update'])->name('update');
+        Route::post('keys', [Admin\LocalizationController::class, 'storeKey'])->name('keys.store');
+        Route::delete('keys', [Admin\LocalizationController::class, 'destroyKey'])->name('keys.destroy');
+        Route::post('locales', [Admin\LocalizationController::class, 'storeLocale'])->name('locales.store');
+        Route::delete('locales/{locale}', [Admin\LocalizationController::class, 'destroyLocale'])->name('locales.destroy');
+    });
+
     // Homepage
     Route::get('home', [Admin\HomeSettingController::class, 'index'])->name('home.index');
     Route::post('home', [Admin\HomeSettingController::class, 'update'])->name('home.update');
@@ -326,6 +337,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->parameters(['impact-statistics' => 'impactStatistic']);
 
     Route::resource('sponsors', Admin\SponsorController::class)->except(['show']);
+    Route::resource('gallery', Admin\GalleryController::class)->except(['show']);
+    Route::resource('testimonials', Admin\TestimonialController::class)->except(['show']);
 
     // Map Structure
     Route::resource('map-projects', Admin\MapProjectController::class)

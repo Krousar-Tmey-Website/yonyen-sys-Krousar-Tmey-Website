@@ -8,8 +8,10 @@ class Book extends Model
 {
     protected $fillable = [
         'title',
+        'title_fr',
         'slug',
         'description',
+        'description_fr',
         'price',
         'stock',
         'cover_image',
@@ -30,6 +32,26 @@ class Book extends Model
     public function scopeAvailable($query)
     {
         return $query->where('is_available', true);
+    }
+
+    // French text falls back to the English field whenever it hasn't been filled in yet.
+    public function getLocalizedTitleAttribute(): string
+    {
+        return $this->localized('title');
+    }
+
+    public function getLocalizedDescriptionAttribute(): ?string
+    {
+        return $this->localized('description');
+    }
+
+    private function localized(string $field): ?string
+    {
+        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+            return $this->{$field . '_fr'};
+        }
+
+        return $this->{$field};
     }
 
     public function getCoverImageUrlAttribute(): ?string

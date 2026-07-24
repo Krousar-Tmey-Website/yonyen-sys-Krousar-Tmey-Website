@@ -202,7 +202,7 @@
                         <td class="px-6 py-3 text-center text-gray-400">{{ $project->sort_order }}</td>
                         <td class="px-6 py-3 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <button @click="openEditModal({{ $project->id }}, '{{ $project->province_key }}', '{{ $project->province_label }}', '{{ addslashes($project->location_name) }}', '{{ addslashes($project->project_type) }}', {{ $project->sort_order }})"
+                                <button @click="openEditModal({{ $project->id }}, '{{ $project->province_key }}', '{{ $project->province_label }}', '{{ addslashes($project->location_name) }}', '{{ addslashes($project->location_name_fr ?? '') }}', '{{ addslashes($project->project_type) }}', {{ $project->sort_order }})"
                                         class="text-xs text-[#2d6fa3] hover:text-[#1d4e7a] font-medium transition-colors">
                                     Edit
                                 </button>
@@ -284,11 +284,25 @@
 
                 {{-- Location --}}
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Location / City</label>
-                    <input type="text" name="location_name" x-model="formLocation"
-                           placeholder="e.g. Poipet"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                           required>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-sm font-medium text-gray-700">Location / City</label>
+                        <div class="lang-tabs" title="Toggle editing language (English / French)">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                        </div>
+                    </div>
+                    <div x-show="lang === 'en'">
+                        <input type="text" name="location_name" x-model="formLocation"
+                               placeholder="e.g. Poipet"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               :required="lang === 'en'">
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <input type="text" name="location_name_fr" x-model="formLocationFr"
+                               placeholder="ex. Poipet"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <p class="text-[11px] text-gray-400 mt-1">Optional — French name for this location.</p>
+                    </div>
                 </div>
 
                 {{-- Project Type --}}
@@ -496,6 +510,8 @@ function mapProjectsManager() {
         formProvinceKey: '',
         formProvinceLabel: '',
         formLocation: '',
+        formLocationFr: '',
+        lang: 'en',
         formProjectType: '',
         formOrder: 0,
 
@@ -510,16 +526,20 @@ function mapProjectsManager() {
             this.formProvinceKey = '';
             this.formProvinceLabel = '';
             this.formLocation = '';
+            this.formLocationFr = '';
+            this.lang = 'en';
             this.formProjectType = '';
             this.formOrder = 0;
             this.addEditModalOpen = true;
         },
 
-        openEditModal(id, provinceKey, provinceLabel, location, projectType, order) {
+        openEditModal(id, provinceKey, provinceLabel, location, locationFr, projectType, order) {
             this.editingId = id;
             this.formProvinceKey = provinceKey;
             this.formProvinceLabel = provinceLabel;
             this.formLocation = location;
+            this.formLocationFr = locationFr;
+            this.lang = 'en';
             this.formProjectType = projectType;
             this.formOrder = order;
             this.addEditModalOpen = true;

@@ -16,6 +16,7 @@ class GalleryController extends Controller {
     public function store(Request $request) {
         $data = $request->validate([
             'title'     => 'required|string|max:255',
+            'title_fr'  => 'nullable|string|max:255',
             'image'     => 'nullable|image|max:4096',
             'is_active' => 'nullable|boolean',
         ]);
@@ -33,6 +34,7 @@ class GalleryController extends Controller {
     public function update(Request $request, Gallery $gallery) {
         $data = $request->validate([
             'title'     => 'required|string|max:255',
+            'title_fr'  => 'nullable|string|max:255',
             'image'     => 'nullable|image|max:4096',
             'is_active' => 'nullable|boolean',
         ]);

@@ -37,7 +37,7 @@
                       class="topic-card group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl border border-gray-100 hover:border-[#2d6fa3]/20 flex flex-col hover:-translate-y-2 transition-all duration-500">
                 @if($page->image)
                 <a href="{{ route('resource-pages.show', $page->slug) }}" class="relative overflow-hidden h-48 block bg-gray-100">
-                    <img src="{{ $page->image_url }}" alt="{{ $page->title }}"
+                    <img src="{{ $page->image_url }}" alt="{{ $page->localized_title }}"
                          class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     @if(($page->article_count ?? 0) > 0)
@@ -49,10 +49,10 @@
                 @endif
                 <div class="p-6 flex flex-col flex-1">
                     <h3 class="font-extrabold text-gray-800 text-lg mb-2 leading-snug">
-                        <a href="{{ route('resource-pages.show', $page->slug) }}" class="group-hover:text-[#1a3c6e] transition-colors">{{ $page->title }}</a>
+                        <a href="{{ route('resource-pages.show', $page->slug) }}" class="group-hover:text-[#1a3c6e] transition-colors">{{ $page->localized_title }}</a>
                     </h3>
-                    @if($page->description)
-                    <p class="text-gray-500 text-sm leading-relaxed mb-5 flex-1">{{ $page->description }}</p>
+                    @if($page->localized_description)
+                    <p class="text-gray-500 text-sm leading-relaxed mb-5 flex-1">{{ $page->localized_description }}</p>
                     @else
                     <div class="flex-1"></div>
                     @endif

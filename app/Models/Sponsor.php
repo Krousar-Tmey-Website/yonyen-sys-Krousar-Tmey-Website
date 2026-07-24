@@ -11,6 +11,7 @@ class Sponsor extends Model
 
     protected $fillable = [
         'name',
+        'name_fr',
         'logo',
         'url',
         'is_active',
@@ -25,5 +26,19 @@ class Sponsor extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function getLocalizedNameAttribute(): string
+    {
+        return $this->localized('name');
+    }
+
+    private function localized(string $field): ?string
+    {
+        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+            return $this->{$field . '_fr'};
+        }
+
+        return $this->{$field};
     }
 }

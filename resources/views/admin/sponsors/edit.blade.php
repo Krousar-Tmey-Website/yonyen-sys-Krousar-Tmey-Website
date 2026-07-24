@@ -10,7 +10,7 @@
 
 @section('content')
 
-<div class="form-container" x-data="{ logoMethod: '{{ str_starts_with($sponsor->logo ?? '', 'http') ? 'url' : 'file' }}', fileName: '' }">
+<div class="form-container" x-data="{ logoMethod: '{{ str_starts_with($sponsor->logo ?? '', 'http') ? 'url' : 'file' }}', fileName: '', lang: 'en' }">
     <form action="{{ route('admin.sponsors.update', $sponsor) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -22,19 +22,34 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                 </div>
-                <h3>Sponsor Details</h3>
-                <span class="badge">Required *</span>
+                <div class="flex items-center justify-between mb-4"><h3>Sponsor Details</h3>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
+                <div class="header-actions">
+                    <span class="badge">Required *</span>
+                </div>
             </div>
 
             <div class="card-body space-y-6">
                 <!-- Sponsor Name -->
-                <div class="form-group">
+<div class="form-group" x-show="lang === 'en'">
                     <label class="form-label">Sponsor Name <span class="required">*</span></label>
-                    <input type="text" name="name" value="{{ old('name', $sponsor->name) }}" required
+                    <input type="text" name="name" value="{{ old('name', $sponsor->name) }}"
                            class="form-control @error('name') error @enderror"
                            placeholder="e.g. Ministry of Education, Youth and Sport">
                     @error('name')<div class="form-error">{{ $message }}</div>@enderror
                     <div class="form-helper">The official display name of the sponsor.</div>
+                </div>
+                <div class="form-group" x-show="lang === 'fr'" x-cloak>
+                    <label class="form-label">Sponsor Name (French) <span class="optional">(optional)</span></label>
+                    <input type="text" name="name_fr" value="{{ old('name_fr', $sponsor->name_fr) }}"
+                           class="form-control @error('name_fr') error @enderror"
+                           placeholder="ex. Ministère de l'Éducation, de la Jeunesse et des Sports">
+                    @error('name_fr')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English name.</div>
                 </div>
 
                 <!-- Website URL -->

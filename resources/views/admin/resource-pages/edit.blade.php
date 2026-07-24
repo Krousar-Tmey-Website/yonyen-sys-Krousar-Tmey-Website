@@ -19,6 +19,7 @@
         @csrf
         @method('PUT')
 
+        <div x-data="bilingualForm()">
         {{-- Basic Info --}}
         <div class="form-card">
             <div class="card-header">
@@ -27,19 +28,34 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
                 </div>
-                <h3>Basic Info</h3>
-                <span class="badge">Required *</span>
+                <div class="flex items-center justify-between mb-4"><h3>Basic Info</h3>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
+                <div class="header-actions">
+                    <span class="badge">Required *</span>
+                </div>
             </div>
             <div class="card-body">
-                <div class="form-group">
+<div class="form-group" x-show="lang === 'en'">
                     <label class="form-label">Title <span class="required">*</span></label>
-                    <input type="text" name="title" value="{{ old('title', $resourcePage->title) }}" required
+                    <input type="text" name="title" value="{{ old('title', $resourcePage->title) }}"
                            class="form-control @error('title') error @enderror">
                     @error('title')<div class="form-error">{{ $message }}</div>@enderror
                     <div class="form-helper">Also the label News tags match against to link here.</div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" x-show="lang === 'fr'" x-cloak>
+                    <label class="form-label">Title (French) <span class="optional">(optional)</span></label>
+                    <input type="text" name="title_fr" value="{{ old('title_fr', $resourcePage->title_fr) }}"
+                           class="form-control @error('title_fr') error @enderror">
+                    @error('title_fr')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English value.</div>
+                </div>
+
+                <div class="form-group" x-show="lang === 'en'">
                     <label class="form-label">Slug <span class="optional">(optional)</span></label>
                     <input type="text" name="slug" value="{{ old('slug', $resourcePage->slug) }}"
                            class="form-control @error('slug') error @enderror">
@@ -47,10 +63,17 @@
                     <div class="form-helper">Used in the URL: /topics/{{ $resourcePage->slug }} — changing this moves the page's URL.</div>
                 </div>
 
-                <div class="form-group form-group--no-margin">
+                <div class="form-group form-group--no-margin" x-show="lang === 'en'">
                     <label class="form-label">Short Description <span class="optional">(optional)</span></label>
                     <textarea name="description" rows="2" class="form-control textarea @error('description') error @enderror">{{ old('description', $resourcePage->description) }}</textarea>
                     @error('description')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+
+                <div class="form-group form-group--no-margin" x-show="lang === 'fr'" x-cloak>
+                    <label class="form-label">Short Description (French) <span class="optional">(optional)</span></label>
+                    <textarea name="description_fr" rows="2" class="form-control textarea @error('description_fr') error @enderror">{{ old('description_fr', $resourcePage->description_fr) }}</textarea>
+                    @error('description_fr')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English value.</div>
                 </div>
             </div>
         </div>
@@ -64,10 +87,12 @@
                     </svg>
                 </div>
                 <h3>Detail Page Content</h3>
-                <span class="badge">Optional</span>
+                <div class="header-actions">
+                    <span class="badge">Optional</span>
+                </div>
             </div>
             <div class="card-body">
-                <div class="form-group">
+                <div class="form-group" x-show="lang === 'en'">
                     <label class="form-label">Header Text <span class="optional">(optional)</span></label>
                     <input type="text" name="header_text" value="{{ old('header_text', $resourcePage->header_text) }}"
                            class="form-control @error('header_text') error @enderror"
@@ -75,10 +100,26 @@
                     @error('header_text')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
-                <div class="form-group form-group--no-margin">
+                <div class="form-group" x-show="lang === 'fr'" x-cloak>
+                    <label class="form-label">Header Text (French) <span class="optional">(optional)</span></label>
+                    <input type="text" name="header_text_fr" value="{{ old('header_text_fr', $resourcePage->header_text_fr) }}"
+                           class="form-control @error('header_text_fr') error @enderror"
+                           placeholder="Remplace le titre comme en-tête de page">
+                    @error('header_text_fr')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English value.</div>
+                </div>
+
+                <div class="form-group form-group--no-margin" x-show="lang === 'en'">
                     <label class="form-label">Full Description <span class="optional">(optional)</span></label>
                     <textarea name="detail_description" rows="6" class="form-control textarea @error('detail_description') error @enderror">{{ old('detail_description', $resourcePage->detail_description) }}</textarea>
                     @error('detail_description')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+
+                <div class="form-group form-group--no-margin" x-show="lang === 'fr'" x-cloak>
+                    <label class="form-label">Full Description (French) <span class="optional">(optional)</span></label>
+                    <textarea name="detail_description_fr" rows="6" class="form-control textarea @error('detail_description_fr') error @enderror">{{ old('detail_description_fr', $resourcePage->detail_description_fr) }}</textarea>
+                    @error('detail_description_fr')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English value.</div>
                 </div>
             </div>
         </div>
@@ -160,17 +201,30 @@
                     </svg>
                 </div>
                 <h3>Feature Items</h3>
-                <span class="badge">Optional, up to 3</span>
+                <div class="header-actions">
+                    <span class="badge">Optional, up to 3</span>
+                </div>
             </div>
             <div class="card-body">
                 @for ($i = 0; $i < 3; $i++)
                 @php $existingItem = $items[$i] ?? null; @endphp
                 <div class="form-group {{ $i < 2 ? '' : 'form-group--no-margin' }}" style="padding-bottom: 1rem; {{ $i < 2 ? 'border-bottom: 1px solid #f1f5f9; margin-bottom: 1rem;' : '' }}">
                     <label class="form-label">Item {{ $i + 1 }}</label>
-                    <input type="text" name="items[{{ $i }}][title]" value="{{ old("items.$i.title", $existingItem['title'] ?? '') }}"
-                           class="form-control mb-2" placeholder="Item title">
-                    <textarea name="items[{{ $i }}][description]" rows="2" class="form-control textarea mb-2"
-                              placeholder="Item description">{{ old("items.$i.description", $existingItem['description'] ?? '') }}</textarea>
+
+                    <div x-show="lang === 'en'">
+                        <input type="text" name="items[{{ $i }}][title]" value="{{ old("items.$i.title", $existingItem['title'] ?? '') }}"
+                               class="form-control mb-2" placeholder="Item title">
+                        <textarea name="items[{{ $i }}][description]" rows="2" class="form-control textarea mb-2"
+                                  placeholder="Item description">{{ old("items.$i.description", $existingItem['description'] ?? '') }}</textarea>
+                    </div>
+
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <input type="text" name="items[{{ $i }}][title_fr]" value="{{ old("items.$i.title_fr", $existingItem['title_fr'] ?? '') }}"
+                               class="form-control mb-2" placeholder="Titre de l'élément (optionnel)">
+                        <textarea name="items[{{ $i }}][description_fr]" rows="2" class="form-control textarea mb-2"
+                                  placeholder="Description de l'élément (optionnel)">{{ old("items.$i.description_fr", $existingItem['description_fr'] ?? '') }}</textarea>
+                        <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English value.</div>
+                    </div>
 
                     @if(!empty($existingItem['image']))
                     <div class="current-image mb-2">
@@ -195,11 +249,14 @@
                         <div id="itemImagePreview{{ $i }}" class="hidden mt-3"></div>
                     </div>
                     @error("items.$i.title")<div class="form-error">{{ $message }}</div>@enderror
+                    @error("items.$i.title_fr")<div class="form-error">{{ $message }}</div>@enderror
                     @error("items.$i.description")<div class="form-error">{{ $message }}</div>@enderror
+                    @error("items.$i.description_fr")<div class="form-error">{{ $message }}</div>@enderror
                     @error("items.$i.image")<div class="form-error">{{ $message }}</div>@enderror
                 </div>
                 @endfor
             </div>
+        </div>
         </div>
 
         {{-- Settings --}}

@@ -11,10 +11,17 @@
         showModal: false,
         editing: false,
         editingId: null,
+        lang: 'en',
+        currentImageUrl: null,
         form: {
             title: '',
+            title_fr: '',
             headline: '',
+            headline_fr: '',
             description: '',
+            description_fr: '',
+            supporting_description: '',
+            supporting_description_fr: '',
             sort_order: 0,
         },
 
@@ -29,17 +36,31 @@
         openAddModal() {
             this.editing = false;
             this.editingId = null;
-            this.form = { title: '', headline: '', description: '', sort_order: 0 };
+            this.lang = 'en';
+            this.currentImageUrl = null;
+            this.form = {
+                title: '', title_fr: '', headline: '', headline_fr: '',
+                description: '', description_fr: '',
+                supporting_description: '', supporting_description_fr: '',
+                sort_order: 0,
+            };
             this.showModal = true;
         },
 
         openEditModal(value) {
             this.editing = true;
             this.editingId = value.id;
+            this.lang = 'en';
+            this.currentImageUrl = value.image_url ?? null;
             this.form = {
                 title: value.title ?? '',
+                title_fr: value.title_fr ?? '',
                 headline: value.headline ?? '',
+                headline_fr: value.headline_fr ?? '',
                 description: value.description ?? '',
+                description_fr: value.description_fr ?? '',
+                supporting_description: value.supporting_description ?? '',
+                supporting_description_fr: value.supporting_description_fr ?? '',
                 sort_order: value.sort_order ?? 0,
             };
             this.showModal = true;
@@ -169,7 +190,12 @@
 
                 {{-- Header --}}
                 <div class="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
-                    <h3 class="font-bold text-gray-800" x-text="modalTitle"></h3>
+                    <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-gray-800" x-text="modalTitle"></h3>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
                     <button @click="closeModal()" type="button"
                             class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,36 +206,80 @@
 
                 {{-- Form --}}
                 <form :action="editing ? '{{ route('admin.core-values.update', '__ID__') }}'.replace('__ID__', editingId) : '{{ route('admin.core-values.store') }}'"
-                      method="POST" class="p-6 space-y-4">
+                      method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
                     @csrf
                     <template x-if="editing">
                         <input type="hidden" name="_method" value="PUT">
                     </template>
 
+
                     {{-- Title --}}
-                    <div>
+<div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">
                             Title <span class="text-red-400">*</span>
                         </label>
-                        <input type="text" name="title" x-model="form.title" required
+                        <input type="text" name="title" x-model="form.title" :required="lang === 'en'"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
                                placeholder="e.g. Integration">
                     </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="title_fr" x-model="form.title_fr"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="ex. Intégration">
+                    </div>
 
                     {{-- Headline --}}
-                    <div>
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Headline (e.g. "Every child belongs.")</label>
                         <input type="text" name="headline" x-model="form.headline"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
                                placeholder="Every child belongs.">
                     </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Headline (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="headline_fr" x-model="form.headline_fr"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Chaque enfant a sa place.">
+                    </div>
 
                     {{-- Description --}}
-                    <div>
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
                         <textarea name="description" x-model="form.description" rows="2"
                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
                                   placeholder="Full description..."></textarea>
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <textarea name="description_fr" x-model="form.description_fr" rows="2"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Description complète..."></textarea>
+                    </div>
+
+                    {{-- Supporting Description --}}
+                    <div x-show="lang === 'en'">
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <textarea name="supporting_description" x-model="form.supporting_description" rows="2"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Extra detail shown below the description on the value's page..."></textarea>
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <textarea name="supporting_description_fr" x-model="form.supporting_description_fr" rows="2"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                                  placeholder="Détail supplémentaire affiché sous la description..."></textarea>
+                    </div>
+
+                    {{-- Image --}}
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Image <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <template x-if="currentImageUrl">
+                            <img :src="currentImageUrl" alt="" class="w-16 h-16 rounded-lg object-cover border border-gray-200 mb-2">
+                        </template>
+                        <input type="file" name="image" accept="image/*"
+                               class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#2d6fa3]/10 file:text-[#2d6fa3] file:text-sm file:font-medium">
+                        <p class="text-[11px] text-gray-400 mt-1">Shown next to the icon on the value's detail page. Leave blank to keep the current image.</p>
                     </div>
 
                     {{-- Order --}}

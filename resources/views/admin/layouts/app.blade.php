@@ -7,7 +7,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin') — {{ $settings['site_name'] ?? 'Krousar Thmey' }}</title>
     @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
-    @stack('styles')
     @php $_logoPath = $settings['site_logo'] ?? 'images/logo.svg'; $_faviconUrl = str_starts_with($_logoPath, 'http') ? $_logoPath : (str_starts_with($_logoPath, 'logos/') ? asset('storage/' . $_logoPath) : asset($_logoPath)); @endphp
     <link rel="icon" type="image/png" href="{{ $_faviconUrl }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,32 +16,10 @@
         [x-cloak] {
             display: none !important;
         }
-        {{-- Google Translate styling --}}
-        iframe.goog-te-banner-frame { display: none !important; }
-        .goog-te-banner-frame { display: none !important; }
-        .goog-logo-link { display: none !important; }
-        .goog-te-gadget { color: transparent !important; }
-        .VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; }
-        body > .skiptranslate > iframe.skiptranslate { display: none !important; visibility: hidden !important; }
-        html { margin-top: 0 !important; top: 0 !important; }
-        body { margin-top: 0 !important; top: 0 !important; position: static !important; }
-        .goog-tooltip { display: none !important; }
-        .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
-        #google_translate_element {
-            position: absolute !important;
-            opacity: 0 !important;
-            z-index: -10 !important;
-            pointer-events: none !important;
-            width: 0 !important;
-            height: 0 !important;
-            overflow: hidden !important;
-        }
-
-
     </style>
 </head>
 
-<body class="h-full" x-data="{ sidebarOpen: window.innerWidth >= 1024 }">
+<body class="h-full" x-data="{ sidebarOpen: window.innerWidth >= 1024 }" data-admin-shell>
 
     <script>
         function openEmail(email) {
@@ -52,78 +29,7 @@
                 window.location.href = 'mailto:' + email;
             }
         }
-
-        {{-- Google Translate helpers --}}
-        function getCurrentLang() {
-            let match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
-            if (match) {
-                let parts = match[2].split('/');
-                if (parts.length === 3 && parts[2] !== 'en') return parts[2];
-            }
-            return '{{ session("locale", "en") }}';
-        }
-
-        function manageGTCookies(action, lang = '') {
-            let hostname = window.location.hostname;
-            let parts = hostname.split('.');
-            let domains = [hostname, '.' + hostname];
-
-            if (parts.length > 2) {
-                domains.push('.' + parts.slice(1).join('.'));
-            }
-
-            let wipe = '=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-            document.cookie = 'googtrans' + wipe;
-            domains.forEach(d => {
-                document.cookie = 'googtrans' + wipe + '; domain=' + d;
-            });
-
-            if (action === 'set' && lang !== 'en') {
-                let val = '=/en/' + lang + '; path=/';
-                document.cookie = 'googtrans' + val;
-                domains.forEach(d => {
-                    document.cookie = 'googtrans' + val + '; domain=' + d;
-                });
-            }
-        }
-
-        function switchLang(lang) {
-            if (lang === 'en') {
-                manageGTCookies('clear');
-            } else {
-                manageGTCookies('set', lang);
-
-                let gtCombo = document.querySelector('.goog-te-combo');
-                if (gtCombo) {
-                    gtCombo.value = lang;
-                    gtCombo.dispatchEvent(new Event('change'));
-                }
-            }
-
-            fetch('{{ url("/lang") }}/' + lang, {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            }).then(() => {
-                setTimeout(() => {
-                    window.location.reload(true);
-                }, 200);
-            }).catch(() => {
-                window.location.href = '{{ url("/lang") }}/' + lang;
-            });
-        }
     </script>
-
-    {{-- Google Translate Element (hidden) --}}
-    <div id="google_translate_element"></div>
-    <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,fr',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      }, 'google_translate_element');
-    }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <div class="flex h-full">
 
@@ -157,25 +63,12 @@
             </div>
 
             {{-- Nav with accordion groups --}}
-            <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+            <nav id="admin-sidebar-nav" class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
                 @php
                 $currentRoute = request()->route()?->getName() ?? '';
-                $routeExists = fn($r) => $r && Route::has($r);
+                $routeNames = app('router')->getRoutes()->getRoutesByName();
+                $routeExists = fn($r) => $r && array_key_exists($r, $routeNames);
 
-                $groupActive = function ($children) use ($currentRoute) {
-                foreach ($children as $child) {
-                $r = $child['route'] ?? '';
-                if ($currentRoute && ($currentRoute === $r || str_starts_with($currentRoute, $r . '.'))) {
-                return true;
-                }
-                }
-                return false;
-                };
-
-                $childActive = function ($route) use ($currentRoute) {
-                return $currentRoute &&
-                ($currentRoute === $route || str_starts_with($currentRoute, $route . '.'));
-                };
 
                 $navGroups = [
                 'dashboard' => [
@@ -272,6 +165,7 @@
                 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z',
                 'children' => [
                 ['route' => 'admin.website.index', 'label' => __('Website Settings')],
+                ['route' => 'admin.localization.index', 'label' => __('Localization')],
                 ['route' => 'admin.seo.index', 'label' => __('SEO Settings')],
                 ['route' => 'admin.media.library', 'label' => __('Media Library')],
                 ],
@@ -286,6 +180,46 @@
                 ],
                 ],
                 ];
+
+                $bestMatch = '';
+                $maxMatchLen = -1;
+
+                if ($currentRoute) {
+                    foreach ($navGroups as $group) {
+                        $items = isset($group['single']) ? [['route' => $group['route']]] : ($group['children'] ?? []);
+                        foreach ($items as $child) {
+                            $r = $child['route'] ?? '';
+                            if (!$r) continue;
+                            
+                            if ($currentRoute === $r) {
+                                $bestMatch = $r;
+                                $maxMatchLen = 9999;
+                                break 2;
+                            }
+                            
+                            $prefix = str_ends_with($r, '.index') ? substr($r, 0, -5) : $r . '.';
+                            if (str_starts_with($currentRoute, $prefix)) {
+                                if (strlen($prefix) > $maxMatchLen) {
+                                    $maxMatchLen = strlen($prefix);
+                                    $bestMatch = $r;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $childActive = function ($route) use ($bestMatch) {
+                    return $route && $route === $bestMatch;
+                };
+
+                $groupActive = function ($children) use ($childActive) {
+                    foreach ($children as $child) {
+                        if ($childActive($child['route'] ?? '')) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
                 @endphp
 
                 @foreach ($navGroups as $key => $group)
@@ -293,11 +227,12 @@
                 {{-- Single link (Dashboard) --}}
                 @php $exists = $routeExists($group['route']); @endphp
                 <a href="{{ $exists ? route($group['route']) : '#' }}"
-                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap
-                              {{ $childActive($group['route']) ? 'bg-white/15 text-white' : 'text-white hover:bg-white/10' }}"
+                    @if($exists) data-admin-nav @endif
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all whitespace-nowrap
+                              {{ $childActive($group['route']) ? 'bg-white/20 text-white font-semibold shadow-sm ring-1 ring-white/10' : 'text-white/80 hover:bg-white/10 hover:text-white font-medium' }}"
                     :class="!sidebarOpen && 'lg:justify-center lg:px-0'"
                     title="{{ $group['label'] }}">
-                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 flex-shrink-0 {{ $childActive($group['route']) ? 'text-white' : 'text-white/70' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="{{ $group['icon'] }}" />
                     </svg>
@@ -308,12 +243,12 @@
                 @php $isGroupActive = $groupActive($group['children']); @endphp
                 <div x-data="{ open: {{ $isGroupActive ? 'true' : 'false' }} }" class="space-y-0.5">
                     <button @click="sidebarOpen ? (open = !open) : (sidebarOpen = true, open = true)"
-                        class="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap
-                                       {{ $isGroupActive ? 'bg-white/15 text-white' : 'text-white hover:bg-white/10' }}"
+                        class="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm transition-all whitespace-nowrap
+                                       {{ $isGroupActive ? 'bg-white/20 text-white font-semibold shadow-sm ring-1 ring-white/10' : 'text-white/80 hover:bg-white/10 hover:text-white font-medium' }}"
                         :class="!sidebarOpen && 'lg:justify-center lg:px-0'"
                         title="{{ $group['label'] }}">
                         <span class="flex items-center gap-3" :class="!sidebarOpen && 'lg:gap-0'">
-                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor"
+                            <svg class="w-5 h-5 flex-shrink-0 {{ $isGroupActive ? 'text-white' : 'text-white/70' }}" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="{{ $group['icon'] }}" />
@@ -326,22 +261,19 @@
                                 d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="sidebarOpen && open" x-transition:enter="transition ease-out duration-150"
-                        x-transition:enter-start="opacity-0 -translate-y-1"
-                        x-transition:enter-end="opacity-100 translate-y-0"
-                        x-transition:leave="transition ease-in duration-100"
-                        x-transition:leave-start="opacity-100 translate-y-0"
-                        x-transition:leave-end="opacity-0 -translate-y-1" class="space-y-0.5 mt-0.5 pl-2"
+                    <div x-show="sidebarOpen && open" x-collapse.duration.300ms
+                        class="space-y-0.5 mt-1 mb-2 pl-3"
                         x-cloak>
                         @foreach ($group['children'] as $child)
                         @php $exists = $routeExists($child['route']); @endphp
                         <a href="{{ $exists ? route($child['route']) : '#' }}"
+                            @if($exists) data-admin-nav @endif
                             {{ !$exists ? 'onclick="return false;"' : '' }}
-                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all
-                                          {{ $childActive($child['route']) ? 'bg-white/10 text-white font-medium' : 'text-white hover:bg-white/10' }}
+                            class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all
+                                          {{ $childActive($child['route']) ? 'bg-white/15 text-white font-semibold shadow-sm' : 'text-white/70 hover:bg-white/10 hover:text-white' }}
                                           {{ !$exists ? 'opacity-40 cursor-default' : '' }}">
                             <span
-                                class="w-1 h-1 rounded-full flex-shrink-0 {{ $childActive($child['route']) ? 'bg-white' : 'bg-white/50' }}"></span>
+                                class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ $childActive($child['route']) ? 'bg-white ring-2 ring-white/30' : 'bg-white/40' }}"></span>
                             <span>{{ $child['label'] }}</span>
                             @if (!$exists)
                             <span class="ml-auto text-[10px] text-white/60">soon</span>
@@ -394,7 +326,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
                     </button>
-                    <div>
+                    <div id="admin-page-header">
                         <h1 class="text-lg font-bold text-gray-800">@yield('page-title', __('Admin Panel'))</h1>
                         @hasSection('breadcrumb')
                         <p class="text-xs text-gray-400 mt-0.5">@yield('breadcrumb')</p>
@@ -402,43 +334,31 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    {{-- Language Switcher — compact, like visitor site --}}
-                    <div class="hidden lg:block notranslate" x-data="{ open: false, lang: getCurrentLang() }">
-                        <div class="relative">
-                            <button @click="open = !open" @click.away="open = false"
-                                    class="flex items-center gap-2 text-gray-600 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-3 rounded-lg hover:bg-gray-50 border border-gray-200 shadow-sm bg-white">
-                                <img :src="lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png'"
-                                     class="w-4 h-auto rounded-sm" alt="">
-                                <span x-text="lang === 'fr' ? 'FR' : 'EN'">EN</span>
-                                <svg class="w-3 h-3 transition-transform duration-200 text-gray-400"
-                                     :class="open ? 'rotate-180' : ''"
-                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </button>
-
-                            <div x-show="open" x-cloak
-                                 x-transition:enter="transition ease-out duration-100"
-                                 x-transition:enter-start="opacity-0 scale-95"
-                                 x-transition:enter-end="opacity-100 scale-100"
-                                 x-transition:leave="transition ease-in duration-75"
-                                 x-transition:leave-start="opacity-100 scale-100"
-                                 x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[100] overflow-hidden">
-                                <button @click="switchLang('en')"
-                                        :class="lang === 'en' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : 'text-gray-600 hover:bg-gray-50 hover:text-[#2d6fa3]'"
-                                        class="w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2">
-                                    <img src="https://flagcdn.com/w20/gb.png" class="w-4 h-auto rounded-sm" alt=""> English
-                                </button>
-                                <button @click="switchLang('fr')"
-                                        :class="lang === 'fr' ? 'bg-blue-50 text-[#2d6fa3] font-medium' : 'text-gray-600 hover:bg-gray-50 hover:text-[#2d6fa3]'"
-                                        class="w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2">
-                                    <img src="https://flagcdn.com/w20/fr.png" class="w-4 h-auto rounded-sm" alt=""> Français
-                                </button>
-                            </div>
+                    @if(!empty($availableLocales) && count($availableLocales) > 1)
+                    <div x-data="{ openLocale: false }" class="relative">
+                        <button @click="openLocale = !openLocale" @click.outside="openLocale = false" type="button"
+                            title="Admin panel language"
+                            class="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#2d6fa3] transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50 border border-gray-200">
+                            @php $currentMeta = collect($availableLocales)->firstWhere('code', $currentLocale); @endphp
+                            <span>{{ $currentMeta['flag'] ?? '🌐' }}</span>
+                            <span class="hidden sm:inline">{{ $currentMeta['native'] ?? strtoupper($currentLocale) }}</span>
+                            <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': openLocale }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="openLocale" x-cloak x-transition
+                            class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 z-20">
+                            @foreach($availableLocales as $loc)
+                            <a href="{{ route('lang.switch', $loc['code']) }}"
+                                class="flex items-center gap-2 px-3 py-2 text-xs transition-colors
+                                          {{ $loc['code'] === $currentLocale ? 'bg-gray-50 text-[#2d6fa3] font-semibold' : 'text-gray-600 hover:bg-gray-50' }}">
+                                <span>{{ $loc['flag'] ?? '🌐' }}</span>
+                                <span>{{ $loc['native'] ?? strtoupper($loc['code']) }}</span>
+                            </a>
+                            @endforeach
                         </div>
                     </div>
-
+                    @endif
                     <a href="{{ route('home') }}" target="_blank"
                         class="flex items-center gap-2 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50 border border-gray-200">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -451,52 +371,59 @@
             </header>
 
             {{-- Flash messages --}}
-            @if (session('success'))
-            <div x-data="{ show: true }" x-show="show" x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                class="mx-6 mt-4 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
-                <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span class="flex-1">{{ session('success') }}</span>
-                <button @click="show = false" type="button"
-                    class="flex-shrink-0 p-0.5 rounded-md hover:bg-green-200/50 transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
+            <div id="admin-flash-messages">
+                @if (session('success'))
+                <div x-data="{ show: true }" x-show="show" x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                    class="mx-6 mt-4 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
-                </button>
-            </div>
-            @endif
-            @if (session('error'))
-            <div x-data="{ show: true }" x-show="show" x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                class="mx-6 mt-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
-                <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="flex-1">{{ session('error') }}</span>
-                <button @click="show = false" type="button"
-                    class="flex-shrink-0 p-0.5 rounded-md hover:bg-red-200/50 transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="flex-1">{{ session('success') }}</span>
+                    <button @click="show = false" type="button"
+                        class="flex-shrink-0 p-0.5 rounded-md hover:bg-green-200/50 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                @endif
+                @if (session('error'))
+                <div x-data="{ show: true }" x-show="show" x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                    class="mx-6 mt-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                </button>
+                    <span class="flex-1">{{ session('error') }}</span>
+                    <button @click="show = false" type="button"
+                        class="flex-shrink-0 p-0.5 rounded-md hover:bg-red-200/50 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                @endif
             </div>
-            @endif
 
             {{-- Content --}}
 
-            <main class="flex-1 overflow-y-auto p-6">
+            <main id="admin-main-content" class="flex-1 overflow-y-auto p-6">
                 @yield('content')
             </main>
         </div>
 
     </div>
 
-    @stack('scripts')
+    <div id="admin-dynamic-styles" hidden>
+        @stack('styles')
+    </div>
+    <div id="admin-page-scripts" hidden>
+        @stack('scripts')
+    </div>
 </body>
 
 </html>

@@ -12,8 +12,10 @@ class ProjectGrantController extends Controller
     {
         $data = $request->validate([
             'title'      => 'nullable|string|max:255',
+            'title_fr'   => 'nullable|string|max:255',
             'amount'     => 'required|numeric|min:0',
             'label'      => 'nullable|string|max:255',
+            'label_fr'   => 'nullable|string|max:255',
             'recipient'  => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
         ]);
@@ -30,8 +32,10 @@ class ProjectGrantController extends Controller
 
         $data = $request->validate([
             'title'      => 'nullable|string|max:255',
+            'title_fr'   => 'nullable|string|max:255',
             'amount'     => 'required|numeric|min:0',
             'label'      => 'nullable|string|max:255',
+            'label_fr'   => 'nullable|string|max:255',
             'recipient'  => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
         ]);

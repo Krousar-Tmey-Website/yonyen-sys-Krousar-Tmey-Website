@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class JobOpportunity extends Model
 {
-    protected $fillable = ['title', 'description', 'location', 'posted_date', 'type', 'status', 'is_active', 'sort_order', 'image'];
+    protected $fillable = ['title', 'title_fr', 'description', 'description_fr', 'location', 'posted_date', 'type', 'status', 'is_active', 'sort_order', 'image'];
 
     protected function casts(): array
     {
@@ -26,5 +26,25 @@ class JobOpportunity extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
+    }
+
+    // French text falls back to the English field whenever it hasn't been filled in yet.
+    public function getLocalizedTitleAttribute(): string
+    {
+        return $this->localized('title');
+    }
+
+    public function getLocalizedDescriptionAttribute(): ?string
+    {
+        return $this->localized('description');
+    }
+
+    private function localized(string $field): ?string
+    {
+        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+            return $this->{$field . '_fr'};
+        }
+
+        return $this->{$field};
     }
 }

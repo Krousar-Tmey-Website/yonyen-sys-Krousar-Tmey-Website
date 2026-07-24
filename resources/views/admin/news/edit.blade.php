@@ -16,6 +16,7 @@
     <form id="articleEditForm" action="{{ route('admin.news.update', $news) }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-news-ajax-form>
         @csrf @method('PUT')
 
+        <div x-data="bilingualForm()">
         {{-- Article Details --}}
         <div class="form-card">
             <div class="card-header">
@@ -24,25 +25,49 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
                 </div>
-                <h3>Article Details</h3>
-                <span class="badge">Required *</span>
+                <div class="flex items-center justify-between mb-4"><h3>Article Details</h3>
+    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+</div>
+</div>
+                <div class="header-actions">
+                    <span class="badge">Required *</span>
+                </div>
             </div>
             <div class="card-body">
-                <div class="form-group">
+<div class="form-group" x-show="lang === 'en'">
                     <label class="form-label">Title <span class="required">*</span></label>
-                    <input type="text" name="title" value="{{ old('title', $news->title) }}" required
+                    <input type="text" name="title" value="{{ old('title', $news->title) }}"
                            class="form-control @error('title') error @enderror"
                            placeholder="Enter article title...">
                     @error('title')<div class="form-error">{{ $message }}</div>@enderror
                     <div class="form-helper">Used as page title and URL slug.</div>
                 </div>
 
-                <div class="form-group form-group--no-margin">
+                <div class="form-group" x-show="lang === 'fr'" x-cloak>
+                    <label class="form-label">Title (French) <span class="optional">(optional)</span></label>
+                    <input type="text" name="title_fr" value="{{ old('title_fr', $news->title_fr) }}"
+                           class="form-control @error('title_fr') error @enderror"
+                           placeholder="Titre de l'article...">
+                    @error('title_fr')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English title.</div>
+                </div>
+
+                <div class="form-group form-group--no-margin" x-show="lang === 'en'">
                     <label class="form-label">Excerpt <span class="optional">(optional)</span></label>
                     <textarea name="excerpt" rows="3" class="form-control textarea"
                               placeholder="Short summary for article cards...">{{ old('excerpt', $news->excerpt) }}</textarea>
                     <div class="form-helper">Recommended: 120-160 characters.</div>
                     @error('excerpt')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+
+                <div class="form-group form-group--no-margin" x-show="lang === 'fr'" x-cloak>
+                    <label class="form-label">Excerpt (French) <span class="optional">(optional)</span></label>
+                    <textarea name="excerpt_fr" rows="3" class="form-control textarea"
+                              placeholder="Résumé court pour les cartes d'article...">{{ old('excerpt_fr', $news->excerpt_fr) }}</textarea>
+                    <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English excerpt.</div>
+                    @error('excerpt_fr')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
         </div>
@@ -56,13 +81,20 @@
                     </svg>
                 </div>
                 <h3>Content</h3>
-            </div>
-            <div class="card-body">
-                <div class="form-group form-group--no-margin">
-                    @include('admin.news._content-editor', ['contentValue' => $news->content])
-                    @error('content')<div class="form-error">{{ $message }}</div>@enderror
+                <div class="header-actions">
                 </div>
             </div>
+            <div class="card-body">
+                <div class="form-group form-group--no-margin" x-show="lang === 'en'">
+                    @include('admin.news._content-editor', ['name' => 'content', 'contentValue' => $news->content])
+                    @error('content')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+                <div class="form-group form-group--no-margin" x-show="lang === 'fr'" x-cloak>
+                    @include('admin.news._content-editor', ['name' => 'content_fr', 'contentValue' => $news->content_fr, 'placeholder' => 'Rédigez le contenu en français ici...'])
+                    @error('content_fr')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+        </div>
         </div>
 
         {{-- Tags Section --}}

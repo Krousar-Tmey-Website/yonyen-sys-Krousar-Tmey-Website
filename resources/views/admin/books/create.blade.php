@@ -15,6 +15,7 @@
         @csrf
 
         {{-- Book Details --}}
+        <div x-data="bilingualForm()">
         <div class="form-card">
             <div class="card-header">
                 <div class="icon blue">
@@ -23,10 +24,14 @@
                     </svg>
                 </div>
                 <h3>Book Details</h3>
+                <div class="header-actions">
+                    <span class="badge">Required *</span>
+                </div>
             </div>
             <div class="card-body">
                 @include('admin.books._form', ['book' => null])
             </div>
+        </div>
         </div>
 
         {{-- Actions --}}

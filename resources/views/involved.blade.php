@@ -160,7 +160,7 @@
                 {{-- Left Image Container --}}
                 <div class="relative w-24 sm:w-28 md:w-32 h-36 md:h-40 shrink-0 bg-slate-50 rounded-2xl flex items-center justify-center p-2 shadow-inner border border-slate-100/80 overflow-hidden">
                     @if($book->cover_image_url)
-                    <img src="{{ $book->cover_image_url }}" alt="{{ $book->title }}" 
+                    <img src="{{ $book->cover_image_url }}" alt="{{ $book->localized_title }}"
                          class="max-h-full max-w-full object-contain rounded-lg shadow-md group-hover:scale-105 transition-transform duration-500">
                     @else
                     <div class="flex flex-col items-center justify-center text-slate-300 gap-1">
@@ -183,13 +183,13 @@
 
                         {{-- Title --}}
                         <h3 class="font-extrabold text-slate-800 text-sm md:text-base uppercase tracking-wide group-hover:text-[#2d6fa3] transition-colors line-clamp-1 leading-snug mb-1">
-                            {{ $book->title }}
+                            {{ $book->localized_title }}
                         </h3>
 
                         {{-- Description --}}
-                        @if($book->description)
+                        @if($book->localized_description)
                         <p class="text-slate-400 text-xs line-clamp-2 leading-relaxed">
-                            {{ strip_tags($book->description) }}
+                            {{ strip_tags($book->localized_description) }}
                         </p>
                         @else
                         <p class="text-slate-300 text-xs italic">No description provided.</p>
@@ -373,22 +373,22 @@
                             @if($wwp->image)
                                 <div class="relative h-48 overflow-hidden bg-gray-50 flex items-center justify-center">
                                     <div class="absolute inset-0 bg-gradient-to-t from-[#1d4e7a]/20 to-transparent z-10"></div>
-                                    <img src="{{ $wwp->image_url }}" alt="{{ $wwp->country_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out z-0">
+                                    <img src="{{ $wwp->image_url }}" alt="{{ $wwp->localized_country_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out z-0">
                                 </div>
                             @else
                                 <div class="relative h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
-                                    <span class="text-gray-400 font-bold text-xl">{{ $wwp->country_name }}</span>
+                                    <span class="text-gray-400 font-bold text-xl">{{ $wwp->localized_country_name }}</span>
                                 </div>
                             @endif
                             <div class="p-6 flex flex-col flex-grow relative z-20 bg-white">
-                                <h4 class="font-black text-[#1d4e7a] text-xl mb-3">{{ $wwp->country_name }}</h4>
+                                <h4 class="font-black text-[#1d4e7a] text-xl mb-3">{{ $wwp->localized_country_name }}</h4>
                                 <p class="text-gray-500 text-sm leading-relaxed mb-6 flex-grow">
-                                    {{ $wwp->description }}
+                                    {{ $wwp->localized_description }}
                                 </p>
                                 @if($wwp->learn_more_url)
                                     <a href="{{ $wwp->learn_more_url }}" target="_blank" rel="noopener"
                                        class="inline-flex items-center justify-center gap-2 w-full bg-white text-[#2d6fa3] font-bold text-sm px-6 py-2.5 rounded-xl border-2 border-[#2d6fa3]/20 hover:border-[#2d6fa3] hover:bg-[#2d6fa3] hover:text-white transition-all duration-300">
-                                        <span>{{ $wwp->button_text ?: 'Learn More' }}</span>
+                                        <span>{{ $wwp->localized_button_text ?: 'Learn More' }}</span>
                                         <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                     </a>
                                 @endif
@@ -974,7 +974,7 @@
                     {{-- Premium image container (full card image) --}}
                     <div class="relative h-48 w-full overflow-hidden flex-shrink-0 bg-slate-100">
                         @if($job->image)
-                        <img src="{{ asset('storage/' . $job->image) }}" alt="{{ $job->title }}"
+                        <img src="{{ asset('storage/' . $job->image) }}" alt="{{ $job->localized_title }}"
                              class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
                              onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');">
                         @endif
@@ -1003,7 +1003,7 @@
                             </div>
 
                             <h3 class="font-extrabold text-slate-800 text-base md:text-lg mb-2 group-hover:text-[#2d6fa3] transition-colors duration-300 line-clamp-2 leading-snug">
-                                {{ $job->title }}
+                                {{ $job->localized_title }}
                             </h3>
 
                             <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs text-slate-500 mb-4">
@@ -1023,7 +1023,7 @@
 
                             @if($job->description)
                             <p class="text-slate-500 text-xs leading-relaxed mb-5 line-clamp-3">
-                                {{ $job->description }}
+                                {{ $job->localized_description }}
                             </p>
                             @endif
                         </div>
