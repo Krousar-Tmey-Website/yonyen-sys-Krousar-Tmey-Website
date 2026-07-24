@@ -238,6 +238,30 @@ Route::get('/donate/international', [DonationController::class, 'showInternation
 Route::post('/donate/international', [DonationController::class, 'send'])->name('donate.international.send');
 Route::post('/donation/continue', [DonationController::class, 'continueDonation']);
 
+// Public Campaigns Listing
+Route::get('/campaigns', function () {
+    $campaigns = \App\Models\Campaign::active()
+        ->ordered()
+        ->get();
+
+    return view('campaigns.index', compact('campaigns'));
+})->name('campaigns.public');
+
+Route::get('/campaigns/{campaign:slug}', function (\App\Models\Campaign $campaign) {
+    if (! $campaign->is_active) {
+        abort(404);
+    }
+
+    $relatedCampaigns = \App\Models\Campaign::active()
+        ->where('id', '!=', $campaign->id)
+        ->whereNotNull('slug')
+        ->ordered()
+        ->take(3)
+        ->get();
+
+    return view('campaigns.show', compact('campaign', 'relatedCampaigns'));
+})->name('campaigns.public.show');
+
 Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
 Route::get('/newsletter/unsubscribe/{email}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
@@ -373,6 +397,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Donation Campaigns
     Route::resource('campaigns', Admin\CampaignController::class)->except(['show']);
     Route::patch('campaigns/{campaign}/toggle', [Admin\CampaignController::class, 'toggle'])->name('campaigns.toggle');
+    Route::post('campaigns/reorder', [Admin\CampaignController::class, 'reorder'])->name('campaigns.reorder');
+    Route::get('campaigns/{campaign}/preview', [Admin\CampaignController::class, 'preview'])->name('campaigns.preview');
 
     Route::prefix('contacts')->name('contacts.')->group(function () {
         Route::get('/', [Admin\ContactInquiryController::class, 'index'])->name('index');
