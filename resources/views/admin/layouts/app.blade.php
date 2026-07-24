@@ -232,8 +232,7 @@
                 ['route' => 'admin.resource-pages.index', 'label' => 'Topics'],
                 ['route' => 'admin.reports.index', 'label' => 'Annual Reports'],
                 ['route' => 'admin.words-pictures.index', 'label' => 'Words and Pictures'],
-                ['route' => 'admin.media.index', 'label' => 'Media Gallery'],
-                ['route' => 'admin.downloads.index', 'label' => 'Downloads'],
+                ['route' => 'admin.media-page.index', 'label' => 'Media Page'],
                 ],
                 ],
                 'involved' => [

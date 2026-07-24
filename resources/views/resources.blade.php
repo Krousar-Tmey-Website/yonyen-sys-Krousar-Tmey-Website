@@ -65,31 +65,17 @@
     </div>
 </section>
 
-{{-- Media --}}
-<section id="media-resources" class="py-20 bg-[#f8f9fc] scroll-mt-24">
+{{-- Words and Pictures application --}}
+<section id="words-and-pictures-application" class="py-20 bg-[#f8f9fc] scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
         <div class="mb-14">
-            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Press</span>
-            <h2 class="section-title mt-3 mb-3">Media Resources</h2>
-            <p class="text-gray-500">Press kits, images, and logos for media and communications use.</p>
+            <span class="text-[#e8a020] font-semibold text-sm uppercase tracking-wider">Application</span>
+            <h2 class="section-title mt-3 mb-3">Words and Pictures</h2>
+            <p class="text-gray-500">Information and downloads for the Words and Pictures application.</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-6">
-            @foreach([
-                ['title' => 'Press Kit 2024', 'desc' => 'Organization overview, key facts, and leadership bios', 'icon' => '📦'],
-                ['title' => 'Photo Library', 'desc' => 'High-resolution images from our programs (contact us for access)', 'icon' => '📷'],
-                ['title' => 'Logo & Brand Assets', 'desc' => 'Official Krousar Thmey logos in various formats', 'icon' => '🎨'],
-            ] as $item)
-            <div class="bg-white rounded-2xl p-7 border border-gray-100 hover:shadow-md transition-shadow">
-                <div class="text-4xl mb-4">{{ $item['icon'] }}</div>
-                <h3 class="font-bold text-[#1a3c6e] mb-2">{{ $item['title'] }}</h3>
-                <p class="text-gray-500 text-sm mb-5">{{ $item['desc'] }}</p>
-                <a href="{{ route('contact') }}" class="text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors">
-                    Request Access
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </a>
-            </div>
-            @endforeach
+        <div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-8 text-center text-gray-500">
+            More content coming soon.
         </div>
     </div>
 </section>
