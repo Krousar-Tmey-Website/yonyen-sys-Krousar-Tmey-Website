@@ -2,48 +2,7 @@
 
 @push('styles')
     @vite(['resources/css/admin.css', 'resources/css/admin-history.css'])
-    <style>
-        .payments-fr-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            text-decoration: none;
-            white-space: nowrap;
-            transition: all 0.15s ease;
-        }
-        .payments-fr-btn.primary {
-            background: #eef2ff;
-            color: #4f46e5;
-            border: 1px solid #c7d2fe;
-        }
-        .payments-fr-btn.primary:hover {
-            background: #e0e7ff;
-            border-color: #a5b4fc;
-        }
-        .payments-fr-btn.secondary {
-            background: #f8fafc;
-            color: #64748b;
-            border: 1px solid #cbd5e1;
-        }
-        .payments-fr-btn.secondary:hover {
-            background: #f1f5f9;
-            border-color: #94a3b8;
-            color: #475569;
-        }
-        .payments-fr-btn svg {
-            flex-shrink: 0;
-        }
-        .payments-fr-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: auto;
-        }
-    </style>
+
 @endpush
 
 @section('title', 'Payment Methods')
@@ -53,6 +12,47 @@
 @section('content')
 
 <div class="payments-page" x-data="paymentManager()" x-init="init()">
+    {{-- Residency Selector Tabs --}}
+    <div style="margin-bottom: 24px;">
+        <div style="background-color: #ffffff; padding: 6px; border-radius: 12px; display: inline-flex; border: 1px solid #eef2f6; gap: 4px; flex-wrap: wrap; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+            <button type="button" 
+                    @click="tag = ''; applyFilters()" 
+                    class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
+                    style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
+                    :style="tag === '' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
+                All Methods
+            </button>
+            <button type="button" 
+                    @click="tag = 'cambodia'; applyFilters()" 
+                    class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
+                    style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
+                    :style="tag === 'cambodia' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
+                Payment in Cambodia 🇰🇭
+            </button>
+            <button type="button" 
+                    @click="tag = 'france'; applyFilters()" 
+                    class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
+                    style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
+                    :style="tag === 'france' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
+                Fiscal residency in France 🇫🇷
+            </button>
+            <button type="button" 
+                    @click="tag = 'switzerland'; applyFilters()" 
+                    class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
+                    style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
+                    :style="tag === 'switzerland' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
+                Fiscal residency in Switzerland 🇨🇭
+            </button>
+            <button type="button" 
+                    @click="tag = 'elsewhere'; applyFilters()" 
+                    class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
+                    style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
+                    :style="tag === 'elsewhere' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
+                Fiscal residency elsewhere 🌐
+            </button>
+        </div>
+    </div>
+
     {{-- Page Header --}}
     <div class="payments-header">
         <div class="payments-header-left">
@@ -66,8 +66,8 @@
                 <p class="payments-header-subtitle">Configure how donors can make payments on the Donate page</p>
             </div>
         </div>
-        <div class="payments-header-right">
-            <div class="payments-header-stats">
+        <div class="payments-header-right" style="display: flex; gap: 12px; align-items: center;">
+            <div class="payments-header-stats" style="margin-right: 4px;">
                 <span class="stat-item">
                     <span class="stat-value">{{ $totalMethods }}</span>
                     <span class="stat-label">Total</span>
@@ -78,7 +78,52 @@
                     <span class="stat-label">Active</span>
                 </span>
             </div>
-            <a href="{{ route('admin.payments.create') }}" class="payments-btn-add">
+
+            {{-- France specific actions --}}
+            <div style="display: flex; gap: 8px;" x-show="tag === 'france'" x-cloak>
+                <a href="{{ route('donate.international') }}?residency=france" 
+                   target="_blank" 
+                   class="payments-btn-add" 
+                   style="background-color: #f8fafc; color: #475569; border: 1px solid #cbd5e1; box-shadow: none;">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 6px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    Preview FR Page
+                </a>
+                <a href="{{ route('admin.payments.create') }}?tag=france" 
+                   class="payments-btn-add" 
+                   style="background-color: #4f46e5; border-color: #4f46e5; color: white;">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 6px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Create France Content
+                </a>
+            </div>
+
+            {{-- Switzerland specific actions --}}
+            <div style="display: flex; gap: 8px;" x-show="tag === 'switzerland'" x-cloak>
+                <a href="{{ route('donate.international') }}?residency=switzerland" 
+                   target="_blank" 
+                   class="payments-btn-add" 
+                   style="background-color: #f8fafc; color: #475569; border: 1px solid #cbd5e1; box-shadow: none;">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 6px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    Preview SW Page
+                </a>
+                <a href="{{ route('admin.payments.create') }}?tag=switzerland" 
+                   class="payments-btn-add" 
+                   style="background-color: #0d9488; border-color: #0d9488; color: white;">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 6px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Create Switzerland Content
+                </a>
+            </div>
+
+            <a href="{{ route('admin.payments.create') }}" class="payments-btn-add" x-show="tag !== 'france' && tag !== 'switzerland'">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
@@ -89,48 +134,6 @@
 
     {{-- Main Content Area --}}
     <div class="payments-content">
-
-        {{-- Residency Selector Tabs --}}
-        <div style="padding: 20px 24px 8px 24px; border-bottom: 1px solid #eef2f6;">
-            <div style="background-color: #f1f5f9; padding: 4px; border-radius: 12px; display: inline-flex; border: 1px solid #e2e8f0; gap: 4px; flex-wrap: wrap;">
-                <button type="button" 
-                        @click="tag = ''; applyFilters()" 
-                        class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
-                        style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
-                        :style="tag === '' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
-                    All Methods
-                </button>
-                <button type="button" 
-                        @click="tag = 'cambodia'; applyFilters()" 
-                        class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
-                        style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
-                        :style="tag === 'cambodia' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
-                    Payment in Cambodia 🇰🇭
-                </button>
-                <button type="button" 
-                        @click="tag = 'france'; applyFilters()" 
-                        class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
-                        style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
-                        :style="tag === 'france' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
-                    Fiscal residency in France 🇫🇷
-                </button>
-                <button type="button" 
-                        @click="tag = 'switzerland'; applyFilters()" 
-                        class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
-                        style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
-                        :style="tag === 'switzerland' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
-                    Fiscal residency in Switzerland 🇨🇭
-                </button>
-
-                <button type="button" 
-                        @click="tag = 'elsewhere'; applyFilters()" 
-                        class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
-                        style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
-                        :style="tag === 'elsewhere' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
-                    Fiscal residency elsewhere 🌐
-                </button>
-            </div>
-        </div>
 
         {{-- Filter Bar --}}
         <div class="payments-filter-bar" style="border-top: none;">
@@ -157,28 +160,7 @@
                 </select>
             </div>
 
-            {{-- France Content Management --}}
-            <div class="payments-fr-actions">
-                <a href="{{ route('admin.website.index') }}"
-                   class="payments-fr-btn primary"
-                   title="Manage France donation page content (contact info, settings)">
-                    <span>🇫🇷</span>
-                    <span>France Content</span>
-                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="opacity: 0.6;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                    </svg>
-                </a>
-                <a href="{{ route('donate.international') }}?residency=france"
-                   target="_blank" rel="noopener"
-                   class="payments-fr-btn secondary"
-                   title="Preview the France international donation page">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                    </svg>
-                    <span>Preview</span>
-                </a>
-            </div>
+
         </div>
 
         {{-- Results Table --}}

@@ -46,7 +46,6 @@
                         </td>
                         <td class="col-name">
                             <div class="payments-name-cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                                <span class="payments-name" style="font-weight: 600;">{{ $method->name }}</span>
                                 @php
                                     $tagColor = match($method->tag) {
                                         'france' => 'background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe;',
@@ -64,6 +63,7 @@
                                 <span class="payments-tag-badge" style="display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; {{ $tagColor }}">
                                     {{ $tagLabel }}
                                 </span>
+                                <span class="payments-name" style="font-weight: 600;">{{ $method->name }}</span>
                                 @if($method->redirect_url)
                                     <span style="font-size: 10px; color: #64748b; font-family: monospace; margin-top: 2px;" title="Redirects to this URL">
                                         🔗 {{ Str::limit($method->redirect_url, 30) }}
