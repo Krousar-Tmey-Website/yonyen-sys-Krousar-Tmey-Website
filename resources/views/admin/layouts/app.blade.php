@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin') — {{ $settings['site_name'] ?? 'Krousar Thmey' }}</title>
+    {{-- CKEditor is bundled via Vite now (npm package) — see resources/js/admin-ckeditor.js --}}
     @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
     @php $_logoPath = $settings['site_logo'] ?? 'images/logo.svg'; $_faviconUrl = str_starts_with($_logoPath, 'http') ? $_logoPath : (str_starts_with($_logoPath, 'logos/') ? asset('storage/' . $_logoPath) : asset($_logoPath)); @endphp
     <link rel="icon" type="image/png" href="{{ $_faviconUrl }}">
@@ -334,31 +335,6 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    @if(!empty($availableLocales) && count($availableLocales) > 1)
-                    <div x-data="{ openLocale: false }" class="relative">
-                        <button @click="openLocale = !openLocale" @click.outside="openLocale = false" type="button"
-                            title="Admin panel language"
-                            class="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#2d6fa3] transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50 border border-gray-200">
-                            @php $currentMeta = collect($availableLocales)->firstWhere('code', $currentLocale); @endphp
-                            <span>{{ $currentMeta['flag'] ?? '🌐' }}</span>
-                            <span class="hidden sm:inline">{{ $currentMeta['native'] ?? strtoupper($currentLocale) }}</span>
-                            <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': openLocale }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <div x-show="openLocale" x-cloak x-transition
-                            class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 z-20">
-                            @foreach($availableLocales as $loc)
-                            <a href="{{ route('lang.switch', $loc['code']) }}"
-                                class="flex items-center gap-2 px-3 py-2 text-xs transition-colors
-                                          {{ $loc['code'] === $currentLocale ? 'bg-gray-50 text-[#2d6fa3] font-semibold' : 'text-gray-600 hover:bg-gray-50' }}">
-                                <span>{{ $loc['flag'] ?? '🌐' }}</span>
-                                <span>{{ $loc['native'] ?? strtoupper($loc['code']) }}</span>
-                            </a>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
                     <a href="{{ route('home') }}" target="_blank"
                         class="flex items-center gap-2 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50 border border-gray-200">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

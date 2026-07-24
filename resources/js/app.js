@@ -2,6 +2,7 @@ import './bootstrap';
 import Alpine from 'alpinejs';
 import focus from '@alpinejs/focus';
 import collapse from '@alpinejs/collapse';
+import { initCKEditors, destroyCKEditors } from './admin-ckeditor';
 
 Alpine.plugin(focus);
 Alpine.plugin(collapse);
@@ -391,10 +392,15 @@ function initializeAdminShell() {
         window.Alpine?.initTree?.(element);
         applyLanguageTabs(element);
         initializeRevealAnimations(element);
+        initCKEditors(element);
     };
 
     const swapFragment = async (currentNode, nextNode) => {
         if (!currentNode || !nextNode) return;
+
+        // Destroy any CKEditor instances bound to the content we're about to
+        // throw away — their host textareas are gone once innerHTML is replaced.
+        destroyCKEditors(currentNode);
 
         const clonedNode = nextNode.cloneNode(true);
         const scripts = extractScripts(clonedNode);
@@ -516,6 +522,7 @@ Alpine.start();
 document.addEventListener('DOMContentLoaded', () => {
     initializeRevealAnimations(document);
     applyLanguageTabs(document);
+    initCKEditors(document);
     initializeAdminShell();
 });
 

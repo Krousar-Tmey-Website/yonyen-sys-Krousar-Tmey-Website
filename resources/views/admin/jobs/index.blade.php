@@ -72,15 +72,11 @@
                 </div>
                 <div x-show="addLang === 'en'">
                     <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
-                    <textarea name="description" rows="3"
-                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                              placeholder="Brief job description...">{{ old('description') }}</textarea>
+                    <x-admin.rich-text name="description" :value="old('description')" lang="en" placeholder="Brief job description..." :rows="3" />
                 </div>
                 <div x-show="addLang === 'fr'" x-cloak>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                    <textarea name="description_fr" rows="3"
-                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                              placeholder="Description sommaire du poste...">{{ old('description_fr') }}</textarea>
+                    <x-admin.rich-text name="description_fr" :value="old('description_fr')" lang="fr" placeholder="Description sommaire du poste..." :rows="3" />
                 </div>
                 {{-- Active checkbox --}}
                 <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 hover:border-gray-300 transition-all">
@@ -274,13 +270,11 @@
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                         <div class="md:col-span-2" x-show="lang === 'en'">
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Description</label>
-                                            <textarea name="description" rows="2"
-                                                      class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $job->description }}</textarea>
+                                            <x-admin.rich-text name="description" :value="$job->description" lang="en" :rows="2" class="w-full text-xs border border-gray-200 rounded-lg" />
                                         </div>
                                         <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                                            <textarea name="description_fr" rows="2"
-                                                      class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $job->description_fr }}</textarea>
+                                            <x-admin.rich-text name="description_fr" :value="$job->description_fr" lang="fr" :rows="2" class="w-full text-xs border border-gray-200 rounded-lg" />
                                         </div>
                                         <div>
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Status</label>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $campaign->title . ' — Krousar Thmey')
-@section('description', Str::limit($campaign->description ?? 'Support our fundraising campaign.', 160))
+@section('description', Str::limit(strip_tags($campaign->description ?? 'Support our fundraising campaign.'), 160))
 
 @section('content')
 {{-- Hero --}}
@@ -24,7 +24,7 @@
                 </span>
                 <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">{{ $campaign->title }}</h1>
                 @if($campaign->description)
-                <p class="mt-4 text-white/70 text-lg leading-relaxed">{{ $campaign->description }}</p>
+                <div class="rich-text-content mt-4 text-white/70 text-lg leading-relaxed">{!! $campaign->description !!}</div>
                 @endif
             </div>
             @if($campaign->image_url)

@@ -118,10 +118,7 @@
                 </div>
 
     <div x-show="lang === 'en'">
-        <textarea id="description" name="description" rows="4"
-            class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none
-                {{ $errors->has('description') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}"
-            placeholder="Short description of the partner organisation">{{ old('description', $isEdit ? $partner->description : '') }}</textarea>
+        <x-admin.rich-text name="description" :value="old('description', $isEdit ? $partner->description : '')" lang="en" placeholder="Short description of the partner organisation" />
         @error('description')
             <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
                 <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
@@ -131,10 +128,7 @@
     </div>
 
     <div x-show="lang === 'fr'" x-cloak>
-        <textarea id="description_fr" name="description_fr" rows="4"
-            class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none
-                {{ $errors->has('description_fr') ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : '' }}"
-            placeholder="Description en français (facultatif)">{{ old('description_fr', $isEdit ? $partner->description_fr : '') }}</textarea>
+        <x-admin.rich-text name="description_fr" :value="old('description_fr', $isEdit ? $partner->description_fr : '')" lang="fr" placeholder="Description en français (facultatif)" />
         @error('description_fr')
             <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
                 <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 9 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>

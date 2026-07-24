@@ -69,16 +69,12 @@
 
             <div x-show="lang === 'en'">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Short Description <span class="text-red-400">*</span></label>
-                <textarea name="description" rows="3"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                          placeholder="Supports fundraising, volunteer engagement, and international partnerships...">{{ old('description', $worldwidePartner->description ?? '') }}</textarea>
+                <x-admin.rich-text name="description" :value="old('description', $worldwidePartner->description ?? '')" lang="en" placeholder="Supports fundraising, volunteer engagement, and international partnerships..." />
             </div>
 
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Short Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <textarea name="description_fr" rows="3"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                          placeholder="Description courte en français...">{{ old('description_fr', $worldwidePartner->description_fr ?? '') }}</textarea>
+                <x-admin.rich-text name="description_fr" :value="old('description_fr', $worldwidePartner->description_fr ?? '')" lang="fr" placeholder="Description courte en français..." />
                 <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English description.</p>
             </div>
 

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $value->localized_title . ' — Our Values | Krousar Thmey')
-@section('description', $value->localized_description ?? 'Learn about Krousar Thmey\'s core values and mission.')
+@section('description', $value->localized_description ? \Illuminate\Support\Str::limit(strip_tags($value->localized_description), 155) : 'Learn about Krousar Thmey\'s core values and mission.')
 
 @section('content')
 
@@ -51,7 +51,7 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
                     @endif
                     @if($value->localized_description)
                     <p class="text-white/60 text-sm bg-white/10 px-3 py-1 rounded-full inline-block">
-                        {{ $value->localized_description }}
+                        {{ \Illuminate\Support\Str::limit(strip_tags($value->localized_description), 80) }}
                     </p>
                     @endif
                 </div>
@@ -82,7 +82,7 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
                 @endif
                 @if($value->localized_description)
                 <p class="text-lg text-white/70 max-w-2xl">
-                    {{ $value->localized_description }}
+                    {{ \Illuminate\Support\Str::limit(strip_tags($value->localized_description), 160) }}
                 </p>
                 @endif
             </div>
@@ -146,14 +146,14 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
                     @if($value->localized_description)
                     <div class="border-l-4 border-[#2d6fa3] pl-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-4">Overview</h3>
-                        <p class="text-gray-600 leading-relaxed text-lg">{{ $value->localized_description }}</p>
+                        <div class="rich-text-content text-gray-600 leading-relaxed text-lg">{!! $value->localized_description !!}</div>
                     </div>
                     @endif
-                    
+
                     @if($value->localized_supporting_description)
                     <div class="border-l-4 border-[#8da83a] pl-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-4">Supporting Description</h3>
-                        <p class="text-gray-600 leading-relaxed text-lg">{{ $value->localized_supporting_description }}</p>
+                        <div class="rich-text-content text-gray-600 leading-relaxed text-lg">{!! $value->localized_supporting_description !!}</div>
                     </div>
                     @endif
                 </div>

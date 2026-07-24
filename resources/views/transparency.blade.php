@@ -109,7 +109,7 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-gray-800 text-sm">{{ $report->localized_title }}</h3>
-                        <p class="text-gray-400 text-xs">{{ $report->year }} • {{ $report->localized_description ?? 'Annual Report' }}</p>
+                        <p class="text-gray-400 text-xs">{{ $report->year }} • {{ $report->localized_description ? \Illuminate\Support\Str::limit(strip_tags($report->localized_description), 60) : 'Annual Report' }}</p>
                     </div>
                 </div>
                 <a href="{{ $report->download_url }}" target="_blank"

@@ -96,7 +96,7 @@
                 <div class="p-5">
                     <h3 class="text-lg font-bold text-gray-800 group-hover:text-[#2d6fa3] transition-colors">{{ $campaign->title }}</h3>
                     @if($campaign->description)
-                    <p class="mt-2 text-sm text-gray-500 line-clamp-2 leading-relaxed">{{ Str::limit($campaign->description, 120) }}</p>
+                    <p class="mt-2 text-sm text-gray-500 line-clamp-2 leading-relaxed">{{ Str::limit(strip_tags($campaign->description), 120) }}</p>
                     @endif
                     <div class="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between text-xs">
                         <span class="text-gray-400">Goal: <strong class="text-gray-600 font-semibold">{{ $campaign->formatted_goal }}</strong></span>

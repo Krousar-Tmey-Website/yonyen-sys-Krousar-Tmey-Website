@@ -45,6 +45,14 @@
                 sort_order: 0,
             };
             this.showModal = true;
+            this.$nextTick(() => this.syncCKEditors());
+        },
+
+        syncCKEditors() {
+            window.setCKEditorContent?.(document.getElementById('cv-description'), this.form.description);
+            window.setCKEditorContent?.(document.getElementById('cv-description-fr'), this.form.description_fr);
+            window.setCKEditorContent?.(document.getElementById('cv-supporting-description'), this.form.supporting_description);
+            window.setCKEditorContent?.(document.getElementById('cv-supporting-description-fr'), this.form.supporting_description_fr);
         },
 
         openEditModal(value) {
@@ -64,6 +72,7 @@
                 sort_order: value.sort_order ?? 0,
             };
             this.showModal = true;
+            this.$nextTick(() => this.syncCKEditors());
         },
 
         closeModal() {
@@ -246,29 +255,29 @@
                     {{-- Description --}}
                     <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
-                        <textarea name="description" x-model="form.description" rows="2"
-                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="Full description..."></textarea>
+                        <x-admin.rich-text id="cv-description" name="description" :value="''" lang="en" :rows="2"
+                            @input="form.description = $event.target.value"
+                            placeholder="Full description..." />
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <textarea name="description_fr" x-model="form.description_fr" rows="2"
-                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="Description complète..."></textarea>
+                        <x-admin.rich-text id="cv-description-fr" name="description_fr" :value="''" lang="fr" :rows="2"
+                            @input="form.description_fr = $event.target.value"
+                            placeholder="Description complète..." />
                     </div>
 
                     {{-- Supporting Description --}}
                     <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <textarea name="supporting_description" x-model="form.supporting_description" rows="2"
-                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="Extra detail shown below the description on the value's page..."></textarea>
+                        <x-admin.rich-text id="cv-supporting-description" name="supporting_description" :value="''" lang="en" :rows="2"
+                            @input="form.supporting_description = $event.target.value"
+                            placeholder="Extra detail shown below the description on the value's page..." />
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Supporting Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <textarea name="supporting_description_fr" x-model="form.supporting_description_fr" rows="2"
-                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="Détail supplémentaire affiché sous la description..."></textarea>
+                        <x-admin.rich-text id="cv-supporting-description-fr" name="supporting_description_fr" :value="''" lang="fr" :rows="2"
+                            @input="form.supporting_description_fr = $event.target.value"
+                            placeholder="Détail supplémentaire affiché sous la description..." />
                     </div>
 
                     {{-- Image --}}

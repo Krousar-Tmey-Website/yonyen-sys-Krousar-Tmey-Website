@@ -52,7 +52,7 @@
                         <a href="{{ route('resource-pages.show', $page->slug) }}" class="group-hover:text-[#1a3c6e] transition-colors">{{ $page->localized_title }}</a>
                     </h3>
                     @if($page->localized_description)
-                    <p class="text-gray-500 text-sm leading-relaxed mb-5 flex-1">{{ $page->localized_description }}</p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-5 flex-1">{{ strip_tags($page->localized_description) }}</p>
                     @else
                     <div class="flex-1"></div>
                     @endif

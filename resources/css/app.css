@@ -520,8 +520,48 @@
         transition: none !important;
         transform: none !important;
     }
-    
+
     #key-figures .group:hover {
         transform: none !important;
     }
+}
+
+/* Rich text content rendered from CKEditor-backed admin fields (description,
+   subtitle, etc). Kept minimal since the surrounding page usually supplies its
+   own text color/size — this only fills in spacing CKEditor's output needs. */
+.rich-text-content p {
+    margin-bottom: 1em;
+}
+.rich-text-content p:last-child {
+    margin-bottom: 0;
+}
+.rich-text-content ul,
+.rich-text-content ol {
+    margin: 1em 0;
+    padding-left: 1.5em;
+}
+.rich-text-content ul {
+    list-style: disc;
+}
+.rich-text-content ol {
+    list-style: decimal;
+}
+.rich-text-content li {
+    margin-bottom: 0.4em;
+}
+.rich-text-content blockquote {
+    border-left: 3px solid currentColor;
+    opacity: 0.85;
+    padding-left: 1em;
+    margin: 1em 0;
+    font-style: italic;
+}
+.rich-text-content a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.rich-text-content h2,
+.rich-text-content h3 {
+    font-weight: 700;
+    margin: 1em 0 0.5em;
 }

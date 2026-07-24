@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $item->localized_title . ' — Krousar Thmey')
-@section('description', $item->localized_short_content ?? $item->localized_title)
+@section('description', $item->localized_short_content ? Str::limit(strip_tags($item->localized_short_content), 155) : $item->localized_title)
 
 @section('content')
 
@@ -50,7 +50,7 @@
                             </div>
                             <h3 class="text-lg font-black text-[#1a3c6e] uppercase tracking-widest m-0">Objective</h3>
                         </div>
-                        <p class="text-gray-700 text-[16px] leading-relaxed relative z-10">{{ $item->localized_objective }}</p>
+                        <div class="rich-text-content text-gray-700 text-[16px] leading-relaxed relative z-10">{!! $item->localized_objective !!}</div>
                     </div>
                     @endif
 
@@ -61,7 +61,7 @@
                             <div class="w-2 h-2 rounded-full bg-[#8da83a]"></div>
                             <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-widest m-0">Our Approach</h3>
                         </div>
-                        <div class="prose prose-lg max-w-none
+                        <div class="rich-text-content prose prose-lg max-w-none
                                     prose-headings:text-[#1a3c6e] prose-headings:font-black
                                     prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-5
                                     prose-h3:text-xl

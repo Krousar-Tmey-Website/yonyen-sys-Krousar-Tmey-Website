@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('core_values', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('headline')->nullable();
             $table->string('icon')->default('⭐');
             $table->text('description')->nullable();
             $table->integer('sort_order')->default(0);

@@ -65,13 +65,13 @@
 
                 <div class="form-group form-group--no-margin" x-show="lang === 'en'">
                     <label class="form-label">Short Description <span class="optional">(optional)</span></label>
-                    <textarea name="description" rows="2" class="form-control textarea @error('description') error @enderror">{{ old('description', $resourcePage->description) }}</textarea>
+                    <x-admin.rich-text name="description" :value="old('description', $resourcePage->description)" lang="en" :rows="2" />
                     @error('description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-group form-group--no-margin" x-show="lang === 'fr'" x-cloak>
                     <label class="form-label">Short Description (French) <span class="optional">(optional)</span></label>
-                    <textarea name="description_fr" rows="2" class="form-control textarea @error('description_fr') error @enderror">{{ old('description_fr', $resourcePage->description_fr) }}</textarea>
+                    <x-admin.rich-text name="description_fr" :value="old('description_fr', $resourcePage->description_fr)" lang="fr" :rows="2" />
                     @error('description_fr')<div class="form-error">{{ $message }}</div>@enderror
                     <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English value.</div>
                 </div>
@@ -111,13 +111,13 @@
 
                 <div class="form-group form-group--no-margin" x-show="lang === 'en'">
                     <label class="form-label">Full Description <span class="optional">(optional)</span></label>
-                    <textarea name="detail_description" rows="6" class="form-control textarea @error('detail_description') error @enderror">{{ old('detail_description', $resourcePage->detail_description) }}</textarea>
+                    <x-admin.rich-text name="detail_description" :value="old('detail_description', $resourcePage->detail_description)" lang="en" :rows="6" />
                     @error('detail_description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-group form-group--no-margin" x-show="lang === 'fr'" x-cloak>
                     <label class="form-label">Full Description (French) <span class="optional">(optional)</span></label>
-                    <textarea name="detail_description_fr" rows="6" class="form-control textarea @error('detail_description_fr') error @enderror">{{ old('detail_description_fr', $resourcePage->detail_description_fr) }}</textarea>
+                    <x-admin.rich-text name="detail_description_fr" :value="old('detail_description_fr', $resourcePage->detail_description_fr)" lang="fr" :rows="6" />
                     @error('detail_description_fr')<div class="form-error">{{ $message }}</div>@enderror
                     <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English value.</div>
                 </div>

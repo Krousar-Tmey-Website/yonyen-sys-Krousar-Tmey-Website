@@ -199,7 +199,7 @@
                             </span>
                         </div>
                         @if($item->description)
-                        <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $item->description }}</p>
+                        <div class="rich-text-content text-gray-500 text-sm leading-relaxed flex-1">{!! $item->description !!}</div>
                         @endif
                         <div class="mt-4">
                             @if($item->external_url)

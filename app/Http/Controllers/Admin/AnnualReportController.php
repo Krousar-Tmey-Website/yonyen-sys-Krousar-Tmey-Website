@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnnualReport;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+
 
 class AnnualReportController extends Controller
 {
@@ -38,6 +40,8 @@ class AnnualReportController extends Controller
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'title_fr' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
             'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
             'file'  => ['required', 'file', 'mimes:pdf', 'max:20480'],
         ]);
@@ -68,6 +72,8 @@ class AnnualReportController extends Controller
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'title_fr' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
             'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
             'file'  => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
         ]);

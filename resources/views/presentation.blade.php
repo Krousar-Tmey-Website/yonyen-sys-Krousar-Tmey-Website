@@ -186,7 +186,7 @@
                         <div class="flex-1">
                             <p class="text-sm font-bold text-gray-900 leading-snug mb-2">{{ $stat->localized_label }}</p>
                             @if($stat->localized_description)
-                            <p class="text-xs text-gray-500 leading-relaxed">{{ $stat->localized_description }}</p>
+                            <p class="text-xs text-gray-500 leading-relaxed">{{ strip_tags($stat->localized_description) }}</p>
                             @endif
                         </div>
                     </div>

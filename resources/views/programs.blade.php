@@ -143,9 +143,9 @@
                                         </div>
                                         <h3 class="text-sm font-black text-[#e8a020] uppercase tracking-widest">Objective</h3>
                                     </div>
-                                    <p class="text-gray-800 leading-relaxed text-lg md:text-[1.15rem] font-medium pl-1">
-                                        {{ $program->localized_description }}
-                                    </p>
+                                    <div class="rich-text-content text-gray-800 leading-relaxed text-lg md:text-[1.15rem] font-medium pl-1">
+                                        {!! $program->localized_description !!}
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -153,8 +153,8 @@
                         @if($program->localized_full_description)
                             <div class="mb-10 bg-white/50 backdrop-blur rounded-3xl p-6 border border-gray-100 shadow-sm" data-reveal="{{ $isEven ? 'right' : 'left' }}" style="--reveal-delay: 200">
                                 <h3 class="text-sm font-black text-[#1a3c6e] uppercase tracking-widest mb-4">Program Details</h3>
-                                <div class="prose prose-lg prose-p:text-gray-600 prose-p:leading-loose max-w-none">
-                                    <p class="whitespace-pre-line">{{ $program->localized_full_description }}</p>
+                                <div class="rich-text-content text-gray-600 leading-loose">
+                                    {!! $program->localized_full_description !!}
                                 </div>
                             </div>
                         @endif
@@ -214,7 +214,7 @@
                                 </svg>
                             </button>
                             <div x-show="open" class="px-8 pb-8 pt-4 border-t border-white/10" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-                                <p class="text-white/90 leading-loose text-lg whitespace-pre-line italic font-medium drop-shadow-sm">{{ $program->localized_testimony_story }}</p>
+                                <div class="rich-text-content text-white/90 leading-loose text-lg italic font-medium drop-shadow-sm">{!! $program->localized_testimony_story !!}</div>
                             </div>
                         </div>
                     </div>
@@ -246,8 +246,7 @@
                                         </div>
                                     </div>
                                     <div class="p-8 flex flex-col flex-1 relative">
-                                            <p class="text-gray-600 text-[15px] leading-relaxed flex-1 mb-8">{{ Str::limit($project->localized_description, 130) }}</p>
-                                        @endif
+                                            <p class="text-gray-600 text-[15px] leading-relaxed flex-1 mb-8">{{ Str::limit(strip_tags($project->localized_description), 130) }}</p>
                                         <div class="mt-auto flex items-center justify-between">
                                             <span class="inline-flex items-center gap-2 text-[#2d6fa3] text-xs font-black uppercase tracking-widest group-hover:text-[#1a3c6e] transition-colors duration-300">
                                                 Read More
@@ -301,7 +300,7 @@
                             @endif
 
                             <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-wide mb-3 relative z-10">{{ $program->localized_title }}</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line relative z-10 font-medium">{{ $program->localized_description }}</p>
+                            <div class="rich-text-content text-gray-600 text-sm leading-relaxed relative z-10 font-medium">{!! $program->localized_description !!}</div>
                         </div>
                     @endforeach
                 </div>
@@ -350,7 +349,7 @@
                                 <h3 class="text-lg font-black text-[#1a3c6e] mb-3 uppercase tracking-wide group-hover:text-[#2d6fa3] transition-colors">{{ $item->localized_title }}</h3>
 
                                 @if($item->short_content)
-                                    <p class="text-gray-600 text-sm font-medium leading-relaxed flex-1 mb-8">{{ Str::limit($item->localized_short_content, 110) }}</p>
+                                    <p class="text-gray-600 text-sm font-medium leading-relaxed flex-1 mb-8">{{ Str::limit(strip_tags($item->localized_short_content), 110) }}</p>
                                 @endif
 
                                 <div class="mt-auto flex items-center justify-between pt-6 border-t border-gray-100">

@@ -3,7 +3,7 @@
 @php use Illuminate\Support\Str; @endphp
 
 @section('title', $page->localized_title . ' — Krousar Thmey')
-@section('description', $page->localized_description ?? $page->localized_title)
+@section('description', $page->localized_description ? \Illuminate\Support\Str::limit(strip_tags($page->localized_description), 155) : $page->localized_title)
 
 @section('content')
 
@@ -32,8 +32,8 @@
 
         {{-- Description --}}
         @if($page->localized_detail_description)
-        <div data-reveal style="--reveal-delay: 180" class="prose prose-lg max-w-none text-justify prose-p:text-gray-700 mb-8">
-            {!! nl2br(e($page->localized_detail_description)) !!}
+        <div data-reveal style="--reveal-delay: 180" class="rich-text-content text-justify text-gray-700 mb-8">
+            {!! $page->localized_detail_description !!}
         </div>
         @endif
 

@@ -80,14 +80,12 @@
             </div>
             <div class="card-body">
                 <div class="form-group" x-show="lang === 'en'">
-                    <textarea name="description" rows="3" class="form-control textarea"
-                              placeholder="Write a short description or synopsis for the book...">{{ old('description', $book->description) }}</textarea>
+                    <x-admin.rich-text name="description" :value="old('description', $book->description)" lang="en" :rows="3" placeholder="Write a short description or synopsis for the book..." />
                     @error('description')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-group" x-show="lang === 'fr'" x-cloak>
-                    <textarea name="description_fr" rows="3" class="form-control textarea"
-                              placeholder="RÃ©digez une courte description ou un rÃ©sumÃ© du livre en franÃ§ais...">{{ old('description_fr', $book->description_fr) }}</textarea>
+                    <x-admin.rich-text name="description_fr" :value="old('description_fr', $book->description_fr)" lang="fr" :rows="3" placeholder="Rédigez une courte description ou un résumé du livre en français..." />
                     @error('description_fr')<div class="form-error">{{ $message }}</div>@enderror
                     <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English description.</div>
                 </div>

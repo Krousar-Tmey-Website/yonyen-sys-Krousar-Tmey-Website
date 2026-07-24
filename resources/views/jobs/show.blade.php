@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $jobOpportunity->localized_title . ' — Krousar Thmey')
-@section('description', $jobOpportunity->localized_description ?? 'Job opportunity at Krousar Thmey')
+@section('description', $jobOpportunity->localized_description ? \Illuminate\Support\Str::limit(strip_tags($jobOpportunity->localized_description), 155) : 'Job opportunity at Krousar Thmey')
 
 @section('content')
 
@@ -90,8 +90,8 @@
                     </h2>
                     
                     @if($jobOpportunity->description)
-                    <div class="text-slate-600 text-sm leading-relaxed whitespace-pre-line prose max-w-none">
-                        {{ $jobOpportunity->localized_description }}
+                    <div class="rich-text-content text-slate-600 text-sm leading-relaxed">
+                        {!! $jobOpportunity->localized_description !!}
                     </div>
                     @else
                     <p class="text-slate-400 text-sm italic">No description provided for this opening.</p>

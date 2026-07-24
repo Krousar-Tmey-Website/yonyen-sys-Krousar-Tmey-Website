@@ -200,7 +200,7 @@ $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
                     'year' => $award->year,
                     'image' => $award->image_url,
                     'title' => $award->organization ? trim($award->organization) : $award->localized_title,
-                    'description' => trim(($award->recipient ? $award->recipient . ' ' : '') . ($award->localized_description ?? '')),
+                    'description' => trim(($award->recipient ? $award->recipient . ' ' : '') . strip_tags($award->localized_description ?? '')),
                     'buttonText' => $cta,
                     'buttonLink' => $link,
                 ];
@@ -501,11 +501,11 @@ $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
                     @continue(!$partner->logo_url)
                 <div class="bg-white rounded-xl border border-gray-100 p-8 flex items-center justify-center aspect-[3/2] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
                     @if($partner->website_url)
-                    <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="w-full h-full flex items-center justify-center" title="{{ $partner->localized_description ?? $partner->name }}">
+                    <a href="{{ $partner->website_url }}" target="_blank" rel="noopener noreferrer" class="w-full h-full flex items-center justify-center" title="{{ $partner->localized_description ? strip_tags($partner->localized_description) : $partner->name }}">
                         <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
                     </a>
                     @else
-                    <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" title="{{ $partner->localized_description ?? $partner->name }}" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                    <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" title="{{ $partner->localized_description ? strip_tags($partner->localized_description) : $partner->name }}" class="max-h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
                     @endif
                 </div>
                 @endforeach

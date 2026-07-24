@@ -55,12 +55,12 @@
 
                     <div x-show="lang === 'en'">
                         <label class="mb-2 block text-sm font-semibold text-slate-700">Objective</label>
-                        <textarea name="objective" rows="4" class="{{ $textareaClass }}" placeholder="e.g. To protect the health of Cambodian children...">{{ $fieldValue('objective') }}</textarea>
+                        <x-admin.rich-text name="objective" :value="$fieldValue('objective')" lang="en" :rows="4" placeholder="e.g. To protect the health of Cambodian children..." />
                         @error('objective')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
                         <label class="mb-2 block text-sm font-semibold text-slate-700">Objective (French) <span class="font-normal text-slate-400">(optional)</span></label>
-                        <textarea name="objective_fr" rows="4" class="{{ $textareaClass }}" placeholder="Objectif en francais">{{ $fieldValue('objective_fr') }}</textarea>
+                        <x-admin.rich-text name="objective_fr" :value="$fieldValue('objective_fr')" lang="fr" :rows="4" placeholder="Objectif en francais" />
                         <p class="mt-1.5 text-xs text-slate-400">Shown to French-language visitors.</p>
                         @error('objective_fr')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                     </div>
@@ -68,24 +68,24 @@
 
                 <div x-show="lang === 'en'">
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Short Content <span class="font-normal text-slate-400">(card preview)</span></label>
-                    <textarea name="short_content" rows="4" class="{{ $textareaClass }}" placeholder="Brief description that appears on the card listing...">{{ $fieldValue('short_content') }}</textarea>
+                    <x-admin.rich-text name="short_content" :value="$fieldValue('short_content')" lang="en" :rows="4" placeholder="Brief description that appears on the card listing..." />
                     @error('short_content')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                 </div>
                 <div x-show="lang === 'fr'" x-cloak>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Short Content (French) <span class="font-normal text-slate-400">(optional)</span></label>
-                    <textarea name="short_content_fr" rows="4" class="{{ $textareaClass }}" placeholder="Breve description en francais">{{ $fieldValue('short_content_fr') }}</textarea>
+                    <x-admin.rich-text name="short_content_fr" :value="$fieldValue('short_content_fr')" lang="fr" :rows="4" placeholder="Breve description en francais" />
                     <p class="mt-1.5 text-xs text-slate-400">Leave blank to reuse the English card text.</p>
                     @error('short_content_fr')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                 </div>
 
                 <div x-show="lang === 'en'">
                     <label class="mb-2 block text-sm font-semibold text-slate-700">The Project <span class="font-normal text-slate-400">(detail content)</span></label>
-                    <textarea name="detail_content" rows="11" class="{{ $textareaClass }} font-mono" placeholder="Full content. HTML is supported.">{{ $fieldValue('detail_content') }}</textarea>
+                    <x-admin.rich-text name="detail_content" :value="$fieldValue('detail_content')" lang="en" :rows="11" placeholder="Full content." />
                     @error('detail_content')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                 </div>
                 <div x-show="lang === 'fr'" x-cloak>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">The Project (French) <span class="font-normal text-slate-400">(optional)</span></label>
-                    <textarea name="detail_content_fr" rows="11" class="{{ $textareaClass }} font-mono" placeholder="Contenu complet en francais. HTML pris en charge.">{{ $fieldValue('detail_content_fr') }}</textarea>
+                    <x-admin.rich-text name="detail_content_fr" :value="$fieldValue('detail_content_fr')" lang="fr" :rows="11" placeholder="Contenu complet en francais." />
                     <p class="mt-1.5 text-xs text-slate-400">Leave blank to reuse the English detail content.</p>
                     @error('detail_content_fr')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                 </div>

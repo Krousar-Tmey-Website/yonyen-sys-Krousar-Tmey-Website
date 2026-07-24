@@ -49,7 +49,7 @@
                         {!! nl2br(e($slide->localized_title)) !!}
                     </h1>
                     @if($slide->localized_subtitle)
-                    <p class="text-white/80 text-lg mb-8 leading-relaxed">{{ $slide->localized_subtitle }}</p>
+                    <div class="rich-text-content text-white/80 text-lg mb-8 leading-relaxed">{!! $slide->localized_subtitle !!}</div>
                     @endif
 
                     @if($slide->localized_cta_primary_text || $slide->localized_cta_secondary_text)
@@ -843,7 +843,7 @@
                 <div class="p-6 flex flex-col flex-1">
                     <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $program->localized_title }}</h3>
                     <p class="text-gray-600 text-sm leading-relaxed mb-5 line-clamp-3">
-                        {{ $program->localized_description }}
+                        {{ strip_tags($program->localized_description) }}
                     </p>
                     <ul class="space-y-1.5 mb-6">
                         @if($program->stats && count($program->stats) > 1)
@@ -1264,10 +1264,8 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
                 {{-- Description --}}
                 @if($section->localized_description)
-                <div class="text-gray-600 leading-relaxed space-y-4 mb-8">
-                    @foreach(explode("\n\n", $section->localized_description) as $paragraph)
-                    <p>{{ $paragraph }}</p>
-                    @endforeach
+                <div class="rich-text-content text-gray-600 leading-relaxed mb-8">
+                    {!! $section->localized_description !!}
                 </div>
                 @endif
 
@@ -1319,7 +1317,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                 <img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset('storage/' . $project->image) }}" class="w-full h-40 object-cover rounded-xl mb-5 group-hover:opacity-90 transition-opacity relative z-0">
                 @endif
                 <h3 class="text-xl font-bold text-[#1a3c6e] mb-3 relative z-0">{{ $project->localized_title }}</h3>
-                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5 flex-1 relative z-0">{{ $project->localized_description }}</p>
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5 flex-1 relative z-0">{{ strip_tags($project->localized_description) }}</p>
                 
                 <div class="mt-auto flex items-center justify-between border-t border-gray-200/50 pt-5">
                     <span class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm group-hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300 pointer-events-none">
@@ -1443,7 +1441,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                         <p class="text-xs text-gray-500">{{ $testimony->localized_role }}</p>
                     </div>
                 </div>
-                <p class="text-gray-600 leading-relaxed text-sm italic line-clamp-4 relative z-10">"{{ $testimony->localized_content }}"</p>
+                <p class="text-gray-600 leading-relaxed text-sm italic line-clamp-4 relative z-10">"{{ strip_tags($testimony->localized_content) }}"</p>
             </div>
             @endforeach
         </div>

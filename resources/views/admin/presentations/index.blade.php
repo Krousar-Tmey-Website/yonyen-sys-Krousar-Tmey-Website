@@ -164,6 +164,11 @@
                  this.statIsActive = true;
                  this.statIsFeatured = false;
                  this.showStatsModal = true;
+                 this.$nextTick(() => this.syncStatCKEditors());
+             },
+             syncStatCKEditors() {
+                 window.setCKEditorContent?.(document.getElementById('stat-description'), this.statDescription);
+                 window.setCKEditorContent?.(document.getElementById('stat-description-fr'), this.statDescriptionFr);
              },
              openEditModal(stat) {
                  this.editMode = true;
@@ -179,6 +184,7 @@
                  this.statIsActive = !!stat.is_active;
                  this.statIsFeatured = !!stat.is_featured;
                  this.showStatsModal = true;
+                 this.$nextTick(() => this.syncStatCKEditors());
              }
          }">
         <div class="bg-white rounded-2xl border border-gray-100 p-6">
@@ -392,15 +398,15 @@
                             {{-- Description --}}
                             <div x-show="lang === 'en'">
                                 <label class="block text-xs font-medium text-gray-600 mb-1.5">Description <span class="text-gray-400 font-normal">(optional)</span></label>
-                                <textarea name="description" x-model="statDescription" rows="2"
-                                          class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow resize-none"
-                                          placeholder="Short supporting detail..."></textarea>
+                                <x-admin.rich-text id="stat-description" name="description" :value="''" lang="en" :rows="2"
+                                    @input="statDescription = $event.target.value"
+                                    placeholder="Short supporting detail..." />
                             </div>
                             <div x-show="lang === 'fr'" x-cloak>
                                 <label class="block text-xs font-medium text-gray-600 mb-1.5">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                                <textarea name="description_fr" x-model="statDescriptionFr" rows="2"
-                                          class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow resize-none"
-                                          placeholder="Détail supplémentaire..."></textarea>
+                                <x-admin.rich-text id="stat-description-fr" name="description_fr" :value="''" lang="fr" :rows="2"
+                                    @input="statDescriptionFr = $event.target.value"
+                                    placeholder="Détail supplémentaire..." />
                             </div>
 
                             {{-- Sort order + Active --}}

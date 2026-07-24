@@ -59,12 +59,12 @@
 
                 <div x-show="lang === 'en'">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5 mt-4">Short Description</label>
-                    <textarea name="description" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description') }}</textarea>
+                    <x-admin.rich-text name="description" :value="old('description')" lang="en" :rows="2" />
                     <p class="mt-1 text-xs text-gray-400">Shown as subtitle in the page header banner.</p>
                 </div>
                 <div x-show="lang === 'fr'" x-cloak>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5 mt-4">Short Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                    <textarea name="description_fr" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description_fr') }}</textarea>
+                    <x-admin.rich-text name="description_fr" :value="old('description_fr')" lang="fr" :rows="2" />
                     <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
                 </div>
             </div>
@@ -107,21 +107,21 @@
 
             <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective</label>
-                <textarea name="objective" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('objective') }}</textarea>
+                <x-admin.rich-text name="objective" :value="old('objective')" lang="en" :rows="2" />
             </div>
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <textarea name="objective_fr" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('objective_fr') }}</textarea>
+                <x-admin.rich-text name="objective_fr" :value="old('objective_fr')" lang="fr" :rows="2" />
                 <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
 
             <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content (HTML Supported)</label>
-                <textarea name="content" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Full content (HTML is supported)...">{{ old('content') }}</textarea>
+                <x-admin.rich-text name="content" :value="old('content')" lang="en" :rows="5" placeholder="Full content..." />
             </div>
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Project Content (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <textarea name="content_fr" rows="5" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Contenu complet (HTML pris en charge)...">{{ old('content_fr') }}</textarea>
+                <x-admin.rich-text name="content_fr" :value="old('content_fr')" lang="fr" :rows="5" placeholder="Contenu complet..." />
                 <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
 
@@ -194,11 +194,11 @@
             </div>
             <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Story / Quote</label>
-                <textarea name="testimony_story" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ old('testimony_story') }}</textarea>
+                <x-admin.rich-text name="testimony_story" :value="old('testimony_story')" lang="en" :rows="4" />
             </div>
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Story / Quote (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <textarea name="testimony_story_fr" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ old('testimony_story_fr') }}</textarea>
+                <x-admin.rich-text name="testimony_story_fr" :value="old('testimony_story_fr')" lang="fr" :rows="4" />
                 <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
         </div>
