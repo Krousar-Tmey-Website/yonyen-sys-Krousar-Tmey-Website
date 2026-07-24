@@ -34,23 +34,51 @@
 <section class="pt-16 pb-20 bg-[#f8f9fc]">
     <div class="max-w-[1040px] mx-auto px-4 sm:px-6 2xl:px-0">
 
-        {{-- Mode Switcher Tabs --}}
-        <div class="flex justify-center gap-4 mb-10">
+        {{-- Unified Tabs Switcher --}}
+        <div class="bg-white rounded-2xl border border-slate-200/80 p-1.5 shadow-2xs mb-10 flex flex-wrap lg:flex-nowrap justify-between gap-1 max-w-[1040px] mx-auto">
+            
+            {{-- Tab: Cambodia --}}
             <a href="{{ route('donate') }}"
-               class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-white border border-slate-200 text-slate-650 hover:bg-slate-50 flex items-center gap-2">
-                <svg class="w-4 h-4 text-slate-450" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                Local Donation (Cambodia)
+               class="flex-1 min-w-[200px] flex items-center justify-center gap-2.5 px-4 py-3 text-xs font-black rounded-xl transition-all duration-200 select-none text-slate-650 hover:bg-slate-50 hover:text-slate-800">
+                <span class="text-base leading-none">🇰🇭</span>
+                <span class="uppercase tracking-wider">Payment in Cambodia</span>
             </a>
-            <a href="{{ route('donate.international') }}"
-               class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-[#2d6fa3] text-white shadow-[0_8px_18px_rgba(45,111,163,0.25)] flex items-center gap-2">
-                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
-                </svg>
-                International Donation
+
+            {{-- Tab: France --}}
+            <a href="{{ route('donate.international') }}?residency=france"
+               @click.prevent="residency = 'france'; window.history.replaceState({}, '', '?residency=france')"
+               :class="residency === 'france' ? 'bg-[#2d6fa3] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'"
+               class="flex-1 min-w-[200px] flex items-center justify-center gap-2.5 px-4 py-3 text-xs font-black rounded-xl transition-all duration-200 select-none">
+                <span class="text-base leading-none">🇫🇷</span>
+                <span class="uppercase tracking-wider">Fiscal residency in France</span>
             </a>
+
+            {{-- Tab: Switzerland --}}
+            <a href="{{ route('donate.international') }}?residency=switzerland"
+               @click.prevent="residency = 'switzerland'; window.history.replaceState({}, '', '?residency=switzerland')"
+               :class="residency === 'switzerland' ? 'bg-[#2d6fa3] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'"
+               class="flex-1 min-w-[200px] flex items-center justify-center gap-2.5 px-4 py-3 text-xs font-black rounded-xl transition-all duration-200 select-none">
+                <span class="text-base leading-none">🇨🇭</span>
+                <span class="uppercase tracking-wider">Fiscal residency in Switzerland</span>
+            </a>
+
+            {{-- Tab: Elsewhere --}}
+            <a href="{{ route('donate.international') }}?residency=elsewhere"
+               @click.prevent="residency = 'elsewhere'; window.history.replaceState({}, '', '?residency=elsewhere')"
+               :class="residency === 'elsewhere' ? 'bg-[#2d6fa3] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'"
+               class="flex-1 min-w-[200px] flex items-center justify-center gap-2.5 px-4 py-3 text-xs font-black rounded-xl transition-all duration-200 select-none">
+                <span class="text-base leading-none">🌍</span>
+                <span class="uppercase tracking-wider">Fiscal residency elsewhere</span>
+            </a>
+            
+            {{-- Tab: Campaigns --}}
+            @if(Route::has('campaigns.index'))
+            <a href="{{ route('campaigns.index') }}"
+               class="flex-none flex items-center justify-center gap-2 px-4 py-3 text-xs font-black rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800 select-none">
+                <span class="text-base leading-none">📣</span>
+                <span class="uppercase tracking-wider">Campaigns</span>
+            </a>
+            @endif
         </div>
 
         {{-- Twin Columns Layout --}}
