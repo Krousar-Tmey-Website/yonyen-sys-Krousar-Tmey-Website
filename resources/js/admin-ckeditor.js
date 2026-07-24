@@ -19,43 +19,235 @@ import {
     Heading,
     Link,
     List,
+    ListProperties,
     BlockQuote,
-    Font,
+    FontFamily,
+    FontSize,
+    FontColor,
+    FontBackgroundColor,
     Alignment,
+    Table,
+    TableToolbar,
+    RemoveFormat,
+    HorizontalLine,
+    Indent,
+    IndentBlock,
+    Plugin,
+    createDropdown,
+    View
 } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
+import 'ckeditor5/translations/fr.js';
 
 const editorPromises = new WeakMap();
 
+class CustomFontSize extends Plugin {
+    init() {
+        const editor = this.editor;
+        editor.ui.componentFactory.add('customFontSize', locale => {
+            const dropdownView = createDropdown(locale);
+            const command = editor.commands.get('fontSize');
+
+            dropdownView.bind('isEnabled').to(command);
+            
+            dropdownView.buttonView.set({
+                withText: true,
+                tooltip: 'Font Size',
+                class: 'ck-custom-font-size-btn'
+            });
+
+            dropdownView.buttonView.bind('label').to(command, 'value', value => {
+                return value ? value.replace('px', '') : 'Size';
+            });
+
+            class FormView extends View {
+                constructor(locale) {
+                    super(locale);
+                    this.presetSizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 48, 72];
+
+                    this.setTemplate({
+                        tag: 'div',
+                        attributes: {
+                            class: ['ck', 'ck-custom-font-size-panel'],
+                            style: { padding: '10px', minWidth: '180px' }
+                        },
+                        children: [
+                            {
+                                tag: 'form',
+                                attributes: { style: { display: 'flex', gap: '5px', marginBottom: '10px' } },
+                                children: [
+                                    {
+                                        tag: 'input',
+                                        attributes: {
+                                            type: 'text',
+                                            placeholder: 'e.g. 24',
+                                            class: ['ck', 'ck-input', 'ck-input-text'],
+                                            style: { width: '80px', flexGrow: '1' }
+                                        }
+                                    },
+                                    {
+                                        tag: 'button',
+                                        attributes: {
+                                            type: 'submit',
+                                            class: ['ck', 'ck-button', 'ck-button_save']
+                                        },
+                                        children: [{ tag: 'span', attributes: { class: ['ck', 'ck-button__label'] }, children: ['Apply'] }]
+                                    }
+                                ]
+                            },
+                            {
+                                tag: 'div',
+                                attributes: {
+                                    class: 'preset-grid',
+                                    style: { 
+                                        display: 'grid', 
+                                        gridTemplateColumns: 'repeat(4, 1fr)', 
+                                        gap: '2px', 
+                                        borderTop: '1px solid var(--ck-color-base-border)', 
+                                        paddingTop: '10px' 
+                                    }
+                                },
+                                children: []
+                            }
+                        ]
+                    });
+                }
+                
+                render() {
+                    super.render();
+                    const form = this.element.querySelector('form');
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.fire('submit', this.inputValue);
+                    });
+
+                    const grid = this.element.querySelector('.preset-grid');
+                    this.presetSizes.forEach(size => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'ck ck-button';
+                        btn.style.padding = '4px 0';
+                        btn.style.textAlign = 'center';
+                        btn.style.minHeight = '24px';
+                        
+                        const span = document.createElement('span');
+                        span.className = 'ck ck-button__label';
+                        span.textContent = size;
+                        btn.appendChild(span);
+
+                        btn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            this.fire('submit', size.toString());
+                        });
+                        grid.appendChild(btn);
+                    });
+                }
+                
+                get inputValue() { return this.element.querySelector('input').value; }
+                set inputValue(val) { this.element.querySelector('input').value = val; }
+                focus() { this.element.querySelector('input').focus(); }
+            }
+
+            const formView = new FormView(locale);
+            dropdownView.panelView.children.add(formView);
+
+            formView.on('submit', (evt, size) => {
+                dropdownView.isOpen = false;
+                editor.editing.view.focus();
+
+                if (size) {
+                    const value = isNaN(size) ? size : size + 'px';
+                    setTimeout(() => {
+                        editor.execute('fontSize', { value });
+                    }, 10);
+                }
+            });
+
+            dropdownView.on('change:isOpen', () => {
+                const selection = editor.model.document.selection;
+                
+                if (dropdownView.isOpen) {
+                    // When opening, turn the current selection into a 'fake' selection 
+                    // so it stays highlighted even when the input steals browser focus.
+                    if (!selection.isCollapsed) {
+                        const ranges = Array.from(selection.getRanges());
+                        editor.model.change(writer => {
+                            writer.setSelection(ranges, { backward: selection.isBackward, fake: true });
+                        });
+                    }
+
+                    const currentVal = command.value ? command.value.replace('px', '') : '';
+                    formView.inputValue = currentVal;
+                    setTimeout(() => formView.focus(), 50);
+                } else {
+                    // When closing, remove the 'fake' flag so it becomes a normal native selection again
+                    if (selection.isFake) {
+                        const ranges = Array.from(selection.getRanges());
+                        editor.model.change(writer => {
+                            writer.setSelection(ranges, { backward: selection.isBackward });
+                        });
+                    }
+                }
+            });
+
+            return dropdownView;
+        });
+    }
+}
+
 const PLUGINS = [
     Essentials, Paragraph, Bold, Italic, Underline, Strikethrough,
-    Heading, Link, List, BlockQuote, Font, Alignment,
+    Heading, Link, List, ListProperties, BlockQuote, FontFamily, FontSize, CustomFontSize, FontColor, FontBackgroundColor,
+    Alignment, Table, TableToolbar, RemoveFormat, HorizontalLine, Indent, IndentBlock,
 ];
 
 const TOOLBAR = [
     'heading', '|',
-    'fontFamily', 'fontSize', '|',
-    'bold', 'italic', 'underline', 'strikethrough', '|',
+    'fontFamily', 'customFontSize', '|',
+    'bold', 'italic', 'underline', 'strikethrough', 'removeFormat', '|',
     'fontColor', 'fontBackgroundColor', '|',
-    'alignment', 'bulletedList', 'numberedList', 'blockQuote', 'link', '|',
+    'alignment', 'bulletedList', 'numberedList', 'outdent', 'indent', 'blockQuote', '|',
+    'insertTable', 'horizontalLine', 'link', '|',
     'undo', 'redo',
 ];
 
-const FONT_SIZES = [10, 12, 14, 'default', 18, 20, 24, 28, 32, 40];
+const FONT_SIZES = [
+    8, 9, 10, 11, 12, 13, 'default', 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 30, 32, 34, 36, 40, 44, 48, 56, 64, 72
+];
+
+const FONT_FAMILIES = [
+    'default',
+    'Inter, sans-serif',
+    'Arial, Helvetica, sans-serif',
+    'Georgia, serif',
+    'Times New Roman, Times, serif',
+    'Courier New, Courier, monospace',
+    'Verdana, Geneva, sans-serif',
+    'Trebuchet MS, Helvetica, sans-serif',
+    'Tahoma, Geneva, sans-serif',
+    'Playfair Display, serif',
+    'Montserrat, sans-serif',
+    'Roboto, sans-serif',
+];
 
 const FONT_COLORS = [
     { color: '#000000', label: 'Black' },
+    { color: '#1a1a1a', label: 'Dark Charcoal' },
     { color: '#4a4a4a', label: 'Dark Grey' },
-    { color: '#8a8a8a', label: 'Grey' },
+    { color: '#71717a', label: 'Zinc Grey' },
+    { color: '#a1a1aa', label: 'Light Grey' },
     { color: '#ffffff', label: 'White', hasBorder: true },
-    { color: '#e03131', label: 'Red' },
-    { color: '#e8590c', label: 'Orange' },
-    { color: '#e8a020', label: 'Gold' },
-    { color: '#2f9e44', label: 'Green' },
-    { color: '#1d4e7a', label: 'Navy' },
-    { color: '#2d6fa3', label: 'Blue' },
-    { color: '#8da83a', label: 'Olive' },
-    { color: '#9c36b5', label: 'Purple' },
+    { color: '#1a3c6e', label: 'Krousar Primary Dark' },
+    { color: '#2d6fa3', label: 'Krousar Blue' },
+    { color: '#0284c7', label: 'Sky Blue' },
+    { color: '#0d9488', label: 'Teal' },
+    { color: '#16a34a', label: 'Green' },
+    { color: '#854d0e', label: 'Bronze Gold' },
+    { color: '#ca8a04', label: 'Golden Yellow' },
+    { color: '#ea580c', label: 'Orange' },
+    { color: '#dc2626', label: 'Red' },
+    { color: '#9333ea', label: 'Purple' },
+    { color: '#db2777', label: 'Pink' },
 ];
 
 function createEditor(textarea) {
@@ -73,19 +265,19 @@ function createEditor(textarea) {
         language: lang,
         placeholder,
         fontSize: { options: FONT_SIZES, supportAllValues: true },
-        fontFamily: {
-            options: [
-                'default',
-                'Inter, sans-serif',
-                'Arial, Helvetica, sans-serif',
-                'Georgia, serif',
-                'Times New Roman, serif',
-                'Courier New, monospace',
-            ],
-            supportAllValues: true,
+        fontFamily: { options: FONT_FAMILIES, supportAllValues: true },
+        fontColor: { colors: FONT_COLORS, columns: 6, colorPicker: { format: 'hex' } },
+        fontBackgroundColor: { colors: FONT_COLORS, columns: 6, colorPicker: { format: 'hex' } },
+        list: {
+            properties: {
+                styles: true,
+                startIndex: true,
+                reversed: true
+            }
         },
-        fontColor: { colors: FONT_COLORS, columns: 6 },
-        fontBackgroundColor: { colors: FONT_COLORS, columns: 6 },
+        table: {
+            contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+        }
     })
         .then((editor) => {
             editor.model.document.on('change:data', () => {

@@ -135,9 +135,7 @@
             {{-- Hero Subtitle --}}
             <div>
                 <label for="history_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Subtitle</label>
-                <textarea id="history_banner_subtitle" name="history_banner_subtitle" rows="2"
-                          oninput="document.getElementById('preview-subtitle').textContent = this.value"
-                          class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $bannerSubtitle }}</textarea>
+                <x-admin.rich-text id="history_banner_subtitle" name="history_banner_subtitle" :value="$bannerSubtitle" lang="en" :rows="2" />
             </div>
 
             <div class="flex items-center gap-3 pt-1">

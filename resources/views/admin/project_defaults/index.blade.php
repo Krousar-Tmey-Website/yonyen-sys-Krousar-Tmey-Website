@@ -89,11 +89,7 @@
                 </div>
                 <div class="md:col-span-2">
                     <label for="project_default_make_difference_text" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text</label>
-                    <textarea id="project_default_make_difference_text"
-                              name="project_default_make_difference_text"
-                              rows="4"
-                              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                              placeholder="e.g. $50 - food expenses per child per month">{{ old('project_default_make_difference_text', $settings['project_default_make_difference_text']->value ?? '') }}</textarea>
+                    <x-admin.rich-text id="project_default_make_difference_text" name="project_default_make_difference_text" :value="old('project_default_make_difference_text', $settings['project_default_make_difference_text']->value ?? '')" lang="en" :rows="3" placeholder="e.g. $50 - food expenses per child per month" />
                     <p class="mt-1.5 text-xs text-gray-400">Shown on the public project page whenever a project leaves its own donation/details text blank.</p>
                 </div>
                 <div>
@@ -254,12 +250,7 @@
                     </div>
                     <div class="md:col-span-2">
                         <label for="make_difference_text" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text</label>
-                        <textarea id="make_difference_text"
-                                  name="make_difference_text"
-                                  rows="4"
-                                  :disabled="detailsMode !== 'specific'"
-                                  class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="e.g. $50 - food expenses per child per month">{{ old('make_difference_text', $selectedProject->make_difference_text) }}</textarea>
+                        <x-admin.rich-text id="make_difference_text" name="make_difference_text" :value="old('make_difference_text', $selectedProject->make_difference_text)" lang="en" :rows="3" placeholder="e.g. $50 - food expenses per child per month" />
                     </div>
                     <div>
                         <label for="donate_button_text" class="block text-sm font-medium text-gray-700 mb-1.5">Donate Button Text</label>

@@ -189,15 +189,13 @@
                     <div x-show="lang === 'en'">
                         <input type="text" name="items[{{ $i }}][title]" value="{{ old("items.$i.title") }}"
                                class="form-control mb-2" placeholder="Item title">
-                        <textarea name="items[{{ $i }}][description]" rows="2" class="form-control textarea mb-2"
-                                  placeholder="Item description">{{ old("items.$i.description") }}</textarea>
+                        <x-admin.rich-text name="items[{{ $i }}][description]" :value="old('items.'.$i.'.description')" lang="en" :rows="2" placeholder="Item description..." />
                     </div>
 
                     <div x-show="lang === 'fr'" x-cloak>
                         <input type="text" name="items[{{ $i }}][title_fr]" value="{{ old("items.$i.title_fr") }}"
                                class="form-control mb-2" placeholder="Titre de l'élément (optionnel)">
-                        <textarea name="items[{{ $i }}][description_fr]" rows="2" class="form-control textarea mb-2"
-                                  placeholder="Description de l'élément (optionnel)">{{ old("items.$i.description_fr") }}</textarea>
+                        <x-admin.rich-text name="items[{{ $i }}][description_fr]" :value="old('items.'.$i.'.description_fr')" lang="fr" :rows="2" placeholder="Description de l'élément (optionnel)..." />
                         <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English value.</div>
                     </div>
 

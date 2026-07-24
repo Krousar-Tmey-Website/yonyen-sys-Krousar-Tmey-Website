@@ -24,7 +24,7 @@
 
 <div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_330px]">
     <div class="space-y-6">
-        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <section class="overflow-visible rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="border-b border-slate-100 bg-gradient-to-r from-[#f7fbfd] to-white px-6 py-5">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
@@ -92,20 +92,20 @@
 
                 <div x-show="lang === 'en'">
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Activities</label>
-                    <textarea name="activities" rows="5" class="{{ $textareaClass }}" placeholder="Activity 1&#10;Activity 2">{{ $fieldValue('activities') }}</textarea>
-                    <p class="mt-1.5 text-xs text-slate-400">Each new line becomes a bullet point on the public page.</p>
+                    <x-admin.rich-text name="activities" :value="$fieldValue('activities')" lang="en" :rows="4" placeholder="Activity 1..." />
+                    <p class="mt-1.5 text-xs text-slate-400">Add key activities with formatting and bullet points.</p>
                     @error('activities')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                 </div>
                 <div x-show="lang === 'fr'" x-cloak>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Activities (French) <span class="font-normal text-slate-400">(optional)</span></label>
-                    <textarea name="activities_fr" rows="5" class="{{ $textareaClass }}" placeholder="Activite 1&#10;Activite 2">{{ $fieldValue('activities_fr') }}</textarea>
+                    <x-admin.rich-text name="activities_fr" :value="$fieldValue('activities_fr')" lang="fr" :rows="4" placeholder="Activité 1..." />
                     <p class="mt-1.5 text-xs text-slate-400">Leave blank to reuse the English activities.</p>
                     @error('activities_fr')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                 </div>
             </div>
         </section>
 
-        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <section class="overflow-visible rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="border-b border-slate-100 px-6 py-5">
                 <p class="text-[11px] font-black uppercase tracking-[0.22em] text-[#8da83a]">Media</p>
                 <h2 class="mt-1 text-lg font-bold text-slate-900">Images</h2>

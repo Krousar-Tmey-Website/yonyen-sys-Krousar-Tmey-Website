@@ -167,9 +167,7 @@
         {{-- Subtitle --}}
         <div>
             <label for="transparency_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle</label>
-            <textarea id="transparency_banner_subtitle" name="transparency_banner_subtitle" rows="2"
-                      oninput="document.getElementById('preview-subtitle').textContent = this.value"
-                      class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $bannerSubtitle }}</textarea>
+            <x-admin.rich-text id="transparency_banner_subtitle" name="transparency_banner_subtitle" :value="$bannerSubtitle" lang="en" :rows="2" />
         </div>
 
         <div class="flex items-center gap-3 pt-1">
@@ -198,23 +196,19 @@
             </div>
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 1</label>
-                <textarea name="transparency_financial_p1" rows="2"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_financial_p1'] ?? 'Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used.' }}</textarea>
+                <x-admin.rich-text name="transparency_financial_p1" :value="$settings['transparency_financial_p1'] ?? 'Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used.'" lang="en" :rows="2" />
             </div>
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 2</label>
-                <textarea name="transparency_financial_p2" rows="2"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_financial_p2'] ?? 'The implementation of programs and projects is our priority.' }}</textarea>
+                <x-admin.rich-text name="transparency_financial_p2" :value="$settings['transparency_financial_p2'] ?? 'The implementation of programs and projects is our priority.'" lang="en" :rows="2" />
             </div>
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 3</label>
-                <textarea name="transparency_financial_p3" rows="2"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_financial_p3'] ?? 'Thanks to the strict financial management and the involvement of European volunteers, all administrative costs remain under 4% of the total budget.' }}</textarea>
+                <x-admin.rich-text name="transparency_financial_p3" :value="$settings['transparency_financial_p3'] ?? 'Thanks to the strict financial management and the involvement of European volunteers, all administrative costs remain under 4% of the total budget.'" lang="en" :rows="2" />
             </div>
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 4 (Audit firm)</label>
-                <textarea name="transparency_financial_p4" rows="3"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_financial_p4'] ?? "Krousar Thmey Cambodia's accounts are all audited and certified each year by an independent audit firm (PricewaterhouseCoopers since 2013 and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes in order to provide greater efficiency to the organization and transparency to its partners." }}</textarea>
+                <x-admin.rich-text name="transparency_financial_p4" :value="$settings['transparency_financial_p4'] ?? 'Krousar Thmey Cambodia\'s accounts are all audited and certified each year by an independent audit firm (PricewaterhouseCoopers since 2013 and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes in order to provide greater efficiency to the organization and transparency to its partners.'" lang="en" :rows="3" />
             </div>
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Line Before Report List</label>
@@ -224,8 +218,7 @@
             </div>
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Closing Line</label>
-                <textarea name="transparency_financial_outro" rows="2"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_financial_outro'] ?? "Our French and Swiss organisations' accounts are also audited annually." }}</textarea>
+                <x-admin.rich-text name="transparency_financial_outro" :value="$settings['transparency_financial_outro'] ?? 'Our French and Swiss organisations\' accounts are also audited annually.'" lang="en" :rows="2" />
             </div>
         </div>
 
@@ -238,18 +231,15 @@
             </div>
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 1 (International support)</label>
-                <textarea name="transparency_origins_p1" rows="3"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_origins_p1'] ?? 'In support of its local activity in Cambodia, Krousar Thmey benefits from the involvement of volunteers in international entities: Krousar Thmey France, Krousar Thmey Switzerland and Krousar Thmey Singapore. As their main activity is fundraising, these branches are a privileged relay to donors outside of Cambodia. They enable Krousar Thmey to receive institutional funding and support from individual donors.' }}</textarea>
+                <x-admin.rich-text name="transparency_origins_p1" :value="$settings['transparency_origins_p1'] ?? 'In support of its local activity in Cambodia, Krousar Thmey benefits from the involvement of volunteers in international entities: Krousar Thmey France, Krousar Thmey Switzerland and Krousar Thmey Singapore. As their main activity is fundraising, these branches are a privileged relay to donors outside of Cambodia. They enable Krousar Thmey to receive institutional funding and support from individual donors.'" lang="en" :rows="3" />
             </div>
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 2 (Local support)</label>
-                <textarea name="transparency_origins_p2" rows="2"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_origins_p2'] ?? 'Donations received in Cambodia come mainly from non-governmental organizations and to a lesser extent from private donors and the Cambodian authorities.' }}</textarea>
+                <x-admin.rich-text name="transparency_origins_p2" :value="$settings['transparency_origins_p2'] ?? 'Donations received in Cambodia come mainly from non-governmental organizations and to a lesser extent from private donors and the Cambodian authorities.'" lang="en" :rows="2" />
             </div>
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 3</label>
-                <textarea name="transparency_origins_p3" rows="3"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $settings['transparency_origins_p3'] ?? "Financial or in-kind donations from the Cambodian authorities have increased steadily over the past few years, accounting for nearly 8% of Krousar Thmey's resources. All staff of special schools for deaf or blind children are civil servants of the Ministry of Education, Youth and Sports who pay their salary (excluding complements paid by Krousar Thmey). For the time being, this contribution is not included in the expenditure and income statement." }}</textarea>
+                <x-admin.rich-text name="transparency_origins_p3" :value="$settings['transparency_origins_p3'] ?? 'Financial or in-kind donations from the Cambodian authorities have increased steadily over the past few years, accounting for nearly 8% of Krousar Thmey\'s resources. All staff of special schools for deaf or blind children are civil servants of the Ministry of Education, Youth and Sports who pay their salary (excluding complements paid by Krousar Thmey). For the time being, this contribution is not included in the expenditure and income statement.'" lang="en" :rows="3" />
             </div>
         </div>
 

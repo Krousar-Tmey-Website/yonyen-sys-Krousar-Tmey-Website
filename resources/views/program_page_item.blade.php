@@ -75,25 +75,15 @@
                     </div>
                     @endif
 
-                    {{-- Activities --}}
                     @if($item->localized_activities)
                     <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 shadow-sm">
                         <div class="flex items-center gap-3 mb-8">
                             <div class="w-2 h-2 rounded-full bg-[#e8a020]"></div>
                             <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-widest m-0">Key Activities</h3>
                         </div>
-                        <ul class="space-y-3">
-                            @foreach(explode("\n", str_replace("\r", "", $item->localized_activities)) as $activityLine)
-                                @if(trim($activityLine))
-                                <li class="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-[#1a3c6e]/20 hover:shadow-md transition-all group">
-                                    <div class="w-7 h-7 rounded-full bg-[#1a3c6e]/5 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-[#1a3c6e]/10 transition-colors">
-                                        <div class="w-2.5 h-2.5 rounded-full bg-[#1a3c6e]"></div>
-                                    </div>
-                                    <span class="text-gray-700 text-[15px] font-medium leading-relaxed pt-1">{{ trim($activityLine) }}</span>
-                                </li>
-                                @endif
-                            @endforeach
-                        </ul>
+                        <div class="rich-text-content">
+                            {!! $item->localized_activities !!}
+                        </div>
                     </div>
                     @endif
 

@@ -181,12 +181,12 @@
 
             <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Activities</label>
-                <textarea name="activities" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Activity 1&#10;Activity 2">{{ old('activities', $item->activities) }}</textarea>
-                <p class="mt-1 text-xs text-gray-400">Each new line will be displayed as a bullet point on the public page.</p>
+                <x-admin.rich-text name="activities" :value="old('activities', $item->activities)" lang="en" :rows="3" placeholder="Activity 1..." />
+                <p class="mt-1 text-xs text-gray-400">Add key activities with formatting and bullet points.</p>
             </div>
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Activities (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <textarea name="activities_fr" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Activité 1&#10;Activité 2">{{ old('activities_fr', $item->activities_fr) }}</textarea>
+                <x-admin.rich-text name="activities_fr" :value="old('activities_fr', $item->activities_fr)" lang="fr" :rows="3" placeholder="Activité 1..." />
                 <p class="mt-1 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
         </div>

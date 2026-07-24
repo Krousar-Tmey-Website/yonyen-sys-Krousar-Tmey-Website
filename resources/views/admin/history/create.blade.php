@@ -50,9 +50,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Event Description <span class="required">*</span></label>
-                    <textarea name="event" rows="4"
-                              class="form-control textarea @error('event') error @enderror"
-                              placeholder="Describe the event...">{{ old('event') }}</textarea>
+                    <x-admin.rich-text name="event" :value="old('event')" lang="en" :rows="3" placeholder="Describe the event..." />
                     @error('event')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
