@@ -51,7 +51,27 @@ class DashboardController extends Controller
 
         // ── Retrieve selected year & available years ──
         $year = request('year', now()->year);
-        $availableYears = range(2026, 2030);
+
+        $currentYear = (int) now()->year;
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            $yearsFromDb = Donation::selectRaw('strftime("%Y", DonationDate) as year')
+                ->whereNotNull('DonationDate')
+                ->distinct()
+                ->pluck('year')
+                ->map(fn($y) => (int)$y)
+                ->toArray();
+        } else {
+            $yearsFromDb = Donation::selectRaw('YEAR(DonationDate) as year')
+                ->whereNotNull('DonationDate')
+                ->distinct()
+                ->pluck('year')
+                ->map(fn($y) => (int)$y)
+                ->toArray();
+        }
+
+        $minYear = min(array_merge([$currentYear - 2], $yearsFromDb));
+        $maxYear = max(array_merge([$currentYear + 2], $yearsFromDb));
+        $availableYears = range($minYear, $maxYear);
 
         // ── Donation Trends Chart Data (filtered by year) ──
         $rawDonations = Donation::select(

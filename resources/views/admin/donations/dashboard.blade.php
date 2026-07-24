@@ -74,14 +74,8 @@
     <div class="lg:col-span-3 fade-in d4">
         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             <div class="flex items-center justify-between px-5 py-3 border-b border-gray-50">
-                <h2 class="font-bold text-gray-800 text-sm">Monthly Donations <span class="text-gray-400 font-normal">{{ $year }}</span></h2>
+                <h2 class="font-bold text-gray-800 text-sm">Monthly Donations</h2>
                 <div class="flex items-center gap-2">
-                    <select onchange="window.location.href = '?year=' + this.value"
-                        class="text-xs border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#2d6fa3] bg-white text-gray-600 font-medium">
-                        @foreach($availableYears as $y)
-                        <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
-                        @endforeach
-                    </select>
                     <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full font-medium">{{ count($donationMonths) }} months</span>
                 </div>
             </div>

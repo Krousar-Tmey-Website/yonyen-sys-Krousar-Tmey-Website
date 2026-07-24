@@ -168,17 +168,24 @@
                     </a>
                 </div>
                 <div class="flex items-center gap-4">
-                    <form action="{{ route('admin.donations.destroy', $donation) }}" method="POST" class="inline"
-                          onsubmit="return confirm('Delete this donation record? This cannot be undone.')">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="text-xs text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors font-medium">
-                            Delete
-                        </button>
-                    </form>
+                    <button type="submit"
+                            form="delete-donation-form"
+                            class="text-xs text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors font-medium">
+                        Delete
+                    </button>
                     <span class="text-xs text-gray-400">ID: {{ $donation->DonationID }}</span>
                 </div>
             </div>
         </div>
+    </form>
+
+    <form id="delete-donation-form"
+          action="{{ route('admin.donations.destroy', $donation) }}"
+          method="POST"
+          class="hidden"
+          onsubmit="return confirm('Delete this donation record? This cannot be undone.')">
+        @csrf
+        @method('DELETE')
     </form>
 </div>
 
