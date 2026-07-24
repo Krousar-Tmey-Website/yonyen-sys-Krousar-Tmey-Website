@@ -186,8 +186,9 @@ Route::get('/media', function () {
     $settings = HomeSetting::allKeyed();
     $latestNews = News::published()->latest('published_at')->take(3)->get();
     $topicPagesByTitle = ResourcePage::active()->get(['title', 'slug'])->keyBy(fn ($page) => strtolower($page->title));
+    $mediaGallery = \App\Models\MediaGallery::active()->ordered()->get();
 
-    return view('media', compact('settings', 'latestNews', 'topicPagesByTitle'));
+    return view('media', compact('settings', 'latestNews', 'topicPagesByTitle', 'mediaGallery'));
 })->name('media');
 Route::get('/words-and-pictures', function () {
     return view('words-and-pictures');
@@ -309,6 +310,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Website Settings
     Route::get('website', [Admin\WebsiteController::class, 'index'])->name('website.index');
     Route::post('website', [Admin\WebsiteController::class, 'update'])->name('website.update');
+    // SEO Settings
+    Route::get('seo', [Admin\SeoController::class, 'index'])->name('seo.index');
+    Route::post('seo', [Admin\SeoController::class, 'update'])->name('seo.update');
+    // Media Library
+    Route::get('media/library', [Admin\MediaLibraryController::class, 'index'])->name('media.library');
 
     // Homepage
     Route::get('home', [Admin\HomeSettingController::class, 'index'])->name('home.index');
@@ -371,6 +377,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);
+
+    // Analytics
+    Route::get('analytics', [Admin\AnalyticsController::class, 'index'])->name('analytics.index');
 
     // Books for Sale
     Route::resource('books', Admin\BookController::class)->except(['show']);

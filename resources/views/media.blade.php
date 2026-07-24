@@ -146,7 +146,87 @@
         @else
         <p class="text-gray-400 text-sm" data-reveal="up">No news articles published yet.</p>
         @endif
-    </div>
-</section>
+        </div>
+    </section>
 
-@endsection
+    {{-- ========================================================
+         MEDIA GALLERY
+         ======================================================== --}}
+    @if($mediaGallery->isNotEmpty())
+    <section class="py-12 md:py-16 bg-white scroll-mt-20">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-[#11568c] mb-8" data-reveal="left">
+                Media Gallery
+            </h2>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($mediaGallery as $i => $item)
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden"
+                     data-reveal="up" style="--reveal-delay: {{ $i * 100 }}">
+                    @if($item->file_path)
+                        @if($item->type === 'image')
+                        <div class="h-44 overflow-hidden">
+                            <img src="{{ $item->image_url }}" alt="{{ $item->alt_text ?? $item->title }}" class="w-full h-full object-cover">
+                        </div>
+                        @elseif($item->type === 'video')
+                        <div class="h-44 bg-gray-100 flex items-center justify-center">
+                            <svg class="w-12 h-12 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M10 16.5l6-4.5-6-4.5v9zM21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2z"/>
+                            </svg>
+                        </div>
+                        @else
+                        <div class="h-44 bg-gray-100 flex items-center justify-center">
+                            <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        @endif
+                    @else
+                    <div class="h-44 bg-gray-100 flex items-center justify-center">
+                        <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    @endif
+                    <div class="p-6 flex flex-col flex-1">
+                        <div class="flex items-start justify-between mb-2">
+                            <h3 class="font-bold text-[#1d4e7a] uppercase text-sm leading-snug">{{ $item->title }}</h3>
+                            <span class="px-2 py-0.5 rounded-full text-xs flex-shrink-0 ml-2
+                                @if($item->type === 'image') bg-blue-50 text-blue-600
+                                @elseif($item->type === 'video') bg-purple-50 text-purple-600
+                                @else bg-amber-50 text-amber-600 @endif">
+                                {{ ucfirst($item->type) }}
+                            </span>
+                        </div>
+                        @if($item->description)
+                        <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $item->description }}</p>
+                        @endif
+                        <div class="mt-4">
+                            @if($item->external_url)
+                            <a href="{{ $item->external_url }}" target="_blank" rel="noopener"
+                               class="inline-flex items-center gap-1.5 text-[#2d6fa3] font-semibold text-sm hover:underline">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
+                                View
+                            </a>
+                            @elseif($item->file_path)
+                            <a href="{{ $item->image_url }}" target="_blank" rel="noopener"
+                               class="inline-flex items-center gap-1.5 text-[#2d6fa3] font-semibold text-sm hover:underline">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                                View
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
+    @endsection
