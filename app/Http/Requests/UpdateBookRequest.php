@@ -15,7 +15,9 @@ class UpdateBookRequest extends FormRequest
     {
         return [
             'title'        => ['required', 'string', 'max:255'],
+            'title_fr'     => ['nullable', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
             'price'        => ['nullable', 'numeric', 'min:0', 'max:999999.99'],
             'stock'        => ['nullable', 'integer', 'min:0'],
             'is_available' => ['nullable', 'boolean'],

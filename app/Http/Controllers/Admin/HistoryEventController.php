@@ -51,9 +51,11 @@ class HistoryEventController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'year'       => ['required', 'string', 'max:10'],
-            'left_text'  => ['nullable', 'required_without:right_text', 'string'],
-            'right_text' => ['nullable', 'required_without:left_text', 'string'],
+            'year'          => ['required', 'string', 'max:10'],
+            'left_text'     => ['nullable', 'required_without:right_text', 'string'],
+            'left_text_fr'  => ['nullable', 'string'],
+            'right_text'    => ['nullable', 'required_without:left_text', 'string'],
+            'right_text_fr' => ['nullable', 'string'],
             'image'      => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
             'image_url'  => ['nullable', 'url', 'max:2048'],
             'sort_order' => ['nullable', 'integer'],
@@ -68,8 +70,10 @@ class HistoryEventController extends Controller
         unset($data['image_url']);
 
         // Convert empty strings to null so blank fields don't render as content
-        $data['left_text']  = $data['left_text'] !== '' ? ($data['left_text'] ?? null) : null;
-        $data['right_text'] = $data['right_text'] !== '' ? ($data['right_text'] ?? null) : null;
+        $data['left_text']     = $data['left_text'] !== '' ? ($data['left_text'] ?? null) : null;
+        $data['right_text']    = $data['right_text'] !== '' ? ($data['right_text'] ?? null) : null;
+        $data['left_text_fr']  = !empty($data['left_text_fr']) ? $data['left_text_fr'] : null;
+        $data['right_text_fr'] = !empty($data['right_text_fr']) ? $data['right_text_fr'] : null;
 
         $event = HistoryEvent::create($data);
 
@@ -96,9 +100,11 @@ class HistoryEventController extends Controller
     public function update(Request $request, HistoryEvent $historyEvent)
     {
         $data = $request->validate([
-            'year'       => ['required', 'string', 'max:10'],
-            'left_text'  => ['nullable', 'required_without:right_text', 'string'],
-            'right_text' => ['nullable', 'required_without:left_text', 'string'],
+            'year'          => ['required', 'string', 'max:10'],
+            'left_text'     => ['nullable', 'required_without:right_text', 'string'],
+            'left_text_fr'  => ['nullable', 'string'],
+            'right_text'    => ['nullable', 'required_without:left_text', 'string'],
+            'right_text_fr' => ['nullable', 'string'],
             'image'      => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
             'image_url'  => ['nullable', 'url', 'max:2048'],
             'remove_image' => ['nullable', 'boolean'],
@@ -132,6 +138,12 @@ class HistoryEventController extends Controller
         }
         if (array_key_exists('right_text', $data) && $data['right_text'] === '') {
             $data['right_text'] = null;
+        }
+        if (array_key_exists('left_text_fr', $data) && $data['left_text_fr'] === '') {
+            $data['left_text_fr'] = null;
+        }
+        if (array_key_exists('right_text_fr', $data) && $data['right_text_fr'] === '') {
+            $data['right_text_fr'] = null;
         }
 
         $historyEvent->update($data);

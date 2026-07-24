@@ -37,6 +37,7 @@ class AnnualReportController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_fr' => ['nullable', 'string', 'max:255'],
             'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
             'file'  => ['required', 'file', 'mimes:pdf', 'max:20480'],
         ]);
@@ -66,6 +67,7 @@ class AnnualReportController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_fr' => ['nullable', 'string', 'max:255'],
             'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
             'file'  => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
         ]);

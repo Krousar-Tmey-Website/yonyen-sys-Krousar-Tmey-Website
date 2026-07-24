@@ -37,7 +37,9 @@ class PageSectionController extends Controller
         $data = $request->validate([
             'section_name' => ['required', 'string', 'max:100'],
             'title'        => ['required', 'string', 'max:255'],
+            'title_fr'     => ['nullable', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
             'order'        => ['nullable', 'integer', 'min:0'],
             'active'       => ['nullable', 'boolean'],
 
@@ -88,7 +90,9 @@ class PageSectionController extends Controller
         $data = $request->validate([
             'section_name' => ['required', 'string', 'max:100'],
             'title'        => ['required', 'string', 'max:255'],
+            'title_fr'     => ['nullable', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
             'order'        => ['nullable', 'integer', 'min:0'],
             'active'       => ['nullable', 'boolean'],
 
@@ -175,6 +179,7 @@ class PageSectionController extends Controller
         $order = 1;
         foreach ($decoded as $linkData) {
             $text = trim((string) ($linkData['text'] ?? $linkData['title'] ?? ''));
+            $textFr = trim((string) ($linkData['text_fr'] ?? ''));
             $url  = trim((string) ($linkData['url'] ?? ''));
 
             if (empty($text) || empty($url)) {
@@ -183,6 +188,7 @@ class PageSectionController extends Controller
 
             $section->links()->create([
                 'text'   => $text,
+                'text_fr' => $textFr !== '' ? $textFr : null,
                 'url'    => $url,
                 'type'   => $linkData['type'] ?? 'button',
                 'target' => $linkData['target'] ?? '_self',

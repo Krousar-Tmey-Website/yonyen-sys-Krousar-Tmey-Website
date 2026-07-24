@@ -123,19 +123,25 @@ class ResourcePageController extends Controller
     private function validateData(Request $request, ?int $ignoreId = null): array
     {
         return $request->validate([
-            'title'              => ['required', 'string', 'max:255'],
-            'slug'               => ['nullable', 'string', 'max:255'],
-            'description'        => ['nullable', 'string', 'max:1000'],
-            'header_text'        => ['nullable', 'string', 'max:255'],
-            'detail_description' => ['nullable', 'string'],
-            'image'              => ['nullable', 'image', 'max:2048'],
-            'detail_image'       => ['nullable', 'image', 'max:4096'],
-            'sort_order'         => ['nullable', 'integer'],
-            'is_active'          => ['nullable', 'boolean'],
-            'items'              => ['nullable', 'array', 'max:3'],
-            'items.*.title'      => ['nullable', 'string', 'max:255'],
-            'items.*.description' => ['nullable', 'string', 'max:500'],
-            'items.*.image'      => ['nullable', 'image', 'max:2048'],
+            'title'                 => ['required', 'string', 'max:255'],
+            'title_fr'              => ['nullable', 'string', 'max:255'],
+            'slug'                  => ['nullable', 'string', 'max:255'],
+            'description'           => ['nullable', 'string', 'max:1000'],
+            'description_fr'        => ['nullable', 'string', 'max:1000'],
+            'header_text'           => ['nullable', 'string', 'max:255'],
+            'header_text_fr'        => ['nullable', 'string', 'max:255'],
+            'detail_description'    => ['nullable', 'string'],
+            'detail_description_fr' => ['nullable', 'string'],
+            'image'                 => ['nullable', 'image', 'max:2048'],
+            'detail_image'          => ['nullable', 'image', 'max:4096'],
+            'sort_order'            => ['nullable', 'integer'],
+            'is_active'             => ['nullable', 'boolean'],
+            'items'                 => ['nullable', 'array', 'max:3'],
+            'items.*.title'         => ['nullable', 'string', 'max:255'],
+            'items.*.title_fr'      => ['nullable', 'string', 'max:255'],
+            'items.*.description'   => ['nullable', 'string', 'max:500'],
+            'items.*.description_fr' => ['nullable', 'string', 'max:500'],
+            'items.*.image'         => ['nullable', 'image', 'max:2048'],
         ]);
     }
 
@@ -152,7 +158,9 @@ class ResourcePageController extends Controller
 
         foreach (range(0, 2) as $i) {
             $title = trim((string) $request->input("items.$i.title"));
+            $titleFr = trim((string) $request->input("items.$i.title_fr"));
             $description = trim((string) $request->input("items.$i.description"));
+            $descriptionFr = trim((string) $request->input("items.$i.description_fr"));
             $imagePath = $existing[$i]['image'] ?? null;
 
             if ($request->hasFile("items.$i.image")) {
@@ -171,7 +179,13 @@ class ResourcePageController extends Controller
                 continue;
             }
 
-            $items[] = ['title' => $title, 'description' => $description, 'image' => $imagePath];
+            $items[] = [
+                'title' => $title,
+                'title_fr' => $titleFr,
+                'description' => $description,
+                'description_fr' => $descriptionFr,
+                'image' => $imagePath,
+            ];
         }
 
         return $items;

@@ -40,28 +40,89 @@
             {{ $transparencyBannerSubtitle }}
         </p>
 
-        @if($sharingEnabled == '1')
-        <div class="hero-reveal hero-reveal-delay-4 flex items-center justify-center gap-3 mt-8">
-            <a href="{{ $facebookLink ?: 'https://www.addtoany.com/add_to/facebook?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Transparency and Accountability') . '&linknote=' . urlencode('Krousar Thmey - Transparency and Accountability') }}"
-               target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"
-               class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
-                <img src="{{ asset($facebookIcon) }}" alt="Facebook" class="w-full h-full object-cover">
-            </a>
-            <a href="https://www.addtoany.com/add_to/twitter?linkurl={{ urlencode(url()->current()) }}&linkname={{ urlencode('Transparency and Accountability') }}&linknote={{ urlencode('Krousar Thmey - Transparency and Accountability') }}"
-               target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter"
-               class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
-                <img src="{{ asset($twitterIcon) }}" alt="Twitter" class="w-full h-full object-cover">
-            </a>
-            <a href="{{ $linkedinLink ?: 'https://www.addtoany.com/add_to/linkedin?linkurl=' . urlencode(url()->current()) . '&linkname=' . urlencode('Transparency and Accountability') . '&linknote=' . urlencode('Krousar Thmey - Transparency and Accountability') }}"
-               target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"
-               class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
-                <img src="{{ asset($linkedinIcon) }}" alt="LinkedIn" class="w-full h-full object-cover">
-            </a>
-            <a href="https://www.addtoany.com/share#url={{ urlencode(url()->current()) }}&title={{ urlencode('Transparency and Accountability') }}"
-               target="_blank" rel="noopener noreferrer" aria-label="Share"
-               class="group w-9 h-9 rounded-full overflow-hidden shadow-sm transition duration-300 hover:-translate-y-0.5 hover:scale-110">
-                <img src="{{ asset($shareIcon) }}" alt="Share" class="w-full h-full object-cover">
-            </a>
+{{-- ========================================================
+     FINANCIAL TRANSPARENCY SECTION
+     ======================================================== --}}
+<section id="financial" class="py-24 bg-white scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16" data-reveal>
+            <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Financial Transparency</h2>
+            <p class="text-gray-500 max-w-3xl mx-auto">Our commitment to open and responsible stewardship of donor funds</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12 mb-16">
+            {{-- Left: Text Content --}}
+            <div data-reveal="left">
+                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
+                    Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used. The implementation of programs and projects is our priority.
+                </p>
+                <p class="text-gray-600 leading-relaxed mb-6">
+                    Thanks to strict financial management and the involvement of European volunteers, <strong class="text-[#2d6fa3]">all administrative costs remain under 4% of the total budget.</strong>
+                </p>
+                <p class="text-gray-600 leading-relaxed mb-6">
+                    Krousar Thmey Cambodia's accounts are all audited and certified each year by an independent audit firm (<strong>PricewaterhouseCoopers since 2013</strong> and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes.
+                </p>
+                
+                {{-- Key Stats --}}
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-[#2d6fa3]/5 rounded-2xl p-6 text-center border border-[#2d6fa3]/15">
+                        <div class="text-3xl font-black text-[#2d6fa3] mb-1">< 4%</div>
+                        <div class="text-gray-500 text-xs">Administrative Costs</div>
+                    </div>
+                    <div class="bg-[#8da83a]/5 rounded-2xl p-6 text-center border border-[#8da83a]/15">
+                        <div class="text-3xl font-black text-[#8da83a] mb-1">100%</div>
+                        <div class="text-gray-500 text-xs">Funds to Children</div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Right: Image --}}
+            <div class="relative" data-reveal="right">
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+                    <img src="{{ asset('images/children.jpg') }}" alt="Children at Krousar Thmey" 
+                         class="w-full h-[400px] object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ========================================================
+     AUDITED STATEMENTS SECTION
+     ======================================================== --}}
+<section class="py-24 bg-[#f8f5f0] scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16" data-reveal>
+            <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Audited Financial Statements</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto">Download our annual reports and financial statements</p>
+        </div>
+
+        @if($reports->isNotEmpty())
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($reports as $i => $report)
+            <div class="group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 p-6"
+                 data-reveal="up" style="--reveal-delay: {{ $i * 80 }}">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-sm">{{ $report->localized_title }}</h3>
+                        <p class="text-gray-400 text-xs">{{ $report->year }} • {{ $report->localized_description ?? 'Annual Report' }}</p>
+                    </div>
+                </div>
+                <a href="{{ $report->download_url }}" target="_blank"
+                   class="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-[#2d6fa3] text-white text-sm font-medium rounded-lg hover:bg-[#1d4e7a] transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Download PDF
+                </a>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="text-center py-12" data-reveal>
+            <p class="text-gray-400">No reports available yet. <a href="{{ route('resources') }}" class="text-[#2d6fa3] hover:underline">View resources page</a>.</p>
         </div>
         @endif
     </div>

@@ -6,23 +6,29 @@
 
 @section('content')
 
-<div class="grid lg:grid-cols-3 gap-6">
+<div class="max-w-3xl mx-auto">
 
     {{-- Form --}}
-    <div class="lg:col-span-2">
-        <form action="{{ route('admin.page-sections.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+    <div>
+        <form action="{{ route('admin.page-sections.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5" x-data="bilingualForm()">
             @csrf
 
             {{-- Section Info --}}
             <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
-                    <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </span>
-                    Section Information
-                </h3>
+                <div class="flex items-center justify-between">
+                    <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </span>
+                        Section Information
+                    </h3>
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -44,7 +50,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div x-show="lang === 'en'">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
                         Title <span class="text-red-400">*</span>
                     </label>
@@ -56,7 +62,20 @@
                     @enderror
                 </div>
 
-                <div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                        Title (French) <span class="text-gray-400 font-normal">(optional)</span>
+                    </label>
+                    <input type="text" name="title_fr" value="{{ old('title_fr') }}"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="Titre de section en français">
+                    @error('title_fr')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English title.</p>
+                </div>
+
+                <div x-show="lang === 'en'">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
                     <textarea name="description" rows="6"
                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
@@ -64,6 +83,17 @@
                     @error('description')
                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
+                </div>
+
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <textarea name="description_fr" rows="6"
+                              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                              placeholder="Décrivez cette section en français.">{{ old('description_fr') }}</textarea>
+                    @error('description_fr')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English description.</p>
                 </div>
             </div>
 
@@ -104,21 +134,30 @@
             </div>
 
             <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="linkManager()">
-                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
-                    <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-                        </svg>
-                    </span>
-                    CTA Buttons / Links
-                </h3>
+                <div class="flex items-center justify-between">
+                    <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                            </svg>
+                        </span>
+                        CTA Buttons / Links
+                    </h3>
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: $root.lang === 'en' }" @click="$root.lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: $root.lang === 'fr' }" @click="$root.lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Add a Link</label>
                     <div class="flex gap-2">
-                        <input type="text" x-model="newLink.text" @keydown.enter.prevent="addLink()"
+                        <input type="text" x-show="$root.lang === 'en'" x-model="newLink.text" @keydown.enter.prevent="addLink()"
                                class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
                                placeholder="Button text (e.g. Support Us)">
+                        <input type="text" x-show="$root.lang === 'fr'" x-cloak x-model="newLink.text_fr" @keydown.enter.prevent="addLink()"
+                               class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Texte du bouton en français (optionnel)">
                         <input type="url" x-model="newLink.url" @keydown.enter.prevent="addLink()"
                                class="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
                                placeholder="https://example.com">
@@ -136,7 +175,7 @@
                         <template x-for="(link, index) in links" :key="index">
                             <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl border border-gray-100">
                                 <span class="w-2 h-2 rounded-full bg-[#2d6fa3] flex-shrink-0"></span>
-                                <span class="text-sm font-medium text-gray-700 min-w-[100px]" x-text="link.text"></span>
+                                <span class="text-sm font-medium text-gray-700 min-w-[100px]" x-text="$root.lang === 'fr' && link.text_fr ? link.text_fr : link.text"></span>
                                 <span class="text-xs text-blue-500 truncate flex-1" x-text="link.url"></span>
                                 <button type="button" @click="removeLink(index)"
                                         class="text-red-400 hover:text-red-600 text-lg leading-none">&times;</button>
@@ -178,27 +217,6 @@
         </form>
     </div>
 
-    {{-- Tips sidebar --}}
-    <div class="space-y-4">
-        <div class="bg-[#2d6fa3]/5 rounded-2xl p-5 border border-[#2d6fa3]/10">
-            <h4 class="font-bold text-[#2d6fa3] text-sm mb-3">📐 Section Tips</h4>
-            <ul class="space-y-2 text-xs text-gray-600">
-                <li>• <strong>Section Name</strong> is an identifier (e.g. <code>focus</code>, <code>mission</code>)</li>
-                <li>• The <strong>Order</strong> determines position on the homepage</li>
-                <li>• Use double line breaks in the description for paragraphs</li>
-                <li>• Recommended image: <strong>800 × 500px</strong></li>
-            </ul>
-        </div>
-        <div class="bg-[#8da83a]/5 rounded-2xl p-5 border border-[#8da83a]/10">
-            <h4 class="font-bold text-[#8da83a] text-sm mb-3">🔗 Link Tips</h4>
-            <ul class="space-y-2 text-xs text-gray-600">
-                <li>• The <strong>first link</strong> becomes the primary CTA button</li>
-                <li>• Additional links become secondary buttons</li>
-                <li>• Use full URLs (including <code>https://</code>)</li>
-            </ul>
-        </div>
-    </div>
-
 </div>
 
 <script>
@@ -216,17 +234,18 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
 function linkManager() {
     return {
         links: [],
-        newLink: { text: '', url: '' },
+        newLink: { text: '', text_fr: '', url: '' },
         get linksJson() {
             return JSON.stringify(this.links);
         },
         addLink() {
             const text = this.newLink.text.trim();
+            const textFr = this.newLink.text_fr.trim();
             const url = this.newLink.url.trim();
             if (!text || !url) return;
             try { new URL(url); } catch(e) { alert('Please enter a valid URL.'); return; }
-            this.links.push({ text, url });
-            this.newLink = { text: '', url: '' };
+            this.links.push({ text, text_fr: textFr, url });
+            this.newLink = { text: '', text_fr: '', url: '' };
         },
         removeLink(index) {
             this.links.splice(index, 1);

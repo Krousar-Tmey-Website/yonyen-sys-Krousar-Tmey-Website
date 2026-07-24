@@ -28,6 +28,7 @@ class UpdatePartnerRequest extends FormRequest
             ],
             'country'     => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
+            'description_fr' => ['nullable', 'string', 'max:2000'],
             'website_url' => ['nullable', 'url', 'max:255'],
             'sort_order'  => ['nullable', 'integer'],
             'is_active'   => ['nullable', 'boolean'],

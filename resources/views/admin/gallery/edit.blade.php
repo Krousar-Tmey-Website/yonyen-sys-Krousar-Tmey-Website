@@ -7,11 +7,24 @@
     <form action="{{ route('admin.gallery.update', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf @method('PUT')
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-                        <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Title / Caption</label>
-                <input type="text" name="title" value="{{ old('title', $item->title) }}" required class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <div x-data="bilingualForm()">
+                <div class="flex items-center justify-between mb-1.5">
+                    <label class="block text-sm font-medium text-gray-700">Title / Caption</label>
+                
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
+                <div x-show="lang === 'en'">
+                    <input type="text" name="title" value="{{ old('title', $item->title) }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <input type="text" name="title_fr" value="{{ old('title_fr', $item->title_fr) }}" placeholder="Titre (français)..." class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English title.</p>
+                </div>
             </div>
-            
+
             <div class="flex items-end pb-1">
                 <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl w-full">
                     <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $item->is_active) ? 'checked' : '' }}

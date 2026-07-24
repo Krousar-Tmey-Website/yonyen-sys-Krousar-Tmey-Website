@@ -11,30 +11,48 @@
                 <h3 class="font-bold text-gray-800">New Value</h3>
                 <p class="text-sm text-gray-400 mt-0.5">Add a new core value card to the About page.</p>
             </div>
-            <a href="{{ route('admin.core-values.index') }}"
-               class="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition">
-                Back to values
-            </a>
+            <div class="flex items-center gap-3">
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+                <a href="{{ route('admin.core-values.index') }}"
+                   class="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition">
+                    Back to values
+                </a>
+            </div>
         </div>
 
-        <form action="{{ route('admin.core-values.store') }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.core-values.store') }}" method="POST" class="space-y-6" x-data="bilingualForm()">
             @csrf
 
             <div class="space-y-4">
-                <div>
+                <div x-show="lang === 'en'">
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Title <span class="text-red-400">*</span></label>
-                    <input type="text" name="title" value="{{ old('title') }}" required
+                    <input type="text" name="title" value="{{ old('title') }}" :required="lang === 'en'"
                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
                            placeholder="Enter value title">
                     @error('title')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
                 </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text" name="title_fr" value="{{ old('title_fr') }}"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="Enter value title in French">
+                </div>
 
-                <div>
+                <div x-show="lang === 'en'">
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Description <span class="text-gray-400">(optional)</span></label>
                     <textarea name="description" rows="3"
                               class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
                               placeholder="Describe the value">{{ old('description') }}</textarea>
                     @error('description')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Description (French) <span class="text-gray-400">(optional)</span></label>
+                    <textarea name="description_fr" rows="3"
+                              class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
+                              placeholder="Describe the value in French">{{ old('description_fr') }}</textarea>
                 </div>
 
                 <div>

@@ -27,6 +27,51 @@ class Project extends Model
             : asset('storage/' . $this->image);
     }
 
+    // French text falls back to the English field whenever it hasn't been filled in yet.
+    public function getLocalizedTitleAttribute(): ?string
+    {
+        return $this->localized('title');
+    }
+
+    public function getLocalizedDescriptionAttribute(): ?string
+    {
+        return $this->localized('description');
+    }
+
+    public function getLocalizedObjectiveAttribute(): ?string
+    {
+        return $this->localized('objective');
+    }
+
+    public function getLocalizedContentAttribute(): ?string
+    {
+        return $this->localized('content');
+    }
+
+    public function getLocalizedActivitiesAttribute(): ?string
+    {
+        return $this->localized('activities');
+    }
+
+    public function getLocalizedTestimonyNameAttribute(): ?string
+    {
+        return $this->localized('testimony_name');
+    }
+
+    public function getLocalizedTestimonyStoryAttribute(): ?string
+    {
+        return $this->localized('testimony_story');
+    }
+
+    private function localized(string $field): ?string
+    {
+        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+            return $this->{$field . '_fr'};
+        }
+
+        return $this->{$field};
+    }
+
     public function getEffectiveAreaOfWorkAttribute(): string
     {
         return $this->resolveProjectDefault($this->attributes['area_of_work'] ?? null, 'project_default_area_of_work');

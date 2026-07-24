@@ -11,10 +11,13 @@
         editing: false,
         editingId: null,
         submitting: false,
+        lang: 'en',
         form: {
             year: '',
             left_text: '',
+            left_text_fr: '',
             right_text: '',
+            right_text_fr: '',
             sort_order: 0,
             is_active: true,
         },
@@ -38,7 +41,8 @@
         openAddModal() {
             this.editing = false;
             this.editingId = null;
-            this.form = { year: '', left_text: '', right_text: '', sort_order: 0, is_active: true };
+            this.lang = 'en';
+            this.form = { year: '', left_text: '', left_text_fr: '', right_text: '', right_text_fr: '', sort_order: 0, is_active: true };
             this.imageFile = null;
             this.removeCurrentImage = false;
             this.currentImageUrl = null;
@@ -56,10 +60,13 @@
         openEditModal(eventData) {
             this.editing = true;
             this.editingId = eventData.id;
+            this.lang = 'en';
             this.form = {
                 year: eventData.year ?? '',
                 left_text: eventData.left_text ?? '',
+                left_text_fr: eventData.left_text_fr ?? '',
                 right_text: eventData.right_text ?? '',
+                right_text_fr: eventData.right_text_fr ?? '',
                 sort_order: eventData.sort_order ?? 0,
                 is_active: Boolean(eventData.is_active),
             };
@@ -120,7 +127,9 @@
             const formData = new FormData();
             formData.append('year', this.form.year);
             formData.append('left_text', this.form.left_text);
+            formData.append('left_text_fr', this.form.left_text_fr);
             formData.append('right_text', this.form.right_text);
+            formData.append('right_text_fr', this.form.right_text_fr);
             formData.append('sort_order', this.form.sort_order);
 
             if (this.editing) {
@@ -297,6 +306,7 @@
                 <form @submit.prevent="submitForm()" class="p-5 space-y-3" enctype="multipart/form-data">
                     @csrf
 
+
                     <div class="grid grid-cols-2 gap-3">
                         {{-- YEAR --}}
                         <div>
@@ -318,7 +328,14 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
+                    
+                <div class="flex justify-end w-full mb-3 -mt-2">
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
+<div class="grid grid-cols-2 gap-3" x-show="lang === 'en'">
                         {{-- LEFT COLUMN TEXT --}}
                         <div>
                             <label class="text-xs font-medium text-gray-600">
@@ -343,7 +360,33 @@
                             <p class="text-xs text-red-500 mt-1" x-show="errors.right_text" x-text="errors.right_text" x-cloak></p>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-400 -mt-2">At least one of Left or Right Column Text is required.</p>
+                    <p class="text-xs text-gray-400 -mt-2" x-show="lang === 'en'">At least one of Left or Right Column Text is required.</p>
+
+                    <div class="grid grid-cols-2 gap-3" x-show="lang === 'fr'" x-cloak>
+                        {{-- LEFT COLUMN TEXT (FRENCH) --}}
+                        <div>
+                            <label class="text-xs font-medium text-gray-600">
+                                Left Column Text (French) <span class="text-gray-400 font-normal">(optional)</span>
+                            </label>
+                            <textarea x-model="form.left_text_fr" rows="2"
+                                      class="form-input text-sm resize-none"
+                                      :class="errors.left_text_fr ? 'form-input-error' : ''"
+                                      placeholder="Description principale de l'événement..."></textarea>
+                            <p class="text-xs text-red-500 mt-1" x-show="errors.left_text_fr" x-text="errors.left_text_fr" x-cloak></p>
+                        </div>
+
+                        {{-- RIGHT COLUMN TEXT (FRENCH) --}}
+                        <div>
+                            <label class="text-xs font-medium text-gray-600">
+                                Right Column Text (French) <span class="text-gray-400 font-normal">(optional)</span>
+                            </label>
+                            <textarea x-model="form.right_text_fr" rows="2"
+                                      class="form-input text-sm resize-none"
+                                      :class="errors.right_text_fr ? 'form-input-error' : ''"
+                                      placeholder="Deuxième événement pour la même année..."></textarea>
+                            <p class="text-xs text-red-500 mt-1" x-show="errors.right_text_fr" x-text="errors.right_text_fr" x-cloak></p>
+                        </div>
+                    </div>
 
                     {{-- ACTIVE --}}
                     <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2 rounded-xl border border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-white transition-all duration-150 w-fit">

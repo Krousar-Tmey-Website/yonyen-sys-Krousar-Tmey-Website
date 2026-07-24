@@ -20,7 +20,9 @@ class JobOpportunityController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_fr' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
             'location' => ['nullable', 'string', 'max:255'],
             'posted_date' => ['nullable', 'date'],
             'type' => ['nullable', 'string', 'max:255'],
@@ -46,7 +48,9 @@ class JobOpportunityController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_fr' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
             'location' => ['nullable', 'string', 'max:255'],
             'posted_date' => ['nullable', 'date'],
             'type' => ['nullable', 'string', 'max:255'],

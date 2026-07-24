@@ -184,9 +184,9 @@
 
                         {{-- Supporting text --}}
                         <div class="flex-1">
-                            <p class="text-sm font-bold text-gray-900 leading-snug mb-2">{{ $stat->label }}</p>
-                            @if($stat->description)
-                            <p class="text-xs text-gray-500 leading-relaxed">{{ $stat->description }}</p>
+                            <p class="text-sm font-bold text-gray-900 leading-snug mb-2">{{ $stat->localized_label }}</p>
+                            @if($stat->localized_description)
+                            <p class="text-xs text-gray-500 leading-relaxed">{{ $stat->localized_description }}</p>
                             @endif
                         </div>
                     </div>
@@ -392,9 +392,9 @@
                     </span>
                     <div class="h-px flex-1 bg-gray-100"></div>
                 </div>
-                <h3 class="text-xl font-black uppercase tracking-wider text-[#1d4e7a] mb-4">{{ $value->title }}</h3>
+                <h3 class="text-xl font-black uppercase tracking-wider text-[#1d4e7a] mb-4">{{ $value->localized_title }}</h3>
                 <p class="text-gray-600 leading-relaxed">
-                    {{ $value->description }}
+                    {{ $value->localized_description }}
                 </p>
             </div>
             @empty

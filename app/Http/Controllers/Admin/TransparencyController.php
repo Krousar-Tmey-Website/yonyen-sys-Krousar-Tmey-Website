@@ -97,8 +97,10 @@ class TransparencyController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_fr' => ['nullable', 'string', 'max:255'],
             'year' => ['required', 'integer', 'min:1990', 'max:2100'],
             'description' => ['nullable', 'string', 'max:255'],
+            'description_fr' => ['nullable', 'string', 'max:255'],
             'file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'file_url' => ['nullable', 'url', 'max:2048'],
         ]);
@@ -122,8 +124,10 @@ class TransparencyController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_fr' => ['nullable', 'string', 'max:255'],
             'year' => ['required', 'integer', 'min:1990', 'max:2100'],
             'description' => ['nullable', 'string', 'max:255'],
+            'description_fr' => ['nullable', 'string', 'max:255'],
             'file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'file_url' => ['nullable', 'url', 'max:2048'],
             'is_active' => ['nullable', 'boolean'],

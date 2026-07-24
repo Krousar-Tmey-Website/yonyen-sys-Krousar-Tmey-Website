@@ -28,6 +28,7 @@ class StorePartnerRequest extends FormRequest
             ],
             'country'     => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
+            'description_fr' => ['nullable', 'string', 'max:2000'],
             'website_url' => ['nullable', 'url', 'max:255'],
             'logo'        => ['nullable', 'image', 'mimes:jpg,jpeg,png,svg,webp', 'max:2048'],
         ];

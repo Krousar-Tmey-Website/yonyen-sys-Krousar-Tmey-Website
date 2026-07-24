@@ -34,6 +34,7 @@ use App\Models\User;
 use App\Models\Volunteer;
 use App\Models\WorldwidePartner;
 use App\Observers\ModelActivityObserver;
+use App\Services\LocalizationManager;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -99,6 +100,21 @@ class AppServiceProvider extends ServiceProvider
                     $view->with('settings', HomeSetting::allKeyed());
                 } catch (\Throwable $e) {
                     $view->with('settings', []);
+                }
+            }
+
+            if (!array_key_exists('availableLocales', $data)) {
+                try {
+                    $localization = app(LocalizationManager::class);
+                    $locales = collect($localization->locales())
+                        ->map(fn ($code) => array_merge(['code' => $code], $localization->metaFor($code)))
+                        ->values()
+                        ->all();
+                    $view->with('availableLocales', $locales);
+                    $view->with('currentLocale', app()->getLocale());
+                } catch (\Throwable $e) {
+                    $view->with('availableLocales', []);
+                    $view->with('currentLocale', app()->getLocale());
                 }
             }
         });

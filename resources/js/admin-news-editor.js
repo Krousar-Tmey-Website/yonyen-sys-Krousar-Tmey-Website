@@ -112,7 +112,7 @@ function initEditor(root) {
         modules: {
             toolbar: toolbarEl,
         },
-        placeholder: 'Write your article content here...',
+        placeholder: root.dataset.quillPlaceholder || 'Write your article content here...',
     });
 
     if (hiddenInput.value.trim()) {

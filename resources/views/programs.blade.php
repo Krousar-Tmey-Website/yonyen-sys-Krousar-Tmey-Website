@@ -90,12 +90,12 @@
                             <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center group-hover:bg-white group-hover:text-[#1a3c6e] transition-all duration-300 shadow-inner">
                                 {!! $programIconFor($prog->title, 'w-7 h-7') !!}
                             </div>
-                            @if($prog->Status)
-                                <span class="text-[10px] font-black uppercase tracking-widest text-white/90 bg-white/20 backdrop-blur px-3 py-1.5 rounded-full">{{ $prog->Status }}</span>
+                            @if($prog->localized_status)
+                                <span class="text-[10px] font-black uppercase tracking-widest text-white/90 bg-white/20 backdrop-blur px-3 py-1.5 rounded-full">{{ $prog->localized_status }}</span>
                             @endif
                         </div>
                         <div class="relative mt-8">
-                            <div class="font-black text-white text-lg uppercase tracking-wider drop-shadow-sm">{{ $prog->title }}</div>
+                            <div class="font-black text-white text-lg uppercase tracking-wider drop-shadow-sm">{{ $prog->localized_title }}</div>
                             <div class="mt-4 flex items-center gap-2 text-white/70 group-hover:text-white transition-colors text-xs font-bold uppercase tracking-widest">
                                 Discover
                                 <svg class="w-4 h-4 group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -125,11 +125,11 @@
                         <div class="flex items-center gap-4 mb-8" data-reveal="{{ $isEven ? 'right' : 'left' }}">
                             <div class="w-2 h-10 rounded-full bg-gradient-to-b from-[#d32f2f] to-[#e8a020]"></div>
                             <h2 class="text-3xl lg:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide leading-tight drop-shadow-sm">
-                                {{ $program->title }}
+                                {{ $program->localized_title }}
                             </h2>
                         </div>
 
-                        @if($program->description)
+                        @if($program->localized_description)
                             <div class="mb-10" data-reveal="{{ $isEven ? 'right' : 'left' }}" style="--reveal-delay: 100">
                                 <div class="relative bg-[#fffdf8] border border-[#f2e6c9] rounded-2xl p-7 md:p-8 shadow-sm overflow-hidden">
                                     <!-- Clean left accent bar -->
@@ -144,17 +144,17 @@
                                         <h3 class="text-sm font-black text-[#e8a020] uppercase tracking-widest">Objective</h3>
                                     </div>
                                     <p class="text-gray-800 leading-relaxed text-lg md:text-[1.15rem] font-medium pl-1">
-                                        {{ $program->description }}
+                                        {{ $program->localized_description }}
                                     </p>
                                 </div>
                             </div>
                         @endif
 
-                        @if($program->full_description)
+                        @if($program->localized_full_description)
                             <div class="mb-10 bg-white/50 backdrop-blur rounded-3xl p-6 border border-gray-100 shadow-sm" data-reveal="{{ $isEven ? 'right' : 'left' }}" style="--reveal-delay: 200">
                                 <h3 class="text-sm font-black text-[#1a3c6e] uppercase tracking-widest mb-4">Program Details</h3>
                                 <div class="prose prose-lg prose-p:text-gray-600 prose-p:leading-loose max-w-none">
-                                    <p class="whitespace-pre-line">{{ $program->full_description }}</p>
+                                    <p class="whitespace-pre-line">{{ $program->localized_full_description }}</p>
                                 </div>
                             </div>
                         @endif
@@ -178,14 +178,14 @@
                     <div class="lg:col-span-6 {{ $isEven ? 'lg:order-1' : '' }} relative hidden md:block group" data-reveal="{{ $isEven ? 'left' : 'right' }}">
                         <div class="absolute inset-0 bg-[#1a3c6e]/5 rounded-3xl transform rotate-3 scale-105 group-hover:rotate-6 transition-transform duration-700"></div>
                         <div class="relative w-full h-[350px] rounded-3xl overflow-hidden shadow-xl shadow-[#1a3c6e]/20 border-[6px] border-white z-10">
-                            <img src="{{ $program->image_url }}" alt="{{ $program->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <img src="{{ $program->image_url }}" alt="{{ $program->localized_title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                         </div>
                     </div>
                 </div>
 
                 {{-- Testimony Section --}}
-                @if($program->testimony_name && $program->testimony_story)
-                    @php $cleanTestimonyName = preg_replace('/^testimony\s*:?\s*/i', '', $program->testimony_name); @endphp
+                @if($program->localized_testimony_name && $program->localized_testimony_story)
+                    @php $cleanTestimonyName = preg_replace('/^testimony\s*:?\s*/i', '', $program->localized_testimony_name); @endphp
                     <div class="mt-24 max-w-5xl mx-auto bg-gradient-to-br from-[#1a3c6e] to-[#2d6fa3] rounded-[3rem] p-10 md:p-16 text-center shadow-2xl relative overflow-hidden group" data-reveal="up">
                         <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 group-hover:scale-150 transition-transform duration-1000"></div>
                         
@@ -214,7 +214,7 @@
                                 </svg>
                             </button>
                             <div x-show="open" class="px-8 pb-8 pt-4 border-t border-white/10" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-                                <p class="text-white/90 leading-loose text-lg whitespace-pre-line italic font-medium drop-shadow-sm">{{ $program->testimony_story }}</p>
+                                <p class="text-white/90 leading-loose text-lg whitespace-pre-line italic font-medium drop-shadow-sm">{{ $program->localized_testimony_story }}</p>
                             </div>
                         </div>
                     </div>
@@ -235,19 +235,18 @@
                             @foreach($program->projects as $project)
                                 <div class="group bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col h-full relative" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
                                     {{-- Main Card Link --}}
-                                    <a href="{{ route('projects.show', $project) }}" class="absolute inset-0 z-10" aria-label="View {{ $project->title }}"></a>
+                                    <a href="{{ route('projects.show', $project) }}" class="absolute inset-0 z-10" aria-label="View {{ $project->localized_title }}"></a>
 
                                     <div class="absolute -top-20 -right-20 w-40 h-40 bg-[#1a3c6e]/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
                                     <div class="h-48 overflow-hidden relative">
-                                        <img src="{{ $project->image_url }}" alt="{{ $project->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                        <img src="{{ $project->image_url }}" alt="{{ $project->localized_title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                                         <div class="absolute inset-0 bg-gradient-to-t from-[#1a3c6e]/90 via-[#1a3c6e]/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
                                         <div class="absolute bottom-6 left-6 right-6">
-                                            <h4 class="text-lg font-black text-white uppercase tracking-wide leading-snug drop-shadow-md">{{ $project->title }}</h4>
+                                            <h4 class="text-lg font-black text-white uppercase tracking-wide leading-snug drop-shadow-md">{{ $project->localized_title }}</h4>
                                         </div>
                                     </div>
                                     <div class="p-8 flex flex-col flex-1 relative">
-                                        @if($project->description)
-                                            <p class="text-gray-600 text-[15px] leading-relaxed flex-1 mb-8">{{ Str::limit($project->description, 130) }}</p>
+                                            <p class="text-gray-600 text-[15px] leading-relaxed flex-1 mb-8">{{ Str::limit($project->localized_description, 130) }}</p>
                                         @endif
                                         <div class="mt-auto flex items-center justify-between">
                                             <span class="inline-flex items-center gap-2 text-[#2d6fa3] text-xs font-black uppercase tracking-widest group-hover:text-[#1a3c6e] transition-colors duration-300">
@@ -256,7 +255,7 @@
                                             </span>
                                             
                                             {{-- Donate Button (Z-20 to sit above stretched link) --}}
-                                            <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $project->title }}">
+                                            <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $project->localized_title }}">
                                                 <svg class="w-4 h-4 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                                                 <span>Donate Now</span>
                                             </a>
@@ -295,14 +294,14 @@
                                 {!! $programIconFor($program->title, 'w-7 h-7') !!}
                             </div>
                             
-                            @if($program->Status)
+                            @if($program->localized_status)
                                 <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e8a020]/10 border border-[#e8a020]/20 mb-4 relative z-10">
-                                    <span class="text-[#e8a020] font-black text-[10px] uppercase tracking-widest">{{ $program->Status }}</span>
+                                    <span class="text-[#e8a020] font-black text-[10px] uppercase tracking-widest">{{ $program->localized_status }}</span>
                                 </div>
                             @endif
-                            
-                            <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-wide mb-3 relative z-10">{{ $program->title }}</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line relative z-10 font-medium">{{ $program->description }}</p>
+
+                            <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-wide mb-3 relative z-10">{{ $program->localized_title }}</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line relative z-10 font-medium">{{ $program->localized_description }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -331,13 +330,13 @@
                         <div class="group bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 flex flex-col h-full hover:-translate-y-2 relative" data-reveal="up" style="--reveal-delay: {{ min($loop->index * 90, 360) }}">
                             
                             {{-- Main Card Link --}}
-                            <a href="{{ route('program-page-items.show', $item->id) }}" class="absolute inset-0 z-10" aria-label="View {{ $item->title }}"></a>
+                            <a href="{{ route('program-page-items.show', $item->id) }}" class="absolute inset-0 z-10" aria-label="View {{ $item->localized_title }}"></a>
 
                             <div class="absolute -top-20 -right-20 w-40 h-40 bg-[#2d6fa3]/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
 
                             @if($item->image)
                                 <div class="h-48 overflow-hidden relative bg-[#1a3c6e]/5 p-2">
-                                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700 shadow-inner">
+                                    <img src="{{ $item->image_url }}" alt="{{ $item->localized_title }}" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700 shadow-inner">
                                 </div>
                             @else
                                 <div class="h-48 bg-gradient-to-br from-[#1a3c6e] to-[#2d6fa3] flex items-center justify-center m-2 rounded-2xl">
@@ -348,10 +347,10 @@
                             @endif
 
                             <div class="p-8 flex flex-col flex-1 relative">
-                                <h3 class="text-lg font-black text-[#1a3c6e] mb-3 uppercase tracking-wide group-hover:text-[#2d6fa3] transition-colors">{{ $item->title }}</h3>
-                                
+                                <h3 class="text-lg font-black text-[#1a3c6e] mb-3 uppercase tracking-wide group-hover:text-[#2d6fa3] transition-colors">{{ $item->localized_title }}</h3>
+
                                 @if($item->short_content)
-                                    <p class="text-gray-600 text-sm font-medium leading-relaxed flex-1 mb-8">{{ Str::limit($item->short_content, 110) }}</p>
+                                    <p class="text-gray-600 text-sm font-medium leading-relaxed flex-1 mb-8">{{ Str::limit($item->localized_short_content, 110) }}</p>
                                 @endif
 
                                 <div class="mt-auto flex items-center justify-between pt-6 border-t border-gray-100">
@@ -359,9 +358,9 @@
                                         Read More
                                         <svg class="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                                     </span>
-                                    
+
                                     {{-- Donate Button (Z-20 to sit above stretched link) --}}
-                                    <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $item->title }}">
+                                    <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $item->localized_title }}">
                                         <svg class="w-4 h-4 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                                         <span>Donate Now</span>
                                     </a>

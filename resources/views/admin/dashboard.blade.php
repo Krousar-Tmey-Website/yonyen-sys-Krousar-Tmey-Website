@@ -372,8 +372,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof Chart === 'undefined') return;
 
+    // Revisiting this page (e.g. via the admin SPA nav) re-runs this setup against
+    // canvases that may already have a chart bound to them — destroy it first so
+    // Chart.js doesn't throw "Canvas is already in use".
+    const destroyExistingChart = (canvas) => {
+        if (canvas) Chart.getChart(canvas)?.destroy();
+    };
+
     // ── Donation Trends (Bar Chart) ──
-    const donationCtx = document.getElementById('donationChart')?.getContext('2d');
+    const donationCanvas = document.getElementById('donationChart');
+    destroyExistingChart(donationCanvas);
+    const donationCtx = donationCanvas?.getContext('2d');
     if (donationCtx) {
         new Chart(donationCtx, {
             type: 'bar',
@@ -428,7 +437,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ── Category Distribution (Doughnut Chart) ──
-    const categoryCtx = document.getElementById('categoryChart')?.getContext('2d');
+    const categoryCanvas = document.getElementById('categoryChart');
+    destroyExistingChart(categoryCanvas);
+    const categoryCtx = categoryCanvas?.getContext('2d');
     if (categoryCtx) {
         const categoryLabels = {!! json_encode($chartData['partnerCategoryLabels']) !!};
         const categoryData = {!! json_encode($chartData['partnerCategories']) !!};
@@ -480,7 +491,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ── Donation by Type (Pie Chart) ──
-    const typeCtx = document.getElementById('donationTypeChart')?.getContext('2d');
+    const typeCanvas = document.getElementById('donationTypeChart');
+    destroyExistingChart(typeCanvas);
+    const typeCtx = typeCanvas?.getContext('2d');
     if (typeCtx) {
         const typeData = {!! json_encode($chartData['donationByType']->pluck('total')) !!};
         const typeLabels = {!! json_encode($chartData['donationByType']->pluck('DonationType')) !!};
