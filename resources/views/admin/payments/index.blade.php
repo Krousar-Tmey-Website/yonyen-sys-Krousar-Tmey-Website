@@ -57,51 +57,9 @@
     {{-- Page Header --}}
     <div class="payments-header">
         <div class="payments-header-left">
-            <div class="payments-header-icon">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-                </svg>
-            </div>
-            <div>
-                <h1 class="payments-header-title">Payment Methods</h1>
-                <p class="payments-header-subtitle">Configure how donors can make payments on the Donate page</p>
-            </div>
         </div>
         <div class="payments-header-right" style="display: flex; gap: 12px; align-items: center;">
-            <div class="payments-header-stats" style="margin-right: 4px;">
-                <span class="stat-item">
-                    <span class="stat-value">{{ $totalMethods }}</span>
-                    <span class="stat-label">Total</span>
-                </span>
-                <span class="stat-divider"></span>
-                <span class="stat-item">
-                    <span class="stat-value">{{ $paymentMethods->where('is_active', true)->count() }}</span>
-                    <span class="stat-label">Active</span>
-                </span>
-            </div>
-            {{-- Switzerland specific actions --}}
-            <div style="display: flex; gap: 8px;" x-show="tag === 'switzerland'" x-cloak>
-                <a href="{{ route('donate.international') }}?residency=switzerland" 
-                   target="_blank" 
-                   class="payments-btn-add" 
-                   style="background-color: #f8fafc; color: #475569; border: 1px solid #cbd5e1; box-shadow: none;">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 6px;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                    </svg>
-                    Preview SW Page
-                </a>
-                <a href="{{ route('admin.payments.create') }}?tag=switzerland" 
-                   class="payments-btn-add" 
-                   style="background-color: #0d9488; border-color: #0d9488; color: white;">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 6px;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Create Switzerland Content
-                </a>
-            </div>
-
-            <a href="{{ route('admin.payments.create') }}" class="payments-btn-add" x-show="tag !== 'france' && tag !== 'switzerland'">
+            <a href="{{ route('admin.payments.create') }}" class="payments-btn-add" x-show="tag !== 'france'">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
@@ -150,15 +108,6 @@
                                class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         <p class="mt-1.5 text-xs text-gray-400">Donors will be redirected here to make an online donation via HelloAsso.</p>
                     </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Description <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <textarea name="helloasso_description" rows="3"
-                                  class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="You can make a one-time or regular donation on our dedicated website...">{{ old('helloasso_description', $settings['france_helloasso_description'] ?? '') }}</textarea>
-                        <p class="mt-1.5 text-xs text-gray-400">Shown above the HelloAsso button. Leave blank to use the default text.</p>
-                    </div>
-
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">Logo / Brand Image <span class="text-gray-400 font-normal">(optional)</span></label>
                         @php $logo = $settings['france_helloasso_logo'] ?? ''; @endphp
@@ -244,7 +193,11 @@
     </div>
 
     {{-- ════════════════════════════════════════════════
+         SWITZERLAND TAB: Donation Settings
+         ════════════════════════════════════════════════ --}}
+    {{-- ════════════════════════════════════════════════
          OTHER TABS: Payment Methods Table
+         (Switzerland uses payment methods dynamically like Cambodia)
          ════════════════════════════════════════════════ --}}
     <div x-show="tag !== 'france'" class="payments-content">
 
