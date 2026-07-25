@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (! Schema::hasTable('resource_pages')) {
+            return;
+        }
+
         Schema::table('resource_pages', function (Blueprint $table) {
             $table->longText('title_fr')->nullable()->after('title');
             $table->longText('description_fr')->nullable()->after('description');
@@ -18,6 +22,10 @@ return new class extends Migration
 
     public function down(): void
     {
+        if (! Schema::hasTable('resource_pages')) {
+            return;
+        }
+
         Schema::table('resource_pages', function (Blueprint $table) {
             $table->dropColumn(['title_fr', 'description_fr', 'header_text_fr', 'detail_description_fr']);
         });

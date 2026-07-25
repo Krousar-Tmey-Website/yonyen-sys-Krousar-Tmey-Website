@@ -37,18 +37,20 @@ return new class extends Migration
             // Step 1: Change column type from JSON to TEXT FIRST.
             // This automatically drops any CHECK(json_valid(...)) constraints
             // because MODIFY COLUMN replaces the entire column definition.
-            foreach ($columns as $column) {
-                if (!Schema::hasColumn($tableName, $column)) {
-                    continue;
-                }
+            if (DB::getDriverName() !== 'sqlite') {
+                foreach ($columns as $column) {
+                    if (!Schema::hasColumn($tableName, $column)) {
+                        continue;
+                    }
 
-                try {
-                    DB::statement("ALTER TABLE `{$tableName}` MODIFY `{$column}` LONGTEXT NULL");
-                } catch (\Exception $e) {
                     try {
-                        DB::statement("ALTER TABLE `{$tableName}` MODIFY `{$column}` TEXT NULL");
-                    } catch (\Exception $e2) {
-                        echo "Warning: Could not modify column {$tableName}.{$column}: " . $e2->getMessage() . "\n";
+                        DB::statement("ALTER TABLE `{$tableName}` MODIFY `{$column}` LONGTEXT NULL");
+                    } catch (\Exception $e) {
+                        try {
+                            DB::statement("ALTER TABLE `{$tableName}` MODIFY `{$column}` TEXT NULL");
+                        } catch (\Exception $e2) {
+                            echo "Warning: Could not modify column {$tableName}.{$column}: " . $e2->getMessage() . "\n";
+                        }
                     }
                 }
             }

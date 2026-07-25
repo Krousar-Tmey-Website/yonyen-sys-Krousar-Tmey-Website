@@ -178,7 +178,7 @@
                                         @endif
                                     </div>
                                     @if($campaign->description)
-                                    <div class="text-xs text-gray-400 truncate max-w-[220px]">{{ Str::limit($campaign->description, 55) }}</div>
+                                    <div class="text-xs text-gray-400 truncate max-w-[220px]">{{ Str::limit(strip_tags($campaign->description), 55) }}</div>
                                     @endif
                                 </div>
                             </div>

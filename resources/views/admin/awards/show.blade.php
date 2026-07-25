@@ -54,7 +54,7 @@
             @if($award->description)
             <div class="border-t border-gray-100 pt-5">
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Description</p>
-                <p class="text-sm text-gray-600 leading-relaxed">{{ $award->description }}</p>
+                <div class="rich-text-content text-sm text-gray-600 leading-relaxed">{!! $award->description !!}</div>
             </div>
             @endif
         </div>

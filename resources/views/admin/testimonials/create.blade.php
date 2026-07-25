@@ -31,10 +31,10 @@
                 <div class="mt-5">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Content</label>
                     <div x-show="lang === 'en'">
-                        <textarea name="content" rows="4" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('content') }}</textarea>
+                        <x-admin.rich-text name="content" :value="old('content')" lang="en" />
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
-                        <textarea name="content_fr" rows="4" placeholder="Contenu (français)..." class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('content_fr') }}</textarea>
+                        <x-admin.rich-text name="content_fr" :value="old('content_fr')" lang="fr" placeholder="Contenu (français)..." />
                         <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English value.</p>
                     </div>
                 </div>

@@ -43,8 +43,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Text (shown on hover)</label>
-                        <textarea name="mission_text" rows="4"
-                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['mission_text'] ?? 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.' }}</textarea>
+                        <x-admin.rich-text name="mission_text" :value="$settings['mission_text'] ?? 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.'" lang="en" :rows="3" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Photo</label>
@@ -80,8 +79,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Text (shown on hover)</label>
-                        <textarea name="vision_text" rows="4"
-                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['vision_text'] ?? 'A world in which all children are empowered to grow into independent and responsible adults.' }}</textarea>
+                        <x-admin.rich-text name="vision_text" :value="$settings['vision_text'] ?? 'A world in which all children are empowered to grow into independent and responsible adults.'" lang="en" :rows="3" />
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Photo</label>
@@ -116,18 +114,15 @@
                 @csrf
                 <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Portfolio Paragraph</label>
-                    <textarea name="portfolio_text" rows="4"
-                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['portfolio_text'] ?? 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.' }}</textarea>
+                    <x-admin.rich-text name="portfolio_text" :value="$settings['portfolio_text'] ?? 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.'" lang="en" :rows="4" />
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Pull-Quote</label>
-                    <textarea name="principle_quote" rows="2"
-                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." }}</textarea>
+                    <x-admin.rich-text name="principle_quote" :value="$settings['principle_quote'] ?? 'Krousar Thmey\'s main principle is the development of projects led by Cambodians for Cambodians.'" lang="en" :rows="2" />
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Closing Note</label>
-                    <textarea name="portfolio_volunteers_text" rows="3"
-                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $settings['portfolio_volunteers_text'] ?? 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.' }}</textarea>
+                    <x-admin.rich-text name="portfolio_volunteers_text" :value="$settings['portfolio_volunteers_text'] ?? 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.'" lang="en" :rows="3" />
                 </div>
                 <button type="submit" class="btn-primary text-sm py-2.5">Save Our Portfolio</button>
             </form>
@@ -164,6 +159,11 @@
                  this.statIsActive = true;
                  this.statIsFeatured = false;
                  this.showStatsModal = true;
+                 this.$nextTick(() => this.syncStatCKEditors());
+             },
+             syncStatCKEditors() {
+                 window.setCKEditorContent?.(document.getElementById('stat-description'), this.statDescription);
+                 window.setCKEditorContent?.(document.getElementById('stat-description-fr'), this.statDescriptionFr);
              },
              openEditModal(stat) {
                  this.editMode = true;
@@ -179,6 +179,7 @@
                  this.statIsActive = !!stat.is_active;
                  this.statIsFeatured = !!stat.is_featured;
                  this.showStatsModal = true;
+                 this.$nextTick(() => this.syncStatCKEditors());
              }
          }">
         <div class="bg-white rounded-2xl border border-gray-100 p-6">
@@ -392,15 +393,15 @@
                             {{-- Description --}}
                             <div x-show="lang === 'en'">
                                 <label class="block text-xs font-medium text-gray-600 mb-1.5">Description <span class="text-gray-400 font-normal">(optional)</span></label>
-                                <textarea name="description" x-model="statDescription" rows="2"
-                                          class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow resize-none"
-                                          placeholder="Short supporting detail..."></textarea>
+                                <x-admin.rich-text id="stat-description" name="description" :value="''" lang="en" :rows="2"
+                                    @input="statDescription = $event.target.value"
+                                    placeholder="Short supporting detail..." />
                             </div>
                             <div x-show="lang === 'fr'" x-cloak>
                                 <label class="block text-xs font-medium text-gray-600 mb-1.5">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                                <textarea name="description_fr" x-model="statDescriptionFr" rows="2"
-                                          class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow resize-none"
-                                          placeholder="Détail supplémentaire..."></textarea>
+                                <x-admin.rich-text id="stat-description-fr" name="description_fr" :value="''" lang="fr" :rows="2"
+                                    @input="statDescriptionFr = $event.target.value"
+                                    placeholder="Détail supplémentaire..." />
                             </div>
 
                             {{-- Sort order + Active --}}

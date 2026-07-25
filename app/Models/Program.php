@@ -2,10 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperProgram
+ */
 class Program extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = [
+        'description', 'description_fr',
+        'full_description', 'full_description_fr',
+        'testimony_story', 'testimony_story_fr',
+    ];
 
     protected $fillable = [
         'title', 'title_fr', 'slug', 'description', 'description_fr',

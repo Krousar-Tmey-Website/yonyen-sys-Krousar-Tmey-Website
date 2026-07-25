@@ -64,9 +64,9 @@
                 </div>
                 
                 @if($bannerSubtitle)
-                    <p class="text-white/90 text-lg md:text-xl max-w-xl leading-relaxed hero-reveal hero-reveal-delay-2 font-medium drop-shadow-md">
-                        {{ $bannerSubtitle }}
-                    </p>
+                    <div class="rich-text-content text-white/90 text-lg md:text-xl max-w-xl leading-relaxed hero-reveal hero-reveal-delay-2 font-medium drop-shadow-md">
+                        {!! $bannerSubtitle !!}
+                    </div>
                 @endif
             </div>
         </div>
@@ -143,9 +143,9 @@
                                         </div>
                                         <h3 class="text-sm font-black text-[#e8a020] uppercase tracking-widest">Objective</h3>
                                     </div>
-                                    <p class="text-gray-800 leading-relaxed text-lg md:text-[1.15rem] font-medium pl-1">
-                                        {{ $program->localized_description }}
-                                    </p>
+                                    <div class="rich-text-content text-gray-800 leading-relaxed text-lg md:text-[1.15rem] font-medium pl-1">
+                                        {!! $program->localized_description !!}
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -153,8 +153,8 @@
                         @if($program->localized_full_description)
                             <div class="mb-10 bg-white/50 backdrop-blur rounded-3xl p-6 border border-gray-100 shadow-sm" data-reveal="{{ $isEven ? 'right' : 'left' }}" style="--reveal-delay: 200">
                                 <h3 class="text-sm font-black text-[#1a3c6e] uppercase tracking-widest mb-4">Program Details</h3>
-                                <div class="prose prose-lg prose-p:text-gray-600 prose-p:leading-loose max-w-none">
-                                    <p class="whitespace-pre-line">{{ $program->localized_full_description }}</p>
+                                <div class="rich-text-content text-gray-600 leading-loose">
+                                    {!! $program->localized_full_description !!}
                                 </div>
                             </div>
                         @endif
@@ -214,7 +214,7 @@
                                 </svg>
                             </button>
                             <div x-show="open" class="px-8 pb-8 pt-4 border-t border-white/10" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-                                <p class="text-white/90 leading-loose text-lg whitespace-pre-line italic font-medium drop-shadow-sm">{{ $program->localized_testimony_story }}</p>
+                                <div class="rich-text-content text-white/90 leading-loose text-lg italic font-medium drop-shadow-sm">{!! $program->localized_testimony_story !!}</div>
                             </div>
                         </div>
                     </div>
@@ -246,8 +246,7 @@
                                         </div>
                                     </div>
                                     <div class="p-8 flex flex-col flex-1 relative">
-                                            <p class="text-gray-600 text-[15px] leading-relaxed flex-1 mb-8">{{ Str::limit($project->localized_description, 130) }}</p>
-                                        @endif
+                                            <p class="text-gray-600 text-[15px] leading-relaxed flex-1 mb-8">{{ Str::limit(strip_tags($project->localized_description), 130) }}</p>
                                         <div class="mt-auto flex items-center justify-between">
                                             <span class="inline-flex items-center gap-2 text-[#2d6fa3] text-xs font-black uppercase tracking-widest group-hover:text-[#1a3c6e] transition-colors duration-300">
                                                 Read More
@@ -278,9 +277,9 @@
                 <div class="text-center mb-16" data-reveal="up">
                     <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#e8a020]/10 border border-[#e8a020]/20 mb-5 shadow-sm">
                         <div class="w-2 h-2 rounded-full bg-[#e8a020]"></div>
-                        <span class="text-[#e8a020] font-bold text-xs uppercase tracking-widest">{{ $additionalLabel }}</span>
+                        <span class="text-[#e8a020] font-bold text-xs uppercase tracking-widest">{{ strip_tags($additionalLabel) }}</span>
                     </div>
-                    <h2 class="text-3xl md:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide">{{ $additionalTitle }}</h2>
+                    <h2 class="text-3xl md:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide">{{ strip_tags($additionalTitle) }}</h2>
                     <div class="w-24 h-1.5 bg-gradient-to-r from-[#d32f2f] to-[#e8a020] mx-auto mt-6 rounded-full"></div>
                 </div>
                 
@@ -301,7 +300,7 @@
                             @endif
 
                             <h3 class="text-xl font-black text-[#1a3c6e] uppercase tracking-wide mb-3 relative z-10">{{ $program->localized_title }}</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line relative z-10 font-medium">{{ $program->localized_description }}</p>
+                            <div class="rich-text-content text-gray-600 text-sm leading-relaxed relative z-10 font-medium">{!! $program->localized_description !!}</div>
                         </div>
                     @endforeach
                 </div>
@@ -319,9 +318,9 @@
                 <div class="text-center mb-16" data-reveal="up">
                     <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#2d6fa3]/10 border border-[#2d6fa3]/20 mb-5 shadow-sm">
                         <div class="w-2 h-2 rounded-full bg-[#2d6fa3]"></div>
-                        <span class="text-[#2d6fa3] font-bold text-xs uppercase tracking-widest">{{ $infoLabel }}</span>
+                        <span class="text-[#2d6fa3] font-bold text-xs uppercase tracking-widest">{{ strip_tags($infoLabel) }}</span>
                     </div>
-                    <h2 class="text-3xl md:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide">{{ $infoTitle }}</h2>
+                    <h2 class="text-3xl md:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide">{{ strip_tags($infoTitle) }}</h2>
                     <div class="w-24 h-1.5 bg-gradient-to-r from-[#d32f2f] to-[#e8a020] mx-auto mt-6 rounded-full"></div>
                 </div>
 
@@ -350,7 +349,7 @@
                                 <h3 class="text-lg font-black text-[#1a3c6e] mb-3 uppercase tracking-wide group-hover:text-[#2d6fa3] transition-colors">{{ $item->localized_title }}</h3>
 
                                 @if($item->short_content)
-                                    <p class="text-gray-600 text-sm font-medium leading-relaxed flex-1 mb-8">{{ Str::limit($item->localized_short_content, 110) }}</p>
+                                    <p class="text-gray-600 text-sm font-medium leading-relaxed flex-1 mb-8">{{ Str::limit(strip_tags($item->localized_short_content), 110) }}</p>
                                 @endif
 
                                 <div class="mt-auto flex items-center justify-between pt-6 border-t border-gray-100">
@@ -381,12 +380,12 @@
         <div class="relative max-w-4xl mx-auto px-6 text-center z-10" data-reveal="scale">
             <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 backdrop-blur border border-white/20 mb-8 shadow-sm">
                 <div class="w-2 h-2 rounded-full bg-[#8da83a] animate-pulse"></div>
-                <span class="text-white font-bold text-xs uppercase tracking-widest">{{ $ctaLabel }}</span>
+                <span class="text-white font-bold text-xs uppercase tracking-widest">{{ strip_tags($ctaLabel) }}</span>
             </div>
             
-            <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-wide mb-6 drop-shadow-md">{{ $ctaTitle }}</h2>
+            <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-wide mb-6 drop-shadow-md">{{ strip_tags($ctaTitle) }}</h2>
             
-            <p class="text-white/80 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-medium">{{ $ctaSubtitle }}</p>
+            <div class="rich-text-content text-white/80 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-medium">{!! $ctaSubtitle !!}</div>
             
             <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
                 <a href="{{ route('donate') }}" class="w-full sm:w-auto px-10 py-4 bg-[#8da83a] hover:bg-[#7a932d] text-white rounded-full text-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3">

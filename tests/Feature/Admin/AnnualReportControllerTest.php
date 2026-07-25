@@ -33,6 +33,16 @@ class AnnualReportControllerTest extends TestCase
             $table->integer('year');
             $table->string('file_path')->nullable();
             $table->string('original_filename')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('programs', function (Blueprint $table) {
+            $table->id();
+            $table->string('title')->nullable();
+            $table->string('title_fr')->nullable();
+            $table->string('slug')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -40,6 +50,7 @@ class AnnualReportControllerTest extends TestCase
     protected function tearDown(): void
     {
         Schema::dropIfExists('annual_reports');
+        Schema::dropIfExists('programs');
         Schema::dropIfExists('users');
 
         parent::tearDown();
@@ -93,6 +104,7 @@ class AnnualReportControllerTest extends TestCase
         $response->assertRedirect(route('admin.reports.index'));
         $this->assertDatabaseHas('annual_reports', ['title' => 'Annual Report 2024 Updated', 'year' => 2025]);
 
+        $report->refresh();
         Storage::disk('public')->delete($report->file_path);
 
         $response = $this->get(route('admin.reports.show', $report));

@@ -33,6 +33,19 @@
                     @error('title_fr')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
                     <p class="mt-1 text-xs text-gray-500">Shown to French-language visitors. Leave blank to reuse the English title.</p>
                 </div>
+
+                <div x-show="lang === 'en'" class="mt-4">
+                    <label for="description" class="mb-1 block text-sm font-semibold text-gray-700">Description</label>
+                    <x-admin.rich-text name="description" :value="old('description')" lang="en" />
+                    @error('description')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
+                </div>
+
+                <div x-show="lang === 'fr'" x-cloak class="mt-4">
+                    <label for="description_fr" class="mb-1 block text-sm font-semibold text-gray-700">Description (French) <span class="optional">(optional)</span></label>
+                    <x-admin.rich-text name="description_fr" :value="old('description_fr')" lang="fr" />
+                    @error('description_fr')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
+                    <p class="mt-1 text-xs text-gray-500">Shown to French-language visitors. Leave blank to reuse the English description.</p>
+                </div>
             </div>
 
             <div>

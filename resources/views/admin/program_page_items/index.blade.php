@@ -56,7 +56,7 @@
                             <div>
                                 <div class="font-semibold text-gray-900 text-sm">{{ $item->title }}</div>
                                 @if($item->short_content)
-                                <div class="text-xs text-gray-400 mt-0.5 max-w-xs truncate">{{ Str::limit($item->short_content, 80) }}</div>
+                                <div class="text-xs text-gray-400 mt-0.5 max-w-xs truncate">{{ Str::limit(strip_tags($item->short_content), 80) }}</div>
                                 @endif
                             </div>
                         </div>

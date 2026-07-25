@@ -29,7 +29,7 @@
     background: #ffffff;
     border: none;
     border-bottom: 1px solid #e9ecef;
-    overflow: hidden;
+    overflow: visible;
 }
 .form-card:last-child {
     border-bottom: none;
@@ -3157,4 +3157,67 @@ select.form-control {
         width: 36px;
         height: 36px;
     }
+}
+
+/* ============================================
+   CKEDITOR CUSTOMIZATIONS
+============================================ */
+
+.ck-body-wrapper .ck-dropdown__panel,
+.ck.ck-dropdown__panel {
+    z-index: 999999 !important;
+}
+
+.ck-body-wrapper .ck-dropdown__panel .ck-list,
+.ck.ck-dropdown__panel .ck-list {
+    max-height: 180px !important;
+    overflow-y: auto !important;
+    /* Custom scrollbar for visibility */
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.ck-body-wrapper .ck-dropdown__panel .ck-list::-webkit-scrollbar,
+.ck.ck-dropdown__panel .ck-list::-webkit-scrollbar {
+    width: 6px;
+}
+.ck-body-wrapper .ck-dropdown__panel .ck-list::-webkit-scrollbar-track,
+.ck.ck-dropdown__panel .ck-list::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+.ck-body-wrapper .ck-dropdown__panel .ck-list::-webkit-scrollbar-thumb,
+.ck.ck-dropdown__panel .ck-list::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* Force all CKEditor layout containers to be visible to prevent clipping */
+.ck.ck-editor,
+.ck.ck-editor__top,
+.ck.ck-editor__main,
+.ck.ck-toolbar,
+.ck.ck-toolbar__items,
+.ck.ck-dropdown {
+    overflow: visible !important;
+}
+
+/* Minimum editor height so the editing area is usable */
+.ck.ck-editor__editable_inline {
+    min-height: 120px;
+    padding: 0.75rem 1rem !important;
+}
+
+/* Match the admin form's border/radius style */
+.ck.ck-editor__main .ck-editor__editable {
+    border-color: #e2e8f0 !important;
+    border-radius: 0 0 8px 8px !important;
+}
+.ck.ck-editor__top .ck-toolbar {
+    border-color: #e2e8f0 !important;
+    border-radius: 8px 8px 0 0 !important;
+    background: #f8fafc !important;
+}
+.ck.ck-editor__main .ck-editor__editable:focus {
+    border-color: #2d6fa3 !important;
+    box-shadow: 0 0 0 3px rgba(45, 111, 163, 0.08) !important;
 }

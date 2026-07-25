@@ -382,9 +382,9 @@
                             @endif
                             <div class="p-6 flex flex-col flex-grow relative z-20 bg-white">
                                 <h4 class="font-black text-[#1d4e7a] text-xl mb-3">{{ $wwp->localized_country_name }}</h4>
-                                <p class="text-gray-500 text-sm leading-relaxed mb-6 flex-grow">
-                                    {{ $wwp->localized_description }}
-                                </p>
+                                <div class="rich-text-content text-gray-500 text-sm leading-relaxed mb-6 flex-grow">
+                                    {!! $wwp->localized_description !!}
+                                </div>
                                 @if($wwp->learn_more_url)
                                     <a href="{{ $wwp->learn_more_url }}" target="_blank" rel="noopener"
                                        class="inline-flex items-center justify-center gap-2 w-full bg-white text-[#2d6fa3] font-bold text-sm px-6 py-2.5 rounded-xl border-2 border-[#2d6fa3]/20 hover:border-[#2d6fa3] hover:bg-[#2d6fa3] hover:text-white transition-all duration-300">
@@ -524,7 +524,7 @@
                                 @if($description)
                                     <div class="space-y-4">
                                         <div class="pl-4 border-l-2 border-gray-100 hover:border-gray-300 transition-colors">
-                                            <div class="text-gray-500 text-sm leading-relaxed prose prose-sm max-w-none">
+                                            <div class="rich-text-content text-gray-500 text-sm leading-relaxed max-w-none">
                                                 {!! $description !!}
                                             </div>
                                         </div>
@@ -1023,7 +1023,7 @@
 
                             @if($job->description)
                             <p class="text-slate-500 text-xs leading-relaxed mb-5 line-clamp-3">
-                                {{ $job->localized_description }}
+                                {{ strip_tags($job->localized_description) }}
                             </p>
                             @endif
                         </div>

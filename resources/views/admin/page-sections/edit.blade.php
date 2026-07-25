@@ -77,8 +77,7 @@
 
                 <div x-show="lang === 'en'">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
-                    <textarea name="description" rows="6"
-                              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description', $page_section->description) }}</textarea>
+                    <x-admin.rich-text name="description" :value="old('description', $page_section->description)" lang="en" :rows="6" />
                     @error('description')
                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -86,8 +85,7 @@
 
                 <div x-show="lang === 'fr'" x-cloak>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                    <textarea name="description_fr" rows="6"
-                              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description_fr', $page_section->description_fr) }}</textarea>
+                    <x-admin.rich-text name="description_fr" :value="old('description_fr', $page_section->description_fr)" lang="fr" :rows="6" />
                     @error('description_fr')
                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror

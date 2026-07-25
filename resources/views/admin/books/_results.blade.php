@@ -28,7 +28,7 @@
 
                    <h4 class="font-bold text-gray-800 text-sm truncate group-hover:text-[#2d6fa3] transition-colors" title="{{ $book->title }}">{{ $book->title }}</h4>
                    @if($book->description)
-                   <p class="text-xs text-gray-400 line-clamp-2 mt-1">{{ $book->description }}</p>
+                   <p class="text-xs text-gray-400 line-clamp-2 mt-1">{{ Str::limit(strip_tags($book->description), 100) }}</p>
                    @endif
               </div>
 
@@ -47,7 +47,7 @@
               </a>
               <form action="{{ route('admin.books.destroy', $book) }}" method="POST" class="inline">
                    @csrf @method('DELETE')
-                   <button type="submit" title="Delete" class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition shadow-sm">
+                   <button type="submit" title="Delete" onclick="return confirm('Delete this book? This cannot be undone.')" class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition shadow-sm">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
                         </svg>

@@ -99,6 +99,7 @@
 function bookManager() {
     return {
         openAddModal: {{ $errors->any() ? 'true' : 'false' }},
+        lang: 'en',
         search: '{{ $filters['search'] ?? '' }}',
         availability: '{{ $filters['availability'] ?? '' }}',
         total: {{ $totalBooks ?? 0 }},

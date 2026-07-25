@@ -88,9 +88,9 @@
                 <p class="font-bold text-gray-800 text-lg mb-2">&ldquo;{{ $settings['media_press_headline'] ?? 'Classical arts not a priority in schools today' }}&rdquo;</p>
                 <p class="italic text-gray-400 text-sm mb-4">published {{ $settings['media_press_date'] ?? '07.25.17' }}</p>
                 <hr class="border-gray-100 mb-4">
-                <p class="italic text-gray-600 leading-relaxed mb-6">
-                    {{ $settings['media_press_excerpt'] ?? "Traditional Cambodian art forms such as classical dance and music have been passed down throughout the generations as a way for children to learn and preserve the meaning of their culture. However, as the education sector changes, gaining knowledge of the arts at a young age is proving less essential for the Kingdom's public schools…" }}
-                </p>
+                <div class="rich-text-content italic text-gray-600 leading-relaxed mb-6">
+                    {!! $settings['media_press_excerpt'] ?? "Traditional Cambodian art forms such as classical dance and music have been passed down throughout the generations as a way for children to learn and preserve the meaning of their culture. However, as the education sector changes, gaining knowledge of the arts at a young age is proving less essential for the Kingdom's public schools…" !!}
+                </div>
                 <a href="{{ $pressArticleUrl }}" target="_blank" rel="noopener"
                    class="inline-flex items-center justify-center px-6 py-2.5 bg-[#2d6fa3] text-white text-sm font-semibold rounded hover:bg-[#1d4e7a] transition-colors">
                     Read the article
@@ -135,7 +135,7 @@
                         @endif
                     </p>
                     <h3 class="font-bold text-[#1d4e7a] uppercase text-sm mb-3 leading-snug">{{ $article->title }}</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $article->excerpt }}</p>
+                    <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ Str::limit(strip_tags($article->excerpt ?? ''), 160) }}</p>
                     <a href="{{ route('news.show', $article->slug) }}" class="mt-4 text-[#2d6fa3] font-semibold text-sm hover:underline">
                         read more
                     </a>
@@ -199,7 +199,7 @@
                             </span>
                         </div>
                         @if($item->description)
-                        <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $item->description }}</p>
+                        <div class="rich-text-content text-gray-500 text-sm leading-relaxed flex-1">{!! $item->description !!}</div>
                         @endif
                         <div class="mt-4">
                             @if($item->external_url)

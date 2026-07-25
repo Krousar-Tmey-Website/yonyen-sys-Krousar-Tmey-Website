@@ -47,7 +47,7 @@
         <div class="p-5">
             <h3 class="font-semibold text-gray-800 text-sm leading-snug mb-1">{{ $program->title }}</h3>
             @if($program->description)
-            <p class="text-gray-400 text-xs leading-relaxed mb-3 line-clamp-2">{{ $program->description }}</p>
+            <p class="text-gray-400 text-xs leading-relaxed mb-3 line-clamp-2">{{ Str::limit(strip_tags($program->description), 100) }}</p>
             @endif
 
 

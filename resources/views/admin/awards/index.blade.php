@@ -16,6 +16,8 @@
             title: '',
             title_fr: '',
             year: '',
+            recipient: '',
+            organization: '',
             description: '',
             description_fr: '',
             website_url: '',
@@ -43,12 +45,21 @@
             this.lang = 'en';
             this.form = {
                 title: '', title_fr: '',
-                year: '', description: '', description_fr: '',
+                year: '', recipient: '', organization: '',
+                description: '', description_fr: '',
                 website_url: '', article_url: '', video_url: '', sort_order: 0,
                 is_active: true, image_url: null,
             };
             this.showModal = true;
-            this.$nextTick(() => this.resetImageInput());
+            this.$nextTick(() => {
+                this.resetImageInput();
+                this.syncCKEditors();
+            });
+        },
+
+        syncCKEditors() {
+            window.setCKEditorContent?.(document.getElementById('modal-description'), this.form.description);
+            window.setCKEditorContent?.(document.getElementById('modal-description_fr'), this.form.description_fr);
         },
 
         openEditModal(award) {
@@ -59,6 +70,8 @@
                 title: award.title ?? '',
                 title_fr: award.title_fr ?? '',
                 year: award.year ?? '',
+                recipient: award.recipient ?? '',
+                organization: award.organization ?? '',
                 description: award.description ?? '',
                 description_fr: award.description_fr ?? '',
                 website_url: award.website_url ?? '',
@@ -69,7 +82,10 @@
                 image_url: award.image_url ?? null,
             };
             this.showModal = true;
-            this.$nextTick(() => this.resetImageInput());
+            this.$nextTick(() => {
+                this.resetImageInput();
+                this.syncCKEditors();
+            });
         },
 
         closeModal() {
@@ -233,20 +249,36 @@
                                placeholder="ex. Meilleur prix ONG">
                     </div>
 
+                    {{-- ORGANIZATION / RECIPIENT --}}
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="modal-organization" class="text-xs font-medium text-gray-600">Organization <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <input type="text" id="modal-organization" name="organization" autocomplete="off"
+                                   x-model="form.organization"
+                                   class="form-input text-sm"
+                                   placeholder="e.g. UNICEF">
+                        </div>
+                        <div>
+                            <label for="modal-recipient" class="text-xs font-medium text-gray-600">Recipient <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <input type="text" id="modal-recipient" name="recipient" autocomplete="off"
+                                   x-model="form.recipient"
+                                   class="form-input text-sm"
+                                   placeholder="e.g. Krousar Thmey">
+                        </div>
+                    </div>
+
                     {{-- DESCRIPTION --}}
                     <div x-show="lang === 'en'">
                         <label for="modal-description" class="text-xs font-medium text-gray-600">Description</label>
-                        <textarea id="modal-description" name="description" rows="2"
-                                  class="form-input text-sm resize-none"
-                                  placeholder="Short description..."
-                                  x-model="form.description"></textarea>
+                        <x-admin.rich-text id="modal-description" name="description" :value="''" lang="en" :rows="2"
+                            @input="form.description = $event.target.value"
+                            placeholder="Short description..." />
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
                         <label for="modal-description_fr" class="text-xs font-medium text-gray-600">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <textarea id="modal-description_fr" name="description_fr" rows="2"
-                                  class="form-input text-sm resize-none"
-                                  placeholder="Description courte..."
-                                  x-model="form.description_fr"></textarea>
+                        <x-admin.rich-text id="modal-description_fr" name="description_fr" :value="''" lang="fr" :rows="2"
+                            @input="form.description_fr = $event.target.value"
+                            placeholder="Description courte..." />
                     </div>
 
                     {{-- LINKS --}}

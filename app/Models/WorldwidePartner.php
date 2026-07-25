@@ -2,10 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperWorldwidePartner
+ */
 class WorldwidePartner extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['description', 'description_fr'];
+
     protected $fillable = [
         'country_name', 'country_name_fr', 'description', 'description_fr', 'image', 'learn_more_url',
         'button_text', 'button_text_fr', 'display_order', 'is_featured', 'is_active',

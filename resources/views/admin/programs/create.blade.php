@@ -23,7 +23,7 @@
 
 <div class="max-w-3xl mx-auto">
     <form action="{{ route('admin.programs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6"
-          data-program-form-state="{{ e(json_encode($programFormState, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT)) }}"
+          data-program-form-state="{{ json_encode($programFormState, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) }}"
           x-data="programForm(JSON.parse($el.dataset.programFormState || '{}'))">
         @csrf
 
@@ -73,11 +73,11 @@
                         </div>
                         <div class="mb-6">
                             <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-widest mb-2" data-program-preview-label="objectiveLabel" x-text="previewLabels.objectiveLabel">Objective</h3>
-                            <p class="text-gray-700 leading-relaxed whitespace-pre-line" data-program-preview="objective" x-text="previewObjective"></p>
+                            <div class="text-gray-700 leading-relaxed rich-text-content" data-program-preview="objective" x-html="previewObjective"></div>
                         </div>
                         <div class="mb-6">
                             <h3 class="text-xs font-bold text-[#8da83a] uppercase tracking-widest mb-2" data-program-preview-label="programLabel" x-text="previewLabels.programLabel">Program</h3>
-                            <p class="text-gray-700 leading-relaxed whitespace-pre-line" data-program-preview="program" x-text="previewProgramText"></p>
+                            <div class="text-gray-700 leading-relaxed rich-text-content" data-program-preview="program" x-html="previewProgramText"></div>
                         </div>
                         <div class="flex flex-col sm:flex-row gap-3">
                             <div class="btn-blue justify-center text-center w-full sm:w-auto opacity-90" data-program-preview-label="projectsButton" x-text="previewLabels.projectsButton">Know more about the projects</div>
@@ -140,27 +140,23 @@
 
             <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective Text</label>
-                <textarea name="description" rows="3" x-model="description"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description') }}</textarea>
+                <x-admin.rich-text name="description" :value="old('description')" lang="en" :rows="3" @input="description = $event.target.value" />
                 <p class="mt-2 text-xs text-gray-400">This fills the Objective paragraph on the public program section.</p>
             </div>
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Objective Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <textarea name="description_fr" rows="3" x-model="descriptionFr"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('description_fr') }}</textarea>
+                <x-admin.rich-text name="description_fr" :value="old('description_fr')" lang="fr" :rows="3" @input="descriptionFr = $event.target.value" />
                 <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
 
             <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Program Text</label>
-                <textarea name="full_description" rows="6" x-model="fullDescription"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('full_description') }}</textarea>
+                <x-admin.rich-text name="full_description" :value="old('full_description')" lang="en" :rows="6" @input="fullDescription = $event.target.value" />
                 <p class="mt-2 text-xs text-gray-400">This fills the main Program content block on the public page.</p>
             </div>
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Program Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <textarea name="full_description_fr" rows="6" x-model="fullDescriptionFr"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('full_description_fr') }}</textarea>
+                <x-admin.rich-text name="full_description_fr" :value="old('full_description_fr')" lang="fr" :rows="6" @input="fullDescriptionFr = $event.target.value" />
                 <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
             </div>
 
@@ -204,13 +200,11 @@
                 </div>
                 <div x-show="lang === 'en'">
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Story Content</label>
-                    <textarea name="testimony_story" rows="4" placeholder="Enter testimony story text here..."
-                              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('testimony_story') }}</textarea>
+                    <x-admin.rich-text name="testimony_story" :value="old('testimony_story')" lang="en" :rows="4" placeholder="Enter testimony story text here..." />
                 </div>
                 <div x-show="lang === 'fr'" x-cloak>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Story Content (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                    <textarea name="testimony_story_fr" rows="4" placeholder="Saisissez le texte du témoignage en français..."
-                              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-y">{{ old('testimony_story_fr') }}</textarea>
+                    <x-admin.rich-text name="testimony_story_fr" :value="old('testimony_story_fr')" lang="fr" :rows="4" placeholder="Saisissez le texte du témoignage en français..." />
                     <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
                 </div>
             </div>

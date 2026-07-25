@@ -45,14 +45,14 @@
             @if($news->excerpt)
             <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Excerpt</p>
-                <p class="text-sm text-gray-600 italic">{{ $news->excerpt }}</p>
+                <div class="rich-text-content text-sm text-gray-600 italic">{!! $news->excerpt !!}</div>
             </div>
             @endif
 
             @if($news->content)
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Content</p>
-                <div class="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">{{ $news->content }}</div>
+                <div class="rich-text-content text-sm text-gray-600 leading-relaxed">{!! $news->content !!}</div>
             </div>
             @endif
 

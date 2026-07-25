@@ -3,12 +3,16 @@
 namespace Tests\Feature;
 
 use App\Models\HomeSetting;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class SocialIconUploadTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -17,25 +21,8 @@ class SocialIconUploadTest extends TestCase
 
     public function test_debug_upload_flow(): void
     {
-        // Create a valid PNG (1x1 pixel) - getimagesize can read this
-        $tempPath = tempnam(sys_get_temp_dir(), 'test_png') . '.png';
-        $pngContent = base64_decode(
-            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGA' .
-            'WjI9ZgAAAABJRU5ErkJggg=='
-        );
-        file_put_contents($tempPath, $pngContent);
-
-        echo 'Temp file: ' . $tempPath . PHP_EOL;
-        echo 'Temp file size: ' . filesize($tempPath) . PHP_EOL;
-        $size = @getimagesize($tempPath);
-        echo 'getimagesize result: ';
-        var_dump($size);
-
-        $file = new UploadedFile($tempPath, 'custom-facebook.png', 'image/png', 0, true);
-
-        // Manually authenticate and post
-        $admin = \App\Models\User::where('email', 'admin@krousar-thmey.org')->first();
-        $this->assertNotNull($admin, 'Admin user exists');
+        $file = UploadedFile::fake()->image('custom-facebook.png', 1, 1);
+        $admin = User::factory()->create(['is_admin' => true]);
 
         $response = $this->actingAs($admin)
             ->post(route('admin.website.update'), [
@@ -48,27 +35,12 @@ class SocialIconUploadTest extends TestCase
                 'sharing_facebook_icon_file' => $file,
             ]);
 
-        echo 'Response status: ' . $response->getStatusCode() . PHP_EOL;
+        $response->assertRedirect(route('admin.website.index'));
+        $response->assertSessionHas('success', 'Website settings saved successfully.');
 
-        // Follow redirect if any
-        if ($response->isRedirect()) {
-            $response = $this->followRedirects();
-        }
+        $value = HomeSetting::getValue('sharing_facebook_icon', '');
 
-        echo 'Final status: ' . $response->getStatusCode() . PHP_EOL;
-        echo 'Session success: ';
-        var_dump(session('success'));
-
-        $errors = session('errors');
-        if ($errors) {
-            echo 'Session errors: ' . json_encode($errors->all()) . PHP_EOL;
-        } else {
-            echo 'No session errors' . PHP_EOL;
-        }
-
-        $val = HomeSetting::getValue('sharing_facebook_icon', 'DEFAULT');
-        echo 'sharing_facebook_icon value: ' . $val . PHP_EOL;
-
-        @unlink($tempPath);
+        $this->assertStringStartsWith('social/', $value);
+        Storage::disk('public')->assertExists($value);
     }
 }

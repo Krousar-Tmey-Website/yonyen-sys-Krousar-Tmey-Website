@@ -27,7 +27,7 @@
 <section class="py-16 bg-white">
     <div class="max-w-3xl mx-auto px-6">
 
-        @if(session('success'))
+        @if(session('volunteer_success'))
             {{-- Success Message --}}
             <div class="bg-green-50 border border-green-200 rounded-3xl p-12 text-center">
                 <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">

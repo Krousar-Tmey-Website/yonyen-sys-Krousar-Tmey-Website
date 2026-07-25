@@ -61,8 +61,7 @@
             
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
-                <textarea name="settings[worldwide_description]" rows="3"
-                          class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('settings.worldwide_description', \App\Models\HomeSetting::getValue('worldwide_description', 'Krousar Thmey benefits from the support of partner organizations around the world. Their fundraising, advocacy, communication, and volunteer networks greatly contribute to the success of our education, child protection, and disability inclusion programs.')) }}</textarea>
+                <x-admin.rich-text name="settings[worldwide_description]" :value="old('settings.worldwide_description', \App\Models\HomeSetting::getValue('worldwide_description', 'Krousar Thmey benefits from the support of partner organizations around the world. Their fundraising, advocacy, communication, and volunteer networks greatly contribute to the success of our education, child protection, and disability inclusion programs.'))" lang="en" :rows="3" />
             </div>
             
             <button type="submit" class="btn-primary text-sm py-2.5">Save Changes</button>
@@ -150,7 +149,7 @@
                         </div>
                         <h4 class="font-bold text-gray-800 text-sm mb-1 truncate max-w-sm">{{ $partner->country_name }}</h4>
                         @if($partner->description)
-                        <p class="text-gray-400 text-xs line-clamp-2 max-w-sm">{{ Str::limit($partner->description, 80) }}</p>
+                        <p class="text-gray-400 text-xs line-clamp-2 max-w-sm">{{ Str::limit(strip_tags($partner->description), 80) }}</p>
                         @endif
                     </div>
                     <div class="flex items-center gap-2 flex-shrink-0">

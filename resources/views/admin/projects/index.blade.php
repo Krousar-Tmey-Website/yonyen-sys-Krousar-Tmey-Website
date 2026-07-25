@@ -55,7 +55,7 @@
                 </span>
             </div>
             @if($item->description)
-            <p class="text-gray-400 text-xs leading-relaxed line-clamp-2 mb-3">{{ $item->description }}</p>
+            <p class="text-gray-400 text-xs leading-relaxed line-clamp-2 mb-3">{{ Str::limit(strip_tags($item->description), 100) }}</p>
             @endif
 
             <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">

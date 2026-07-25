@@ -75,7 +75,7 @@
                         @endforeach
                         @endif
                     </p>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-4 flex-1">{{ Str::limit($article->localized_excerpt, 120) }}</p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-4 flex-1">{{ Str::limit(strip_tags($article->localized_excerpt ?? ''), 120) }}</p>
                     <div class="mt-auto pt-3 border-t border-gray-100">
                         <a href="{{ route('news.show', $article->slug) }}" class="inline-flex items-center gap-1.5 text-[#2d6fa3] text-xs font-bold group-hover:gap-2.5 transition-all">
                             Read More

@@ -89,7 +89,7 @@
                 </div>
 
                 @if($item->description)
-                <p class="text-gray-400 text-xs leading-relaxed line-clamp-2 flex-1">{{ $item->description }}</p>
+                <p class="text-gray-400 text-xs leading-relaxed line-clamp-2 flex-1">{{ Str::limit(strip_tags($item->description), 100) }}</p>
                 @endif
 
                 {{-- Actions --}}

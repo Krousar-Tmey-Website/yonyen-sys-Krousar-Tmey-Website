@@ -100,7 +100,7 @@
                                     {{ $article->title }}
                                 </div>
                                 @if($article->excerpt)
-                                <div class="text-xs text-gray-400 mt-0.5 truncate max-w-xs">{{ Str::limit($article->excerpt, 60) }}</div>
+                                <div class="text-xs text-gray-400 mt-0.5 truncate max-w-xs">{{ Str::limit(strip_tags($article->excerpt), 60) }}</div>
                                 @endif
                             </div>
                         </div>

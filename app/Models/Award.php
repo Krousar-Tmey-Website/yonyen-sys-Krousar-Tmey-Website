@@ -2,11 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperAward
+ */
 class Award extends Model
 {
-    protected $fillable = ['title', 'title_fr', 'year', 'recipient', 'organization', 'description', 'description_fr', 'image', 'sort_order', 'is_active', 'website_url', 'article_url', 'video_url'];
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['description', 'description_fr'];
+
+    protected $fillable =['title', 'title_fr', 'year', 'recipient', 'organization', 'description', 'description_fr', 'image', 'sort_order', 'is_active', 'website_url', 'article_url', 'video_url'];
 
     protected $appends = ['image_url'];
 
