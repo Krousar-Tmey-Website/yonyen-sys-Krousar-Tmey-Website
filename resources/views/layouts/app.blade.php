@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" href="{{ $_faviconUrl }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Kantumruy+Pro:wght@400;500;600&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -608,6 +608,11 @@ function googleTranslateElementInit() {
                     <a href="#" class="text-white/30 hover:text-white/60 text-xs transition-colors">Terms of Use</a>
                     <a href="{{ route('resources') }}" class="text-white/30 hover:text-white/60 text-xs transition-colors">Annual Reports</a>
                 </div>
+            </div>
+            <div class="border-t border-white/5">
+                <p class="max-w-7xl mx-auto px-6 py-4 text-center font-khmer text-base tracking-wide text-white/40">
+                    បង្កើតដោយសិស្ស <span class="font-medium text-white/60">Passerelles Numériques Cambodia (PNC)</span> <span class="text-rose-400 align-[-1px]">❤️</span>
+                </p>
             </div>
         </div>
     </footer>

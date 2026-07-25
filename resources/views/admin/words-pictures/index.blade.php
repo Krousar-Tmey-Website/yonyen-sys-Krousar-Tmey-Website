@@ -41,8 +41,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Text</label>
-                <textarea name="words_pictures_objective_text" rows="3"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('words_pictures_objective_text', $settings['words_pictures_objective_text'] ?? 'To enable children with hearing and speech impairments and their relatives and friends access a tool to practice Cambodian Sign Language.') }}</textarea>
+                <x-admin.rich-text name="words_pictures_objective_text" :value="old('words_pictures_objective_text', $settings['words_pictures_objective_text'] ?? 'To enable children with hearing and speech impairments and their relatives and friends access a tool to practice Cambodian Sign Language.')" lang="en" :rows="3" />
             </div>
         </div>
 
@@ -58,8 +57,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Paragraph 1</label>
-                <textarea name="words_pictures_project_p1" rows="5"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('words_pictures_project_p1', $settings['words_pictures_project_p1'] ?? "For over 25 years, Krousar Thmey has implemented a unique mix of special and inclusive education for children with sensory disabilities in Cambodia, developing a unique expertise in visual and hearing impairments with an established track record of results, transforming lives through education, and lastingly influencing national policies. Children with hearing disabilities face many challenges in terms of communication, and have specific educational needs requiring adapted resources. As technology is an ever growing means of providing access to education and communication, Krousar Thmey is launching an educative and innovative mobile phone application:") }}</textarea>
+                <x-admin.rich-text name="words_pictures_project_p1" :value="old('words_pictures_project_p1', $settings['words_pictures_project_p1'] ?? 'For over 25 years, Krousar Thmey has implemented a unique mix of special and inclusive education for children with sensory disabilities in Cambodia, developing a unique expertise in visual and hearing impairments with an established track record of results, transforming lives through education, and lastingly influencing national policies. Children with hearing disabilities face many challenges in terms of communication, and have specific educational needs requiring adapted resources. As technology is an ever growing means of providing access to education and communication, Krousar Thmey is launching an educative and innovative mobile phone application:')" lang="en" :rows="4" />
                 <p class="mt-1.5 text-xs text-gray-400">Ends right before the app name (shown in italics automatically).</p>
             </div>
             <div>
@@ -69,8 +67,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Paragraph 2</label>
-                <textarea name="words_pictures_project_p2" rows="4"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('words_pictures_project_p2', $settings['words_pictures_project_p2'] ?? "Based on a very intuitive interface and simple design, the inclusive application is readily accessible to a very wide audience, and equally useful for families with young children with or without disabilities. Featuring over 500 words relevant to every-day life situations, selected for their suitability to the Cambodian background, the purpose of the application is to offer a fun picture dictionary with integrated sounds and sign language pictograms.") }}</textarea>
+                <x-admin.rich-text name="words_pictures_project_p2" :value="old('words_pictures_project_p2', $settings['words_pictures_project_p2'] ?? 'Based on a very intuitive interface and simple design, the inclusive application is readily accessible to a very wide audience, and equally useful for families with young children with or without disabilities. Featuring over 500 words relevant to every-day life situations, selected for their suitability to the Cambodian background, the purpose of the application is to offer a fun picture dictionary with integrated sounds and sign language pictograms.')" lang="en" :rows="4" />
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -93,8 +90,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Thanks / Credits</label>
-                <textarea name="words_pictures_thanks_text" rows="3"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('words_pictures_thanks_text', $settings['words_pictures_thanks_text'] ?? 'Many thanks to Judit van Geystelen for the original idea and design, Open Institute for the development, as well as the Ministry of Education, Youth and Sport of Cambodia, Symphasis Foundation, and Clariant Foundation for their support.') }}</textarea>
+                <x-admin.rich-text name="words_pictures_thanks_text" :value="old('words_pictures_thanks_text', $settings['words_pictures_thanks_text'] ?? 'Many thanks to Judit van Geystelen for the original idea and design, Open Institute for the development, as well as the Ministry of Education, Youth and Sport of Cambodia, Symphasis Foundation, and Clariant Foundation for their support.')" lang="en" :rows="3" />
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Dedication</label>
@@ -271,8 +267,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Excerpt</label>
-                <textarea name="words_pictures_press_excerpt" rows="4"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('words_pictures_press_excerpt', $settings['words_pictures_press_excerpt'] ?? 'As children with hearing disabilities face many challenges in terms of communication and have specific educational needs, Krousar Thmey has utilised technology to create a mobile learning app as a resource for disadvantaged children…') }}</textarea>
+                <x-admin.rich-text name="words_pictures_press_excerpt" :value="old('words_pictures_press_excerpt', $settings['words_pictures_press_excerpt'] ?? 'As children with hearing disabilities face many challenges in terms of communication and have specific educational needs, Krousar Thmey has utilised technology to create a mobile learning app as a resource for disadvantaged children…')" lang="en" :rows="3" />
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Article URL</label>

@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+/**
+ * @mixin IdeHelperDonor
+ */
 class Donor extends Model
 {
     protected $table = 'donors';

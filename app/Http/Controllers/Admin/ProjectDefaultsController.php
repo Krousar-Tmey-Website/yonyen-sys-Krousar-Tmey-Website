@@ -63,7 +63,7 @@ class ProjectDefaultsController extends Controller
             HomeSetting::updateOrCreate(
                 ['key' => $key],
                 [
-                    'value' => $value ?? '',
+                    'value' => clean($value ?? ''),
                     'label' => $labels[$key] ?? $key,
                     'group' => 'project_defaults',
                 ]

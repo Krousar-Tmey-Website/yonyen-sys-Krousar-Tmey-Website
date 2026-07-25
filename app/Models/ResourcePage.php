@@ -2,11 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperResourcePage
+ */
 class ResourcePage extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['description', 'description_fr', 'detail_description', 'detail_description_fr'];
+
     protected $fillable = [
         'title', 'title_fr', 'slug', 'description', 'description_fr',
         'image', 'header_text', 'header_text_fr', 'detail_image', 'detail_description', 'detail_description_fr',
@@ -19,6 +27,30 @@ class ResourcePage extends Model
             'items'     => 'array',
             'is_active' => 'boolean',
         ];
+    }
+
+    // The "items" column is a JSON array of feature cards, each with its own rich-text
+    // description/description_fr — HasPurifiedHtml only walks flat string columns, so the
+    // nested item text needs its own pass through the same sanitizer.
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saving(function (ResourcePage $page) {
+            if (!is_array($page->items)) {
+                return;
+            }
+
+            $page->items = array_map(function ($item) {
+                foreach (['description', 'description_fr'] as $field) {
+                    if (!empty($item[$field])) {
+                        $item[$field] = clean($item[$field]);
+                    }
+                }
+
+                return $item;
+            }, $page->items);
+        });
     }
 
     public function scopeActive(Builder $query)

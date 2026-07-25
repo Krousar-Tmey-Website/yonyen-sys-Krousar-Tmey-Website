@@ -56,16 +56,14 @@
 
                 <div class="form-group form-group--no-margin" x-show="lang === 'en'">
                     <label class="form-label">Excerpt <span class="optional">(optional)</span></label>
-                    <textarea name="excerpt" rows="3" class="form-control textarea"
-                              placeholder="Short summary for article cards...">{{ old('excerpt', $news->excerpt) }}</textarea>
+                    <x-admin.rich-text name="excerpt" :value="old('excerpt', $news->excerpt)" lang="en" :rows="2" placeholder="Short summary for article cards..." />
                     <div class="form-helper">Recommended: 120-160 characters.</div>
                     @error('excerpt')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-group form-group--no-margin" x-show="lang === 'fr'" x-cloak>
                     <label class="form-label">Excerpt (French) <span class="optional">(optional)</span></label>
-                    <textarea name="excerpt_fr" rows="3" class="form-control textarea"
-                              placeholder="Résumé court pour les cartes d'article...">{{ old('excerpt_fr', $news->excerpt_fr) }}</textarea>
+                    <x-admin.rich-text name="excerpt_fr" :value="old('excerpt_fr', $news->excerpt_fr)" lang="fr" :rows="2" placeholder="Résumé court pour les cartes d'article..." />
                     <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English excerpt.</div>
                     @error('excerpt_fr')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
@@ -523,6 +521,6 @@ function renderTagLinks() {
 renderPresetButtons();
 </script>
 
-@vite(['resources/js/admin-news-editor.js', 'resources/js/admin-news-form.js'])
+@vite(['resources/js/admin-news-form.js'])
 
 @endsection

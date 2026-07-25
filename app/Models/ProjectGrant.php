@@ -3,6 +3,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperProjectGrant
+ */
 class ProjectGrant extends Model
 {
     protected $guarded = [];

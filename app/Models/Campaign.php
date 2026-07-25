@@ -2,12 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+/**
+ * @mixin IdeHelperCampaign
+ */
 class Campaign extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['description'];
+
     protected $fillable = [
         'title',
         'slug',

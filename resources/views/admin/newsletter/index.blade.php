@@ -122,6 +122,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
+                                            onclick="return confirm('Delete this subscriber? This cannot be undone.')"
                                             class="action-btn btn-delete"
                                             title="Delete Subscriber">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

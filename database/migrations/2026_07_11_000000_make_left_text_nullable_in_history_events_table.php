@@ -10,7 +10,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('ALTER TABLE history_events MODIFY left_text TEXT NULL');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE history_events MODIFY left_text TEXT NULL');
+        }
     }
 
     /**
@@ -19,6 +21,8 @@ return new class extends Migration
     public function down(): void
     {
         DB::statement("UPDATE history_events SET left_text = '' WHERE left_text IS NULL");
-        DB::statement('ALTER TABLE history_events MODIFY left_text TEXT NOT NULL');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE history_events MODIFY left_text TEXT NOT NULL');
+        }
     }
 };

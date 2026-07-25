@@ -72,15 +72,11 @@
                 </div>
                 <div x-show="addLang === 'en'">
                     <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
-                    <textarea name="description" rows="3"
-                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                              placeholder="Brief job description...">{{ old('description') }}</textarea>
+                    <x-admin.rich-text name="description" :value="old('description')" lang="en" placeholder="Brief job description..." :rows="3" />
                 </div>
                 <div x-show="addLang === 'fr'" x-cloak>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                    <textarea name="description_fr" rows="3"
-                              class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                              placeholder="Description sommaire du poste...">{{ old('description_fr') }}</textarea>
+                    <x-admin.rich-text name="description_fr" :value="old('description_fr')" lang="fr" placeholder="Description sommaire du poste..." :rows="3" />
                 </div>
                 {{-- Active checkbox --}}
                 <label class="flex items-center gap-2 cursor-pointer select-none px-3.5 py-2.5 rounded-xl border border-gray-200 bg-gray-50 hover:border-gray-300 transition-all">
@@ -182,7 +178,7 @@
                                     <div class="min-w-0">
                                         <span class="font-bold text-gray-800 text-sm block truncate">{{ $job->title }}</span>
                                         @if($job->description)
-                                        <span class="text-xs text-gray-400 block truncate max-w-[200px] mt-0.5">{{ $job->description }}</span>
+                                        <span class="text-xs text-gray-400 block truncate max-w-[200px] mt-0.5">{{ Str::limit(strip_tags($job->description), 100) }}</span>
                                         @endif
                                     </div>
                                 </div>
@@ -216,7 +212,7 @@
                                     </button>
                                     <form action="{{ route('admin.jobs.destroy', $job) }}" method="POST" class="inline">
                                         @csrf @method('DELETE')
-                                        <button type="submit" title="Delete" class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition shadow-sm">
+                                        <button type="submit" title="Delete" onclick="return confirm('Delete this job opportunity? This cannot be undone.')" class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition shadow-sm">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
                                             </svg>
@@ -274,13 +270,11 @@
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                         <div class="md:col-span-2" x-show="lang === 'en'">
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Description</label>
-                                            <textarea name="description" rows="2"
-                                                      class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $job->description }}</textarea>
+                                            <x-admin.rich-text name="description" :value="$job->description" lang="en" :rows="2" class="w-full text-xs border border-gray-200 rounded-lg" />
                                         </div>
                                         <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                                            <textarea name="description_fr" rows="2"
-                                                      class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3] resize-none">{{ $job->description_fr }}</textarea>
+                                            <x-admin.rich-text name="description_fr" :value="$job->description_fr" lang="fr" :rows="2" class="w-full text-xs border border-gray-200 rounded-lg" />
                                         </div>
                                         <div>
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Status</label>

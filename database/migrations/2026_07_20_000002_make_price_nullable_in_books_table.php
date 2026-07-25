@@ -9,11 +9,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement("ALTER TABLE books MODIFY price DECIMAL(10,2) NULL DEFAULT NULL;");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE books MODIFY price DECIMAL(10,2) NULL DEFAULT NULL;");
+        }
     }
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE books MODIFY price DECIMAL(10,2) NOT NULL DEFAULT 0.00;");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE books MODIFY price DECIMAL(10,2) NOT NULL DEFAULT 0.00;");
+        }
     }
 };

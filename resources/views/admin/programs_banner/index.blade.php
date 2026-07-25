@@ -41,7 +41,7 @@
                     <span class="text-white">Our Programs</span>
                 </nav>
                 <h1 id="preview-title" class="text-2xl font-bold text-white mb-2">{{ $previewTitle }}</h1>
-                <p id="preview-subtitle" class="text-white/70 text-sm max-w-xl">{{ $previewSubtitle }}</p>
+                <p id="preview-subtitle" class="text-white/70 text-sm max-w-xl rich-text-content">{!! $previewSubtitle !!}</p>
             </div>
         </div>
     </div>
@@ -83,12 +83,7 @@
 
             <div>
                 <label for="programs_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle / Description</label>
-                <textarea id="programs_banner_subtitle"
-                          name="programs_banner_subtitle"
-                          rows="3"
-                          oninput="document.getElementById('preview-subtitle').textContent = this.value"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                          placeholder="Short description shown below the title...">{{ old('programs_banner_subtitle', $settings['programs_banner_subtitle']->value ?? '') }}</textarea>
+                <x-admin.rich-text id="programs_banner_subtitle" name="programs_banner_subtitle" :value="old('programs_banner_subtitle', $settings['programs_banner_subtitle']->value ?? '')" lang="en" :rows="3" placeholder="Short description shown below the title..." />
                 <p class="mt-1.5 text-xs text-gray-400">One or two sentences summarising the programs section.</p>
             </div>
         </div>
@@ -200,7 +195,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle / Description</label>
-                <textarea name="programs_cta_subtitle" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none" placeholder="Your donation goes directly to one of these programs...">{{ old('programs_cta_subtitle', $settings['programs_cta_subtitle']->value ?? 'Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.') }}</textarea>
+                <x-admin.rich-text name="programs_cta_subtitle" :value="old('programs_cta_subtitle', $settings['programs_cta_subtitle']->value ?? 'Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.')" lang="en" :rows="2" placeholder="Your donation goes directly to one of these programs..." />
             </div>
         </div>
 

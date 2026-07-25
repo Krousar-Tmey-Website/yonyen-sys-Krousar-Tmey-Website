@@ -14,13 +14,16 @@ return new class extends Migration
             $table->string('availability')->nullable()->after('address');
         });
 
-        // Modify the status enum to include new values
-        DB::statement("ALTER TABLE volunteers MODIFY COLUMN status ENUM('Pending', 'Under Review', 'Interview Scheduled', 'Approved', 'Rejected') DEFAULT 'Pending'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE volunteers MODIFY COLUMN status ENUM('Pending', 'Under Review', 'Interview Scheduled', 'Approved', 'Rejected') DEFAULT 'Pending'");
+        }
     }
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE volunteers MODIFY COLUMN status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE volunteers MODIFY COLUMN status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending'");
+        }
 
         Schema::table('volunteers', function (Blueprint $table) {
             $table->dropColumn(['address', 'availability']);

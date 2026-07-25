@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperSiteNotification
+ */
 class SiteNotification extends Model
 {
     protected $table = 'site_notifications';

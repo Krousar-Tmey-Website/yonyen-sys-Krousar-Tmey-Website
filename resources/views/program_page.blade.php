@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $page->localized_title . ' — Krousar Thmey')
-@section('description', $page->localized_short_content ?? $page->localized_title)
+@section('description', $page->localized_short_content ? Str::limit(strip_tags($page->localized_short_content), 155) : $page->localized_title)
 
 @section('content')
 
@@ -29,7 +29,7 @@
 @if($page->localized_content)
 <section class="py-12 bg-white">
     <div class="max-w-4xl mx-auto px-6">
-        <div class="prose prose-sm max-w-none prose-headings:text-[#1a3c6e] prose-a:text-[#2d6fa3] prose-img:rounded-xl prose-img:max-h-64 prose-img:object-cover">
+        <div class="rich-text-content prose prose-sm max-w-none prose-headings:text-[#1a3c6e] prose-a:text-[#2d6fa3] prose-img:rounded-xl prose-img:max-h-64 prose-img:object-cover">
             {!! $page->localized_content !!}
         </div>
     </div>
@@ -63,7 +63,7 @@
                 <div class="p-5 flex flex-col flex-1 relative z-0">
                     <h3 class="text-base font-bold text-[#1a3c6e] mb-2 leading-snug group-hover:text-[#2d6fa3] transition-colors">{{ $item->localized_title }}</h3>
                     @if($item->localized_short_content)
-                    <p class="text-gray-500 text-sm leading-relaxed flex-1 mb-4">{{ Str::limit($item->localized_short_content, 120) }}</p>
+                    <p class="text-gray-500 text-sm leading-relaxed flex-1 mb-4">{{ Str::limit(strip_tags($item->localized_short_content), 120) }}</p>
                     @endif
                     <div class="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
                         <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-bold transition-colors pointer-events-none group-hover:bg-[#2d6fa3] group-hover:text-white">

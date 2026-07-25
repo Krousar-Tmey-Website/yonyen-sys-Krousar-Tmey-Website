@@ -2,11 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @mixin IdeHelperAnnualReport
+ */
 class AnnualReport extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['description', 'description_fr'];
+
     protected $fillable = [
         'title',
         'title_fr',
@@ -32,7 +40,7 @@ class AnnualReport extends Model
         return ['is_active' => 'boolean'];
     }
 
-    public function scopeActive($query)
+    public function scopeActive(\Illuminate\Database\Eloquent\Builder $query)
     {
         return $query->where('is_active', true)->orderByDesc('year');
     }

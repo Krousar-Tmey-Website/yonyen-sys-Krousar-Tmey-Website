@@ -19,16 +19,12 @@
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Short Content <span class="text-gray-400 font-normal">(card preview)</span></label>
-            <textarea name="short_content" rows="3"
-                      class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm"
-                      placeholder="Brief description shown on the card...">{{ old('short_content') }}</textarea>
+            <x-admin.rich-text name="short_content" :value="old('short_content')" lang="en" :rows="3" />
             @error('short_content')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Full Detail Content <span class="text-gray-400 font-normal">(shown on "Read More" page)</span></label>
-            <textarea name="detail_content" rows="14"
-                      class="w-full rounded-xl border-gray-300 focus:border-[#2d6fa3] focus:ring focus:ring-[#2d6fa3]/20 transition-all text-sm font-mono"
-                      placeholder="Full content — plain text or HTML...">{{ old('detail_content') }}</textarea>
+            <x-admin.rich-text name="detail_content" :value="old('detail_content')" lang="en" :rows="14" />
             @error('detail_content')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
         <hr class="border-gray-100">

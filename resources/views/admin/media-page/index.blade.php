@@ -38,7 +38,7 @@
                     </p>
                     <p id="preview-headline" class="font-bold text-gray-800 text-sm mb-1">&ldquo;{{ $previewHeadline }}&rdquo;</p>
                     <p class="italic text-gray-400 text-xs mb-2">published <span id="preview-date">{{ $previewDate }}</span></p>
-                    <p id="preview-excerpt" class="italic text-gray-500 text-xs leading-relaxed line-clamp-3">{{ $previewExcerpt }}</p>
+                    <div id="preview-excerpt" class="italic text-gray-500 text-xs leading-relaxed line-clamp-3 rich-text-content">{!! $previewExcerpt !!}</div>
                 </div>
             </div>
         </div>
@@ -150,9 +150,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Excerpt</label>
-                <textarea name="media_press_excerpt" rows="4"
-                          oninput="document.getElementById('preview-excerpt').textContent = this.value"
-                          class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('media_press_excerpt', $settings['media_press_excerpt'] ?? "Traditional Cambodian art forms such as classical dance and music have been passed down throughout the generations as a way for children to learn and preserve the meaning of their culture. However, as the education sector changes, gaining knowledge of the arts at a young age is proving less essential for the Kingdom's public schools…") }}</textarea>
+                <x-admin.rich-text name="media_press_excerpt" :value="old('media_press_excerpt', $settings['media_press_excerpt'] ?? 'Traditional Cambodian art forms such as classical dance and music have been passed down throughout the generations as a way for children to learn and preserve the meaning of their culture. However, as the education sector changes, gaining knowledge of the arts at a young age is proving less essential for the Kingdom\'s public schools…')" lang="en" :rows="3" />
             </div>
 
             <div>

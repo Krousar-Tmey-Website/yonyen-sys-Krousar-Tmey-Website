@@ -2,10 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperMediaGallery
+ */
 class MediaGallery extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['description'];
+
     protected $guarded = [];
 
     protected $casts = [

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $article->localized_title . ' — Krousar Thmey')
-@section('description', $article->localized_excerpt ?? 'Read the latest news from Krousar Thmey.')
+@section('description', \Illuminate\Support\Str::limit(strip_tags($article->localized_excerpt ?? ''), 160) ?: 'Read the latest news from Krousar Thmey.')
 
 @php use Illuminate\Support\Str; @endphp
 
@@ -42,7 +42,7 @@
         @endif
 
         {{-- Content --}}
-        <div class="article-content prose prose-lg max-w-none text-justify prose-p:text-gray-700 prose-headings:text-[#1a3c6e] prose-a:text-[#2d6fa3] prose-a:hover:text-[#1a4a7a] prose-img:rounded-lg">
+        <div class="article-content rich-text-content max-w-none">
             {!! $article->localized_content !!}
         </div>
 

@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperHomeSetting
+ */
 class HomeSetting extends Model
 {
     protected $fillable = ['key', 'value', 'label', 'group'];
@@ -13,9 +16,13 @@ class HomeSetting extends Model
         return static::where('key', $key)->value('value') ?? $default;
     }
 
+    // Many keys (banner subtitles, mission/vision copy, transparency text, etc.) are
+    // authored through <x-admin.rich-text>/CKEditor and rendered raw ({!! !!}) on public
+    // pages, so every value passes through the same sanitizer used by the dedicated models
+    // — plain-text keys (numbers, short labels) pass through clean() unaffected.
     public static function setValue(string $key, ?string $value): void
     {
-        static::updateOrCreate(['key' => $key], ['value' => $value ?? '']);
+        static::updateOrCreate(['key' => $key], ['value' => clean($value ?? '')]);
     }
 
     public static function allKeyed(): array

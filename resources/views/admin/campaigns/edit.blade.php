@@ -126,10 +126,7 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <textarea name="description" id="campaignDescription" rows="6" maxlength="5000"
-                              class="form-control textarea @error('description') error @enderror"
-                              placeholder="Describe the campaign goal, who it helps, and why donations are needed..."
-                              oninput="document.getElementById('charCount').textContent = this.value.length">{{ old('description', $campaign->description) }}</textarea>
+                    <x-admin.rich-text id="campaignDescription" name="description" :value="old('description', $campaign->description)" lang="en" :rows="6" maxlength="5000" placeholder="Describe the campaign goal, who it helps, and why donations are needed..." oninput="document.getElementById('charCount').textContent = this.value.length" />
                     @error('description')<div class="form-error">{{ $message }}</div>@enderror
                     <div class="form-helper">This will be shown on the public campaign page.</div>
                 </div>

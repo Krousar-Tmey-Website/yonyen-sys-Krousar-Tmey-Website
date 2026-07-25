@@ -3,10 +3,18 @@
 namespace App\Models;
 
 use App\Enums\PartnerCategory;
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperPartner
+ */
 class Partner extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['description', 'description_fr'];
+
     protected $fillable = [
         'name',
         'category',

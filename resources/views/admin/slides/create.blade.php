@@ -44,9 +44,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle</label>
-                        <textarea name="subtitle" rows="3"
-                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="Our students showcase the beauty of Khmer arts and culture...">{{ old('subtitle') }}</textarea>
+                        <x-admin.rich-text name="subtitle" :value="old('subtitle')" lang="en" placeholder="Our students showcase the beauty of Khmer arts and culture..." />
                     </div>
                 </div>
 
@@ -70,9 +68,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <textarea name="subtitle_fr" rows="3"
-                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="Sous-titre en français...">{{ old('subtitle_fr') }}</textarea>
+                        <x-admin.rich-text name="subtitle_fr" :value="old('subtitle_fr')" lang="fr" placeholder="Sous-titre en français..." />
                         <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English subtitle.</p>
                     </div>
                 </div>

@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('core_values', function (Blueprint $table) {
-            $table->string('headline')->nullable()->after('title');
-        });
+        if (Schema::hasTable('core_values') && ! Schema::hasColumn('core_values', 'headline')) {
+            Schema::table('core_values', function (Blueprint $table) {
+                $table->string('headline')->nullable()->after('title');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('core_values', function (Blueprint $table) {
-            $table->dropColumn('headline');
-        });
+        if (Schema::hasTable('core_values') && Schema::hasColumn('core_values', 'headline')) {
+            Schema::table('core_values', function (Blueprint $table) {
+                $table->dropColumn('headline');
+            });
+        }
     }
 };

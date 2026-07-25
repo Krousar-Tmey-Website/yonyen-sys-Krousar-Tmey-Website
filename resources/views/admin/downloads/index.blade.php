@@ -36,7 +36,7 @@
                 @endif
             </div>
             @if($item->description)
-            <p class="text-gray-400 text-xs leading-relaxed mb-4 line-clamp-2">{{ $item->description }}</p>
+            <p class="text-gray-400 text-xs leading-relaxed mb-4 line-clamp-2">{{ Str::limit(strip_tags($item->description), 100) }}</p>
             @endif
             <div class="flex items-center justify-between mt-4">
                 <a href="{{ route('admin.downloads.edit', $item) }}"

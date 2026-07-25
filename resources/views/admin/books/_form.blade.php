@@ -36,15 +36,13 @@
 {{-- Description --}}
 <div class="form-group" x-show="lang === 'en'">
     <label class="form-label">Description</label>
-    <textarea name="description" rows="3" class="form-control textarea @error('description') error @enderror"
-              placeholder="Write a short description or synopsis for the book...">{{ $bookDescription }}</textarea>
+    <x-admin.rich-text name="description" :value="$bookDescription" lang="en" placeholder="Write a short description or synopsis for the book..." />
     @error('description')<div class="form-error">{{ $message }}</div>@enderror
 </div>
 
 <div class="form-group" x-show="lang === 'fr'" x-cloak>
     <label class="form-label">Description (French) <span class="optional">(optional)</span></label>
-    <textarea name="description_fr" rows="3" class="form-control textarea @error('description_fr') error @enderror"
-              placeholder="Rédigez une courte description ou un résumé du livre en français...">{{ $bookDescriptionFr }}</textarea>
+    <x-admin.rich-text name="description_fr" :value="$bookDescriptionFr" lang="fr" placeholder="Rédigez une courte description ou un résumé du livre en français..." />
     @error('description_fr')<div class="form-error">{{ $message }}</div>@enderror
     <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English description.</div>
 </div>

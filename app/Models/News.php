@@ -2,22 +2,27 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
  * Class News
- * 
+ *
  * @method static \Illuminate\Database\Eloquent\Builder latest(string $column = 'created_at')
  * @method static \Illuminate\Contracts\Pagination\LengthAwarePaginator paginate(int $perPage = 15)
  * @method static \Illuminate\Database\Eloquent\Builder published()
  * @method bool delete()
  * @method static News find(int $id)
  * @method static News create(array $attributes = [])
+ * @mixin IdeHelperNews
  */
 class News extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['excerpt', 'excerpt_fr', 'content', 'content_fr'];
 
     protected $fillable = [
         'title', 'title_fr', 'slug', 'excerpt', 'excerpt_fr', 'content', 'content_fr',

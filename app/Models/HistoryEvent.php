@@ -2,10 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperHistoryEvent
+ */
 class HistoryEvent extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['left_text', 'left_text_fr', 'right_text', 'right_text_fr'];
+
     protected $fillable = ['year', 'left_text', 'left_text_fr', 'right_text', 'right_text_fr', 'image', 'sort_order', 'is_active'];
 
     protected function casts(): array

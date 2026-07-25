@@ -54,7 +54,15 @@
                 const fileInput = document.getElementById('modal-image-input');
                 if (fileInput) fileInput.value = '';
                 this.updateImagePreview(null);
+                this.syncCKEditors();
             });
+        },
+
+        syncCKEditors() {
+            window.setCKEditorContent?.(document.getElementById('history-left-text'), this.form.left_text);
+            window.setCKEditorContent?.(document.getElementById('history-left-text-fr'), this.form.left_text_fr);
+            window.setCKEditorContent?.(document.getElementById('history-right-text'), this.form.right_text);
+            window.setCKEditorContent?.(document.getElementById('history-right-text-fr'), this.form.right_text_fr);
         },
 
         openEditModal(eventData) {
@@ -80,6 +88,7 @@
                 const fileInput = document.getElementById('modal-image-input');
                 if (fileInput) fileInput.value = '';
                 this.updateImagePreview(null);
+                this.syncCKEditors();
             });
         },
 
@@ -341,10 +350,9 @@
                             <label class="text-xs font-medium text-gray-600">
                                 Left Column Text <span class="text-gray-400 font-normal">(optional)</span>
                             </label>
-                            <textarea x-model="form.left_text" rows="2"
-                                      class="form-input text-sm resize-none"
-                                      :class="errors.left_text ? 'form-input-error' : ''"
-                                      placeholder="Main event description..."></textarea>
+                            <x-admin.rich-text id="history-left-text" name="left_text_display" :value="''" lang="en" :rows="2"
+                                @input="form.left_text = $event.target.value"
+                                placeholder="Main event description..." />
                             <p class="text-xs text-red-500 mt-1" x-show="errors.left_text" x-text="errors.left_text" x-cloak></p>
                         </div>
 
@@ -353,10 +361,9 @@
                             <label class="text-xs font-medium text-gray-600">
                                 Right Column Text <span class="text-gray-400 font-normal">(optional)</span>
                             </label>
-                            <textarea x-model="form.right_text" rows="2"
-                                      class="form-input text-sm resize-none"
-                                      :class="errors.right_text ? 'form-input-error' : ''"
-                                      placeholder="Second event for same year..."></textarea>
+                            <x-admin.rich-text id="history-right-text" name="right_text_display" :value="''" lang="en" :rows="2"
+                                @input="form.right_text = $event.target.value"
+                                placeholder="Second event for same year..." />
                             <p class="text-xs text-red-500 mt-1" x-show="errors.right_text" x-text="errors.right_text" x-cloak></p>
                         </div>
                     </div>
@@ -368,10 +375,9 @@
                             <label class="text-xs font-medium text-gray-600">
                                 Left Column Text (French) <span class="text-gray-400 font-normal">(optional)</span>
                             </label>
-                            <textarea x-model="form.left_text_fr" rows="2"
-                                      class="form-input text-sm resize-none"
-                                      :class="errors.left_text_fr ? 'form-input-error' : ''"
-                                      placeholder="Description principale de l'événement..."></textarea>
+                            <x-admin.rich-text id="history-left-text-fr" name="left_text_fr_display" :value="''" lang="fr" :rows="2"
+                                @input="form.left_text_fr = $event.target.value"
+                                placeholder="Description principale de l'événement..." />
                             <p class="text-xs text-red-500 mt-1" x-show="errors.left_text_fr" x-text="errors.left_text_fr" x-cloak></p>
                         </div>
 
@@ -380,10 +386,9 @@
                             <label class="text-xs font-medium text-gray-600">
                                 Right Column Text (French) <span class="text-gray-400 font-normal">(optional)</span>
                             </label>
-                            <textarea x-model="form.right_text_fr" rows="2"
-                                      class="form-input text-sm resize-none"
-                                      :class="errors.right_text_fr ? 'form-input-error' : ''"
-                                      placeholder="Deuxième événement pour la même année..."></textarea>
+                            <x-admin.rich-text id="history-right-text-fr" name="right_text_fr_display" :value="''" lang="fr" :rows="2"
+                                @input="form.right_text_fr = $event.target.value"
+                                placeholder="Deuxième événement pour la même année..." />
                             <p class="text-xs text-red-500 mt-1" x-show="errors.right_text_fr" x-text="errors.right_text_fr" x-cloak></p>
                         </div>
                     </div>

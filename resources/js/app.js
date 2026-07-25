@@ -2,6 +2,7 @@ import './bootstrap';
 import Alpine from 'alpinejs';
 import focus from '@alpinejs/focus';
 import collapse from '@alpinejs/collapse';
+import { initCKEditors, destroyCKEditors } from './admin-ckeditor';
 
 Alpine.plugin(focus);
 Alpine.plugin(collapse);
@@ -179,11 +180,11 @@ function updateProgramPreviewFallback(scope, lang) {
         });
 
         form.querySelectorAll('[data-program-preview="objective"]').forEach((element) => {
-            element.textContent = objective || getValue('description') || getValue('description_fr') || labels.objectiveFallback;
+            element.innerHTML = objective || getValue('description') || getValue('description_fr') || labels.objectiveFallback;
         });
 
         form.querySelectorAll('[data-program-preview="program"]').forEach((element) => {
-            element.textContent = programText || getValue('full_description') || getValue('full_description_fr') || labels.programFallback;
+            element.innerHTML = programText || getValue('full_description') || getValue('full_description_fr') || labels.programFallback;
         });
 
         form.querySelectorAll('[data-program-preview-label]').forEach((element) => {
@@ -391,10 +392,15 @@ function initializeAdminShell() {
         window.Alpine?.initTree?.(element);
         applyLanguageTabs(element);
         initializeRevealAnimations(element);
+        initCKEditors(element);
     };
 
     const swapFragment = async (currentNode, nextNode) => {
         if (!currentNode || !nextNode) return;
+
+        // Destroy any CKEditor instances bound to the content we're about to
+        // throw away — their host textareas are gone once innerHTML is replaced.
+        destroyCKEditors(currentNode);
 
         const clonedNode = nextNode.cloneNode(true);
         const scripts = extractScripts(clonedNode);
@@ -516,6 +522,7 @@ Alpine.start();
 document.addEventListener('DOMContentLoaded', () => {
     initializeRevealAnimations(document);
     applyLanguageTabs(document);
+    initCKEditors(document);
     initializeAdminShell();
 });
 
@@ -532,7 +539,12 @@ document.addEventListener('click', (event) => {
         return;
     }
 
-    applyLanguageTabs(getLanguageScope(tab), lang);
+    const scope = getLanguageScope(tab);
+    applyLanguageTabs(scope, lang);
+
+    // Init any CKEditor instances that were skipped because they were hidden
+    // when the page loaded — now that their tab is visible, init them.
+    requestAnimationFrame(() => initCKEditors(scope));
 });
 
 document.addEventListener('input', (event) => {

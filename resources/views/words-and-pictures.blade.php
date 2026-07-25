@@ -23,13 +23,13 @@
             {{-- Left: Text content --}}
             <div data-reveal="left">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-[#11568c] mb-2">{{ $wp('words_pictures_objective_heading', 'Objective') }}</h3>
-                <p class="text-gray-700 leading-relaxed mb-6">{{ $wp('words_pictures_objective_text', 'To enable children with hearing and speech impairments and their relatives and friends access a tool to practice Cambodian Sign Language.') }}</p>
+                <div class="rich-text-content text-gray-700 leading-relaxed mb-6">{!! $wp('words_pictures_objective_text', 'To enable children with hearing and speech impairments and their relatives and friends access a tool to practice Cambodian Sign Language.') !!}</div>
 
                 <h3 class="text-xs font-bold uppercase tracking-wider text-[#11568c] mb-2">{{ $wp('words_pictures_project_heading', 'Project') }}</h3>
                 <div class="space-y-4 text-gray-700 leading-relaxed">
-                    <p>{!! nl2br(e($wp('words_pictures_project_p1', "For over 25 years, Krousar Thmey has implemented a unique mix of special and inclusive education for children with sensory disabilities in Cambodia, developing a unique expertise in visual and hearing impairments with an established track record of results, transforming lives through education, and lastingly influencing national policies. Children with hearing disabilities face many challenges in terms of communication, and have specific educational needs requiring adapted resources. As technology is an ever growing means of providing access to education and communication, Krousar Thmey is launching an educative and innovative mobile phone application:"))) !!} <em>{{ $wp('words_pictures_app_name', 'Words and Pictures') }}</em>.</p>
+                    <p>{!! $wp('words_pictures_project_p1', "For over 25 years, Krousar Thmey has implemented a unique mix of special and inclusive education for children with sensory disabilities in Cambodia, developing a unique expertise in visual and hearing impairments with an established track record of results, transforming lives through education, and lastingly influencing national policies. Children with hearing disabilities face many challenges in terms of communication, and have specific educational needs requiring adapted resources. As technology is an ever growing means of providing access to education and communication, Krousar Thmey is launching an educative and innovative mobile phone application:") !!} <em>{{ $wp('words_pictures_app_name', 'Words and Pictures') }}</em>.</p>
 
-                    <p>{{ $wp('words_pictures_project_p2', "Based on a very intuitive interface and simple design, the inclusive application is readily accessible to a very wide audience, and equally useful for families with young children with or without disabilities. Featuring over 500 words relevant to every-day life situations, selected for their suitability to the Cambodian background, the purpose of the application is to offer a fun picture dictionary with integrated sounds and sign language pictograms.") }}</p>
+                    <p>{!! $wp('words_pictures_project_p2', "Based on a very intuitive interface and simple design, the inclusive application is readily accessible to a very wide audience, and equally useful for families with young children with or without disabilities. Featuring over 500 words relevant to every-day life situations, selected for their suitability to the Cambodian background, the purpose of the application is to offer a fun picture dictionary with integrated sounds and sign language pictograms.") !!}</p>
 
                     <p>
                         {{ $wp('words_pictures_download_prefix', 'To download the application on your smartphone, please visit:') }}
@@ -37,7 +37,7 @@
                         {{ $wp('words_pictures_download_suffix', 'or scan the QR code below.') }}
                     </p>
 
-                    <p>{{ $wp('words_pictures_thanks_text', 'Many thanks to Judit van Geystelen for the original idea and design, Open Institute for the development, as well as the Ministry of Education, Youth and Sport of Cambodia, Symphasis Foundation, and Clariant Foundation for their support.') }}</p>
+                    <div class="rich-text-content">{!! $wp('words_pictures_thanks_text', 'Many thanks to Judit van Geystelen for the original idea and design, Open Institute for the development, as well as the Ministry of Education, Youth and Sport of Cambodia, Symphasis Foundation, and Clariant Foundation for their support.') !!}</div>
 
                     <p>{{ $wp('words_pictures_dedication_text', 'This application is dedicated to Tina.') }}</p>
 
@@ -143,9 +143,9 @@
                     </p>
                     <p class="font-bold text-[#2d6fa3] text-lg mb-2">&ldquo;{{ $wp('words_pictures_press_headline', 'Krousar Thmey empowering children with hearing issues') }}&rdquo;</p>
                     <p class="italic text-gray-500 text-sm mb-4">published {{ $wp('words_pictures_press_date', '04.27.2020') }}</p>
-                    <p class="italic text-gray-600 leading-relaxed mb-6">
-                        {{ $wp('words_pictures_press_excerpt', 'As children with hearing disabilities face many challenges in terms of communication and have specific educational needs, Krousar Thmey has utilised technology to create a mobile learning app as a resource for disadvantaged children…') }}
-                    </p>
+                    <div class="rich-text-content italic text-gray-600 leading-relaxed mb-6">
+                        {!! $wp('words_pictures_press_excerpt', 'As children with hearing disabilities face many challenges in terms of communication and have specific educational needs, Krousar Thmey has utilised technology to create a mobile learning app as a resource for disadvantaged children…') !!}
+                    </div>
                     <a href="{{ $wpPressArticleUrl }}" target="_blank" rel="noopener"
                        class="inline-flex items-center justify-center px-6 py-2.5 bg-[#1a3c6e] text-white text-sm font-semibold rounded hover:bg-[#12294d] transition-colors">
                         Read the article
