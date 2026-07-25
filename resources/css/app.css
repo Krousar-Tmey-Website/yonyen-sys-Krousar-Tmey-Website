@@ -8,6 +8,7 @@
 @theme {
     --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
     --font-display: 'Playfair Display', serif;
+    --font-khmer: 'Kantumruy Pro', 'Noto Sans Khmer', 'Inter', sans-serif;
 
     /* Real KT brand colors from official logo */
     --color-kt-blue: #2d6fa3;        /* "Krousar Thmey" text + butterfly outline */
