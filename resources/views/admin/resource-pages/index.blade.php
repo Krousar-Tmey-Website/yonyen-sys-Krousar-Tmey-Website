@@ -84,7 +84,7 @@
                             <div class="min-w-0">
                                 <div class="font-medium text-gray-800 truncate max-w-xs">{{ $page->title }}</div>
                                 @if($page->description)
-                                <div class="text-xs text-gray-400 mt-0.5 truncate max-w-xs">{{ \Illuminate\Support\Str::limit($page->description, 60) }}</div>
+                                <div class="text-xs text-gray-400 mt-0.5 truncate max-w-xs">{{ \Illuminate\Support\Str::limit(strip_tags($page->description), 60) }}</div>
                                 @endif
                             </div>
                         </div>

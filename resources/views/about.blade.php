@@ -25,9 +25,9 @@ $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
             {{ $heroTitle }}
         </h2>
-        <p class="text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md">
-            {{ $heroSubtitle }}
-        </p>
+        <div class="rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md">
+            {!! $heroSubtitle !!}
+        </div>
         <div class="flex flex-col sm:flex-row flex-wrap gap-6 justify-center">
             <a href="{{ route('donate') }}" class="btn-primary text-base btn-micro">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

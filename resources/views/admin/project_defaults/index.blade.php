@@ -315,7 +315,11 @@
                 </div>
                 <div class="mt-4 rounded-xl bg-[#f8f9fc] border border-gray-100 p-4">
                     <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Make a Difference Text</p>
-                    <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{{ $selectedProject->effective_make_difference_text ?: 'Not set' }}</p>
+                    @if($selectedProject->effective_make_difference_text)
+                    <div class="rich-text-content text-sm text-gray-700 leading-relaxed">{!! $selectedProject->effective_make_difference_text !!}</div>
+                    @else
+                    <p class="text-sm text-gray-700 leading-relaxed">Not set</p>
+                    @endif
                 </div>
                 <div class="grid md:grid-cols-2 gap-4 mt-4">
                     <div class="rounded-xl bg-[#f8f9fc] border border-gray-100 p-4">

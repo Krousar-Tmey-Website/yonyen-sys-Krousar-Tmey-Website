@@ -3200,3 +3200,24 @@ select.form-control {
 .ck.ck-dropdown {
     overflow: visible !important;
 }
+
+/* Minimum editor height so the editing area is usable */
+.ck.ck-editor__editable_inline {
+    min-height: 120px;
+    padding: 0.75rem 1rem !important;
+}
+
+/* Match the admin form's border/radius style */
+.ck.ck-editor__main .ck-editor__editable {
+    border-color: #e2e8f0 !important;
+    border-radius: 0 0 8px 8px !important;
+}
+.ck.ck-editor__top .ck-toolbar {
+    border-color: #e2e8f0 !important;
+    border-radius: 8px 8px 0 0 !important;
+    background: #f8fafc !important;
+}
+.ck.ck-editor__main .ck-editor__editable:focus {
+    border-color: #2d6fa3 !important;
+    box-shadow: 0 0 0 3px rgba(45, 111, 163, 0.08) !important;
+}

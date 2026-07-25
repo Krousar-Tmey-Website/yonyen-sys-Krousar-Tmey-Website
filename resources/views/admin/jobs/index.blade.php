@@ -178,7 +178,7 @@
                                     <div class="min-w-0">
                                         <span class="font-bold text-gray-800 text-sm block truncate">{{ $job->title }}</span>
                                         @if($job->description)
-                                        <span class="text-xs text-gray-400 block truncate max-w-[200px] mt-0.5">{{ $job->description }}</span>
+                                        <span class="text-xs text-gray-400 block truncate max-w-[200px] mt-0.5">{{ Str::limit(strip_tags($job->description), 100) }}</span>
                                         @endif
                                     </div>
                                 </div>
@@ -212,7 +212,7 @@
                                     </button>
                                     <form action="{{ route('admin.jobs.destroy', $job) }}" method="POST" class="inline">
                                         @csrf @method('DELETE')
-                                        <button type="submit" title="Delete" class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition shadow-sm">
+                                        <button type="submit" title="Delete" onclick="return confirm('Delete this job opportunity? This cannot be undone.')" class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition shadow-sm">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
                                             </svg>

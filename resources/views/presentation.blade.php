@@ -42,9 +42,9 @@
                         </span>
                         <h3 class="text-white font-bold text-sm uppercase tracking-[0.15em]">{{ $settings['mission_title'] ?? 'Our Mission' }}</h3>
                     </div>
-                    <p class="text-white/80 text-xs leading-relaxed max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-out overflow-hidden">
-                        {{ $settings['mission_text'] ?? 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.' }}
-                    </p>
+                    <div class="rich-text-content text-white/80 text-xs leading-relaxed max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-out overflow-hidden">
+                        {!! $settings['mission_text'] ?? 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.' !!}
+                    </div>
                 </div>
             </div>
 
@@ -66,9 +66,9 @@
                         </span>
                         <h3 class="text-white font-bold text-sm uppercase tracking-[0.15em]">{{ $settings['vision_title'] ?? 'Our Vision' }}</h3>
                     </div>
-                    <p class="text-white/80 text-xs leading-relaxed max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-out overflow-hidden">
-                        {{ $settings['vision_text'] ?? 'A world in which all children are empowered to grow into independent and responsible adults.' }}
-                    </p>
+                    <div class="rich-text-content text-white/80 text-xs leading-relaxed max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-out overflow-hidden">
+                        {!! $settings['vision_text'] ?? 'A world in which all children are empowered to grow into independent and responsible adults.' !!}
+                    </div>
                 </div>
             </div>
         </div>
@@ -375,9 +375,9 @@
         <div class="text-center mb-16" data-reveal>
             <span class="inline-block text-xs font-semibold text-[#2d6fa3] uppercase tracking-wider mb-3">What Drives Us</span>
             <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Our Values</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto">
-                {{ \App\Models\HomeSetting::getValue('values_supporting_description', 'The principles that guide everything we do, ensuring every child has the opportunity to grow, belong, and thrive.') }}
-            </p>
+            <div class="rich-text-content text-gray-500 max-w-2xl mx-auto">
+                {!! \App\Models\HomeSetting::getValue('values_supporting_description', 'The principles that guide everything we do, ensuring every child has the opportunity to grow, belong, and thrive.') !!}
+            </div>
         </div>
 
         <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
@@ -393,9 +393,9 @@
                     <div class="h-px flex-1 bg-gray-100"></div>
                 </div>
                 <h3 class="text-xl font-black uppercase tracking-wider text-[#1d4e7a] mb-4">{{ $value->localized_title }}</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    {{ $value->localized_description }}
-                </p>
+                <div class="rich-text-content text-gray-600 leading-relaxed">
+                    {!! $value->localized_description !!}
+                </div>
             </div>
             @empty
             <p class="text-gray-400 text-center py-8 md:col-span-3">No values listed yet.</p>
@@ -415,19 +415,19 @@
         </div>
 
         <div class="bg-white rounded-3xl shadow-lg border border-gray-100 px-8 py-12 md:px-16 md:py-14 text-center">
-            <p class="text-gray-700 leading-relaxed mb-10">
-                {{ $settings['portfolio_text'] ?? 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.' }}
-            </p>
-
-            <div class="relative py-8 border-y border-gray-100">
-                <p class="text-xl md:text-2xl font-serif italic text-[#1d4e7a] leading-snug max-w-2xl mx-auto">
-                    "{{ $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." }}"
-                </p>
+            <div class="rich-text-content text-gray-700 leading-relaxed mb-10">
+                {!! $settings['portfolio_text'] ?? 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.' !!}
             </div>
 
-            <p class="text-gray-500 text-sm leading-relaxed mt-10 max-w-2xl mx-auto">
-                {{ $settings['portfolio_volunteers_text'] ?? 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.' }}
-            </p>
+            <div class="relative py-8 border-y border-gray-100">
+                <div class="rich-text-content text-xl md:text-2xl font-serif italic text-[#1d4e7a] leading-snug max-w-2xl mx-auto">
+                    "{!! $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." !!}"
+                </div>
+            </div>
+
+            <div class="rich-text-content text-gray-500 text-sm leading-relaxed mt-10 max-w-2xl mx-auto">
+                {!! $settings['portfolio_volunteers_text'] ?? 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.' !!}
+            </div>
         </div>
     </div>
 </section>

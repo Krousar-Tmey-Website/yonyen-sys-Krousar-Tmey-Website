@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperNewsletterSubscriber
+ */
 class NewsletterSubscriber extends Model
 {
     protected $table = 'newsletter_subscribers';

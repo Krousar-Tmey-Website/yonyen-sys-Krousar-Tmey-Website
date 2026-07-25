@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperPartnerPrinciple
+ */
 class PartnerPrinciple extends Model
 {
     protected $fillable = [

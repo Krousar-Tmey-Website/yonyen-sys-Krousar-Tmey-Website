@@ -524,7 +524,7 @@
                                 @if($description)
                                     <div class="space-y-4">
                                         <div class="pl-4 border-l-2 border-gray-100 hover:border-gray-300 transition-colors">
-                                            <div class="text-gray-500 text-sm leading-relaxed prose prose-sm max-w-none">
+                                            <div class="rich-text-content text-gray-500 text-sm leading-relaxed max-w-none">
                                                 {!! $description !!}
                                             </div>
                                         </div>

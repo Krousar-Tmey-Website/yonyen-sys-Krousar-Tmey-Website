@@ -57,9 +57,6 @@ class PresentationController extends Controller
         foreach ($data as $key => $value) {
             HomeSetting::setValue($key, $value);
         }
-        
-        // Ensure values_supporting_description is saved (even if empty)
-        HomeSetting::setValue('values_supporting_description', $request->input('values_supporting_description', ''));
 
         return redirect()->route('admin.presentation.index')->with('success', 'Presentation settings updated.');
     }

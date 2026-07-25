@@ -52,7 +52,7 @@
                     <h3 class="font-bold text-gray-800 text-sm mb-1.5">{{ $item['title'] }}</h3>
                     @endif
                     @if(!empty($item['description']))
-                    <p class="text-gray-500 text-sm leading-relaxed">{{ $item['description'] }}</p>
+                    <div class="rich-text-content text-gray-500 text-sm leading-relaxed">{!! $item['description'] !!}</div>
                     @endif
                 </div>
             </div>
@@ -70,7 +70,7 @@
                         <a href="{{ route('news.show', $article->slug) }}" class="hover:underline">{{ $article->title }}</a>
                     </h3>
                     @if($article->excerpt)
-                    <p class="text-gray-600 text-sm leading-relaxed mb-3">{{ Str::limit($article->excerpt, 220) }}</p>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-3">{{ Str::limit(strip_tags($article->excerpt), 220) }}</p>
                     @endif
                     <a href="{{ route('news.show', $article->slug) }}"
                        class="inline-flex items-center gap-1.5 bg-[#2d6fa3] text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-[#1a4a7a] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">

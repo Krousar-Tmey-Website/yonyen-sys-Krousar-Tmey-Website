@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Volunteer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VolunteerController extends Controller
 {
@@ -62,6 +63,10 @@ class VolunteerController extends Controller
 
     public function destroy(Volunteer $volunteer)
     {
+        if ($volunteer->resume) {
+            Storage::disk('public')->delete($volunteer->resume);
+        }
+
         $volunteer->delete();
 
         return redirect()

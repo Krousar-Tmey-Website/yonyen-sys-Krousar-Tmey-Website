@@ -64,9 +64,9 @@
                 </div>
                 
                 @if($bannerSubtitle)
-                    <p class="text-white/90 text-lg md:text-xl max-w-xl leading-relaxed hero-reveal hero-reveal-delay-2 font-medium drop-shadow-md">
-                        {{ $bannerSubtitle }}
-                    </p>
+                    <div class="rich-text-content text-white/90 text-lg md:text-xl max-w-xl leading-relaxed hero-reveal hero-reveal-delay-2 font-medium drop-shadow-md">
+                        {!! $bannerSubtitle !!}
+                    </div>
                 @endif
             </div>
         </div>
@@ -277,9 +277,9 @@
                 <div class="text-center mb-16" data-reveal="up">
                     <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#e8a020]/10 border border-[#e8a020]/20 mb-5 shadow-sm">
                         <div class="w-2 h-2 rounded-full bg-[#e8a020]"></div>
-                        <span class="text-[#e8a020] font-bold text-xs uppercase tracking-widest">{{ $additionalLabel }}</span>
+                        <span class="text-[#e8a020] font-bold text-xs uppercase tracking-widest">{{ strip_tags($additionalLabel) }}</span>
                     </div>
-                    <h2 class="text-3xl md:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide">{{ $additionalTitle }}</h2>
+                    <h2 class="text-3xl md:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide">{{ strip_tags($additionalTitle) }}</h2>
                     <div class="w-24 h-1.5 bg-gradient-to-r from-[#d32f2f] to-[#e8a020] mx-auto mt-6 rounded-full"></div>
                 </div>
                 
@@ -318,9 +318,9 @@
                 <div class="text-center mb-16" data-reveal="up">
                     <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#2d6fa3]/10 border border-[#2d6fa3]/20 mb-5 shadow-sm">
                         <div class="w-2 h-2 rounded-full bg-[#2d6fa3]"></div>
-                        <span class="text-[#2d6fa3] font-bold text-xs uppercase tracking-widest">{{ $infoLabel }}</span>
+                        <span class="text-[#2d6fa3] font-bold text-xs uppercase tracking-widest">{{ strip_tags($infoLabel) }}</span>
                     </div>
-                    <h2 class="text-3xl md:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide">{{ $infoTitle }}</h2>
+                    <h2 class="text-3xl md:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide">{{ strip_tags($infoTitle) }}</h2>
                     <div class="w-24 h-1.5 bg-gradient-to-r from-[#d32f2f] to-[#e8a020] mx-auto mt-6 rounded-full"></div>
                 </div>
 
@@ -380,12 +380,12 @@
         <div class="relative max-w-4xl mx-auto px-6 text-center z-10" data-reveal="scale">
             <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 backdrop-blur border border-white/20 mb-8 shadow-sm">
                 <div class="w-2 h-2 rounded-full bg-[#8da83a] animate-pulse"></div>
-                <span class="text-white font-bold text-xs uppercase tracking-widest">{{ $ctaLabel }}</span>
+                <span class="text-white font-bold text-xs uppercase tracking-widest">{{ strip_tags($ctaLabel) }}</span>
             </div>
             
-            <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-wide mb-6 drop-shadow-md">{{ $ctaTitle }}</h2>
+            <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-wide mb-6 drop-shadow-md">{{ strip_tags($ctaTitle) }}</h2>
             
-            <p class="text-white/80 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-medium">{{ $ctaSubtitle }}</p>
+            <div class="rich-text-content text-white/80 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-medium">{!! $ctaSubtitle !!}</div>
             
             <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
                 <a href="{{ route('donate') }}" class="w-full sm:w-auto px-10 py-4 bg-[#8da83a] hover:bg-[#7a932d] text-white rounded-full text-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3">

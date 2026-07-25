@@ -1,9 +1,23 @@
 <?php
 namespace App\Models;
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperProject
+ */
 class Project extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = [
+        'description', 'description_fr',
+        'objective', 'objective_fr',
+        'content', 'content_fr',
+        'activities', 'activities_fr',
+        'testimony_story', 'testimony_story_fr',
+        'make_difference_text',
+    ];
 
     protected $guarded = [];
 

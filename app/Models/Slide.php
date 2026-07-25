@@ -2,10 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperSlide
+ */
 class Slide extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['subtitle', 'subtitle_fr'];
+
     protected $fillable = [
         'title', 'title_fr', 'subtitle', 'subtitle_fr', 'badge_text', 'badge_text_fr', 'image',
         'cta_primary_text', 'cta_primary_text_fr', 'cta_primary_url',

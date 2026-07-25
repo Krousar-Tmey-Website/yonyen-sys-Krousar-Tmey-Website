@@ -51,7 +51,7 @@
                 </div>
                 <h3 class="font-bold text-gray-800 text-sm mb-1 truncate max-w-sm">{{ $slide->title }}</h3>
                 @if($slide->subtitle)
-                <p class="text-gray-400 text-xs line-clamp-2 max-w-sm">{{ $slide->subtitle }}</p>
+                <p class="text-gray-400 text-xs line-clamp-2 max-w-sm">{{ Str::limit(strip_tags($slide->subtitle), 100) }}</p>
                 @endif
                 <div class="flex gap-4 mt-2">
                     @if($slide->cta_primary_text)

@@ -41,7 +41,7 @@
                     <span class="text-white">Our Programs</span>
                 </nav>
                 <h1 id="preview-title" class="text-2xl font-bold text-white mb-2">{{ $previewTitle }}</h1>
-                <p id="preview-subtitle" class="text-white/70 text-sm max-w-xl">{{ $previewSubtitle }}</p>
+                <p id="preview-subtitle" class="text-white/70 text-sm max-w-xl rich-text-content">{!! $previewSubtitle !!}</p>
             </div>
         </div>
     </div>

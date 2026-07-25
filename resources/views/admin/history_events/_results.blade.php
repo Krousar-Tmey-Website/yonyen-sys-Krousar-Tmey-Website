@@ -33,8 +33,8 @@
                     </div>
                 </td>
                 <td class="px-6 py-4 text-gray-500">
-                    @if($event->left_text){{ Str::limit($event->left_text, 60) }}@else—@endif
-                    @if($event->right_text)<br><span class="text-gray-400">{{ Str::limit($event->right_text, 60) }}</span>@endif
+                    @if($event->left_text){{ Str::limit(strip_tags($event->left_text), 60) }}@else—@endif
+                    @if($event->right_text)<br><span class="text-gray-400">{{ Str::limit(strip_tags($event->right_text), 60) }}</span>@endif
                 </td>
                 <td class="px-6 py-4">
                     @if($event->is_active)

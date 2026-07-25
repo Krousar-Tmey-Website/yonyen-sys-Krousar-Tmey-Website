@@ -1397,7 +1397,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                         {{ $article->published_at?->format('F Y') ?? $article->created_at->format('F Y') }}
                     </time>
                     <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug group-hover:text-[#1a3c6e] transition-colors">{{ $article->localized_title }}</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ $article->localized_excerpt }}</p>
+                    <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ Str::limit(strip_tags($article->localized_excerpt ?? ''), 160) }}</p>
                     <a href="{{ route('news') }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors link-arrow">
                         Read More
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

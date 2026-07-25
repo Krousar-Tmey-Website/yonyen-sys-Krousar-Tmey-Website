@@ -98,11 +98,11 @@
                         </div>
                         <div class="mb-6">
                             <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-widest mb-2" data-program-preview-label="objectiveLabel" x-text="previewLabels.objectiveLabel">Objective</h3>
-                            <p class="text-gray-700 leading-relaxed whitespace-pre-line" data-program-preview="objective" x-text="previewObjective"></p>
+                            <div class="text-gray-700 leading-relaxed rich-text-content" data-program-preview="objective" x-html="previewObjective"></div>
                         </div>
                         <div class="mb-6">
                             <h3 class="text-xs font-bold text-[#8da83a] uppercase tracking-widest mb-2" data-program-preview-label="programLabel" x-text="previewLabels.programLabel">Program</h3>
-                            <p class="text-gray-700 leading-relaxed whitespace-pre-line" data-program-preview="program" x-text="previewProgramText"></p>
+                            <div class="text-gray-700 leading-relaxed rich-text-content" data-program-preview="program" x-html="previewProgramText"></div>
                         </div>
                         <div class="flex flex-col sm:flex-row gap-3">
                             <div class="btn-blue justify-center text-center w-full sm:w-auto opacity-90" data-program-preview-label="projectsButton" x-text="previewLabels.projectsButton">Know more about the projects</div>

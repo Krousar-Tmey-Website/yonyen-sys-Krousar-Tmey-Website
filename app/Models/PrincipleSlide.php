@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperPrincipleSlide
+ */
 class PrincipleSlide extends Model
 {
     protected $fillable = [

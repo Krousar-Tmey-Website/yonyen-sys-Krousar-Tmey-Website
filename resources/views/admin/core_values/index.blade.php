@@ -135,7 +135,7 @@
                                 <div class="min-w-0">
                                     <p class="font-semibold text-gray-800">{{ $value->title }}</p>
                                     @if($value->description)
-                                    <p class="text-gray-400 text-xs mt-0.5 line-clamp-1">{{ Str::limit($value->description, 50) }}</p>
+                                    <p class="text-gray-400 text-xs mt-0.5 line-clamp-1">{{ Str::limit(strip_tags($value->description), 50) }}</p>
                                     @endif
                                 </div>
                             </div>

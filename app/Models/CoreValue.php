@@ -2,11 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperCoreValue
+ */
 class CoreValue extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['description', 'description_fr', 'supporting_description', 'supporting_description_fr'];
+
     protected $appends = ['image_url'];
 
     protected $fillable = [

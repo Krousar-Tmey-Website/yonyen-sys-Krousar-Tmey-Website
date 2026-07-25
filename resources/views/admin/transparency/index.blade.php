@@ -310,7 +310,7 @@
                         <div class="min-w-0">
                             <p class="font-semibold text-gray-800 truncate">{{ $report->title }}</p>
                             <p class="text-xs text-gray-500 mt-1">
-                                {{ $report->year }} · {{ $report->description ?? 'PDF' }}
+                                {{ $report->year }} · {{ $report->description ? Str::limit(strip_tags($report->description), 60) : 'PDF' }}
                                 @if($report->download_url)
                                     · <a href="{{ $report->download_url }}" target="_blank" class="text-[#2d6fa3] hover:underline">View</a>
                                 @endif

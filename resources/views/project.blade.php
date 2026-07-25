@@ -104,7 +104,7 @@
                             </div>
                             <h3 class="text-lg font-black text-[#1a3c6e] uppercase tracking-widest m-0">{{ $project->effective_make_difference_title ?: 'Make a Difference' }}</h3>
                         </div>
-                        <p class="text-gray-700 text-[16px] leading-relaxed relative z-10 whitespace-pre-line">{{ $project->effective_make_difference_text }}</p>
+                        <div class="rich-text-content text-gray-700 text-[16px] leading-relaxed relative z-10">{!! $project->effective_make_difference_text !!}</div>
                         
                         <div class="mt-6 flex flex-col sm:flex-row gap-4 relative z-10">
                             @if($project->effective_donate_button_text)

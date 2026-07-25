@@ -2,10 +2,22 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperProgramPageItem
+ */
 class ProgramPageItem extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = [
+        'short_content', 'short_content_fr',
+        'objective', 'objective_fr',
+        'detail_content', 'detail_content_fr',
+        'activities', 'activities_fr',
+    ];
 
     protected $fillable = [
         'title',

@@ -37,7 +37,7 @@ import {
     View
 } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
-import 'ckeditor5/translations/fr.js';
+import frTranslations from 'ckeditor5/translations/fr.js';
 
 const editorPromises = new WeakMap();
 
@@ -250,8 +250,18 @@ const FONT_COLORS = [
     { color: '#db2777', label: 'Pink' },
 ];
 
+function isVisible(el) {
+    return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+}
+
 function createEditor(textarea) {
     if (editorPromises.has(textarea)) {
+        return;
+    }
+
+    // Skip hidden textareas — CKEditor renders at zero height inside display:none.
+    // initCKEditors() is called again after each language tab switch.
+    if (!isVisible(textarea)) {
         return;
     }
 
@@ -263,6 +273,7 @@ function createEditor(textarea) {
         plugins: PLUGINS,
         toolbar: TOOLBAR,
         language: lang,
+        translations: [frTranslations],
         placeholder,
         fontSize: { options: FONT_SIZES, supportAllValues: true },
         fontFamily: { options: FONT_FAMILIES, supportAllValues: true },

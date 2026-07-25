@@ -38,7 +38,7 @@
                     </p>
                     <p id="preview-headline" class="font-bold text-gray-800 text-sm mb-1">&ldquo;{{ $previewHeadline }}&rdquo;</p>
                     <p class="italic text-gray-400 text-xs mb-2">published <span id="preview-date">{{ $previewDate }}</span></p>
-                    <p id="preview-excerpt" class="italic text-gray-500 text-xs leading-relaxed line-clamp-3">{{ $previewExcerpt }}</p>
+                    <div id="preview-excerpt" class="italic text-gray-500 text-xs leading-relaxed line-clamp-3 rich-text-content">{!! $previewExcerpt !!}</div>
                 </div>
             </div>
         </div>

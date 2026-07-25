@@ -39,7 +39,7 @@
                         <div class="min-w-0">
                             <p class="font-semibold text-gray-800 truncate">{{ $displayName ?: 'Untitled award' }}</p>
                             @if($award->description)
-                            <p class="text-xs text-gray-400 truncate max-w-xs">{{ Str::limit($award->description, 60) }}</p>
+                            <p class="text-xs text-gray-400 truncate max-w-xs">{{ Str::limit(strip_tags($award->description), 60) }}</p>
                             @endif
                         </div>
                     </div>

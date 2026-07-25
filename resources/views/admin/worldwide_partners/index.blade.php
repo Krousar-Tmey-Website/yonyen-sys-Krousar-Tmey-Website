@@ -149,7 +149,7 @@
                         </div>
                         <h4 class="font-bold text-gray-800 text-sm mb-1 truncate max-w-sm">{{ $partner->country_name }}</h4>
                         @if($partner->description)
-                        <p class="text-gray-400 text-xs line-clamp-2 max-w-sm">{{ Str::limit($partner->description, 80) }}</p>
+                        <p class="text-gray-400 text-xs line-clamp-2 max-w-sm">{{ Str::limit(strip_tags($partner->description), 80) }}</p>
                         @endif
                     </div>
                     <div class="flex items-center gap-2 flex-shrink-0">

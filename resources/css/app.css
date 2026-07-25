@@ -540,20 +540,25 @@
 }
 .rich-text-content ul,
 .rich-text-content ol,
+.article-content ul,
+.article-content ol,
 .ck-content ul,
 .ck-content ol {
     margin: 1em 0;
     padding-left: 1.5em;
 }
 .rich-text-content ul,
+.article-content ul,
 .ck-content ul {
     list-style: disc;
 }
 .rich-text-content ol,
+.article-content ol,
 .ck-content ol {
     list-style: decimal;
 }
 .rich-text-content li,
+.article-content li,
 .ck-content li {
     margin-bottom: 0.4em;
 }
@@ -603,5 +608,73 @@
 .rich-text-content hr {
     border: 0;
     border-top: 1px solid #e2e8f0;
+    margin: 1.5em 0;
+}
+
+/* ── CKEditor output: inline styles & alignment ──────────────────────────────
+   CKEditor writes font-family, font-size, color, and background-color as
+   inline style attributes. Tailwind's preflight resets and the browser's
+   default stylesheet can override these, so we explicitly allow them through
+   by ensuring the containing elements don't suppress inherited styles.       */
+
+/* Honour every inline style attribute CKEditor emits */
+.rich-text-content [style],
+.article-content [style] {
+    /* Let inline styles win over any class-based resets */
+    all: revert;
+    /* Re-apply word-break so long URLs don't overflow */
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* CKEditor wraps tables in <figure class="table"> */
+.rich-text-content figure.table,
+.article-content figure.table {
+    margin: 1.25em 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.rich-text-content figure.table table,
+.article-content figure.table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+.rich-text-content figure.table th,
+.rich-text-content figure.table td,
+.article-content figure.table th,
+.article-content figure.table td {
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem 0.75rem;
+    vertical-align: top;
+}
+.rich-text-content figure.table th,
+.article-content figure.table th {
+    background-color: #f8fafc;
+    font-weight: 600;
+}
+
+/* CKEditor text-alignment utility classes */
+.rich-text-content .text-left,   .article-content .text-left,   .ck-content .text-left   { text-align: left !important; }
+.rich-text-content .text-center, .article-content .text-center, .ck-content .text-center { text-align: center !important; }
+.rich-text-content .text-right,  .article-content .text-right,  .ck-content .text-right  { text-align: right !important; }
+.rich-text-content .text-justify,.article-content .text-justify,.ck-content .text-justify { text-align: justify !important; }
+
+/* CKEditor horizontal rule */
+.rich-text-content hr,
+.article-content hr {
+    border: 0;
+    border-top: 2px solid #e2e8f0;
+    margin: 1.5em 0;
+}
+
+/* Strikethrough */
+.rich-text-content s,
+.article-content s {
+    text-decoration: line-through;
+}
+
+/* article-content: also handle figure.table and inline styles */
+.article-content figure.table {
     margin: 1.5em 0;
 }

@@ -36,9 +36,9 @@
         <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-5xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
             {{ $settings['transparency_title'] ?? 'Transparency and Accountability' }}
         </h1>
-        <p class="hero-reveal hero-reveal-delay-3 text-white/90 text-lg leading-relaxed max-w-2xl mx-auto mt-6 drop-shadow-md">
-            {{ $transparencyBannerSubtitle }}
-        </p>
+        <div class="rich-text-content hero-reveal hero-reveal-delay-3 text-white/90 text-lg leading-relaxed max-w-2xl mx-auto mt-6 drop-shadow-md">
+            {!! $transparencyBannerSubtitle !!}
+        </div>
 
 {{-- ========================================================
      FINANCIAL TRANSPARENCY SECTION
@@ -146,10 +146,10 @@
                 <h3 class="text-sm font-black text-[#e8a020] uppercase tracking-widest">Overview</h3>
             </div>
 
-            <p>{{ $settings['transparency_financial_p1'] ?? 'Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used.' }}</p>
-            <p>{{ $settings['transparency_financial_p2'] ?? 'The implementation of programs and projects is our priority.' }}</p>
-            <p class="font-bold">{{ $settings['transparency_financial_p3'] ?? 'Thanks to the strict financial management and the involvement of European volunteers, all administrative costs remain under 4% of the total budget.' }}</p>
-            <p>{{ $settings['transparency_financial_p4'] ?? "Krousar Thmey Cambodia's accounts are all audited and certified each year by an independent audit firm (PricewaterhouseCoopers since 2013 and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes in order to provide greater efficiency to the organization and transparency to its partners." }}</p>
+            <div class="rich-text-content">{!! $settings['transparency_financial_p1'] ?? 'Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used.' !!}</div>
+            <div class="rich-text-content">{!! $settings['transparency_financial_p2'] ?? 'The implementation of programs and projects is our priority.' !!}</div>
+            <div class="rich-text-content font-bold">{!! $settings['transparency_financial_p3'] ?? 'Thanks to the strict financial management and the involvement of European volunteers, all administrative costs remain under 4% of the total budget.' !!}</div>
+            <div class="rich-text-content">{!! $settings['transparency_financial_p4'] ?? "Krousar Thmey Cambodia's accounts are all audited and certified each year by an independent audit firm (PricewaterhouseCoopers since 2013 and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes in order to provide greater efficiency to the organization and transparency to its partners." !!}</div>
 
             <p class="!mb-2">{{ $settings['transparency_financial_list_intro'] ?? 'Audited financial statements are available here:' }}</p>
             @php $availableReports = $reports->filter(fn ($report) => $report->download_url)->values(); @endphp
@@ -168,7 +168,7 @@
             <p class="text-gray-400 text-sm">No reports available yet.</p>
             @endif
 
-            <p>{{ $settings['transparency_financial_outro'] ?? "Our French and Swiss organisations' accounts are also audited annually." }}</p>
+            <div class="rich-text-content">{!! $settings['transparency_financial_outro'] ?? "Our French and Swiss organisations' accounts are also audited annually." !!}</div>
         </div>
     </div>
 </section>
@@ -191,9 +191,9 @@
                 <h3 class="text-sm font-black text-[#e8a020] uppercase tracking-widest">Overview</h3>
             </div>
 
-            <p>{{ $settings['transparency_origins_p1'] ?? 'In support of its local activity in Cambodia, Krousar Thmey benefits from the involvement of volunteers in international entities: Krousar Thmey France, Krousar Thmey Switzerland and Krousar Thmey Singapore. As their main activity is fundraising, these branches are a privileged relay to donors outside of Cambodia. They enable Krousar Thmey to receive institutional funding and support from individual donors.' }}</p>
-            <p>{{ $settings['transparency_origins_p2'] ?? 'Donations received in Cambodia come mainly from non-governmental organizations and to a lesser extent from private donors and the Cambodian authorities.' }}</p>
-            <p>{{ $settings['transparency_origins_p3'] ?? "Financial or in-kind donations from the Cambodian authorities have increased steadily over the past few years, accounting for nearly 8% of Krousar Thmey's resources. All staff of special schools for deaf or blind children are civil servants of the Ministry of Education, Youth and Sports who pay their salary (excluding complements paid by Krousar Thmey). For the time being, this contribution is not included in the expenditure and income statement." }}</p>
+            <div class="rich-text-content">{!! $settings['transparency_origins_p1'] ?? 'In support of its local activity in Cambodia, Krousar Thmey benefits from the involvement of volunteers in international entities: Krousar Thmey France, Krousar Thmey Switzerland and Krousar Thmey Singapore. As their main activity is fundraising, these branches are a privileged relay to donors outside of Cambodia. They enable Krousar Thmey to receive institutional funding and support from individual donors.' !!}</div>
+            <div class="rich-text-content">{!! $settings['transparency_origins_p2'] ?? 'Donations received in Cambodia come mainly from non-governmental organizations and to a lesser extent from private donors and the Cambodian authorities.' !!}</div>
+            <div class="rich-text-content">{!! $settings['transparency_origins_p3'] ?? "Financial or in-kind donations from the Cambodian authorities have increased steadily over the past few years, accounting for nearly 8% of Krousar Thmey's resources. All staff of special schools for deaf or blind children are civil servants of the Ministry of Education, Youth and Sports who pay their salary (excluding complements paid by Krousar Thmey). For the time being, this contribution is not included in the expenditure and income statement." !!}</div>
         </div>
 
         <div class="group flex items-center justify-center gap-3 text-center font-semibold text-[#11568c] mt-8 bg-[#eea91d]/10 border border-[#eea91d]/30 rounded-2xl px-6 py-5 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 hover:bg-[#eea91d]/15" data-reveal="scale" style="--reveal-delay: 160">

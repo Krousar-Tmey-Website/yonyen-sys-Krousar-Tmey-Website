@@ -48,6 +48,7 @@
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Enable Share Section</label>
                         <label class="flex items-center gap-2 text-xs text-gray-600">
+                            <input type="hidden" name="settings[sharing_enabled]" value="0">
                             <input type="checkbox" name="settings[sharing_enabled]" value="1" {{ (old('settings.sharing_enabled', $items->firstWhere('key', 'sharing_enabled')->value ?? '1')) == '1' ? 'checked' : '' }}
                                    class="rounded border-gray-300 text-[#2d6fa3] focus:ring-[#2d6fa3]/20">
                             Show share buttons on presentation page
@@ -166,31 +167,6 @@
                 @endif
             </div>
 
-            {{-- ====== General footer contact info ====== --}}
-            @php
-                $generalKeys = ['footer_address', 'footer_phone', 'footer_email'];
-                $generalItems = $items->whereIn('key', $generalKeys);
-            @endphp
-            @if($generalItems->isNotEmpty())
-            <div class="pt-2">
-                <h4 class="font-bold text-gray-800 text-sm mb-4 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    General Contact (Footer)
-                </h4>
-                <div class="space-y-4">
-                    @foreach($generalItems as $setting)
-                    @php $k = $setting->key; @endphp
-                    <div>
-                        <label class="block text-xs font-medium text-gray-500 mb-1">{{ $setting->label ?? $setting->key }}</label>
-                        <input type="text" name="settings[{{ $k }}]"
-                               value="{{ old('settings.'.$k, $setting->value) }}"
-                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-            @endif
-
         @elseif($group === 'social')
             {{-- ====== Social Media Links (Header / Footer) ====== --}}
             <div class="space-y-4">
@@ -205,10 +181,11 @@
                     @php
                         $urlSetting = $urlItems->firstWhere('key', $platform['key']);
                         $urlValue = $urlSetting->value ?? '';
+                        $iconStyle = 'background-color: ' . $platform['color'] . '15; color: ' . $platform['color'] . ';';
                     @endphp
                     <div class="flex items-center gap-4 p-3 rounded-xl border border-gray-50 bg-gray-50/50 hover:border-gray-200 transition-colors">
                         <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm"
-                             style="background-color: {{ $platform['color'] }}15; color: {{ $platform['color'] }};">
+                             style="{{ $iconStyle }}">
                             {{ $platform['icon'] }}
                         </div>
                         <div class="flex-1 min-w-0">
@@ -252,7 +229,7 @@
                                 <img src="{{ $logoUrl }}"
                                      alt="Logo preview"
                                      class="w-full h-full object-contain p-1"
-                                     onerror="this.parentElement.innerHTML='<span class=\\'text-gray-400 text-xs\\'>No logo</span>'">
+                                     onerror="this.parentElement.innerHTML='<span class=\'text-gray-400 text-xs\'>No logo</span>'">
                             </div>
                             <div class="flex-1">
                                 <input type="file" name="logo" accept="image/png,image/jpeg,image/webp,image/svg+xml"

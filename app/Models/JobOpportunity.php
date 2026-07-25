@@ -2,11 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperJobOpportunity
+ */
 class JobOpportunity extends Model
 {
+    use HasPurifiedHtml;
+
+    protected array $purifiedHtml = ['description', 'description_fr'];
+
     protected $fillable = ['title', 'title_fr', 'description', 'description_fr', 'location', 'posted_date', 'type', 'status', 'is_active', 'sort_order', 'image'];
 
     protected function casts(): array

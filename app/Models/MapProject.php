@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperMapProject
+ */
 class MapProject extends Model
 {
     protected $fillable = [

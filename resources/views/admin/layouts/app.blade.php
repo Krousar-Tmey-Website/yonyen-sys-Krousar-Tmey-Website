@@ -394,9 +394,7 @@
 
     </div>
 
-    <div id="admin-dynamic-styles" hidden>
-        @stack('styles')
-    </div>
+    @stack('styles')
     <div id="admin-page-scripts" hidden>
         @stack('scripts')
     </div>

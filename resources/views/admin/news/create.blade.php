@@ -425,6 +425,6 @@ function renderTagLinks() {
 renderPresetButtons();
 </script>
 
-@vite(['resources/js/admin-news-editor.js', 'resources/js/admin-news-form.js'])
+@vite(['resources/js/admin-news-form.js'])
 
 @endsection

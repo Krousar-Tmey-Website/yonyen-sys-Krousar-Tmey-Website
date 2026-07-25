@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin IdeHelperProgramPage
+ */
 class ProgramPage extends Model
 {
     protected $fillable = ['title', 'slug', 'short_content', 'content', 'image', 'is_active'];
