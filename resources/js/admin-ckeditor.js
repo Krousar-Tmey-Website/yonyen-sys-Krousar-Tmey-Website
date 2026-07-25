@@ -32,11 +32,17 @@ import {
     HorizontalLine,
     Indent,
     IndentBlock,
+    Image,
+    ImageUpload,
+    ImageToolbar,
+    ImageStyle,
+    ImageResize,
     Plugin,
     createDropdown,
     View
 } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
+import enTranslations from 'ckeditor5/translations/en.js';
 import frTranslations from 'ckeditor5/translations/fr.js';
 
 const editorPromises = new WeakMap();
@@ -254,6 +260,42 @@ function isVisible(el) {
     return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
 }
 
+// Uploads a single file to the given endpoint (e.g. admin.news.upload-image) and
+// resolves to the { default: url } shape CKEditor's FileRepository expects.
+class EndpointUploadAdapter {
+    constructor(loader, uploadUrl) {
+        this.loader = loader;
+        this.uploadUrl = uploadUrl;
+    }
+
+    async upload() {
+        const file = await this.loader.file;
+        const body = new FormData();
+        body.append('image', file);
+
+        const response = await fetch(this.uploadUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+                'Accept': 'application/json',
+            },
+            body,
+        });
+
+        if (!response.ok) {
+            const problem = await response.json().catch(() => null);
+            throw problem?.message || 'Image upload failed.';
+        }
+
+        const data = await response.json();
+        return { default: data.url };
+    }
+
+    abort() {
+        // Nothing to cancel — fetch() here isn't wired to an AbortController.
+    }
+}
+
 function createEditor(textarea) {
     if (editorPromises.has(textarea)) {
         return;
@@ -267,13 +309,21 @@ function createEditor(textarea) {
 
     const lang = textarea.dataset.ckeditorLang === 'fr' ? 'fr' : 'en';
     const placeholder = textarea.getAttribute('placeholder') || '';
+    const uploadUrl = textarea.dataset.ckeditorUploadUrl || null;
+
+    const plugins = uploadUrl
+        ? [...PLUGINS, Image, ImageUpload, ImageToolbar, ImageStyle, ImageResize]
+        : PLUGINS;
+    const toolbar = uploadUrl
+        ? [...TOOLBAR.slice(0, -3), 'uploadImage', ...TOOLBAR.slice(-3)]
+        : TOOLBAR;
 
     const promise = ClassicEditor.create(textarea, {
         licenseKey: 'GPL',
-        plugins: PLUGINS,
-        toolbar: TOOLBAR,
+        plugins,
+        toolbar,
         language: lang,
-        translations: [frTranslations],
+        translations: [enTranslations, frTranslations],
         placeholder,
         fontSize: { options: FONT_SIZES, supportAllValues: true },
         fontFamily: { options: FONT_FAMILIES, supportAllValues: true },
@@ -288,9 +338,14 @@ function createEditor(textarea) {
         },
         table: {
             contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
-        }
+        },
+        ...(uploadUrl ? { image: { toolbar: ['imageStyle:inline', 'imageStyle:block', 'imageStyle:side', '|', 'resizeImage'] } } : {})
     })
         .then((editor) => {
+            if (uploadUrl) {
+                editor.plugins.get('FileRepository').createUploadAdapter = (loader) => new EndpointUploadAdapter(loader, uploadUrl);
+            }
+
             editor.model.document.on('change:data', () => {
                 textarea.value = editor.getData();
                 textarea.dispatchEvent(new Event('input', { bubbles: true }));

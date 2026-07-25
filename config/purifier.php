@@ -26,11 +26,13 @@ return [
         // Matches the CKEditor 5 toolbar in resources/js/admin-ckeditor.js: headings,
         // bold/italic/underline/strikethrough, font family/size/color/background (inline
         // style), alignment, lists (incl. start/reversed), tables, blockquote, hr, links.
-        // No image/iframe support since CKEditor has no Image plugin configured.
+        // img is allowed for fields with the Image/ImageUpload plugins enabled (News
+        // content — see data-ckeditor-upload-url in resources/views/admin/news/_content-editor.blade.php);
+        // no iframe support since no CKEditor field embeds video.
         'default' => [
             'HTML.Doctype'             => 'HTML 4.01 Transitional',
-            'HTML.Allowed'             => 'p[style|class],h2[style],h3[style],h4[style],strong,b,em,i,u,s,strike,del,a[href|target],ul[style],ol[style|start|reversed],li[style],blockquote,table,thead,tbody,tr,th[colspan|rowspan|style],td[colspan|rowspan|style],figure[class],figcaption,hr,span[style],br,div[class]',
-            'CSS.AllowedProperties'    => 'color,background-color,font-family,font-size,text-align,text-decoration,list-style-type',
+            'HTML.Allowed'             => 'p[style|class],h2[style],h3[style],h4[style],strong,b,em,i,u,s,strike,del,a[href|target],ul[style],ol[style|start|reversed],li[style],blockquote,table,thead,tbody,tr,th[colspan|rowspan|style],td[colspan|rowspan|style],figure[class],figcaption,img[src|alt|width|height|style],hr,span[style],br,div[class]',
+            'CSS.AllowedProperties'    => 'color,background-color,font-family,font-size,text-align,text-decoration,list-style-type,aspect-ratio',
             'AutoFormat.AutoParagraph' => false,
             'AutoFormat.RemoveEmpty'   => true,
         ],

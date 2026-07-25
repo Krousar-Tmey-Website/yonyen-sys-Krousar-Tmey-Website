@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $article->localized_title . ' — Krousar Thmey')
-@section('description', $article->localized_excerpt ?? 'Read the latest news from Krousar Thmey.')
+@section('description', \Illuminate\Support\Str::limit(strip_tags($article->localized_excerpt ?? ''), 160) ?: 'Read the latest news from Krousar Thmey.')
 
 @php use Illuminate\Support\Str; @endphp
 
