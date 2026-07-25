@@ -98,7 +98,10 @@
                  CAMBODIA VIEW (QR LOCAL)
                  ────────────────────────────────────────────── --}}
             <div x-show="residency === 'cambodia'" x-cloak>
-                @if($paymentMethods->isNotEmpty())
+                @php
+                    $khMethods = $paymentMethods->where('tag', 'cambodia')->values();
+                @endphp
+                @if($khMethods->isNotEmpty())
                 @php
                     $logoPath = $settings['site_logo'] ?? 'images/logo.png';
                     $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
@@ -112,7 +115,7 @@
                                   alt="Children supported by Krousar Thmey"
                                   class="h-[230px] w-full rounded-tl-[24px] object-cover sm:h-[300px]">
 
-                            <div class="mx-auto mb-0 w-full max-w-[385px] rounded-[18px] bg-white p-5 shadow-[0_16px_38px_rgba(15,23,42,0.08)]">
+                            <div class="w-full mb-0 rounded-[18px] bg-white p-5 shadow-[0_16px_38px_rgba(15,23,42,0.08)]">
                                 <div class="flex items-center gap-3 mb-3.5">
                                     <img src="{{ $logoUrl }}" alt="Krousar Thmey" class="w-10 h-10 rounded-full object-contain bg-gray-50 border border-gray-100">
                                     <div class="min-w-0">
@@ -122,6 +125,15 @@
                                 </div>
                                 <h3 class="text-[18px] font-extrabold text-slate-950 leading-tight mb-2.5">Your gift gives a child a home, a school, a future.</h3>
                                 <p class="text-[13px] leading-relaxed text-slate-500">Every donation goes directly to supporting disadvantaged children across Cambodia — 100% of funds reach the children in our care.</p>
+                                <div class="mt-4 pt-4 border-t border-slate-100">
+                                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">or contact us:</p>
+                                    <div class="text-[12px] leading-relaxed text-slate-650 space-y-1">
+                                        <p class="font-bold text-slate-800">Krousar Thmey Cambodia</p>
+                                        <p>#145 street 132 – PO Box 1393 – Phnom Penh</p>
+                                        <p>Email: <a href="mailto:communication@krousar-thmey.org" class="text-[#2d6fa3] hover:underline font-semibold">communication@krousar-thmey.org</a></p>
+                                        <p>Phone: <a href="tel:+85523880502" class="text-[#2d6fa3] hover:underline font-semibold">+855 (0) 23 880 502</a></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -130,7 +142,7 @@
                             <div class="flex w-full max-w-[420px] flex-col gap-4 rounded-[17px] bg-white p-5 shadow-[0_18px_42px_rgba(15,23,42,0.08)]" x-data="{ active: 0 }">
                                 {{-- Bank Tabs --}}
                                 <div class="grid grid-cols-2 gap-2">
-                                    @foreach($paymentMethods as $i => $method)
+                                    @foreach($khMethods as $i => $method)
                                     <button type="button"
                                             @click="active = {{ $i }}"
                                             :class="active === {{ $i }} ? 'bg-[#1c3a5e] text-white border-[#1c3a5e] shadow-[0_10px_18px_rgba(28,58,94,0.22)]' : 'bg-white text-gray-500 border-gray-300 hover:border-gray-400 hover:text-gray-700'"
@@ -140,21 +152,28 @@
                                     @endforeach
                                 </div>
 
-                                @foreach($paymentMethods as $i => $method)
+                                @foreach($khMethods as $i => $method)
                                 <div x-show="active === {{ $i }}" x-cloak class="flex flex-col gap-4 flex-1">
-                                    {{-- QR Section --}}
+                                    {{-- QR / Link Section --}}
                                     <div class="rounded-[13px] border border-gray-200 bg-[#fbfcfd] px-4 py-5 text-center">
                                         <div class="w-[140px] h-[140px] mx-auto bg-white rounded-[9px] border border-gray-200 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                                             @if($method->qr_code_url)
-                                            <a href="{{ $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}"
+                                            <a href="{{ $method->redirect_url ?: $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}"
                                                target="_blank" rel="noopener"
-                                               aria-label="Open {{ $method->name }} QR code">
+                                               aria-label="Open {{ $method->name }}">
                                                 <img src="{{ $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}"
                                                      alt="{{ $method->name }} QR"
                                                      width="134" height="134"
                                                      class="object-contain"
                                                      style="max-width:134px;max-height:134px;width:134px;height:134px;"
                                                      loading="lazy">
+                                            </a>
+                                            @elseif($method->redirect_url)
+                                            <a href="{{ $method->redirect_url }}" target="_blank" rel="noopener" class="flex flex-col items-center justify-center p-2 text-center text-blue-600 hover:text-blue-800">
+                                                <svg class="w-12 h-12 text-[#2d6fa3] mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0"/>
+                                                </svg>
+                                                <span class="text-xs font-bold uppercase tracking-wider">Donate Online</span>
                                             </a>
                                             @else
                                             <div class="flex flex-col items-center justify-center gap-2">
@@ -165,7 +184,13 @@
                                             </div>
                                             @endif
                                         </div>
-                                        <p class="text-center text-[14px] text-gray-600 mt-3 font-medium">Scan with {{ $method->name }} app</p>
+                                        <p class="text-center text-[14px] text-gray-600 mt-3 font-medium">
+                                            @if($method->redirect_url)
+                                                Click to donate via {{ $method->name }}
+                                            @else
+                                                Scan with {{ $method->name }} app
+                                            @endif
+                                        </p>
                                     </div>
 
                                     {{-- Account Details --}}
@@ -213,13 +238,20 @@
                                     </div>
 
                                     {{-- Primary CTA --}}
-                                    <a href="{{ $method->qr_code_url ? $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) : '#' }}"
-                                       target="{{ $method->qr_code_url ? '_blank' : '_self' }}" rel="noopener"
+                                    <a href="{{ $method->redirect_url ?: ($method->qr_code_url ? $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) : '#') }}"
+                                       target="{{ ($method->redirect_url || $method->qr_code_url) ? '_blank' : '_self' }}" rel="noopener"
                                        class="mt-auto w-full inline-flex items-center justify-center gap-3 rounded-[10px] bg-[#1c3a5e] px-5 py-[13px] text-[14px] font-extrabold text-white shadow-[0_2px_0_rgba(0,0,0,0.8)] transition-colors hover:bg-[#152d4a] active:bg-[#0f2238]">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
-                                        </svg>
-                                        Scan QR to donate via {{ $method->name }}
+                                        @if($method->redirect_url)
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0"/>
+                                            </svg>
+                                            Donate via {{ $method->name }}
+                                        @else
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                                            </svg>
+                                            Scan QR to donate via {{ $method->name }}
+                                        @endif
                                     </a>
                                 </div>
                                 @endforeach
@@ -248,38 +280,102 @@
                 
                 {{-- France view: full width rows (centered layout) --}}
                 <div x-show="residency === 'france'" class="space-y-8 max-w-4xl mx-auto">
+                    @php
+                        $frHelloAssoUrl = $settings['france_helloasso_url'] ?? '';
+                        $frHelloAssoDesc = $settings['france_helloasso_description'] ?? '';
+                        $frHelloAssoLogo = $settings['france_helloasso_logo'] ?? '';
+                        $frCheckRecipient = $settings['france_check_recipient'] ?? '';
+                        $frCheckAddress = $settings['france_check_address'] ?? '';
+                        $frCheckDesc = $settings['france_check_description'] ?? '';
+                        $hasHelloAsso = filled($frHelloAssoUrl);
+                        $hasCheck = filled($frCheckRecipient) || filled($frCheckAddress);
+                        $hasFranceContent = $hasHelloAsso || $hasCheck;
+                    @endphp
                     
                     {{-- Ways to Donate (Full Width Card) --}}
                     <div class="bg-white rounded-2xl border border-slate-200/80 p-10 shadow-sm space-y-10">
-                        
-                        {{-- HelloAsso Section --}}
-                        <div class="space-y-6">
-                            <p class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold">
-                                You can make a one-time or regular donation on our dedicated website, you will be redirected to our HelloAsso page:
-                            </p>
-                            <div class="flex flex-col items-center justify-center space-y-5">
-                                <img src="{{ asset('images/helloasso.jpg') }}" alt="HelloAsso logo" class="h-16 w-auto object-contain">
-                                <a href="https://www.helloasso.com/associations/krousar-thmey-nouvelle-famille" target="_blank" rel="noopener"
-                                   class="inline-flex items-center justify-center px-6 py-2.5 border border-[#1b4d75] hover:bg-[#1b4d75] text-[#1b4d75] hover:text-white text-xs font-black rounded-lg shadow-2xs transition-all cursor-pointer select-none">
-                                    HelloAsso (One-time or regular donation)
-                                </a>
+                        @if($hasFranceContent)
+
+                            @if($hasHelloAsso)
+                                {{-- HelloAsso or other redirect platform --}}
+                                <div class="space-y-6">
+                                    <p class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold">
+                                        @if($frHelloAssoDesc)
+                                            {{ $frHelloAssoDesc }}
+                                        @else
+                                            You can make a one-time or regular donation on our dedicated website, you will be redirected to our HelloAsso page:
+                                        @endif
+                                    </p>
+                                    <div class="flex flex-col items-center justify-center space-y-5">
+                                        @if($frHelloAssoLogo)
+                                            <img src="{{ str_starts_with($frHelloAssoLogo, 'http') ? $frHelloAssoLogo : asset('storage/' . $frHelloAssoLogo) }}" 
+                                                 alt="HelloAsso logo" 
+                                                 class="h-16 w-auto object-contain">
+                                        @else
+                                            <img src="{{ asset('images/helloasso.jpg') }}" alt="HelloAsso logo" class="h-16 w-auto object-contain">
+                                        @endif
+                                        <a href="{{ $frHelloAssoUrl }}" target="_blank" rel="noopener"
+                                           class="inline-flex items-center justify-center px-6 py-2.5 border border-[#1b4d75] hover:bg-[#1b4d75] text-[#1b4d75] hover:text-white text-xs font-black rounded-lg shadow-2xs transition-all cursor-pointer select-none">
+                                            HelloAsso (One-time or regular donation)
+                                        </a>
+                                    </div>
+                                </div>
+                                @if($hasCheck)
+                                    <div class="border-t border-slate-100"></div>
+                                @endif
+                            @endif
+
+                            @if($hasCheck)
+                                {{-- Check or other local details --}}
+                                <div class="space-y-6">
+                                    <p class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold">
+                                        @if($frCheckDesc)
+                                            {{ $frCheckDesc }}
+                                        @else
+                                            You can also send a check payable to <strong class="text-slate-800">{{ $frCheckRecipient ?: 'Krousar Thmey France' }}</strong> at the following address:
+                                        @endif
+                                    </p>
+                                    <div class="text-center font-bold text-slate-700 leading-relaxed text-sm md:text-base space-y-1">
+                                        @if($frCheckRecipient)
+                                            <p class="text-[#2d6fa3] font-black text-lg">{{ $frCheckRecipient }}</p>
+                                        @endif
+                                        @if($frCheckAddress)
+                                            <p class="whitespace-pre-line">{{ $frCheckAddress }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+
+                        @else
+                            {{-- Fallback: Original Hardcoded France Ways to Donate --}}
+                            {{-- HelloAsso Section --}}
+                            <div class="space-y-6">
+                                <p class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold">
+                                    You can make a one-time or regular donation on our dedicated website, you will be redirected to our HelloAsso page:
+                                </p>
+                                <div class="flex flex-col items-center justify-center space-y-5">
+                                    <img src="{{ asset('images/helloasso.jpg') }}" alt="HelloAsso logo" class="h-16 w-auto object-contain">
+                                    <a href="https://www.helloasso.com/associations/krousar-thmey-nouvelle-famille" target="_blank" rel="noopener"
+                                       class="inline-flex items-center justify-center px-6 py-2.5 border border-[#1b4d75] hover:bg-[#1b4d75] text-[#1b4d75] hover:text-white text-xs font-black rounded-lg shadow-2xs transition-all cursor-pointer select-none">
+                                        HelloAsso (One-time or regular donation)
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="border-t border-slate-100"></div>
+                            <div class="border-t border-slate-100"></div>
 
-                        {{-- Check Section --}}
-                        <div class="space-y-6">
-                            <p class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold">
-                                You can also send a check payable to <strong class="text-slate-800">Krousar Thmey France</strong> at the following address:
-                            </p>
-                            <div class="text-center font-bold text-slate-700 leading-relaxed text-sm md:text-base space-y-1">
-                                <p class="text-[#2d6fa3] font-black text-lg">Krousar Thmey France</p>
-                                <p>62 rue Greneta</p>
-                                <p>75002 Paris</p>
+                            {{-- Check Section --}}
+                            <div class="space-y-6">
+                                <p class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold">
+                                    You can also send a check payable to <strong class="text-slate-800">Krousar Thmey France</strong> at the following address:
+                                </p>
+                                <div class="text-center font-bold text-slate-700 leading-relaxed text-sm md:text-base space-y-1">
+                                    <p class="text-[#2d6fa3] font-black text-lg">Krousar Thmey France</p>
+                                    <p>62 rue Greneta</p>
+                                    <p>75002 Paris</p>
+                                </div>
                             </div>
-                        </div>
-
+                        @endif
                     </div>
 
                     {{-- Tax Deductions & Legacy (Under it, Accordions) --}}
@@ -412,40 +508,100 @@
 
                 {{-- Switzerland view: full width rows (centered layout) --}}
                 <div x-show="residency === 'switzerland'" class="space-y-8 max-w-4xl mx-auto" x-cloak>
+                    @php
+                        $chMethods = $paymentMethods->where('tag', 'switzerland')->values();
+                    @endphp
                     
                     {{-- Ways to Donate (Full Width Card) --}}
                     <div class="bg-white rounded-2xl border border-slate-200/80 p-10 shadow-sm text-center space-y-8">
-                        
-                        {{-- Bank Transfer Section --}}
-                        <div class="space-y-4">
-                            <p class="text-sm md:text-base text-slate-655 leading-relaxed max-w-2xl mx-auto">
-                                To make a donation to our entity in Switzerland, you can make a money transfer to our bank account:
-                            </p>
-                            <div class="text-slate-800 leading-relaxed text-sm md:text-base font-semibold">
-                                <p>Banque Cler IBAN CH87</p>
-                                <p>0844 0459 1242 9009 0</p>
-                            </div>
-                        </div>
+                        @if($chMethods->isNotEmpty())
+                            @foreach($chMethods as $index => $method)
+                                @if($index > 0)
+                                    <div class="border-t border-slate-100 my-8"></div>
+                                @endif
 
-                        {{-- PayPal Section --}}
-                        <div class="space-y-4">
-                            <p class="text-sm md:text-base text-slate-655 leading-relaxed max-w-2xl mx-auto">
-                                You can make a online donation via our PayPal account
-                            </p>
-                            <div class="flex flex-col items-center justify-center space-y-4">
-                                <img src="{{ asset('images/paypal.jpg') }}" alt="PayPal logo" class="h-14 w-auto object-contain">
-                                <a href="https://www.paypal.com" target="_blank" rel="noopener"
-                                   class="inline-flex items-center justify-center px-6 py-2.5 border border-[#1b4d75] hover:bg-[#1b4d75] text-[#1b4d75] hover:text-white text-xs font-black rounded-lg shadow-2xs transition-all cursor-pointer select-none">
-                                    Make a donation via PayPal
-                                </a>
-                                <p class="text-[11px] text-slate-400 font-semibold italic text-center">
-                                    (secure payment Visa card or Mastercard accepted)
+                                @if($method->account_no || $method->account_name)
+                                    {{-- Local account details section (e.g. Banque Cler) --}}
+                                    <div class="space-y-4">
+                                        <p class="text-sm md:text-base text-slate-655 leading-relaxed max-w-2xl mx-auto font-semibold">
+                                            @if(!$method->redirect_url && $method->description)
+                                                {{ $method->description }}
+                                            @else
+                                                To make a donation to our entity in Switzerland, you can make a money transfer to our bank account:
+                                            @endif
+                                        </p>
+                                        <div class="text-slate-800 leading-relaxed text-sm md:text-base font-semibold">
+                                            <p class="text-[#2d6fa3] font-black text-lg">{{ $method->account_name ?: $method->name }}</p>
+                                            @if($method->account_no)
+                                                <p class="whitespace-pre-line">{{ $method->account_no }}</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if($method->redirect_url)
+                                    @if($method->account_no || $method->account_name)
+                                        <div class="border-t border-slate-100 my-8"></div>
+                                    @endif
+                                    {{-- Direct redirect link section (e.g. PayPal) --}}
+                                    <div class="space-y-4">
+                                        <p class="text-sm md:text-base text-slate-655 leading-relaxed max-w-2xl mx-auto font-semibold">
+                                            @if($method->description)
+                                                {{ $method->description }}
+                                            @else
+                                                You can make an online donation via our {{ $method->name }} account:
+                                            @endif
+                                        </p>
+                                        <div class="flex flex-col items-center justify-center space-y-4">
+                                            @if($method->qr_code_url)
+                                                <img src="{{ $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}" 
+                                                     alt="{{ $method->name }} logo" 
+                                                     class="h-14 w-auto object-contain">
+                                            @endif
+                                            <a href="{{ $method->redirect_url }}" target="_blank" rel="noopener"
+                                               class="inline-flex items-center justify-center px-6 py-2.5 border border-[#1b4d75] hover:bg-[#1b4d75] text-[#1b4d75] hover:text-white text-xs font-black rounded-lg shadow-2xs transition-all cursor-pointer select-none">
+                                                Make a donation via {{ $method->name }}
+                                            </a>
+                                            <p class="text-[11px] text-slate-400 font-semibold italic text-center">
+                                                (secure payment Visa card or Mastercard accepted)
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        @else
+                            {{-- Fallback: Original Hardcoded Switzerland Ways to Donate --}}
+                            {{-- Bank Transfer Section --}}
+                            <div class="space-y-4">
+                                <p class="text-sm md:text-base text-slate-655 leading-relaxed max-w-2xl mx-auto">
+                                    To make a donation to our entity in Switzerland, you can make a money transfer to our bank account:
                                 </p>
+                                <div class="text-slate-800 leading-relaxed text-sm md:text-base font-semibold">
+                                    <p>Banque Cler IBAN CH87</p>
+                                    <p>0844 0459 1242 9009 0</p>
+                                </div>
                             </div>
-                        </div>
+
+                            {{-- PayPal Section --}}
+                            <div class="space-y-4">
+                                <p class="text-sm md:text-base text-slate-655 leading-relaxed max-w-2xl mx-auto">
+                                    You can make a online donation via our PayPal account
+                                </p>
+                                <div class="flex flex-col items-center justify-center space-y-4">
+                                    <img src="{{ asset('images/paypal.jpg') }}" alt="PayPal logo" class="h-14 w-auto object-contain">
+                                    <a href="https://www.paypal.com" target="_blank" rel="noopener"
+                                       class="inline-flex items-center justify-center px-6 py-2.5 border border-[#1b4d75] hover:bg-[#1b4d75] text-[#1b4d75] hover:text-white text-xs font-black rounded-lg shadow-2xs transition-all cursor-pointer select-none">
+                                        Make a donation via PayPal
+                                    </a>
+                                    <p class="text-[11px] text-slate-400 font-semibold italic text-center">
+                                        (secure payment Visa card or Mastercard accepted)
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
 
                         {{-- Tax Section --}}
-                        <div class="space-y-1 pt-2">
+                        <div class="space-y-1 pt-2 border-t border-slate-100/60 mt-4">
                             <p class="text-sm md:text-base text-slate-700 leading-relaxed font-semibold">
                                 Donations are tax deductible in Switzerland.
                             </p>
@@ -453,7 +609,6 @@
                                 A donation receipt will be sent in February of the year following your transfer
                             </p>
                         </div>
-
                     </div>
                 </div>
 
@@ -813,7 +968,7 @@
                                 <div class="space-y-2">
                                     <h3 class="text-xl font-extrabold text-slate-900">Thank you, <span x-text="first_name"></span>!</h3>
                                     <p class="text-sm md:text-base text-slate-650 font-semibold leading-relaxed">
-                                        We have sent a confirmation email to <span class="font-bold text-slate-850" x-text="email"></span>.
+                                        We have sent a confirmation email to <span class="font-bold text-slate-850" x-text="email"></span>. Please check your email.
                                     </p>
                                 </div>
 
@@ -840,24 +995,24 @@
                     </div>
                 </div>
 
-                {{-- Mutualisation of donations disclaimer --}}
-                <div x-show="residency === 'france' || residency === 'switzerland'" x-cloak class="mt-12 space-y-8">
-                    <p class="text-[11px] text-slate-500 leading-relaxed italic text-center max-w-3xl mx-auto">
-                        <strong>Mutualisation of donations:</strong> Krousar Thmey has the principle of not affecting the donations and to pool the funds received on all of its missions. This clear principle allows for intervention only on the basis of actual needs on the ground and not on the basis of financial considerations. Therefore, if the donations received exceed the commitments made, they will be reallocated according to the other programs.
-                    </p>
-                    <div class="text-center space-y-6">
-                        <h2 class="text-xl md:text-2xl lg:text-3xl font-black text-[#1c3a5e] tracking-tight max-w-2xl mx-auto leading-snug">
-                            On behalf of the children, we warmly thank you for your support!
-                        </h2>
-                        <div class="relative max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-[0_15px_35px_rgba(15,23,42,0.08)] border border-slate-100/80 transition-all duration-300 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]">
-                            <img src="https://www.krousar-thmey.org/wp-content/uploads/2023/02/donate.webp"
-                                 alt="Thank you for your support"
-                                 class="w-full h-auto object-cover transform hover:scale-[1.01] transition-transform duration-500"
-                                 loading="lazy">
-                        </div>
+            </div>
+
+            {{-- Mutualisation of donations disclaimer --}}
+            <div x-show="residency === 'cambodia' || residency === 'france' || residency === 'switzerland'" x-cloak class="mt-12 space-y-8">
+                <p class="text-[11px] text-slate-500 leading-relaxed italic text-center max-w-3xl mx-auto">
+                    <strong>Mutualisation of donations:</strong> Krousar Thmey has the principle of not affecting the donations and to pool the funds received on all of its missions. This clear principle allows for intervention only on the basis of actual needs on the ground and not on the basis of financial considerations. Therefore, if the donations received exceed the commitments made, they will be reallocated according to the other programs.
+                </p>
+                <div class="text-center space-y-6">
+                    <h2 class="text-xl md:text-2xl lg:text-3xl font-black text-[#1c3a5e] tracking-tight max-w-2xl mx-auto leading-snug">
+                        On behalf of the children, we warmly thank you for your support!
+                    </h2>
+                    <div class="relative max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-[0_15px_35px_rgba(15,23,42,0.08)] border border-slate-100/80 transition-all duration-300 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]">
+                        <img src="https://www.krousar-thmey.org/wp-content/uploads/2023/02/donate.webp"
+                             alt="Thank you for your support"
+                             class="w-full h-auto object-cover transform hover:scale-[1.01] transition-transform duration-500"
+                             loading="lazy">
                     </div>
                 </div>
-
             </div>
 
         </div>

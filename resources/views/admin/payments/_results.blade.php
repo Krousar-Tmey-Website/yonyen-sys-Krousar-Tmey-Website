@@ -45,8 +45,30 @@
                             <span class="payments-id">{{ $paymentMethods->firstItem() + $loop->index }}</span>
                         </td>
                         <td class="col-name">
-                            <div class="payments-name-cell">
-                                <span class="payments-name">{{ $method->name }}</span>
+                            <div class="payments-name-cell" style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                                @php
+                                    $tagColor = match($method->tag) {
+                                        'france' => 'background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe;',
+                                        'switzerland' => 'background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;',
+                                        'elsewhere' => 'background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;',
+                                        default => 'background: #f8fafc; color: #475569; border: 1px solid #cbd5e1;',
+                                    };
+                                    $tagLabel = match($method->tag) {
+                                        'france' => 'France 🇫🇷',
+                                        'switzerland' => 'Switzerland 🇨🇭',
+                                        'elsewhere' => 'Elsewhere 🌐',
+                                        default => 'Cambodia 🇰🇭',
+                                    };
+                                @endphp
+                                <span class="payments-tag-badge" style="display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; {{ $tagColor }}">
+                                    {{ $tagLabel }}
+                                </span>
+                                <span class="payments-name" style="font-weight: 600;">{{ $method->name }}</span>
+                                @if($method->redirect_url)
+                                    <span style="font-size: 10px; color: #64748b; font-family: monospace; margin-top: 2px;" title="Redirects to this URL">
+                                        🔗 {{ Str::limit($method->redirect_url, 30) }}
+                                    </span>
+                                @endif
                             </div>
                         </td>
                         <td class="col-qr">

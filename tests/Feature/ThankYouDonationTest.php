@@ -36,7 +36,8 @@ class ThankYouDonationTest extends TestCase
                 && $mail->lastName === 'Doe'
                 && $mail->amount == 100
                 && $mail->currency === 'USD'
-                && $mail->cardCode === '1234567890';
+                && $mail->cardName === 'Krousar Thmey'
+                && $mail->cardNumber === '5325925500116673';
         });
 
         // Assert DonationRequestMail was sent to notify the team
