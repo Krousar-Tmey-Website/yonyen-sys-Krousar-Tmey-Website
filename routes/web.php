@@ -424,6 +424,12 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Payment Methods
     Route::resource('payments', Admin\PaymentMethodController::class)->except(['show']);
 
+    // France Donation Settings
+    Route::prefix('france-donation')->name('france-donation.')->group(function () {
+        Route::get('/', [Admin\FranceDonationController::class, 'index'])->name('index');
+        Route::post('/', [Admin\FranceDonationController::class, 'update'])->name('update');
+    });
+
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
 

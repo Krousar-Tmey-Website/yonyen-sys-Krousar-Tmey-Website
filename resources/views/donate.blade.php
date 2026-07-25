@@ -281,63 +281,71 @@
                 {{-- France view: full width rows (centered layout) --}}
                 <div x-show="residency === 'france'" class="space-y-8 max-w-4xl mx-auto">
                     @php
-                        $frMethods = $paymentMethods->where('tag', 'france')->values();
+                        $frHelloAssoUrl = $settings['france_helloasso_url'] ?? '';
+                        $frHelloAssoDesc = $settings['france_helloasso_description'] ?? '';
+                        $frHelloAssoLogo = $settings['france_helloasso_logo'] ?? '';
+                        $frCheckRecipient = $settings['france_check_recipient'] ?? '';
+                        $frCheckAddress = $settings['france_check_address'] ?? '';
+                        $frCheckDesc = $settings['france_check_description'] ?? '';
+                        $hasHelloAsso = filled($frHelloAssoUrl);
+                        $hasCheck = filled($frCheckRecipient) || filled($frCheckAddress);
+                        $hasFranceContent = $hasHelloAsso || $hasCheck;
                     @endphp
                     
                     {{-- Ways to Donate (Full Width Card) --}}
                     <div class="bg-white rounded-2xl border border-slate-200/80 p-10 shadow-sm space-y-10">
-                        @if($frMethods->isNotEmpty())
-                            @foreach($frMethods as $index => $method)
-                                @if($index > 0)
+                        @if($hasFranceContent)
+
+                            @if($hasHelloAsso)
+                                {{-- HelloAsso or other redirect platform --}}
+                                <div class="space-y-6">
+                                    <p class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold">
+                                        @if($frHelloAssoDesc)
+                                            {{ $frHelloAssoDesc }}
+                                        @else
+                                            You can make a one-time or regular donation on our dedicated website, you will be redirected to our HelloAsso page:
+                                        @endif
+                                    </p>
+                                    <div class="flex flex-col items-center justify-center space-y-5">
+                                        @if($frHelloAssoLogo)
+                                            <img src="{{ str_starts_with($frHelloAssoLogo, 'http') ? $frHelloAssoLogo : asset('storage/' . $frHelloAssoLogo) }}" 
+                                                 alt="HelloAsso logo" 
+                                                 class="h-16 w-auto object-contain">
+                                        @else
+                                            <img src="{{ asset('images/helloasso.jpg') }}" alt="HelloAsso logo" class="h-16 w-auto object-contain">
+                                        @endif
+                                        <a href="{{ $frHelloAssoUrl }}" target="_blank" rel="noopener"
+                                           class="inline-flex items-center justify-center px-6 py-2.5 border border-[#1b4d75] hover:bg-[#1b4d75] text-[#1b4d75] hover:text-white text-xs font-black rounded-lg shadow-2xs transition-all cursor-pointer select-none">
+                                            HelloAsso (One-time or regular donation)
+                                        </a>
+                                    </div>
+                                </div>
+                                @if($hasCheck)
                                     <div class="border-t border-slate-100"></div>
                                 @endif
+                            @endif
 
-                                @if($method->redirect_url)
-                                    {{-- HelloAsso or other redirect platform --}}
-                                    <div class="space-y-6">
-                                        <p class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold">
-                                            @if($method->description)
-                                                {{ $method->description }}
-                                            @else
-                                                You can make a one-time or regular donation on our dedicated website, you will be redirected to our {{ $method->name }} page:
-                                            @endif
-                                        </p>
-                                        <div class="flex flex-col items-center justify-center space-y-5">
-                                            @if($method->qr_code_url)
-                                                <img src="{{ $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}" 
-                                                     alt="{{ $method->name }} logo" 
-                                                     class="h-16 w-auto object-contain">
-                                            @endif
-                                            <a href="{{ $method->redirect_url }}" target="_blank" rel="noopener"
-                                               class="inline-flex items-center justify-center px-6 py-2.5 border border-[#1b4d75] hover:bg-[#1b4d75] text-[#1b4d75] hover:text-white text-xs font-black rounded-lg shadow-2xs transition-all cursor-pointer select-none">
-                                                {{ $method->name }} (One-time or regular donation)
-                                            </a>
-                                        </div>
+                            @if($hasCheck)
+                                {{-- Check or other local details --}}
+                                <div class="space-y-6">
+                                    <p class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold">
+                                        @if($frCheckDesc)
+                                            {{ $frCheckDesc }}
+                                        @else
+                                            You can also send a check payable to <strong class="text-slate-800">{{ $frCheckRecipient ?: 'Krousar Thmey France' }}</strong> at the following address:
+                                        @endif
+                                    </p>
+                                    <div class="text-center font-bold text-slate-700 leading-relaxed text-sm md:text-base space-y-1">
+                                        @if($frCheckRecipient)
+                                            <p class="text-[#2d6fa3] font-black text-lg">{{ $frCheckRecipient }}</p>
+                                        @endif
+                                        @if($frCheckAddress)
+                                            <p class="whitespace-pre-line">{{ $frCheckAddress }}</p>
+                                        @endif
                                     </div>
-                                @endif
+                                </div>
+                            @endif
 
-                                @if($method->account_no || $method->account_name)
-                                    @if($method->redirect_url)
-                                        <div class="border-t border-slate-100"></div>
-                                    @endif
-                                    {{-- Check or other local details --}}
-                                    <div class="space-y-6">
-                                        <p class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold">
-                                            @if(!$method->redirect_url && $method->description)
-                                                {{ $method->description }}
-                                            @else
-                                                You can also send a check/payment payable to <strong class="text-slate-800">{{ $method->account_name ?: $method->name }}</strong> at the following address / account:
-                                            @endif
-                                        </p>
-                                        <div class="text-center font-bold text-slate-700 leading-relaxed text-sm md:text-base space-y-1">
-                                            <p class="text-[#2d6fa3] font-black text-lg">{{ $method->account_name }}</p>
-                                            @if($method->account_no)
-                                                <p class="whitespace-pre-line">{{ $method->account_no }}</p>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
                         @else
                             {{-- Fallback: Original Hardcoded France Ways to Donate --}}
                             {{-- HelloAsso Section --}}
