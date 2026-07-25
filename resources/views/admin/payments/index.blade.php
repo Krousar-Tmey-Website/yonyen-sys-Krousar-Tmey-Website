@@ -12,37 +12,45 @@
 @section('content')
 
 <div class="payments-page" x-data="paymentManager()" x-init="init()">
-    {{-- Residency Selector Tabs --}}
+    {{-- Residency Selector Tabs (styled like public donate page) --}}
     <div style="margin-bottom: 24px;">
-        <div style="background-color: #ffffff; padding: 6px; border-radius: 12px; display: inline-flex; border: 1px solid #eef2f6; gap: 4px; flex-wrap: wrap; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-            <button type="button" 
-                    @click="tag = ''; applyFilters()" 
-                    class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
-                    style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
-                    :style="tag === '' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
-                All Methods
+        <div class="bg-white rounded-xl border border-slate-200/80 p-1 shadow-2xs flex flex-wrap lg:flex-nowrap justify-between gap-1 w-full">
+            
+            {{-- Tab: All Methods --}}
+            <button type="button"
+                    @click="tag = ''; applyFilters()"
+                    :class="tag === '' ? 'bg-[#2d6fa3] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'"
+                    class="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-bold rounded-lg transition-all duration-200 select-none focus:outline-none cursor-pointer">
+                <span>All Methods</span>
             </button>
-            <button type="button" 
-                    @click="tag = 'cambodia'; applyFilters()" 
-                    class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
-                    style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
-                    :style="tag === 'cambodia' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
-                Payment in Cambodia 🇰🇭
+
+            {{-- Tab: Cambodia --}}
+            <button type="button"
+                    @click="tag = 'cambodia'; applyFilters()"
+                    :class="tag === 'cambodia' ? 'bg-[#2d6fa3] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'"
+                    class="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-bold rounded-lg transition-all duration-200 select-none focus:outline-none cursor-pointer">
+                <span>Payment in Cambodia</span>
+                <img src="{{ asset('images/Flag_of_Cambodia.svg.webp') }}" class="h-3.5 w-auto rounded-xs object-contain shrink-0 border border-slate-200/60 shadow-3xs" alt="KH">
             </button>
-            <button type="button" 
-                    @click="tag = 'france'; applyFilters()" 
-                    class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
-                    style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
-                    :style="tag === 'france' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
-                Fiscal residency in France 🇫🇷
+
+            {{-- Tab: France --}}
+            <button type="button"
+                    @click="tag = 'france'; applyFilters()"
+                    :class="tag === 'france' ? 'bg-[#2d6fa3] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'"
+                    class="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-bold rounded-lg transition-all duration-200 select-none focus:outline-none cursor-pointer">
+                <span>Fiscal residency in France</span>
+                <img src="{{ asset('images/Flag_of_France.svg.webp') }}" class="h-3.5 w-auto rounded-xs object-contain shrink-0 border border-slate-200/60 shadow-3xs" alt="FR">
             </button>
-            <button type="button" 
-                    @click="tag = 'switzerland'; applyFilters()" 
-                    class="px-4 py-2 text-sm font-bold transition-all cursor-pointer border-none outline-none"
-                    style="border-radius: 8px; font-weight: 700; font-size: 13px; line-height: 1.5; padding: 8px 16px;"
-                    :style="tag === 'switzerland' ? 'background: #1c3a5e; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);' : 'background: transparent; color: #64748b;'">
-                Fiscal residency in Switzerland 🇨🇭
+
+            {{-- Tab: Switzerland --}}
+            <button type="button"
+                    @click="tag = 'switzerland'; applyFilters()"
+                    :class="tag === 'switzerland' ? 'bg-[#2d6fa3] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'"
+                    class="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-bold rounded-lg transition-all duration-200 select-none focus:outline-none cursor-pointer">
+                <span>Fiscal residency in Switzerland</span>
+                <img src="{{ asset('images/Flag_of_Switzerland_(Pantone).svg.webp') }}" class="h-3.5 w-auto rounded-xs object-contain shrink-0 border border-slate-200/60 shadow-3xs" alt="CH">
             </button>
+
         </div>
     </div>
 
@@ -116,7 +124,7 @@
         </div>
         @endif
 
-        <div class="max-w-3xl mx-auto space-y-6">
+        <div class="w-full space-y-6">
             <form action="{{ route('admin.france-donation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
