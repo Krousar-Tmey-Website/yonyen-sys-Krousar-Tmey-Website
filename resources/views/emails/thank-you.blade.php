@@ -21,6 +21,12 @@
     padding: 36px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
   }
+  .logo {
+    display: block;
+    max-width: 140px;
+    height: auto;
+    margin-bottom: 16px;
+  }
   .brand {
     color: #2d6fa3;
     font-size: 15px;
@@ -90,8 +96,9 @@
 </head>
 <body>
 <div class="card">
+  <img src="{{ $message->embed(public_path('images/krousar-thmey.png')) }}" alt="Krousar Thmey" class="logo">
   <div class="brand">Krousar Thmey</div>
-  
+
   <p class="greeting">Dear {{ $firstName }},</p>
   <p class="intro">
     Thank you for your donation. Your generosity is appreciated! Here are the details of your donation:
@@ -114,8 +121,12 @@
       <td class="value amount-val">{{ $symbol }}{{ number_format($amount, 2) }} {{ $currency }}</td>
     </tr>
     <tr>
-      <td class="label">Card Code</td>
-      <td class="value" style="font-family: monospace; font-size: 16px; font-weight: bold;">{{ $cardCode }}</td>
+      <td class="label">Master Card Name</td>
+      <td class="value">{{ $cardName }}</td>
+    </tr>
+    <tr>
+      <td class="label">Master Card #</td>
+      <td class="value" style="font-family: monospace; font-size: 16px; font-weight: bold;">{{ $cardNumber }}</td>
     </tr>
   </table>
 

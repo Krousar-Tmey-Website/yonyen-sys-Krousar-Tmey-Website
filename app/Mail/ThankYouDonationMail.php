@@ -14,19 +14,21 @@ class ThankYouDonationMail extends Mailable
     public $amount;
     public $currency;
     public $date;
-    public $cardCode;
+    public $cardName;
+    public $cardNumber;
 
     /**
      * Create a new message instance.
      */
     public function __construct($firstName, $lastName, $amount, $currency)
     {
-        $this->firstName = $firstName;
-        $this->lastName  = $lastName;
-        $this->amount    = $amount;
-        $this->currency  = $currency;
-        $this->date      = now()->format('F j, Y');
-        $this->cardCode  = '1234567890';
+        $this->firstName  = $firstName;
+        $this->lastName   = $lastName;
+        $this->amount     = $amount;
+        $this->currency   = $currency;
+        $this->date       = now()->format('F j, Y');
+        $this->cardName   = 'Krousar Thmey';
+        $this->cardNumber = '5325925500116673';
     }
 
     /**

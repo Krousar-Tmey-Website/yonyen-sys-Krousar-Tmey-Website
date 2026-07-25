@@ -960,7 +960,7 @@
                                 <div class="space-y-2">
                                     <h3 class="text-xl font-extrabold text-slate-900">Thank you, <span x-text="first_name"></span>!</h3>
                                     <p class="text-sm md:text-base text-slate-650 font-semibold leading-relaxed">
-                                        We have sent a confirmation email to <span class="font-bold text-slate-850" x-text="email"></span>.
+                                        We have sent a confirmation email to <span class="font-bold text-slate-850" x-text="email"></span>. Please check your email.
                                     </p>
                                 </div>
 
