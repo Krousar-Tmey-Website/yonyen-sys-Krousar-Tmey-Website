@@ -8,7 +8,13 @@
 <section class="py-20 bg-white scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
         @php
-            $wp = fn (string $key, string $default) => \App\Models\HomeSetting::getValue($key, $default);
+            $wp = function (string $key, string $default) {
+                if (app()->getLocale() === 'fr') {
+                    $frValue = \App\Models\HomeSetting::getValue($key . '_fr', '');
+                    if (!empty($frValue)) return $frValue;
+                }
+                return \App\Models\HomeSetting::getValue($key, $default);
+            };
             $wpPhoto = $wp('words_pictures_photo', '');
             $wpPhotoUrl = $wpPhoto ? (str_starts_with($wpPhoto, 'http') ? $wpPhoto : asset('storage/' . $wpPhoto)) : asset('images/cultural.jpg');
             $wpQr = $wp('words_pictures_qr_image', '');

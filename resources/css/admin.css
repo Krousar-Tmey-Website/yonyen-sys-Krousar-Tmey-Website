@@ -1782,11 +1782,6 @@ select.form-control {
    PAYMENT METHODS — REDESIGNED LAYOUT
 ============================================ */
 
-/* Page Container */
-.payments-page {
-    max-width: 100%;
-}
-
 /* ── Page Header ── */
 .payments-header {
     display: flex;

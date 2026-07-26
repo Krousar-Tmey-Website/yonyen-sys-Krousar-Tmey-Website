@@ -5,6 +5,15 @@
 
 @section('content')
 
+@php
+$t = function (string $key, string $default = '') use ($settings) {
+    if (app()->getLocale() === 'fr' && !empty($settings[$key.'_fr'] ?? null)) {
+        return $settings[$key.'_fr'];
+    }
+    return $settings[$key] ?? $default;
+};
+@endphp
+
 {{-- ========================================================
      PAGE HEADER
      ======================================================== --}}
@@ -89,7 +98,7 @@
                 <p class="italic text-gray-400 text-sm mb-4">published {{ $settings['media_press_date'] ?? '07.25.17' }}</p>
                 <hr class="border-gray-100 mb-4">
                 <div class="rich-text-content italic text-gray-600 leading-relaxed mb-6">
-                    {!! $settings['media_press_excerpt'] ?? "Traditional Cambodian art forms such as classical dance and music have been passed down throughout the generations as a way for children to learn and preserve the meaning of their culture. However, as the education sector changes, gaining knowledge of the arts at a young age is proving less essential for the Kingdom's public schools…" !!}
+                    {!! $t('media_press_excerpt', "Traditional Cambodian art forms such as classical dance and music have been passed down throughout the generations as a way for children to learn and preserve the meaning of their culture. However, as the education sector changes, gaining knowledge of the arts at a young age is proving less essential for the Kingdom's public schools…") !!}
                 </div>
                 <a href="{{ $pressArticleUrl }}" target="_blank" rel="noopener"
                    class="inline-flex items-center justify-center px-6 py-2.5 bg-[#2d6fa3] text-white text-sm font-semibold rounded hover:bg-[#1d4e7a] transition-colors">

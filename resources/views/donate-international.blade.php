@@ -70,15 +70,6 @@
                 <span class="text-base leading-none">🌍</span>
                 <span class="uppercase tracking-wider">Fiscal residency elsewhere</span>
             </a>
-            
-            {{-- Tab: Campaigns --}}
-            @if(Route::has('campaigns.index'))
-            <a href="{{ route('campaigns.index') }}"
-               class="flex-none flex items-center justify-center gap-2 px-4 py-3 text-xs font-black rounded-xl transition-all duration-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800 select-none">
-                <span class="text-base leading-none">📣</span>
-                <span class="uppercase tracking-wider">Campaigns</span>
-            </a>
-            @endif
         </div>
 
         {{-- Twin Columns Layout --}}

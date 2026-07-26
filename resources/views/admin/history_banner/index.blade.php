@@ -8,12 +8,14 @@
 
 @php
     $bv = fn($key, $default = '') => old($key, $bannerSettings->get($key, $default));
+    $bvFr = fn($key, $default = '') => old($key.'_fr', $bannerSettings->get($key.'_fr', $default));
     $bannerImage = $bv('history_banner_image');
     $bannerOverlayColor = $bv('history_banner_overlay_color', '#1a3c6e');
     $bannerImageUrl = $bannerImage ? (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) : null;
     $bannerBadge = $bv('history_banner_badge', 'Our History');
     $bannerTitle = $bv('history_banner_title', 'Help a Child Build Their Future');
     $bannerSubtitle = $bv('history_banner_subtitle', 'Discover the inspiring journey of Krousar Thmey, from our humble beginnings in 1991 to our ongoing mission supporting children across Cambodia.');
+    $bannerSubtitleFr = $bvFr('history_banner_subtitle');
 @endphp
 
 <div class="max-w-3xl mx-auto space-y-6">
@@ -36,10 +38,20 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <div class="flex items-center gap-3 mb-1">
-            <span class="text-xl">🎨</span>
-            <h3 class="font-bold text-gray-800 text-base">History Page Banner</h3>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6" x-data="bilingualForm()">
+        <div class="flex items-center justify-between gap-3 mb-1">
+            <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </span>
+                <h3 class="font-semibold text-gray-700 text-sm">History Page Banner</h3>
+            </div>
+            <div class="lang-tabs" title="Toggle editing language (English / French)">
+                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+            </div>
         </div>
         <p class="text-xs text-gray-400 mb-4">Controls the hero banner at the top of the public "Who We Are" page, shown above the history timeline.</p>
 
@@ -133,9 +145,14 @@
             </div>
 
             {{-- Hero Subtitle --}}
-            <div>
+            <div x-show="lang === 'en'">
                 <label for="history_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Subtitle</label>
                 <x-admin.rich-text id="history_banner_subtitle" name="history_banner_subtitle" :value="$bannerSubtitle" lang="en" :rows="2" />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label for="history_banner_subtitle_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Subtitle (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text id="history_banner_subtitle_fr" name="history_banner_subtitle_fr" :value="$bannerSubtitleFr" lang="fr" :rows="2" placeholder="Découvrez le parcours inspirant de Krousar Thmey…" />
+                <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English subtitle.</p>
             </div>
 
             <div class="flex items-center gap-3 pt-1">

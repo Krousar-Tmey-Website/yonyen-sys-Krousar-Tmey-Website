@@ -9,12 +9,18 @@
 <div class="max-w-3xl mx-auto">
     <div class="bg-white rounded-2xl border border-gray-100 p-6" x-data="bilingualForm()">
         <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-gray-700 text-sm">Country Information</h3>
-    <div class="lang-tabs" title="Toggle editing language (English / French)">
-    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-</div>
-</div>
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </span>
+                Country Information
+            </h3>
+            <div class="lang-tabs" title="Toggle editing language (English / French)">
+                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+            </div>
         </div>
 
         <form action="{{ isset($worldwidePartner) ? route('admin.worldwide-partners.update', $worldwidePartner) : route('admin.worldwide-partners.store') }}"

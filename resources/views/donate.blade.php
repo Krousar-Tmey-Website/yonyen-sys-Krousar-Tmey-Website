@@ -83,15 +83,6 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
                     </svg>
                 </button>
-                
-                {{-- Tab: Campaigns --}}
-                @if(Route::has('campaigns.index'))
-                <a href="{{ route('campaigns.index') }}"
-                   class="flex-none flex items-center justify-center gap-2 px-3 py-2 text-xs font-bold rounded-lg transition-all duration-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800 select-none">
-                    <span>Campaigns</span>
-                    <span class="text-sm leading-none">📣</span>
-                </a>
-                @endif
             </div>
 
             {{-- ──────────────────────────────────────────────

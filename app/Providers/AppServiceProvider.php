@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Models\AnnualReport;
 use App\Models\Award;
 use App\Models\Book;
-use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Child;
 use App\Models\ContactInquiry;
@@ -56,7 +55,6 @@ class AppServiceProvider extends ServiceProvider
             AnnualReport::class,
             Award::class,
             Book::class,
-            Campaign::class,
             Category::class,
             Child::class,
             ContactInquiry::class,

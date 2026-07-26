@@ -19,7 +19,7 @@
         </p>
     </div>
 
-    <form action="{{ route('admin.project-defaults.update') }}" method="POST" class="space-y-6">
+    <form action="{{ route('admin.project-defaults.update') }}" method="POST" class="space-y-6" x-data="bilingualForm()">
         @csrf
         @if($selectedProject)
         <input type="hidden" name="selected_project_id" value="{{ $selectedProject->id }}">
@@ -36,7 +36,13 @@
         @endif
 
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Public Project Defaults</h3>
+            <div class="flex items-center justify-between gap-3">
+                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Public Project Defaults</h3>
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+            </div>
             @if($selectedProject)
             <p class="text-xs text-gray-500">
                 Saving shared defaults will keep <strong>{{ $selectedProject->title }}</strong> selected below so you can continue configuring that project from this page.
@@ -79,7 +85,7 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
-                <div class="md:col-span-2">
+                <div class="md:col-span-2" x-show="lang === 'en'">
                     <label for="project_default_make_difference_title" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title</label>
                     <input type="text"
                            id="project_default_make_difference_title"
@@ -87,10 +93,25 @@
                            value="{{ old('project_default_make_difference_title', $settings['project_default_make_difference_title']->value ?? 'Make a Difference') }}"
                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                 </div>
-                <div class="md:col-span-2">
+                <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
+                    <label for="project_default_make_difference_title_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text"
+                           id="project_default_make_difference_title_fr"
+                           name="project_default_make_difference_title_fr"
+                           value="{{ old('project_default_make_difference_title_fr', $settings['project_default_make_difference_title_fr']->value ?? '') }}"
+                           placeholder="Faites la différence"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <p class="mt-1.5 text-xs text-gray-400">Leave blank to reuse the English title.</p>
+                </div>
+                <div class="md:col-span-2" x-show="lang === 'en'">
                     <label for="project_default_make_difference_text" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text</label>
                     <x-admin.rich-text id="project_default_make_difference_text" name="project_default_make_difference_text" :value="old('project_default_make_difference_text', $settings['project_default_make_difference_text']->value ?? '')" lang="en" :rows="3" placeholder="e.g. $50 - food expenses per child per month" />
                     <p class="mt-1.5 text-xs text-gray-400">Shown on the public project page whenever a project leaves its own donation/details text blank.</p>
+                </div>
+                <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
+                    <label for="project_default_make_difference_text_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <x-admin.rich-text id="project_default_make_difference_text_fr" name="project_default_make_difference_text_fr" :value="old('project_default_make_difference_text_fr', $settings['project_default_make_difference_text_fr']->value ?? '')" lang="fr" :rows="3" placeholder="ex. 50 $ - frais alimentaires par enfant par mois" />
+                    <p class="mt-1.5 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English text.</p>
                 </div>
                 <div>
                     <label for="project_default_donate_button_text" class="block text-sm font-medium text-gray-700 mb-1.5">Donate Button Text</label>
@@ -240,17 +261,38 @@
                     </div>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-4 transition-opacity duration-200" :class="detailsMode === 'specific' ? 'opacity-100' : 'opacity-60'">
-                    <div class="md:col-span-2">
+                <div class="grid md:grid-cols-2 gap-4 transition-opacity duration-200" x-data="bilingualForm()" :class="detailsMode === 'specific' ? 'opacity-100' : 'opacity-60'">
+                    <div class="md:col-span-2 flex items-center justify-between gap-3 -mb-1">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Make a Difference Content</p>
+                        <div class="lang-tabs" title="Toggle editing language (English / French)">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2" x-show="lang === 'en'">
                         <label for="make_difference_title" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title</label>
                         <input type="text" id="make_difference_title" name="make_difference_title"
                                value="{{ old('make_difference_title', $selectedProject->make_difference_title) }}"
                                :disabled="detailsMode !== 'specific'"
                                class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
-                    <div class="md:col-span-2">
+                    <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
+                        <label for="make_difference_title_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" id="make_difference_title_fr" name="make_difference_title_fr"
+                               value="{{ old('make_difference_title_fr', $selectedProject->make_difference_title_fr) }}"
+                               placeholder="Faites la différence"
+                               :disabled="detailsMode !== 'specific'"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <p class="mt-1.5 text-xs text-gray-400">Leave blank to reuse the English title.</p>
+                    </div>
+                    <div class="md:col-span-2" x-show="lang === 'en'">
                         <label for="make_difference_text" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text</label>
                         <x-admin.rich-text id="make_difference_text" name="make_difference_text" :value="old('make_difference_text', $selectedProject->make_difference_text)" lang="en" :rows="3" placeholder="e.g. $50 - food expenses per child per month" />
+                    </div>
+                    <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
+                        <label for="make_difference_text_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <x-admin.rich-text id="make_difference_text_fr" name="make_difference_text_fr" :value="old('make_difference_text_fr', $selectedProject->make_difference_text_fr)" lang="fr" :rows="3" placeholder="ex. 50 $ - frais alimentaires par enfant par mois" />
+                        <p class="mt-1.5 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English text.</p>
                     </div>
                     <div>
                         <label for="donate_button_text" class="block text-sm font-medium text-gray-700 mb-1.5">Donate Button Text</label>

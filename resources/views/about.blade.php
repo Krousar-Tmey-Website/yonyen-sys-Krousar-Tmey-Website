@@ -6,10 +6,16 @@
 @section('content')
 
 @php
+$t = function (string $key, string $default = '') use ($settings) {
+    if (app()->getLocale() === 'fr' && !empty($settings[$key.'_fr'] ?? null)) {
+        return $settings[$key.'_fr'];
+    }
+    return $settings[$key] ?? $default;
+};
 $heroImage = $settings['history_banner_image'] ?? null;
 $heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/children.jpg');
 $heroTitle = $settings['history_banner_title'] ?? 'Help a Child Build Their Future';
-$heroSubtitle = $settings['history_banner_subtitle'] ?? 'Discover the inspiring journey of Krousar Thmey, from our humble beginnings in 1991 to our ongoing mission supporting children across Cambodia.';
+$heroSubtitle = $t('history_banner_subtitle', 'Discover the inspiring journey of Krousar Thmey, from our humble beginnings in 1991 to our ongoing mission supporting children across Cambodia.');
 $heroBadge = $settings['history_banner_badge'] ?? 'Our History';
 $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
 @endphp

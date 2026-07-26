@@ -28,6 +28,7 @@ class MediaPageController extends Controller
             'media_press_headline' => ['nullable', 'string', 'max:255'],
             'media_press_date' => ['nullable', 'string', 'max:255'],
             'media_press_excerpt' => ['nullable', 'string'],
+            'media_press_excerpt_fr' => ['nullable', 'string'],
             'media_press_article_url' => ['nullable', 'url', 'max:2048'],
             'media_latest_heading' => ['nullable', 'string', 'max:255'],
             'media_latest_intro' => ['nullable', 'string', 'max:255'],

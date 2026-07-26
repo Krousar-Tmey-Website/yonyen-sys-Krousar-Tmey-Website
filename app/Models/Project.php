@@ -16,7 +16,7 @@ class Project extends Model
         'content', 'content_fr',
         'activities', 'activities_fr',
         'testimony_story', 'testimony_story_fr',
-        'make_difference_text',
+        'make_difference_text', 'make_difference_text_fr',
     ];
 
     protected $guarded = [];
@@ -108,12 +108,20 @@ class Project extends Model
 
     public function getEffectiveMakeDifferenceTextAttribute(): string
     {
-        return $this->resolveProjectDefault($this->attributes['make_difference_text'] ?? null, 'project_default_make_difference_text');
+        return $this->resolveProjectDefaultLocalized(
+            $this->attributes['make_difference_text'] ?? null,
+            $this->attributes['make_difference_text_fr'] ?? null,
+            'project_default_make_difference_text'
+        );
     }
 
     public function getEffectiveMakeDifferenceTitleAttribute(): string
     {
-        return $this->resolveProjectDefault($this->attributes['make_difference_title'] ?? null, 'project_default_make_difference_title');
+        return $this->resolveProjectDefaultLocalized(
+            $this->attributes['make_difference_title'] ?? null,
+            $this->attributes['make_difference_title_fr'] ?? null,
+            'project_default_make_difference_title'
+        );
     }
 
     public function getEffectiveDonateButtonTextAttribute(): string
@@ -149,5 +157,24 @@ class Project extends Model
         }
 
         return HomeSetting::getValue($settingKey, '');
+    }
+
+    protected function resolveProjectDefaultLocalized(?string $value, ?string $valueFr, string $settingKey): string
+    {
+        if (session('locale') === 'fr') {
+            $trimmedFr = trim((string) $valueFr);
+
+            if ($trimmedFr !== '') {
+                return $trimmedFr;
+            }
+
+            $settingFr = HomeSetting::getValue($settingKey . '_fr', '');
+
+            if ($settingFr !== '') {
+                return $settingFr;
+            }
+        }
+
+        return $this->resolveProjectDefault($value, $settingKey);
     }
 }

@@ -54,13 +54,18 @@
     </div>
     @endif
 
-    <form action="{{ route('admin.media-page.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('admin.media-page.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6" x-data="bilingualForm()">
         @csrf
 
         {{-- Page Header --}}
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                <span class="text-base">🏷️</span> Page Header
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                    </svg>
+                </span>
+                Page Header
             </h3>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Page Title</label>
@@ -79,10 +84,21 @@
 
         {{-- Featured Press Article --}}
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                <span class="text-base">📰</span> Featured Press Article
-                <span class="text-xs font-normal text-gray-400 normal-case tracking-normal">("Krousar Thmey In The News")</span>
-            </h3>
+            <div class="flex items-center justify-between gap-3">
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                        </svg>
+                    </span>
+                    Featured Press Article
+                    <span class="text-xs font-normal text-gray-400">("Krousar Thmey In The News")</span>
+                </h3>
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+            </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Section Heading</label>
@@ -148,9 +164,14 @@
                 <p class="mt-1.5 text-xs text-gray-400">Free text — shown exactly as typed, e.g. "published 07.25.17".</p>
             </div>
 
-            <div>
+            <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Excerpt</label>
                 <x-admin.rich-text name="media_press_excerpt" :value="old('media_press_excerpt', $settings['media_press_excerpt'] ?? 'Traditional Cambodian art forms such as classical dance and music have been passed down throughout the generations as a way for children to learn and preserve the meaning of their culture. However, as the education sector changes, gaining knowledge of the arts at a young age is proving less essential for the Kingdom\'s public schools…')" lang="en" :rows="3" />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Excerpt (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="media_press_excerpt_fr" :value="old('media_press_excerpt_fr', $settings['media_press_excerpt_fr'] ?? '')" lang="fr" :rows="3" placeholder="Les formes d'art traditionnelles cambodgiennes…" />
+                <p class="mt-1.5 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English excerpt.</p>
             </div>
 
             <div>
@@ -163,8 +184,13 @@
 
         {{-- Latest News Section --}}
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                <span class="text-base">🗞️</span> Latest News Section
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                    </svg>
+                </span>
+                Latest News Section
             </h3>
             <p class="text-xs text-gray-400 -mt-2">The 3 news cards below this heading are pulled automatically from your most recent published News Articles — nothing to manage here.</p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">

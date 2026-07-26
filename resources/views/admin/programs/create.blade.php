@@ -35,9 +35,16 @@
         </div>
         @endif
 
-        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <h3 class="text-sm font-bold text-[#1a3c6e] uppercase tracking-wider">Public Page Mapping</h3>
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                        </svg>
+                    </span>
+                    Public Page Mapping
+                </h3>
                 <div class="lang-tabs self-start" title="Toggle editing language (English / French)">
                     <button type="button" class="lang-tab" data-lang="en" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
                     <button type="button" class="lang-tab" data-lang="fr" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
@@ -47,12 +54,12 @@
                 <p class="mt-1 text-sm text-gray-600">This form controls the main program section on the public <strong>Our Programs</strong> page.</p>
             </div>
             <div class="grid md:grid-cols-2 gap-3 text-sm text-gray-600">
-                <div class="rounded-xl bg-white/80 border border-white p-4">
+                <div class="rounded-xl bg-gray-50 border border-gray-100 p-4">
                     <p><strong>Section Title</strong> -> large heading</p>
                     <p><strong>Objective Text</strong> -> Objective block</p>
                     <p><strong>Program Text</strong> -> Program block</p>
                 </div>
-                <div class="rounded-xl bg-white/80 border border-white p-4">
+                <div class="rounded-xl bg-gray-50 border border-gray-100 p-4">
                     <p><strong>Public Section Image</strong> -> right-side image</p>
                     <p><strong>Social Media Links</strong> -> icons below the image</p>
                     <p><strong>Projects</strong> -> the “Know more about the projects” button appears automatically when this program has projects</p>
@@ -102,8 +109,14 @@
 
             {{-- Public page content --}}
             <div class="flex items-center justify-between">
-                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Public Page Content</h3>
-            
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </span>
+                    Public Page Content
+                </h3>
                     <span class="text-xs text-gray-400">Editing <span class="font-semibold" x-text="lang === 'fr' ? 'French' : 'English'"></span> content</span>
                 </div>
 
@@ -164,7 +177,14 @@
             {{-- Testimony Settings --}}
             <div class="pt-4 mt-2 border-t border-gray-100">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">Testimony</h3>
+                    <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                        </span>
+                        Testimony
+                    </h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
@@ -211,7 +231,14 @@
 
             {{-- Social Media Links --}}
             <div class="pt-4 mt-2 border-t border-gray-100">
-                <h3 class="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wider">Social Media Links</h3>
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2 mb-4">
+                    <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                        </svg>
+                    </span>
+                    Social Media Links
+                </h3>
                 <p class="text-xs text-gray-400 -mt-2 mb-4">These links appear under the right-side image on the public program section when filled.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -302,8 +329,7 @@
                class="px-5 py-2 text-sm font-medium text-gray-500 hover:text-gray-800 rounded-xl hover:bg-white transition-all border border-gray-200">
                 Cancel
             </a>
-            <button type="submit"
-                    class="inline-flex items-center gap-2 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white px-6 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow-md">
+            <button type="submit" class="btn-primary">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>

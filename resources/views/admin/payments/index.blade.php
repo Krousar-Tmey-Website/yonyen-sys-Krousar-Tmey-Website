@@ -11,19 +11,11 @@
 
 @section('content')
 
-<div class="payments-page" x-data="paymentManager()" x-init="init()">
+<div class="payments-page max-w-3xl mx-auto" x-data="paymentManager()" x-init="init()">
     {{-- Residency Selector Tabs (styled like public donate page) --}}
     <div style="margin-bottom: 24px;">
         <div class="bg-white rounded-xl border border-slate-200/80 p-1 shadow-2xs flex flex-wrap lg:flex-nowrap justify-between gap-1 w-full">
             
-            {{-- Tab: All Methods --}}
-            <button type="button"
-                    @click="switchTag('')"
-                    :class="tag === '' ? 'bg-[#2d6fa3] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'"
-                    class="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-bold rounded-lg transition-all duration-200 select-none focus:outline-none cursor-pointer">
-                <span>All Methods</span>
-            </button>
-
             {{-- Tab: Cambodia --}}
             <button type="button"
                     @click="switchTag('cambodia')"

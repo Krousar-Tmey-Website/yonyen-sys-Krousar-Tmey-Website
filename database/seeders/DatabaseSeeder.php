@@ -10,7 +10,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AdminSeeder::class);
         $this->call(OfficeAndReportSeeder::class);
-        $this->call(CampaignSeeder::class);
         $this->call(ResourcePageSeeder::class);
         $this->call(NewsSeeder::class);
         $this->call(MapProjectSeeder::class);

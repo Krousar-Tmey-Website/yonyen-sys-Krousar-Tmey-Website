@@ -18,10 +18,6 @@ return new class extends Migration
             $table->longText('description_fr')->nullable()->change();
         });
 
-        Schema::table('campaigns', function (Blueprint $table) {
-            $table->longText('description')->nullable()->change();
-        });
-
         Schema::table('media_galleries', function (Blueprint $table) {
             $table->longText('description')->nullable()->change();
         });
@@ -36,10 +32,6 @@ return new class extends Migration
         Schema::table('books', function (Blueprint $table) {
             $table->text('description')->nullable()->change();
             $table->text('description_fr')->nullable()->change();
-        });
-
-        Schema::table('campaigns', function (Blueprint $table) {
-            $table->text('description')->nullable()->change();
         });
 
         Schema::table('media_galleries', function (Blueprint $table) {

@@ -33,8 +33,12 @@
     @foreach($sections as $id => $section)
     <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
         <div class="flex items-center gap-3 mb-4">
-            <span class="text-xl">{{ $section['icon'] }}</span>
-            <h3 class="font-bold text-gray-800 text-base">{{ $section['title'] }}</h3>
+            <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+            </span>
+            <h3 class="font-semibold text-gray-700 text-sm">{{ $section['title'] }}</h3>
         </div>
 
         <hr class="mb-5 border-gray-100">

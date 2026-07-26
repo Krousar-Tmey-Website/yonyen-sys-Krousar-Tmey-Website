@@ -48,9 +48,15 @@ class Program extends Model
         if (!$this->image) {
             return asset('images/program.jpg');
         }
-        return str_starts_with($this->image, 'http')
-            ? $this->image
-            : asset('storage/' . $this->image);
+        if (str_starts_with($this->image, 'http')) {
+            return $this->image;
+        }
+        // Uploaded images are always stored under the "programs/" prefix (see
+        // ProgramController@store); a bare filename with no subfolder is a legacy
+        // default pointing at a bundled asset in public/images/, not an upload.
+        return str_contains($this->image, '/')
+            ? asset('storage/' . $this->image)
+            : asset('images/' . $this->image);
     }
 
     public function getIconImageUrlAttribute(): ?string
@@ -58,9 +64,12 @@ class Program extends Model
         if (!$this->icon_image) {
             return null;
         }
-        return str_starts_with($this->icon_image, 'http')
-            ? $this->icon_image
-            : asset('storage/' . $this->icon_image);
+        if (str_starts_with($this->icon_image, 'http')) {
+            return $this->icon_image;
+        }
+        return str_contains($this->icon_image, '/')
+            ? asset('storage/' . $this->icon_image)
+            : asset('images/' . $this->icon_image);
     }
 
     // French text falls back to the English field whenever it hasn't been filled in yet.

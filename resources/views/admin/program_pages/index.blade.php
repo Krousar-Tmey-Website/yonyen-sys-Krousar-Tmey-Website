@@ -4,19 +4,34 @@
 @section('page-title', 'Additional Pages')
 
 @section('content')
-<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-    <div>
-        <p class="text-gray-500 text-sm">Manage page items that appear under the Our Programs section.</p>
-        <p class="text-gray-400 text-xs mt-1">Each item has a title, short preview, and full detail content shown on "Read More".</p>
+
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-2">
+            <h3 class="font-bold text-gray-800">Additional Pages</h3>
+            @if($items->isNotEmpty())
+            <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                {{ $items->count() }}
+            </span>
+            @endif
+        </div>
+        <a href="{{ route('admin.program-pages.create') }}"
+           class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Add New Item
+        </a>
     </div>
-    <a href="{{ route('admin.program-pages.create') }}"
-       class="flex-shrink-0 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        Add New Item
-    </a>
+    <p class="text-gray-400 text-xs px-6 pt-4">Manage page items that appear under the Our Programs section. Each item has a title, short preview, and full detail content shown on "Read More".</p>
 </div>
 
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    @if($items->isEmpty())
+    <div class="py-16 text-center text-gray-400">
+        <div class="text-4xl mb-3">📝</div>
+        <p class="text-sm font-medium text-gray-500">No items yet</p>
+        <p class="text-xs mt-1">Click <strong>Add New Item</strong> to create your first item.</p>
+    </div>
+    @else
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
             <thead>
@@ -28,7 +43,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-                @forelse($items as $item)
+                @foreach($items as $item)
                 <tr class="hover:bg-gray-50/50 transition-colors">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-4">
@@ -84,15 +99,10 @@
                         </div>
                     </td>
                 </tr>
-                @empty
-                <tr>
-                    <td colspan="4" class="px-6 py-12 text-center text-gray-500 text-sm">
-                        No items found. <a href="{{ route('admin.program-pages.create') }}" class="text-[#2d6fa3] hover:underline">Create one</a>.
-                    </td>
-                </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
     </div>
+    @endif
 </div>
 @endsection

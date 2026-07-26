@@ -3,19 +3,29 @@
 @section('page-title', 'Edit Gallery')
 
 @section('content')
-<div class="max-w-2xl mx-auto">
-    <form action="{{ route('admin.gallery.update', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+<div class="max-w-3xl mx-auto">
+    <form action="{{ route('admin.gallery.update', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-5" x-data="bilingualForm()">
         @csrf @method('PUT')
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-                        <div x-data="bilingualForm()">
-                <div class="flex items-center justify-between mb-1.5">
-                    <label class="block text-sm font-medium text-gray-700">Title / Caption</label>
-                
-                    <div class="lang-tabs" title="Toggle editing language (English / French)">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                    </div>
+
+        {{-- Photo Details --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </span>
+                    Photo Details
+                </h3>
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                 </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Title / Caption</label>
                 <div x-show="lang === 'en'">
                     <input type="text" name="title" value="{{ old('title', $item->title) }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                 </div>
@@ -32,6 +42,18 @@
                     <label for="is_active" class="text-sm font-medium text-gray-700">Active</label>
                 </div>
             </div>
+        </div>
+
+        {{-- Image Upload --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </span>
+                Image Upload
+            </h3>
 
             @if($item->image)
             <div>
@@ -47,8 +69,9 @@
             </div>
         </div>
 
+        {{-- Actions --}}
         <div class="flex items-center gap-3">
-            <button type="submit" class="px-6 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-medium rounded-xl transition-colors">Save Changes</button>
+            <button type="submit" class="btn-primary">Save Changes</button>
             <a href="{{ route('admin.gallery.index') }}" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</a>
         </div>
     </form>

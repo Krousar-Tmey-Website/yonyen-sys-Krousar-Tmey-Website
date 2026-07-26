@@ -18,7 +18,15 @@
 
         {{-- Basic Info --}}
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-            <div class="flex items-center justify-between mb-4"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Basic Information</h3>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </span>
+                    Basic Information
+                </h3>
     <div class="lang-tabs" title="Toggle editing language (English / French)">
     <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
     <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
@@ -72,9 +80,14 @@
 
         {{-- Banner Image --}}
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-                <span>&#127752;</span> Page Header Banner Image
-                <span class="font-normal text-gray-400 normal-case">(optional)</span>
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </span>
+                Page Header Banner Image
+                <span class="font-normal text-gray-400">(optional)</span>
             </h3>
             <div x-data="{ bannerMode: 'upload' }">
                 <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg w-fit mb-3">
@@ -100,7 +113,14 @@
         {{-- Detailed Content --}}
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="bilingualForm()">
             <div class="flex items-center justify-between">
-                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Detailed Content</h3>
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </span>
+                    Detailed Content
+                </h3>
                 <div class="header-actions">
                 </div>
             </div>
@@ -139,7 +159,14 @@
 
         {{-- Project Card Image --}}
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="{ imageMode: 'upload' }">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Project Card Image</h3>
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </span>
+                Project Card Image
+            </h3>
             <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg w-fit mb-1">
                 <button type="button" @click="imageMode = 'upload'" :class="imageMode === 'upload' ? 'bg-white shadow-sm text-[#2d6fa3]' : 'text-gray-500'" class="px-3 py-1.5 text-xs font-medium rounded-md transition-all">Upload File</button>
                 <button type="button" @click="imageMode = 'url'" :class="imageMode === 'url' ? 'bg-white shadow-sm text-[#2d6fa3]' : 'text-gray-500'" class="px-3 py-1.5 text-xs font-medium rounded-md transition-all">Image URL</button>
@@ -157,7 +184,14 @@
         {{-- Testimony --}}
         <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4" x-data="bilingualForm()">
             <div class="flex items-center justify-between">
-                <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-wider">Testimony</h3>
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                    </span>
+                    Testimony
+                </h3>
                 <div class="header-actions">
                 </div>
             </div>
@@ -204,7 +238,14 @@
         </div>
 
         <div class="bg-[#e8a020]/5 rounded-2xl border border-[#e8a020]/10 p-6 space-y-3">
-            <h3 class="text-xs font-bold text-[#e8a020] uppercase tracking-wider">Public Project Page Details</h3>
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </span>
+                Public Project Page Details
+            </h3>
             <p class="text-sm text-gray-600">
                 After you create this project, manage its public page details from the dedicated <strong>Project Defaults</strong> page.
             </p>
@@ -221,9 +262,7 @@
 
         {{-- Actions --}}
         <div class="flex items-center gap-3 pb-4">
-            <button type="submit" class="px-6 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-semibold rounded-xl transition-colors">
-                Create Project
-            </button>
+            <button type="submit" class="btn-primary">Create Project</button>
             <a href="{{ route('admin.projects.index') }}" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</a>
         </div>
     </form>

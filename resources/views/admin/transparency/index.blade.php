@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div class="space-y-8" x-data="{ tab: 'banner', lang: 'en' }">
+<div class="space-y-8 max-w-3xl mx-auto" x-data="{ tab: 'banner', lang: 'en' }">
     {{-- Tab Navigation --}}
     <div class="border-b border-gray-200">
         <nav class="flex space-x-8 overflow-x-auto">
@@ -60,7 +60,7 @@
             <div class="relative">
                 <span id="preview-badge" class="inline-block bg-white text-[#eea91d] text-[10px] font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">{{ $bannerBadge }}</span>
                 <h2 id="preview-title" class="text-xl font-bold text-white mb-2 uppercase">{{ $bannerTitle }}</h2>
-                <p id="preview-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{{ $bannerSubtitle }}</p>
+                <p id="preview-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{!! $bannerSubtitle !!}</p>
             </div>
         </div>
     </div>

@@ -30,13 +30,20 @@
 
     {{-- INTRO / MISSION / VISION SECTION --}}
     <div x-show="tab === 'intro'" class="space-y-6">
-        <div class="grid lg:grid-cols-2 gap-6">
+        <div class="grid lg:grid-cols-2 gap-8">
             {{-- Our Mission --}}
             <div class="bg-white rounded-2xl border border-gray-100 p-6">
                 <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4" x-data="bilingualForm()">
                     @csrf
                     <div class="flex items-center justify-between mb-1">
-                        <h3 class="font-bold text-gray-700 text-sm">Our Mission</h3>
+                        <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                            </span>
+                            Our Mission
+                        </h3>
                         <div class="lang-tabs" title="Toggle editing language (English / French)">
                             <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
                             <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
@@ -89,7 +96,15 @@
                 <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4" x-data="bilingualForm()">
                     @csrf
                     <div class="flex items-center justify-between mb-1">
-                        <h3 class="font-bold text-gray-700 text-sm">Our Vision</h3>
+                        <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </span>
+                            Our Vision
+                        </h3>
                         <div class="lang-tabs" title="Toggle editing language (English / French)">
                             <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
                             <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
@@ -140,14 +155,21 @@
     </div>
 
     {{-- OUR PORTFOLIO SECTION --}}
-    <div x-show="tab === 'portfolio'" class="space-y-6">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4" x-data="bilingualForm()">
+    <div x-show="tab === 'portfolio'" class="space-y-6 max-w-5xl mx-auto">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8">
+            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-5" x-data="bilingualForm()">
                 @csrf
                 <div class="flex items-center justify-between mb-1">
-                    <div>
-                        <h3 class="font-bold text-gray-700 text-sm">Our Portfolio</h3>
-                        <p class="text-gray-400 text-xs mt-0.5">The paragraph, pull-quote, and closing note shown between Our Values and the Programs strip.</p>
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4.5 h-4.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                        </span>
+                        <div>
+                            <h3 class="font-bold text-gray-700 text-sm">Our Portfolio</h3>
+                            <p class="text-gray-400 text-xs mt-0.5">The paragraph, pull-quote, and closing note shown between Our Values and the Programs strip.</p>
+                        </div>
                     </div>
                     <div class="lang-tabs" title="Toggle editing language (English / French)">
                         <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
@@ -282,12 +304,15 @@
                 @php
                     $colorScheme = $accentColors[$index % count($accentColors)];
                     $icon = $statIcons[$index % count($statIcons)];
+                    $accentBorderStyle = 'background-color: ' . $colorScheme['bg'] . ';';
+                    $iconBgStyle = 'background-color: ' . $colorScheme['light'] . ';';
+                    $valueColorStyle = 'color: ' . $colorScheme['bg'] . ';';
                 @endphp
                 <div class="relative bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer group flex flex-col justify-between"
                      @click="openEditModal({{ json_encode($stat) }})">
-                    
+
                     {{-- Top colored accent border --}}
-                    <div class="h-1 w-full" style="background-color: {{ $colorScheme['bg'] }}"></div>
+                    <div class="h-1 w-full" style="{{ $accentBorderStyle }}"></div>
 
                     <div class="p-5 flex-1 flex flex-col justify-between">
                         {{-- Action buttons --}}
@@ -319,13 +344,13 @@
                         {{-- Value & Icon Row --}}
                         <div class="flex items-center gap-3 mb-3.5 mt-1">
                             <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                                 style="background-color: {{ $colorScheme['light'] }}">
+                                 style="{{ $iconBgStyle }}">
                                 <svg class="w-4.5 h-4.5" fill="none" stroke="{{ $colorScheme['bg'] }}" stroke-width="2" viewBox="0 0 24 24">
                                     {!! $icon !!}
                                 </svg>
                             </div>
                             <div class="min-w-0">
-                                <p class="text-lg font-extrabold leading-none" style="color: {{ $colorScheme['bg'] }}">{{ $stat->value }}</p>
+                                <p class="text-lg font-extrabold leading-none" style="{{ $valueColorStyle }}">{{ $stat->value }}</p>
                             </div>
                         </div>
 

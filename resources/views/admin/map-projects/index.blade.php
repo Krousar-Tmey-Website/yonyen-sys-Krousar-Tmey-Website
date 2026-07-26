@@ -185,10 +185,16 @@
                         </td>
                         <td class="px-6 py-3 text-gray-600">{{ $project->location_name }}</td>
                         <td class="px-6 py-3">
+                            @php
+                                $typeBg = $project->project_type === 'School for Deaf or Blind Children' ? '#f0fdf4' : ($project->project_type === 'School of Khmer Arts & Culture' ? '#faf5ff' : '#fef2f2');
+                                $typeColor = $project->project_type === 'School for Deaf or Blind Children' ? '#16A34A' : ($project->project_type === 'School of Khmer Arts & Culture' ? '#7E22CE' : '#DC2626');
+                                $typeDot = $project->project_type === 'School for Deaf or Blind Children' ? '#22C55E' : ($project->project_type === 'School of Khmer Arts & Culture' ? '#A855F7' : '#EF4444');
+                                $typeBadgeStyle = 'background:' . $typeBg . '; color:' . $typeColor . ';';
+                                $typeDotStyle = 'background:' . $typeDot . ';';
+                            @endphp
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border border-gray-100"
-                                  style="background:{{ $project->project_type === 'Child Welfare' ? '#fef2f2' : ($project->project_type === 'Outside Cases' ? '#fef2f2' : ($project->project_type === 'School for Deaf or Blind Children' ? '#f0fdf4' : '#faf5ff')) }}; color:{{ $project->project_type === 'School for Deaf or Blind Children' ? '#16A34A' : ($project->project_type === 'School of Khmer Arts & Culture' ? '#7E22CE' : '#DC2626') }};">
-                                <span class="w-2 h-2 rounded-full flex-shrink-0"
-                                      style="background:{{ $project->project_type === 'School for Deaf or Blind Children' ? '#22C55E' : ($project->project_type === 'School of Khmer Arts & Culture' ? '#A855F7' : '#EF4444') }};"></span>
+                                  style="{{ $typeBadgeStyle }}">
+                                <span class="w-2 h-2 rounded-full flex-shrink-0" style="{{ $typeDotStyle }}"></span>
                                 {{ $project->project_type }}
                             </span>
                         </td>
@@ -254,7 +260,7 @@
             </div>
 
             {{-- Form --}}
-            <form :action="editingId ? '{{ route('admin.map-projects.update', 'REPLACE') }}'.replace('REPLACE', editingId) : '{{ route('admin.map-projects.store') }}'"
+            <form :action="editingId ? '{{ route('admin.map-projects.update', '__ID__') }}'.replace('__ID__', editingId) : '{{ route('admin.map-projects.store') }}'"
                   method="POST" class="p-6 space-y-5">
                 <input type="hidden" name="_method" :value="editingId ? 'PUT' : 'POST'">
                 @csrf
@@ -391,7 +397,11 @@
     {{-- How it works --}}
     <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
         <div class="flex items-center gap-3 mb-4">
-            <span class="text-lg">💡</span>
+            <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                </svg>
+            </span>
             <h3 class="font-bold text-gray-800">How it works</h3>
         </div>
         <ul class="space-y-2 text-sm text-gray-600">

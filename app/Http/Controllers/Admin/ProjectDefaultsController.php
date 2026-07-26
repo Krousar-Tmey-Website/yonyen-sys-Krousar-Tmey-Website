@@ -41,6 +41,8 @@ class ProjectDefaultsController extends Controller
             'project_default_beneficiaries' => ['nullable', 'string', 'max:255'],
             'project_default_make_difference_title' => ['nullable', 'string', 'max:255'],
             'project_default_make_difference_text' => ['nullable', 'string', 'max:2000'],
+            'project_default_make_difference_title_fr' => ['nullable', 'string', 'max:255'],
+            'project_default_make_difference_text_fr' => ['nullable', 'string', 'max:2000'],
             'project_default_donate_button_text' => ['nullable', 'string', 'max:255'],
             'project_default_contact_button_text' => ['nullable', 'string', 'max:255'],
         ]);
@@ -55,6 +57,8 @@ class ProjectDefaultsController extends Controller
             'project_default_beneficiaries' => 'Default Beneficiaries',
             'project_default_make_difference_title' => 'Default Make a Difference Title',
             'project_default_make_difference_text' => 'Default Make a Difference Text',
+            'project_default_make_difference_title_fr' => 'Default Make a Difference Title (French)',
+            'project_default_make_difference_text_fr' => 'Default Make a Difference Text (French)',
             'project_default_donate_button_text' => 'Default Donate Button Text',
             'project_default_contact_button_text' => 'Default Contact Button Text',
         ];
@@ -86,6 +90,8 @@ class ProjectDefaultsController extends Controller
             'beneficiaries' => ['nullable', 'string', 'max:255'],
             'make_difference_title' => ['nullable', 'string', 'max:255'],
             'make_difference_text' => ['nullable', 'string', 'max:2000'],
+            'make_difference_title_fr' => ['nullable', 'string', 'max:255'],
+            'make_difference_text_fr' => ['nullable', 'string', 'max:2000'],
             'donate_button_text' => ['nullable', 'string', 'max:255'],
             'contact_button_text' => ['nullable', 'string', 'max:255'],
         ]);
@@ -107,6 +113,8 @@ class ProjectDefaultsController extends Controller
                 'beneficiaries' => null,
                 'make_difference_title' => null,
                 'make_difference_text' => null,
+                'make_difference_title_fr' => null,
+                'make_difference_text_fr' => null,
                 'donate_button_text' => null,
                 'contact_button_text' => null,
             ]);
@@ -118,6 +126,8 @@ class ProjectDefaultsController extends Controller
                 'beneficiaries' => $data['beneficiaries'] ?? null,
                 'make_difference_title' => $data['make_difference_title'] ?? null,
                 'make_difference_text' => $data['make_difference_text'] ?? null,
+                'make_difference_title_fr' => $data['make_difference_title_fr'] ?? null,
+                'make_difference_text_fr' => $data['make_difference_text_fr'] ?? null,
                 'donate_button_text' => $data['donate_button_text'] ?? null,
                 'contact_button_text' => $data['contact_button_text'] ?? null,
             ]);
