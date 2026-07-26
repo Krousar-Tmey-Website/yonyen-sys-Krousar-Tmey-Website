@@ -146,7 +146,6 @@
                 'children' => [
                 ['route' => 'admin.donations.dashboard', 'label' => __('Dashboard')],
                 ['route' => 'admin.donations.index', 'label' => __('Donations')],
-                ['route' => 'admin.campaigns.index', 'label' => __('Donation Campaigns')],
                 ['route' => 'admin.payments.index', 'label' => __('Payment Methods')],
                 ['route' => 'admin.donations.reports', 'label' => __('Donation Reports')],
                 ],
