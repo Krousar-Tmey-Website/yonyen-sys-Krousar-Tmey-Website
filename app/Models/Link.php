@@ -22,7 +22,7 @@ class Link extends Model
 
     public function getLocalizedTextAttribute(): ?string
     {
-        if (session('locale') === 'fr' && !empty($this->text_fr)) {
+        if (app()->getLocale() === 'fr' && !empty($this->text_fr)) {
             return $this->text_fr;
         }
 

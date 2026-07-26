@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -27,106 +27,17 @@ function openEmail(email) {
 }
 
 function getCurrentLang() {
-    let match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
-    if (match) {
-        let parts = match[2].split('/');
-        if (parts.length === 3 && parts[2] !== 'en') return parts[2];
-    }
     return '{{ session("locale", "en") }}';
 }
 
-function manageGTCookies(action, lang = '') {
-    let hostname = window.location.hostname;
-    let parts = hostname.split('.');
-    let domains = [hostname, '.' + hostname];
-    
-    // If on a subdomain (e.g. krousar-thmey.sreydeth.site), also target the parent domain (.sreydeth.site)
-    // because Google Translate sometimes leaks cookies up to the parent domain, causing conflicts!
-    if (parts.length > 2) {
-        domains.push('.' + parts.slice(1).join('.'));
-    }
-    
-    // 1. ALWAYS obliterate all existing cookies to prevent duplicates
-    let wipe = '=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-    document.cookie = 'googtrans' + wipe;
-    domains.forEach(d => {
-        document.cookie = 'googtrans' + wipe + '; domain=' + d;
-    });
-
-    // 2. If setting a new language, set it aggressively on all domains
-    if (action === 'set' && lang !== 'en') {
-        let val = '=/en/' + lang + '; path=/';
-        document.cookie = 'googtrans' + val;
-        domains.forEach(d => {
-            document.cookie = 'googtrans' + val + '; domain=' + d;
-        });
-    }
-}
-
 function switchLang(lang) {
-    if (lang === 'en') {
-        manageGTCookies('clear');
-    } else {
-        manageGTCookies('set', lang);
-        
-        let gtCombo = document.querySelector('.goog-te-combo');
-        if (gtCombo) {
-            gtCombo.value = lang;
-            gtCombo.dispatchEvent(new Event('change'));
-        }
-    }
-
-    fetch('{{ url("/lang") }}/' + lang, {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    }).then(() => {
-        setTimeout(() => {
-            window.location.reload(true);
-        }, 200);
-    }).catch(() => {
-        window.location.href = '{{ url("/lang") }}/' + lang;
-    });
+    window.location.href = '{{ url("/lang") }}/' + lang;
 }
 </script>
 
 <style>
-/* Hide the Google Translate UI completely */
-iframe.goog-te-banner-frame { display: none !important; }
-.goog-te-banner-frame { display: none !important; }
-.goog-logo-link { display: none !important; }
-.goog-te-gadget { color: transparent !important; }
-.VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; } /* New GT classes */
-body > .skiptranslate > iframe.skiptranslate { display: none !important; visibility: hidden !important; }
-
 [x-cloak] { display: none !important; }
-
-html { margin-top: 0 !important; top: 0 !important; }
-body { margin-top: 0 !important; top: 0 !important; position: static !important; }
-
-.goog-tooltip { display: none !important; }
-.goog-tooltip:hover { display: none !important; }
-.goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
-#google_translate_element { 
-    position: absolute !important;
-    opacity: 0 !important;
-    z-index: -10 !important;
-    pointer-events: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-}
 </style>
-
-<div id="google_translate_element"></div>
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-    pageLanguage: 'en', 
-    includedLanguages: 'en,km,fr', 
-    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-  }, 'google_translate_element');
-}
-</script>
-<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 
     {{-- Flash Message Popup --}}

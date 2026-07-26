@@ -51,7 +51,7 @@ class HistoryEvent extends Model
 
     private function localized(string $field): ?string
     {
-        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+        if (app()->getLocale() === 'fr' && !empty($this->{$field . '_fr'})) {
             return $this->{$field . '_fr'};
         }
 

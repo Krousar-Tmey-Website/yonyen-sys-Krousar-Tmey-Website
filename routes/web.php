@@ -45,7 +45,7 @@ Route::get('/lang/{locale}', function (string $locale, LocalizationManager $loca
     if (in_array($locale, $localization->locales(), true)) {
         session()->put('locale', $locale);
     }
-    return redirect()->back();
+    return redirect()->back(302, [], route('home'));
 })->name('lang.switch');
 
 Route::get('/', function () {

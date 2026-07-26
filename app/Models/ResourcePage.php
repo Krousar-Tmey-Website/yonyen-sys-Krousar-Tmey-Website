@@ -81,7 +81,7 @@ class ResourcePage extends Model
 
     private function localized(string $field): ?string
     {
-        if (session('locale') === 'fr' && !empty($this->{$field . '_fr'})) {
+        if (app()->getLocale() === 'fr' && !empty($this->{$field . '_fr'})) {
             return $this->{$field . '_fr'};
         }
 
@@ -117,10 +117,10 @@ class ResourcePage extends Model
                 ? (str_starts_with($item['image'], 'http') ? $item['image'] : asset('storage/' . $item['image']))
                 : null;
 
-            if (session('locale') === 'fr' && !empty($item['title_fr'])) {
+            if (app()->getLocale() === 'fr' && !empty($item['title_fr'])) {
                 $item['title'] = $item['title_fr'];
             }
-            if (session('locale') === 'fr' && !empty($item['description_fr'])) {
+            if (app()->getLocale() === 'fr' && !empty($item['description_fr'])) {
                 $item['description'] = $item['description_fr'];
             }
 
