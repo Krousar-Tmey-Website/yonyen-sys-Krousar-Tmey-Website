@@ -96,6 +96,7 @@
             </div>
 
         @elseif($group === 'social')
+        
             {{-- ====== Social Media Links (Header / Footer) ====== --}}
             <div class="space-y-4">
                 <p class="text-xs text-gray-500 mb-3">Manage the social media links displayed in the top bar and footer of your website.</p>

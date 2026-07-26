@@ -9,12 +9,22 @@
      PAGE HEADER / BANNER
      ======================================================== --}}
 @php
+    // Picks the French value for a HomeSetting key when the visitor's locale is
+    // French and a translation was actually provided, otherwise falls back to the
+    // English value (or the given default).
+    $t = function (string $key, string $default = '') use ($settings) {
+        if (app()->getLocale() === 'fr' && !empty($settings[$key.'_fr'] ?? null)) {
+            return $settings[$key.'_fr'];
+        }
+        return $settings[$key] ?? $default;
+    };
+
     $transparencyBannerImage = $settings['transparency_banner_image'] ?? null;
     $transparencyBannerImageUrl = $transparencyBannerImage ? (str_starts_with($transparencyBannerImage, 'http') ? $transparencyBannerImage : asset('storage/' . $transparencyBannerImage)) : asset('images/children.jpg');
     $transparencyBannerOverlayColor = $settings['transparency_banner_overlay_color'] ?? '#1a3c6e';
     $transparencyBannerBlur = (int) ($settings['transparency_banner_blur'] ?? 0);
-    $transparencyBannerBadge = $settings['transparency_banner_badge'] ?? 'Accountability';
-    $transparencyBannerSubtitle = $settings['transparency_banner_subtitle'] ?? 'See how every donation is managed with strict financial discipline and independent oversight.';
+    $transparencyBannerBadge = $t('transparency_banner_badge', 'Accountability');
+    $transparencyBannerSubtitle = $t('transparency_banner_subtitle', 'See how every donation is managed with strict financial discipline and independent oversight.');
 @endphp
 <section class="relative py-24 overflow-hidden text-center scroll-mt-20">
     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $transparencyBannerImageUrl }}'); filter: blur({{ $transparencyBannerBlur }}px); {{ $transparencyBannerBlur > 0 ? 'transform: scale(1.05);' : '' }}"></div>
@@ -22,11 +32,13 @@
     <div class="relative z-10 max-w-4xl mx-auto px-6">
         <span class="hero-reveal hero-reveal-delay-1 inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $transparencyBannerBadge }}</span>
         <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-5xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
-            {{ $settings['transparency_title'] ?? 'Transparency and Accountability' }}
+            {{ $t('transparency_title', 'Transparency and Accountability') }}
         </h1>
         <div class="rich-text-content hero-reveal hero-reveal-delay-3 text-white/90 text-lg leading-relaxed max-w-2xl mx-auto mt-6 drop-shadow-md">
             {!! $transparencyBannerSubtitle !!}
         </div>
+    </div>
+</section>
 
 {{-- ========================================================
      FINANCIAL TRANSPARENCY SECTION
@@ -77,51 +89,11 @@
 </section>
 
 {{-- ========================================================
-     AUDITED STATEMENTS SECTION
-     ======================================================== --}}
-<section class="py-24 bg-[#f8f5f0] scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16" data-reveal>
-            <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Audited Financial Statements</h2>
-            <p class="text-gray-500 max-w-2xl mx-auto">Download our annual reports and financial statements</p>
-        </div>
-
-        @if($reports->isNotEmpty())
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach($reports as $i => $report)
-            <div class="group bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 p-6"
-                 data-reveal="up" style="--reveal-delay: {{ $i * 80 }}">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center flex-shrink-0">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-gray-800 text-sm">{{ $report->localized_title }}</h3>
-                        <p class="text-gray-400 text-xs">{{ $report->year }} • {{ $report->localized_description ? \Illuminate\Support\Str::limit(strip_tags($report->localized_description), 60) : 'Annual Report' }}</p>
-                    </div>
-                </div>
-                <a href="{{ $report->download_url }}" target="_blank"
-                   class="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-[#2d6fa3] text-white text-sm font-medium rounded-lg hover:bg-[#1d4e7a] transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    Download PDF
-                </a>
-            </div>
-            @endforeach
-        </div>
-        @else
-        <div class="text-center py-12" data-reveal>
-            <p class="text-gray-400">No reports available yet. <a href="{{ route('resources') }}" class="text-[#2d6fa3] hover:underline">View resources page</a>.</p>
-        </div>
-        @endif
-    </div>
-</section>
-
-{{-- ========================================================
      FINANCIAL TRANSPARENCY
      ======================================================== --}}
 <section class="py-12 md:py-16 bg-white scroll-mt-20">
     <div class="max-w-3xl mx-auto px-6">
-        <h2 class="text-sm font-bold uppercase tracking-wider text-[#11568c] mb-4" data-reveal="left">{{ $settings['transparency_financial_heading'] ?? 'Financial Transparency' }}</h2>
+        <h2 class="text-sm font-bold uppercase tracking-wider text-[#11568c] mb-4" data-reveal="left">{{ $t('transparency_financial_heading', 'Financial Transparency') }}</h2>
         <div class="group relative bg-[#fffdf8] border border-[#f2e6c9] rounded-2xl p-7 md:p-8 shadow-sm overflow-hidden space-y-4 text-[#1d4e7a] leading-relaxed transition-all duration-300 hover:shadow-lg hover:-translate-y-1" data-reveal="up">
             <div class="absolute top-0 left-0 w-[6px] h-full bg-gradient-to-b from-[#e8a020] to-[#d32f2f]"></div>
 
@@ -134,29 +106,12 @@
                 <h3 class="text-sm font-black text-[#e8a020] uppercase tracking-widest">Overview</h3>
             </div>
 
-            <div class="rich-text-content">{!! $settings['transparency_financial_p1'] ?? 'Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used.' !!}</div>
-            <div class="rich-text-content">{!! $settings['transparency_financial_p2'] ?? 'The implementation of programs and projects is our priority.' !!}</div>
-            <div class="rich-text-content font-bold">{!! $settings['transparency_financial_p3'] ?? 'Thanks to the strict financial management and the involvement of European volunteers, all administrative costs remain under 4% of the total budget.' !!}</div>
-            <div class="rich-text-content">{!! $settings['transparency_financial_p4'] ?? "Krousar Thmey Cambodia's accounts are all audited and certified each year by an independent audit firm (PricewaterhouseCoopers since 2013 and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes in order to provide greater efficiency to the organization and transparency to its partners." !!}</div>
+            <div class="rich-text-content">{!! $t('transparency_financial_p1', 'Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used.') !!}</div>
+            <div class="rich-text-content">{!! $t('transparency_financial_p2', 'The implementation of programs and projects is our priority.') !!}</div>
+            <div class="rich-text-content font-bold">{!! $t('transparency_financial_p3', 'Thanks to the strict financial management and the involvement of European volunteers, all administrative costs remain under 4% of the total budget.') !!}</div>
+            <div class="rich-text-content">{!! $t('transparency_financial_p4', "Krousar Thmey Cambodia's accounts are all audited and certified each year by an independent audit firm (PricewaterhouseCoopers since 2013 and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes in order to provide greater efficiency to the organization and transparency to its partners.") !!}</div>
 
-            <p class="!mb-2">{{ $settings['transparency_financial_list_intro'] ?? 'Audited financial statements are available here:' }}</p>
-            @php $availableReports = $reports->filter(fn ($report) => $report->download_url)->values(); @endphp
-            @if($availableReports->isNotEmpty())
-            <ul class="!mt-0 space-y-4">
-                @foreach($availableReports as $i => $report)
-                <li data-reveal="up" style="--reveal-delay: {{ $i * 60 }}">
-                    <a href="{{ $report->download_url }}" target="_blank" rel="noopener"
-                       class="inline-block text-[#2d6fa3] font-medium transition-transform duration-200 hover:underline hover:translate-x-1">
-                        Audited financial statement {{ $report->year }}
-                    </a>
-                </li>
-                @endforeach
-            </ul>
-            @else
-            <p class="text-gray-400 text-sm">No reports available yet.</p>
-            @endif
-
-            <div class="rich-text-content">{!! $settings['transparency_financial_outro'] ?? "Our French and Swiss organisations' accounts are also audited annually." !!}</div>
+            <div class="rich-text-content">{!! $t('transparency_financial_outro', "Our French and Swiss organisations' accounts are also audited annually.") !!}</div>
         </div>
     </div>
 </section>
@@ -166,7 +121,7 @@
      ======================================================== --}}
 <section class="py-12 md:py-16 bg-white scroll-mt-20">
     <div class="max-w-3xl mx-auto px-6">
-        <h2 class="text-sm font-bold uppercase tracking-wider text-[#11568c] mb-4" data-reveal="left" style="--reveal-delay: 80">{{ $settings['transparency_origins_heading'] ?? 'Origins Of The Funds' }}</h2>
+        <h2 class="text-sm font-bold uppercase tracking-wider text-[#11568c] mb-4" data-reveal="left" style="--reveal-delay: 80">{{ $t('transparency_origins_heading', 'Origins Of The Funds') }}</h2>
         <div class="group relative bg-[#fffdf8] border border-[#f2e6c9] rounded-2xl p-7 md:p-8 shadow-sm overflow-hidden space-y-4 text-[#1d4e7a] leading-relaxed transition-all duration-300 hover:shadow-lg hover:-translate-y-1" data-reveal="up" style="--reveal-delay: 80">
             <div class="absolute top-0 left-0 w-[6px] h-full bg-gradient-to-b from-[#e8a020] to-[#d32f2f]"></div>
 
@@ -179,9 +134,9 @@
                 <h3 class="text-sm font-black text-[#e8a020] uppercase tracking-widest">Overview</h3>
             </div>
 
-            <div class="rich-text-content">{!! $settings['transparency_origins_p1'] ?? 'In support of its local activity in Cambodia, Krousar Thmey benefits from the involvement of volunteers in international entities: Krousar Thmey France, Krousar Thmey Switzerland and Krousar Thmey Singapore. As their main activity is fundraising, these branches are a privileged relay to donors outside of Cambodia. They enable Krousar Thmey to receive institutional funding and support from individual donors.' !!}</div>
-            <div class="rich-text-content">{!! $settings['transparency_origins_p2'] ?? 'Donations received in Cambodia come mainly from non-governmental organizations and to a lesser extent from private donors and the Cambodian authorities.' !!}</div>
-            <div class="rich-text-content">{!! $settings['transparency_origins_p3'] ?? "Financial or in-kind donations from the Cambodian authorities have increased steadily over the past few years, accounting for nearly 8% of Krousar Thmey's resources. All staff of special schools for deaf or blind children are civil servants of the Ministry of Education, Youth and Sports who pay their salary (excluding complements paid by Krousar Thmey). For the time being, this contribution is not included in the expenditure and income statement." !!}</div>
+            <div class="rich-text-content">{!! $t('transparency_origins_p1', 'In support of its local activity in Cambodia, Krousar Thmey benefits from the involvement of volunteers in international entities: Krousar Thmey France, Krousar Thmey Switzerland and Krousar Thmey Singapore. As their main activity is fundraising, these branches are a privileged relay to donors outside of Cambodia. They enable Krousar Thmey to receive institutional funding and support from individual donors.') !!}</div>
+            <div class="rich-text-content">{!! $t('transparency_origins_p2', 'Donations received in Cambodia come mainly from non-governmental organizations and to a lesser extent from private donors and the Cambodian authorities.') !!}</div>
+            <div class="rich-text-content">{!! $t('transparency_origins_p3', "Financial or in-kind donations from the Cambodian authorities have increased steadily over the past few years, accounting for nearly 8% of Krousar Thmey's resources. All staff of special schools for deaf or blind children are civil servants of the Ministry of Education, Youth and Sports who pay their salary (excluding complements paid by Krousar Thmey). For the time being, this contribution is not included in the expenditure and income statement.") !!}</div>
         </div>
 
         <div class="group flex items-center justify-center gap-3 text-center font-semibold text-[#11568c] mt-8 bg-[#eea91d]/10 border border-[#eea91d]/30 rounded-2xl px-6 py-5 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 hover:bg-[#eea91d]/15" data-reveal="scale" style="--reveal-delay: 160">
@@ -189,9 +144,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
             <p>
-                {{ $settings['transparency_award_prefix'] ?? 'Krousar Thmey won the' }}
-                <a href="{{ $settings['transparency_award_link_url'] ?? 'https://ideas.asso.fr/' }}" target="_blank" rel="noopener" class="text-[#2d6fa3] underline hover:text-[#1d4e7a]">{{ $settings['transparency_award_link_label'] ?? 'label Ideas' }}</a>
-                {{ $settings['transparency_award_suffix'] ?? 'in 2010.' }}
+                {{ $t('transparency_award_prefix', 'Krousar Thmey won the') }}
+                <a href="{{ $settings['transparency_award_link_url'] ?? 'https://ideas.asso.fr/' }}" target="_blank" rel="noopener" class="text-[#2d6fa3] underline hover:text-[#1d4e7a]">{{ $t('transparency_award_link_label', 'label Ideas') }}</a>
+                {{ $t('transparency_award_suffix', 'in 2010.') }}
             </p>
         </div>
     </div>

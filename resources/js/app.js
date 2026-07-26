@@ -212,7 +212,15 @@ function applyLanguageTabs(scope = document, lang = null) {
 
         const shouldShow = expressionMatchesLanguage(expression, activeLang);
         element.removeAttribute('x-cloak');
-        element.hidden = !shouldShow;
+        // Only ever touch style.display here — never the `hidden` attribute. Alpine's
+        // own x-show reactivity (bound directly to each element, unaffected by any
+        // ancestor's @click.stop) only ever clears style.display when it re-runs; it
+        // has no idea the `hidden` attribute exists. If this function had set
+        // `hidden` once (e.g. on page load) and never got a chance to clear it again —
+        // which happens for any modal whose panel uses @click.stop, since that also
+        // blocks the document-level listener that re-invokes this function on tab
+        // clicks — the element stays hidden forever even after Alpine sets lang
+        // correctly, because the browser's default `[hidden]` UA rule still applies.
         element.style.display = shouldShow ? '' : 'none';
     });
 
@@ -524,6 +532,25 @@ document.addEventListener('DOMContentLoaded', () => {
     applyLanguageTabs(document);
     initCKEditors(document);
     initializeAdminShell();
+});
+
+// Modals (e.g. the Awards/History Events "Add/Edit" popups) start hidden via Alpine's
+// x-show and aren't covered by the .lang-tab click handler below — there's no dedicated
+// "shown" event to hook into, since x-show just toggles an inline style. Watch for any
+// style/class mutation and re-scan; initCKEditors() is cheap and idempotent (it skips
+// already-initialized and still-hidden textareas), so this is safe to call liberally.
+let ckEditorRescanQueued = false;
+new MutationObserver(() => {
+    if (ckEditorRescanQueued) return;
+    ckEditorRescanQueued = true;
+    requestAnimationFrame(() => {
+        ckEditorRescanQueued = false;
+        initCKEditors(document);
+    });
+}).observe(document.body, {
+    attributes: true,
+    attributeFilter: ['style', 'class'],
+    subtree: true,
 });
 
 document.addEventListener('click', (event) => {

@@ -101,9 +101,8 @@ Route::get('/who-we-are/presentation', function () {
 
 Route::get('/who-we-are/transparency', function () {
     $settings = HomeSetting::allKeyed();
-    $reports = AnnualReport::active()->get();
 
-    return view('transparency', compact('settings', 'reports'));
+    return view('transparency', compact('settings'));
 })->name('transparency');
 
 Route::get('/our-programs', function () {
@@ -385,11 +384,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('worldwide-partners/settings', [Admin\WorldwidePartnerController::class, 'updateSettings'])
         ->name('worldwide-partners.settings');
 
+    Route::get('transparency', [Admin\TransparencyController::class, 'index'])->name('transparency.index');
     Route::post('transparency-content', [Admin\TransparencyController::class, 'updateContent'])->name('transparency.content.update');
     Route::post('transparency-banner', [Admin\TransparencyController::class, 'updateBanner'])->name('transparency.banner.update');
-    Route::resource('transparency', Admin\TransparencyController::class)
-        ->except(['show'])
-        ->parameters(['transparency' => 'report']);
 
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);

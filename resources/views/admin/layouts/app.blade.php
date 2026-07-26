@@ -147,7 +147,6 @@
                 ['route' => 'admin.donations.dashboard', 'label' => __('Dashboard')],
                 ['route' => 'admin.donations.index', 'label' => __('Donations')],
                 ['route' => 'admin.payments.index', 'label' => __('Payment Methods')],
-                ['route' => 'admin.donations.reports', 'label' => __('Donation Reports')],
                 ],
                 ],
                 'communication' => [
