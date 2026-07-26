@@ -7,22 +7,26 @@
 @section('content')
 
 <div x-data="{ showModal: false, selectedSponsor: {} }">
-    <div class="mb-8 flex justify-between items-center">
-        <div>
-            <h2 class="text-2xl font-bold text-gray-900">Sponsors</h2>
-            <p class="mt-1 text-sm text-gray-500">Manage the sponsors displayed on your homepage.</p>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-2">
+                <h3 class="font-bold text-gray-800">Sponsors</h3>
+                @if($sponsors->isNotEmpty())
+                <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                    {{ $sponsors->count() }}
+                </span>
+                @endif
+            </div>
+            <a href="{{ route('admin.sponsors.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Add Sponsor
+            </a>
         </div>
-        <a href="{{ route('admin.sponsors.create') }}" class="inline-flex items-center px-4 py-2 bg-[#1a3c6e] text-white text-sm font-medium rounded-md shadow-sm hover:bg-[#153059] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1a3c6e]">
-            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            Add Sponsor
-        </a>
     </div>
 
-
-
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -88,15 +92,13 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <h3 class="mt-2 text-sm font-medium text-gray-900">No sponsors</h3>
-                                <p class="mt-1 text-sm text-gray-500">Get started by creating a new sponsor.</p>
-                                <div class="mt-6">
-                                    <a href="{{ route('admin.sponsors.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#1a3c6e] hover:bg-[#153059]">
-                                        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <td colspan="5">
+                                <div class="py-16 text-center text-gray-400">
+                                    <div class="text-4xl mb-3">🤝</div>
+                                    <p class="text-sm font-medium text-gray-500">No sponsors</p>
+                                    <p class="text-xs mt-1">Click <strong>Add Sponsor</strong> to create your first sponsor.</p>
+                                    <a href="{{ route('admin.sponsors.create') }}" class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-semibold rounded-full transition-colors shadow-sm hover:shadow-md">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                         </svg>
                                         Add Sponsor

@@ -5,17 +5,30 @@
 @section('breadcrumb', 'Manage downloadable documents and resources')
 
 @section('content')
-<div class="flex items-center justify-between mb-6">
-    <h2 class="text-gray-700 font-semibold">All Downloads</h2>
-    <a href="{{ route('admin.downloads.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-medium rounded-xl transition-colors">
-        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        Add Download
-    </a>
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-2">
+            <h3 class="font-bold text-gray-800">All Downloads</h3>
+            @if($items->isNotEmpty())
+            <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                {{ $items->count() }}
+            </span>
+            @endif
+        </div>
+        <a href="{{ route('admin.downloads.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Add Download
+        </a>
+    </div>
 </div>
 
 @if($items->isEmpty())
-<div class="bg-white rounded-2xl border border-gray-100 p-8 text-center">
-    <p class="text-gray-400">No downloads added yet. Click "Add Download" to get started.</p>
+<div class="bg-white rounded-2xl border border-gray-100">
+    <div class="py-16 text-center text-gray-400">
+        <div class="text-4xl mb-3">📄</div>
+        <p class="text-sm font-medium text-gray-500">No downloads yet</p>
+        <p class="text-xs mt-1">Click <strong>Add Download</strong> to create your first download.</p>
+    </div>
 </div>
 @else
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">

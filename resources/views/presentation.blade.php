@@ -6,6 +6,18 @@
 
 @section('content')
 
+@php
+    // Picks the French value for a HomeSetting key when the visitor's locale is
+    // French and a translation was actually provided, otherwise falls back to the
+    // English value (or the given default).
+    $t = function (string $key, string $default = '') use ($settings) {
+        if (app()->getLocale() === 'fr' && !empty($settings[$key.'_fr'] ?? null)) {
+            return $settings[$key.'_fr'];
+        }
+        return $settings[$key] ?? $default;
+    };
+@endphp
+
 {{-- ========================================================
      WHO WE ARE / INTRO SECTION
      ======================================================== --}}
@@ -40,10 +52,10 @@
                         <span class="w-9 h-9 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                         </span>
-                        <h3 class="text-white font-bold text-sm uppercase tracking-[0.15em]">{{ $settings['mission_title'] ?? 'Our Mission' }}</h3>
+                        <h3 class="text-white font-bold text-sm uppercase tracking-[0.15em]">{{ $t('mission_title', 'Our Mission') }}</h3>
                     </div>
                     <div class="rich-text-content text-white/80 text-xs leading-relaxed max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-out overflow-hidden">
-                        {!! $settings['mission_text'] ?? 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.' !!}
+                        {!! $t('mission_text', 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.') !!}
                     </div>
                 </div>
             </div>
@@ -64,10 +76,10 @@
                         <span class="w-9 h-9 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                         </span>
-                        <h3 class="text-white font-bold text-sm uppercase tracking-[0.15em]">{{ $settings['vision_title'] ?? 'Our Vision' }}</h3>
+                        <h3 class="text-white font-bold text-sm uppercase tracking-[0.15em]">{{ $t('vision_title', 'Our Vision') }}</h3>
                     </div>
                     <div class="rich-text-content text-white/80 text-xs leading-relaxed max-h-0 opacity-0 group-hover:max-h-28 group-hover:opacity-100 transition-all duration-500 ease-out overflow-hidden">
-                        {!! $settings['vision_text'] ?? 'A world in which all children are empowered to grow into independent and responsible adults.' !!}
+                        {!! $t('vision_text', 'A world in which all children are empowered to grow into independent and responsible adults.') !!}
                     </div>
                 </div>
             </div>
@@ -416,17 +428,17 @@
 
         <div class="bg-white rounded-3xl shadow-lg border border-gray-100 px-8 py-12 md:px-16 md:py-14 text-center">
             <div class="rich-text-content text-gray-700 leading-relaxed mb-10">
-                {!! $settings['portfolio_text'] ?? 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.' !!}
+                {!! $t('portfolio_text', 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.') !!}
             </div>
 
             <div class="relative py-8 border-y border-gray-100">
                 <div class="rich-text-content text-xl md:text-2xl font-serif italic text-[#1d4e7a] leading-snug max-w-2xl mx-auto">
-                    "{!! $settings['principle_quote'] ?? "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians." !!}"
+                    "{!! $t('principle_quote', "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians.") !!}"
                 </div>
             </div>
 
             <div class="rich-text-content text-gray-500 text-sm leading-relaxed mt-10 max-w-2xl mx-auto">
-                {!! $settings['portfolio_volunteers_text'] ?? 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.' !!}
+                {!! $t('portfolio_volunteers_text', 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.') !!}
             </div>
         </div>
     </div>

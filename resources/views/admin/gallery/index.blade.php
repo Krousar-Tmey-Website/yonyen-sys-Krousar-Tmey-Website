@@ -1,16 +1,34 @@
 @extends('admin.layouts.app')
-@section('title', 'Gallerys')
-@section('page-title', 'Gallerys')
+@section('title', 'Gallery')
+@section('page-title', 'Gallery')
 
 @section('content')
-<div class="flex items-center justify-between mb-6">
-    <h2 class="text-gray-700 font-semibold">All Gallerys</h2>
-    <a href="{{ route('admin.gallery.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-medium rounded-xl transition-colors">
-        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        Create Gallery
-    </a>
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-2">
+            <h3 class="font-bold text-gray-800">All Gallery Items</h3>
+            @if($items->isNotEmpty())
+            <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                {{ $items->count() }}
+            </span>
+            @endif
+        </div>
+        <a href="{{ route('admin.gallery.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Create Gallery
+        </a>
+    </div>
 </div>
 
+@if($items->isEmpty())
+<div class="bg-white rounded-2xl border border-gray-100">
+    <div class="py-16 text-center text-gray-400">
+        <div class="text-4xl mb-3">🖼️</div>
+        <p class="text-sm font-medium text-gray-500">No gallery items yet</p>
+        <p class="text-xs mt-1">Click <strong>Create Gallery</strong> to create your first gallery item.</p>
+    </div>
+</div>
+@else
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
     @foreach($items as $item)
     <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
@@ -50,4 +68,5 @@
     </div>
     @endforeach
 </div>
+@endif
 @endsection

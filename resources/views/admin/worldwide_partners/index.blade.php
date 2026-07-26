@@ -11,11 +11,13 @@
     <div class="bg-white rounded-2xl border border-gray-100 p-6">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">🌍 Krousar Thmey Worldwide</h1>
+                <h3 class="font-bold text-gray-800">🌍 Krousar Thmey Worldwide</h3>
                 <p class="text-gray-500 text-sm mt-1">Manage international partner organizations displayed on the website.</p>
             </div>
-            <a href="{{ route('admin.worldwide-partners.create') }}" class="btn-primary">
-                + Add New Country
+            <a href="{{ route('admin.worldwide-partners.create') }}"
+               class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Add New Country
             </a>
         </div>
 
@@ -28,7 +30,7 @@
             <div class="bg-green-50 rounded-xl p-4 text-center">
                 <p class="text-2xl font-bold text-green-600">{{ $partners->where('is_active', true)->count() }}</p>
                 <p class="text-xs text-gray-500">Active Countries</p>
-            </div>did
+            </div>
             <div class="bg-gray-50 rounded-xl p-4 text-center">
                 <p class="text-2xl font-bold text-gray-400">{{ $partners->where('is_active', false)->count() }}</p>
                 <p class="text-xs text-gray-500">Inactive Countries</p>
@@ -115,9 +117,12 @@
         </div>
 
         @if($partners->isEmpty())
-        <div class="bg-gray-50 rounded-xl py-12 text-center text-gray-400">
-            <p class="text-sm font-medium mb-2">No country partners yet.</p>
-            <a href="{{ route('admin.worldwide-partners.create') }}" class="text-[#2d6fa3] text-sm underline">Add your first country</a>
+        <div class="bg-gray-50 rounded-xl py-16 text-center text-gray-400">
+            <div class="text-4xl mb-3">🌍</div>
+            <p class="text-sm font-medium text-gray-500">No country partners yet</p>
+            <p class="text-xs mt-1">
+                <a href="{{ route('admin.worldwide-partners.create') }}" class="text-[#2d6fa3] hover:underline">Add your first country</a> to get started.
+            </p>
         </div>
         @else
         <div class="space-y-3">

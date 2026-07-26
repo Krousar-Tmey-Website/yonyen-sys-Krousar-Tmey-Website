@@ -6,16 +6,30 @@
 
 @section('content')
 
-<div class="flex items-center justify-between mb-6">
-    <p class="text-sm text-gray-400">{{ $users->count() }} account(s)</p>
-    <a href="{{ route('admin.users.create') }}" class="btn-primary text-sm">+ New Admin</a>
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-2">
+            <h3 class="font-bold text-gray-800">All Users</h3>
+            <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                {{ $users->count() }}
+            </span>
+        </div>
+        <a href="{{ route('admin.users.create') }}"
+           class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            New Admin
+        </a>
+    </div>
 </div>
 
-<div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
     @if($users->isEmpty())
-    <div class="px-6 py-16 text-center text-gray-400">
-        <p class="text-sm">No users yet.</p>
-        <a href="{{ route('admin.users.create') }}" class="text-[#2d6fa3] text-sm underline mt-1 inline-block">Create the first admin account</a>
+    <div class="py-16 text-center text-gray-400">
+        <div class="text-4xl mb-3">👤</div>
+        <p class="text-sm font-medium text-gray-500">No users yet</p>
+        <p class="text-xs mt-1">Click <strong>New Admin</strong> to create the first admin account.</p>
     </div>
     @else
     <table class="w-full text-sm">

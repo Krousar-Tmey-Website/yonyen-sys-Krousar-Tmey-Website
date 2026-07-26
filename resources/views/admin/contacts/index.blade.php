@@ -68,15 +68,27 @@
         }
     </script>
 
+    {{-- Toolbar --}}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-2">
+                <h3 class="font-bold text-gray-800">Contact Inquiries</h3>
+                @if($inquiries->total() > 0)
+                <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                    {{ $inquiries->total() }}
+                </span>
+                @endif
+            </div>
+        </div>
+    </div>
+
     {{-- Inquiries Table --}}
-    <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         @if ($inquiries->isEmpty())
-            <div class="px-6 py-16 text-center">
-                <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <p class="text-gray-400 text-sm">No contact inquiries found.</p>
+            <div class="py-16 text-center text-gray-400">
+                <div class="text-4xl mb-3">📬</div>
+                <p class="text-sm font-medium text-gray-500">No contact inquiries found</p>
+                <p class="text-xs mt-1">Messages sent through the Contact page will appear here.</p>
                 @if (request('name') || request('status'))
                     <a href="{{ route('admin.contacts.index') }}"
                         class="text-[#2d6fa3] text-sm hover:underline mt-2 inline-block">Clear filters</a>

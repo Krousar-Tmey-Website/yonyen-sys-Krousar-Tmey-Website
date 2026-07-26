@@ -6,18 +6,25 @@
 
 @section('content')
 
-<div class="flex items-center justify-between mb-6">
-    <p class="text-sm text-gray-400">{{ $slides->count() }} slide(s) · drag to reorder (coming soon)</p>
-    <a href="{{ route('admin.presentation-slides.create') }}" class="btn-primary text-sm">+ Add Slide</a>
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-2">
+            <h3 class="font-bold text-gray-800">Hero Slideshow</h3>
+            <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">{{ $slides->count() }}</span>
+        </div>
+        <a href="{{ route('admin.presentation-slides.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Add Slide
+        </a>
+    </div>
+    <p class="px-6 pb-4 -mt-2 text-xs text-gray-400">drag to reorder (coming soon)</p>
 </div>
 
 @if($slides->isEmpty())
 <div class="bg-white rounded-2xl border border-gray-100 py-16 text-center text-gray-400">
-    <svg class="w-12 h-12 mx-auto mb-4 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-    </svg>
-    <p class="text-sm font-medium">No slides yet.</p>
-    <a href="{{ route('admin.presentation-slides.create') }}" class="text-[#2d6fa3] text-sm underline mt-1 inline-block">Add your first slide</a>
+    <div class="text-4xl mb-3">🖼️</div>
+    <p class="text-sm font-medium text-gray-500">No slides yet</p>
+    <p class="text-xs mt-1">Click <strong>Add Slide</strong> to create your first slide.</p>
 </div>
 @else
 <div class="space-y-4">

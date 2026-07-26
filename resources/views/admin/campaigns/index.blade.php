@@ -9,33 +9,18 @@
 <div class="form-container">
 
     {{-- Page Header --}}
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold text-gray-800">Donation Campaigns</h1>
-                    <p class="text-sm text-gray-400 mt-0.5">Create and manage your fundraising campaigns</p>
-                </div>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-2">
+                <h3 class="font-bold text-gray-800">Donation Campaigns</h3>
+                <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                    {{ $totalCampaigns }}
+                </span>
             </div>
-            <div class="flex items-center gap-3">
-                <div class="flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-xl border border-gray-100">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        <span class="text-xs font-medium text-gray-500"><span class="text-gray-800">{{ $activeCampaigns }}</span> active</span>
-                    </div>
-                    <span class="text-gray-200">|</span>
-                    <span class="text-xs font-medium text-gray-500"><span class="text-gray-800">{{ $totalCampaigns }}</span> total</span>
-                </div>
-                <a href="{{ route('admin.campaigns.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                    New Campaign
-                </a>
-            </div>
+            <a href="{{ route('admin.campaigns.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                New Campaign
+            </a>
         </div>
     </div>
 
@@ -305,28 +290,25 @@
         </div>
         @else
         {{-- Empty state --}}
-        <div class="text-center py-20 px-6">
-            @if(request()->anyFilled(['search', 'status']))
-            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
-                <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            </div>
-            <p class="text-gray-500 font-semibold">No campaigns match your filters</p>
-            <a href="{{ route('admin.campaigns.index') }}" class="mt-3 inline-flex items-center gap-1 text-sm text-[#2d6fa3] hover:underline font-medium">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                Clear all filters
-            </a>
-            @else
-            <div class="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-[#2d6fa3]/10 to-[#8da83a]/10 border border-gray-100 flex items-center justify-center">
-                <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            </div>
-            <h3 class="text-gray-800 font-bold text-lg">No campaigns yet</h3>
-            <p class="text-gray-400 text-sm mt-1 max-w-sm mx-auto">Create your first donation campaign to start collecting funds and sharing your mission.</p>
-            <a href="{{ route('admin.campaigns.create') }}" class="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-[#2d6fa3] text-white text-sm font-semibold rounded-xl hover:bg-[#1d4e7a] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                Create Campaign
-            </a>
-            @endif
+        @if(request()->anyFilled(['search', 'status']))
+        <div class="py-16 text-center text-gray-400">
+            <div class="text-4xl mb-3">🔍</div>
+            <p class="text-sm font-medium text-gray-500">No campaigns match your filters</p>
+            <p class="text-xs mt-1">
+                <a href="{{ route('admin.campaigns.index') }}" class="text-[#2d6fa3] hover:underline font-medium">Clear all filters</a>
+            </p>
         </div>
+        @else
+        <div class="py-16 text-center text-gray-400">
+            <div class="text-4xl mb-3">📢</div>
+            <p class="text-sm font-medium text-gray-500">No campaigns yet</p>
+            <p class="text-xs mt-1">Click <strong>New Campaign</strong> to create your first campaign.</p>
+            <a href="{{ route('admin.campaigns.create') }}" class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-semibold rounded-full transition-colors shadow-sm hover:shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                New Campaign
+            </a>
+        </div>
+        @endif
         @endif
     </div>
 

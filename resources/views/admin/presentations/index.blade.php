@@ -33,17 +33,34 @@
         <div class="grid lg:grid-cols-2 gap-6">
             {{-- Our Mission --}}
             <div class="bg-white rounded-2xl border border-gray-100 p-6">
-                <h3 class="font-bold text-gray-700 mb-4 text-sm">Our Mission</h3>
-                <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4" x-data="bilingualForm()">
                     @csrf
-                    <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <h3 class="font-bold text-gray-700 text-sm">Our Mission</h3>
+                        <div class="lang-tabs" title="Toggle editing language (English / French)">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                        </div>
+                    </div>
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
                         <input type="text" name="mission_title" value="{{ $settings['mission_title'] ?? 'Our Mission' }}"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
-                    <div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="mission_title_fr" value="{{ $settings['mission_title_fr'] ?? '' }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="ex. Notre Mission">
+                    </div>
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Text (shown on hover)</label>
                         <x-admin.rich-text name="mission_text" :value="$settings['mission_text'] ?? 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.'" lang="en" :rows="3" />
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <x-admin.rich-text name="mission_text_fr" :value="$settings['mission_text_fr'] ?? ''" lang="fr" :rows="3" placeholder="Texte affiché au survol..." />
+                        <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Photo</label>
@@ -69,17 +86,34 @@
 
             {{-- Our Vision --}}
             <div class="bg-white rounded-2xl border border-gray-100 p-6">
-                <h3 class="font-bold text-gray-700 mb-4 text-sm">Our Vision</h3>
-                <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4" x-data="bilingualForm()">
                     @csrf
-                    <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <h3 class="font-bold text-gray-700 text-sm">Our Vision</h3>
+                        <div class="lang-tabs" title="Toggle editing language (English / French)">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                        </div>
+                    </div>
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
                         <input type="text" name="vision_title" value="{{ $settings['vision_title'] ?? 'Our Vision' }}"
                                class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
-                    <div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="vision_title_fr" value="{{ $settings['vision_title_fr'] ?? '' }}"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="ex. Notre Vision">
+                    </div>
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Text (shown on hover)</label>
                         <x-admin.rich-text name="vision_text" :value="$settings['vision_text'] ?? 'A world in which all children are empowered to grow into independent and responsible adults.'" lang="en" :rows="3" />
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <x-admin.rich-text name="vision_text_fr" :value="$settings['vision_text_fr'] ?? ''" lang="fr" :rows="3" placeholder="Texte affiché au survol..." />
+                        <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Photo</label>
@@ -108,21 +142,44 @@
     {{-- OUR PORTFOLIO SECTION --}}
     <div x-show="tab === 'portfolio'" class="space-y-6">
         <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 class="font-bold text-gray-700 mb-1 text-sm">Our Portfolio</h3>
-            <p class="text-gray-400 text-xs mb-4">The paragraph, pull-quote, and closing note shown between Our Values and the Programs strip.</p>
-            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
+            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4" x-data="bilingualForm()">
                 @csrf
-                <div>
+                <div class="flex items-center justify-between mb-1">
+                    <div>
+                        <h3 class="font-bold text-gray-700 text-sm">Our Portfolio</h3>
+                        <p class="text-gray-400 text-xs mt-0.5">The paragraph, pull-quote, and closing note shown between Our Values and the Programs strip.</p>
+                    </div>
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
+                <div x-show="lang === 'en'">
                     <label class="block text-xs font-medium text-gray-600 mb-1">Portfolio Paragraph</label>
                     <x-admin.rich-text name="portfolio_text" :value="$settings['portfolio_text'] ?? 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.'" lang="en" :rows="4" />
                 </div>
-                <div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Portfolio Paragraph (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <x-admin.rich-text name="portfolio_text_fr" :value="$settings['portfolio_text_fr'] ?? ''" lang="fr" :rows="4" placeholder="Paragraphe du portfolio..." />
+                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
+                </div>
+                <div x-show="lang === 'en'">
                     <label class="block text-xs font-medium text-gray-600 mb-1">Pull-Quote</label>
                     <x-admin.rich-text name="principle_quote" :value="$settings['principle_quote'] ?? 'Krousar Thmey\'s main principle is the development of projects led by Cambodians for Cambodians.'" lang="en" :rows="2" />
                 </div>
-                <div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Pull-Quote (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <x-admin.rich-text name="principle_quote_fr" :value="$settings['principle_quote_fr'] ?? ''" lang="fr" :rows="2" placeholder="Citation phare..." />
+                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
+                </div>
+                <div x-show="lang === 'en'">
                     <label class="block text-xs font-medium text-gray-600 mb-1">Closing Note</label>
                     <x-admin.rich-text name="portfolio_volunteers_text" :value="$settings['portfolio_volunteers_text'] ?? 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.'" lang="en" :rows="3" />
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Closing Note (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <x-admin.rich-text name="portfolio_volunteers_text_fr" :value="$settings['portfolio_volunteers_text_fr'] ?? ''" lang="fr" :rows="3" placeholder="Note de clôture..." />
+                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
                 </div>
                 <button type="submit" class="btn-primary text-sm py-2.5">Save Our Portfolio</button>
             </form>

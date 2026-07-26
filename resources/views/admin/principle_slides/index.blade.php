@@ -64,15 +64,20 @@
 
     {{-- Slides list --}}
     <div class="lg:col-span-2">
-        @if($slides->isEmpty())
-        <div class="bg-white rounded-2xl border border-gray-100 py-12 text-center text-gray-400 text-sm">
-            No slides yet. Add your first one.
-        </div>
-        @else
         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div class="px-5 py-3.5 bg-gray-50 border-b border-gray-100">
-                <h4 class="font-semibold text-gray-700 text-sm">{{ $slides->count() }} Slide(s)</h4>
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center gap-2">
+                    <h3 class="font-bold text-gray-800">Slides</h3>
+                    <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">{{ $slides->count() }}</span>
+                </div>
             </div>
+        @if($slides->isEmpty())
+            <div class="py-16 text-center text-gray-400">
+                <div class="text-4xl mb-3">🎬</div>
+                <p class="text-sm font-medium text-gray-500">No slides yet</p>
+                <p class="text-xs mt-1">Use the form on the left to add your first slide.</p>
+            </div>
+        @else
             <div class="divide-y divide-gray-50">
                 @foreach($slides as $slide)
                 <div x-data="{ editing: false }">
@@ -170,8 +175,8 @@
                 </div>
                 @endforeach
             </div>
-        </div>
         @endif
+        </div>
     </div>
 </div>
 

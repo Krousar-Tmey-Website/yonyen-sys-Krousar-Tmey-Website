@@ -121,9 +121,12 @@
     {{-- Jobs list --}}
     <div class="w-full">
         @if($jobs->isEmpty())
-        <div class="bg-white rounded-2xl border border-gray-100 py-12 text-center text-gray-400 text-sm flex flex-col items-center gap-4">
-            <span>No job opportunities yet. Add your first one.</span>
-            <button @click="openAddModal = true" class="btn-primary flex items-center gap-1.5 text-xs py-2 px-4">
+        <div class="bg-white rounded-2xl border border-gray-100 py-16 text-center text-gray-400">
+            <div class="text-4xl mb-3">💼</div>
+            <p class="text-sm font-medium text-gray-500">No job opportunities yet</p>
+            <p class="text-xs mt-1 mb-4">Click <strong>Add New Job</strong> to create your first posting.</p>
+            <button @click="openAddModal = true"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
@@ -133,14 +136,15 @@
         @else
         {{-- Header & Table Card --}}
         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-            <div class="px-5 py-3.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
                 <div class="flex items-center gap-2">
-                    <h3 class="font-bold text-gray-800 text-base">Job Opportunities</h3>
-                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#2d6fa3]/5 text-[#2d6fa3]">
-                        {{ $jobs->count() }} Job(s)
+                    <h3 class="font-bold text-gray-800">All Jobs</h3>
+                    <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                        {{ $jobs->count() }}
                     </span>
                 </div>
-                <button @click="openAddModal = true" class="btn-primary flex items-center gap-1.5 text-xs py-2 px-4 shadow-sm">
+                <button @click="openAddModal = true"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>

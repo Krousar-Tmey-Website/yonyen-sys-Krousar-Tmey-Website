@@ -9,22 +9,24 @@
         $items = \App\Models\ProgramPageItem::orderBy('sort_order')->orderBy('id')->get();
     }
 @endphp
-<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-    <div>
-        <p class="text-gray-500 text-sm">Each item links to a full detail page accessible from the Our Programs page.</p>
-        <p class="text-gray-400 text-xs mt-1">{{ $items->count() }} item(s) total · ordered by sort_order then id</p>
-    </div>
-    <div class="flex items-center gap-2">
-        <a href="{{ route('programs') }}" target="_blank"
-           class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#2d6fa3] border border-[#2d6fa3]/30 bg-[#2d6fa3]/5 hover:bg-[#2d6fa3]/10 rounded-xl transition-colors">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-            View Live
-        </a>
-        <a href="{{ route('admin.program-pages.create') }}"
-           class="flex-shrink-0 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            Add Item
-        </a>
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+    <div class="px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <p class="text-gray-500 text-sm">Each item links to a full detail page accessible from the Our Programs page.</p>
+            <p class="text-gray-400 text-xs mt-1">{{ $items->count() }} item(s) total · ordered by sort_order then id</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="{{ route('programs') }}" target="_blank"
+               class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#2d6fa3] border border-[#2d6fa3]/30 bg-[#2d6fa3]/5 hover:bg-[#2d6fa3]/10 rounded-xl transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                View Live
+            </a>
+            <a href="{{ route('admin.program-pages.create') }}"
+               class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Add Item
+            </a>
+        </div>
     </div>
 </div>
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -98,8 +100,12 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-6 py-12 text-center text-gray-500 text-sm">
-                        No items yet. <a href="{{ route('admin.program-pages.create') }}" class="text-[#2d6fa3] hover:underline">Create one</a>.
+                    <td colspan="5">
+                        <div class="py-16 text-center text-gray-400">
+                            <div class="text-4xl mb-3">📝</div>
+                            <p class="text-sm font-medium text-gray-500">No items yet</p>
+                            <p class="text-xs mt-1">Click <strong>Add Item</strong> to create your first item.</p>
+                        </div>
                     </td>
                 </tr>
                 @endforelse

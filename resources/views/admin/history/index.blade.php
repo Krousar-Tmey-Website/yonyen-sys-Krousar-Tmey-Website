@@ -13,39 +13,29 @@
 @section('content')
 
 <div class="form-container">
-    {{-- Header with Add Button --}}
-    <div class="flex items-center justify-between mb-6">
-        <p class="text-sm text-gray-400">{{ $events->count() }} event(s) · displayed on About page</p>
-        <a href="{{ route('admin.history.create') }}" class="btn-primary text-sm">+ Add Event</a>
-    </div>
-
     {{-- Events List --}}
-    <div class="form-card">
-        <div class="card-header table-header--blue">
-            <div class="icon blue">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-2">
+                <h3 class="font-bold text-gray-800">All Events</h3>
+                <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                    {{ $events->count() }}
+                </span>
             </div>
-            <h3>History Events</h3>
-            <span class="badge">{{ $events->count() }} total</span>
+            <a href="{{ route('admin.history.create') }}"
+               class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Add Event
+            </a>
         </div>
         <div class="card-body">
             @if($events->isEmpty())
-            <div class="empty-state">
-                <div class="empty-icon">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                </div>
-                <h4 class="empty-title">No history events yet</h4>
-                <p class="empty-desc">Add your first history event to display on the About page.</p>
-                <a href="{{ route('admin.history.create') }}" class="inline-flex items-center gap-2 mt-4 text-[#2d6fa3] font-medium hover:text-[#1a4a7a] transition-colors text-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Add your first event
-                </a>
+            <div class="py-16 text-center text-gray-400">
+                <div class="text-4xl mb-3">🕒</div>
+                <p class="text-sm font-medium text-gray-500">No history events yet</p>
+                <p class="text-xs mt-1">Click <strong>Add Event</strong> to display your first event on the About page.</p>
             </div>
             @else
             <div class="overflow-x-auto">

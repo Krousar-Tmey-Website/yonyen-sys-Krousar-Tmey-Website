@@ -143,33 +143,26 @@
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 -translate-y-2">
 
-    {{-- Top bar: Title + Add button --}}
-    <div class="flex items-center justify-between">
-        <div>
-            <h2 class="text-xl font-bold text-gray-800">Map Projects</h2>
-            <p class="text-sm text-gray-400 mt-1">{{ $projects->count() }} project{{ $projects->count() !== 1 ? 's' : '' }} configured</p>
-        </div>
-        <button @click="openAddModal()" class="btn-primary text-sm">
-            <span class="icon-wrap">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                </svg>
-            </span>
-            Add Project
-        </button>
-    </div>
-
     {{-- Projects table --}}
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        @if($projects->isEmpty())
-        <div class="px-6 py-16 text-center">
-            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center">
-                <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
-                </svg>
+        {{-- Toolbar --}}
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+            <div>
+                <h3 class="font-bold text-gray-800">Map Projects</h3>
+                <p class="text-sm text-gray-400 mt-1">{{ $projects->count() }} project{{ $projects->count() !== 1 ? 's' : '' }} configured</p>
             </div>
-            <p class="text-gray-400 text-sm mb-2">No projects on the map yet.</p>
-            <button @click="openAddModal()" class="text-[#0F766E] text-sm font-medium hover:underline">Add your first project.</button>
+            <button @click="openAddModal()"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Add Project
+            </button>
+        </div>
+
+        @if($projects->isEmpty())
+        <div class="px-6 py-16 text-center text-gray-400">
+            <div class="text-4xl mb-3">🗺️</div>
+            <p class="text-sm font-medium text-gray-500">No projects on the map yet</p>
+            <p class="text-xs mt-1">Click <button type="button" @click="openAddModal()" class="text-[#2d6fa3] font-semibold hover:underline">Add Project</button> to create your first project.</p>
         </div>
         @else
         <div class="overflow-x-auto">

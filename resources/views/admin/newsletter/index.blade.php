@@ -5,16 +5,24 @@
 @section('breadcrumb', 'Manage email subscribers for newsletter communications')
 
 @section('content')
-    {{-- Top actions --}}
-    <div class="flex items-center justify-end mb-6">
-        <a href="{{ route('admin.newsletter.export') }}"
-            class="inline-flex items-center gap-1 px-3 py-1.5 bg-[#8da83a] text-white text-xs font-medium rounded-lg hover:bg-[#a3c04a] transition-all">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Export CSV
-        </a>
+    {{-- Toolbar --}}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-2">
+                <h3 class="font-bold text-gray-800">Subscribers</h3>
+                <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
+                    {{ $totalCount }}
+                </span>
+            </div>
+            <a href="{{ route('admin.newsletter.export') }}"
+                class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-full text-sm font-semibold transition-colors border border-gray-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Export CSV
+            </a>
+        </div>
     </div>
 <div class="flex flex-col lg:flex-row gap-4 mb-6">
     {{-- Total Subscribers --}}
@@ -75,14 +83,12 @@
     </script>
 
     {{-- Subscribers Table --}}
-    <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         @if ($subscribers->isEmpty())
-            <div class="px-6 py-16 text-center">
-                <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <p class="text-gray-400 text-sm">No subscribers found.</p>
+            <div class="py-16 text-center text-gray-400">
+                <div class="text-4xl mb-3">📧</div>
+                <p class="text-sm font-medium text-gray-500">No subscribers yet</p>
+                <p class="text-xs mt-1">Newsletter sign-ups from the public site will appear here.</p>
                 @if (request('email'))
                     <a href="{{ route('admin.newsletter.index') }}"
                         class="text-[#2d6fa3] text-sm hover:underline mt-2 inline-block">Clear search</a>

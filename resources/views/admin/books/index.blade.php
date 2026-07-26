@@ -39,14 +39,15 @@
 
             {{-- Header & Toolbar --}}
             <div class="bg-white rounded-2xl border border-gray-100 p-5 mb-6 shadow-sm">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                    <div class="flex items-center gap-3">
-                        <h3 class="font-bold text-gray-800 text-base">All Books</h3>
-                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#2d6fa3]/5 text-[#2d6fa3]">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-4 border-b border-gray-100">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-bold text-gray-800">All Books</h3>
+                        <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
                             Showing <span x-text="total">{{ $totalBooks ?? 0 }}</span>
                         </span>
                     </div>
-                    <button @click="openAddModal = true" class="btn-primary flex items-center gap-1.5 text-xs py-2 px-4 shadow-sm self-start sm:self-auto">
+                    <button @click="openAddModal = true"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md self-start sm:self-auto">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>

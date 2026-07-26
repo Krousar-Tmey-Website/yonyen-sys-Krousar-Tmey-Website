@@ -64,7 +64,7 @@
             </div>
 
             {{-- Nav with accordion groups --}}
-            <nav id="admin-sidebar-nav" class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+            <nav id="admin-sidebar-nav" class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
                 @php
                 $currentRoute = request()->route()?->getName() ?? '';
                 $routeNames = app('router')->getRoutes()->getRoutesByName();
@@ -215,11 +215,14 @@
                 @php $exists = $routeExists($group['route']); @endphp
                 <a href="{{ $exists ? route($group['route']) : '#' }}"
                     @if($exists) data-admin-nav @endif
-                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all whitespace-nowrap
-                              {{ $childActive($group['route']) ? 'bg-white/20 text-white font-semibold shadow-sm ring-1 ring-white/10' : 'text-white/80 hover:bg-white/10 hover:text-white font-medium' }}"
+                    class="relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all whitespace-nowrap
+                              {{ $childActive($group['route']) ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:bg-white/5 hover:text-white font-medium' }}"
                     :class="!sidebarOpen && 'lg:justify-center lg:px-0'"
                     title="{{ $group['label'] }}">
-                    <svg class="w-5 h-5 flex-shrink-0 {{ $childActive($group['route']) ? 'text-white' : 'text-white/70' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    @if ($childActive($group['route']))
+                    <span class="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full bg-white"></span>
+                    @endif
+                    <svg class="w-5 h-5 flex-shrink-0 {{ $childActive($group['route']) ? 'text-white' : 'text-white/60' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="{{ $group['icon'] }}" />
                     </svg>
@@ -230,26 +233,29 @@
                 @php $isGroupActive = $groupActive($group['children']); @endphp
                 <div x-data="{ open: {{ $isGroupActive ? 'true' : 'false' }} }" class="space-y-0.5">
                     <button @click="sidebarOpen ? (open = !open) : (sidebarOpen = true, open = true)"
-                        class="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm transition-all whitespace-nowrap
-                                       {{ $isGroupActive ? 'bg-white/20 text-white font-semibold shadow-sm ring-1 ring-white/10' : 'text-white/80 hover:bg-white/10 hover:text-white font-medium' }}"
+                        class="relative flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm transition-all whitespace-nowrap
+                                       {{ $isGroupActive ? 'bg-white/10 text-white font-semibold' : 'text-white/70 hover:bg-white/5 hover:text-white font-medium' }}"
                         :class="!sidebarOpen && 'lg:justify-center lg:px-0'"
                         title="{{ $group['label'] }}">
+                        @if ($isGroupActive)
+                        <span class="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full bg-white"></span>
+                        @endif
                         <span class="flex items-center gap-3" :class="!sidebarOpen && 'lg:gap-0'">
-                            <svg class="w-5 h-5 flex-shrink-0 {{ $isGroupActive ? 'text-white' : 'text-white/70' }}" fill="none" stroke="currentColor"
+                            <svg class="w-5 h-5 flex-shrink-0 {{ $isGroupActive ? 'text-white' : 'text-white/60' }}" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="{{ $group['icon'] }}" />
                             </svg>
                             <span :class="!sidebarOpen && 'lg:hidden'">{{ $group['label'] }}</span>
                         </span>
-                        <svg class="w-4 h-4 transition-transform duration-200 flex-shrink-0" :class="{ 'rotate-180': open, 'lg:hidden': !sidebarOpen }"
+                        <svg class="w-4 h-4 transition-transform duration-200 flex-shrink-0 text-white/50" :class="{ 'rotate-180': open, 'lg:hidden': !sidebarOpen }"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div x-show="sidebarOpen && open" x-collapse.duration.300ms
-                        class="space-y-0.5 mt-1 mb-2 pl-3"
+                        class="space-y-0.5 mt-1 mb-2 pl-3 border-l border-white/10 ml-4"
                         x-cloak>
                         @foreach ($group['children'] as $child)
                         @php $exists = $routeExists($child['route']); @endphp
@@ -257,13 +263,13 @@
                             @if($exists) data-admin-nav @endif
                             {{ !$exists ? 'onclick="return false;"' : '' }}
                             class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all
-                                          {{ $childActive($child['route']) ? 'bg-white/15 text-white font-semibold shadow-sm' : 'text-white/70 hover:bg-white/10 hover:text-white' }}
+                                          {{ $childActive($child['route']) ? 'bg-white/10 text-white font-semibold' : 'text-white/60 hover:bg-white/5 hover:text-white' }}
                                           {{ !$exists ? 'opacity-40 cursor-default' : '' }}">
                             <span
-                                class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ $childActive($child['route']) ? 'bg-white ring-2 ring-white/30' : 'bg-white/40' }}"></span>
+                                class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ $childActive($child['route']) ? 'bg-white' : 'bg-white/30' }}"></span>
                             <span>{{ $child['label'] }}</span>
                             @if (!$exists)
-                            <span class="ml-auto text-[10px] text-white/60">soon</span>
+                            <span class="ml-auto text-[10px] text-white/50">soon</span>
                             @endif
                         </a>
                         @endforeach
@@ -275,15 +281,21 @@
 
             {{-- User --}}
             <div class="px-4 py-4 border-t border-white/10" :class="!sidebarOpen && 'lg:px-2'">
-                <div class="flex items-center justify-between" :class="!sidebarOpen && 'lg:justify-center'">
-                    <div :class="!sidebarOpen && 'lg:hidden'">
-                        <p class="text-white text-xs font-medium truncate max-w-[120px]">{{ auth()->user()->name }}</p>
-                        <p class="text-white text-xs truncate max-w-[120px]">{{ auth()->user()->email }}</p>
+                <div class="flex items-center gap-2.5 justify-between" :class="!sidebarOpen && 'lg:flex-col lg:gap-2'">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        @php $_initials = collect(explode(' ', auth()->user()->name))->map(fn($p) => mb_substr($p, 0, 1))->take(2)->implode(''); @endphp
+                        <div class="w-8 h-8 rounded-full bg-white/15 text-white text-xs font-semibold flex items-center justify-center flex-shrink-0 uppercase">
+                            {{ $_initials }}
+                        </div>
+                        <div class="min-w-0" :class="!sidebarOpen && 'lg:hidden'">
+                            <p class="text-white text-xs font-medium truncate max-w-[110px]">{{ auth()->user()->name }}</p>
+                            <p class="text-white/50 text-[11px] truncate max-w-[110px]">{{ auth()->user()->email }}</p>
+                        </div>
                     </div>
-                    <form action="{{ route('admin.logout') }}" method="POST" :class="!sidebarOpen && 'lg:mx-auto'">
+                    <form action="{{ route('admin.logout') }}" method="POST">
                         @csrf
                         <button type="submit" title="Logout"
-                            class="text-white hover:text-white/80 transition-colors p-1.5 rounded-lg hover:bg-white/10 flex items-center justify-center">
+                            class="text-white/60 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10 flex items-center justify-center flex-shrink-0">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -306,23 +318,23 @@
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
 
             {{-- Top bar --}}
-            <header class="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between flex-shrink-0">
-                <div class="flex items-center gap-4">
-                    <button @click="sidebarOpen = !sidebarOpen" class="p-1.5 -ml-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-200">
+            <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-gray-100 px-6 py-4 flex items-center justify-between flex-shrink-0 shadow-sm shadow-gray-900/[0.02]">
+                <div class="flex items-center gap-4 min-w-0">
+                    <button @click="sidebarOpen = !sidebarOpen" class="p-1.5 -ml-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-200 flex-shrink-0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
                     </button>
-                    <div id="admin-page-header">
-                        <h1 class="text-lg font-bold text-gray-800">@yield('page-title', __('Admin Panel'))</h1>
+                    <div id="admin-page-header" class="min-w-0">
+                        <h1 class="text-lg font-bold text-gray-800 truncate">@yield('page-title', __('Admin Panel'))</h1>
                         @hasSection('breadcrumb')
-                        <p class="text-xs text-gray-400 mt-0.5">@yield('breadcrumb')</p>
+                        <p class="text-xs text-gray-400 mt-0.5 truncate">@yield('breadcrumb')</p>
                         @endif
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 flex-shrink-0">
                     <a href="{{ route('home') }}" target="_blank"
-                        class="flex items-center gap-2 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50 border border-gray-200">
+                        class="flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-[#2d6fa3] transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-50 border border-gray-200">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -337,7 +349,7 @@
                 @if (session('success'))
                 <div x-data="{ show: true }" x-show="show" x-transition:leave="transition ease-in duration-200"
                     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                    class="mx-6 mt-4 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
+                    class="mx-6 lg:mx-8 mt-4 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
@@ -354,7 +366,7 @@
                 @if (session('error'))
                 <div x-data="{ show: true }" x-show="show" x-transition:leave="transition ease-in duration-200"
                     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                    class="mx-6 mt-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
+                    class="mx-6 lg:mx-8 mt-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl flex items-center gap-2">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -373,7 +385,7 @@
 
             {{-- Content --}}
 
-            <main id="admin-main-content" class="flex-1 overflow-y-auto p-6">
+            <main id="admin-main-content" class="flex-1 overflow-y-auto p-6 lg:p-8">
                 @yield('content')
             </main>
         </div>

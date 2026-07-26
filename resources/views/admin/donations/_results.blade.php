@@ -81,14 +81,14 @@
             </tr>
             @empty
             <tr>
-                <td colspan="7" class="px-6 py-16 text-center">
-                    <div class="text-4xl text-slate-300 mb-3">💝</div>
+                <td colspan="7" class="py-16 text-center text-gray-400">
+                    <div class="text-4xl mb-3">💝</div>
                     @if($activeCount > 0)
-                    <p class="text-sm text-slate-400 font-medium">No donations found.</p>
-                    <p class="text-xs text-slate-400 mt-1">Try different search terms or filters.</p>
+                    <p class="text-sm font-medium text-gray-500">No donations found</p>
+                    <p class="text-xs mt-1">Try different search terms or filters.</p>
                     @else
-                    <p class="text-sm text-slate-400">No donations recorded yet</p>
-                    <p class="text-xs text-slate-400 mt-1">Click <strong>Add New Donation</strong> to record your first donation</p>
+                    <p class="text-sm font-medium text-gray-500">No donations yet</p>
+                    <p class="text-xs mt-1">Click <strong>Add New Donation</strong> to record your first donation.</p>
                     @endif
                 </td>
             </tr>

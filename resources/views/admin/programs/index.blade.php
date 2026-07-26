@@ -7,23 +7,26 @@
 
 
 
-<div class="flex items-center justify-between mb-6">
-    <div>
-        <h2 class="text-gray-700 font-semibold">All Programs
-            <span class="text-gray-400 font-normal text-sm ml-1">({{ $programs->count() }} total)</span>
-        </h2>
-        <p class="text-xs text-gray-400 mt-0.5">Each program appears as a section on the public <a href="{{ route('programs') }}" target="_blank" class="text-[#2d6fa3] hover:underline">Our Programs</a> page.</p>
-    </div>
-    <div class="flex items-center gap-2">
-        <a href="{{ route('programs') }}" target="_blank"
-           class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#2d6fa3] border border-[#2d6fa3]/30 bg-[#2d6fa3]/5 hover:bg-[#2d6fa3]/10 rounded-xl transition-colors">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-            View Live Page
-        </a>
-        <a href="{{ route('admin.programs.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-medium rounded-xl transition-colors">
-            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            New Program
-        </a>
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+        <div>
+            <div class="flex items-center gap-2">
+                <h3 class="font-bold text-gray-800">All Programs</h3>
+                <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">{{ $programs->count() }}</span>
+            </div>
+            <p class="text-xs text-gray-400 mt-1">Each program appears as a section on the public <a href="{{ route('programs') }}" target="_blank" class="text-[#2d6fa3] hover:underline">Our Programs</a> page.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="{{ route('programs') }}" target="_blank"
+               class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#2d6fa3] border border-[#2d6fa3]/30 bg-[#2d6fa3]/5 hover:bg-[#2d6fa3]/10 rounded-xl transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                View Live Page
+            </a>
+            <a href="{{ route('admin.programs.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                New Program
+            </a>
+        </div>
     </div>
 </div>
 
@@ -109,9 +112,9 @@
     </div>
     @empty
     <div class="col-span-3 text-center py-16 text-gray-400">
-        <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        <p class="text-sm font-medium">No programs yet</p>
-        <a href="{{ route('admin.programs.create') }}" class="mt-3 inline-block text-[#2d6fa3] text-sm hover:underline">Create the first program</a>
+        <div class="text-4xl mb-3">📋</div>
+        <p class="text-sm font-medium text-gray-500">No programs yet</p>
+        <p class="text-xs mt-1">Click <strong>New Program</strong> to create your first program.</p>
     </div>
     @endforelse
 </div>

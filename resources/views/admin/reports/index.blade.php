@@ -6,14 +6,19 @@
 
 @section('content')
     <div class="space-y-6">
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-                <h2 class="text-xl font-semibold text-gray-800">Annual Reports</h2>
-                <p class="text-sm text-gray-500">Upload, search, and manage report PDFs for the public resources page.</p>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center gap-2">
+                    <h3 class="font-bold text-gray-800">Annual Reports</h3>
+                    <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">{{ $reports->total() }}</span>
+                </div>
+                <a href="{{ route('admin.reports.create') }}"
+                   class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white rounded-full text-sm font-semibold transition-colors shadow-sm hover:shadow-md">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    Add Report
+                </a>
             </div>
-            <a href="{{ route('admin.reports.create') }}" class="inline-flex items-center justify-center rounded-xl bg-[#1d4e7a] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#173e63]">
-                Add Report
-            </a>
+            <p class="px-6 pt-3 pb-4 text-sm text-gray-500">Upload, search, and manage report PDFs for the public resources page.</p>
         </div>
 
         <div class="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6">
@@ -68,7 +73,13 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-8 text-center text-sm text-gray-500">No annual reports found.</td>
+                                <td colspan="5">
+                                <div class="py-16 text-center text-gray-400">
+                                    <div class="text-4xl mb-3">📄</div>
+                                    <p class="text-sm font-medium text-gray-500">No annual reports found</p>
+                                    <p class="text-xs mt-1">Click <strong>Add Report</strong> to create your first report.</p>
+                                </div>
+                            </td>
                             </tr>
                         @endforelse
                     </tbody>

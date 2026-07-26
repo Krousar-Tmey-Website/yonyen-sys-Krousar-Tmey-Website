@@ -70,7 +70,7 @@
 
         {{-- Toolbar: title, count, search + category filter --}}
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-            <div class="flex items-center justify-between flex-wrap gap-4 mb-4">
+            <div class="flex items-center justify-between flex-wrap gap-4 pb-4 mb-4 border-b border-gray-100">
                 <div class="flex items-center gap-2">
                     <h3 class="font-bold text-gray-800">All Partners</h3>
                     <span class="px-2.5 py-1 bg-[#2d6fa3]/10 text-[#2d6fa3] rounded-full text-xs font-semibold">
