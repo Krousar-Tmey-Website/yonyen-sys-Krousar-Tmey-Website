@@ -11,7 +11,7 @@ return new class extends Migration
             // Website group
             ['key' => 'site_name',        'label' => 'Website Name',           'group' => 'website', 'value' => 'Krousar Thmey'],
             ['key' => 'site_tagline',     'label' => 'Website Tagline',        'group' => 'website', 'value' => 'គ្រួសារថ្មី · New Family'],
-            ['key' => 'site_logo',        'label' => 'Site Logo (path)',       'group' => 'website', 'value' => 'images/logo.png'],
+            ['key' => 'site_logo',        'label' => 'Site Logo (path)',       'group' => 'website', 'value' => 'images/logo.svg'],
             ['key' => 'site_description', 'label' => 'Meta Description',       'group' => 'website', 'value' => "Krousar Thmey is Cambodia's first organization dedicated to helping disadvantaged children — through child welfare, special education, and cultural development."],
 
             // Social group

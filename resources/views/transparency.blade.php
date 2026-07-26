@@ -15,18 +15,6 @@
     $transparencyBannerBlur = (int) ($settings['transparency_banner_blur'] ?? 0);
     $transparencyBannerBadge = $settings['transparency_banner_badge'] ?? 'Accountability';
     $transparencyBannerSubtitle = $settings['transparency_banner_subtitle'] ?? 'See how every donation is managed with strict financial discipline and independent oversight.';
-
-    $sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
-    $facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
-    $facebookIcon = str_starts_with($facebookIcon, 'social/') ? 'storage/' . $facebookIcon : $facebookIcon;
-    $twitterIcon = \App\Models\HomeSetting::getValue('sharing_twitter_icon', 'images/social/twitter.svg');
-    $twitterIcon = str_starts_with($twitterIcon, 'social/') ? 'storage/' . $twitterIcon : $twitterIcon;
-    $linkedinIcon = \App\Models\HomeSetting::getValue('sharing_linkedin_icon', 'images/social/linkedin.svg');
-    $linkedinIcon = str_starts_with($linkedinIcon, 'social/') ? 'storage/' . $linkedinIcon : $linkedinIcon;
-    $shareIcon = \App\Models\HomeSetting::getValue('sharing_share_icon', 'images/social/share.svg');
-    $shareIcon = str_starts_with($shareIcon, 'social/') ? 'storage/' . $shareIcon : $shareIcon;
-    $facebookLink = \App\Models\HomeSetting::getValue('social_facebook', '');
-    $linkedinLink = \App\Models\HomeSetting::getValue('social_linkedin', '');
 @endphp
 <section class="relative py-24 overflow-hidden text-center scroll-mt-20">
     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $transparencyBannerImageUrl }}'); filter: blur({{ $transparencyBannerBlur }}px); {{ $transparencyBannerBlur > 0 ? 'transform: scale(1.05);' : '' }}"></div>

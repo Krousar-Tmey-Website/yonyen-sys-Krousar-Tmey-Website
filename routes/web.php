@@ -335,21 +335,6 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Website Settings
     Route::get('website', [Admin\WebsiteController::class, 'index'])->name('website.index');
     Route::post('website', [Admin\WebsiteController::class, 'update'])->name('website.update');
-    // SEO Settings
-    Route::get('seo', [Admin\SeoController::class, 'index'])->name('seo.index');
-    Route::post('seo', [Admin\SeoController::class, 'update'])->name('seo.update');
-    // Media Library
-    Route::get('media/library', [Admin\MediaLibraryController::class, 'index'])->name('media.library');
-
-    // Localization (native Laravel lang/*.json translation manager)
-    Route::prefix('localization')->name('localization.')->group(function () {
-        Route::get('/', [Admin\LocalizationController::class, 'index'])->name('index');
-        Route::post('/', [Admin\LocalizationController::class, 'update'])->name('update');
-        Route::post('keys', [Admin\LocalizationController::class, 'storeKey'])->name('keys.store');
-        Route::delete('keys', [Admin\LocalizationController::class, 'destroyKey'])->name('keys.destroy');
-        Route::post('locales', [Admin\LocalizationController::class, 'storeLocale'])->name('locales.store');
-        Route::delete('locales/{locale}', [Admin\LocalizationController::class, 'destroyLocale'])->name('locales.destroy');
-    });
 
     // Homepage
     Route::get('home', [Admin\HomeSettingController::class, 'index'])->name('home.index');
@@ -397,6 +382,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Worldwide Partners
     Route::resource('worldwide-partners', Admin\WorldwidePartnerController::class)
         ->parameters(['worldwide-partners' => 'worldwidePartner']);
+    Route::post('worldwide-partners/settings', [Admin\WorldwidePartnerController::class, 'updateSettings'])
+        ->name('worldwide-partners.settings');
 
     Route::post('transparency-content', [Admin\TransparencyController::class, 'updateContent'])->name('transparency.content.update');
     Route::post('transparency-banner', [Admin\TransparencyController::class, 'updateBanner'])->name('transparency.banner.update');
@@ -404,19 +391,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         ->except(['show'])
         ->parameters(['transparency' => 'report']);
 
-    // Reports — Activity Logs (must be before reports resource to avoid route collision)
-    Route::prefix('reports')->name('reports.')->group(function () {
-        Route::get('activity-logs', [Admin\Reports\ActivityLogController::class, 'index'])
-            ->name('activity-logs.index');
-        Route::get('activity-logs/{activityLog}', [Admin\Reports\ActivityLogController::class, 'show'])
-            ->name('activity-logs.show');
-    });
-
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);
-
-    // Analytics
-    Route::get('analytics', [Admin\AnalyticsController::class, 'index'])->name('analytics.index');
 
     // Books for Sale
     Route::resource('books', Admin\BookController::class)->except(['show']);

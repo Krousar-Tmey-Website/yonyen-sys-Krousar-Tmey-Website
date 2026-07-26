@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', ($settings['site_name'] ?? 'Krousar Thmey') . ' — ' . ($settings['site_tagline'] ?? 'Helping Children in Cambodia'))</title>
-    <meta name="description" content="@yield('description', $settings['site_description'] ?? 'Krousar Thmey is Cambodia\'s first organization dedicated to helping disadvantaged children — through child welfare, special education, and cultural development.')">
-    @php $_logoPath = $settings['site_logo'] ?? 'images/logo.png'; $_faviconUrl = str_starts_with($_logoPath, 'http') ? $_logoPath : (str_starts_with($_logoPath, 'logos/') ? asset('storage/' . $_logoPath) : asset($_logoPath)); @endphp
+    <title>{!! $__env->yieldContent('title', e(($settings['site_name'] ?? 'Krousar Thmey') . ' — ' . ($settings['site_tagline'] ?? 'Helping Children in Cambodia'))) !!}</title>
+    <meta name="description" content="{!! $__env->yieldContent('description', e($settings['site_description'] ?? 'Krousar Thmey is Cambodia\'s first organization dedicated to helping disadvantaged children — through child welfare, special education, and cultural development.')) !!}">
+    @php $_logoPath = $settings['site_logo'] ?? 'images/logo.svg'; $_faviconUrl = str_starts_with($_logoPath, 'http') ? $_logoPath : (str_starts_with($_logoPath, 'logos/') ? asset('storage/' . $_logoPath) : asset($_logoPath)); @endphp
     <link rel="icon" type="image/png" href="{{ $_faviconUrl }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

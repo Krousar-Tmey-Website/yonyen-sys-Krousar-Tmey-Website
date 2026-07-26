@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\HomeSetting;
 use App\Models\WorldwidePartner;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,26 @@ class WorldwidePartnerController extends Controller
     {
         $partners = WorldwidePartner::orderBy('display_order')->orderBy('id')->get();
         return view('admin.worldwide_partners.index', compact('partners'));
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $data = $request->validate([
+            'settings'                          => ['required', 'array'],
+            'settings.worldwide_label'          => ['nullable', 'string', 'max:255'],
+            'settings.worldwide_title'          => ['nullable', 'string', 'max:255'],
+            'settings.worldwide_description'    => ['nullable', 'string'],
+            'settings.sharing_facebook_enabled' => ['nullable', 'string'],
+            'settings.sharing_twitter_enabled'  => ['nullable', 'string'],
+            'settings.sharing_linkedin_enabled' => ['nullable', 'string'],
+            'settings.sharing_share_enabled'    => ['nullable', 'string'],
+        ]);
+
+        foreach ($data['settings'] as $key => $value) {
+            HomeSetting::setValue($key, $value ?? '');
+        }
+
+        return redirect()->route('admin.worldwide-partners.index')->with('success', 'Settings updated successfully.');
     }
 
     public function create()

@@ -2,7 +2,7 @@
 
 @section('title', 'Website Settings')
 @section('page-title', 'Website Settings')
-@section('breadcrumb', 'Manage your site name, logo, social media, contact information, and footer content')
+@section('breadcrumb', 'Manage your site name, logo, social media, and footer content')
 
 @section('content')
 
@@ -10,12 +10,11 @@
     @csrf
 
     @php
-    $order = ['website', 'sharing', 'social', 'contact', 'footer'];
+    $order = ['website', 'sharing', 'social', 'footer'];
     $labels = [
         'website' => ['🌐', 'Website Identity'],
         'sharing' => ['📤', 'Share our impact'],
         'social'  => ['📱', 'Social Media Links'],
-        'contact' => ['📞', 'Contact Information'],
         'footer'  => ['📍', 'Footer Settings'],
     ];
 
@@ -54,15 +53,8 @@
                             Show share buttons on presentation page
                         </label>
                     </div>
-                    
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Section Title</label>
-                        <input type="text" name="settings[sharing_title]" 
-                               value="{{ old('settings.sharing_title', $items->firstWhere('key', 'sharing_title')->value ?? 'Share our impact') }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
                 </div>
-                
+
                 <div class="pt-3 border-t border-gray-100">
                     <p class="text-xs font-medium text-gray-700 mb-3">Social Media Icons</p>
                     
@@ -97,74 +89,10 @@
                     </div>
 
                     <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-600 mt-4">
-                        <strong>Note:</strong> Icons will be saved to <code>public/images/social/</code> directory. Upload takes priority over existing files.
+                        <strong>Note:</strong> Icons will be saved to <code>storage/app/public/social/</code>. Upload takes priority over existing files.
                     </div>
                 </div>
 
-            </div>
-
-        @elseif($group === 'contact')
-            {{-- ====== Per-country office cards ====== --}}
-            <div class="space-y-6">
-                @foreach($countries as $id => $info)
-                @php
-                    $countryAddress = $items->firstWhere('key', "contact_{$id}_address");
-                    $countryPhone   = $items->firstWhere('key', "contact_{$id}_phone");
-                    $countryEmail   = $items->firstWhere('key', "contact_{$id}_email");
-                @endphp
-                <div class="bg-gray-50 rounded-xl border border-gray-100 p-5">
-                    <h4 class="font-bold text-gray-800 text-sm mb-4 flex items-center gap-2">
-                        <span class="text-lg">{{ $info['flag'] }}</span>
-                        {{ $info['name'] }} Office
-                    </h4>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">Address</label>
-                            <textarea name="settings[contact_{{ $id }}_address]" rows="3"
-                                      class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('settings.contact_'.$id.'_address', $countryAddress->value ?? '') }}</textarea>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1">Phone</label>
-                                <input type="text" name="settings[contact_{{ $id }}_phone]"
-                                       value="{{ old('settings.contact_'.$id.'_phone', $countryPhone->value ?? '') }}"
-                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1">Email</label>
-                                <input type="text" name="settings[contact_{{ $id }}_email]"
-                                       value="{{ old('settings.contact_'.$id.'_email', $countryEmail->value ?? '') }}"
-                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-
-                {{-- ====== General footer contact info ====== --}}
-                @php
-                    $generalKeys = ['footer_address', 'footer_phone', 'footer_email'];
-                    $generalItems = $items->whereIn('key', $generalKeys);
-                @endphp
-                @if($generalItems->isNotEmpty())
-                <div class="pt-2">
-                    <h4 class="font-bold text-gray-800 text-sm mb-4 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        General Contact (Footer)
-                    </h4>
-                    <div class="space-y-4">
-                        @foreach($generalItems as $setting)
-                        @php $k = $setting->key; @endphp
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">{{ $setting->label ?? $setting->key }}</label>
-                            <input type="text" name="settings[{{ $k }}]"
-                                   value="{{ old('settings.'.$k, $setting->value) }}"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
             </div>
 
         @elseif($group === 'social')
@@ -209,6 +137,39 @@
                     </div>
                     @endforeach
                 </div>
+
+                <div class="pt-4 border-t border-gray-100">
+                    <p class="text-xs font-medium text-gray-700 mb-3">Icons (Top Bar / Footer)</p>
+                    @php
+                        $socialIconSettings = [
+                            'social_facebook_icon'  => ['label' => 'Facebook Icon',  'default' => 'images/social/facebook.svg'],
+                            'social_instagram_icon' => ['label' => 'Instagram Icon', 'default' => 'images/social/instagram.svg'],
+                            'social_linkedin_icon'  => ['label' => 'LinkedIn Icon',  'default' => 'images/social/linkedin.svg'],
+                            'social_youtube_icon'   => ['label' => 'YouTube Icon',   'default' => 'images/social/youtube.svg'],
+                            'social_telegram_icon'  => ['label' => 'Telegram Icon',  'default' => 'images/social/telegram.svg'],
+                        ];
+                    @endphp
+                    <div class="grid grid-cols-1 gap-4">
+                        @foreach($socialIconSettings as $key => $config)
+                        <div class="flex items-center gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden border border-gray-200">
+                                @php
+                                    $_previewSocialIcon = $items->firstWhere('key', $key)->value ?? $config['default'];
+                                    $_previewSocialUrl = str_starts_with($_previewSocialIcon, 'social/') ? asset('storage/' . $_previewSocialIcon) : asset($_previewSocialIcon);
+                                @endphp
+                                <img src="{{ $_previewSocialUrl }}" alt="{{ $config['label'] }}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-xs font-medium text-gray-600 mb-1">{{ $config['label'] }}</label>
+                                <input type="file" name="{{ $key }}_file" accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#2d6fa3]">
+                                <input type="hidden" name="settings[{{ $key }}]" value="{{ $items->firstWhere('key', $key)->value ?? $config['default'] }}">
+                                <p class="text-xs text-gray-400 mt-1">SVG, PNG, JPG, or WebP. Upload to replace icon.</p>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
 
         @else
@@ -224,7 +185,7 @@
                             <div class="flex-shrink-0 w-20 h-20 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden">
                                 @php
                                     $logoPath = $setting->value;
-                                    $logoUrl = $logoPath ? (str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath))) : asset('images/logo.png');
+                                    $logoUrl = $logoPath ? (str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath))) : asset('images/logo.svg');
                                 @endphp
                                 <img src="{{ $logoUrl }}"
                                      alt="Logo preview"

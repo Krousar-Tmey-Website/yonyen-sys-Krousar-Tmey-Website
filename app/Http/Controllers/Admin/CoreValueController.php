@@ -30,6 +30,7 @@ class CoreValueController extends Controller
             'icon'                      => ['nullable', 'string', 'max:10'],
             'image'                     => ['nullable', 'image', 'max:2048'],
             'description'               => ['nullable', 'string'],
+            
             'description_fr'            => ['nullable', 'string'],
             'supporting_description'    => ['nullable', 'string'],
             'supporting_description_fr' => ['nullable', 'string'],

@@ -43,9 +43,8 @@
     {{-- Worldwide Content Settings --}}
     <div class="bg-white rounded-2xl border border-gray-100 p-6">
         <h3 class="font-bold text-gray-700 mb-4 text-sm">Worldwide Content Settings</h3>
-        <form action="{{ route('admin.website.update') }}" method="POST" class="space-y-4">
+        <form action="{{ route('admin.worldwide-partners.settings') }}" method="POST" class="space-y-4">
             @csrf
-            <input type="hidden" name="section" value="worldwide">
             
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Small Label</label>
@@ -71,9 +70,8 @@
     {{-- Social Sharing Settings --}}
     <div class="bg-white rounded-2xl border border-gray-100 p-6">
         <h3 class="font-bold text-gray-700 mb-4 text-sm">Social Sharing Settings</h3>
-        <form action="{{ route('admin.website.update') }}" method="POST" class="space-y-4">
+        <form action="{{ route('admin.worldwide-partners.settings') }}" method="POST" class="space-y-4">
             @csrf
-            <input type="hidden" name="section" value="social">
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <label class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
