@@ -394,3 +394,10 @@ export function setCKEditorContent(textarea, html) {
 }
 
 window.setCKEditorContent = setCKEditorContent;
+
+// For Alpine-driven tab switches (e.g. the Donate page content tabs on the
+// Payment Methods admin screen): panels hidden via x-show are display:none at
+// load, so their CKEditor textareas get skipped by initCKEditors(). Call this
+// after the tab becomes visible (wrap in requestAnimationFrame so Alpine has
+// applied the style change first) to initialize any editors that were skipped.
+window.initCKEditors = initCKEditors;
