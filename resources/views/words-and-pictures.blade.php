@@ -50,7 +50,7 @@ $btn3Url  = $settings['words_pictures_banner_btn3_url'] ?? '';
             </a>
             @endif
             @if($btn2Text)
-            <a href="{{ $btn2Url }}" class="btn-outline text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+            <a href="{{ $btn2Url }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#8da83a] text-white hover:bg-[#a3c04a] text-sm sm:text-base font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
@@ -130,8 +130,8 @@ $btn3Url  = $settings['words_pictures_banner_btn3_url'] ?? '';
                         {{ $wp('words_pictures_learn_more_text', 'Learn more about the projects of this program') }}
                     </a>
                     <a href="{{ route('donate') }}"
-                       class="inline-flex items-center justify-center gap-1.5 px-5 py-2 border border-[#35a752] text-[#35a752] text-sm font-bold uppercase rounded hover:bg-[#35a752] hover:text-white transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                       class="inline-flex items-center justify-center gap-1.5 px-5 py-2 bg-[#8da83a] text-white text-sm font-bold uppercase rounded hover:bg-[#a3c04a] transition-colors shadow-sm">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                         Donate Now
                     </a>
                 </div>

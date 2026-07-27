@@ -10,7 +10,7 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto">
+<div class="max-w-5xl mx-auto">
     <form id="articleForm" action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-news-ajax-form>
         @csrf
 

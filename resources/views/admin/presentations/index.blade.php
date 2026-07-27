@@ -219,11 +219,15 @@
              statValue: '',
              statLabel: '',
              statLabelFr: '',
-             statDescription: '',
-             statDescriptionFr: '',
-             statSortOrder: 0,
-             statIsActive: true,
-             statIsFeatured: false,
+              statDescription: '',
+              statDescriptionFr: '',
+              statAccentColor: '#2d6fa3',
+              statIconBackgroundColor: '#e3f2fd',
+              statValueColor: '#2d6fa3',
+              statLabelColor: '#111827',
+              statSortOrder: 0,
+              statIsActive: true,
+              statIsFeatured: false,
              openAddModal() {
                  this.editMode = false;
                  this.lang = 'en';
@@ -231,12 +235,16 @@
                  this.statId = '';
                  this.statValue = '';
                  this.statLabel = '';
-                 this.statLabelFr = '';
-                 this.statDescription = '';
-                 this.statDescriptionFr = '';
-                 this.statSortOrder = 0;
-                 this.statIsActive = true;
-                 this.statIsFeatured = false;
+                  this.statLabelFr = '';
+                  this.statDescription = '';
+                  this.statDescriptionFr = '';
+                  this.statAccentColor = '#2d6fa3';
+                  this.statIconBackgroundColor = '#e3f2fd';
+                  this.statValueColor = '#2d6fa3';
+                  this.statLabelColor = '#111827';
+                  this.statSortOrder = 0;
+                  this.statIsActive = true;
+                  this.statIsFeatured = false;
                  this.showStatsModal = true;
                  this.$nextTick(() => this.syncStatCKEditors());
              },
@@ -251,12 +259,16 @@
                  this.statId = stat.id;
                  this.statValue = stat.value;
                  this.statLabel = stat.label;
-                 this.statLabelFr = stat.label_fr || '';
-                 this.statDescription = stat.description || '';
-                 this.statDescriptionFr = stat.description_fr || '';
-                 this.statSortOrder = stat.sort_order;
-                 this.statIsActive = !!stat.is_active;
-                 this.statIsFeatured = !!stat.is_featured;
+                  this.statLabelFr = stat.label_fr || '';
+                  this.statDescription = stat.description || '';
+                  this.statDescriptionFr = stat.description_fr || '';
+                  this.statAccentColor = stat.accent_color || stat.fallback_accent_color || '#2d6fa3';
+                  this.statIconBackgroundColor = stat.icon_background_color || stat.fallback_icon_background_color || '#e3f2fd';
+                  this.statValueColor = stat.value_color || stat.fallback_value_color || this.statAccentColor;
+                  this.statLabelColor = stat.label_color || stat.fallback_label_color || '#111827';
+                  this.statSortOrder = stat.sort_order;
+                  this.statIsActive = !!stat.is_active;
+                  this.statIsFeatured = !!stat.is_featured;
                  this.showStatsModal = true;
                  this.$nextTick(() => this.syncStatCKEditors());
              }
@@ -283,6 +295,17 @@
                 ['name' => 'purple', 'bg' => '#7c4dff', 'light' => '#f3e5f5', 'lighter' => '#e1bee7'],
             ];
 
+            $mixWithWhite = function (?string $hex, float $whiteRatio = 0.88): string {
+                if (!is_string($hex) || !preg_match('/^#([0-9a-fA-F]{6})$/', $hex, $matches)) {
+                    return '#f3f4f6';
+                }
+
+                $rgb = sscanf($matches[1], '%02x%02x%02x');
+                $mixed = array_map(fn ($channel) => (int) round($channel * (1 - $whiteRatio) + 255 * $whiteRatio), $rgb);
+
+                return sprintf('#%02x%02x%02x', $mixed[0], $mixed[1], $mixed[2]);
+            };
+
             $statIcons = [
                 '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>',
                 '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>',
@@ -303,13 +326,25 @@
                 @foreach($impactStats as $index => $stat)
                 @php
                     $colorScheme = $accentColors[$index % count($accentColors)];
+                    $accentColor = $stat->accent_color ?: $colorScheme['bg'];
+                    $colorScheme['bg'] = $accentColor;
+                    $colorScheme['light'] = $stat->accent_color ? $mixWithWhite($accentColor) : $colorScheme['light'];
+                    $iconBackgroundColor = $stat->icon_background_color ?: $colorScheme['light'];
+                    $valueColor = $stat->value_color ?: $colorScheme['bg'];
+                    $labelColor = $stat->label_color ?: '#374151';
                     $icon = $statIcons[$index % count($statIcons)];
                     $accentBorderStyle = 'background-color: ' . $colorScheme['bg'] . ';';
-                    $iconBgStyle = 'background-color: ' . $colorScheme['light'] . ';';
-                    $valueColorStyle = 'color: ' . $colorScheme['bg'] . ';';
+                    $iconBgStyle = 'background-color: ' . $iconBackgroundColor . ';';
+                    $valueColorStyle = 'color: ' . $valueColor . ';';
+                    $statForModal = array_merge($stat->toArray(), [
+                        'fallback_accent_color' => $colorScheme['bg'],
+                        'fallback_icon_background_color' => $iconBackgroundColor,
+                        'fallback_value_color' => $valueColor,
+                        'fallback_label_color' => $labelColor,
+                    ]);
                 @endphp
                 <div class="relative bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer group flex flex-col justify-between"
-                     @click="openEditModal({{ json_encode($stat) }})">
+                     @click="openEditModal({{ json_encode($statForModal) }})">
 
                     {{-- Top colored accent border --}}
                     <div class="h-1 w-full" style="{{ $accentBorderStyle }}"></div>
@@ -321,7 +356,7 @@
                             <button type="button"
                                     class="w-7 h-7 rounded-full flex items-center justify-center bg-gray-50 hover:bg-blue-50 hover:text-blue-600 text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-200"
                                     title="Edit statistic"
-                                    @click.stop="openEditModal({{ json_encode($stat) }})">
+                                    @click.stop="openEditModal({{ json_encode($statForModal) }})">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                                 </svg>
@@ -355,7 +390,7 @@
                         </div>
 
                         {{-- Label --}}
-                        <p class="text-xs font-semibold text-gray-700 leading-snug flex-1 mb-4">{{ $stat->label }}</p>
+                        <p class="text-xs font-semibold text-gray-700 leading-snug flex-1 mb-4" style="color: {{ $labelColor }}">{{ $stat->label }}</p>
 
                         {{-- Card footer --}}
                         <div class="flex items-center justify-between pt-3 border-t border-gray-50 mt-auto">
@@ -484,6 +519,33 @@
                                 <x-admin.rich-text id="stat-description-fr" name="description_fr" :value="''" lang="fr" :rows="2"
                                     @input="statDescriptionFr = $event.target.value"
                                     placeholder="Détail supplémentaire..." />
+                            </div>
+
+                            {{-- Style Controls --}}
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-2">Inside Card Colors</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="text-[11px] text-gray-500 space-y-1">
+                                        <span>Icon + Line</span>
+                                        <input type="color" name="accent_color" x-model="statAccentColor"
+                                               class="h-10 w-full rounded-lg border border-gray-200 bg-white p-1 cursor-pointer">
+                                    </label>
+                                    <label class="text-[11px] text-gray-500 space-y-1">
+                                        <span>Icon Background</span>
+                                        <input type="color" name="icon_background_color" x-model="statIconBackgroundColor"
+                                               class="h-10 w-full rounded-lg border border-gray-200 bg-white p-1 cursor-pointer">
+                                    </label>
+                                    <label class="text-[11px] text-gray-500 space-y-1">
+                                        <span>Number Color</span>
+                                        <input type="color" name="value_color" x-model="statValueColor"
+                                               class="h-10 w-full rounded-lg border border-gray-200 bg-white p-1 cursor-pointer">
+                                    </label>
+                                    <label class="text-[11px] text-gray-500 space-y-1">
+                                        <span>Text Color</span>
+                                        <input type="color" name="label_color" x-model="statLabelColor"
+                                               class="h-10 w-full rounded-lg border border-gray-200 bg-white p-1 cursor-pointer">
+                                    </label>
+                                </div>
                             </div>
 
                             {{-- Sort order + Active --}}

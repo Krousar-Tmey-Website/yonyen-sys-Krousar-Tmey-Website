@@ -1,14 +1,14 @@
-@extends('admin.layouts.app')
+﻿@extends('admin.layouts.app')
 
 @section('title', 'Homepage Settings')
 @section('page-title', 'Homepage Settings')
 
 @section('content')
 
-<div class="max-w-4xl mx-auto" x-data="{ tab: 'cta' }">
+<div x-data="{ tab: 'cta' }">
 
     {{-- ── Professional Page Header ── --}}
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:p-8 mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2.5">
@@ -71,6 +71,8 @@ $sections = [
             ['key' => 'stat_employees',      'label' => 'Employees',                              'type' => 'number', 'placeholder' => 'e.g. 70'],
             ['key' => 'stat_budget',         'label' => 'Annual Budget (number or e.g. 950K)',    'type' => 'budget', 'placeholder' => 'e.g. 950000 or 950K'],
             ['key' => 'stat_provinces',      'label' => 'Provinces in Cambodia',                  'type' => 'number', 'placeholder' => 'e.g. 15'],
+            ['key' => 'stats_background_color', 'label' => 'Background Color',                     'type' => 'color', 'default' => '#1a3c6e'],
+            ['key' => 'stats_data_color',       'label' => 'Data Number Color',                    'type' => 'color', 'default' => '#e8a020'],
         ],
     ],
 
@@ -98,7 +100,7 @@ $sections = [
 
     @foreach($sections as $id => $section)
     <div x-show="tab === '{{ $id }}'">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 shadow-sm">
             <div class="flex items-center gap-3 mb-4">
                 <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
                     <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,14 +116,15 @@ $sections = [
 
             <hr class="mb-5 border-gray-100">
 
-            <div class="space-y-5">
+            <div class="grid lg:grid-cols-2 gap-5">
                 @foreach($section['fields'] as $field)
                 @php
                     $k = $field['key'];
                     $default = $field['default'] ?? '';
                     $currentVal = $val($k, $default);
+                    $isWide = in_array($field['type'], ['textarea', 'image']);
                 @endphp
-                <div>
+                <div class="{{ $isWide ? 'lg:col-span-2' : '' }}">
                     <label for="settings_{{ $k }}" class="block text-sm font-medium text-gray-700 mb-1.5">
                         {{ $field['label'] }}
                     </label>
@@ -142,6 +145,14 @@ $sections = [
                                value="{{ $currentVal }}"
                                placeholder="{{ $field['placeholder'] ?? 'e.g. 950000 or 950K' }}"
                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+
+                    @elseif($field['type'] === 'color')
+                        <div class="flex items-center gap-3">
+                            <input type="color" id="settings_{{ $k }}" name="settings[{{ $k }}]"
+                                   value="{{ $currentVal ?: $default }}"
+                                   class="h-11 w-16 rounded-xl border border-gray-200 bg-white p-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <span class="text-xs font-mono text-gray-400">{{ $currentVal ?: $default }}</span>
+                        </div>
 
                     @elseif($field['type'] === 'image')
                         {{-- Current image preview --}}

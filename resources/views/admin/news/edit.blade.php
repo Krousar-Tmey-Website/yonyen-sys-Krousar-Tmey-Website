@@ -12,7 +12,7 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto">
+<div class="max-w-5xl mx-auto">
     <form id="articleEditForm" action="{{ route('admin.news.update', $news) }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-news-ajax-form>
         @csrf @method('PUT')
 

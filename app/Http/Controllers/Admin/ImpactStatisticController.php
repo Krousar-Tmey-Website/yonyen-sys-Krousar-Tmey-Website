@@ -26,9 +26,10 @@ class ImpactStatisticController extends Controller
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
-        ]);
+        ] + $this->styleValidationRules());
 
         $data['sort_order'] = $data['sort_order'] ?? 0;
+        $data = $this->normalizeStyleColors($data);
         $data['image'] = $this->resolveImage($request, $data);
         unset($data['image_url']);
 
@@ -49,7 +50,9 @@ class ImpactStatisticController extends Controller
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
-        ]);
+        ] + $this->styleValidationRules());
+
+        $data = $this->normalizeStyleColors($data);
 
         if ($request->boolean('remove_image')) {
             $this->deleteStoredImage($impactStatistic->image);
@@ -105,5 +108,43 @@ class ImpactStatisticController extends Controller
         if ($path && !str_starts_with($path, 'http')) {
             Storage::disk('public')->delete($path);
         }
+    }
+
+    private function styleValidationRules(): array
+    {
+        $hexRule = ['nullable', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}$/'];
+
+        return [
+            'accent_color' => $hexRule,
+            'card_background_color' => $hexRule,
+            'card_border_color' => $hexRule,
+            'icon_background_color' => $hexRule,
+            'value_color' => $hexRule,
+            'label_color' => $hexRule,
+        ];
+    }
+
+    private function normalizeStyleColors(array $data): array
+    {
+        foreach (array_keys($this->styleValidationRules()) as $field) {
+            $data[$field] = $this->normalizeHexColor($data[$field] ?? null);
+        }
+
+        return $data;
+    }
+
+    private function normalizeHexColor(?string $color): ?string
+    {
+        if ($color === null || $color === '') {
+            return null;
+        }
+
+        $color = strtolower($color);
+
+        if (strlen($color) === 4) {
+            return '#' . $color[1] . $color[1] . $color[2] . $color[2] . $color[3] . $color[3];
+        }
+
+        return $color;
     }
 }

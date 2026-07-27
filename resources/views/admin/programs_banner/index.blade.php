@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto space-y-6">
+<div class="space-y-6">
 
     {{-- Live Preview --}}
     @php
@@ -61,41 +61,53 @@
         @endif
 
         {{-- Text content --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                <span class="text-base">&#9997;&#65039;</span> Banner Text
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-5">
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                </span>
+                Banner Text
             </h3>
 
-            <div>
-                <label for="programs_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">
-                    Page Title <span class="text-red-400">*</span>
-                </label>
-                <input type="text"
-                       id="programs_banner_title"
-                       name="programs_banner_title"
-                       value="{{ old('programs_banner_title', $settings['programs_banner_title']->value ?? 'Our Programs') }}"
-                       required
-                       oninput="document.getElementById('preview-title').textContent = this.value || 'Our Programs'"
-                       class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                       placeholder="Our Programs">
-                <p class="mt-1.5 text-xs text-gray-400">The large heading displayed at the top of the page.</p>
-            </div>
+            <div class="grid lg:grid-cols-2 gap-5">
+                <div>
+                    <label for="programs_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">
+                        Page Title <span class="text-red-400">*</span>
+                    </label>
+                    <input type="text"
+                           id="programs_banner_title"
+                           name="programs_banner_title"
+                           value="{{ old('programs_banner_title', $settings['programs_banner_title']->value ?? 'Our Programs') }}"
+                           required
+                           oninput="document.getElementById('preview-title').textContent = this.value || 'Our Programs'"
+                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="Our Programs">
+                    <p class="mt-1.5 text-xs text-gray-400">The large heading displayed at the top of the page.</p>
+                </div>
 
-            <div>
-                <label for="programs_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle / Description</label>
-                <x-admin.rich-text id="programs_banner_subtitle" name="programs_banner_subtitle" :value="old('programs_banner_subtitle', $settings['programs_banner_subtitle']->value ?? '')" lang="en" :rows="3" placeholder="Short description shown below the title..." />
-                <p class="mt-1.5 text-xs text-gray-400">One or two sentences summarising the programs section.</p>
+                <div>
+                    <label for="programs_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle / Description</label>
+                    <x-admin.rich-text id="programs_banner_subtitle" name="programs_banner_subtitle" :value="old('programs_banner_subtitle', $settings['programs_banner_subtitle']->value ?? '')" lang="en" :rows="3" placeholder="Short description shown below the title..." />
+                    <p class="mt-1.5 text-xs text-gray-400">One or two sentences summarising the programs section.</p>
+                </div>
             </div>
         </div>
 
         {{-- Background image (x-data uses PHP-computed value to avoid quote conflict) --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5"
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-5"
              x-data="{ imageType: '{{ $imageTypeInit }}' }">
 
             <div class="flex items-center justify-between">
-                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                    <span class="text-base">&#128444;&#65039;</span> Background Image
-                    <span class="text-xs font-normal text-gray-400 normal-case tracking-normal">(optional &mdash; falls back to solid blue)</span>
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </span>
+                    Background Image
+                    <span class="text-xs font-normal text-gray-400">(optional &mdash; falls back to solid blue)</span>
                 </h3>
                 <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
                     <button type="button" @click="imageType = 'upload'"
@@ -145,9 +157,14 @@
         </div>
 
         {{-- Additional Programs Text --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                <span class="text-base">&#128203;&#65039;</span> Additional Programs Section
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-5">
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
+                    </svg>
+                </span>
+                Additional Programs Section
             </h3>
             <div class="grid md:grid-cols-2 gap-5">
                 <div>
@@ -162,9 +179,14 @@
         </div>
 
         {{-- Additional Information Text --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                <span class="text-base">&#8505;&#65039;</span> Additional Information Section
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-5">
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </span>
+                Additional Information Section
             </h3>
             <div class="grid md:grid-cols-2 gap-5">
                 <div>
@@ -179,9 +201,14 @@
         </div>
 
         {{-- CTA Text --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                <span class="text-base">&#128150;&#65039;</span> Bottom CTA Section
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-5">
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                </span>
+                Bottom CTA Section
             </h3>
             <div class="grid md:grid-cols-2 gap-5">
                 <div>

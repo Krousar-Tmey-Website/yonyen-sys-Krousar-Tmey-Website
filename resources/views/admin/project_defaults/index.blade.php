@@ -6,11 +6,15 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto space-y-6">
+<div class="space-y-6">
 
-
-    <div class="rounded-2xl border border-[#2d6fa3]/10 bg-[#2d6fa3]/5 p-5">
-        <h2 class="text-sm font-bold text-[#1a3c6e] mb-2">How This Works</h2>
+    <div class="rounded-2xl border border-[#2d6fa3]/10 bg-[#2d6fa3]/5 p-5 lg:p-6">
+        <h2 class="text-sm font-bold text-[#1a3c6e] mb-2 flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-[#2d6fa3]/10 flex items-center justify-center">
+                <svg class="w-4 h-4 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </span>
+            How This Works
+        </h2>
         <p class="text-sm text-gray-600 leading-relaxed">
             Set shared fallback values for all project pages here. You can also choose a specific project below and give it its own public-page details from this same screen.
         </p>
@@ -35,9 +39,14 @@
         </div>
         @endif
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-            <div class="flex items-center justify-between gap-3">
-                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Public Project Defaults</h3>
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-5">
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" /></svg>
+                    </span>
+                    Public Project Defaults
+                </h3>
                 <div class="lang-tabs" title="Toggle editing language (English / French)">
                     <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
                     <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
@@ -49,7 +58,7 @@
             </p>
             @endif
 
-            <div class="grid md:grid-cols-2 gap-4">
+            <div class="grid lg:grid-cols-2 gap-5">
                 <div>
                     <label for="project_default_area_of_work" class="block text-sm font-medium text-gray-700 mb-1.5">Area of Work</label>
                     <input type="text"
@@ -84,8 +93,8 @@
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4">
-                <div class="md:col-span-2" x-show="lang === 'en'">
+            <div class="grid lg:grid-cols-2 gap-5">
+                <div class="lg:col-span-2" x-show="lang === 'en'">
                     <label for="project_default_make_difference_title" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title</label>
                     <input type="text"
                            id="project_default_make_difference_title"
@@ -93,7 +102,7 @@
                            value="{{ old('project_default_make_difference_title', $settings['project_default_make_difference_title']->value ?? 'Make a Difference') }}"
                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                 </div>
-                <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
+                <div class="lg:col-span-2" x-show="lang === 'fr'" x-cloak>
                     <label for="project_default_make_difference_title_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
                     <input type="text"
                            id="project_default_make_difference_title_fr"
@@ -103,12 +112,12 @@
                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     <p class="mt-1.5 text-xs text-gray-400">Leave blank to reuse the English title.</p>
                 </div>
-                <div class="md:col-span-2" x-show="lang === 'en'">
+                <div class="lg:col-span-2" x-show="lang === 'en'">
                     <label for="project_default_make_difference_text" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text</label>
                     <x-admin.rich-text id="project_default_make_difference_text" name="project_default_make_difference_text" :value="old('project_default_make_difference_text', $settings['project_default_make_difference_text']->value ?? '')" lang="en" :rows="3" placeholder="e.g. $50 - food expenses per child per month" />
                     <p class="mt-1.5 text-xs text-gray-400">Shown on the public project page whenever a project leaves its own donation/details text blank.</p>
                 </div>
-                <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
+                <div class="lg:col-span-2" x-show="lang === 'fr'" x-cloak>
                     <label for="project_default_make_difference_text_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
                     <x-admin.rich-text id="project_default_make_difference_text_fr" name="project_default_make_difference_text_fr" :value="old('project_default_make_difference_text_fr', $settings['project_default_make_difference_text_fr']->value ?? '')" lang="fr" :rows="3" placeholder="ex. 50 $ - frais alimentaires par enfant par mois" />
                     <p class="mt-1.5 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English text.</p>
@@ -140,10 +149,15 @@
         </div>
     </form>
 
-    <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-5">
         <div>
-            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Specific Project Page Details</h3>
-            <p class="mt-1 text-xs text-gray-500">
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5" /></svg>
+                </span>
+                Specific Project Page Details
+            </h3>
+            <p class="mt-1 text-xs text-gray-500 ml-9">
                 Choose a project here if you want that one project page to use its own values instead of the shared defaults above.
             </p>
         </div>
@@ -229,7 +243,7 @@
                     </label>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-4 transition-opacity duration-200"
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 transition-opacity duration-200"
                      :class="detailsMode === 'specific' ? 'opacity-100' : 'opacity-60'">
                     <div>
                         <label for="area_of_work" class="block text-sm font-medium text-gray-700 mb-1.5">Area of Work</label>
@@ -261,22 +275,22 @@
                     </div>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-4 transition-opacity duration-200" x-data="bilingualForm()" :class="detailsMode === 'specific' ? 'opacity-100' : 'opacity-60'">
-                    <div class="md:col-span-2 flex items-center justify-between gap-3 -mb-1">
+                <div class="grid lg:grid-cols-2 gap-5 transition-opacity duration-200" x-data="bilingualForm()" :class="detailsMode === 'specific' ? 'opacity-100' : 'opacity-60'">
+                    <div class="lg:col-span-2 flex items-center justify-between gap-3 -mb-1">
                         <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Make a Difference Content</p>
                         <div class="lang-tabs" title="Toggle editing language (English / French)">
                             <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
                             <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                         </div>
                     </div>
-                    <div class="md:col-span-2" x-show="lang === 'en'">
+                    <div class="lg:col-span-2" x-show="lang === 'en'">
                         <label for="make_difference_title" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title</label>
                         <input type="text" id="make_difference_title" name="make_difference_title"
                                value="{{ old('make_difference_title', $selectedProject->make_difference_title) }}"
                                :disabled="detailsMode !== 'specific'"
                                class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                     </div>
-                    <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
+                    <div class="lg:col-span-2" x-show="lang === 'fr'" x-cloak>
                         <label for="make_difference_title_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
                         <input type="text" id="make_difference_title_fr" name="make_difference_title_fr"
                                value="{{ old('make_difference_title_fr', $selectedProject->make_difference_title_fr) }}"
@@ -285,11 +299,11 @@
                                class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         <p class="mt-1.5 text-xs text-gray-400">Leave blank to reuse the English title.</p>
                     </div>
-                    <div class="md:col-span-2" x-show="lang === 'en'">
+                    <div class="lg:col-span-2" x-show="lang === 'en'">
                         <label for="make_difference_text" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text</label>
                         <x-admin.rich-text id="make_difference_text" name="make_difference_text" :value="old('make_difference_text', $selectedProject->make_difference_text)" lang="en" :rows="3" placeholder="e.g. $50 - food expenses per child per month" />
                     </div>
-                    <div class="md:col-span-2" x-show="lang === 'fr'" x-cloak>
+                    <div class="lg:col-span-2" x-show="lang === 'fr'" x-cloak>
                         <label for="make_difference_text_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
                         <x-admin.rich-text id="make_difference_text_fr" name="make_difference_text_fr" :value="old('make_difference_text_fr', $selectedProject->make_difference_text_fr)" lang="fr" :rows="3" placeholder="ex. 50 $ - frais alimentaires par enfant par mois" />
                         <p class="mt-1.5 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English text.</p>
@@ -332,7 +346,7 @@
                     </a>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-4">
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="rounded-xl bg-[#f8f9fc] border border-gray-100 p-4">
                         <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Area of Work</p>
                         <p class="text-sm font-semibold text-gray-800">{{ $selectedProject->effective_area_of_work ?: 'Not set' }}</p>
