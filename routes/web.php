@@ -55,8 +55,10 @@ Route::get('/', function () {
     $testimonials = Testimonial::where('is_active', true)->take(3)->get();
     $galleries = Gallery::where('is_active', true)->latest()->take(6)->get();
     $programs = Program::active()->take(3)->get();
-    $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
-    $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
+    $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get()
+        ->filter(fn ($s) => filled(app()->getLocale() === 'fr' ? $s->title_fr : $s->title))->values();
+    $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get()
+        ->filter(fn ($s) => filled(app()->getLocale() === 'fr' ? $s->label_fr : $s->label))->values();
     $sponsors = \App\Models\Sponsor::active()->orderBy('sort_order')->get();
     $mapProjects = MapProject::getFrontendData();
 
@@ -69,7 +71,8 @@ Route::get('/who-we-are', function () {
     $historyEvents = HistoryEvent::active()->get();
     $reports = AnnualReport::active()->get();
     $settings = HomeSetting::allKeyed();
-    $coreValues = CoreValue::ordered()->get();
+    $coreValues = CoreValue::ordered()->get()
+        ->filter(fn ($v) => filled(app()->getLocale() === 'fr' ? $v->title_fr : $v->title))->values();
 
     $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
 
@@ -91,9 +94,11 @@ Route::get('/who-we-are', function () {
 // Who We Are - Sub-pages
 Route::get('/who-we-are/presentation', function () {
     $settings = HomeSetting::allKeyed();
-    $coreValues = CoreValue::ordered()->get();
+    $coreValues = CoreValue::ordered()->get()
+        ->filter(fn ($v) => filled(app()->getLocale() === 'fr' ? $v->title_fr : $v->title))->values();
     $offices = collect(config('offices'))->reject(fn ($o) => $o['country'] === 'Cambodia')->map(fn ($o) => (object) $o);
-    $impactStatistics = \App\Models\ImpactStatistic::active()->get();
+    $impactStatistics = \App\Models\ImpactStatistic::active()->get()
+        ->filter(fn ($s) => filled(app()->getLocale() === 'fr' ? $s->label_fr : $s->label))->values();
 
     return view('presentation', compact('settings', 'coreValues', 'offices', 'impactStatistics'));
 })->name('presentation');
@@ -148,7 +153,8 @@ Route::get('/projects/{project}', function (Project $project) {
 
 Route::get('/get-involved', function () {
     $settings = HomeSetting::allKeyed();
-    $jobs = JobOpportunity::active()->ordered()->get();
+    $jobs = JobOpportunity::active()->ordered()->get()
+        ->filter(fn ($j) => filled(app()->getLocale() === 'fr' ? $j->title_fr : $j->title))->values();
     $books = Book::available()->orderBy('sort_order')->orderBy('title')->get();
     
     $partnershipCategories = \App\Models\PartnershipCategory::ordered()->get();

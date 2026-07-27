@@ -29,8 +29,8 @@
 
 
                 <div x-show="addLang === 'en'">
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Job Title <span class="text-red-400">*</span></label>
-                    <input type="text" name="title" value="{{ old('title') }}" :required="addLang === 'en'"
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Job Title <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text" name="title" value="{{ old('title') }}"
                            class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
                            placeholder="e.g. Social Worker">
                 </div>
@@ -247,7 +247,7 @@
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
 <div x-show="lang === 'en'">
                                             <label class="block text-[10px] font-medium text-gray-500 mb-0.5">Job Title</label>
-                                            <input type="text" name="title" value="{{ $job->title }}" :required="lang === 'en'"
+                                            <input type="text" name="title" value="{{ $job->title }}"
                                                    class="w-full px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#2d6fa3]">
                                         </div>
                                         <div x-show="lang === 'fr'" x-cloak>

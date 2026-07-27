@@ -309,7 +309,7 @@
     @endif
 
     {{-- Additional Information (Page Items) --}}
-    @php $additionalItems = \App\Models\ProgramPageItem::active()->orderBy('sort_order')->get(); @endphp
+    @php $additionalItems = \App\Models\ProgramPageItem::active()->orderBy('sort_order')->get()->filter(fn ($item) => filled(app()->getLocale() === 'fr' ? $item->title_fr : $item->title))->values(); @endphp
     @if($additionalItems->count() > 0)
         <section class="py-24 bg-white relative overflow-hidden">
             <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#2d6fa3]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4"></div>

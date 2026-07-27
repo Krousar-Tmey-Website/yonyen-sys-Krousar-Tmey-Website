@@ -42,8 +42,8 @@
             <div class="space-y-6 p-6">
                 <div class="grid gap-5 md:grid-cols-2">
                     <div x-show="lang === 'en'">
-                        <label class="mb-2 block text-sm font-semibold text-slate-700">Title <span class="text-red-500">*</span></label>
-                        <input type="text" name="title" value="{{ $fieldValue('title') }}" class="{{ $inputClass }}" placeholder="e.g. Child Protection Services" required>
+                        <label class="mb-2 block text-sm font-semibold text-slate-700">Title <span class="text-gray-400 font-normal">(optional)</span></label>
+                        <input type="text" name="title" value="{{ $fieldValue('title') }}" class="{{ $inputClass }}" placeholder="e.g. Child Protection Services">
                         @error('title')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
