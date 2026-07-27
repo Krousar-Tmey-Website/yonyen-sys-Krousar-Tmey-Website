@@ -113,7 +113,7 @@
                             </a>
                             @endif
                             @if($project->effective_contact_button_text)
-                            <a href="{{ route('contact') }}" class="px-6 py-3 bg-[#1a3c6e] hover:bg-[#122b52] text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center text-center">
+                            <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="px-6 py-3 bg-[#1a3c6e] hover:bg-[#122b52] text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center text-center">
                                 {{ $project->effective_contact_button_text }}
                             </a>
                             @endif

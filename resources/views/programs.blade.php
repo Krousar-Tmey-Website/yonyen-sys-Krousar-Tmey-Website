@@ -392,7 +392,7 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                     Donate
                 </a>
-                <a href="{{ route('contact') }}" class="w-full sm:w-auto px-10 py-4 bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-[#1a3c6e] rounded-xl font-bold transition-all uppercase tracking-widest text-center">
+                <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="w-full sm:w-auto px-10 py-4 bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-[#1a3c6e] rounded-xl font-bold transition-all uppercase tracking-widest text-center">
                     Contact Us
                 </a>
             </div>

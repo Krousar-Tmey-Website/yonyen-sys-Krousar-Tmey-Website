@@ -2022,6 +2022,7 @@ select.form-control {
 }
 .payments-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
     min-width: 720px;
@@ -2057,12 +2058,12 @@ select.form-control {
 
 /* Column widths */
 .col-id { width: 60px; }
-.col-name { width: auto; min-width: 160px; }
+.col-name { width: 46%; }
 .col-code { width: 100px; }
-.col-qr { width: 80px; text-align: center; }
-.col-status { width: 120px; }
-.col-sort { width: 70px; text-align: center; }
-.col-actions { width: 140px; text-align: right; }
+.col-qr { width: 110px; text-align: center; }
+.col-status { width: 140px; }
+.col-sort { width: 90px; text-align: center; }
+.col-actions { width: 160px; text-align: right; }
 
 .col-id,
 .col-sort {
