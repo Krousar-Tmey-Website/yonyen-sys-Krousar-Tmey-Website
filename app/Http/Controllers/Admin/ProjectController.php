@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller {
     public function index() {
-        $items = Project::latest()->get();
+        $items = Project::with('program')->latest()->get();
         return view('admin.projects.index', compact('items'));
     }
     public function create() {
