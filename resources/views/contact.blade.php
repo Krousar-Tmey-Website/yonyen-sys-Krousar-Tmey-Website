@@ -321,18 +321,24 @@
 </section>
 
 {{-- CTA Banner --}}
-<section class="bg-[#1d4e7a] py-16 relative overflow-hidden">
+@php
+    $ctaBgImgUrl = !empty($contactBannerImage) ? (str_starts_with($contactBannerImage, 'http') ? $contactBannerImage : asset('storage/' . $contactBannerImage)) : null;
+@endphp
+<section class="relative py-16 overflow-hidden" style="background-color: {{ $contactBannerOverlayColor }};">
+    @if($ctaBgImgUrl)
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $ctaBgImgUrl }}'); opacity: 0.25;"></div>
+    @endif
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 right-0 w-72 h-72 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[#2d6fa3] translate-y-1/2 -translate-x-1/3"></div>
     </div>
-    <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
-        <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support Our Work</p>
-        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">Make a Difference Today</h2>
-        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.</p>
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
+        <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">{{ $contactBannerBadge }}</p>
+        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">{{ $contactBannerTitle }}</h2>
+        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">{{ $contactBannerSubtitle }}</p>
         <div class="flex flex-wrap gap-4 justify-center">
-            <a href="{{ route('donate') }}" class="btn-primary text-base">Donate Now</a>
-            <a href="{{ route('involved') }}" class="btn-outline text-base">Get Involved</a>
+            <a href="{{ $contactBannerBtn1Url }}" class="btn-primary text-base">{{ $contactBannerBtn1Text }}</a>
+            <a href="{{ $contactBannerBtn2Url }}" class="btn-outline text-base">{{ $contactBannerBtn2Text }}</a>
         </div>
     </div>
 </section>
