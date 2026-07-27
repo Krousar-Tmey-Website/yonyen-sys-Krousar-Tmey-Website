@@ -183,8 +183,9 @@ Route::get('/topics/{slug}', [ResourcePageController::class, 'show'])->name('res
 
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
+    $settings = HomeSetting::allKeyed();
 
-    return view('resources', compact('reports'));
+    return view('resources', compact('reports', 'settings'));
 })->name('resources');
 
 Route::get('/media', function () {
@@ -380,6 +381,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);
+
+    // Resources Banner
+    Route::get('resources-banner', [Admin\AnnualReportController::class, 'bannerIndex'])->name('resources-banner.index');
+    Route::post('resources-banner', [Admin\AnnualReportController::class, 'updateBanner'])->name('resources-banner.update');
 
     // Books for Sale
     Route::resource('books', Admin\BookController::class)->except(['show']);

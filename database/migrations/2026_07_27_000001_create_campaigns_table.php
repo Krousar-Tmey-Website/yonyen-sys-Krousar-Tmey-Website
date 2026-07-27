@@ -30,6 +30,7 @@ return new class extends Migration
         $this->foldLegacyColumns();
         $this->relaxLegacyColumns();
         $this->backfill();
+        $this->addUniqueIndexes();
     }
 
     private function createFresh(): void
@@ -55,6 +56,22 @@ return new class extends Migration
 
     private function addMissingColumns(): void
     {
+        // The prototype table may have youtube_url instead of video — add video first
+        // so the ->after('video') on file and foldLegacyColumns() below can use it.
+        if (! Schema::hasColumn('campaigns', 'video')) {
+            Schema::table('campaigns', function (Blueprint $table) {
+                $table->string('video')->nullable()->after('image');
+            });
+        }
+
+        // Add slug first WITHOUT the unique constraint so existing rows get populated
+        // with NULL (allowed under a unique index) before backfill runs.
+        if (! Schema::hasColumn('campaigns', 'slug')) {
+            Schema::table('campaigns', function (Blueprint $table) {
+                $table->string('slug')->nullable()->after('id');
+            });
+        }
+
         Schema::table('campaigns', function (Blueprint $table) {
             if (! Schema::hasColumn('campaigns', 'year')) {
                 $table->string('year', 20)->nullable()->after('slug')->index();
@@ -70,6 +87,12 @@ return new class extends Migration
             }
             if (! Schema::hasColumn('campaigns', 'file_original_name')) {
                 $table->string('file_original_name')->nullable()->after('file');
+            }
+            if (! Schema::hasColumn('campaigns', 'is_active')) {
+                $table->boolean('is_active')->default(true)->after('file_original_name');
+            }
+            if (! Schema::hasColumn('campaigns', 'sort_order')) {
+                $table->unsignedInteger('sort_order')->default(0)->after('is_active');
             }
         });
     }
@@ -115,9 +138,15 @@ return new class extends Migration
                 }
             }
 
-            $table->boolean('is_active')->default(true)->change();
-            $table->unsignedInteger('sort_order')->default(0)->change();
-            $table->longText('description')->nullable()->change();
+            if (Schema::hasColumn('campaigns', 'is_active')) {
+                $table->boolean('is_active')->default(true)->change();
+            }
+            if (Schema::hasColumn('campaigns', 'sort_order')) {
+                $table->unsignedInteger('sort_order')->default(0)->change();
+            }
+            if (Schema::hasColumn('campaigns', 'description')) {
+                $table->longText('description')->nullable()->change();
+            }
         });
     }
 
@@ -157,12 +186,36 @@ return new class extends Migration
         }
     }
 
+    /** Add unique indexes after backfill has populated the columns. */
+    private function addUniqueIndexes(): void
+    {
+        // slug was added as nullable so existing rows get NULL (allowed in unique indexes).
+        // Now that backfill has populated every row with a unique slug, make it NOT NULL
+        // and add the unique constraint.
+        if (Schema::hasColumn('campaigns', 'slug')) {
+            Schema::table('campaigns', function (Blueprint $table) {
+                $table->string('slug')->nullable(false)->change();
+            });
+
+            try {
+                Schema::table('campaigns', function (Blueprint $table) {
+                    $table->unique('slug');
+                });
+            } catch (\Illuminate\Database\QueryException $e) {
+                // Index may already exist on a re-run — that's fine.
+                if (! str_contains($e->getMessage(), 'Duplicate key name')) {
+                    throw $e;
+                }
+            }
+        }
+    }
+
     public function down(): void
     {
         // The table predates this migration on upgraded environments, so only the
         // columns it introduced are removed — the table itself is left in place.
         Schema::table('campaigns', function (Blueprint $table) {
-            foreach (['year', 'title_fr', 'description_fr', 'file', 'file_original_name'] as $column) {
+            foreach (['slug', 'year', 'title_fr', 'description_fr', 'video', 'file', 'file_original_name'] as $column) {
                 if (Schema::hasColumn('campaigns', $column)) {
                     $table->dropColumn($column);
                 }
