@@ -5,24 +5,71 @@
 
 @section('content')
 
-{{-- Page Header --}}
-<div class="bg-[#2d6fa3] pt-16 pb-20 relative overflow-hidden">
+{{-- ========================================================
+     NEWS BANNER
+     ======================================================== --}}
+@php
+    $newsBannerImage = $settings['news_banner_image'] ?? null;
+    $newsBannerImageUrl = $newsBannerImage ? (str_starts_with($newsBannerImage, 'http') ? $newsBannerImage : asset('storage/' . $newsBannerImage)) : null;
+    $newsBannerOverlay = $settings['news_banner_overlay_color'] ?? '#1a3c6e';
+    $newsBannerBadge = $settings['news_banner_badge'] ?? 'Krousar Thmey';
+    $newsBannerTitle = $settings['news_banner_title'] ?? "Krousar Thmey's news, in Cambodia and around the world";
+    $newsBannerSubtitle = $settings['news_banner_subtitle'] ?? 'Updates from our programs, success stories from our beneficiaries, and events from Krousar Thmey.';
+    $newsBtn1Text = $settings['news_banner_btn1_text'] ?? null;
+    $newsBtn1Url  = $settings['news_banner_btn1_url'] ?? null;
+    $newsBtn2Text = $settings['news_banner_btn2_text'] ?? null;
+    $newsBtn2Url  = $settings['news_banner_btn2_url'] ?? null;
+    $newsBtn3Text = $settings['news_banner_btn3_text'] ?? null;
+    $newsBtn3Url  = $settings['news_banner_btn3_url'] ?? null;
+@endphp
+
+<section id="news-banner" class="relative pt-24 pb-28 md:pb-32 overflow-hidden"
+         style="background-color: {{ $newsBannerOverlay }};">
+    {{-- Background image --}}
+    @if($newsBannerImageUrl)
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ $newsBannerImageUrl }}'); opacity: 0.4;"></div>
+    @endif
+
+    {{-- Decorative circles --}}
     <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/3"></div>
     <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a]/40 translate-y-1/2 -translate-x-1/4"></div>
+
     <div class="relative max-w-7xl mx-auto px-6">
-        <nav data-reveal class="flex items-center gap-2 text-sm text-white/50 mb-8">
+        <nav class="flex items-center gap-2 text-sm text-white/50 mb-8">
             <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <span class="text-white/80">News</span>
         </nav>
-        <div data-reveal style="--reveal-delay: 60" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-4">
+
+        <div data-reveal class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-4">
             <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
-            <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">Krousar Thmey</span>
+            <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">{{ $newsBannerBadge }}</span>
         </div>
-        <h1 data-reveal style="--reveal-delay: 120" class="text-3xl md:text-4xl font-black text-white mb-3 uppercase tracking-wide">Krousar Thmey's news, in Cambodia and around the world</h1>
-        <p data-reveal style="--reveal-delay: 180" class="text-white/60 text-base max-w-2xl leading-relaxed">Updates from our programs, success stories from our beneficiaries, and events from Krousar Thmey.</p>
+        <h1 data-reveal style="--reveal-delay: 60" class="text-3xl md:text-4xl font-black text-white mb-3 uppercase tracking-wide max-w-3xl">{{ $newsBannerTitle }}</h1>
+        @if($newsBannerSubtitle)
+        <p data-reveal style="--reveal-delay: 120" class="text-white/60 text-base max-w-2xl leading-relaxed">{{ $newsBannerSubtitle }}</p>
+        @endif
+
+        @if($newsBtn1Text)
+        <div data-reveal style="--reveal-delay: 180" class="flex flex-wrap gap-4 mt-8">
+            <a href="{{ $newsBtn1Url ?? route('donate') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#2d6fa3] hover:bg-[#e8a020] hover:text-white text-sm font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                {{ $newsBtn1Text }}
+            </a>
+            @if($newsBtn2Text)
+            <a href="{{ $newsBtn2Url ?? route('get-involved') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-white/30 text-white hover:border-white hover:bg-white/10 text-sm font-bold transition-all duration-300">
+                {{ $newsBtn2Text }}
+            </a>
+            @endif
+            @if($newsBtn3Text)
+            <a href="{{ $newsBtn3Url ?? route('resources') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-white/30 text-white hover:border-white hover:bg-white/10 text-sm font-bold transition-all duration-300">
+                {{ $newsBtn3Text }}
+            </a>
+            @endif
+        </div>
+        @endif
     </div>
-</div>
+</section>
 
 {{-- News Grid --}}
 <section class="bg-[#f8f9fc] py-14">
