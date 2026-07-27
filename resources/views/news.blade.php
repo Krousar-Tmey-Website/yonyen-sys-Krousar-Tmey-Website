@@ -23,7 +23,7 @@
     $newsBtn3Url  = $settings['news_banner_btn3_url'] ?? null;
 @endphp
 
-<section id="news-banner" class="relative pt-24 pb-28 md:pb-32 overflow-hidden"
+<section id="news-banner" class=" pt-20 pb-20 relative pt-24 pb-28 md:pb-32 overflow-hidden"
          style="background-color: {{ $newsBannerOverlay }};">
     {{-- Background image --}}
     @if($newsBannerImageUrl)
@@ -35,13 +35,7 @@
     <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a]/40 translate-y-1/2 -translate-x-1/4"></div>
 
     <div class="relative max-w-7xl mx-auto px-6">
-        <nav class="flex items-center gap-2 text-sm text-white/50 mb-8">
-            <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-white/80">News</span>
-        </nav>
-
-        <div data-reveal class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-4">
+<div data-reveal class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-4">
             <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
             <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">{{ $newsBannerBadge }}</span>
         </div>

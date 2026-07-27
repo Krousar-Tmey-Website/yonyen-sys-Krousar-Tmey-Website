@@ -13,7 +13,7 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto">
+<div>
     <form action="{{ route('admin.donations.update', $donation) }}" method="POST">
         @csrf
         @method('PUT')

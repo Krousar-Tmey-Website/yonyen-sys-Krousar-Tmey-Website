@@ -68,7 +68,7 @@
         {{-- Bank Type (Only for Cambodia) --}}
         <div class="payment-form-group" x-show="residency === 'cambodia'">
             <label class="payment-form-label">Bank Type <span class="required">*</span></label>
-            <div class="payment-form-grid">
+            <div class="payment-form-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
                 @foreach(['ABA Bank','ACLEDA Bank','Wing Bank','Other'] as $bt)
                 <label class="payment-form-radio-card {{ $val('bank_type') === $bt ? 'selected' : '' }}">
                     <input type="radio" name="bank_type" value="{{ $bt }}"

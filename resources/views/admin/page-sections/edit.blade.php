@@ -8,7 +8,7 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto">
+<div>
 
     {{-- Form --}}
     <div>
@@ -16,7 +16,7 @@
             @csrf @method('PUT')
 
             {{-- Section Info --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
                 <div class="flex items-center justify-between">
                     <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                         <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -94,7 +94,7 @@
             </div>
 
             {{-- Image --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">
                         <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,23 +120,25 @@
                 </div>
                 @endif
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        {{ $existingImage ? 'Replace Image' : 'Upload Image' }}
-                        <span class="text-gray-400 font-normal">(recommended: 800×500px)</span>
-                    </label>
-                    <input type="file" name="image" accept="image/*" id="imageInput"
-                           class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#2d6fa3]/10 file:text-[#2d6fa3] hover:file:bg-[#2d6fa3]/20">
-                    @error('image')
-                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                <div class="grid lg:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                            {{ $existingImage ? 'Replace Image' : 'Upload Image' }}
+                            <span class="text-gray-400 font-normal">(recommended: 800×500px)</span>
+                        </label>
+                        <input type="file" name="image" accept="image/*" id="imageInput"
+                               class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#2d6fa3]/10 file:text-[#2d6fa3] hover:file:bg-[#2d6fa3]/20">
+                        @error('image')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Image Alt Text</label>
-                    <input type="text" name="image_alt" value="{{ old('image_alt', $existingImage->alt ?? '') }}"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                           placeholder="Describe the image for accessibility">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Image Alt Text</label>
+                        <input type="text" name="image_alt" value="{{ old('image_alt', $existingImage->alt ?? '') }}"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="Describe the image for accessibility">
+                    </div>
                 </div>
 
                 {{-- Preview for new upload --}}
@@ -149,7 +151,7 @@
             </div>
 
             
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="linkManager({{ $page_section->links->toJson() }})">
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4" x-data="linkManager({{ $page_section->links->toJson() }})">
                 <div class="flex items-center justify-between">
                     <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                         <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
@@ -206,7 +208,7 @@
             </div>
 
             {{-- Settings --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8">
                 <h3 class="font-semibold text-gray-700 text-sm mb-4 flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

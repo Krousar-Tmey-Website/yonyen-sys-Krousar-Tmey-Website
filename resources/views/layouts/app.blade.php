@@ -80,7 +80,7 @@ function switchLang(lang) {
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-9">
             <span class="text-white/60 text-xs">{{ $settings['site_tagline'] ?? "Cambodia's first organization helping disadvantaged children since 1991" }}</span>
             <div class="flex items-center gap-5">
-                <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="text-white/60 hover:text-white transition-colors text-xs">{{ __('Contact') }}</a>
+                <a href="{{ route('contact') }}" class="text-white/60 hover:text-white transition-colors text-xs">{{ __('Contact') }}</a>
                 <span class="text-white/20">|</span>
                 <div class="flex items-center gap-3">
                     @php
@@ -160,6 +160,7 @@ function switchLang(lang) {
                     $isInvolved  = request()->routeIs('involved') || request()->routeIs('jobs.*') || request()->routeIs('volunteer') || request()->routeIs('books.*');
                     $isNews      = request()->routeIs('news') || request()->routeIs('news.*');
                     $isResources = request()->routeIs('resources') || request()->routeIs('reports.*') || request()->routeIs('resource-pages.*') || request()->routeIs('media') || request()->routeIs('words-pictures');
+                    $isContact   = request()->routeIs('contact');
                 @endphp
                 <div class="hidden lg:flex items-center gap-0.5 xl:gap-1 text-sm flex-shrink-0">
 
@@ -270,7 +271,7 @@ function switchLang(lang) {
                             </div>
                         </div>
                     </div>
-                    <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="nav-link px-2 xl:px-3 py-2 rounded-lg hover:bg-gray-50 whitespace-nowrap">{{ __('Contact') }}</a>
+                    <a href="{{ route('contact') }}" class="nav-link {{ $isContact ? 'active' : '' }} px-2 xl:px-3 py-2 rounded-lg hover:bg-gray-50 whitespace-nowrap">{{ __('Contact') }}</a>
                 </div>
 
                 {{-- CTA + Mobile toggle --}}
@@ -339,7 +340,7 @@ function switchLang(lang) {
                 <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg {{ $isInvolved ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Get Involved') }}</a>
                 <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg {{ $isNews ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('News') }}</a>
                 <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg {{ $isResources ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Resources') }}</a>
-                <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Contact') }}</a>
+                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg {{ $isContact ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Contact') }}</a>
                 <div class="pt-3 pb-1 border-t border-gray-100 mt-2">
                     <div class="flex items-center gap-2 mb-4 notranslate" x-data="{ lang: getCurrentLang() }">
                         <button @click="switchLang('en')" :class="lang === 'en' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
@@ -446,7 +447,7 @@ function switchLang(lang) {
                         <li><a href="{{ route('campaigns.index') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Campaigns') }}</a></li>
                         <li><a href="{{ route('news') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('News') }}</a></li>
                         <li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Resources') }}</a></li>
-                        <li><a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Contact') }}</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Contact') }}</a></li>
                     </ul>
                 </div>
 
