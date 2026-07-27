@@ -18,7 +18,6 @@
         }
         return $settings[$key] ?? $default;
     };
-
     $transparencyBannerImage = $settings['transparency_banner_image'] ?? null;
     $transparencyBannerImageUrl = $transparencyBannerImage ? (str_starts_with($transparencyBannerImage, 'http') ? $transparencyBannerImage : asset('storage/' . $transparencyBannerImage)) : asset('images/children.jpg');
     $transparencyBannerOverlayColor = $settings['transparency_banner_overlay_color'] ?? '#1a3c6e';
@@ -32,7 +31,7 @@
     <div class="relative z-10 max-w-4xl mx-auto px-6">
         <span class="hero-reveal hero-reveal-delay-1 inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $transparencyBannerBadge }}</span>
         <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-5xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
-            {{ $t('transparency_title', 'Transparency and Accountability') }}
+            {{ $t('transparency_title', 'Transparency and Accountabilitys') }}
         </h1>
         <div class="rich-text-content hero-reveal hero-reveal-delay-3 text-white/90 text-lg leading-relaxed max-w-2xl mx-auto mt-6 drop-shadow-md">
             {!! $transparencyBannerSubtitle !!}
