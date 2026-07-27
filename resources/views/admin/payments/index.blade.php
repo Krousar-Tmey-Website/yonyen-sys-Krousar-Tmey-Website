@@ -11,7 +11,7 @@
 
 @section('content')
 
-<div class="payments-page max-w-3xl mx-auto" x-data="paymentManager()" x-init="init()">
+<div class="payments-page" x-data="paymentManager()" x-init="init()">
     {{-- Residency Selector Tabs (styled like public donate page) --}}
     <div style="margin-bottom: 24px;">
         <div class="bg-white rounded-xl border border-slate-200/80 p-1 shadow-2xs flex flex-wrap lg:flex-nowrap justify-between gap-1 w-full">
@@ -56,7 +56,7 @@
     </div>
 
     {{-- Page Header --}}
-    <div class="payments-header">
+    <div class="payments-header" :class="(tag === 'france' || tag === 'switzerland' || tag === 'elsewhere') ? 'max-w-3xl mx-auto' : 'max-w-5xl mx-auto'">
         <div class="payments-header-left">
         </div>
         <div class="payments-header-right" style="display: flex; gap: 12px; align-items: center;">
@@ -87,7 +87,7 @@
             $fr = fn($key, $default = '') => old($key, $settings['france_' . $key] ?? $default);
         @endphp
 
-        <div class="w-full space-y-6">
+        <div class="max-w-3xl mx-auto space-y-6">
             <form action="{{ route('admin.donate-content.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 <input type="hidden" name="redirect_tag" value="france">
@@ -320,7 +320,7 @@
         @php
             $ch = fn($key, $default = '') => old($key, $settings['switzerland_' . $key] ?? $default);
         @endphp
-        <div class="w-full space-y-6">
+        <div class="max-w-3xl mx-auto space-y-6">
             <form action="{{ route('admin.donate-content.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 <input type="hidden" name="redirect_tag" value="switzerland">
@@ -475,7 +475,7 @@
         @php
             $el = fn($key, $default = '') => old($key, $settings[$key] ?? $default);
         @endphp
-        <form action="{{ route('admin.donate-content.update') }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.donate-content.update') }}" method="POST" class="max-w-3xl mx-auto space-y-6">
             @csrf
             <input type="hidden" name="redirect_tag" value="elsewhere">
 
@@ -541,7 +541,7 @@
          OTHER TABS: Payment Methods Table
          (Cambodia and "All Methods" use the payment methods table)
          ════════════════════════════════════════════════ --}}
-    <div x-show="tag !== 'france' && tag !== 'elsewhere' && tag !== 'switzerland'" class="payments-content">
+    <div x-show="tag !== 'france' && tag !== 'elsewhere' && tag !== 'switzerland'" class="payments-content max-w-5xl mx-auto">
 
         {{-- Filter Bar --}}
         <div class="payments-filter-bar" style="border-top: none;">
@@ -658,7 +658,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         '    <span style="font-size:11px;color:#94a3b8;">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</span>',
                         '    <button type="button"',
                         '            style="background:#f1f5f9;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px;color:#64748b;font-weight:500;"',
-                        '            onclick="event.stopPropagation(); document.getElementById(\\'helloassoLogoInput\\').value=\\'\\'; document.getElementById(\\'helloassoPreview\\').innerHTML=\\'\\'; document.getElementById(\\'helloassoPreview\\').classList.add(\\'hidden\\'); document.getElementById(\\'helloassoPlaceholder\\').classList.remove(\\'hidden\\'); document.getElementById(\\'helloassoUploadZone\\').classList.remove(\\'has-file\\');">',
+                        '            onclick="event.stopPropagation(); document.getElementById(\'helloassoLogoInput\').value=\'\'; document.getElementById(\'helloassoPreview\').innerHTML=\'\'; document.getElementById(\'helloassoPreview\').classList.add(\'hidden\'); document.getElementById(\'helloassoPlaceholder\').classList.remove(\'hidden\'); document.getElementById(\'helloassoUploadZone\').classList.remove(\'has-file\');">',
                         '        × Remove',
                         '    </button>',
                         '</div>',
@@ -696,7 +696,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         '    <span style="font-size:11px;color:#94a3b8;">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</span>',
                         '    <button type="button"',
                         '            style="background:#f1f5f9;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px;color:#64748b;font-weight:500;"',
-                        '            onclick="event.stopPropagation(); document.getElementById(\\'paypalLogoInput\\').value=\\'\\'; document.getElementById(\\'paypalLogoPreview\\').innerHTML=\\'\\'; document.getElementById(\\'paypalLogoPreview\\').classList.add(\\'hidden\\'); document.getElementById(\\'paypalLogoPlaceholder\\').classList.remove(\\'hidden\\'); document.getElementById(\\'paypalLogoUploadZone\\').classList.remove(\\'has-file\\');">',
+                        '            onclick="event.stopPropagation(); document.getElementById(\'paypalLogoInput\').value=\'\'; document.getElementById(\'paypalLogoPreview\').innerHTML=\'\'; document.getElementById(\'paypalLogoPreview\').classList.add(\'hidden\'); document.getElementById(\'paypalLogoPlaceholder\').classList.remove(\'hidden\'); document.getElementById(\'paypalLogoUploadZone\').classList.remove(\'has-file\');">',
                         '        × Remove',
                         '    </button>',
                         '</div>',
