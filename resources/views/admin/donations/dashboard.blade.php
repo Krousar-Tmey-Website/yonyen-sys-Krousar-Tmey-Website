@@ -74,17 +74,30 @@
     <div class="lg:col-span-3 fade-in d4">
         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             <div class="flex items-center justify-between px-5 py-3 border-b border-gray-50">
-                <h2 class="font-bold text-gray-800 text-sm">Monthly Donations</h2>
+                <h2 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    </span>
+                    Monthly Donations
+                </h2>
                 <div class="flex items-center gap-2">
+                    <select onchange="location.href = '{{ route('admin.donations.dashboard') }}?year=' + this.value"
+                            class="text-xs text-gray-600 bg-gray-50 border border-gray-100 px-2.5 py-1 rounded-full font-medium focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 cursor-pointer">
+                        @foreach($availableYears as $y)
+                        <option value="{{ $y }}" {{ (int) $year === $y ? 'selected' : '' }}>{{ $y }}</option>
+                        @endforeach
+                    </select>
                     <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full font-medium">{{ count($donationMonths) }} months</span>
                 </div>
             </div>
             <div class="p-4">
-                <canvas id="monthlyChart" height="125"
-                    data-months='@json($donationMonths)'
-                    data-totals='@json($donationTotals)'
-                    data-counts='@json($donationCounts)'>
-                </canvas>
+                <div class="relative h-[280px]">
+                    <canvas id="monthlyChart"
+                        data-months='@json($donationMonths)'
+                        data-totals='@json($donationTotals)'
+                        data-counts='@json($donationCounts)'>
+                    </canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -93,7 +106,12 @@
     <div class="lg:col-span-2 fade-in d5">
         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden h-full">
             <div class="flex items-center justify-between px-5 py-3 border-b border-gray-50">
-                <h2 class="font-bold text-gray-800 text-sm">By Payment Method</h2>
+                <h2 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-green-50 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    </span>
+                    By Payment Method
+                </h2>
                 <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full font-medium">{{ $byPaymentMethod->count() }} methods</span>
             </div>
             <div class="p-4">
@@ -135,7 +153,12 @@
     <div class="fade-in d6">
         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden h-full">
             <div class="px-5 py-3 border-b border-gray-50">
-                <h2 class="font-bold text-gray-800 text-sm">Donation Types</h2>
+                <h2 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-orange-50 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+                    </span>
+                    Donation Types
+                </h2>
             </div>
             <div class="p-4 flex items-center justify-center">
                 @if($byType->isEmpty())
@@ -156,7 +179,12 @@
     <div class="lg:col-span-2 fade-in d7">
         <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             <div class="flex items-center justify-between px-5 py-3 border-b border-gray-50">
-                <h2 class="font-bold text-gray-800 text-sm">Recent Donations</h2>
+                <h2 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-purple-50 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </span>
+                    Recent Donations
+                </h2>
                 @if($recentDonations->isNotEmpty())
                 <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full font-medium">Last 20</span>
                 @endif
@@ -233,77 +261,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const canvas = document.getElementById('monthlyChart');
-    if (!canvas) return;
-
-    const labels   = JSON.parse(canvas.dataset.months);
-    const totals   = JSON.parse(canvas.dataset.totals);
-    const counts   = JSON.parse(canvas.dataset.counts);
-
-    if (!labels || labels.length === 0) return;
-
-    new Chart(canvas, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Amount ($)',
-                    data: totals,
-                    backgroundColor: 'rgba(45, 111, 163, 0.7)',
-                    borderColor: '#2d6fa3',
-                    borderWidth: 2,
-                    borderRadius: 6,
-                    borderSkipped: false,
-                    hoverBackgroundColor: '#2d6fa3',
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: '#1e293b',
-                    titleFont: { size: 13 },
-                    bodyFont: { size: 12 },
-                    padding: 10,
-                    cornerRadius: 8,
-                    callbacks: {
-                        label: function(ctx) { return '$' + ctx.raw.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    suggestedMax: 100,
-                    title: {
-                        display: true,
-                        text: 'Amount ($)',
-                        color: '#64748b',
-                        font: { size: 11 },
-                    },
-                    grid: { color: '#f1f5f9' },
-                    ticks: {
-                        color: '#94a3b8',
-                        font: { size: 11 },
-                        precision: 2,
-                        callback: function(value) { return '$' + value; }
-                    }
-                },
-                x: {
-                    grid: { display: false },
-                    ticks: {
-                        color: '#94a3b8',
-                        font: { size: 11 },
-                    }
-                }
-            }
-        }
-    });
-
     const typeCanvas = document.getElementById('typeChart');
     if (typeCanvas) {
         const typeLabels = JSON.parse(typeCanvas.dataset.labels);

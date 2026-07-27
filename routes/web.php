@@ -101,8 +101,9 @@ Route::get('/who-we-are/presentation', function () {
 
 Route::get('/who-we-are/transparency', function () {
     $settings = HomeSetting::allKeyed();
+    $reports = AnnualReport::active()->get();
 
-    return view('transparency', compact('settings'));
+    return view('transparency', compact('settings', 'reports'));
 })->name('transparency');
 
 Route::get('/our-programs', function () {
@@ -290,9 +291,13 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Media page (public /media)
     Route::get('media-page', [Admin\MediaPageController::class, 'index'])->name('media-page.index');
     Route::post('media-page', [Admin\MediaPageController::class, 'update'])->name('media-page.update');
+    // Media banner (for the Media Page tabs)
+    Route::get('media-banner', [Admin\MediaBannerController::class, 'index'])->name('media-banner.index');
+    Route::post('media-banner', [Admin\MediaBannerController::class, 'update'])->name('media-banner.update');
     // Words and Pictures application (public /words-and-pictures)
     Route::get('words-pictures', [Admin\WordsPicturesController::class, 'index'])->name('words-pictures.index');
     Route::post('words-pictures', [Admin\WordsPicturesController::class, 'update'])->name('words-pictures.update');
+    Route::post('words-pictures/banner', [Admin\WordsPicturesController::class, 'updateBanner'])->name('words-pictures.banner.update');
 
     // Topics (Resource Pages) — the categories News tags link to
     Route::resource('resource-pages', Admin\ResourcePageController::class)
@@ -343,6 +348,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Who We Are
     Route::get('presentation', [Admin\PresentationController::class, 'index'])->name('presentation.index');
     Route::post('presentation', [Admin\PresentationController::class, 'update'])->name('presentation.update');
+    Route::post('presentation/banner', [Admin\PresentationController::class, 'updateBanner'])->name('presentation.banner.update');
     Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show'])->parameters(['presentation-slides' => 'slide']);
     Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show'])->parameters(['principle-slides' => 'slide']);
     Route::resource('partners', Admin\PartnerController::class)->except(['show']);
@@ -362,9 +368,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('worldwide-partners/settings', [Admin\WorldwidePartnerController::class, 'updateSettings'])
         ->name('worldwide-partners.settings');
 
-    Route::get('transparency', [Admin\TransparencyController::class, 'index'])->name('transparency.index');
     Route::post('transparency-content', [Admin\TransparencyController::class, 'updateContent'])->name('transparency.content.update');
     Route::post('transparency-banner', [Admin\TransparencyController::class, 'updateBanner'])->name('transparency.banner.update');
+    Route::resource('transparency', Admin\TransparencyController::class)
+        ->except(['show'])
+        ->parameters(['transparency' => 'report']);
 
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);

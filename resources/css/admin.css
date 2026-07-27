@@ -2022,6 +2022,7 @@ select.form-control {
 }
 .payments-table {
     width: 100%;
+    max-width: 1120px;
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;

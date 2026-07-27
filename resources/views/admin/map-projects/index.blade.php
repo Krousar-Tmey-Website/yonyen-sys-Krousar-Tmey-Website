@@ -101,7 +101,7 @@
 }
 </style>
 
-<div class="max-w-5xl mx-auto space-y-8"
+<div class="space-y-8"
      x-data="mapProjectsManager()">
 
     {{-- ===== TAB NAVIGATION ===== --}}
