@@ -299,6 +299,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('words-pictures', [Admin\WordsPicturesController::class, 'update'])->name('words-pictures.update');
     Route::post('words-pictures/banner', [Admin\WordsPicturesController::class, 'updateBanner'])->name('words-pictures.banner.update');
 
+    // News Banner
+    Route::get('news-banner', [Admin\NewsController::class, 'bannerIndex'])->name('news-banner.index');
+    Route::post('news-banner', [Admin\NewsController::class, 'updateBanner'])->name('news-banner.update');
+
     // Topics (Resource Pages) — the categories News tags link to
     Route::resource('resource-pages', Admin\ResourcePageController::class)
         ->except(['show'])

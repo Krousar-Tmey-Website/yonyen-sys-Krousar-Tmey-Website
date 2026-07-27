@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\ResourcePage;
 use Illuminate\Http\Request;
@@ -14,7 +15,8 @@ class NewsController extends Controller
     public function index()
     {
         $articles = News::latest()->paginate(12);
-        return view('admin.news.index', compact('articles'));
+        $settings = HomeSetting::allKeyed();
+        return view('admin.news.index', compact('articles', 'settings'));
     }
 
     public function create()
@@ -256,5 +258,70 @@ class NewsController extends Controller
 
         $news->delete();
         return redirect()->route('admin.news.index')->with('success', 'Article deleted.');
+    }
+
+    /**
+     * Show the News banner settings page.
+     */
+    public function bannerIndex()
+    {
+        $settings = HomeSetting::allKeyed();
+        $articles = News::latest()->paginate(12);
+        return view('admin.news-banner.index', compact('settings', 'articles'));
+    }
+
+    /**
+     * Handle the News banner settings update.
+     */
+    public function updateBanner(Request $request)
+    {
+        $request->validate([
+            'news_banner_badge'         => ['nullable', 'string', 'max:255'],
+            'news_banner_title'         => ['nullable', 'string', 'max:255'],
+            'news_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
+            'news_banner_overlay_color' => ['nullable', 'string', 'max:20'],
+            'news_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
+            'news_banner_image_url'     => ['nullable', 'url', 'max:2048'],
+            'news_banner_btn1_text'     => ['nullable', 'string', 'max:100'],
+            'news_banner_btn1_url'      => ['nullable', 'string', 'max:500'],
+            'news_banner_btn2_text'     => ['nullable', 'string', 'max:100'],
+            'news_banner_btn2_url'      => ['nullable', 'string', 'max:500'],
+            'news_banner_btn3_text'     => ['nullable', 'string', 'max:100'],
+            'news_banner_btn3_url'      => ['nullable', 'string', 'max:500'],
+        ]);
+
+        HomeSetting::setValue('news_banner_badge', $request->input('news_banner_badge', ''));
+        HomeSetting::setValue('news_banner_title', $request->input('news_banner_title', ''));
+        HomeSetting::setValue('news_banner_subtitle', $request->input('news_banner_subtitle', ''));
+        HomeSetting::setValue('news_banner_overlay_color', $request->input('news_banner_overlay_color', ''));
+        HomeSetting::setValue('news_banner_btn1_text', $request->input('news_banner_btn1_text', ''));
+        HomeSetting::setValue('news_banner_btn1_url', $request->input('news_banner_btn1_url', ''));
+        HomeSetting::setValue('news_banner_btn2_text', $request->input('news_banner_btn2_text', ''));
+        HomeSetting::setValue('news_banner_btn2_url', $request->input('news_banner_btn2_url', ''));
+        HomeSetting::setValue('news_banner_btn3_text', $request->input('news_banner_btn3_text', ''));
+        HomeSetting::setValue('news_banner_btn3_url', $request->input('news_banner_btn3_url', ''));
+
+        if ($request->hasFile('news_banner_image')) {
+            $existing = HomeSetting::getValue('news_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            $path = $request->file('news_banner_image')->store('news_banner', 'public');
+            HomeSetting::setValue('news_banner_image', $path);
+        } elseif ($request->filled('news_banner_image_url')) {
+            $existing = HomeSetting::getValue('news_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            HomeSetting::setValue('news_banner_image', $request->input('news_banner_image_url'));
+        } elseif ($request->boolean('news_banner_image_clear')) {
+            $existing = HomeSetting::getValue('news_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            HomeSetting::setValue('news_banner_image', '');
+        }
+
+        return redirect()->route('admin.news-banner.index')->with('success', 'News banner updated.');
     }
 }
