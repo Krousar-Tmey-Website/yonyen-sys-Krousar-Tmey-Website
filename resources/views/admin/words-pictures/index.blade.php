@@ -5,10 +5,10 @@
 
 @section('content')
 
-<div class="max-w-4xl mx-auto" x-data="{ tab: 'banner', lang: 'en' }">
+<div x-data="{ tab: 'banner', lang: 'en' }">
 
     {{-- ── Professional Page Header ── --}}
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:p-8 mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2.5">
@@ -103,7 +103,7 @@
     </div>
 
     {{-- Banner Form --}}
-    <form action="{{ route('admin.words-pictures.banner.update') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5" x-data="bilingualForm()">
+    <form action="{{ route('admin.words-pictures.banner.update') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-5" x-data="bilingualForm()">
         @csrf
         <div class="flex items-center justify-between gap-3">
             <h3 class="font-bold text-gray-700 text-sm">Page Banner</h3>
@@ -302,7 +302,7 @@
         @csrf
 
         {{-- Page Title --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
                     <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -316,7 +316,7 @@
         </div>
 
         {{-- Objective --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
@@ -348,7 +348,7 @@
         </div>
 
         {{-- Project Description --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
@@ -440,7 +440,7 @@
         </div>
 
         {{-- QR Code --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
                     <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -476,7 +476,7 @@
         </div>
 
         {{-- Buttons --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -505,7 +505,7 @@
         </div>
 
         {{-- Photo --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
                     <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -541,7 +541,7 @@
         </div>
 
         {{-- In The News --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
