@@ -121,11 +121,16 @@ class MapProjectController extends Controller
     public function updateSettings(Request $request)
     {
         $data = $request->validate([
-            'structure_heading'         => ['nullable', 'string', 'max:255'],
-            'structure_welfare_title'   => ['nullable', 'string', 'max:255'],
+            'structure_heading'         => ['nullable', 'string', 'max:1000'],
+            'structure_heading_fr'      => ['nullable', 'string', 'max:1000'],
+            'structure_welfare_title'   => ['nullable', 'string', 'max:1000'],
+            'structure_welfare_title_fr' => ['nullable', 'string', 'max:1000'],
             'structure_welfare_items'   => ['nullable', 'string'],
-            'structure_education_title' => ['nullable', 'string', 'max:255'],
+            'structure_welfare_items_fr' => ['nullable', 'string'],
+            'structure_education_title' => ['nullable', 'string', 'max:1000'],
+            'structure_education_title_fr' => ['nullable', 'string', 'max:1000'],
             'structure_education_items' => ['nullable', 'string'],
+            'structure_education_items_fr' => ['nullable', 'string'],
         ]);
 
         foreach ($data as $key => $value) {

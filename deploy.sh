@@ -34,11 +34,11 @@ npm run build
 
 # 6. Clear all old caches (Fail-safe)
 echo "=> Clearing old caches..."
-php artisan cache:clear || true
-php artisan config:clear || true
-php artisan route:clear || true
-php artisan view:clear || true
-php artisan event:clear || true
+php artisan cache:clear 
+php artisan config:clear 
+php artisan route:clear 
+php artisan view:clear 
+php artisan event:clear 
 
 # 7. Run database migrations (Fail-safe)
 echo "=> Running database migrations..."
@@ -46,10 +46,10 @@ php artisan migrate --force || true
 
 # 8. Generate Performance Caches (Fail-safe)
 echo "=> Generating performance caches..."
-php artisan config:cache || true
-php artisan route:cache || true
-php artisan view:cache || true
-php artisan event:cache || true
+php artisan config:cache 
+php artisan route:cache 
+php artisan view:cache 
+php artisan event:cache 
 
 echo "================================================="
 echo "✅ Deployment & Performance Boost Complete!"

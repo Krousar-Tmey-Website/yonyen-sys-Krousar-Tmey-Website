@@ -868,8 +868,22 @@
 </section>
 {{-- ===== PROGRAM STRUCTURE MAP SECTION ===== --}}
 @php
-$structureWelfareItems = array_filter(explode("\n", $settings['structure_welfare_items'] ?? "2 Temporary Protection Centers\n2 Long-term Protection Centers\n2 Family Houses\nOutside Cases"));
-$structureEducationItems = array_filter(explode("\n", $settings['structure_education_items'] ?? "5 Special Education High Schools"));
+// Picks the French value for a HomeSetting key when the visitor's locale is
+// French and a translation was actually provided, otherwise falls back to the
+// English value (or the given default).
+$structureT = function (string $key, string $default = '') use ($settings) {
+    if (app()->getLocale() === 'fr' && !empty($settings[$key.'_fr'] ?? null)) {
+        return $settings[$key.'_fr'];
+    }
+    return $settings[$key] ?? $default;
+};
+// CKEditor-authored single-line fields (heading/titles) come back wrapped in a
+// single <p>...</p> block — unwrap that so they render cleanly inside <h2>/<h3>.
+$structureUnwrapP = function (string $html): string {
+    return preg_replace('/^\s*<p>(.*)<\/p>\s*$/s', '$1', trim($html));
+};
+$structureWelfareItemsHtml = $structureT('structure_welfare_items', '<p>2 Temporary Protection Centers</p><p>2 Long-term Protection Centers</p><p>2 Family Houses</p><p>Outside Cases</p>');
+$structureEducationItemsHtml = $structureT('structure_education_items', '<p>5 Special Education High Schools</p>');
 $structureImage = $settings['structure_image'] ?? null;
 @endphp
 <section class="py-16 lg:py-24 bg-white">
@@ -1161,36 +1175,32 @@ $structureImage = $settings['structure_image'] ?? null;
             <div>
 
                 <h2 class="text-3xl font-bold text-[#1a3c6e] mb-8">
-                    {{ $settings['structure_heading'] ?? "KROUSAR THMEY'S STRUCTURES" }}
+                    {!! $structureUnwrapP($structureT('structure_heading', "<p>KROUSAR THMEY'S STRUCTURES</p>")) !!}
                 </h2>
 
                 {{-- Child Welfare --}}
-                @if(!empty($structureWelfareItems))
+                @if(!empty(strip_tags($structureWelfareItemsHtml)))
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">
-                        • {{ $settings['structure_welfare_title'] ?? 'Child Welfare Program' }}
+                        • {!! $structureUnwrapP($structureT('structure_welfare_title', '<p>Child Welfare Program</p>')) !!}
                     </h3>
 
-                    <ul class="space-y-2 ml-8 text-gray-600">
-                        @foreach($structureWelfareItems as $item)
-                        <li>– {{ $item }}</li>
-                        @endforeach
-                    </ul>
+                    <div class="structure-list-content space-y-2 ml-8 text-gray-600">
+                        {!! $structureWelfareItemsHtml !!}
+                    </div>
                 </div>
                 @endif
 
                 {{-- Education --}}
-                @if(!empty($structureEducationItems))
+                @if(!empty(strip_tags($structureEducationItemsHtml)))
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">
-                        • {{ $settings['structure_education_title'] ?? 'Education for Deaf or Blind Children Program' }}
+                        • {!! $structureUnwrapP($structureT('structure_education_title', '<p>Education for Deaf or Blind Children Program</p>')) !!}
                     </h3>
 
-                    <ul class="space-y-2 ml-8 text-gray-600">
-                        @foreach($structureEducationItems as $item)
-                        <li>– {{ $item }}</li>
-                        @endforeach
-                    </ul>
+                    <div class="structure-list-content space-y-2 ml-8 text-gray-600">
+                        {!! $structureEducationItemsHtml !!}
+                    </div>
                 </div>
                 @endif
             </div>
@@ -1199,6 +1209,16 @@ $structureImage = $settings['structure_image'] ?? null;
 
     </div>
 </section>
+<style>
+    /* CKEditor renders each list line as its own <p> — prefix each with a dash
+       so the "Structures" panel keeps its bullet-list look. */
+    .structure-list-content > p {
+        margin: 0;
+    }
+    .structure-list-content > p::before {
+        content: "– ";
+    }
+</style>
 {{-- ===== PAGE SECTIONS (Focus / Video / etc.) ===== --}}
 @if($pageSections->isNotEmpty())
 @foreach($pageSections as $index => $section)

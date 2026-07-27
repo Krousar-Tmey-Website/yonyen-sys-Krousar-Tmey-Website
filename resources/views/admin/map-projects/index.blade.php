@@ -436,55 +436,81 @@
          x-transition:leave-end="opacity-0 translate-y-2">
 
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/30">
-            <div class="flex items-center gap-3">
-                <span class="text-lg"></span>
-                <h3 class="font-bold text-gray-800">Right Side Content</h3>
+        <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/30 flex items-center justify-between">
+            <div>
+                <div class="flex items-center gap-3">
+                    <span class="text-lg"></span>
+                    <h3 class="font-bold text-gray-800">Right Side Content</h3>
+                </div>
+                <p class="text-xs text-gray-400 mt-1 ml-10">
+                    Edit the text that appears on the right side of the Cambodia map on the homepage.
+                </p>
             </div>
-            <p class="text-xs text-gray-400 mt-1 ml-10">
-                Edit the text that appears on the right side of the Cambodia map on the homepage.
-            </p>
+            <div class="lang-tabs" title="Toggle editing language (English / French)">
+                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+            </div>
         </div>
 
-        <form action="{{ route('admin.map-projects.settings') }}" method="POST" class="p-6 space-y-5">
+        @php $structureHeadingDefault = "KROUSAR THMEY'S STRUCTURES"; @endphp
+        <form action="{{ route('admin.map-projects.settings') }}" method="POST" class="p-6 space-y-5" x-data="bilingualForm()">
             @csrf
 
             {{-- Section Heading --}}
-            <div>
-                <label for="structure_heading" class="block text-sm font-medium text-gray-700 mb-1.5">Section Heading (Main Title)</label>
-                <input type="text" id="structure_heading" name="structure_heading"
-                       value="{{ old('structure_heading', $settings['structure_heading'] ?? "KROUSAR THMEY'S STRUCTURES") }}"
-                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            <div x-show="lang === 'en'">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Section Heading (Main Title)</label>
+                <x-admin.rich-text name="structure_heading" :value="old('structure_heading', $settings['structure_heading'] ?? $structureHeadingDefault)" lang="en" :rows="1" />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Section Heading (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="structure_heading_fr" :value="old('structure_heading_fr', $settings['structure_heading_fr'] ?? '')" lang="fr" :rows="1" placeholder="ex. STRUCTURES DE KROUSAR THMEY" />
+                <p class="mt-1.5 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English text.</p>
             </div>
 
             {{-- Welfare Title --}}
-            <div>
-                <label for="structure_welfare_title" class="block text-sm font-medium text-gray-700 mb-1.5">Welfare Section Title</label>
-                <input type="text" id="structure_welfare_title" name="structure_welfare_title"
-                       value="{{ old('structure_welfare_title', $settings['structure_welfare_title'] ?? 'Child Welfare Program') }}"
-                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            <div x-show="lang === 'en'">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Welfare Section Title</label>
+                <x-admin.rich-text name="structure_welfare_title" :value="old('structure_welfare_title', $settings['structure_welfare_title'] ?? 'Child Welfare Program')" lang="en" :rows="1" />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Welfare Section Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="structure_welfare_title_fr" :value="old('structure_welfare_title_fr', $settings['structure_welfare_title_fr'] ?? '')" lang="fr" :rows="1" placeholder="ex. Programme de protection de l'enfance" />
+                <p class="mt-1.5 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English text.</p>
             </div>
 
             {{-- Welfare Items --}}
-            <div>
-                <label for="structure_welfare_items" class="block text-sm font-medium text-gray-700 mb-1.5">Welfare Items (one per line)</label>
-                <textarea id="structure_welfare_items" name="structure_welfare_items" rows="4"
-                          class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('structure_welfare_items', $settings['structure_welfare_items'] ?? "2 Temporary Protection Centers\n2 Long-term Protection Centers\n2 Family Houses\nOutside Cases") }}</textarea>
+            <div x-show="lang === 'en'">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Welfare Items (one per paragraph)</label>
+                <x-admin.rich-text name="structure_welfare_items" :value="old('structure_welfare_items', $settings['structure_welfare_items'] ?? '<p>2 Temporary Protection Centers</p><p>2 Long-term Protection Centers</p><p>2 Family Houses</p><p>Outside Cases</p>')" lang="en" :rows="4" />
+                <p class="mt-1.5 text-xs text-gray-400">Press Enter after each item to start a new line — each paragraph becomes a bullet on the public page.</p>
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Welfare Items (French, one per paragraph) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="structure_welfare_items_fr" :value="old('structure_welfare_items_fr', $settings['structure_welfare_items_fr'] ?? '')" lang="fr" :rows="4" placeholder="2 Centres de protection temporaire..." />
+                <p class="mt-1.5 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English list.</p>
             </div>
 
             {{-- Education Title --}}
-            <div>
-                <label for="structure_education_title" class="block text-sm font-medium text-gray-700 mb-1.5">Education Section Title</label>
-                <input type="text" id="structure_education_title" name="structure_education_title"
-                       value="{{ old('structure_education_title', $settings['structure_education_title'] ?? 'Education for Deaf or Blind Children Program') }}"
-                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            <div x-show="lang === 'en'">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Education Section Title</label>
+                <x-admin.rich-text name="structure_education_title" :value="old('structure_education_title', $settings['structure_education_title'] ?? 'Education for Deaf or Blind Children Program')" lang="en" :rows="1" />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Education Section Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="structure_education_title_fr" :value="old('structure_education_title_fr', $settings['structure_education_title_fr'] ?? '')" lang="fr" :rows="1" placeholder="ex. Programme d'éducation pour enfants sourds ou aveugles" />
+                <p class="mt-1.5 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English text.</p>
             </div>
 
             {{-- Education Items --}}
-            <div>
-                <label for="structure_education_items" class="block text-sm font-medium text-gray-700 mb-1.5">Education Items (one per line)</label>
-                <textarea id="structure_education_items" name="structure_education_items" rows="3"
-                          class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ old('structure_education_items', $settings['structure_education_items'] ?? '5 Special Education High Schools') }}</textarea>
+            <div x-show="lang === 'en'">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Education Items (one per paragraph)</label>
+                <x-admin.rich-text name="structure_education_items" :value="old('structure_education_items', $settings['structure_education_items'] ?? '<p>5 Special Education High Schools</p>')" lang="en" :rows="3" />
+                <p class="mt-1.5 text-xs text-gray-400">Press Enter after each item to start a new line — each paragraph becomes a bullet on the public page.</p>
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Education Items (French, one per paragraph) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="structure_education_items_fr" :value="old('structure_education_items_fr', $settings['structure_education_items_fr'] ?? '')" lang="fr" :rows="3" placeholder="5 écoles spécialisées..." />
+                <p class="mt-1.5 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English list.</p>
             </div>
 
 
