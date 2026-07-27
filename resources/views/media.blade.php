@@ -31,9 +31,47 @@ $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
             {{ $heroTitle }}
         </h1>
-        <div class="rich-text-content text-white/90 text-lg leading-relaxed drop-shadow-md">
+        <div class="rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md">
             {!! $heroSubtitle !!}
         </div>
+
+        @php
+            $btn1Text = $settings['media_banner_btn1_text'] ?? 'Donate Now';
+            $btn1Url  = $settings['media_banner_btn1_url'] ?? '/donate';
+            $btn2Text = $settings['media_banner_btn2_text'] ?? 'Get Involved';
+            $btn2Url  = $settings['media_banner_btn2_url'] ?? '/get-involved';
+            $btn3Text = $settings['media_banner_btn3_text'] ?? 'Annual Report';
+            $btn3Url  = $settings['media_banner_btn3_url'] ?? '/resources#annual-reports';
+        @endphp
+
+        @if($btn1Text || $btn2Text || $btn3Text)
+        <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
+            @if($btn1Text)
+            <a href="{{ $btn1Url }}" class="btn-primary text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                {{ $btn1Text }}
+            </a>
+            @endif
+            @if($btn2Text)
+            <a href="{{ $btn2Url }}" class="btn-outline text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                {{ $btn2Text }}
+            </a>
+            @endif
+            @if($btn3Text)
+            <a href="{{ $btn3Url }}" class="btn-outline text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                {{ $btn3Text }}
+            </a>
+            @endif
+        </div>
+        @endif
     </div>
 </section>
 

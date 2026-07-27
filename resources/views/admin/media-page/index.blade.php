@@ -181,6 +181,71 @@
                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
             </div>
 
+            {{-- Banner Action Buttons --}}
+            <div class="border-t border-gray-100 pt-4 space-y-4">
+                <p class="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    Banner Action Buttons
+                </p>
+                <p class="text-xs text-gray-400 -mt-2">Configure up to 3 buttons shown below the subtitle on the Media page banner. Leave any field empty to hide that button.</p>
+
+                {{-- Button 1 --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="media_banner_btn1_text" class="block text-xs font-medium text-gray-600 mb-1">Button 1 Text</label>
+                        <input type="text" id="media_banner_btn1_text" name="media_banner_btn1_text"
+                               value="{{ old('media_banner_btn1_text', $settings['media_banner_btn1_text'] ?? 'Donate Now') }}"
+                               placeholder="Donate Now"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label for="media_banner_btn1_url" class="block text-xs font-medium text-gray-600 mb-1">Button 1 URL</label>
+                        <input type="text" id="media_banner_btn1_url" name="media_banner_btn1_url"
+                               value="{{ old('media_banner_btn1_url', $settings['media_banner_btn1_url'] ?? '/donate') }}"
+                               placeholder="/donate"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                </div>
+
+                {{-- Button 2 --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="media_banner_btn2_text" class="block text-xs font-medium text-gray-600 mb-1">Button 2 Text</label>
+                        <input type="text" id="media_banner_btn2_text" name="media_banner_btn2_text"
+                               value="{{ old('media_banner_btn2_text', $settings['media_banner_btn2_text'] ?? 'Get Involved') }}"
+                               placeholder="Get Involved"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label for="media_banner_btn2_url" class="block text-xs font-medium text-gray-600 mb-1">Button 2 URL</label>
+                        <input type="text" id="media_banner_btn2_url" name="media_banner_btn2_url"
+                               value="{{ old('media_banner_btn2_url', $settings['media_banner_btn2_url'] ?? '/get-involved') }}"
+                               placeholder="/get-involved"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                </div>
+
+                {{-- Button 3 --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="media_banner_btn3_text" class="block text-xs font-medium text-gray-600 mb-1">Button 3 Text</label>
+                        <input type="text" id="media_banner_btn3_text" name="media_banner_btn3_text"
+                               value="{{ old('media_banner_btn3_text', $settings['media_banner_btn3_text'] ?? 'Annual Report') }}"
+                               placeholder="Annual Report"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div>
+                        <label for="media_banner_btn3_url" class="block text-xs font-medium text-gray-600 mb-1">Button 3 URL</label>
+                        <input type="text" id="media_banner_btn3_url" name="media_banner_btn3_url"
+                               value="{{ old('media_banner_btn3_url', $settings['media_banner_btn3_url'] ?? '/resources#annual-reports') }}"
+                               placeholder="/resources#annual-reports"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                </div>
+            </div>
+
             {{-- Hero Subtitle --}}
             <div x-show="lang === 'en'">
                 <label for="media_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Subtitle</label>
