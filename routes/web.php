@@ -251,11 +251,7 @@ Route::get('/storage/{path}', function (string $path) {
     ]);
 })->where('path', '.*')->name('storage.public');
 
-Route::get('/contact', function () {
-    $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
-
-    return view('contact', compact('offices'));
-})->name('contact');
+Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/partners', function () {
@@ -437,6 +433,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::patch('{contactInquiry}/status', [Admin\ContactInquiryController::class, 'updateStatus'])->name('status');
         Route::delete('{contactInquiry}', [Admin\ContactInquiryController::class, 'destroy'])->name('destroy');
     });
+
+    // Offices (Contact page cards + email routing)
+    Route::resource('offices', Admin\OfficeController::class)->except(['show']);
 
     // Newsletter Subscribers
     Route::prefix('newsletter')->name('newsletter.')->group(function () {
