@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('payment_methods', function (Blueprint $table) {
-            $table->text('description')->nullable()->after('redirect_url');
-        });
+        if (!Schema::hasColumn('payment_methods', 'description')) {
+            Schema::table('payment_methods', function (Blueprint $table) {
+                $table->text('description')->nullable()->after('redirect_url');
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('payment_methods', function (Blueprint $table) {
-            $table->dropColumn('description');
-        });
+        if (Schema::hasColumn('payment_methods', 'description')) {
+            Schema::table('payment_methods', function (Blueprint $table) {
+                $table->dropColumn('description');
+            });
+        }
     }
 };

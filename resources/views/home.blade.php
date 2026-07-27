@@ -1502,7 +1502,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
             @if(!empty($settings['cta_secondary_text']))
             <a href="{{ $settings['cta_secondary_url'] ?? route('get-involved') }}" class="btn-outline text-base btn-micro">{{ $settings['cta_secondary_text'] }}</a>
             @endif
-            <a href="{{ route('resources') }}" class="btn-outline text-base btn-micro">{{ $settings['cta_annual_report_text'] ?? 'Annual Report' }}</a>
+            <a href="{{ $settings['cta_annual_report_url'] ?? route('resources') }}" class="btn-outline text-base btn-micro">{{ $settings['cta_annual_report_text'] ?? 'Annual Report' }}</a>
         </div>
     </div>
 </section>

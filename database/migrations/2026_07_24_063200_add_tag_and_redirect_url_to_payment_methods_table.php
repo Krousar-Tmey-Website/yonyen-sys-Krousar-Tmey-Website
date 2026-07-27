@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payment_methods', function (Blueprint $table) {
-            $table->string('tag')->default('cambodia')->after('is_active');
-            $table->string('redirect_url', 500)->nullable()->after('tag');
+            if (!Schema::hasColumn('payment_methods', 'tag')) {
+                $table->string('tag')->default('cambodia')->after('is_active');
+            }
+
+            if (!Schema::hasColumn('payment_methods', 'redirect_url')) {
+                $table->string('redirect_url', 500)->nullable()->after('tag');
+            }
         });
     }
 
@@ -23,7 +28,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payment_methods', function (Blueprint $table) {
-            $table->dropColumn(['tag', 'redirect_url']);
+            $columns = array_filter(
+                ['tag', 'redirect_url'],
+                fn (string $column): bool => Schema::hasColumn('payment_methods', $column)
+            );
+
+            if ($columns !== []) {
+                $table->dropColumn($columns);
+            }
         });
     }
 };
