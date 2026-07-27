@@ -27,6 +27,22 @@
             ],
         ],
 
+        'cta' => [
+            'icon'   => '🎯',
+            'title'  => 'Call to Action Banner',
+            'fields' => [
+                ['key' => 'cta_background_image', 'label' => 'Background Image',                               'type' => 'image'],
+                ['key' => 'cta_label',            'label' => 'Badge Text',                                     'type' => 'text', 'placeholder' => 'Support Our Work'],
+                ['key' => 'cta_title',            'label' => 'Title',                                          'type' => 'text', 'placeholder' => 'Help a Child Build Their Future'],
+                ['key' => 'cta_subtitle',         'label' => 'Subtitle',                                       'type' => 'textarea', 'placeholder' => 'We guarantee that 100% of your donation...'],
+                ['key' => 'cta_primary_text',     'label' => 'Button 1 — Text (Donate Now)',                   'type' => 'text', 'placeholder' => 'Donate Now'],
+                ['key' => 'cta_primary_url',      'label' => 'Button 1 — URL',                                 'type' => 'url', 'placeholder' => '/donate'],
+                ['key' => 'cta_secondary_text',   'label' => 'Button 2 — Text (Get Involved)',                  'type' => 'text', 'placeholder' => 'Get Involved'],
+                ['key' => 'cta_secondary_url',    'label' => 'Button 2 — URL',                                 'type' => 'url', 'placeholder' => '/get-involved'],
+                ['key' => 'cta_annual_report_text','label' => 'Button 3 — Text (Annual Report)',                'type' => 'text', 'placeholder' => 'Annual Report'],
+                ['key' => 'cta_annual_report_url', 'label' => 'Button 3 — URL',                                'type' => 'url', 'placeholder' => '/resources'],
+            ],
+        ],
     ];
     @endphp
 
