@@ -286,6 +286,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Words and Pictures application (public /words-and-pictures)
     Route::get('words-pictures', [Admin\WordsPicturesController::class, 'index'])->name('words-pictures.index');
     Route::post('words-pictures', [Admin\WordsPicturesController::class, 'update'])->name('words-pictures.update');
+    Route::post('words-pictures/banner', [Admin\WordsPicturesController::class, 'updateBanner'])->name('words-pictures.banner.update');
 
     // Topics (Resource Pages) — the categories News tags link to
     Route::resource('resource-pages', Admin\ResourcePageController::class)
