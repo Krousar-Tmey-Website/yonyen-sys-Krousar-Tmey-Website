@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\HomeSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PresentationController extends Controller
 {
@@ -66,5 +67,62 @@ class PresentationController extends Controller
         }
 
         return redirect()->route('admin.presentation.index')->with('success', 'Presentation settings updated.');
+    }
+
+    /**
+     * Handle the banner tab form submission.
+     */
+    public function updateBanner(Request $request)
+    {
+        $request->validate([
+            'presentation_banner_badge'         => ['nullable', 'string', 'max:255'],
+            'presentation_banner_title'         => ['nullable', 'string', 'max:255'],
+            'presentation_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
+            'presentation_banner_subtitle_fr'   => ['nullable', 'string', 'max:1000'],
+            'presentation_banner_overlay_color' => ['nullable', 'string', 'max:20'],
+            'presentation_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
+            'presentation_banner_image_url'     => ['nullable', 'url', 'max:2048'],
+            'presentation_banner_btn1_text'     => ['nullable', 'string', 'max:100'],
+            'presentation_banner_btn1_url'      => ['nullable', 'string', 'max:500'],
+            'presentation_banner_btn2_text'     => ['nullable', 'string', 'max:100'],
+            'presentation_banner_btn2_url'      => ['nullable', 'string', 'max:500'],
+            'presentation_banner_btn3_text'     => ['nullable', 'string', 'max:100'],
+            'presentation_banner_btn3_url'      => ['nullable', 'string', 'max:500'],
+        ]);
+
+        HomeSetting::setValue('presentation_banner_badge', $request->input('presentation_banner_badge', ''));
+        HomeSetting::setValue('presentation_banner_title', $request->input('presentation_banner_title', ''));
+        HomeSetting::setValue('presentation_banner_subtitle', $request->input('presentation_banner_subtitle', ''));
+        HomeSetting::setValue('presentation_banner_subtitle_fr', $request->input('presentation_banner_subtitle_fr', ''));
+        HomeSetting::setValue('presentation_banner_overlay_color', $request->input('presentation_banner_overlay_color', ''));
+        HomeSetting::setValue('presentation_banner_btn1_text', $request->input('presentation_banner_btn1_text', ''));
+        HomeSetting::setValue('presentation_banner_btn1_url', $request->input('presentation_banner_btn1_url', ''));
+        HomeSetting::setValue('presentation_banner_btn2_text', $request->input('presentation_banner_btn2_text', ''));
+        HomeSetting::setValue('presentation_banner_btn2_url', $request->input('presentation_banner_btn2_url', ''));
+        HomeSetting::setValue('presentation_banner_btn3_text', $request->input('presentation_banner_btn3_text', ''));
+        HomeSetting::setValue('presentation_banner_btn3_url', $request->input('presentation_banner_btn3_url', ''));
+
+        if ($request->hasFile('presentation_banner_image')) {
+            $existing = HomeSetting::getValue('presentation_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            $path = $request->file('presentation_banner_image')->store('presentation', 'public');
+            HomeSetting::setValue('presentation_banner_image', $path);
+        } elseif ($request->filled('presentation_banner_image_url')) {
+            $existing = HomeSetting::getValue('presentation_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            HomeSetting::setValue('presentation_banner_image', $request->input('presentation_banner_image_url'));
+        } elseif ($request->boolean('presentation_banner_image_clear')) {
+            $existing = HomeSetting::getValue('presentation_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            HomeSetting::setValue('presentation_banner_image', '');
+        }
+
+        return redirect()->route('admin.presentation.index')->with('success', 'Presentation banner updated.');
     }
 }
