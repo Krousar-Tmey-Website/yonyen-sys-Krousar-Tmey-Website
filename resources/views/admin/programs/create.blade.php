@@ -21,7 +21,7 @@
     ];
 @endphp
 
-<div class="max-w-3xl mx-auto">
+<div>
     <form action="{{ route('admin.programs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6"
           data-program-form-state="{{ json_encode($programFormState, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) }}"
           x-data="programForm(JSON.parse($el.dataset.programFormState || '{}'))">
@@ -35,7 +35,7 @@
         </div>
         @endif
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -93,19 +93,12 @@
                     </div>
                     <div class="space-y-5">
                         <img :src="previewImageSrc" :alt="previewTitle" class="w-full rounded-3xl border-4 border-white shadow-xl object-cover max-h-[420px]">
-                        <div class="flex items-center justify-center gap-2">
-                            <span class="w-9 h-9 rounded-lg bg-[#1877f2]"></span>
-                            <span class="w-9 h-9 rounded-lg bg-[#0088cc]"></span>
-                            <span class="w-9 h-9 rounded-lg bg-[#0a66c2]"></span>
-                            <span class="w-9 h-9 rounded-lg bg-[#e1306c]"></span>
-                            <span class="w-9 h-9 rounded-lg bg-[#ff0000]"></span>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-5">
 
             {{-- Public page content --}}
             <div class="flex items-center justify-between">

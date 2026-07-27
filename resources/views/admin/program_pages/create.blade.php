@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-<div class="mx-auto max-w-6xl">
+<div>
     <form action="{{ route('admin.program-pages.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" x-data="bilingualForm()">
         @csrf
         @include('admin.program_pages._form')

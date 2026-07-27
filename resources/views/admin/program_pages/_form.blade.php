@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <div class="space-y-6 p-6">
+            <div class="space-y-6 p-6 lg:p-8">
                 <div class="grid gap-5 md:grid-cols-2">
                     <div x-show="lang === 'en'">
                         <label class="mb-2 block text-sm font-semibold text-slate-700">Title <span class="text-red-500">*</span></label>

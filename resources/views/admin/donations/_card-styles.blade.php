@@ -55,6 +55,10 @@
         .donate-create-card .card-body-inner { padding: 20px; }
         .donate-grid-2, .donate-grid-3 { grid-template-columns: 1fr; }
     }
+    @media (min-width: 1024px) {
+        .donate-create-card .card-body-inner { padding: 40px 48px; }
+        .donate-actions-bar { padding: 20px 48px; }
+    }
     .donate-field .field-label {
         display: block;
         font-size: 13px;

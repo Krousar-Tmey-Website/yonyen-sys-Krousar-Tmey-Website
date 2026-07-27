@@ -11,9 +11,16 @@ class HomeSetting extends Model
 {
     protected $fillable = ['key', 'value', 'label', 'group'];
 
+    // Settings are read dozens of times per request (every admin/public page reads
+    // several keys, and each <x-admin.rich-text> field render triggers its own
+    // App\Providers\AppServiceProvider view-composer lookup). Memoizing the full
+    // key/value table for the lifetime of the request turns that into a single
+    // query instead of one per call/component.
+    protected static ?array $cachedKeyed = null;
+
     public static function getValue(string $key, string $default = ''): string
     {
-        return static::where('key', $key)->value('value') ?? $default;
+        return static::allKeyed()[$key] ?? $default;
     }
 
     // Many keys (banner subtitles, mission/vision copy, transparency text, etc.) are
@@ -23,11 +30,12 @@ class HomeSetting extends Model
     public static function setValue(string $key, ?string $value): void
     {
         static::updateOrCreate(['key' => $key], ['value' => clean($value ?? '')]);
+        static::$cachedKeyed = null;
     }
 
     public static function allKeyed(): array
     {
-        return static::pluck('value', 'key')->toArray();
+        return static::$cachedKeyed ??= static::pluck('value', 'key')->toArray();
     }
 
     public static function colorValue(?string $value, string $default): string
