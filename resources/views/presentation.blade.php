@@ -19,6 +19,135 @@
 @endphp
 
 {{-- ========================================================
+     PRESENTATION BANNER (hero)
+     ======================================================== --}}
+@php
+$heroImage = $settings['presentation_banner_image'] ?? null;
+$heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/cultural.jpg');
+$heroTitle = $settings['presentation_banner_title'] ?? 'Krousar Thmey, the first Cambodian organization helping disadvantaged children';
+$heroSubtitle = $settings['presentation_banner_subtitle'] ?? 'Born in 1991 in the Site II refugee camp in Thailand, Krousar Thmey has been supporting children for over 25 years.';
+if (app()->getLocale() === 'fr' && !empty($settings['presentation_banner_subtitle_fr'] ?? null)) {
+    $heroSubtitle = $settings['presentation_banner_subtitle_fr'];
+}
+$heroBadge = $settings['presentation_banner_badge'] ?? 'Since 1991';
+$heroOverlayColor = $settings['presentation_banner_overlay_color'] ?? '#1a3c6e';
+$btn1Text = $settings['presentation_banner_btn1_text'] ?? 'Learn More';
+$btn1Url  = $settings['presentation_banner_btn1_url'] ?? '/our-programs';
+$btn2Text = $settings['presentation_banner_btn2_text'] ?? 'Donate Now';
+$btn2Url  = $settings['presentation_banner_btn2_url'] ?? '/donate';
+$btn3Text = $settings['presentation_banner_btn3_text'] ?? '';
+$btn3Url  = $settings['presentation_banner_btn3_url'] ?? '';
+@endphp
+
+<section class="relative py-28 md:py-36 overflow-hidden" id="presentation-banner">
+    {{-- Background image with slow zoom animation --}}
+    <div class="absolute inset-0 bg-cover bg-center animate-banner-zoom" style="background-image: url('{{ $heroImageUrl }}');"></div>
+    <div class="absolute inset-0" style="background-color: {{ $heroOverlayColor }}; opacity: 0.55;"></div>
+
+    {{-- Subtle gradient overlays for depth --}}
+    <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
+
+    <div class="pt-20 pb-20 relative z-10 max-w-3xl mx-auto px-6 text-center">
+        {{-- Badge: fade in then slide up --}}
+        <div class="animate-badge-reveal opacity-0">
+            <span class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-5 py-2 rounded-full mb-6 uppercase tracking-wider shadow-lg">{{ $heroBadge }}</span>
+        </div>
+
+        {{-- Title: fade in then slide up (delayed) --}}
+        <div class="animate-title-reveal opacity-0">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
+                {{ $heroTitle }}
+            </h1>
+        </div>
+
+        {{-- Subtitle: fade in then slide up (further delayed) --}}
+        <div class="animate-subtitle-reveal opacity-0">
+            <div class="rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md max-w-2xl mx-auto">
+                {!! $heroSubtitle !!}
+            </div>
+        </div>
+
+        {{-- Buttons: staggered entrance (further delayed) --}}
+        @if($btn1Text || $btn2Text || $btn3Text)
+        <div class="animate-buttons-reveal opacity-0">
+            <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
+                @if($btn1Text)
+                <a href="{{ $btn1Url }}" class="btn-primary text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                    {{ $btn1Text }}
+                </a>
+                @endif
+                @if($btn2Text)
+                <a href="{{ $btn2Url }}" class="btn-outline text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    {{ $btn2Text }}
+                </a>
+                @endif
+                @if($btn3Text)
+                <a href="{{ $btn3Url }}" class="btn-outline text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    {{ $btn3Text }}
+                </a>
+                @endif
+            </div>
+        </div>
+        @endif
+    </div>
+</section>
+
+{{-- Banner Animation Styles --}}
+<style>
+    /* ── Slow background zoom ─────────────────────────────── */
+    @keyframes bannerZoom {
+        0%   { transform: scale(1); }
+        100% { transform: scale(1.08); }
+    }
+    .animate-banner-zoom {
+        animation: bannerZoom 12s ease-out forwards;
+    }
+
+    /* ── Staggered content reveal ─────────────────────────── */
+    @keyframes fadeSlideUp {
+        0%   { opacity: 0; transform: translateY(30px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-badge-reveal {
+        animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    }
+
+    .animate-title-reveal {
+        animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+    }
+
+    .animate-subtitle-reveal {
+        animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+    }
+
+    .animate-buttons-reveal {
+        animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .animate-banner-zoom,
+        .animate-badge-reveal,
+        .animate-title-reveal,
+        .animate-subtitle-reveal,
+        .animate-buttons-reveal {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+    }
+</style>
+
+{{-- ========================================================
      WHO WE ARE / INTRO SECTION
      ======================================================== --}}
 <section class="py-14 bg-[#f8f5f0] scroll-mt-20">

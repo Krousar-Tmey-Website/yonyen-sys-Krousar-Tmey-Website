@@ -1,576 +1,535 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Presentation')
-@section('page-title', 'Presentation Management')
-@section('breadcrumb', 'Manage all content for the Presentation page')
+@section('page-title', 'Presentation')
 
 @section('content')
 
-<div class="space-y-8" x-data="{ tab: '{{ request('tab', 'intro') }}' }">
-    {{-- Tab Navigation --}}
-    <div class="border-b border-gray-200">
-        <nav class="flex space-x-8 overflow-x-auto">
-            <button @click="tab = 'intro'"
-                    :class="tab === 'intro' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
-                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Intro / Mission / Vision
-            </button>
-            <button @click="tab = 'portfolio'"
-                    :class="tab === 'portfolio' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
-                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Our Portfolio
-            </button>
-            <button @click="tab = 'impact'"
-                    :class="tab === 'impact' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
-                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
-                Key Figures
-            </button>
-        </nav>
-    </div>
+<div class="max-w-4xl mx-auto" x-data="{ tab: 'banner', lang: 'en' }">
 
-    {{-- INTRO / MISSION / VISION SECTION --}}
-    <div x-show="tab === 'intro'" class="space-y-6">
-        <div class="grid lg:grid-cols-2 gap-8">
-            {{-- Our Mission --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6">
-                <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4" x-data="bilingualForm()">
-                    @csrf
-                    <div class="flex items-center justify-between mb-1">
-                        <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
-                            <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                                </svg>
-                            </span>
-                            Our Mission
-                        </h3>
-                        <div class="lang-tabs" title="Toggle editing language (English / French)">
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                        </div>
-                    </div>
-                    <div x-show="lang === 'en'">
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
-                        <input type="text" name="mission_title" value="{{ $settings['mission_title'] ?? 'Our Mission' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div x-show="lang === 'fr'" x-cloak>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <input type="text" name="mission_title_fr" value="{{ $settings['mission_title_fr'] ?? '' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="ex. Notre Mission">
-                    </div>
-                    <div x-show="lang === 'en'">
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Text (shown on hover)</label>
-                        <x-admin.rich-text name="mission_text" :value="$settings['mission_text'] ?? 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.'" lang="en" :rows="3" />
-                    </div>
-                    <div x-show="lang === 'fr'" x-cloak>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <x-admin.rich-text name="mission_text_fr" :value="$settings['mission_text_fr'] ?? ''" lang="fr" :rows="3" placeholder="Texte affiché au survol..." />
-                        <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Photo</label>
-                        <div class="space-y-3">
-                            @if(!empty($settings['mission_image']))
-                            <div class="flex items-center gap-3">
-                                <img src="{{ str_starts_with($settings['mission_image'], 'http') ? $settings['mission_image'] : asset('storage/' . $settings['mission_image']) }}"
-                                     alt="Current mission image" class="w-20 h-14 object-cover rounded-lg border border-gray-200">
-                                <label class="flex items-center gap-1.5 text-xs text-gray-500">
-                                    <input type="checkbox" name="remove_mission_image" value="1" class="rounded border-gray-300">
-                                    Remove current image
-                                </label>
-                            </div>
-                            @endif
-                            <input type="file" name="mission_image_file" accept="image/*"
-                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        </div>
-                        <p class="text-xs text-gray-400 mt-1">Upload an image (max 4MB).</p>
-                    </div>
-                    <button type="submit" class="btn-primary text-sm py-2.5">Save Our Mission</button>
-                </form>
+    {{-- ── Professional Page Header ── --}}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#2d6fa3] to-[#1d4e7a] flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
+                        </svg>
+                    </span>
+                    Presentation Settings
+                </h2>
+                <p class="text-sm text-gray-500 mt-1.5 ml-[42px]">Manage the public Presentation page — banner, mission, vision, portfolio, and key figures.</p>
             </div>
-
-            {{-- Our Vision --}}
-            <div class="bg-white rounded-2xl border border-gray-100 p-6">
-                <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4" x-data="bilingualForm()">
-                    @csrf
-                    <div class="flex items-center justify-between mb-1">
-                        <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
-                            <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                            </span>
-                            Our Vision
-                        </h3>
-                        <div class="lang-tabs" title="Toggle editing language (English / French)">
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                        </div>
-                    </div>
-                    <div x-show="lang === 'en'">
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
-                        <input type="text" name="vision_title" value="{{ $settings['vision_title'] ?? 'Our Vision' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div x-show="lang === 'fr'" x-cloak>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <input type="text" name="vision_title_fr" value="{{ $settings['vision_title_fr'] ?? '' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="ex. Notre Vision">
-                    </div>
-                    <div x-show="lang === 'en'">
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Text (shown on hover)</label>
-                        <x-admin.rich-text name="vision_text" :value="$settings['vision_text'] ?? 'A world in which all children are empowered to grow into independent and responsible adults.'" lang="en" :rows="3" />
-                    </div>
-                    <div x-show="lang === 'fr'" x-cloak>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <x-admin.rich-text name="vision_text_fr" :value="$settings['vision_text_fr'] ?? ''" lang="fr" :rows="3" placeholder="Texte affiché au survol..." />
-                        <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Photo</label>
-                        <div class="space-y-3">
-                            @if(!empty($settings['vision_image']))
-                            <div class="flex items-center gap-3">
-                                <img src="{{ str_starts_with($settings['vision_image'], 'http') ? $settings['vision_image'] : asset('storage/' . $settings['vision_image']) }}"
-                                     alt="Current vision image" class="w-20 h-14 object-cover rounded-lg border border-gray-200">
-                                <label class="flex items-center gap-1.5 text-xs text-gray-500">
-                                    <input type="checkbox" name="remove_vision_image" value="1" class="rounded border-gray-300">
-                                    Remove current image
-                                </label>
-                            </div>
-                            @endif
-                            <input type="file" name="vision_image_file" accept="image/*"
-                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        </div>
-                        <p class="text-xs text-gray-400 mt-1">Upload an image (max 4MB).</p>
-                    </div>
-                    <button type="submit" class="btn-primary text-sm py-2.5">Save Our Vision</button>
-                </form>
-            </div>
+            <a href="{{ route('presentation') }}" target="_blank"
+               class="inline-flex items-center gap-2 px-4 py-2 bg-[#2d6fa3] hover:bg-[#1d4e7a] text-white text-sm font-medium rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+                View Site
+            </a>
         </div>
-    </div>
 
-    {{-- OUR PORTFOLIO SECTION --}}
-    <div x-show="tab === 'portfolio'" class="space-y-6 max-w-5xl mx-auto">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8">
-            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-5" x-data="bilingualForm()">
-                @csrf
-                <div class="flex items-center justify-between mb-1">
-                    <div class="flex items-center gap-3">
-                        <span class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4.5 h-4.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                            </svg>
-                        </span>
-                        <div>
-                            <h3 class="font-bold text-gray-700 text-sm">Our Portfolio</h3>
-                            <p class="text-gray-400 text-xs mt-0.5">The paragraph, pull-quote, and closing note shown between Our Values and the Programs strip.</p>
-                        </div>
-                    </div>
-                    <div class="lang-tabs" title="Toggle editing language (English / French)">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                    </div>
-                </div>
-                <div x-show="lang === 'en'">
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Portfolio Paragraph</label>
-                    <x-admin.rich-text name="portfolio_text" :value="$settings['portfolio_text'] ?? 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.'" lang="en" :rows="4" />
-                </div>
-                <div x-show="lang === 'fr'" x-cloak>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Portfolio Paragraph (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                    <x-admin.rich-text name="portfolio_text_fr" :value="$settings['portfolio_text_fr'] ?? ''" lang="fr" :rows="4" placeholder="Paragraphe du portfolio..." />
-                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
-                </div>
-                <div x-show="lang === 'en'">
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Pull-Quote</label>
-                    <x-admin.rich-text name="principle_quote" :value="$settings['principle_quote'] ?? 'Krousar Thmey\'s main principle is the development of projects led by Cambodians for Cambodians.'" lang="en" :rows="2" />
-                </div>
-                <div x-show="lang === 'fr'" x-cloak>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Pull-Quote (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                    <x-admin.rich-text name="principle_quote_fr" :value="$settings['principle_quote_fr'] ?? ''" lang="fr" :rows="2" placeholder="Citation phare..." />
-                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
-                </div>
-                <div x-show="lang === 'en'">
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Closing Note</label>
-                    <x-admin.rich-text name="portfolio_volunteers_text" :value="$settings['portfolio_volunteers_text'] ?? 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.'" lang="en" :rows="3" />
-                </div>
-                <div x-show="lang === 'fr'" x-cloak>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Closing Note (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                    <x-admin.rich-text name="portfolio_volunteers_text_fr" :value="$settings['portfolio_volunteers_text_fr'] ?? ''" lang="fr" :rows="3" placeholder="Note de clôture..." />
-                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
-                </div>
-                <button type="submit" class="btn-primary text-sm py-2.5">Save Our Portfolio</button>
-            </form>
-        </div>
-    </div>
-
-    {{-- KEY FIGURES SECTION --}}
-    <div x-show="tab === 'impact'" class="space-y-6"
-         x-data="{
-             showStatsModal: false,
-             editMode: false,
-             lang: 'en',
-             actionUrl: '{{ route('admin.impact-statistics.store') }}',
-             statId: '',
-             statValue: '',
-             statLabel: '',
-             statLabelFr: '',
-             statDescription: '',
-             statDescriptionFr: '',
-             statSortOrder: 0,
-             statIsActive: true,
-             statIsFeatured: false,
-             openAddModal() {
-                 this.editMode = false;
-                 this.lang = 'en';
-                 this.actionUrl = '{{ route('admin.impact-statistics.store') }}';
-                 this.statId = '';
-                 this.statValue = '';
-                 this.statLabel = '';
-                 this.statLabelFr = '';
-                 this.statDescription = '';
-                 this.statDescriptionFr = '';
-                 this.statSortOrder = 0;
-                 this.statIsActive = true;
-                 this.statIsFeatured = false;
-                 this.showStatsModal = true;
-                 this.$nextTick(() => this.syncStatCKEditors());
-             },
-             syncStatCKEditors() {
-                 window.setCKEditorContent?.(document.getElementById('stat-description'), this.statDescription);
-                 window.setCKEditorContent?.(document.getElementById('stat-description-fr'), this.statDescriptionFr);
-             },
-             openEditModal(stat) {
-                 this.editMode = true;
-                 this.lang = 'en';
-                 this.actionUrl = `/admin/impact-statistics/${stat.id}`;
-                 this.statId = stat.id;
-                 this.statValue = stat.value;
-                 this.statLabel = stat.label;
-                 this.statLabelFr = stat.label_fr || '';
-                 this.statDescription = stat.description || '';
-                 this.statDescriptionFr = stat.description_fr || '';
-                 this.statSortOrder = stat.sort_order;
-                 this.statIsActive = !!stat.is_active;
-                 this.statIsFeatured = !!stat.is_featured;
-                 this.showStatsModal = true;
-                 this.$nextTick(() => this.syncStatCKEditors());
-             }
-         }">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h3 class="font-bold text-gray-700 text-sm">Key Figures / Impact Statistics</h3>
-                    <p class="text-xs text-gray-400 mt-0.5">Click any card to edit its content or change its sort order.</p>
-                </div>
-                <button @click="openAddModal()"
-                        class="inline-flex items-center gap-1.5 text-xs font-medium text-white bg-[#2d6fa3] hover:bg-[#1d4e7a] px-3.5 py-2 rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:scale-95">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    Add Statistic
+        {{-- Tab Navigation --}}
+        <div class="flex justify-center mt-6 pt-5 border-t border-gray-100">
+            <div class="inline-flex bg-gray-100/80 rounded-xl p-1 gap-1 shadow-inner">
+                <button @click="tab = 'banner'"
+                        :class="tab === 'banner' ? 'bg-white shadow-sm text-[#2d6fa3] font-semibold ring-1 ring-gray-200/50' : 'text-gray-500 hover:text-gray-700 font-medium'"
+                        class="px-7 py-2.5 rounded-lg text-sm transition-all duration-200 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    Page Banner
+                </button>
+                <button @click="tab = 'content'"
+                        :class="tab === 'content' ? 'bg-white shadow-sm text-[#2d6fa3] font-semibold ring-1 ring-gray-200/50' : 'text-gray-500 hover:text-gray-700 font-medium'"
+                        class="px-7 py-2.5 rounded-lg text-sm transition-all duration-200 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                    </svg>
+                    Page Content
                 </button>
             </div>
+        </div>
+    </div>
 
-            @php
-            $accentColors = [
-                ['name' => 'blue', 'bg' => '#2d6fa3', 'light' => '#e3f2fd', 'lighter' => '#bbdefb'],
-                ['name' => 'green', 'bg' => '#8da83a', 'light' => '#f1f8e9', 'lighter' => '#dcedc8'],
-                ['name' => 'orange', 'bg' => '#e8a020', 'light' => '#fff3e0', 'lighter' => '#ffe0b2'],
-                ['name' => 'red', 'bg' => '#d32f2f', 'light' => '#ffebee', 'lighter' => '#ffcdd2'],
-                ['name' => 'purple', 'bg' => '#7c4dff', 'light' => '#f3e5f5', 'lighter' => '#e1bee7'],
-            ];
+    {{-- Tab Content Wrapper --}}
+    <div class="space-y-6">
 
-            $statIcons = [
-                '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>',
-                '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>',
-                '<path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>',
-                '<path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342"/>',
-                '<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>',
-            ];
-            $impactStats = \App\Models\ImpactStatistic::orderBy('sort_order')->get();
-            @endphp
+@php
+    // ── Banner tab variables ──
+    $bv = fn($key, $default = '') => old($key, $settings[$key] ?? $default);
+    $bvFr = fn($key, $default = '') => old($key.'_fr', $settings[$key.'_fr'] ?? $default);
+    $bannerImage = $bv('presentation_banner_image');
+    $bannerOverlayColor = $bv('presentation_banner_overlay_color', '#1a3c6e');
+    $bannerImageUrl = $bannerImage ? (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) : null;
+    $bannerBadge = $bv('presentation_banner_badge', 'Since 1991');
+    $bannerTitle = $bv('presentation_banner_title', 'Krousar Thmey, the first Cambodian organization helping disadvantaged children');
+    $bannerSubtitle = $bv('presentation_banner_subtitle', 'Born in 1991 in the Site II refugee camp in Thailand, Krousar Thmey has been supporting children for over 25 years.');
+    $bannerSubtitleFr = $bvFr('presentation_banner_subtitle');
+    $btn1Text = $bv('presentation_banner_btn1_text', 'Learn More');
+    $btn1Url  = $bv('presentation_banner_btn1_url', '/our-programs');
+    $btn2Text = $bv('presentation_banner_btn2_text', 'Donate Now');
+    $btn2Url  = $bv('presentation_banner_btn2_url', '/donate');
+    $btn3Text = $bv('presentation_banner_btn3_text', '');
+    $btn3Url  = $bv('presentation_banner_btn3_url', '');
+@endphp
 
-            @if($impactStats->isEmpty())
-            <div class="bg-gray-50 rounded-xl py-12 text-center text-gray-400">
-                <p class="text-sm font-medium mb-2">No impact statistics configured yet.</p>
-                <button @click="openAddModal()" class="text-[#2d6fa3] text-sm underline hover:text-[#1d4e7a] transition-colors">Add your first statistic</button>
-            </div>
-            @else
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-                @foreach($impactStats as $index => $stat)
-                @php
-                    $colorScheme = $accentColors[$index % count($accentColors)];
-                    $icon = $statIcons[$index % count($statIcons)];
-                    $accentBorderStyle = 'background-color: ' . $colorScheme['bg'] . ';';
-                    $iconBgStyle = 'background-color: ' . $colorScheme['light'] . ';';
-                    $valueColorStyle = 'color: ' . $colorScheme['bg'] . ';';
-                @endphp
-                <div class="relative bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer group flex flex-col justify-between"
-                     @click="openEditModal({{ json_encode($stat) }})">
-
-                    {{-- Top colored accent border --}}
-                    <div class="h-1 w-full" style="{{ $accentBorderStyle }}"></div>
-
-                    <div class="p-5 flex-1 flex flex-col justify-between">
-                        {{-- Action buttons --}}
-                        <div class="absolute top-3 right-3 z-10 flex gap-1 items-center">
-                            {{-- Edit button --}}
-                            <button type="button"
-                                    class="w-7 h-7 rounded-full flex items-center justify-center bg-gray-50 hover:bg-blue-50 hover:text-blue-600 text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-200"
-                                    title="Edit statistic"
-                                    @click.stop="openEditModal({{ json_encode($stat) }})">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                                </svg>
-                            </button>
-
-                            {{-- Delete button --}}
-                            <form action="{{ route('admin.impact-statistics.destroy', $stat) }}" method="POST"
-                                  @click.stop class="inline-block">
-                                @csrf @method('DELETE')
-                                <button type="submit"
-                                        class="w-7 h-7 rounded-full flex items-center justify-center bg-gray-50 hover:bg-red-50 hover:text-red-600 text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-200"
-                                        title="Delete statistic">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-
-                        {{-- Value & Icon Row --}}
-                        <div class="flex items-center gap-3 mb-3.5 mt-1">
-                            <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                                 style="{{ $iconBgStyle }}">
-                                <svg class="w-4.5 h-4.5" fill="none" stroke="{{ $colorScheme['bg'] }}" stroke-width="2" viewBox="0 0 24 24">
-                                    {!! $icon !!}
-                                </svg>
-                            </div>
-                            <div class="min-w-0">
-                                <p class="text-lg font-extrabold leading-none" style="{{ $valueColorStyle }}">{{ $stat->value }}</p>
-                            </div>
-                        </div>
-
-                        {{-- Label --}}
-                        <p class="text-xs font-semibold text-gray-700 leading-snug flex-1 mb-4">{{ $stat->label }}</p>
-
-                        {{-- Card footer --}}
-                        <div class="flex items-center justify-between pt-3 border-t border-gray-50 mt-auto">
-                            <div class="flex gap-1">
-                                @if($stat->is_featured)
-                                <span class="text-[9px] font-bold text-[#e8a020] bg-orange-50 border border-orange-100 px-2 py-0.5 rounded-full uppercase tracking-wider">Featured</span>
-                                @endif
-
-                                @if(!$stat->is_active)
-                                <span class="text-[9px] font-bold text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded-full uppercase tracking-wider">Inactive</span>
-                                @endif
-                            </div>
-                            <span class="text-[10px] font-bold text-gray-400">Order: {{ $stat->sort_order }}</span>
-                        </div>
-                    </div>
+{{-- ========================================================
+     TAB: PAGE BANNER
+     ======================================================== --}}
+<div x-show="tab === 'banner'" class="space-y-6">
+    {{-- Live Preview --}}
+    <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+        <div class="text-xs font-medium text-gray-400 uppercase tracking-wider px-4 py-2 bg-gray-50 border-b border-gray-100 flex items-center gap-2">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Live Preview
+        </div>
+        <div id="presentation-banner-preview" class="relative py-14 px-6 text-center overflow-hidden" style="background-color: {{ $bannerOverlayColor }};">
+            @if($bannerImageUrl)
+            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $bannerImageUrl }}'); opacity: 0.35;"></div>
+            @endif
+            <div class="relative">
+                <span id="preview-badge" class="inline-block bg-white text-[#eea91d] text-[10px] font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">{{ $bannerBadge }}</span>
+                <h2 id="preview-title" class="text-xl font-bold text-white mb-2">{{ $bannerTitle }}</h2>
+                <p id="preview-subtitle" class="text-white/80 text-xs max-w-md mx-auto mb-4">{{ $bannerSubtitle }}</p>
+                <div id="preview-buttons" class="flex flex-wrap items-center justify-center gap-2">
+                    <span id="preview-btn1" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-semibold bg-white text-[#2d6fa3] {{ $btn1Text ? '' : 'opacity-30' }}">{{ $btn1Text ?: 'Button 1' }}</span>
+                    <span id="preview-btn2" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-semibold border border-white/40 text-white {{ $btn2Text ? '' : 'opacity-30' }}">{{ $btn2Text ?: 'Button 2' }}</span>
+                    <span id="preview-btn3" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-semibold border border-white/40 text-white {{ $btn3Text ? '' : 'opacity-30' }}">{{ $btn3Text ?: 'Button 3' }}</span>
                 </div>
-                @endforeach
+            </div>
+        </div>
+    </div>
+
+    {{-- Banner Form --}}
+    <form action="{{ route('admin.presentation.banner.update') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5" x-data="bilingualForm()">
+        @csrf
+        <div class="flex items-center justify-between gap-3">
+            <h3 class="font-bold text-gray-700 text-sm">Page Banner</h3>
+            <div class="lang-tabs" title="Toggle editing language (English / French)">
+                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+            </div>
+        </div>
+        <p class="text-xs text-gray-400 -mt-3">Controls the hero banner shown at the top of the public Presentation page.</p>
+
+        {{-- Background Image --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Background Image</label>
+            @if($bannerImage)
+            <div class="mb-3">
+                <img src="{{ str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage) }}"
+                     alt="Current banner image"
+                     class="w-full max-h-48 object-contain rounded-xl border border-gray-200 bg-gray-50 p-2">
+                <label class="mt-2 inline-flex items-center gap-2 text-xs text-gray-500 cursor-pointer">
+                    <input type="checkbox" name="presentation_banner_image_clear" value="1" class="rounded border-gray-300 text-red-500 focus:ring-red-400">
+                    Remove current image
+                </label>
             </div>
             @endif
+            <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-[#2d6fa3]/40 transition-colors cursor-pointer"
+                 x-data="{ fileName: '' }"
+                 @dragover.prevent="$el.classList.add('border-[#2d6fa3]')"
+                 @dragleave.prevent="$el.classList.remove('border-[#2d6fa3]')"
+                 @drop.prevent="$el.classList.remove('border-[#2d6fa3]'); const f = $event.dataTransfer.files[0]; if(f) { $refs.fileInput.files = $event.dataTransfer.files; fileName = f.name; }"
+                 @click="$refs.fileInput.click()">
+                <input type="file" name="presentation_banner_image"
+                       accept="image/png,image/jpg,image/jpeg,image/webp,image/svg+xml"
+                       class="hidden" x-ref="fileInput"
+                       @change="fileName = $event.target.files[0]?.name || ''">
+                <svg class="w-8 h-8 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <p class="text-sm text-gray-500" x-text="fileName || 'Click or drag & drop to upload'"></p>
+                <p class="text-xs text-gray-400 mt-1">PNG, JPG, WebP or SVG — max 5MB</p>
+            </div>
+            <div class="mt-3" x-data="{ showUrl: {{ $bannerImage && !str_starts_with($bannerImage, 'http') ? 'false' : 'true' }} }">
+                <button type="button" @click="showUrl = !showUrl" class="text-xs text-[#2d6fa3] hover:text-[#1d4e7a] transition-colors mb-2">
+                    <span x-show="!showUrl">+ Or paste an image URL instead</span>
+                    <span x-show="showUrl">− Hide URL input</span>
+                </button>
+                <div x-show="showUrl" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+                    <input type="text" name="presentation_banner_image_url"
+                           value="{{ str_starts_with($bannerImage ?? '', 'http') ? $bannerImage : '' }}"
+                           placeholder="https://example.com/image.png"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                </div>
+            </div>
         </div>
 
-        {{-- ===== ANIMATED STATS MODAL ===== --}}
-        <template x-teleport="body">
-            <div x-show="showStatsModal"
-                 x-cloak
-                 @keydown.escape.window="showStatsModal = false"
-                 class="fixed inset-0 z-[9999] flex items-start justify-center p-4 pt-10 sm:pt-16 sm:p-6 overflow-y-auto"
-                 style="background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);">
+        {{-- Background Overlay Color --}}
+        <div>
+            <label for="presentation_banner_overlay_color" class="block text-sm font-medium text-gray-700 mb-1.5">Background Overlay Color</label>
+            <div class="flex items-center gap-3">
+                <input type="color" id="presentation_banner_overlay_color_picker"
+                       value="{{ $bannerOverlayColor }}"
+                       class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                       onchange="document.getElementById('presentation_banner_overlay_color').value = this.value; document.getElementById('presentation-banner-preview').style.backgroundColor = this.value;">
+                <input type="text" id="presentation_banner_overlay_color" name="presentation_banner_overlay_color"
+                       value="{{ $bannerOverlayColor }}"
+                       placeholder="#1a3c6e"
+                       oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('presentation_banner_overlay_color_picker').value = this.value; document.getElementById('presentation-banner-preview').style.backgroundColor = this.value; }"
+                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+            </div>
+        </div>
 
-                {{-- Overlay click to close --}}
-                <div x-show="showStatsModal"
-                     x-transition:enter="transition ease-out duration-200"
-                     x-transition:enter-start="opacity-0"
-                     x-transition:enter-end="opacity-100"
-                     x-transition:leave="transition ease-in duration-150"
-                     x-transition:leave-start="opacity-100"
-                     x-transition:leave-end="opacity-0"
-                     @click="showStatsModal = false"
-                     class="absolute inset-0 z-0"></div>
+        {{-- Badge Text --}}
+        <div x-show="lang === 'en'">
+            <label for="presentation_banner_badge" class="block text-sm font-medium text-gray-700 mb-1.5">Badge Text</label>
+            <input type="text" id="presentation_banner_badge" name="presentation_banner_badge"
+                   value="{{ $bannerBadge }}"
+                   oninput="document.getElementById('preview-badge').textContent = this.value || 'Since 1991'"
+                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+        </div>
 
-                {{-- Modal Panel --}}
-                <div x-show="showStatsModal"
-                     x-transition:enter="transition ease-out duration-300"
-                     x-transition:enter-start="opacity-0 scale-95 translate-y-8"
-                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                     x-transition:leave="transition ease-in duration-200"
-                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                     x-transition:leave-end="opacity-0 scale-95 translate-y-8"
-                     class="relative z-10 w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden max-h-[90vh] overflow-y-auto">
+        {{-- Hero Title --}}
+        <div x-show="lang === 'en'">
+            <label for="presentation_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Title</label>
+            <input type="text" id="presentation_banner_title" name="presentation_banner_title"
+                   value="{{ $bannerTitle }}"
+                   oninput="document.getElementById('preview-title').textContent = this.value || 'Krousar Thmey, the first Cambodian organization helping disadvantaged children'"
+                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+        </div>
 
-                    {{-- Top accent bar --}}
-                    <div class="h-1.5 w-full bg-gradient-to-r from-[#2d6fa3] via-[#8da83a] to-[#2d6fa3]"></div>
+        {{-- Hero Subtitle --}}
+        <div x-show="lang === 'en'">
+            <label for="presentation_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Subtitle</label>
+            <x-admin.rich-text id="presentation_banner_subtitle" name="presentation_banner_subtitle" :value="$bannerSubtitle" lang="en" :rows="2" />
+        </div>
+        <div x-show="lang === 'fr'" x-cloak>
+            <label for="presentation_banner_subtitle_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Subtitle (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+            <x-admin.rich-text id="presentation_banner_subtitle_fr" name="presentation_banner_subtitle_fr" :value="$bannerSubtitleFr" lang="fr" :rows="2" placeholder="Née en 1991 dans le camp de réfugiés…" />
+            <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English subtitle.</p>
+        </div>
 
-                    {{-- Modal Header --}}
-                    <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-50">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-[#2d6fa3]/10 flex items-center justify-center">
-                                <svg class="w-4 h-4 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-gray-800 text-sm" x-text="editMode ? 'Edit Statistic' : 'Add New Statistic'">Add New Statistic</h3>
-                                <p class="text-xs text-gray-400" x-text="editMode ? 'Modify an existing key figure' : 'Create a new key figure for the presentation page'">Create a new key figure</p>
-                            </div>
-                        </div>
-                        <button @click="showStatsModal = false"
-                                class="w-7 h-7 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 hover:rotate-90 transition-all duration-200 group">
-                            <svg class="w-3.5 h-3.5 text-gray-500 group-hover:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        {{-- Banner Action Buttons --}}
+        <div class="border-t border-gray-100 pt-4 space-y-4">
+            <p class="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                Banner Action Buttons
+            </p>
+            <p class="text-xs text-gray-400 -mt-2">Configure up to 3 buttons. Leave empty to hide.</p>
+
+            {{-- Button 1 --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="presentation_banner_btn1_text" class="block text-xs font-medium text-gray-600 mb-1">Button 1 Text</label>
+                    <input type="text" id="presentation_banner_btn1_text" name="presentation_banner_btn1_text"
+                           value="{{ $btn1Text }}"
+                           oninput="document.getElementById('preview-btn1').textContent = this.value || 'Button 1'; document.getElementById('preview-btn1').classList.toggle('opacity-30', !this.value)"
+                           placeholder="Learn More"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label for="presentation_banner_btn1_url" class="block text-xs font-medium text-gray-600 mb-1">Button 1 URL</label>
+                    <input type="text" id="presentation_banner_btn1_url" name="presentation_banner_btn1_url"
+                           value="{{ $btn1Url }}"
+                           placeholder="/our-programs"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+            </div>
+
+            {{-- Button 2 --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="presentation_banner_btn2_text" class="block text-xs font-medium text-gray-600 mb-1">Button 2 Text</label>
+                    <input type="text" id="presentation_banner_btn2_text" name="presentation_banner_btn2_text"
+                           value="{{ $btn2Text }}"
+                           oninput="document.getElementById('preview-btn2').textContent = this.value || 'Button 2'; document.getElementById('preview-btn2').classList.toggle('opacity-30', !this.value)"
+                           placeholder="Donate Now"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label for="presentation_banner_btn2_url" class="block text-xs font-medium text-gray-600 mb-1">Button 2 URL</label>
+                    <input type="text" id="presentation_banner_btn2_url" name="presentation_banner_btn2_url"
+                           value="{{ $btn2Url }}"
+                           placeholder="/donate"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+            </div>
+
+            {{-- Button 3 --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="presentation_banner_btn3_text" class="block text-xs font-medium text-gray-600 mb-1">Button 3 Text</label>
+                    <input type="text" id="presentation_banner_btn3_text" name="presentation_banner_btn3_text"
+                           value="{{ $btn3Text }}"
+                           oninput="document.getElementById('preview-btn3').textContent = this.value || 'Button 3'; document.getElementById('preview-btn3').classList.toggle('opacity-30', !this.value)"
+                           placeholder="Get Involved"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label for="presentation_banner_btn3_url" class="block text-xs font-medium text-gray-600 mb-1">Button 3 URL</label>
+                    <input type="text" id="presentation_banner_btn3_url" name="presentation_banner_btn3_url"
+                           value="{{ $btn3Url }}"
+                           placeholder="/resources"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 pt-1">
+            <button type="submit" class="btn-primary">Save Banner</button>
+            <a href="{{ route('admin.dashboard') }}" class="text-gray-400 hover:text-gray-600 text-sm transition-colors">Cancel</a>
+            <a href="{{ route('presentation') }}" target="_blank" class="ml-auto flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                View live page
+            </a>
+        </div>
+    </form>
+</div>
+
+{{-- ========================================================
+     TAB: PAGE CONTENT
+     ======================================================== --}}
+<div x-show="tab === 'content'" class="space-y-6">
+
+    @if($errors->any())
+    <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+        <ul class="list-disc list-inside space-y-1">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    {{-- Intro / Mission / Vision Section --}}
+    <div class="grid lg:grid-cols-2 gap-6">
+        {{-- Our Mission --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4" x-data="bilingualForm()">
+                @csrf
+                <div class="flex items-center justify-between mb-1">
+                    <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                             </svg>
-                        </button>
-                    </div>
-
-                    {{-- Modal Body: Form --}}
-                    <div class="p-6">
-                        <form x-bind:action="actionUrl" method="POST" enctype="multipart/form-data" class="space-y-4">
-                            @csrf
-                            <input type="hidden" name="_method" value="PUT" x-bind:disabled="!editMode">
-
-
-                            {{-- Value --}}
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1.5">
-                                    Value <span class="text-red-400">*</span>
-                                </label>
-                                <input type="text" name="value" x-model="statValue" required
-                                       class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow"
-                                       placeholder="e.g. 3526 or 950K or < 4%">
-                            </div>
-
-                            {{-- Label --}}
-                            
-                <div class="flex justify-end w-full mb-3 -mt-2">
+                        </span>
+                        Our Mission
+                    </h3>
                     <div class="lang-tabs" title="Toggle editing language (English / French)">
                         <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
                         <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                     </div>
                 </div>
-<div x-show="lang === 'en'">
-                                <label class="block text-xs font-medium text-gray-600 mb-1.5">
-                                    Label <span class="text-red-400">*</span>
-                                </label>
-                                <input type="text" name="label" x-model="statLabel" :required="lang === 'en'"
-                                       class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow"
-                                       placeholder="e.g. Children Supported in 2025">
-                            </div>
-                            <div x-show="lang === 'fr'" x-cloak>
-                                <label class="block text-xs font-medium text-gray-600 mb-1.5">
-                                    Label (French) <span class="text-gray-400 font-normal">(optional)</span>
-                                </label>
-                                <input type="text" name="label_fr" x-model="statLabelFr"
-                                       class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow"
-                                       placeholder="ex. Enfants soutenus en 2025">
-                            </div>
-
-                            {{-- Description --}}
-                            <div x-show="lang === 'en'">
-                                <label class="block text-xs font-medium text-gray-600 mb-1.5">Description <span class="text-gray-400 font-normal">(optional)</span></label>
-                                <x-admin.rich-text id="stat-description" name="description" :value="''" lang="en" :rows="2"
-                                    @input="statDescription = $event.target.value"
-                                    placeholder="Short supporting detail..." />
-                            </div>
-                            <div x-show="lang === 'fr'" x-cloak>
-                                <label class="block text-xs font-medium text-gray-600 mb-1.5">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                                <x-admin.rich-text id="stat-description-fr" name="description_fr" :value="''" lang="fr" :rows="2"
-                                    @input="statDescriptionFr = $event.target.value"
-                                    placeholder="Détail supplémentaire..." />
-                            </div>
-
-                            {{-- Sort order + Active --}}
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Sort Order</label>
-                                    <input type="number" name="sort_order" x-model="statSortOrder"
-                                           class="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] transition-shadow">
-                                </div>
-                                <div class="flex items-end pb-1">
-                                    <label class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer select-none">
-                                        <input type="hidden" name="is_active" value="0">
-                                        <input type="checkbox" name="is_active" value="1" x-model="statIsActive"
-                                               class="rounded border-gray-300 text-[#2d6fa3] focus:ring-[#2d6fa3]/20 cursor-pointer">
-                                        Active
-                                    </label>
-                                </div>
-                            </div>
-
-                            {{-- Featured --}}
-                            <div class="flex items-end">
-                                <label class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer select-none">
-                                    <input type="hidden" name="is_featured" value="0">
-                                    <input type="checkbox" name="is_featured" value="1" x-model="statIsFeatured"
-                                           class="rounded border-gray-300 text-[#e8a020] focus:ring-[#e8a020]/20 cursor-pointer">
-                                    <span>Featured <span class="text-gray-400">(Main Highlight)</span></span>
-                                </label>
-                            </div>
-
-                            {{-- Submit --}}
-                            <div class="flex gap-3 pt-2">
-                                <button type="submit"
-                                        class="flex-1 btn-primary text-sm py-2.5 inline-flex items-center justify-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x-bind:d="editMode ? 'M5 13l4 4L19 7' : 'M12 4v16m8-8H4'"/>
-                                    </svg>
-                                    <span x-text="editMode ? 'Save Changes' : 'Add Statistic'">Add Statistic</span>
-                                </button>
-                                <button type="button" @click="showStatsModal = false"
-                                        class="px-5 py-2.5 text-sm font-medium text-gray-500 hover:text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all duration-200">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    {{-- Bottom accent bar --}}
-                    <div class="h-1 w-full bg-gradient-to-r from-[#2d6fa3] to-[#8da83a]"></div>
+                <div x-show="lang === 'en'">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
+                    <input type="text" name="mission_title" value="{{ $settings['mission_title'] ?? 'Our Mission' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                 </div>
-            </div>
-        </template>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text" name="mission_title_fr" value="{{ $settings['mission_title_fr'] ?? '' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="ex. Notre Mission">
+                </div>
+                <div x-show="lang === 'en'">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Text (shown on hover)</label>
+                    <x-admin.rich-text name="mission_text" :value="$settings['mission_text'] ?? 'Enable the integration of underprivileged children into Cambodian society through education and support adapted to their needs, with respect to their traditions and beliefs.'" lang="en" :rows="3" />
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <x-admin.rich-text name="mission_text_fr" :value="$settings['mission_text_fr'] ?? ''" lang="fr" :rows="3" placeholder="Texte affiché au survol..." />
+                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Photo</label>
+                    <div class="space-y-3">
+                        @if(!empty($settings['mission_image']))
+                        <div class="flex items-center gap-3">
+                            <img src="{{ str_starts_with($settings['mission_image'], 'http') ? $settings['mission_image'] : asset('storage/' . $settings['mission_image']) }}"
+                                 alt="Current mission image" class="w-20 h-14 object-cover rounded-lg border border-gray-200">
+                            <label class="flex items-center gap-1.5 text-xs text-gray-500">
+                                <input type="checkbox" name="remove_mission_image" value="1" class="rounded border-gray-300">
+                                Remove current image
+                            </label>
+                        </div>
+                        @endif
+                        <input type="file" name="mission_image_file" accept="image/*"
+                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1">Upload an image (max 4MB).</p>
+                </div>
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Our Mission</button>
+            </form>
+        </div>
 
+        {{-- Our Vision --}}
         <div class="bg-white rounded-2xl border border-gray-100 p-6">
-            <h3 class="font-bold text-gray-700 mb-1 text-sm">Organisation-wide Figures</h3>
-            <p class="text-gray-400 text-xs mb-4">Provinces, staff, budget, and administrative cost figures shown across the page.</p>
-            <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-4">
+            <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4" x-data="bilingualForm()">
                 @csrf
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Provinces</label>
-                        <input type="text" name="stat_provinces" value="{{ $settings['stat_provinces'] ?? '15' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Cambodian Staff</label>
-                        <input type="text" name="stat_employees" value="{{ $settings['stat_employees'] ?? '68' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Expat Staff</label>
-                        <input type="text" name="stat_expats" value="{{ $settings['stat_expats'] ?? '2' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Budget (K USD)</label>
-                        <input type="text" name="stat_budget" value="{{ $settings['stat_budget'] ?? '950' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Admin Costs (%)</label>
-                        <input type="text" name="stat_admin_costs" value="{{ $settings['stat_admin_costs'] ?? '4' }}"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                <div class="flex items-center justify-between mb-1">
+                    <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </span>
+                        Our Vision
+                    </h3>
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
                     </div>
                 </div>
-                <button type="submit" class="btn-primary text-sm py-2.5">Save Organisation Figures</button>
+                <div x-show="lang === 'en'">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
+                    <input type="text" name="vision_title" value="{{ $settings['vision_title'] ?? 'Our Vision' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text" name="vision_title_fr" value="{{ $settings['vision_title_fr'] ?? '' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                           placeholder="ex. Notre Vision">
+                </div>
+                <div x-show="lang === 'en'">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Text (shown on hover)</label>
+                    <x-admin.rich-text name="vision_text" :value="$settings['vision_text'] ?? 'A world in which all children are empowered to grow into independent and responsible adults.'" lang="en" :rows="3" />
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <x-admin.rich-text name="vision_text_fr" :value="$settings['vision_text_fr'] ?? ''" lang="fr" :rows="3" placeholder="Texte affiché au survol..." />
+                    <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Photo</label>
+                    <div class="space-y-3">
+                        @if(!empty($settings['vision_image']))
+                        <div class="flex items-center gap-3">
+                            <img src="{{ str_starts_with($settings['vision_image'], 'http') ? $settings['vision_image'] : asset('storage/' . $settings['vision_image']) }}"
+                                 alt="Current vision image" class="w-20 h-14 object-cover rounded-lg border border-gray-200">
+                            <label class="flex items-center gap-1.5 text-xs text-gray-500">
+                                <input type="checkbox" name="remove_vision_image" value="1" class="rounded border-gray-300">
+                                Remove current image
+                            </label>
+                        </div>
+                        @endif
+                        <input type="file" name="vision_image_file" accept="image/*"
+                               class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1">Upload an image (max 4MB).</p>
+                </div>
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Our Vision</button>
             </form>
         </div>
     </div>
+
+    {{-- Our Portfolio --}}
+    <div class="bg-white rounded-2xl border border-gray-100 p-6">
+        <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4" x-data="bilingualForm()">
+            @csrf
+            <div class="flex items-center justify-between mb-1">
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                        </svg>
+                    </span>
+                    Our Portfolio
+                </h3>
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+            </div>
+            <div x-show="lang === 'en'">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Portfolio Text</label>
+                <x-admin.rich-text name="portfolio_text" :value="$settings['portfolio_text'] ?? 'Krousar Thmey offers a portfolio of cross-cutting programs and projects supporting 4,079 children in their development: Child Welfare, special and inclusive Education for Deaf or Blind Children, Cultural and Artistic Development, Academic and Career Counseling, as well as Health and Hygiene. In the spirit of sustainable action, Krousar Thmey ensures that its support does not lead to any privilege, dependence or disparity in the community.'" lang="en" :rows="4" />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Portfolio Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="portfolio_text_fr" :value="$settings['portfolio_text_fr'] ?? ''" lang="fr" :rows="4" placeholder="Texte du portfolio en français..." />
+                <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
+            </div>
+
+            @php $principleQuoteDefault = "Krousar Thmey's main principle is the development of projects led by Cambodians for Cambodians."; @endphp
+            <div x-show="lang === 'en'">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Principle Quote</label>
+                <x-admin.rich-text name="principle_quote" :value="$settings['principle_quote'] ?? $principleQuoteDefault" lang="en" :rows="2" />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Principle Quote (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="principle_quote_fr" :value="$settings['principle_quote_fr'] ?? ''" lang="fr" :rows="2" placeholder="Citation du principe en français..." />
+            </div>
+
+            <div x-show="lang === 'en'">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Volunteers Text</label>
+                <x-admin.rich-text name="portfolio_volunteers_text" :value="$settings['portfolio_volunteers_text'] ?? 'Only two foreign volunteers provide the organization with support in communication, donor relations and project coordination. Apolitical and secular, the action of Krousar Thmey has been acknowledged internationally for its impact, capacity for innovation and sustainability.'" lang="en" :rows="3" />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Volunteers Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="portfolio_volunteers_text_fr" :value="$settings['portfolio_volunteers_text_fr'] ?? ''" lang="fr" :rows="3" placeholder="Texte sur les bénévoles en français..." />
+            </div>
+
+            <div class="flex items-center gap-3 pt-1">
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Portfolio</button>
+                <a href="{{ route('presentation') }}" target="_blank" class="ml-auto flex items-center gap-1.5 text-xs text-gray-400 hover:text-[#2d6fa3] transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    View live page
+                </a>
+            </div>
+        </form>
+    </div>
+
+    {{-- Key Figures / Stats --}}
+    <div class="bg-white rounded-2xl border border-gray-100 p-6">
+        <form action="{{ route('admin.presentation.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+            @csrf
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2 mb-4">
+                <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </span>
+                Key Figures — Organization At A Glance
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Provinces</label>
+                    <input type="text" name="stat_provinces" value="{{ $settings['stat_provinces'] ?? '15' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Total Staff</label>
+                    <input type="text" name="stat_employees" value="{{ $settings['stat_employees'] ?? '68' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Expat Staff</label>
+                    <input type="text" name="stat_expats" value="{{ $settings['stat_expats'] ?? '2' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Annual Budget (USD)</label>
+                    <input type="text" name="stat_budget" value="{{ $settings['stat_budget'] ?? '950' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Admin Costs (%)</label>
+                    <input type="text" name="stat_admin_costs" value="{{ $settings['stat_admin_costs'] ?? '4' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Worldwide Text</label>
+                    <input type="text" name="worldwide_text" value="{{ $settings['worldwide_text'] ?? 'Krousar Thmey benefits from the support of various entities around the world.' }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+            </div>
+            <div class="flex items-center gap-3 pt-1">
+                <button type="submit" class="btn-primary text-sm py-2.5">Save Key Figures</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    </div>
+    {{-- End Tab Content Wrapper --}}
+</div>
 
 @endsection
