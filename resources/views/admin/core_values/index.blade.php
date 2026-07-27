@@ -133,16 +133,23 @@
                                      class="w-10 h-10 rounded-lg object-cover border border-gray-100 bg-white flex-shrink-0">
                                 @endif
                                 <div class="min-w-0">
-                                    <p class="font-semibold text-gray-800">{{ $value->title }}</p>
-                                    @if($value->description)
-                                    <p class="text-gray-400 text-xs mt-0.5 line-clamp-1">{{ Str::limit(strip_tags($value->description), 50) }}</p>
+                                    <p class="font-semibold text-gray-800">
+                                        {{ $value->title ?: $value->title_fr }}
+                                        @if(!$value->title && $value->title_fr)
+                                        <span class="text-[10px] font-semibold text-[#2d6fa3] bg-[#2d6fa3]/10 rounded px-1.5 py-0.5 align-middle">FR</span>
+                                        @elseif($value->title && !$value->title_fr)
+                                        <span class="text-[10px] font-semibold text-gray-400 bg-gray-100 rounded px-1.5 py-0.5 align-middle">EN</span>
+                                        @endif
+                                    </p>
+                                    @if($value->description || $value->description_fr)
+                                    <p class="text-gray-400 text-xs mt-0.5 line-clamp-1">{{ Str::limit(strip_tags($value->description ?: $value->description_fr), 50) }}</p>
                                     @endif
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 text-gray-500">
-                            @if($value->headline)
-                            <span class="text-xs">{{ $value->headline }}</span>
+                            @if($value->headline || $value->headline_fr)
+                            <span class="text-xs">{{ $value->headline ?: $value->headline_fr }}</span>
                             @else
                             <span class="text-xs text-gray-300">—</span>
                             @endif
