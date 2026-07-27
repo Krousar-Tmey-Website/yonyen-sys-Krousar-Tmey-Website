@@ -30,6 +30,13 @@ class HomeSetting extends Model
         return static::pluck('value', 'key')->toArray();
     }
 
+    public static function colorValue(?string $value, string $default): string
+    {
+        $color = trim((string) $value);
+
+        return preg_match('/^#(?:[0-9A-Fa-f]{3}){1,2}$/', $color) ? $color : $default;
+    }
+
     public static function getStats(): array
     {
         $settings = static::allKeyed();

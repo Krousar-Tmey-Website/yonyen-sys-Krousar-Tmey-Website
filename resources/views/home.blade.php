@@ -103,7 +103,11 @@
 </section>
 
 {{-- ===== STATS / DATA SECTION ===== --}}
-<section class="bg-[#1a3c6e] py-12 lg:py-16 overflow-hidden" data-reveal>
+@php
+    $statsBackgroundColor = \App\Models\HomeSetting::colorValue($settings['stats_background_color'] ?? null, '#1a3c6e');
+    $statsDataColor = \App\Models\HomeSetting::colorValue($settings['stats_data_color'] ?? null, '#e8a020');
+@endphp
+<section class="py-12 lg:py-16 overflow-hidden" style="background-color: {{ $statsBackgroundColor }};" data-reveal>
     <div class="max-w-7xl mx-auto px-6">
 
         <div class="text-center mb-10 animate-fade-up">
@@ -145,7 +149,8 @@
 
             @foreach($stats as $stat)
             <div class="group text-center opacity-0 translate-y-10 animate-stat">
-                <div class="text-4xl lg:text-5xl font-bold text-[#e8a020] mb-2 counter"
+                <div class="text-4xl lg:text-5xl font-bold mb-2 counter"
+                    style="color: {{ $statsDataColor }};"
                     data-target="{{ $stat['number'] }}"
                     data-final="{{ $stat['display'] }}">
                     {{ $stat['display'] }}
