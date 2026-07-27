@@ -18,7 +18,6 @@
         }
         return $settings[$key] ?? $default;
     };
-
     $transparencyBannerImage = $settings['transparency_banner_image'] ?? null;
     $transparencyBannerImageUrl = $transparencyBannerImage ? (str_starts_with($transparencyBannerImage, 'http') ? $transparencyBannerImage : asset('storage/' . $transparencyBannerImage)) : asset('images/children.jpg');
     $transparencyBannerOverlayColor = $settings['transparency_banner_overlay_color'] ?? '#1a3c6e';
