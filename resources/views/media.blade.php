@@ -78,8 +78,10 @@ $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
 {{-- ========================================================
      PAGE HEADER
      ======================================================== --}}
-<section class="pt-16 pb-8 bg-white text-center scroll-mt-20">
-    <div class="max-w-4xl mx-auto px-6">
+<section class="pt-20 pb-8 bg-white text-center scroll-mt-20">
+<h1 class="py-10 text-5xl md:text-6xl font-extrabold text-[#1F3C6E] uppercase tracking-wide">
+  Media Resources
+</h1>    <div class="max-w-4xl mx-auto px-6">
         @php
             $sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
             $facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
