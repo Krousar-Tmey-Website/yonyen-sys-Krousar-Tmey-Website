@@ -53,21 +53,12 @@ class DashboardController extends Controller
         $year = request('year', now()->year);
 
         $currentYear = (int) now()->year;
-        if (DB::connection()->getDriverName() === 'sqlite') {
-            $yearsFromDb = Donation::selectRaw('strftime("%Y", DonationDate) as year')
-                ->whereNotNull('DonationDate')
-                ->distinct()
-                ->pluck('year')
-                ->map(fn($y) => (int)$y)
-                ->toArray();
-        } else {
-            $yearsFromDb = Donation::selectRaw('YEAR(DonationDate) as year')
-                ->whereNotNull('DonationDate')
-                ->distinct()
-                ->pluck('year')
-                ->map(fn($y) => (int)$y)
-                ->toArray();
-        }
+        $yearsFromDb = Donation::selectRaw('YEAR(DonationDate) as year')
+            ->whereNotNull('DonationDate')
+            ->distinct()
+            ->pluck('year')
+            ->map(fn($y) => (int)$y)
+            ->toArray();
 
         $minYear = min(array_merge([$currentYear - 2], $yearsFromDb));
         $maxYear = max(array_merge([$currentYear + 2], $yearsFromDb));
