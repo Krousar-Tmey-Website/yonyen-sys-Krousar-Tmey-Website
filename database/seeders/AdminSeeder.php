@@ -75,6 +75,8 @@ class AdminSeeder extends Seeder
             ['key' => 'cta_primary_url',     'label' => 'CTA Primary Button URL',   'group' => 'cta', 'value' => '/donate'],
             ['key' => 'cta_secondary_text',  'label' => 'CTA Secondary Button Text', 'group' => 'cta', 'value' => 'Get Involved'],
             ['key' => 'cta_secondary_url',   'label' => 'CTA Secondary Button URL', 'group' => 'cta', 'value' => '/get-involved'],
+            ['key' => 'cta_annual_report_text','label' => 'CTA Annual Report Button Text', 'group' => 'cta', 'value' => 'Annual Report'],
+            ['key' => 'cta_annual_report_url', 'label' => 'CTA Annual Report Button URL', 'group' => 'cta', 'value' => '/resources'],
             // Structure map
             ['key' => 'structure_heading',       'label' => 'Structure Map — Heading',            'group' => 'structure', 'value' => "KROUSAR THMEY'S STRUCTURES"],
             ['key' => 'structure_welfare_title', 'label' => 'Structure Map — Child Welfare Title', 'group' => 'structure', 'value' => 'Child Welfare Program'],
