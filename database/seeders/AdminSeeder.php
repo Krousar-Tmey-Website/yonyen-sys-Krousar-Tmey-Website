@@ -122,6 +122,25 @@ class AdminSeeder extends Seeder
             ['key' => 'programs_banner_title',    'label' => 'Banner Title',    'group' => 'programs_banner', 'value' => 'Our Programs'],
             ['key' => 'programs_banner_subtitle',  'label' => 'Banner Subtitle', 'group' => 'programs_banner', 'value' => 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.'],
             ['key' => 'programs_banner_image',     'label' => 'Banner Background Image (URL or upload path)', 'group' => 'programs_banner', 'value' => ''],
+            // Involved Banner group
+            ['key' => 'involved_banner_image',         'label' => 'Banner Background Image (URL or upload path)', 'group' => 'involved_banner', 'value' => ''],
+            ['key' => 'involved_banner_overlay_color', 'label' => 'Banner Overlay Color', 'group' => 'involved_banner', 'value' => '#1d4e7a'],
+            ['key' => 'involved_banner_badge',         'label' => 'Banner Badge Text',    'group' => 'involved_banner', 'value' => 'Join Our Mission'],
+            ['key' => 'involved_banner_title',         'label' => 'Banner Title',         'group' => 'involved_banner', 'value' => 'Get Involved'],
+            ['key' => 'involved_banner_subtitle',      'label' => 'Banner Subtitle',      'group' => 'involved_banner', 'value' => 'There are many meaningful ways to support Krousar Thmey\'s mission — from partnerships and volunteering, to exploring job opportunities or purchasing our books.'],
+            ['key' => 'involved_banner_subtitle_fr',   'label' => 'Banner Subtitle (French)',      'group' => 'involved_banner', 'value' => ''],
+            // Involved Books Banner group
+            ['key' => 'involved_books_banner_image',         'label' => 'Books Section — Background Image (URL or upload path)', 'group' => 'involved_banner', 'value' => ''],
+            ['key' => 'involved_books_banner_overlay_color', 'label' => 'Books Section — Overlay Color', 'group' => 'involved_banner', 'value' => '#163b5d'],
+            ['key' => 'involved_books_banner_badge',         'label' => 'Books Section — Badge Text',    'group' => 'involved_banner', 'value' => 'Books for Sale'],
+            ['key' => 'involved_books_banner_title',         'label' => 'Books Section — Title',         'group' => 'involved_banner', 'value' => 'Support Through Literature'],
+            ['key' => 'involved_books_banner_subtitle',      'label' => 'Books Section — Subtitle',      'group' => 'involved_banner', 'value' => 'Browse our collection of publication titles. 100% of proceeds directly fund our educational and social programs for vulnerable children across Cambodia.'],
+            // Involved CTA Banner group
+            ['key' => 'involved_cta_banner_image',         'label' => 'CTA Section — Background Image (URL or upload path)', 'group' => 'involved_banner', 'value' => ''],
+            ['key' => 'involved_cta_banner_overlay_color', 'label' => 'CTA Section — Overlay Color', 'group' => 'involved_banner', 'value' => '#1d4e7a'],
+            ['key' => 'involved_cta_banner_badge',         'label' => 'CTA Section — Badge Text',    'group' => 'involved_banner', 'value' => 'Ready to Help?'],
+            ['key' => 'involved_cta_banner_title',         'label' => 'CTA Section — Title',         'group' => 'involved_banner', 'value' => 'Every Action Counts'],
+            ['key' => 'involved_cta_banner_subtitle',      'label' => 'CTA Section — Subtitle',      'group' => 'involved_banner', 'value' => 'Whether you buy a book, volunteer, partner with us, or send your application — you are helping build a better future for Cambodia\'s children.'],
             // Project defaults group
             ['key' => 'project_default_area_of_work', 'label' => 'Default Area of Work', 'group' => 'project_defaults', 'value' => 'Child protection'],
             ['key' => 'project_default_duration', 'label' => 'Default Duration', 'group' => 'project_defaults', 'value' => 'Undetermined'],
