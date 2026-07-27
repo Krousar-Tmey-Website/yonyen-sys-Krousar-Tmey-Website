@@ -65,7 +65,7 @@
             <div>
                 <label for="file" class="mb-1 block text-sm font-semibold text-gray-700">PDF File <span class="text-red-500">*</span></label>
                 <input id="file" name="file" type="file" accept=".pdf,application/pdf" required class="block w-full rounded-xl border {{ $errors->has('file') ? 'border-red-300 focus:ring-red-400' : 'border-gray-200' }} text-sm file:mr-4 file:rounded-full file:border-0 file:bg-[#1d4e7a] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white">
-                <p class="mt-1 text-xs text-gray-500">Only PDF files up to 10MB are allowed.</p>
+                <p class="mt-1 text-xs text-gray-500">Only PDF files up to 40MB are allowed.</p>
                 @error('file')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
             </div>
         </div>

@@ -69,7 +69,7 @@
                 @if ($report->file_path)
                     <p class="mt-2 text-sm text-gray-500">Current file: {{ $report->original_filename ?? basename($report->file_path) }}</p>
                 @endif
-                <p class="mt-1 text-xs text-gray-500">Leave empty to keep the current PDF. Only PDF files up to 10MB are allowed.</p>
+                <p class="mt-1 text-xs text-gray-500">Leave empty to keep the current PDF. Only PDF files up to 40MB are allowed.</p>
                 @error('file')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
             </div>
         </div>

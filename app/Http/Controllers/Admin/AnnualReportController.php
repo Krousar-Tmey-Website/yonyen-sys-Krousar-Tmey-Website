@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnnualReport;
+use App\Services\ReportThumbnailGenerator;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -35,7 +37,7 @@ class AnnualReportController extends Controller
         return view('admin.reports.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, ReportThumbnailGenerator $thumbnails)
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -43,7 +45,7 @@ class AnnualReportController extends Controller
             'description' => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],
             'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
-            'file'  => ['required', 'file', 'mimes:pdf', 'max:20480'],
+            'file'  => ['required', 'file', 'mimes:pdf', 'max:40960'],
         ]);
 
         $file = $request->file('file');
@@ -52,6 +54,7 @@ class AnnualReportController extends Controller
         $data['is_active'] = true;
 
         $report = AnnualReport::create($data);
+        $this->generateThumbnail($report, $thumbnails);
 
         return redirect()->route('admin.reports.index')
             ->with('success', 'Report created successfully.');
@@ -67,7 +70,7 @@ class AnnualReportController extends Controller
         return view('admin.reports.edit', compact('report'));
     }
 
-    public function update(Request $request, AnnualReport $report)
+    public function update(Request $request, AnnualReport $report, ReportThumbnailGenerator $thumbnails)
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -75,7 +78,7 @@ class AnnualReportController extends Controller
             'description' => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],
             'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
-            'file'  => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
+            'file'  => ['nullable', 'file', 'mimes:pdf', 'max:40960'],
         ]);
 
         if ($request->hasFile('file')) {
@@ -85,12 +88,30 @@ class AnnualReportController extends Controller
             $file = $request->file('file');
             $data['file_path'] = $file->store('reports', 'public');
             $data['original_filename'] = $file->getClientOriginalName();
+            if ($report->thumbnail_path) {
+                Storage::disk('public')->delete($report->thumbnail_path);
+            }
+            $data['thumbnail_path'] = null;
+
         }
 
         $report->update($data);
 
+        if ($request->hasFile('file')) {
+            $this->generateThumbnail($report->fresh(), $thumbnails);
+        }
+
         return redirect()->route('admin.reports.index')
             ->with('success', 'Report updated successfully.');
+    }
+
+    private function generateThumbnail(AnnualReport $report, ReportThumbnailGenerator $thumbnails): void
+    {
+        try {
+            $thumbnails->generate($report);
+        } catch (\Throwable $e) {
+            Log::warning("Thumbnail generation failed for report #{$report->id}: " . $e->getMessage());
+        }
     }
 
     public function destroy(AnnualReport $report)
@@ -98,10 +119,15 @@ class AnnualReportController extends Controller
         if ($report->file_path) {
             Storage::disk('public')->delete($report->file_path);
         }
+        if ($report->thumbnail_path) {
+            Storage::disk('public')->delete($report->thumbnail_path);
+        }
 
         $report->delete();
 
         return redirect()->route('admin.reports.index')
             ->with('success', 'Report deleted successfully.');
     }
+
+
 }
