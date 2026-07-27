@@ -14,14 +14,14 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto">
+<div>
     <form action="{{ route('admin.resource-pages.update', $resourcePage) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')
 
         <div x-data="bilingualForm()" class="space-y-6">
         {{-- Basic Info --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -37,28 +37,31 @@
                 </div>
             </div>
 
-            <div class="form-group" x-show="lang === 'en'">
-                <label class="form-label">Title <span class="required">*</span></label>
-                <input type="text" name="title" value="{{ old('title', $resourcePage->title) }}"
-                       class="form-control @error('title') error @enderror">
-                @error('title')<div class="form-error">{{ $message }}</div>@enderror
-                <div class="form-helper">Also the label News tags match against to link here.</div>
-            </div>
+            <div class="grid lg:grid-cols-2 gap-5">
+                <div>
+                    <div class="form-group form-group--no-margin" x-show="lang === 'en'">
+                        <label class="form-label">Title <span class="required">*</span></label>
+                        <input type="text" name="title" value="{{ old('title', $resourcePage->title) }}"
+                               class="form-control @error('title') error @enderror">
+                        @error('title')<div class="form-error">{{ $message }}</div>@enderror
+                        <div class="form-helper">Also the label News tags match against to link here.</div>
+                    </div>
+                    <div class="form-group form-group--no-margin" x-show="lang === 'fr'" x-cloak>
+                        <label class="form-label">Title (French) <span class="optional">(optional)</span></label>
+                        <input type="text" name="title_fr" value="{{ old('title_fr', $resourcePage->title_fr) }}"
+                               class="form-control @error('title_fr') error @enderror">
+                        @error('title_fr')<div class="form-error">{{ $message }}</div>@enderror
+                        <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English value.</div>
+                    </div>
+                </div>
 
-            <div class="form-group" x-show="lang === 'fr'" x-cloak>
-                <label class="form-label">Title (French) <span class="optional">(optional)</span></label>
-                <input type="text" name="title_fr" value="{{ old('title_fr', $resourcePage->title_fr) }}"
-                       class="form-control @error('title_fr') error @enderror">
-                @error('title_fr')<div class="form-error">{{ $message }}</div>@enderror
-                <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English value.</div>
-            </div>
-
-            <div class="form-group" x-show="lang === 'en'">
-                <label class="form-label">Slug <span class="optional">(optional)</span></label>
-                <input type="text" name="slug" value="{{ old('slug', $resourcePage->slug) }}"
-                       class="form-control @error('slug') error @enderror">
-                @error('slug')<div class="form-error">{{ $message }}</div>@enderror
-                <div class="form-helper">Used in the URL: /topics/{{ $resourcePage->slug }} — changing this moves the page's URL.</div>
+                <div class="form-group form-group--no-margin" x-show="lang === 'en'">
+                    <label class="form-label">Slug <span class="optional">(optional)</span></label>
+                    <input type="text" name="slug" value="{{ old('slug', $resourcePage->slug) }}"
+                           class="form-control @error('slug') error @enderror">
+                    @error('slug')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">Used in the URL: /topics/{{ $resourcePage->slug }} — changing this moves the page's URL.</div>
+                </div>
             </div>
 
             <div class="form-group form-group--no-margin" x-show="lang === 'en'">
@@ -76,7 +79,7 @@
         </div>
 
         {{-- Detail Page Content --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
                     <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +121,7 @@
         </div>
 
         {{-- Images --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">
                     <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,63 +131,65 @@
                 Images
             </h3>
 
-            <div class="form-group">
-                <label class="form-label">Card Image <span class="optional">(shown on the Topics listing)</span></label>
-                @if($resourcePage->image)
-                <div class="current-image mb-2">
-                    <img src="{{ $resourcePage->image_url }}" alt="Current image">
-                    <div class="image-info">
-                        <strong>Current image</strong>
-                        <label class="text-small-info flex items-center gap-1.5 mt-1">
-                            <input type="checkbox" name="remove_image" value="1"> Remove image
-                        </label>
+            <div class="grid lg:grid-cols-2 gap-5">
+                <div class="form-group form-group--no-margin">
+                    <label class="form-label">Card Image <span class="optional">(shown on the Topics listing)</span></label>
+                    @if($resourcePage->image)
+                    <div class="current-image mb-2">
+                        <img src="{{ $resourcePage->image_url }}" alt="Current image">
+                        <div class="image-info">
+                            <strong>Current image</strong>
+                            <label class="text-small-info flex items-center gap-1.5 mt-1">
+                                <input type="checkbox" name="remove_image" value="1"> Remove image
+                            </label>
+                        </div>
                     </div>
-                </div>
-                @endif
-                <div class="upload-area" onclick="document.getElementById('imageInput').click()">
-                    <input type="file" name="image" id="imageInput" accept="image/*" class="hidden">
-                    <div id="imagePlaceholder">
-                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <div class="upload-title">Click to upload new image</div>
-                        <div class="upload-subtitle">Max 2MB. JPG, PNG, or WebP</div>
+                    @endif
+                    <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+                        <input type="file" name="image" id="imageInput" accept="image/*" class="hidden">
+                        <div id="imagePlaceholder">
+                            <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <div class="upload-title">Click to upload new image</div>
+                            <div class="upload-subtitle">Max 2MB. JPG, PNG, or WebP</div>
+                        </div>
+                        <div id="imagePreview" class="hidden mt-3"></div>
                     </div>
-                    <div id="imagePreview" class="hidden mt-3"></div>
+                    @error('image')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
-                @error('image')<div class="form-error">{{ $message }}</div>@enderror
-            </div>
 
-            <div class="form-group form-group--no-margin">
-                <label class="form-label">Detail Page Hero Image <span class="optional">(shown on the topic's own page)</span></label>
-                @if($resourcePage->detail_image)
-                <div class="current-image mb-2">
-                    <img src="{{ $resourcePage->detail_image_url }}" alt="Current detail image">
-                    <div class="image-info">
-                        <strong>Current image</strong>
-                        <label class="text-small-info flex items-center gap-1.5 mt-1">
-                            <input type="checkbox" name="remove_detail_image" value="1"> Remove image
-                        </label>
+                <div class="form-group form-group--no-margin">
+                    <label class="form-label">Detail Page Hero Image <span class="optional">(shown on the topic's own page)</span></label>
+                    @if($resourcePage->detail_image)
+                    <div class="current-image mb-2">
+                        <img src="{{ $resourcePage->detail_image_url }}" alt="Current detail image">
+                        <div class="image-info">
+                            <strong>Current image</strong>
+                            <label class="text-small-info flex items-center gap-1.5 mt-1">
+                                <input type="checkbox" name="remove_detail_image" value="1"> Remove image
+                            </label>
+                        </div>
                     </div>
-                </div>
-                @endif
-                <div class="upload-area" onclick="document.getElementById('detailImageInput').click()">
-                    <input type="file" name="detail_image" id="detailImageInput" accept="image/*" class="hidden">
-                    <div id="detailImagePlaceholder">
-                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <div class="upload-title">Click to upload new image</div>
-                        <div class="upload-subtitle">Max 4MB. JPG, PNG, or WebP</div>
+                    @endif
+                    <div class="upload-area" onclick="document.getElementById('detailImageInput').click()">
+                        <input type="file" name="detail_image" id="detailImageInput" accept="image/*" class="hidden">
+                        <div id="detailImagePlaceholder">
+                            <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <div class="upload-title">Click to upload new image</div>
+                            <div class="upload-subtitle">Max 4MB. JPG, PNG, or WebP</div>
+                        </div>
+                        <div id="detailImagePreview" class="hidden mt-3"></div>
                     </div>
-                    <div id="detailImagePreview" class="hidden mt-3"></div>
+                    @error('detail_image')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
-                @error('detail_image')<div class="form-error">{{ $message }}</div>@enderror
             </div>
         </div>
 
         {{-- Feature Items --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
                     <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -245,7 +250,7 @@
         </div>
 
         {{-- Settings --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

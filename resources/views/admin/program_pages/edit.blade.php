@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-<div class="mx-auto max-w-6xl">
+<div>
     <form id="main-update-form" action="{{ route('admin.program-pages.update', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-6" x-data="bilingualForm()">
         @csrf
         @method('PUT')

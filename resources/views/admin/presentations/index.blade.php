@@ -155,7 +155,7 @@
     </div>
 
     {{-- OUR PORTFOLIO SECTION --}}
-    <div x-show="tab === 'portfolio'" class="space-y-6 max-w-5xl mx-auto">
+    <div x-show="tab === 'portfolio'" class="space-y-6">
         <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8">
             <form action="{{ route('admin.presentation.update') }}" method="POST" class="space-y-5" x-data="bilingualForm()">
                 @csrf
