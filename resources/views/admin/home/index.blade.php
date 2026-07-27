@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+﻿@extends('admin.layouts.app')
 
 @section('title', 'Homepage Settings')
 @section('page-title', 'Homepage Settings')
@@ -71,6 +71,8 @@ $sections = [
             ['key' => 'stat_employees',      'label' => 'Employees',                              'type' => 'number', 'placeholder' => 'e.g. 70'],
             ['key' => 'stat_budget',         'label' => 'Annual Budget (number or e.g. 950K)',    'type' => 'budget', 'placeholder' => 'e.g. 950000 or 950K'],
             ['key' => 'stat_provinces',      'label' => 'Provinces in Cambodia',                  'type' => 'number', 'placeholder' => 'e.g. 15'],
+            ['key' => 'stats_background_color', 'label' => 'Background Color',                     'type' => 'color', 'default' => '#1a3c6e'],
+            ['key' => 'stats_data_color',       'label' => 'Data Number Color',                    'type' => 'color', 'default' => '#e8a020'],
         ],
     ],
 
@@ -142,6 +144,14 @@ $sections = [
                                value="{{ $currentVal }}"
                                placeholder="{{ $field['placeholder'] ?? 'e.g. 950000 or 950K' }}"
                                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+
+                    @elseif($field['type'] === 'color')
+                        <div class="flex items-center gap-3">
+                            <input type="color" id="settings_{{ $k }}" name="settings[{{ $k }}]"
+                                   value="{{ $currentVal ?: $default }}"
+                                   class="h-11 w-16 rounded-xl border border-gray-200 bg-white p-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <span class="text-xs font-mono text-gray-400">{{ $currentVal ?: $default }}</span>
+                        </div>
 
                     @elseif($field['type'] === 'image')
                         {{-- Current image preview --}}
