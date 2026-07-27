@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
@@ -183,8 +184,9 @@ Route::get('/topics/{slug}', [ResourcePageController::class, 'show'])->name('res
 
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
+    $settings = HomeSetting::allKeyed();
 
-    return view('resources', compact('reports'));
+    return view('resources', compact('reports', 'settings'));
 })->name('resources');
 
 Route::get('/media', function () {
@@ -227,6 +229,13 @@ Route::get('/storage/{path}', function (string $path) {
         'Content-Type' => $disk->mimeType($path) ?: 'application/octet-stream',
     ]);
 })->where('path', '.*')->name('storage.public');
+
+Route::get('/contact', function () {
+    $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
+
+    return view('contact', compact('offices'));
+})->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/partners', function () {
     $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
@@ -380,6 +389,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);
+
+    // Resources Banner
+    Route::get('resources-banner', [Admin\AnnualReportController::class, 'bannerIndex'])->name('resources-banner.index');
+    Route::post('resources-banner', [Admin\AnnualReportController::class, 'updateBanner'])->name('resources-banner.update');
 
     // Books for Sale
     Route::resource('books', Admin\BookController::class)->except(['show']);

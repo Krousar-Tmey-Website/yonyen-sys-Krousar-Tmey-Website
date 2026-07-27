@@ -5,6 +5,7 @@
     $selectedSubcategory = old('subcategory', $isEdit ? $partner->subcategory : '');
 @endphp
 
+<div class="grid lg:grid-cols-2 gap-5">
 {{-- PARTNER NAME --}}
 <div>
     <label for="name" class="block text-sm font-semibold text-gray-700 mb-1.5">
@@ -102,6 +103,7 @@
             </p>
         @enderror
     </div>
+</div>
 </div>
 
 {{-- DESCRIPTION --}}

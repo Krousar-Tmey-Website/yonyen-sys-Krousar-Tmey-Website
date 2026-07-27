@@ -49,7 +49,7 @@
                     </div>
                     <h3 class="font-extrabold text-lg text-white mb-1">Make a Difference</h3>
                     <p class="text-xs text-white/70 leading-relaxed mb-4">Together, we build a brighter future for disadvantaged children across Cambodia.</p>
-                    <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#a3c04a] hover:text-white transition-colors">
+                    <a href="{{ route('contact') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#a3c04a] hover:text-white transition-colors">
                         Get in touch
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
@@ -416,7 +416,7 @@
                         </div>
                         <p class="text-[#1d4e7a] font-bold text-lg md:text-xl mb-2">Interested in becoming a partner?</p>
                         <p class="text-gray-500 text-sm mb-6">Let's build together our future cooperation</p>
-                        <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')"
+                        <a href="{{ route('contact') }}"
                            class="group/btn mt-4 inline-flex items-center gap-2 bg-white text-[#1d4e7a] font-bold text-sm px-7 py-2.5 rounded-xl border-2 border-[#1d4e7a] hover:bg-[#1d4e7a] hover:text-white hover:gap-3 transition-all duration-300 active:scale-[0.97] shadow-sm hover:shadow-md">
                             <span>Contact us</span>
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
@@ -1114,7 +1114,7 @@
         <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">Whether you buy a book, volunteer, partner with us, or send your application — you are helping build a better future for Cambodia's children.</p>
         <div class="flex flex-wrap gap-4 justify-center">
             <a href="{{ route('involved') }}#book-for-sales" class="btn-primary text-base">Book for Sales</a>
-            <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="btn-outline text-base">Contact Us</a>
+            <a href="{{ route('contact') }}" class="btn-outline text-base">Contact Us</a>
         </div>
     </div>
 </section>
