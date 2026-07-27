@@ -25,6 +25,11 @@
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
                 Key Figures
             </button>
+            <button @click="tab = 'banner'"
+                    :class="tab === 'banner' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Banner
+            </button>
         </nav>
     </div>
 
@@ -204,6 +209,188 @@
                     <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
                 </div>
                 <button type="submit" class="btn-primary text-sm py-2.5">Save Our Portfolio</button>
+            </form>
+        </div>
+    </div>
+
+    {{-- ═══════════════════════════════════════════ --}}
+    {{-- BANNER TAB --}}
+    {{-- ═══════════════════════════════════════════ --}}
+    <div x-show="tab === 'banner'" class="space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8">
+            <form action="{{ route('admin.presentation.banner.update') }}" method="POST" enctype="multipart/form-data" class="space-y-5" x-data="bilingualForm()">
+                @csrf
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4.5 h-4.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </span>
+                        <div>
+                            <h3 class="font-bold text-gray-700 text-sm">Page Banner</h3>
+                            <p class="text-gray-400 text-xs mt-0.5">Customize the hero banner at the top of the Presentation page.</p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Live Preview --}}
+                <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                    <div class="text-xs font-medium text-gray-400 uppercase tracking-wider px-4 py-2 bg-gray-50 border-b border-gray-100 flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        Live Preview
+                    </div>
+                    @php
+                    $pbImage = $settings['presentation_banner_image'] ?? null;
+                    $pbImageUrl = $pbImage ? (str_starts_with($pbImage, 'http') ? $pbImage : asset('storage/' . $pbImage)) : null;
+                    $pbOverlay = old('presentation_banner_overlay_color', $settings['presentation_banner_overlay_color'] ?? '#1a3c6e');
+                    $pbBadge = old('presentation_banner_badge', $settings['presentation_banner_badge'] ?? 'Since 1991');
+                    $pbTitle = old('presentation_banner_title', $settings['presentation_banner_title'] ?? 'Krousar Thmey, the first Cambodian organization helping disadvantaged children');
+                    $pbBtn1 = old('presentation_banner_btn1_text', $settings['presentation_banner_btn1_text'] ?? 'Learn More');
+                    $pbBtn2 = old('presentation_banner_btn2_text', $settings['presentation_banner_btn2_text'] ?? 'Donate Now');
+                    @endphp
+                    <div id="banner-preview" class="relative py-14 px-6 text-center overflow-hidden" style="background-color: {{ $pbOverlay }};">
+                        @if($pbImageUrl)
+                        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $pbImageUrl }}'); opacity: 0.35;"></div>
+                        @endif
+                        <div class="relative z-10 flex flex-col items-center gap-3">
+                            <span class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg">{{ $pbBadge }}</span>
+                            <p class="text-white text-lg font-bold max-w-xl">{{ $pbTitle }}</p>
+                            <div class="flex flex-wrap gap-3 justify-center mt-2">
+                                <span class="px-4 py-2 bg-[#2d6fa3] text-white text-xs rounded-full shadow-md">{{ $pbBtn1 }}</span>
+                                <span class="px-4 py-2 bg-[#8da83a] text-white text-xs rounded-full shadow-md">{{ $pbBtn2 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Background Image --}}
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-2">Background Image</label>
+                    <div class="space-y-3">
+                        @if($pbImage)
+                        <div class="flex items-center gap-3">
+                            <img src="{{ $pbImageUrl }}" alt="Current banner" class="w-24 h-16 object-cover rounded-lg border border-gray-200">
+                            <label class="flex items-center gap-1.5 text-xs text-gray-500 cursor-pointer">
+                                <input type="checkbox" name="presentation_banner_image_clear" value="1" class="rounded border-gray-300">
+                                Remove current image
+                            </label>
+                        </div>
+                        @endif
+                        <div class="flex items-center gap-3">
+                            <input type="file" name="presentation_banner_image" accept="image/*"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                   onchange="if(this.files.length){let r=new FileReader();r.onload=function(e){document.getElementById('banner-preview').style.backgroundImage='url('+e.target.result+')';document.getElementById('banner-preview').querySelector('.absolute').style.backgroundImage='url('+e.target.result+')'};r.readAsDataURL(this.files[0])}">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Or use image URL</label>
+                            <input type="url" name="presentation_banner_image_url" value="{{ $pbImage && str_starts_with($pbImage, 'http') ? $pbImage : '' }}"
+                                   placeholder="https://example.com/image.jpg"
+                                   class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                   onchange="document.getElementById('banner-preview').style.backgroundImage='url('+this.value+')'">
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Overlay Color --}}
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Overlay Color</label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" name="presentation_banner_overlay_color" value="{{ $pbOverlay }}"
+                               onchange="document.getElementById('banner-preview').style.backgroundColor=this.value"
+                               class="h-10 w-16 rounded-lg border border-gray-200 bg-white p-1 cursor-pointer">
+                        <input type="text" name="presentation_banner_overlay_color_text" value="{{ $pbOverlay }}"
+                               oninput="this.previousElementSibling.value=this.value;document.getElementById('banner-preview').style.backgroundColor=this.value"
+                               class="w-28 px-3 py-2 border border-gray-200 rounded-xl text-xs font-mono focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                               placeholder="#1a3c6e">
+                    </div>
+                </div>
+
+                {{-- Badge --}}
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Badge Text</label>
+                    <input type="text" name="presentation_banner_badge" value="{{ $pbBadge }}"
+                           oninput="document.querySelector('#banner-preview .inline-block').textContent=this.value"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+
+                {{-- Title --}}
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
+                    <input type="text" name="presentation_banner_title" value="{{ $pbTitle }}"
+                           oninput="document.querySelector('#banner-preview p.font-bold').textContent=this.value"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+
+                {{-- Subtitle (bilingual) --}}
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-medium text-gray-600">Subtitle</label>
+                        <div class="lang-tabs" title="Toggle editing language (English / French)">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                        </div>
+                    </div>
+                    <div x-show="lang === 'en'">
+                        <textarea name="presentation_banner_subtitle" rows="3"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                  placeholder="Born in 1991 in the Site II refugee camp...">{{ old('presentation_banner_subtitle', $settings['presentation_banner_subtitle'] ?? '') }}</textarea>
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <textarea name="presentation_banner_subtitle_fr" rows="3"
+                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                  placeholder="French translation (optional)">{{ old('presentation_banner_subtitle_fr', $settings['presentation_banner_subtitle_fr'] ?? '') }}</textarea>
+                        <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
+                    </div>
+                </div>
+
+                {{-- Buttons --}}
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-2">Buttons</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">Button 1 (Primary) — Text</label>
+                            <input type="text" name="presentation_banner_btn1_text" value="{{ $settings['presentation_banner_btn1_text'] ?? 'Learn More' }}"
+                                   oninput="document.querySelectorAll('#banner-preview .flex-wrap span:first-child').forEach(e=>e.textContent=this.value)"
+                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">Button 1 — URL</label>
+                            <input type="text" name="presentation_banner_btn1_url" value="{{ $settings['presentation_banner_btn1_url'] ?? '/our-programs' }}"
+                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                   placeholder="/our-programs">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">Button 2 (Secondary) — Text</label>
+                            <input type="text" name="presentation_banner_btn2_text" value="{{ $settings['presentation_banner_btn2_text'] ?? 'Donate Now' }}"
+                                   oninput="document.querySelectorAll('#banner-preview .flex-wrap span:last-child').forEach(e=>e.textContent=this.value)"
+                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">Button 2 — URL</label>
+                            <input type="text" name="presentation_banner_btn2_url" value="{{ $settings['presentation_banner_btn2_url'] ?? '/donate' }}"
+                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                   placeholder="/donate">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">Button 3 — Text <span class="text-gray-400">(optional)</span></label>
+                            <input type="text" name="presentation_banner_btn3_text" value="{{ $settings['presentation_banner_btn3_text'] ?? '' }}"
+                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">Button 3 — URL</label>
+                            <input type="text" name="presentation_banner_btn3_url" value="{{ $settings['presentation_banner_btn3_url'] ?? '' }}"
+                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                                   placeholder="Optional URL">
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Submit --}}
+                <div class="pt-2 border-t border-gray-100">
+                    <button type="submit" class="btn-primary text-sm py-2.5">Save Banner Settings</button>
+                    <a href="{{ route('presentation') }}" target="_blank" class="ml-3 text-xs text-[#2d6fa3] hover:text-[#1d4e7a] underline">View live page &rarr;</a>
+                </div>
             </form>
         </div>
     </div>

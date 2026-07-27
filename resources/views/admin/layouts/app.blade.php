@@ -105,8 +105,7 @@
                 'children' => [
                 ['route' => 'admin.presentation.index', 'label' => 'Presentation'],
                 ['route' => 'admin.core-values.index', 'label' => 'Our Values'],
-                ['route' => 'admin.history-banner.index', 'label' => 'History Banner'],
-                ['route' => 'admin.history-events.index', 'label' => 'Our History'],
+                ['route' => 'admin.history-page.index', 'label' => 'History Page'],
                 ['route' => 'admin.awards.index', 'label' => 'Awards'],
                 ['route' => 'admin.partners.index', 'label' => 'Partners'],
                 ['route' => 'admin.transparency.index', 'label' => 'Transparency'],

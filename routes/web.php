@@ -385,6 +385,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
     Route::get('history-banner', [Admin\HistoryBannerController::class, 'index'])->name('history-banner.index');
     Route::post('history-banner', [Admin\HistoryBannerController::class, 'update'])->name('history-banner.update');
+    Route::get('history-page', [Admin\HistoryPageController::class, 'index'])->name('history-page.index');
     Route::resource('history-events', Admin\HistoryEventController::class)
         ->except(['show', 'create'])
         ->parameters(['history-events' => 'historyEvent']);
@@ -423,6 +424,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Involved Banner
     Route::get('involved-banner', [Admin\InvolvedBannerController::class, 'index'])->name('involved-banner.index');
     Route::post('involved-banner', [Admin\InvolvedBannerController::class, 'update'])->name('involved-banner.update');
+
+    // Contact Banner
+    Route::get('contact-banner', [Admin\ContactBannerController::class, 'index'])->name('contact-banner.index');
+    Route::post('contact-banner', [Admin\ContactBannerController::class, 'update'])->name('contact-banner.update');
+    Route::get('contact-page', [Admin\ContactPageController::class, 'index'])->name('contact-page.index');
 
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);

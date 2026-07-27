@@ -54,16 +54,16 @@
         @endif
 
         {{-- Actions --}}
-        <div class="flex items-center gap-2.5 pt-5 border-t border-gray-100">
+        <div class="flex items-center gap-2 pt-4 border-t border-gray-100">
             <a href="{{ route('donate') }}"
-               class="flex-1 inline-flex items-center justify-center gap-1.5 bg-[#8da83a] hover:bg-[#a3c04a] text-white px-4 py-2.5 rounded-full text-sm font-semibold transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+               class="flex-1 inline-flex items-center justify-center gap-1 bg-[#8da83a] hover:bg-[#a3c04a] text-white px-3 py-1.5 rounded-full text-xs font-semibold transition-colors">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                 {{ __('Donate') }}
             </a>
             <a href="{{ route('campaigns.show', $campaign) }}"
-               class="flex-1 inline-flex items-center justify-center gap-1.5 border border-gray-200 hover:border-[#2d6fa3] text-[#2d6fa3] hover:bg-[#2d6fa3]/5 px-4 py-2.5 rounded-full text-sm font-semibold transition-all">
+               class="flex-1 inline-flex items-center justify-center gap-1 border border-gray-200 hover:border-[#2d6fa3] text-[#2d6fa3] hover:bg-[#2d6fa3]/5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all">
                 {{ __('Read More') }}
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </a>
         </div>
     </div>
