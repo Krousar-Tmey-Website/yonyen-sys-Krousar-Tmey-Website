@@ -354,7 +354,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('page-sections', Admin\PageSectionController::class)->except(['show']);
     Route::resource('slides', Admin\SlideController::class)->except(['show']);
     Route::resource('impact-statistics', Admin\ImpactStatisticController::class)
-        ->except(['show', 'create', 'edit'])
+        ->except(['show', 'create', 'edit', 'index'])
         ->parameters(['impact-statistics' => 'impactStatistic']);
 
     Route::resource('sponsors', Admin\SponsorController::class)->except(['show']);
@@ -380,7 +380,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('presentation', [Admin\PresentationController::class, 'update'])->name('presentation.update');
     Route::post('presentation/banner', [Admin\PresentationController::class, 'updateBanner'])->name('presentation.banner.update');
     Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show'])->parameters(['presentation-slides' => 'slide']);
-    Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show'])->parameters(['principle-slides' => 'slide']);
+    Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show', 'create', 'edit'])->parameters(['principle-slides' => 'slide']);
     Route::resource('partners', Admin\PartnerController::class)->except(['show']);
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
     Route::get('history-banner', [Admin\HistoryBannerController::class, 'index'])->name('history-banner.index');

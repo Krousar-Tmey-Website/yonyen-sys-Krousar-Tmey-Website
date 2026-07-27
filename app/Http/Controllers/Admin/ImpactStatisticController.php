@@ -9,12 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ImpactStatisticController extends Controller
 {
-    public function index()
-    {
-        $statistics = ImpactStatistic::orderBy('sort_order')->get();
-        return view('admin.impact_statistics.index', compact('statistics'));
-    }
-
     public function store(Request $request)
     {
         $data = $request->validate([

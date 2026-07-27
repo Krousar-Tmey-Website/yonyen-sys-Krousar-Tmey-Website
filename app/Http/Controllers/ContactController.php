@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ContactInquiryMail;
 use App\Models\ContactInquiry;
+use App\Models\HomeSetting;
 use App\Models\Office;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +16,31 @@ class ContactController extends Controller
     public function show()
     {
         $offices = Office::active()->get();
-        return view('contact', compact('offices'));
+
+        $settings = HomeSetting::allKeyed();
+
+        $contactBannerImage = $settings['contact_banner_image'] ?? '';
+        $contactBannerOverlayColor = HomeSetting::colorValue($settings['contact_banner_overlay_color'] ?? null, '#1d4e7a');
+        $contactBannerBadge = $settings['contact_banner_badge'] ?? 'Support Our Work';
+        $contactBannerTitle = $settings['contact_banner_title'] ?? 'Make a Difference Today';
+        $contactBannerSubtitle = $settings['contact_banner_subtitle'] ?? 'Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.';
+        $contactBannerBtn1Text = $settings['contact_banner_btn1_text'] ?? 'Donate Now';
+        $contactBannerBtn1Url = $settings['contact_banner_btn1_url'] ?? '/donate';
+        $contactBannerBtn2Text = $settings['contact_banner_btn2_text'] ?? 'Get Involved';
+        $contactBannerBtn2Url = $settings['contact_banner_btn2_url'] ?? '/get-involved';
+
+        return view('contact', compact(
+            'offices',
+            'contactBannerImage',
+            'contactBannerOverlayColor',
+            'contactBannerBadge',
+            'contactBannerTitle',
+            'contactBannerSubtitle',
+            'contactBannerBtn1Text',
+            'contactBannerBtn1Url',
+            'contactBannerBtn2Text',
+            'contactBannerBtn2Url'
+        ));
     }
 
     public function store(Request $request)
