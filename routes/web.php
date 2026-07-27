@@ -280,6 +280,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Media page (public /media)
     Route::get('media-page', [Admin\MediaPageController::class, 'index'])->name('media-page.index');
     Route::post('media-page', [Admin\MediaPageController::class, 'update'])->name('media-page.update');
+    // Media banner (for the Media Page tabs)
+    Route::get('media-banner', [Admin\MediaBannerController::class, 'index'])->name('media-banner.index');
+    Route::post('media-banner', [Admin\MediaBannerController::class, 'update'])->name('media-banner.update');
     // Words and Pictures application (public /words-and-pictures)
     Route::get('words-pictures', [Admin\WordsPicturesController::class, 'index'])->name('words-pictures.index');
     Route::post('words-pictures', [Admin\WordsPicturesController::class, 'update'])->name('words-pictures.update');
