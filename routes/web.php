@@ -338,6 +338,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Who We Are
     Route::get('presentation', [Admin\PresentationController::class, 'index'])->name('presentation.index');
     Route::post('presentation', [Admin\PresentationController::class, 'update'])->name('presentation.update');
+    Route::post('presentation/banner', [Admin\PresentationController::class, 'updateBanner'])->name('presentation.banner.update');
     Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show'])->parameters(['presentation-slides' => 'slide']);
     Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show'])->parameters(['principle-slides' => 'slide']);
     Route::resource('partners', Admin\PartnerController::class)->except(['show']);

@@ -44,6 +44,8 @@ class AdminSeeder extends Seeder
             ['key' => 'stat_employees',  'label' => 'Employees',                  'group' => 'stats', 'value' => '70'],
             ['key' => 'stat_budget',     'label' => 'USD Annual Budget',          'group' => 'stats', 'value' => '950000'],
             ['key' => 'stat_provinces',  'label' => 'Provinces',                  'group' => 'stats', 'value' => '15'],
+            ['key' => 'stats_background_color', 'label' => 'Stats Background Color', 'group' => 'stats', 'value' => '#1a3c6e'],
+            ['key' => 'stats_data_color',       'label' => 'Stats Data Number Color', 'group' => 'stats', 'value' => '#e8a020'],
             // Hero group
             ['key' => 'hero_banner_text',           'label' => 'Hero Banner Text',           'group' => 'hero', 'value' => 'Krousar Thmey is Cambodia’s first organization helping disadvantaged children through child welfare, special education, and cultural development.'],
             ['key' => 'hero_button_primary_text',   'label' => 'Hero Primary Button Text',   'group' => 'hero', 'value' => 'Donate Now'],
@@ -75,6 +77,8 @@ class AdminSeeder extends Seeder
             ['key' => 'cta_primary_url',     'label' => 'CTA Primary Button URL',   'group' => 'cta', 'value' => '/donate'],
             ['key' => 'cta_secondary_text',  'label' => 'CTA Secondary Button Text', 'group' => 'cta', 'value' => 'Get Involved'],
             ['key' => 'cta_secondary_url',   'label' => 'CTA Secondary Button URL', 'group' => 'cta', 'value' => '/get-involved'],
+            ['key' => 'cta_annual_report_text','label' => 'CTA Annual Report Button Text', 'group' => 'cta', 'value' => 'Annual Report'],
+            ['key' => 'cta_annual_report_url', 'label' => 'CTA Annual Report Button URL', 'group' => 'cta', 'value' => '/resources'],
             // Structure map
             ['key' => 'structure_heading',       'label' => 'Structure Map — Heading',            'group' => 'structure', 'value' => "KROUSAR THMEY'S STRUCTURES"],
             ['key' => 'structure_welfare_title', 'label' => 'Structure Map — Child Welfare Title', 'group' => 'structure', 'value' => 'Child Welfare Program'],

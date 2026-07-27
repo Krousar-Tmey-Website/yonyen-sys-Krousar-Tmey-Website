@@ -19,6 +19,135 @@
 @endphp
 
 {{-- ========================================================
+     PRESENTATION BANNER (hero)
+     ======================================================== --}}
+@php
+$heroImage = $settings['presentation_banner_image'] ?? null;
+$heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/cultural.jpg');
+$heroTitle = $settings['presentation_banner_title'] ?? 'Krousar Thmey, the first Cambodian organization helping disadvantaged children';
+$heroSubtitle = $settings['presentation_banner_subtitle'] ?? 'Born in 1991 in the Site II refugee camp in Thailand, Krousar Thmey has been supporting children for over 25 years.';
+if (app()->getLocale() === 'fr' && !empty($settings['presentation_banner_subtitle_fr'] ?? null)) {
+    $heroSubtitle = $settings['presentation_banner_subtitle_fr'];
+}
+$heroBadge = $settings['presentation_banner_badge'] ?? 'Since 1991';
+$heroOverlayColor = $settings['presentation_banner_overlay_color'] ?? '#1a3c6e';
+$btn1Text = $settings['presentation_banner_btn1_text'] ?? 'Learn More';
+$btn1Url  = $settings['presentation_banner_btn1_url'] ?? '/our-programs';
+$btn2Text = $settings['presentation_banner_btn2_text'] ?? 'Donate Now';
+$btn2Url  = $settings['presentation_banner_btn2_url'] ?? '/donate';
+$btn3Text = $settings['presentation_banner_btn3_text'] ?? '';
+$btn3Url  = $settings['presentation_banner_btn3_url'] ?? '';
+@endphp
+
+<section class="relative py-28 md:py-36 overflow-hidden" id="presentation-banner">
+    {{-- Background image with slow zoom animation --}}
+    <div class="absolute inset-0 bg-cover bg-center animate-banner-zoom" style="background-image: url('{{ $heroImageUrl }}');"></div>
+    <div class="absolute inset-0" style="background-color: {{ $heroOverlayColor }}; opacity: 0.55;"></div>
+
+    {{-- Subtle gradient overlays for depth --}}
+    <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
+
+    <div class="pt-20 pb-20 relative z-10 max-w-3xl mx-auto px-6 text-center">
+        {{-- Badge: fade in then slide up --}}
+        <div class="animate-badge-reveal opacity-0">
+            <span class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-5 py-2 rounded-full mb-6 uppercase tracking-wider shadow-lg">{{ $heroBadge }}</span>
+        </div>
+
+        {{-- Title: fade in then slide up (delayed) --}}
+        <div class="animate-title-reveal opacity-0">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
+                {{ $heroTitle }}
+            </h1>
+        </div>
+
+        {{-- Subtitle: fade in then slide up (further delayed) --}}
+        <div class="animate-subtitle-reveal opacity-0">
+            <div class="rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md max-w-2xl mx-auto">
+                {!! $heroSubtitle !!}
+            </div>
+        </div>
+
+        {{-- Buttons: staggered entrance (further delayed) --}}
+        @if($btn1Text || $btn2Text || $btn3Text)
+        <div class="animate-buttons-reveal opacity-0">
+            <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
+                @if($btn1Text)
+                <a href="{{ $btn1Url }}" class="btn-primary text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                    {{ $btn1Text }}
+                </a>
+                @endif
+                @if($btn2Text)
+                <a href="{{ $btn2Url }}" class="btn-outline text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    {{ $btn2Text }}
+                </a>
+                @endif
+                @if($btn3Text)
+                <a href="{{ $btn3Url }}" class="btn-outline text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    {{ $btn3Text }}
+                </a>
+                @endif
+            </div>
+        </div>
+        @endif
+    </div>
+</section>
+
+{{-- Banner Animation Styles --}}
+<style>
+    /* ── Slow background zoom ─────────────────────────────── */
+    @keyframes bannerZoom {
+        0%   { transform: scale(1); }
+        100% { transform: scale(1.08); }
+    }
+    .animate-banner-zoom {
+        animation: bannerZoom 12s ease-out forwards;
+    }
+
+    /* ── Staggered content reveal ─────────────────────────── */
+    @keyframes fadeSlideUp {
+        0%   { opacity: 0; transform: translateY(30px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-badge-reveal {
+        animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    }
+
+    .animate-title-reveal {
+        animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+    }
+
+    .animate-subtitle-reveal {
+        animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+    }
+
+    .animate-buttons-reveal {
+        animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .animate-banner-zoom,
+        .animate-badge-reveal,
+        .animate-title-reveal,
+        .animate-subtitle-reveal,
+        .animate-buttons-reveal {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+    }
+</style>
+
+{{-- ========================================================
      WHO WE ARE / INTRO SECTION
      ======================================================== --}}
 <section class="py-14 bg-[#f8f5f0] scroll-mt-20">
@@ -140,6 +269,17 @@
                 ['name' => 'purple', 'bg' => '#7c4dff', 'light' => '#f3e5f5', 'lighter' => '#e1bee7'],
             ];
 
+            $mixWithWhite = function (?string $hex, float $whiteRatio = 0.88): string {
+                if (!is_string($hex) || !preg_match('/^#([0-9a-fA-F]{6})$/', $hex, $matches)) {
+                    return '#f3f4f6';
+                }
+
+                $rgb = sscanf($matches[1], '%02x%02x%02x');
+                $mixed = array_map(fn ($channel) => (int) round($channel * (1 - $whiteRatio) + 255 * $whiteRatio), $rgb);
+
+                return sprintf('#%02x%02x%02x', $mixed[0], $mixed[1], $mixed[2]);
+            };
+
             $statIcons = [
                 '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>',
                 '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>',
@@ -153,15 +293,17 @@
             @foreach($allStats as $index => $stat)
             @php
                 $colorScheme = $accentColors[$index % count($accentColors)];
+                $accentColor = $stat->accent_color ?: $colorScheme['bg'];
+                $colorScheme['bg'] = $accentColor;
+                $colorScheme['light'] = $stat->accent_color ? $mixWithWhite($accentColor) : $colorScheme['light'];
+                $iconBackgroundColor = $stat->icon_background_color ?: $colorScheme['light'];
+                $valueColor = $stat->value_color ?: $colorScheme['bg'];
+                $labelColor = $stat->label_color ?: '#111827';
                 $icon = $statIcons[$index % count($statIcons)];
             @endphp
             <div class="group relative" data-reveal="up" style="--reveal-delay: {{ $index * 100 }}">
                 {{-- Card Container with soft shadow --}}
                 <div class="relative h-full bg-white rounded-[24px] border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-default">
-                    
-                    {{-- Left colored accent border --}}
-                    <div class="absolute left-0 top-0 bottom-0 w-1.5 transition-all duration-300" style="background: linear-gradient(to bottom, {{ $colorScheme['bg'] }}, {{ $colorScheme['bg'] }}80))"></div>
-
                     {{-- Card content with generous padding --}}
                     <div class="p-8 h-full flex flex-col items-center text-center">
                         
@@ -170,7 +312,7 @@
                             <div class="relative inline-flex">
                                 {{-- Icon background circle --}}
                                 <div class="w-16 h-16 rounded-[18px] flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
-                                     style="background-color: {{ $colorScheme['light'] }}; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.03);">
+                                     style="background-color: {{ $iconBackgroundColor }}; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.03);">
                                     <svg class="w-8 h-8 transition-all duration-300" fill="none" stroke="{{ $colorScheme['bg'] }}" stroke-width="1.5" viewBox="0 0 24 24">
                                         {!! $icon !!}
                                     </svg>
@@ -186,7 +328,7 @@
                             <div class="text-4xl md:text-3xl lg:text-4xl font-black transition-all duration-300 counter leading-none"
                                  data-target="{{ preg_replace('/[^0-9.]/', '', $stat->value) }}"
                                  data-suffix="{{ preg_match('/[KMBkmb]/', $stat->value) ? substr(trim($stat->value), -1) : '' }}"
-                                 style="color: {{ $colorScheme['bg'] }}">
+                                 style="color: {{ $valueColor }}">
                                 {{ $stat->value }}
                             </div>
                         </div>
@@ -196,7 +338,7 @@
 
                         {{-- Supporting text --}}
                         <div class="flex-1">
-                            <p class="text-sm font-bold text-gray-900 leading-snug mb-2">{{ $stat->localized_label }}</p>
+                            <p class="text-sm font-bold text-gray-900 leading-snug mb-2" style="color: {{ $labelColor }}">{{ $stat->localized_label }}</p>
                             @if($stat->localized_description)
                             <p class="text-xs text-gray-500 leading-relaxed">{{ strip_tags($stat->localized_description) }}</p>
                             @endif
@@ -204,7 +346,7 @@
                     </div>
 
                     {{-- Hover gradient overlay (very subtle) --}}
-                    <div class="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none" 
+                    <div class="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none"
                          style="background: linear-gradient(135deg, {{ $colorScheme['bg'] }} 0%, transparent 100%);"></div>
                 </div>
             </div>
