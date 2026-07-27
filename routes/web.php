@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
@@ -249,6 +250,13 @@ Route::get('/storage/{path}', function (string $path) {
         'Content-Type' => $disk->mimeType($path) ?: 'application/octet-stream',
     ]);
 })->where('path', '.*')->name('storage.public');
+
+Route::get('/contact', function () {
+    $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
+
+    return view('contact', compact('offices'));
+})->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/partners', function () {
     $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
