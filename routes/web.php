@@ -389,6 +389,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
     Route::get('history-banner', [Admin\HistoryBannerController::class, 'index'])->name('history-banner.index');
     Route::post('history-banner', [Admin\HistoryBannerController::class, 'update'])->name('history-banner.update');
+    Route::get('history-page', [Admin\HistoryPageController::class, 'index'])->name('history-page.index');
     Route::resource('history-events', Admin\HistoryEventController::class)
         ->except(['show', 'create'])
         ->parameters(['history-events' => 'historyEvent']);
