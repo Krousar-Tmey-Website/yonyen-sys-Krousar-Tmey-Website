@@ -23,8 +23,10 @@ class HomeSettingController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'settings'        => ['required', 'array'],
-            'settings.*'      => ['nullable', 'string'],
+            'settings'                       => ['required', 'array'],
+            'settings.*'                     => ['nullable', 'string'],
+            'settings.stats_background_color' => ['nullable', 'regex:/^#(?:[0-9A-Fa-f]{3}){1,2}$/'],
+            'settings.stats_data_color'       => ['nullable', 'regex:/^#(?:[0-9A-Fa-f]{3}){1,2}$/'],
         ]);
 
         // Handle structure_image file upload

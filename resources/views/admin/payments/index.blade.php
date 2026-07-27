@@ -56,7 +56,7 @@
     </div>
 
     {{-- Page Header --}}
-    <div class="payments-header" :class="(tag === 'france' || tag === 'switzerland' || tag === 'elsewhere') ? 'max-w-3xl mx-auto' : 'max-w-5xl mx-auto'">
+    <div class="payments-header" :class="(tag === 'france' || tag === 'switzerland' || tag === 'elsewhere') ? 'max-w-3xl mx-auto' : ''">
         <div class="payments-header-left">
         </div>
         <div class="payments-header-right" style="display: flex; gap: 12px; align-items: center;">
@@ -541,7 +541,7 @@
          OTHER TABS: Payment Methods Table
          (Cambodia and "All Methods" use the payment methods table)
          ════════════════════════════════════════════════ --}}
-    <div x-show="tag !== 'france' && tag !== 'elsewhere' && tag !== 'switzerland'" class="payments-content max-w-5xl mx-auto">
+    <div x-show="tag !== 'france' && tag !== 'elsewhere' && tag !== 'switzerland'" class="payments-content">
 
         {{-- Filter Bar --}}
         <div class="payments-filter-bar" style="border-top: none;">

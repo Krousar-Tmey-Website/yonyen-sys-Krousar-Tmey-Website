@@ -6,7 +6,7 @@
 
 @section('content')
 
-<form action="{{ route('admin.website.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6 max-w-3xl mx-auto">
+<form action="{{ route('admin.website.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
     @csrf
 
     @php
@@ -16,6 +16,12 @@
         'sharing' => ['📤', 'Share our impact'],
         'social'  => ['📱', 'Social Media Links'],
         'footer'  => ['📍', 'Footer Settings'],
+    ];
+    $iconStyles = [
+        'website' => ['bg' => 'bg-blue-50', 'text' => 'text-blue-500', 'path' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />'],
+        'sharing' => ['bg' => 'bg-orange-50', 'text' => 'text-orange-500', 'path' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />'],
+        'social'  => ['bg' => 'bg-purple-50', 'text' => 'text-purple-500', 'path' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />'],
+        'footer'  => ['bg' => 'bg-red-50', 'text' => 'text-red-500', 'path' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />'],
     ];
 
     $socialPlatforms = [
@@ -30,9 +36,11 @@
     @foreach($order as $group)
     @if(!isset($settings[$group])) @continue @endif
     @php $items = $settings[$group]; @endphp
-    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 shadow-sm hover:shadow-md transition-shadow">
         <div class="flex items-center gap-3 mb-4">
-            <span class="text-xl">{{ $labels[$group][0] }}</span>
+            <span class="w-9 h-9 rounded-xl {{ $iconStyles[$group]['bg'] }} flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 {{ $iconStyles[$group]['text'] }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $iconStyles[$group]['path'] !!}</svg>
+            </span>
             <h3 class="font-bold text-gray-800 text-base">{{ $labels[$group][1] }}</h3>
         </div>
 
@@ -67,7 +75,7 @@
                     ];
                     @endphp
                     
-                    <div class="grid grid-cols-1 gap-4">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         @foreach($iconSettings as $key => $config)
                         <div class="flex items-center gap-4">
                             <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden border border-gray-200">
@@ -150,7 +158,7 @@
                             'social_telegram_icon'  => ['label' => 'Telegram Icon',  'default' => 'images/social/telegram.svg'],
                         ];
                     @endphp
-                    <div class="grid grid-cols-1 gap-4">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         @foreach($socialIconSettings as $key => $config)
                         <div class="flex items-center gap-4">
                             <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden border border-gray-200">

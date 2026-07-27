@@ -41,54 +41,6 @@
 </section>
 
 {{-- ========================================================
-     FINANCIAL TRANSPARENCY SECTION
-     ======================================================== --}}
-<section id="financial" class="py-24 bg-white scroll-mt-20">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16" data-reveal>
-            <h2 class="text-4xl md:text-5xl font-bold text-[#1d4e7a] mb-4">Financial Transparency</h2>
-            <p class="text-gray-500 max-w-3xl mx-auto">Our commitment to open and responsible stewardship of donor funds</p>
-        </div>
-
-        <div class="grid lg:grid-cols-2 gap-12 mb-16">
-            {{-- Left: Text Content --}}
-            <div data-reveal="left">
-                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
-                    Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used. The implementation of programs and projects is our priority.
-                </p>
-                <p class="text-gray-600 leading-relaxed mb-6">
-                    Thanks to strict financial management and the involvement of European volunteers, <strong class="text-[#2d6fa3]">all administrative costs remain under 4% of the total budget.</strong>
-                </p>
-                <p class="text-gray-600 leading-relaxed mb-6">
-                    Krousar Thmey Cambodia's accounts are all audited and certified each year by an independent audit firm (<strong>PricewaterhouseCoopers since 2013</strong> and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes.
-                </p>
-                
-                {{-- Key Stats --}}
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-[#2d6fa3]/5 rounded-2xl p-6 text-center border border-[#2d6fa3]/15">
-                        <div class="text-3xl font-black text-[#2d6fa3] mb-1">< 4%</div>
-                        <div class="text-gray-500 text-xs">Administrative Costs</div>
-                    </div>
-                    <div class="bg-[#8da83a]/5 rounded-2xl p-6 text-center border border-[#8da83a]/15">
-                        <div class="text-3xl font-black text-[#8da83a] mb-1">100%</div>
-                        <div class="text-gray-500 text-xs">Funds to Children</div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Right: Image --}}
-            <div class="relative" data-reveal="right">
-                <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-                    <img src="{{ asset('images/children.jpg') }}" alt="Children at Krousar Thmey" 
-                         class="w-full h-[400px] object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- ========================================================
      FINANCIAL TRANSPARENCY
      ======================================================== --}}
 <section class="py-12 md:py-16 bg-white scroll-mt-20">
@@ -110,6 +62,23 @@
             <div class="rich-text-content">{!! $t('transparency_financial_p2', 'The implementation of programs and projects is our priority.') !!}</div>
             <div class="rich-text-content font-bold">{!! $t('transparency_financial_p3', 'Thanks to the strict financial management and the involvement of European volunteers, all administrative costs remain under 4% of the total budget.') !!}</div>
             <div class="rich-text-content">{!! $t('transparency_financial_p4', "Krousar Thmey Cambodia's accounts are all audited and certified each year by an independent audit firm (PricewaterhouseCoopers since 2013 and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes in order to provide greater efficiency to the organization and transparency to its partners.") !!}</div>
+
+            <p class="!mb-2">{{ $t('transparency_financial_list_intro', 'Audited financial statements are available here:') }}</p>
+            @php $availableReports = $reports->filter(fn ($report) => $report->download_url)->values(); @endphp
+            @if($availableReports->isNotEmpty())
+            <ul class="!mt-0 space-y-4">
+                @foreach($availableReports as $i => $report)
+                <li data-reveal="up" style="--reveal-delay: {{ $i * 60 }}">
+                    <a href="{{ $report->download_url }}" target="_blank" rel="noopener"
+                       class="inline-block text-[#2d6fa3] font-medium transition-transform duration-200 hover:underline hover:translate-x-1">
+                        Audited financial statement {{ $report->year }}
+                    </a>
+                </li>
+                @endforeach
+            </ul>
+            @else
+            <p class="text-gray-400 text-sm">No reports available yet.</p>
+            @endif
 
             <div class="rich-text-content">{!! $t('transparency_financial_outro', "Our French and Swiss organisations' accounts are also audited annually.") !!}</div>
         </div>
