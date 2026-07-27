@@ -253,8 +253,25 @@ Route::get('/storage/{path}', function (string $path) {
 
 Route::get('/contact', function () {
     $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
+    $settings = HomeSetting::allKeyed();
 
-    return view('contact', compact('offices'));
+    $contactBannerImage = $settings['contact_banner_image'] ?? '';
+    $contactBannerOverlayColor = $settings['contact_banner_overlay_color'] ?? '#1d4e7a';
+    $contactBannerBadge = $settings['contact_banner_badge'] ?? 'Support Our Work';
+    $contactBannerTitle = $settings['contact_banner_title'] ?? 'Make a Difference Today';
+    $contactBannerSubtitle = $settings['contact_banner_subtitle'] ?? 'Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.';
+    $contactBannerBtn1Text = $settings['contact_banner_btn1_text'] ?? 'Donate Now';
+    $contactBannerBtn1Url = $settings['contact_banner_btn1_url'] ?? '/donate';
+    $contactBannerBtn2Text = $settings['contact_banner_btn2_text'] ?? 'Get Involved';
+    $contactBannerBtn2Url = $settings['contact_banner_btn2_url'] ?? '/get-involved';
+
+    return view('contact', compact(
+        'offices',
+        'contactBannerImage', 'contactBannerOverlayColor',
+        'contactBannerBadge', 'contactBannerTitle', 'contactBannerSubtitle',
+        'contactBannerBtn1Text', 'contactBannerBtn1Url',
+        'contactBannerBtn2Text', 'contactBannerBtn2Url',
+    ));
 })->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
@@ -428,6 +445,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Involved Banner
     Route::get('involved-banner', [Admin\InvolvedBannerController::class, 'index'])->name('involved-banner.index');
     Route::post('involved-banner', [Admin\InvolvedBannerController::class, 'update'])->name('involved-banner.update');
+
+    // Contact Banner
+    Route::get('contact-banner', [Admin\ContactBannerController::class, 'index'])->name('contact-banner.index');
+    Route::post('contact-banner', [Admin\ContactBannerController::class, 'update'])->name('contact-banner.update');
+    Route::get('contact-page', [Admin\ContactPageController::class, 'index'])->name('contact-page.index');
 
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
