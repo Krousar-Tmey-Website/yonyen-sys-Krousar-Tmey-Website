@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
@@ -173,6 +174,10 @@ Route::get('/jobs/{jobOpportunity}', function (JobOpportunity $jobOpportunity) {
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
+// Campaigns
+Route::get('/campaigns', [CampaignController::class, 'index'])->name('campaigns.index');
+Route::get('/campaigns/{campaign:slug}', [CampaignController::class, 'show'])->name('campaigns.show');
+
 Route::get('/topics', [ResourcePageController::class, 'index'])->name('resource-pages.index');
 Route::get('/topics/{slug}', [ResourcePageController::class, 'show'])->name('resource-pages.show');
 
@@ -269,6 +274,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Dashboard
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // Campaigns
+    Route::post('campaigns/upload-image', [Admin\CampaignController::class, 'uploadImage'])->name('campaigns.upload-image');
+    Route::post('campaigns/banner', [Admin\CampaignController::class, 'updateBanner'])->name('campaigns.banner');
+    Route::resource('campaigns', Admin\CampaignController::class)->except(['show']);
 
     // Donations
     Route::get('/donations/dashboard', [Admin\DonationDashboardController::class, 'index'])->name('donations.dashboard');
