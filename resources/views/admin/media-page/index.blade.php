@@ -15,6 +15,14 @@
     $previewExcerpt     = $settings['media_press_excerpt'] ?? "Traditional Cambodian art forms such as classical dance and music have been passed down throughout the generations as a way for children to learn and preserve the meaning of their culture. However, as the education sector changes, gaining knowledge of the arts at a young age is proving less essential for the Kingdom's public schools…";
     $previewImage       = $settings['media_press_image'] ?? null;
     $previewImageUrl    = $previewImage ? (str_starts_with($previewImage, 'http') ? $previewImage : asset('storage/' . $previewImage)) : asset('images/cultural.jpg');
+
+    $bannerImage = old('media_banner_image', $settings['media_banner_image'] ?? '');
+    $bannerOverlayColor = old('media_banner_overlay_color', $settings['media_banner_overlay_color'] ?? '#1a3c6e');
+    $bannerImageUrl = $bannerImage ? (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) : null;
+    $bannerBadge = old('media_banner_badge', $settings['media_banner_badge'] ?? 'Media');
+    $bannerTitle = old('media_banner_title', $settings['media_banner_title'] ?? 'Krousar Thmey In The Media');
+    $bannerSubtitle = old('media_banner_subtitle', $settings['media_banner_subtitle'] ?? 'Press coverage and the latest news from Krousar Thmey.');
+    $bannerSubtitleFr = old('media_banner_subtitle_fr', $settings['media_banner_subtitle_fr'] ?? '');
 @endphp
 
 <div class="max-w-3xl mx-auto space-y-6">
@@ -56,6 +64,134 @@
 
     <form action="{{ route('admin.media-page.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6" x-data="bilingualForm()">
         @csrf
+
+        {{-- Media Banner --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+            <div class="flex items-center justify-between gap-3">
+                <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </span>
+                    Media Banner
+                    <span class="text-xs font-normal text-gray-400">(hero at the top of the page)</span>
+                </h3>
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+            </div>
+
+            {{-- Banner Live Preview --}}
+            <div class="rounded-xl overflow-hidden border border-gray-100">
+                <div id="media-banner-preview" class="relative py-12 px-6 text-center overflow-hidden" style="background-color: {{ $bannerOverlayColor }};">
+                    @if($bannerImageUrl)
+                    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $bannerImageUrl }}'); opacity: 0.35;"></div>
+                    @endif
+                    <div class="relative">
+                        <span id="banner-preview-badge" class="inline-block bg-white text-[#eea91d] text-[10px] font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">{{ $bannerBadge }}</span>
+                        <h2 id="banner-preview-title" class="text-xl font-bold text-white mb-2">{{ $bannerTitle }}</h2>
+                        <p id="banner-preview-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{{ $bannerSubtitle }}</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Background Image --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Background Image</label>
+
+                @if($bannerImage)
+                <div class="mb-3">
+                    <img src="{{ str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage) }}"
+                         alt="Current banner image"
+                         class="w-full max-h-48 object-contain rounded-xl border border-gray-200 bg-gray-50 p-2">
+                    <label class="mt-2 inline-flex items-center gap-2 text-xs text-gray-500 cursor-pointer">
+                        <input type="checkbox" name="media_banner_image_clear" value="1" class="rounded border-gray-300 text-red-500 focus:ring-red-400">
+                        Remove current image
+                    </label>
+                </div>
+                @endif
+
+                <div class="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-[#2d6fa3]/40 transition-colors cursor-pointer"
+                     x-data="{ fileName: '' }"
+                     @dragover.prevent="$el.classList.add('border-[#2d6fa3]')"
+                     @dragleave.prevent="$el.classList.remove('border-[#2d6fa3]')"
+                     @drop.prevent="$el.classList.remove('border-[#2d6fa3]'); const f = $event.dataTransfer.files[0]; if(f) { $refs.mediaBannerFileInput.files = $event.dataTransfer.files; fileName = f.name; }"
+                     @click="$refs.mediaBannerFileInput.click()">
+                    <input type="file" name="media_banner_image"
+                           accept="image/png,image/jpg,image/jpeg,image/webp,image/svg+xml"
+                           class="hidden" x-ref="mediaBannerFileInput"
+                           @change="fileName = $event.target.files[0]?.name || ''">
+                    <svg class="w-8 h-8 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <p class="text-sm text-gray-500" x-text="fileName || 'Click or drag & drop to upload'"></p>
+                    <p class="text-xs text-gray-400 mt-1">PNG, JPG, WebP or SVG — max 5MB</p>
+                </div>
+
+                <div class="mt-3" x-data="{ showUrl: {{ $bannerImage && !str_starts_with($bannerImage, 'http') ? 'false' : 'true' }} }">
+                    <button type="button" @click="showUrl = !showUrl"
+                            class="text-xs text-[#2d6fa3] hover:text-[#1d4e7a] transition-colors mb-2">
+                        <span x-show="!showUrl">+ Or paste an image URL instead</span>
+                        <span x-show="showUrl">− Hide URL input</span>
+                    </button>
+                    <div x-show="showUrl" x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 -translate-y-2"
+                         x-transition:enter-end="opacity-100 translate-y-0">
+                        <input type="text" name="media_banner_image_url"
+                               value="{{ str_starts_with($bannerImage ?? '', 'http') ? $bannerImage : '' }}"
+                               placeholder="https://example.com/image.png"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                    </div>
+                </div>
+            </div>
+
+            {{-- Background Overlay Color --}}
+            <div>
+                <label for="media_banner_overlay_color" class="block text-sm font-medium text-gray-700 mb-1.5">Background Overlay Color</label>
+                <div class="flex items-center gap-3">
+                    <input type="color" id="media_banner_overlay_color_picker"
+                           value="{{ $bannerOverlayColor }}"
+                           class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                           onchange="document.getElementById('media_banner_overlay_color').value = this.value; document.getElementById('media-banner-preview').style.backgroundColor = this.value;">
+                    <input type="text" id="media_banner_overlay_color" name="media_banner_overlay_color"
+                           value="{{ $bannerOverlayColor }}"
+                           placeholder="#1a3c6e"
+                           oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('media_banner_overlay_color_picker').value = this.value; document.getElementById('media-banner-preview').style.backgroundColor = this.value; }"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                </div>
+            </div>
+
+            {{-- Badge Text --}}
+            <div>
+                <label for="media_banner_badge" class="block text-sm font-medium text-gray-700 mb-1.5">Badge Text</label>
+                <input type="text" id="media_banner_badge" name="media_banner_badge"
+                       value="{{ $bannerBadge }}"
+                       oninput="document.getElementById('banner-preview-badge').textContent = this.value || 'Media'"
+                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            </div>
+
+            {{-- Hero Title --}}
+            <div>
+                <label for="media_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Title</label>
+                <input type="text" id="media_banner_title" name="media_banner_title"
+                       value="{{ $bannerTitle }}"
+                       oninput="document.getElementById('banner-preview-title').textContent = this.value || 'Krousar Thmey In The Media'"
+                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            </div>
+
+            {{-- Hero Subtitle --}}
+            <div x-show="lang === 'en'">
+                <label for="media_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Subtitle</label>
+                <x-admin.rich-text id="media_banner_subtitle" name="media_banner_subtitle" :value="$bannerSubtitle" lang="en" :rows="2" />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label for="media_banner_subtitle_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Subtitle (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text id="media_banner_subtitle_fr" name="media_banner_subtitle_fr" :value="$bannerSubtitleFr" lang="fr" :rows="2" placeholder="Couverture médiatique et actualités de Krousar Thmey…" />
+                <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English subtitle.</p>
+            </div>
+        </div>
 
         {{-- Page Header --}}
         <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">

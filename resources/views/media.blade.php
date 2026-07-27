@@ -12,17 +12,36 @@ $t = function (string $key, string $default = '') use ($settings) {
     }
     return $settings[$key] ?? $default;
 };
+$heroImage = $settings['media_banner_image'] ?? null;
+$heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/cultural.jpg');
+$heroTitle = $settings['media_banner_title'] ?? 'Krousar Thmey In The Media';
+$heroSubtitle = $t('media_banner_subtitle', 'Press coverage and the latest news from Krousar Thmey.');
+$heroBadge = $settings['media_banner_badge'] ?? 'Media';
+$heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
 @endphp
+
+{{-- ========================================================
+     MEDIA BANNER (hero)
+     ======================================================== --}}
+<section class="relative py-24 overflow-hidden" data-reveal="scale">
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $heroImageUrl }}');"></div>
+    <div class="absolute inset-0" style="background-color: {{ $heroOverlayColor }}; opacity: 0.55;"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+        <span class="inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $heroBadge }}</span>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
+            {{ $heroTitle }}
+        </h1>
+        <div class="rich-text-content text-white/90 text-lg leading-relaxed drop-shadow-md">
+            {!! $heroSubtitle !!}
+        </div>
+    </div>
+</section>
 
 {{-- ========================================================
      PAGE HEADER
      ======================================================== --}}
 <section class="pt-16 pb-8 bg-white text-center scroll-mt-20">
     <div class="max-w-4xl mx-auto px-6">
-        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-[#0A5EA8] uppercase" data-reveal>
-            {{ $settings['media_title'] ?? 'Media' }}
-        </h1>
-
         @php
             $sharingEnabled = \App\Models\HomeSetting::getValue('sharing_enabled', '1');
             $facebookIcon = \App\Models\HomeSetting::getValue('sharing_facebook_icon', 'images/social/facebook.svg');
