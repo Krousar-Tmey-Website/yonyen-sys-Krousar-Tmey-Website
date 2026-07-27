@@ -5,10 +5,10 @@
 
 @section('content')
 
-<div class="max-w-4xl mx-auto" x-data="{ tab: 'cta' }">
+<div x-data="{ tab: 'cta' }">
 
     {{-- ── Professional Page Header ── --}}
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:p-8 mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2.5">
@@ -100,7 +100,7 @@ $sections = [
 
     @foreach($sections as $id => $section)
     <div x-show="tab === '{{ $id }}'">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 shadow-sm">
             <div class="flex items-center gap-3 mb-4">
                 <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
                     <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,14 +116,15 @@ $sections = [
 
             <hr class="mb-5 border-gray-100">
 
-            <div class="space-y-5">
+            <div class="grid lg:grid-cols-2 gap-5">
                 @foreach($section['fields'] as $field)
                 @php
                     $k = $field['key'];
                     $default = $field['default'] ?? '';
                     $currentVal = $val($k, $default);
+                    $isWide = in_array($field['type'], ['textarea', 'image']);
                 @endphp
-                <div>
+                <div class="{{ $isWide ? 'lg:col-span-2' : '' }}">
                     <label for="settings_{{ $k }}" class="block text-sm font-medium text-gray-700 mb-1.5">
                         {{ $field['label'] }}
                     </label>
