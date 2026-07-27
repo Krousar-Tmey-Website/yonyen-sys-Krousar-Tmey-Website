@@ -18,7 +18,7 @@
     $bannerSubtitleFr = $bvFr('history_banner_subtitle');
 @endphp
 
-<div class="max-w-3xl mx-auto space-y-6">
+<div class="space-y-6">
 
     {{-- Live Preview --}}
     <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6" x-data="bilingualForm()">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:p-8" x-data="bilingualForm()">
         <div class="flex items-center justify-between gap-3 mb-1">
             <div class="flex items-center gap-3">
                 <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
@@ -126,22 +126,23 @@
                 </div>
             </div>
 
-            {{-- Badge Text --}}
-            <div>
-                <label for="history_banner_badge" class="block text-sm font-medium text-gray-700 mb-1.5">Badge Text</label>
-                <input type="text" id="history_banner_badge" name="history_banner_badge"
-                       value="{{ $bannerBadge }}"
-                       oninput="document.getElementById('preview-badge').textContent = this.value || 'Our History'"
-                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-            </div>
+            {{-- Badge Text & Hero Title --}}
+            <div class="grid lg:grid-cols-2 gap-5">
+                <div>
+                    <label for="history_banner_badge" class="block text-sm font-medium text-gray-700 mb-1.5">Badge Text</label>
+                    <input type="text" id="history_banner_badge" name="history_banner_badge"
+                           value="{{ $bannerBadge }}"
+                           oninput="document.getElementById('preview-badge').textContent = this.value || 'Our History'"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
 
-            {{-- Hero Title --}}
-            <div>
-                <label for="history_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Title</label>
-                <input type="text" id="history_banner_title" name="history_banner_title"
-                       value="{{ $bannerTitle }}"
-                       oninput="document.getElementById('preview-title').textContent = this.value || 'Help a Child Build Their Future'"
-                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                <div>
+                    <label for="history_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Title</label>
+                    <input type="text" id="history_banner_title" name="history_banner_title"
+                           value="{{ $bannerTitle }}"
+                           oninput="document.getElementById('preview-title').textContent = this.value || 'Help a Child Build Their Future'"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
             </div>
 
             {{-- Hero Subtitle --}}
