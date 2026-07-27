@@ -13,7 +13,7 @@ class CampaignController extends Controller
     public function index()
     {
         $settings = HomeSetting::allKeyed();
-        $campaigns = Campaign::active()->paginate(9);
+        $campaigns = Campaign::active()->paginate(8);
 
         $banner = $this->banner($settings);
 

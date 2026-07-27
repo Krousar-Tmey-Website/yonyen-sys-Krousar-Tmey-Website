@@ -6,7 +6,7 @@
 @section('content')
 
 {{-- ── Hero banner ────────────────────────────────────────── --}}
-<section class="relative overflow-hidden bg-[#1d4e7a]">
+<section class="relative overflow-hidden bg-[#1d4e7a] h-[90vh] min-h-[600px] max-h-[900px]">
     @if($banner['image'])
     <img src="{{ $banner['image'] }}" alt="" aria-hidden="true"
          class="absolute inset-0 w-full h-full object-cover object-center">
@@ -16,48 +16,53 @@
     <div class="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-[#8da83a]/30 translate-y-1/2 -translate-x-1/4"></div>
     @endif
 
-    <div class="relative max-w-7xl mx-auto px-6 py-20 lg:py-28">
-        <nav data-reveal class="flex items-center gap-2 text-sm text-white/50 mb-8">
-            <a href="{{ route('home') }}" class="hover:text-white transition-colors">{{ __('Home') }}</a>
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-white/80">{{ __('Campaigns') }}</span>
-        </nav>
+    <div class="relative h-full flex items-center">
+        <div class="max-w-7xl mx-auto px-6 w-full">
+            <nav data-reveal class="flex items-center gap-2 text-sm text-white/50 mb-8">
+                <a href="{{ route('home') }}" class="hover:text-white transition-colors">{{ __('Home') }}</a>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                <span class="text-white/80">{{ __('Campaigns') }}</span>
+            </nav>
 
-        <div class="max-w-3xl">
-            <div data-reveal style="--reveal-delay: 60" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8da83a]/25 border border-[#8da83a]/40 mb-5">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#a3c04a]"></span>
-                <span class="text-[#cfe08a] font-semibold text-xs uppercase tracking-widest">{{ __('Support Our Cause') }}</span>
-            </div>
+            <div class="max-w-3xl">
+                <div data-reveal style="--reveal-delay: 60" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8da83a]/25 border border-[#8da83a]/40 mb-5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#a3c04a]"></span>
+                    <span class="text-[#cfe08a] font-semibold text-xs uppercase tracking-widest">{{ __('Support Our Cause') }}</span>
+                </div>
 
-            <h1 data-reveal style="--reveal-delay: 120" class="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] mb-5">
-                {{ $banner['title'] }}
-            </h1>
+                <h1 data-reveal style="--reveal-delay: 120" class="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] mb-5">
+                    {{ $banner['title'] }}
+                </h1>
 
-            @if($banner['subtitle'])
-            <div data-reveal style="--reveal-delay: 180" class="max-w-2xl text-white/70 text-base md:text-lg leading-relaxed [&_p]:mb-3 [&_p:last-child]:mb-0">
-                {!! $banner['subtitle'] !!}
-            </div>
-            @endif
-
-            <div data-reveal style="--reveal-delay: 240" class="flex flex-wrap items-center gap-3 mt-8">
-                <a href="{{ route('donate') }}"
-                   class="inline-flex items-center gap-2 bg-[#8da83a] hover:bg-[#a3c04a] text-white px-7 py-3.5 rounded-full font-semibold text-sm shadow-lg shadow-black/20 hover:shadow-xl hover:-translate-y-0.5 transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                    {{ __('Donate Now') }}
-                </a>
-                @if($campaigns->isNotEmpty())
-                <a href="#campaign-list"
-                   class="inline-flex items-center gap-2 border border-white/25 hover:border-white/50 hover:bg-white/10 text-white px-7 py-3.5 rounded-full font-semibold text-sm transition-all">
-                    {{ __('Browse Campaigns') }}
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-                </a>
+                @if($banner['subtitle'])
+                <div data-reveal style="--reveal-delay: 180" class="max-w-2xl text-white/70 text-base md:text-lg leading-relaxed [&_p]:mb-3 [&_p:last-child]:mb-0">
+                    {!! $banner['subtitle'] !!}
+                </div>
                 @endif
+
+                <div data-reveal style="--reveal-delay: 240" class="flex flex-wrap items-center gap-3 mt-8">
+                    <a href="{{ route('donate') }}"
+                       class="inline-flex items-center gap-2 bg-[#8da83a] hover:bg-[#a3c04a] text-white px-7 py-3.5 rounded-full font-semibold text-sm shadow-lg shadow-black/20 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        {{ __('Donate Now') }}
+                    </a>
+                    @if($campaigns->isNotEmpty())
+                    <a href="#campaign-list"
+                       class="inline-flex items-center gap-2 border border-white/25 hover:border-white/50 hover:bg-white/10 text-white px-7 py-3.5 rounded-full font-semibold text-sm transition-all">
+                        {{ __('Browse Campaigns') }}
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                    </a>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
 
-    {{-- Soft edge into the list section --}}
-    <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#f8f9fc] to-transparent"></div>
+    {{-- Scroll cue --}}
+    <a href="#campaign-list" data-reveal style="--reveal-delay: 320"
+       class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 hover:text-white transition-colors animate-bounce">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+    </a>
 </section>
 
 {{-- ── Campaign list ──────────────────────────────────────── --}}
@@ -82,7 +87,7 @@
             </span>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-7">
             @foreach($campaigns as $campaign)
             @include('campaigns._card', ['campaign' => $campaign, 'delay' => min($loop->index * 80, 480)])
             @endforeach

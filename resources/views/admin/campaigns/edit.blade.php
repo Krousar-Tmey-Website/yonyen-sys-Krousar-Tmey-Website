@@ -10,7 +10,7 @@
 
 @section('content')
 
-<div class="max-w-4xl mx-auto space-y-5">
+<div class="w-full space-y-5">
     <form action="{{ route('admin.campaigns.update', $campaign) }}" method="POST" enctype="multipart/form-data"
           class="space-y-5" x-data="bilingualForm()">
         @csrf
