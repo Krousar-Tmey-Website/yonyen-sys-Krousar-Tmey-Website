@@ -141,18 +141,26 @@
 </div>
 
 {{-- Our Offices --}}
+<div x-data="{ selectedOffice: @js($offices->first()->country ?? '') }">
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14" data-reveal>
             <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Our Offices</span>
             <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-[#2d6fa3]">Find Us Around the World</h2>
             <div class="w-16 h-1 bg-[#d32f2f] rounded-full mx-auto mt-4"></div>
+            <p class="text-gray-400 text-xs mt-3">Click an office to choose where your message from the form below is sent.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             @forelse($offices as $loc)
-            <div class="bg-[#f8f9fc] rounded-3xl border-2 border-slate-200/50 hover:border-[#2d6fa3]/40 hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col h-full hover:-translate-y-0.5"
+            <div class="relative rounded-3xl border-2 hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col h-full hover:-translate-y-0.5 cursor-pointer"
+                 @click="selectedOffice = '{{ $loc->country }}'"
+                 :class="selectedOffice === '{{ $loc->country }}' ? 'bg-[#2d6fa3]/5 border-[#2d6fa3] ring-2 ring-[#2d6fa3]/25 shadow-lg' : 'bg-[#f8f9fc] border-slate-200/50 hover:border-[#2d6fa3]/40'"
                  data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
+                <div class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#2d6fa3] text-white flex items-center justify-center shadow-sm"
+                     x-show="selectedOffice === '{{ $loc->country }}'" x-cloak>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                </div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <span class="text-3xl font-black text-gray-800">{{ $loc->flag }}</span>
@@ -258,6 +266,14 @@
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
                     <form class="space-y-5" method="POST" action="{{ route('contact.store') }}">
                         @csrf
+                        <input type="hidden" name="office" :value="selectedOffice">
+
+                        <div class="flex items-center gap-2.5 bg-[#2d6fa3]/5 border border-[#2d6fa3]/15 rounded-xl px-4 py-3">
+                            <svg class="w-4 h-4 text-[#2d6fa3] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <p class="text-xs text-gray-600">Sending to <strong class="text-[#2d6fa3]" x-text="selectedOffice"></strong> — click a different office above to change this.</p>
+                        </div>
+                        @error('office') <p class="text-red-500 text-xs -mt-2">{{ $message }}</p> @enderror
+
                         <div class="grid md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">First Name <span class="text-[#d32f2f]">*</span></label>
@@ -319,6 +335,7 @@
         </div>
     </div>
 </section>
+</div>
 
 {{-- CTA Banner --}}
 @php

@@ -251,28 +251,7 @@ Route::get('/storage/{path}', function (string $path) {
     ]);
 })->where('path', '.*')->name('storage.public');
 
-Route::get('/contact', function () {
-    $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
-    $settings = HomeSetting::allKeyed();
-
-    $contactBannerImage = $settings['contact_banner_image'] ?? '';
-    $contactBannerOverlayColor = $settings['contact_banner_overlay_color'] ?? '#1d4e7a';
-    $contactBannerBadge = $settings['contact_banner_badge'] ?? 'Support Our Work';
-    $contactBannerTitle = $settings['contact_banner_title'] ?? 'Make a Difference Today';
-    $contactBannerSubtitle = $settings['contact_banner_subtitle'] ?? 'Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.';
-    $contactBannerBtn1Text = $settings['contact_banner_btn1_text'] ?? 'Donate Now';
-    $contactBannerBtn1Url = $settings['contact_banner_btn1_url'] ?? '/donate';
-    $contactBannerBtn2Text = $settings['contact_banner_btn2_text'] ?? 'Get Involved';
-    $contactBannerBtn2Url = $settings['contact_banner_btn2_url'] ?? '/get-involved';
-
-    return view('contact', compact(
-        'offices',
-        'contactBannerImage', 'contactBannerOverlayColor',
-        'contactBannerBadge', 'contactBannerTitle', 'contactBannerSubtitle',
-        'contactBannerBtn1Text', 'contactBannerBtn1Url',
-        'contactBannerBtn2Text', 'contactBannerBtn2Url',
-    ));
-})->name('contact');
+Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/partners', function () {
@@ -375,7 +354,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('page-sections', Admin\PageSectionController::class)->except(['show']);
     Route::resource('slides', Admin\SlideController::class)->except(['show']);
     Route::resource('impact-statistics', Admin\ImpactStatisticController::class)
-        ->except(['show', 'create', 'edit'])
+        ->except(['show', 'create', 'edit', 'index'])
         ->parameters(['impact-statistics' => 'impactStatistic']);
 
     Route::resource('sponsors', Admin\SponsorController::class)->except(['show']);
@@ -401,7 +380,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('presentation', [Admin\PresentationController::class, 'update'])->name('presentation.update');
     Route::post('presentation/banner', [Admin\PresentationController::class, 'updateBanner'])->name('presentation.banner.update');
     Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show'])->parameters(['presentation-slides' => 'slide']);
-    Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show'])->parameters(['principle-slides' => 'slide']);
+    Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show', 'create', 'edit'])->parameters(['principle-slides' => 'slide']);
     Route::resource('partners', Admin\PartnerController::class)->except(['show']);
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
     Route::get('history-banner', [Admin\HistoryBannerController::class, 'index'])->name('history-banner.index');
@@ -460,6 +439,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::patch('{contactInquiry}/status', [Admin\ContactInquiryController::class, 'updateStatus'])->name('status');
         Route::delete('{contactInquiry}', [Admin\ContactInquiryController::class, 'destroy'])->name('destroy');
     });
+
+    // Offices (Contact page cards + email routing)
+    Route::resource('offices', Admin\OfficeController::class)->except(['show']);
 
     // Newsletter Subscribers
     Route::prefix('newsletter')->name('newsletter.')->group(function () {
