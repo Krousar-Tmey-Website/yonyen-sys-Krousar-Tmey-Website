@@ -33,6 +33,8 @@ class ProgramPageItem extends Model
         'image',
         'image_2',
         'image_3',
+        'accent_color',
+        'card_background_color',
         'is_active',
         'sort_order',
     ];
