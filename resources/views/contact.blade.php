@@ -341,23 +341,73 @@
 @php
     $ctaBgImgUrl = !empty($contactBannerImage) ? (str_starts_with($contactBannerImage, 'http') ? $contactBannerImage : asset('storage/' . $contactBannerImage)) : null;
 @endphp
-<section class="relative py-16 overflow-hidden" style="background-color: {{ $contactBannerOverlayColor }};">
+<section class="relative py-20 overflow-hidden" style="background-color: {{ $contactBannerOverlayColor }};">
+    {{-- Background image with slow zoom animation --}}
     @if($ctaBgImgUrl)
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $ctaBgImgUrl }}'); opacity: 0.25;"></div>
+    <div class="absolute inset-0 bg-cover bg-center animate-banner-zoom" style="background-image: url('{{ $ctaBgImgUrl }}');"></div>
     @endif
+    {{-- Color overlay --}}
+    <div class="absolute inset-0" style="background-color: {{ $contactBannerOverlayColor }}; opacity: 0.55;"></div>
+    {{-- Gradient overlay for depth --}}
+    <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
+    {{-- Decorative blobs --}}
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 right-0 w-72 h-72 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[#2d6fa3] translate-y-1/2 -translate-x-1/3"></div>
     </div>
+
     <div class="relative z-10 max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
-        <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">{{ $contactBannerBadge }}</p>
-        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">{{ $contactBannerTitle }}</h2>
-        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">{{ $contactBannerSubtitle }}</p>
-        <div class="flex flex-wrap gap-4 justify-center">
+        <p class="animate-cta-badge-reveal opacity-0">
+            <span class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-5 py-2 rounded-full mb-6 uppercase tracking-wider shadow-lg">{{ $contactBannerBadge }}</span>
+        </p>
+        <h2 class="animate-cta-title-reveal opacity-0 text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4 drop-shadow-lg">{{ $contactBannerTitle }}</h2>
+        <p class="animate-cta-subtitle-reveal opacity-0 text-white/70 text-lg mb-8 max-w-2xl mx-auto drop-shadow-md">{{ $contactBannerSubtitle }}</p>
+        <div class="animate-cta-buttons-reveal opacity-0 flex flex-wrap gap-4 justify-center">
             <a href="{{ $contactBannerBtn1Url }}" class="btn-primary text-base">{{ $contactBannerBtn1Text }}</a>
             <a href="{{ $contactBannerBtn2Url }}" class="btn-outline text-base">{{ $contactBannerBtn2Text }}</a>
         </div>
     </div>
 </section>
+
+{{-- CTA Banner Animations --}}
+<style>
+    @keyframes bannerZoom {
+        0%   { transform: scale(1); }
+        100% { transform: scale(1.08); }
+    }
+    .animate-banner-zoom {
+        animation: bannerZoom 12s ease-out forwards;
+    }
+
+    @keyframes ctaFadeSlideUp {
+        0%   { opacity: 0; transform: translateY(30px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-cta-badge-reveal {
+        animation: ctaFadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    }
+    .animate-cta-title-reveal {
+        animation: ctaFadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+    }
+    .animate-cta-subtitle-reveal {
+        animation: ctaFadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+    }
+    .animate-cta-buttons-reveal {
+        animation: ctaFadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .animate-banner-zoom,
+        .animate-cta-badge-reveal,
+        .animate-cta-title-reveal,
+        .animate-cta-subtitle-reveal,
+        .animate-cta-buttons-reveal {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+    }
+</style>
 
 @endsection
