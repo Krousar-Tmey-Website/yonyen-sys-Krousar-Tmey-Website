@@ -45,6 +45,13 @@
             @php
                 $logoPath = $settings['site_logo'] ?? 'images/logo.png';
                 $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
+
+                // Helper to resolve dynamic banner images with a fallback to hardcoded defaults
+                $bannerUrl = function($key, $default) use ($settings) {
+                    $path = $settings[$key] ?? '';
+                    if (!$path) return asset($default);
+                    return str_starts_with($path, 'http') ? $path : asset('storage/' . $path);
+                };
             @endphp
 
             {{-- Unified Tabs Switcher --}}
@@ -95,12 +102,14 @@
             <div x-show="residency === 'cambodia'" x-cloak>
                 @php
                     $khMethods = $paymentMethods->where('tag', 'cambodia')->values();
+                    $khFirstBanner = $khMethods->first()?->donation_image_url;
+                    $khBannerUrl = $khFirstBanner ?: asset('images/donate-cambodia-classroom.png');
                 @endphp
                 @if($khMethods->isNotEmpty())
                 <div class="overflow-hidden rounded-[28px] bg-white shadow-[0_20px_52px_rgba(15,23,42,0.11)]">
                     {{-- Big banner image --}}
                     <div class="relative h-64 sm:h-80 lg:h-[420px]">
-                        <img src="{{ asset('images/donate-cambodia-classroom.png') }}"
+                        <img src="{{ $khBannerUrl }}"
                              alt="Children supported by Krousar Thmey"
                              class="absolute inset-0 h-full w-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-black/10"></div>
@@ -301,11 +310,9 @@
                         $frHelloAssoUrl = $settings['france_helloasso_url'] ?? '';
                         $frHelloAssoDesc = $settings['france_helloasso_description'] ?? '';
                         $frHelloAssoLogo = $settings['france_helloasso_logo'] ?? '';
-                        $frCheckRecipient = $settings['france_check_recipient'] ?? '';
-                        $frCheckAddress = $settings['france_check_address'] ?? '';
-                        $frCheckDesc = $settings['france_check_description'] ?? '';
+                        $frCheckContent = $settings['france_check_content'] ?? '';
                         $hasHelloAsso = filled($frHelloAssoUrl);
-                        $hasCheck = filled($frCheckRecipient) || filled($frCheckAddress);
+                        $hasCheck = filled($frCheckContent);
                         $hasFranceContent = $hasHelloAsso || $hasCheck;
                     @endphp
                     
@@ -313,7 +320,7 @@
                     <div class="overflow-hidden rounded-[28px] bg-white shadow-[0_20px_52px_rgba(15,23,42,0.11)]">
                         {{-- Banner image --}}
                         <div class="relative h-64 sm:h-80 lg:h-[420px]">
-                            <img src="{{ asset('images/img5.png') }}"
+                            <img src="{{ $bannerUrl('france_donation_image', 'images/img5.png') }}"
                                  alt="Krousar Thmey France"
                                  class="absolute inset-0 h-full w-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-black/10"></div>
@@ -357,22 +364,8 @@
 
                             @if($hasCheck)
                                 {{-- Check or other local details --}}
-                                <div class="space-y-6">
-                                    <div class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold [&_p]:m-0">
-                                        @if($frCheckDesc)
-                                            {!! $frCheckDesc !!}
-                                        @else
-                                            You can also send a check payable to <strong class="text-slate-800">{{ $frCheckRecipient ?: 'Krousar Thmey France' }}</strong> at the following address:
-                                        @endif
-                                    </div>
-                                    <div class="text-center font-bold text-slate-700 leading-relaxed text-sm md:text-base space-y-1">
-                                        @if($frCheckRecipient)
-                                            <p class="text-[#2d6fa3] font-black text-lg">{{ $frCheckRecipient }}</p>
-                                        @endif
-                                        @if($frCheckAddress)
-                                            <p class="whitespace-pre-line">{{ $frCheckAddress }}</p>
-                                        @endif
-                                    </div>
+                                <div class="text-sm md:text-base text-slate-655 leading-relaxed font-semibold [&_p]:m-0 [&_strong]:text-slate-800">
+                                    {!! $frCheckContent !!}
                                 </div>
                             @endif
 
@@ -424,32 +417,8 @@
                             </button>
                             
                             <div x-show="activeSection === 'tax'" x-collapse>
-                                <div class="p-6 pt-0 border-t border-slate-100 space-y-4">
-                                    <div class="text-xs text-slate-500 leading-relaxed font-semibold [&_p]:m-0">
-                                        {!! ($settings['france_tax_intro'] ?? '') ?: 'The Krousar Thmey entities in France and Switzerland are recognized as being of public interest, so you can get tax deductions based on your donation.' !!}
-                                    </div>
-
-                                    {{-- Association 1901 --}}
-                                    <div class="border-l-4 border-emerald-500 pl-4 py-1 space-y-1">
-                                        <h4 class="text-xs font-black text-slate-755 uppercase tracking-wide text-[#2d6fa3]">Under an association of 1901 general interest</h4>
-                                        <div class="text-xs text-slate-505 leading-relaxed [&_p]:m-0">
-                                            {!! ($settings['france_tax_association_text'] ?? '') ?: 'Deduction of <strong class="text-slate-800">66% of income tax (IR)</strong> and up to 20% of taxable income. If the limit is exceeded, the excess entitles you to a tax reduction for the next five years.' !!}
-                                        </div>
-                                    </div>
-
-                                    {{-- Loi Coluche --}}
-                                    <div class="border-l-4 border-blue-500 pl-4 py-1 space-y-1">
-                                        <h4 class="text-xs font-black text-slate-755 uppercase tracking-wide text-[#2d6fa3]">Under the loi Coluche</h4>
-                                        <div class="text-xs text-slate-550 leading-relaxed [&_p]:m-0">
-                                            {!! ($settings['france_tax_coluche_text'] ?? '') ?: 'Deduction of <strong class="text-slate-800">75% of income tax</strong> capped at <strong class="text-slate-800">€530</strong>. Beyond that, donations are deductible up to 66% of income tax and up to 20% of taxable income. If the limit is exceeded, the surplus entitles the holder to a tax reduction for the next five years.' !!}
-                                        </div>
-                                    </div>
-
-                                    {{-- Tax Receipt Note --}}
-                                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200 text-xs text-slate-505 flex gap-2">
-                                        <svg class="w-4.5 h-4.5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                        <span>{{ ($settings['france_tax_receipt_note'] ?? '') ?: 'A tax receipt will be sent to you in March of the year following your donation.' }}</span>
-                                    </div>
+                                <div class="p-6 pt-0 border-t border-slate-100 text-xs text-slate-500 leading-relaxed [&_p]:m-0 [&_h4]:text-xs [&_h4]:font-black [&_h4]:uppercase [&_h4]:tracking-wide [&_h4]:text-[#2d6fa3] [&_h4]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_li]:mb-0 [&_li]:text-slate-500 [&_strong]:font-bold [&_strong]:text-slate-800">
+                                    {!! ($settings['france_tax_content'] ?? '') ?: '<p>The Krousar Thmey entities in France and Switzerland are recognized as being of public interest, so you can get tax deductions based on your donation.</p><h4>Under an association of 1901 general interest</h4><p>Deduction of <strong>66% of income tax (IR)</strong> and up to 20% of taxable income. If the limit is exceeded, the excess entitles you to a tax reduction for the next five years.</p><h4>Under the loi Coluche</h4><p>Deduction of <strong>75% of income tax</strong> capped at <strong>€530</strong>. Beyond that, donations are deductible up to 66% of income tax and up to 20% of taxable income. If the limit is exceeded, the surplus entitles the holder to a tax reduction for the next five years.</p><p>A tax receipt will be sent to you in March of the year following your donation.</p>' !!}
                                 </div>
                             </div>
                         </div>
@@ -466,70 +435,8 @@
                             </button>
                             
                             <div x-show="activeSection === 'legacy'" x-collapse>
-                                <div class="p-6 pt-0 border-t border-slate-100 space-y-4" x-data="{ legacyType: 'bequest' }">
-                                    <div class="text-xs text-slate-500 leading-relaxed font-semibold [&_p]:m-0">
-                                        {!! ($settings['france_legacy_intro'] ?? '') ?: 'As a recognized association of public utility, Krousar Thmey is entitled to receive bequests and donations.' !!}
-                                    </div>
-
-                                    {{-- Accordion Tabs --}}
-                                    <div class="flex gap-2 border-b border-slate-100 pb-3">
-                                        <button type="button" @click="legacyType = 'bequest'"
-                                                :class="legacyType === 'bequest' ? 'bg-[#8da83a] text-white shadow-xs' : 'bg-slate-100 text-slate-655 hover:bg-slate-200/60'"
-                                                class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all focus:outline-none cursor-pointer">
-                                            Bequest (Wills)
-                                        </button>
-                                        <button type="button" @click="legacyType = 'donation'"
-                                                :class="legacyType === 'donation' ? 'bg-[#8da83a] text-white shadow-xs' : 'bg-slate-100 text-slate-655 hover:bg-slate-200/60'"
-                                                class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all focus:outline-none cursor-pointer">
-                                            Donation (Lifetime)
-                                        </button>
-                                    </div>
-
-                                    {{-- Bequest block --}}
-                                    <div x-show="legacyType === 'bequest'" class="space-y-4">
-                                        <div class="bg-slate-50 rounded-xl p-4.5 border border-slate-200/60 space-y-2">
-                                            <h4 class="text-xs font-extrabold text-slate-805 uppercase tracking-wider">What is a bequest?</h4>
-                                            <div class="text-xs text-slate-500 leading-relaxed [&_p]:m-0">
-                                                {!! ($settings['france_legacy_bequest_what_text'] ?? '') ?: 'A bequest is a testamentary disposition whereby a person transfers all or part of his or her property to the designated person. You can bequeath your property to an association recognized of public interest such as Krousar Thmey; Whatever the amount, the gift is exempt from all inheritance taxes.' !!}
-                                            </div>
-                                            <div class="text-[11px] text-slate-400 font-semibold border-t border-slate-150 pt-2 mt-1">
-                                                {!! ($settings['france_legacy_bequest_types_note'] ?? '') ?: 'There are several types of legacies: The universal legacy (all property), the legacy of a part of patrimony, or the particular legacy (bequest of one or more properties identified).' !!}
-                                            </div>
-                                        </div>
-
-                                        <div class="bg-slate-50 rounded-xl p-4.5 border border-slate-200/60 space-y-2">
-                                            <h4 class="text-xs font-extrabold text-slate-805 uppercase tracking-wider">How to make a legacy to Krousar Thmey?</h4>
-                                            <p class="text-xs text-slate-500 leading-relaxed">
-                                                {{ ($settings['france_legacy_bequest_how_intro'] ?? '') ?: 'You have to write a will. The most common forms are:' }}
-                                            </p>
-                                            <div class="list-disc pl-5 text-xs text-slate-500 space-y-1.5 leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1.5">
-                                                {!! ($settings['france_legacy_bequest_how_list'] ?? '') ?: '<ul><li><strong>The holograph will:</strong> document written, dated and signed by the hand of the testator, it is easy and inexpensive. However, it can sometimes be challenged when it is not drafted with the help of a specialized lawyer.</li><li><strong>The authentic testament:</strong> drawn up by a notary in the presence of two witnesses or a second notary, the authentic will must be signed by the testator. The notary writes it himself under the dictation of his client.</li></ul>' !!}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {{-- Donation block --}}
-                                    <div x-show="legacyType === 'donation'" x-cloak class="space-y-4">
-                                        <div class="bg-slate-50 rounded-xl p-4.5 border border-slate-200/60 space-y-2">
-                                            <h4 class="text-xs font-extrabold text-slate-805 uppercase tracking-wider">What is a donation?</h4>
-                                            <div class="text-xs text-slate-505 leading-relaxed [&_p]:m-0">
-                                                {!! ($settings['france_legacy_donation_what_text'] ?? '') ?: 'A donation is a contract by which you, as a donor, transfer ownership of a property to a beneficiary. You can give to a recognized public interest association, whatever the amount, this donation is exempt from all rights of succession.' !!}
-                                            </div>
-                                            <div class="text-[11px] text-slate-400 font-semibold border-t border-slate-150 pt-2 mt-1">
-                                                {!! ($settings['france_legacy_donation_capped_note'] ?? '') ?: '<strong>Capped Share:</strong> The share you can transmit is called the amount available and corresponds to 1/2 of your assets if you have only one child, 1/3 if you have two children, and 1/4 if you have three or more children. It can be all or part of the estate if you have no other heirs.' !!}
-                                            </div>
-                                        </div>
-
-                                        <div class="bg-slate-50 rounded-xl p-4.5 border border-slate-200/60 space-y-2">
-                                            <h4 class="text-xs font-extrabold text-slate-850 uppercase tracking-wider">How to make a donation to Krousar Thmey?</h4>
-                                            <div class="text-xs text-slate-500 leading-relaxed [&_p]:m-0">
-                                                {!! ($settings['france_legacy_donation_how_text'] ?? '') ?: 'Contrary to the will, which takes effect only at the death of the testator, this transmission takes place during the lifetime of its author. In principle, recourse to the notary is compulsory at the time of a donation. Nevertheless, the donor can hand over goods or money directly (manual donation).' !!}
-                                            </div>
-                                            <div class="text-[11px] text-slate-400 font-semibold border-t border-slate-150 pt-2 mt-1">
-                                                {!! ($settings['france_legacy_donation_conditions_note'] ?? '') ?: 'Three conditions of any contract must be met for a donation to be valid: the donor must have the capacity to give, the donee must have the capacity to receive, and donor and recipient must agree to the donation.' !!}
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="p-6 pt-0 border-t border-slate-100 text-xs text-slate-500 leading-relaxed [&_p]:m-0 [&_h4]:text-xs [&_h4]:font-black [&_h4]:uppercase [&_h4]:tracking-wide [&_h4]:text-[#2d6fa3] [&_h4]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_li]:mb-0 [&_li]:text-slate-500 [&_strong]:font-bold [&_strong]:text-slate-800">
+                                    {!! ($settings['france_legacy_content'] ?? '') ?: '<p>As a recognized association of public utility, Krousar Thmey is entitled to receive bequests and donations.</p><h4>What is a bequest?</h4><p>A bequest is a testamentary disposition whereby a person transfers all or part of his or her property to the designated person. You can bequeath your property to an association recognized of public interest such as Krousar Thmey; Whatever the amount, the gift is exempt from all inheritance taxes.</p><p>There are several types of legacies: The universal legacy (all property), the legacy of a part of patrimony, or the particular legacy (bequest of one or more properties identified).</p><h4>How to make a legacy to Krousar Thmey?</h4><p>You have to write a will. The most common forms are:</p><ul><li><strong>The holograph will:</strong> document written, dated and signed by the hand of the testator, it is easy and inexpensive. However, it can sometimes be challenged when it is not drafted with the help of a specialized lawyer.</li><li><strong>The authentic testament:</strong> drawn up by a notary in the presence of two witnesses or a second notary, the authentic will must be signed by the testator. The notary writes it himself under the dictation of his client.</li></ul><h4>What is a donation?</h4><p>A donation is a contract by which you, as a donor, transfer ownership of a property to a beneficiary. You can give to a recognized public interest association, whatever the amount, this donation is exempt from all rights of succession.</p><p><strong>Capped Share:</strong> The share you can transmit is called the amount available and corresponds to 1/2 of your assets if you have only one child, 1/3 if you have two children, and 1/4 if you have three or more children. It can be all or part of the estate if you have no other heirs.</p><h4>How to make a donation to Krousar Thmey?</h4><p>Contrary to the will, which takes effect only at the death of the testator, this transmission takes place during the lifetime of its author. In principle, recourse to the notary is compulsory at the time of a donation. Nevertheless, the donor can hand over goods or money directly (manual donation).</p><p>Three conditions of any contract must be met for a donation to be valid: the donor must have the capacity to give, the donee must have the capacity to receive, and donor and recipient must agree to the donation.</p>' !!}
                                 </div>
                             </div>
                         </div>
@@ -552,7 +459,7 @@
                     <div class="overflow-hidden rounded-[28px] bg-white shadow-[0_20px_52px_rgba(15,23,42,0.11)]">
                         {{-- Banner image --}}
                         <div class="relative h-64 sm:h-80 lg:h-[420px]">
-                            <img src="{{ asset('images/img3.png') }}"
+                            <img src="{{ $bannerUrl('switzerland_donation_image', 'images/img3.png') }}"
                                  alt="Krousar Thmey Switzerland"
                                  class="absolute inset-0 h-full w-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-black/10"></div>
@@ -670,7 +577,7 @@
                     <div class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm flex flex-col justify-between min-h-[460px]">
                         {{-- Banner image --}}
                         <div class="relative h-40 sm:h-48">
-                            <img src="{{ asset('images/img4.png') }}"
+                            <img src="{{ $bannerUrl('elsewhere_donation_image', 'images/img4.png') }}"
                                  alt="Krousar Thmey"
                                  class="absolute inset-0 h-full w-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-black/10"></div>
@@ -734,13 +641,7 @@
                             </div>
                         </div>
 
-                        {{-- Guarantee Note --}}
-                        <div class="border-t border-slate-100 pt-4 mt-6 flex items-center gap-2.5 text-[11px] text-slate-455 font-bold">
-                            <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                            </svg>
-                            <span>{{ ($settings['elsewhere_guarantee_note'] ?? '') ?: '100% of your funds go directly to supporting the children in Cambodia.' }}</span>
-                        </div>
+
                         </div>
                     </div>
 
