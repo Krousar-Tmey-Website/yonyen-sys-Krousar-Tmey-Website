@@ -349,7 +349,7 @@
             </div>
 
             <div x-show="lang === 'en'">
-                <label class="block text-xs font-medium text-gray-600 mb-1">Closing Line</label>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Closing Line <span class="text-gray-400 font-normal">(shown below the file list)</span></label>
                 <x-admin.rich-text name="transparency_financial_outro" :value="$cv('transparency_financial_outro', 'Our French and Swiss organisations\' accounts are also audited annually.')" lang="en" :rows="2" />
             </div>
             <div x-show="lang === 'fr'" x-cloak>
