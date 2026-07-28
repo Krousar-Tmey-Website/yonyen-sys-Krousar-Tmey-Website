@@ -18,6 +18,7 @@ class PaymentMethod extends Model
         'currency',
         'brand_color',
         'qr_code',
+        'donation_image',
         'sort_order',
         'is_active',
         'tag',
@@ -52,5 +53,16 @@ class PaymentMethod extends Model
         return str_starts_with($this->qr_code, 'http')
             ? $this->qr_code
             : asset('storage/' . $this->qr_code);
+    }
+
+    public function getDonationImageUrlAttribute(): ?string
+    {
+        if (!$this->donation_image) {
+            return null;
+        }
+
+        return str_starts_with($this->donation_image, 'http')
+            ? $this->donation_image
+            : asset('storage/' . $this->donation_image);
     }
 }
