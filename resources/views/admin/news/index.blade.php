@@ -9,7 +9,7 @@
 
 @section('content')
 
-<div x-data="{ tab: 'banner' }">
+<div x-data="{ tab: '{{ request('tab', 'banner') }}' }">
 
     {{-- ── Professional Page Header ── --}}
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
@@ -37,7 +37,7 @@
         {{-- Tab Navigation --}}
         <div class="flex justify-center mt-6 pt-5 border-t border-gray-100">
             <div class="inline-flex bg-gray-100/80 rounded-xl p-1 gap-1 shadow-inner">
-                <button @click="tab = 'banner'"
+                <button @click="tab = 'banner'; history.replaceState(null, '', window.location.pathname)"
                         :class="tab === 'banner' ? 'bg-white shadow-sm text-[#2d6fa3] font-semibold ring-1 ring-gray-200/50' : 'text-gray-500 hover:text-gray-700 font-medium'"
                         class="px-7 py-2.5 rounded-lg text-sm transition-all duration-200 flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +45,7 @@
                     </svg>
                     News Banner
                 </button>
-                <button @click="tab = 'management'"
+                <button @click="tab = 'management'; history.replaceState(null, '', window.location.pathname + '?tab=management')"
                         :class="tab === 'management' ? 'bg-white shadow-sm text-[#2d6fa3] font-semibold ring-1 ring-gray-200/50' : 'text-gray-500 hover:text-gray-700 font-medium'"
                         class="px-7 py-2.5 rounded-lg text-sm transition-all duration-200 flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -460,7 +460,7 @@
                     <strong>{{ $articles->total() }}</strong> articles
                 </div>
                 <div class="pagination-links">
-                    {{ $articles->links() }}
+                    {{ $articles->appends(['tab' => 'management'])->links() }}
                 </div>
             </div>
             @endif
