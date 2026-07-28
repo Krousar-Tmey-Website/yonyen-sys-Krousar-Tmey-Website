@@ -23,7 +23,11 @@
 
             {{-- Title --}}
             <div class="flex items-stretch gap-5 mb-6">
+                @if($item->accent_color)
+                <div class="w-1.5 rounded-full" style="background-color: {{ $item->accent_color }}"></div>
+                @else
                 <div class="w-1.5 rounded-full bg-gradient-to-b from-[#d32f2f] to-[#e8a020]"></div>
+                @endif
                 <h1 class="text-3xl md:text-4xl lg:text-5xl font-black text-[#1a3c6e] uppercase tracking-wide leading-tight drop-shadow-sm">
                     {{ $item->localized_title }}
                 </h1>
@@ -42,7 +46,8 @@
                     
                     {{-- Objective Block --}}
                     @if($item->localized_objective)
-                    <div class="bg-blue-50/50 rounded-3xl p-8 border border-blue-100/50 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+                    <div class="rounded-3xl p-8 border border-blue-100/50 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow {{ $item->card_background_color ? '' : 'bg-blue-50/50' }}"
+                         @if($item->card_background_color) style="background-color: {{ $item->card_background_color }}" @endif>
                         <div class="absolute top-0 right-0 w-32 h-32 bg-[#1a3c6e]/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-xl group-hover:scale-110 transition-transform duration-700"></div>
                         <div class="flex items-center gap-3 mb-5 relative z-10">
                             <div class="w-8 h-8 rounded-full bg-[#1a3c6e] flex items-center justify-center text-white shadow-sm">

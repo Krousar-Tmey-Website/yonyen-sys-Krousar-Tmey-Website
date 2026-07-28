@@ -41,10 +41,11 @@ class ProgramPageController extends Controller
             'image_3_url'    => 'nullable|url|max:2048',
             'is_active'      => 'boolean',
             'sort_order'     => 'nullable|integer',
-        ]);
+        ] + $this->styleValidationRules());
 
         $data['is_active']  = $request->boolean('is_active');
         $data['sort_order'] = $request->input('sort_order', 0);
+        $data = $this->normalizeStyleColors($data);
 
         // Handle 3 images
         foreach ([['field' => 'image', 'url' => 'image_url'], ['field' => 'image_2', 'url' => 'image_2_url'], ['field' => 'image_3', 'url' => 'image_3_url']] as $img) {
@@ -92,10 +93,11 @@ class ProgramPageController extends Controller
             'image_3_url'    => 'nullable|url|max:2048',
             'is_active'      => 'boolean',
             'sort_order'     => 'nullable|integer',
-        ]);
+        ] + $this->styleValidationRules());
 
         $data['is_active']  = $request->boolean('is_active');
         $data['sort_order'] = $request->input('sort_order', 0);
+        $data = $this->normalizeStyleColors($data);
 
         foreach ([['field' => 'image', 'url' => 'image_url'], ['field' => 'image_2', 'url' => 'image_2_url'], ['field' => 'image_3', 'url' => 'image_3_url']] as $img) {
             $field = $img['field'];
@@ -128,5 +130,39 @@ class ProgramPageController extends Controller
         }
         $item->delete();
         return redirect()->route('admin.program-pages.index')->with('success', 'Item deleted successfully.');
+    }
+
+    private function styleValidationRules(): array
+    {
+        $hexRule = ['nullable', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}$/'];
+
+        return [
+            'accent_color' => $hexRule,
+            'card_background_color' => $hexRule,
+        ];
+    }
+
+    private function normalizeStyleColors(array $data): array
+    {
+        foreach (array_keys($this->styleValidationRules()) as $field) {
+            $data[$field] = $this->normalizeHexColor($data[$field] ?? null);
+        }
+
+        return $data;
+    }
+
+    private function normalizeHexColor(?string $color): ?string
+    {
+        if ($color === null || $color === '') {
+            return null;
+        }
+
+        $color = strtolower($color);
+
+        if (strlen($color) === 4) {
+            return '#' . $color[1] . $color[1] . $color[2] . $color[2] . $color[3] . $color[3];
+        }
+
+        return $color;
     }
 }

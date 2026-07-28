@@ -173,6 +173,50 @@
             </div>
         </section>
 
+        @php
+            $accentColorValue = $fieldValue('accent_color', '#d32f2f');
+            $cardBgColorValue = $fieldValue('card_background_color', '#eff6ff');
+        @endphp
+        <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <p class="text-[11px] font-black uppercase tracking-[0.2em] text-[#8da83a]">Appearance</p>
+            <h2 class="mt-1 text-lg font-bold text-slate-900">Detail Page Style</h2>
+            <p class="mt-1 text-xs text-slate-500">Controls the title accent bar and Objective card on the public detail page.</p>
+
+            <div class="mt-5 space-y-5">
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Accent Color <span class="font-normal text-slate-400">(title ruler)</span></label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="accent_color_picker"
+                               value="{{ $accentColorValue }}"
+                               class="h-11 w-14 shrink-0 rounded-lg border border-slate-200 cursor-pointer p-1"
+                               onchange="document.getElementById('accent_color').value = this.value;">
+                        <input type="text" id="accent_color" name="accent_color"
+                               value="{{ $accentColorValue }}"
+                               placeholder="#d32f2f"
+                               oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('accent_color_picker').value = this.value; }"
+                               class="{{ $inputClass }} font-mono text-xs">
+                    </div>
+                    @error('accent_color')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">Card Background <span class="font-normal text-slate-400">(Objective box)</span></label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="card_background_color_picker"
+                               value="{{ $cardBgColorValue }}"
+                               class="h-11 w-14 shrink-0 rounded-lg border border-slate-200 cursor-pointer p-1"
+                               onchange="document.getElementById('card_background_color').value = this.value;">
+                        <input type="text" id="card_background_color" name="card_background_color"
+                               value="{{ $cardBgColorValue }}"
+                               placeholder="#eff6ff"
+                               oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('card_background_color_picker').value = this.value; }"
+                               class="{{ $inputClass }} font-mono text-xs">
+                    </div>
+                    @error('card_background_color')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                </div>
+            </div>
+        </section>
+
 
         <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <div class="flex flex-col gap-3">
