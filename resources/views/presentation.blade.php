@@ -47,7 +47,7 @@ $btn3Url  = $settings['presentation_banner_btn3_url'] ?? '';
     {{-- Subtle gradient overlays for depth --}}
     <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
 
-    <div class="pt-20 pb-20 relative z-10 max-w-3xl mx-auto px-6 text-center">
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
         {{-- Badge: fade in then slide up --}}
         <div class="animate-badge-reveal opacity-0">
             <span class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-5 py-2 rounded-full mb-6 uppercase tracking-wider shadow-lg">{{ $heroBadge }}</span>
