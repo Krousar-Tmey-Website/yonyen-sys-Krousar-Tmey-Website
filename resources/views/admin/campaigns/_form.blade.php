@@ -12,6 +12,7 @@
     // rather than falling back to the stored/default "on".
     $vActive        = $errors->any() ? (bool) old('is_active') : ($campaign->is_active ?? true);
     $vVideoUrl      = old('video_url', $campaign && $campaign->is_external_video ? $campaign->video : '');
+    $vVideoTab      = $vVideoUrl !== '' ? 'link' : 'upload';
 @endphp
 
 {{-- ── Language switch ──────────────────────────────────────
@@ -130,54 +131,115 @@
 </div>
 
 {{-- ── Video ───────────────────────────────────────────────── --}}
-<div class="form-group" x-data="{ name: '', removed: false }">
+<div class="form-group" x-data="{
+        name: '', preview: '', removed: false, error: '',
+        videoUrl: @js($vVideoUrl),
+        tab: @js($vVideoTab),
+        maxSize: 20 * 1024 * 1024,
+        get embedUrl() {
+            const url = this.videoUrl.trim();
+            if (!url) return '';
+            let m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i);
+            if (m) return 'https://www.youtube.com/embed/' + m[1];
+            m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/i);
+            if (m) return 'https://player.vimeo.com/video/' + m[1];
+            return '';
+        }
+     }">
     <label class="form-label">Video <span class="optional">(optional)</span></label>
 
-    <div class="upload-area" @click="$refs.videoInput.click()">
-        <input type="file" name="video" x-ref="videoInput" accept="video/mp4,video/quicktime,video/webm" class="hidden"
-               @change="const f = $event.target.files[0];
-                        name = f ? `${f.name} (${(f.size/1048576).toFixed(1)} MB)` : '';
-                        if (f) removed = false;">
-        <template x-if="!name">
-            <div>
-                <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                </svg>
-                <div class="upload-title">Click to upload a video</div>
-                <div class="upload-subtitle">MP4, MOV or WebM — max 50 MB</div>
-            </div>
-        </template>
-        <template x-if="name">
-            <div class="flex items-center justify-center gap-2 text-sm text-gray-600 py-2" @click.stop>
-                <svg class="w-4 h-4 text-[#2d6fa3]" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <span x-text="name"></span>
-                <button type="button" class="text-red-500 hover:text-red-600 font-bold px-1"
-                        @click="$refs.videoInput.value = ''; name = '';">×</button>
-            </div>
-        </template>
+    <div class="lang-tabs mb-3">
+        <button type="button" class="lang-tab" :class="{ active: tab === 'upload' }" @click="tab = 'upload'">Upload video</button>
+        <button type="button" class="lang-tab" :class="{ active: tab === 'link' }" @click="tab = 'link'">Paste a link</button>
     </div>
 
-    <div class="mt-3">
-        <label class="form-label">…or paste a video link</label>
-        <input type="url" name="video_url" value="{{ $vVideoUrl }}"
+    {{-- Upload --}}
+    <div x-show="tab === 'upload'" x-cloak>
+        <div class="upload-area" @click="$refs.videoInput.click()">
+            <input type="file" name="video" x-ref="videoInput" accept="video/mp4,video/quicktime,video/webm" class="hidden"
+                   @change="const f = $event.target.files[0];
+                            error = ''; preview = '';
+                            if (f && f.size > maxSize) {
+                                error = `“${f.name}” is ${(f.size/1048576).toFixed(1)} MB — the max video size is 20 MB.`;
+                                $event.target.value = ''; name = '';
+                                return;
+                            }
+                            name = f ? `${f.name} (${(f.size/1048576).toFixed(1)} MB)` : '';
+                            preview = f ? URL.createObjectURL(f) : '';
+                            if (f) removed = false;">
+            <template x-if="!name">
+                <div>
+                    <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    <div class="upload-title">Click to upload a video</div>
+                    <div class="upload-subtitle">MP4, MOV or WebM — max 20 MB</div>
+                </div>
+            </template>
+            <template x-if="name">
+                <div class="flex items-center justify-center gap-2 text-sm text-gray-600 py-2" @click.stop>
+                    <svg class="w-4 h-4 text-[#2d6fa3]" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <span x-text="name"></span>
+                    <button type="button" class="text-red-500 hover:text-red-600 font-bold px-1"
+                            @click="$refs.videoInput.value = ''; name = ''; preview = '';">×</button>
+                </div>
+            </template>
+        </div>
+        <template x-if="error">
+            <div class="form-error mt-1" x-text="error"></div>
+        </template>
+        <template x-if="preview">
+            <video :src="preview" controls class="mt-2 rounded-lg w-full" style="max-height:220px" @click.stop></video>
+        </template>
+
+        @if($isEdit && $campaign->has_video && !$campaign->is_external_video)
+        <div x-show="!name && !removed">
+            <div class="current-image mt-3">
+                <div class="image-info">
+                    <strong>Current video</strong>
+                    <div class="text-small-info break-all">{{ $campaign->video }}</div>
+                    <label class="inline-flex items-center gap-1.5 mt-1.5 text-xs text-red-500 cursor-pointer hover:text-red-600">
+                        <input type="checkbox" name="remove_video" value="1" @change="removed = $event.target.checked">
+                        Remove this video
+                    </label>
+                </div>
+            </div>
+            <video src="{{ $campaign->video_url }}" controls class="mt-2 rounded-lg w-full" style="max-height:220px"></video>
+        </div>
+        @endif
+    </div>
+
+    {{-- Link --}}
+    <div x-show="tab === 'link'" x-cloak>
+        <input type="url" name="video_url" x-model="videoUrl"
                class="form-control @error('video_url') error @enderror"
                placeholder="https://www.youtube.com/watch?v=…">
         @error('video_url')<div class="form-error">{{ $message }}</div>@enderror
-        <div class="form-helper">YouTube and Vimeo links play inline. An uploaded file takes priority over a link.</div>
+        <div class="form-helper">YouTube and Vimeo links play inline.</div>
+        <template x-if="embedUrl">
+            <div class="mt-2 rounded-lg overflow-hidden border border-gray-200" style="aspect-ratio:16/9;max-width:400px">
+                <iframe :src="embedUrl" class="w-full h-full" frameborder="0" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+        </template>
+        <template x-if="videoUrl.trim() && !embedUrl">
+            <div class="form-helper text-amber-600 mt-1">This doesn't look like a YouTube or Vimeo link — it will be saved, but won't preview here or on the site.</div>
+        </template>
+
+        @if($isEdit && $campaign->has_video && $campaign->is_external_video)
+        <div class="current-image mt-3" x-show="!removed">
+            <div class="image-info">
+                <strong>Current video link</strong>
+                <div class="text-small-info break-all">{{ $campaign->video }}</div>
+                <label class="inline-flex items-center gap-1.5 mt-1.5 text-xs text-red-500 cursor-pointer hover:text-red-600">
+                    <input type="checkbox" name="remove_video" value="1" @change="removed = $event.target.checked">
+                    Remove this video
+                </label>
+            </div>
+        </div>
+        @endif
     </div>
 
-    @if($isEdit && $campaign->has_video)
-    <div class="current-image mt-3" x-show="!name && !removed">
-        <div class="image-info">
-            <strong>Current video</strong>
-            <div class="text-small-info break-all">{{ $campaign->video }}</div>
-            <label class="inline-flex items-center gap-1.5 mt-1.5 text-xs text-red-500 cursor-pointer hover:text-red-600">
-                <input type="checkbox" name="remove_video" value="1" @change="removed = $event.target.checked">
-                Remove this video
-            </label>
-        </div>
-    </div>
-    @endif
+    <div class="form-helper mt-2">An uploaded file takes priority over a link if both are provided.</div>
     @error('video')<div class="form-error">{{ $message }}</div>@enderror
 </div>
 
