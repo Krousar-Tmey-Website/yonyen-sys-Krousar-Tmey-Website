@@ -27,22 +27,19 @@
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-5">
-                <div>
-                    <div x-show="lang === 'en'">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Title <span class="text-red-400">*</span></label>
-                        <input type="text" name="title" value="{{ old('title') }}" :required="lang === 'en'"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="Enter value title">
-                        @error('title')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
-                    </div>
-                    <div x-show="lang === 'fr'" x-cloak>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <input type="text" name="title_fr" value="{{ old('title_fr') }}"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="Enter value title in French">
-                    </div>
-                </div>
+            <div x-show="lang === 'en'">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Title <span class="text-gray-400 font-normal">(optional)</span></label>
+                <input type="text" name="title" value="{{ old('title') }}"
+                       class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                       placeholder="Enter value title">
+                @error('title')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <input type="text" name="title_fr" value="{{ old('title_fr') }}"
+                       class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
+                       placeholder="Enter value title in French">
+            </div>
 
                 <div>
                     <div x-show="lang === 'en'">

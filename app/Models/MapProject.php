@@ -47,6 +47,11 @@ class MapProject extends Model
         $grouped = [];
 
         foreach ($records as $record) {
+            $ownLocationName = app()->getLocale() === 'fr' ? $record->location_name_fr : $record->location_name;
+            if (blank($ownLocationName)) {
+                continue;
+            }
+
             $key = $record->province_key;
 
             if (!isset($grouped[$key])) {
@@ -59,7 +64,7 @@ class MapProject extends Model
             // Find or create location
             $locIdx = null;
             foreach ($grouped[$key]['locations'] as $i => $loc) {
-                if ($loc['name'] === $record->location_name) {
+                if ($loc['name'] === $record->localized_location_name) {
                     $locIdx = $i;
                     break;
                 }

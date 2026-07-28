@@ -23,7 +23,7 @@ class ProgramPageController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'              => 'required|string|max:255',
+            'title'              => 'nullable|string|max:255',
             'title_fr'           => 'nullable|string|max:255',
             'short_content'      => 'nullable|string',
             'short_content_fr'   => 'nullable|string',
@@ -74,7 +74,7 @@ class ProgramPageController extends Controller
     public function update(Request $request, ProgramPageItem $item)
     {
         $data = $request->validate([
-            'title'              => 'required|string|max:255',
+            'title'              => 'nullable|string|max:255',
             'title_fr'           => 'nullable|string|max:255',
             'short_content'      => 'nullable|string',
             'short_content_fr'   => 'nullable|string',

@@ -19,7 +19,7 @@ class JobOpportunityController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
             'title_fr' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],
@@ -47,7 +47,7 @@ class JobOpportunityController extends Controller
     public function update(Request $request, JobOpportunity $job)
     {
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
             'title_fr' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],

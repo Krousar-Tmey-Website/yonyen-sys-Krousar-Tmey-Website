@@ -39,7 +39,7 @@ class CoreValue extends Model
     }
 
     // French text falls back to the English field whenever it hasn't been filled in yet.
-    public function getLocalizedTitleAttribute(): string
+    public function getLocalizedTitleAttribute(): ?string
     {
         return $this->localized('title');
     }

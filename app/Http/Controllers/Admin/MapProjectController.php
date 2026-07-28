@@ -24,7 +24,7 @@ class MapProjectController extends Controller
         $data = $request->validate([
             'province_key'   => ['required', 'string', 'max:100'],
             'province_label' => ['nullable', 'string', 'max:255'],
-            'location_name'  => ['required', 'string', 'max:255'],
+            'location_name'  => ['nullable', 'string', 'max:255'],
             'location_name_fr' => ['nullable', 'string', 'max:255'],
             'project_type'   => ['required', 'string', 'max:255'],
             'sort_order'     => ['nullable', 'integer', 'min:0'],
@@ -45,7 +45,7 @@ class MapProjectController extends Controller
         $data = $request->validate([
             'province_key'   => ['required', 'string', 'max:100'],
             'province_label' => ['nullable', 'string', 'max:255'],
-            'location_name'  => ['required', 'string', 'max:255'],
+            'location_name'  => ['nullable', 'string', 'max:255'],
             'location_name_fr' => ['nullable', 'string', 'max:255'],
             'project_type'   => ['required', 'string', 'max:255'],
             'sort_order'     => ['nullable', 'integer', 'min:0'],
