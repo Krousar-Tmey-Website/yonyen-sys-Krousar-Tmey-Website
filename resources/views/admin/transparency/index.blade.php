@@ -46,6 +46,12 @@
     $bannerTitleFr = $bvFr('transparency_title');
     $bannerSubtitle = $bv('transparency_banner_subtitle', 'See how every donation is managed with strict financial discipline and independent oversight.');
     $bannerSubtitleFr = $bvFr('transparency_banner_subtitle');
+    $btn1Text = $bv('transparency_banner_btn1_text', 'Donate Now');
+    $btn1Url  = $bv('transparency_banner_btn1_url', '/donate');
+    $btn2Text = $bv('transparency_banner_btn2_text', 'Get Involved');
+    $btn2Url  = $bv('transparency_banner_btn2_url', '/get-involved');
+    $btn3Text = $bv('transparency_banner_btn3_text', 'Annual Report');
+    $btn3Url  = $bv('transparency_banner_btn3_url', '/resources#annual-reports');
 @endphp
 
 {{-- ========================================================
@@ -65,7 +71,12 @@
             <div class="relative">
                 <span id="preview-badge" class="inline-block bg-white text-[#eea91d] text-[10px] font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">{{ $bannerBadge }}</span>
                 <h2 id="preview-title" class="text-xl font-bold text-white mb-2 uppercase">{{ $bannerTitle }}</h2>
-                <p id="preview-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{!! $bannerSubtitle !!}</p>
+                <p id="preview-subtitle" class="text-white/80 text-xs max-w-md mx-auto mb-4">{!! $bannerSubtitle !!}</p>
+                <div id="preview-buttons" class="flex flex-wrap items-center justify-center gap-2">
+                    <span id="preview-btn1" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-semibold bg-white text-[#2d6fa3] {{ $btn1Text ? '' : 'opacity-30' }}">{{ $btn1Text ?: 'Button 1' }}</span>
+                    <span id="preview-btn2" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-semibold border border-white/40 text-white {{ $btn2Text ? '' : 'opacity-30' }}">{{ $btn2Text ?: 'Button 2' }}</span>
+                    <span id="preview-btn3" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-semibold border border-white/40 text-white {{ $btn3Text ? '' : 'opacity-30' }}">{{ $btn3Text ?: 'Button 3' }}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -205,6 +216,74 @@
             <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English subtitle.</p>
         </div>
 
+        {{-- Banner Action Buttons --}}
+        <div class="border-t border-gray-100 pt-4 space-y-4">
+            <p class="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                Banner Action Buttons
+            </p>
+            <p class="text-xs text-gray-400 -mt-2">Configure up to 3 buttons. Leave empty to hide.</p>
+
+            {{-- Button 1 --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="transparency_banner_btn1_text" class="block text-xs font-medium text-gray-600 mb-1">Button 1 Text</label>
+                    <input type="text" id="transparency_banner_btn1_text" name="transparency_banner_btn1_text"
+                           value="{{ $btn1Text }}"
+                           oninput="document.getElementById('preview-btn1').textContent = this.value || 'Button 1'; document.getElementById('preview-btn1').classList.toggle('opacity-30', !this.value)"
+                           placeholder="Donate Now"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label for="transparency_banner_btn1_url" class="block text-xs font-medium text-gray-600 mb-1">Button 1 URL</label>
+                    <input type="text" id="transparency_banner_btn1_url" name="transparency_banner_btn1_url"
+                           value="{{ $btn1Url }}"
+                           placeholder="/donate"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+            </div>
+
+            {{-- Button 2 --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="transparency_banner_btn2_text" class="block text-xs font-medium text-gray-600 mb-1">Button 2 Text</label>
+                    <input type="text" id="transparency_banner_btn2_text" name="transparency_banner_btn2_text"
+                           value="{{ $btn2Text }}"
+                           oninput="document.getElementById('preview-btn2').textContent = this.value || 'Button 2'; document.getElementById('preview-btn2').classList.toggle('opacity-30', !this.value)"
+                           placeholder="Get Involved"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label for="transparency_banner_btn2_url" class="block text-xs font-medium text-gray-600 mb-1">Button 2 URL</label>
+                    <input type="text" id="transparency_banner_btn2_url" name="transparency_banner_btn2_url"
+                           value="{{ $btn2Url }}"
+                           placeholder="/get-involved"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+            </div>
+
+            {{-- Button 3 --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="transparency_banner_btn3_text" class="block text-xs font-medium text-gray-600 mb-1">Button 3 Text</label>
+                    <input type="text" id="transparency_banner_btn3_text" name="transparency_banner_btn3_text"
+                           value="{{ $btn3Text }}"
+                           oninput="document.getElementById('preview-btn3').textContent = this.value || 'Button 3'; document.getElementById('preview-btn3').classList.toggle('opacity-30', !this.value)"
+                           placeholder="Annual Report"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label for="transparency_banner_btn3_url" class="block text-xs font-medium text-gray-600 mb-1">Button 3 URL</label>
+                    <input type="text" id="transparency_banner_btn3_url" name="transparency_banner_btn3_url"
+                           value="{{ $btn3Url }}"
+                           placeholder="/resources#annual-reports"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+            </div>
+        </div>
+
         <div class="flex items-center gap-3 pt-1">
             <button type="submit" class="btn-primary">Save Banner</button>
             @if(Route::has('transparency'))
@@ -248,39 +327,13 @@
             </div>
 
             <div x-show="lang === 'en'">
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 1</label>
-                <x-admin.rich-text name="transparency_financial_p1" :value="$cv('transparency_financial_p1', 'Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used.')" lang="en" :rows="2" />
+                <label class="block text-xs font-medium text-gray-600 mb-1">Body Text</label>
+                <x-admin.rich-text name="transparency_financial_body" :value="$cv('transparency_financial_body', '<p>Financial transparency is a key principle for Krousar Thmey. Everybody has the right to know how the funds raised are used.</p><p>The implementation of programs and projects is our priority.</p><blockquote><p>Thanks to the strict financial management and the involvement of European volunteers, all administrative costs remain under 4% of the total budget.</p></blockquote><p>Krousar Thmey Cambodia\'s accounts are all audited and certified each year by an independent audit firm (PricewaterhouseCoopers since 2013 and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes in order to provide greater efficiency to the organization and transparency to its partners.</p>')" lang="en" :rows="8" />
+                <p class="text-xs text-gray-400 mt-1">Tip: select a key sentence (like the admin-cost figure) and click the "Block quote" toolbar button to make it stand out visually.</p>
             </div>
             <div x-show="lang === 'fr'" x-cloak>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 1 (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <x-admin.rich-text name="transparency_financial_p1_fr" :value="$cvFr('transparency_financial_p1')" lang="fr" :rows="2" />
-            </div>
-
-            <div x-show="lang === 'en'">
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 2</label>
-                <x-admin.rich-text name="transparency_financial_p2" :value="$cv('transparency_financial_p2', 'The implementation of programs and projects is our priority.')" lang="en" :rows="2" />
-            </div>
-            <div x-show="lang === 'fr'" x-cloak>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 2 (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <x-admin.rich-text name="transparency_financial_p2_fr" :value="$cvFr('transparency_financial_p2')" lang="fr" :rows="2" />
-            </div>
-
-            <div x-show="lang === 'en'">
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 3</label>
-                <x-admin.rich-text name="transparency_financial_p3" :value="$cv('transparency_financial_p3', 'Thanks to the strict financial management and the involvement of European volunteers, all administrative costs remain under 4% of the total budget.')" lang="en" :rows="2" />
-            </div>
-            <div x-show="lang === 'fr'" x-cloak>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 3 (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <x-admin.rich-text name="transparency_financial_p3_fr" :value="$cvFr('transparency_financial_p3')" lang="fr" :rows="2" />
-            </div>
-
-            <div x-show="lang === 'en'">
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 4 (Audit firm)</label>
-                <x-admin.rich-text name="transparency_financial_p4" :value="$cv('transparency_financial_p4', 'Krousar Thmey Cambodia\'s accounts are all audited and certified each year by an independent audit firm (PricewaterhouseCoopers since 2013 and KPMG before then). Working closely with the auditors, Krousar Thmey is committed to constantly improving the quality and precision of its financial processes in order to provide greater efficiency to the organization and transparency to its partners.')" lang="en" :rows="3" />
-            </div>
-            <div x-show="lang === 'fr'" x-cloak>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 4 (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <x-admin.rich-text name="transparency_financial_p4_fr" :value="$cvFr('transparency_financial_p4')" lang="fr" :rows="3" />
+                <label class="block text-xs font-medium text-gray-600 mb-1">Body Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="transparency_financial_body_fr" :value="$cvFr('transparency_financial_body')" lang="fr" :rows="8" />
             </div>
 
             <div x-show="lang === 'en'">
@@ -324,30 +377,13 @@
             </div>
 
             <div x-show="lang === 'en'">
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 1 (International support)</label>
-                <x-admin.rich-text name="transparency_origins_p1" :value="$cv('transparency_origins_p1', 'In support of its local activity in Cambodia, Krousar Thmey benefits from the involvement of volunteers in international entities: Krousar Thmey France, Krousar Thmey Switzerland and Krousar Thmey Singapore. As their main activity is fundraising, these branches are a privileged relay to donors outside of Cambodia. They enable Krousar Thmey to receive institutional funding and support from individual donors.')" lang="en" :rows="3" />
+                <label class="block text-xs font-medium text-gray-600 mb-1">Body Text</label>
+                <x-admin.rich-text name="transparency_origins_body" :value="$cv('transparency_origins_body', '<p>In support of its local activity in Cambodia, Krousar Thmey benefits from the involvement of volunteers in international entities: Krousar Thmey France, Krousar Thmey Switzerland and Krousar Thmey Singapore. As their main activity is fundraising, these branches are a privileged relay to donors outside of Cambodia. They enable Krousar Thmey to receive institutional funding and support from individual donors.</p><p>Donations received in Cambodia come mainly from non-governmental organizations and to a lesser extent from private donors and the Cambodian authorities.</p><blockquote><p>Financial or in-kind donations from the Cambodian authorities have increased steadily over the past few years, accounting for nearly 8% of Krousar Thmey\'s resources. All staff of special schools for deaf or blind children are civil servants of the Ministry of Education, Youth and Sports who pay their salary (excluding complements paid by Krousar Thmey). For the time being, this contribution is not included in the expenditure and income statement.</p></blockquote>')" lang="en" :rows="8" />
+                <p class="text-xs text-gray-400 mt-1">Tip: select a key sentence (like the government-funding figure) and click the "Block quote" toolbar button to make it stand out visually.</p>
             </div>
             <div x-show="lang === 'fr'" x-cloak>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 1 (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <x-admin.rich-text name="transparency_origins_p1_fr" :value="$cvFr('transparency_origins_p1')" lang="fr" :rows="3" />
-            </div>
-
-            <div x-show="lang === 'en'">
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 2 (Local support)</label>
-                <x-admin.rich-text name="transparency_origins_p2" :value="$cv('transparency_origins_p2', 'Donations received in Cambodia come mainly from non-governmental organizations and to a lesser extent from private donors and the Cambodian authorities.')" lang="en" :rows="2" />
-            </div>
-            <div x-show="lang === 'fr'" x-cloak>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 2 (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <x-admin.rich-text name="transparency_origins_p2_fr" :value="$cvFr('transparency_origins_p2')" lang="fr" :rows="2" />
-            </div>
-
-            <div x-show="lang === 'en'">
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 3</label>
-                <x-admin.rich-text name="transparency_origins_p3" :value="$cv('transparency_origins_p3', 'Financial or in-kind donations from the Cambodian authorities have increased steadily over the past few years, accounting for nearly 8% of Krousar Thmey\'s resources. All staff of special schools for deaf or blind children are civil servants of the Ministry of Education, Youth and Sports who pay their salary (excluding complements paid by Krousar Thmey). For the time being, this contribution is not included in the expenditure and income statement.')" lang="en" :rows="3" />
-            </div>
-            <div x-show="lang === 'fr'" x-cloak>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Paragraph 3 (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <x-admin.rich-text name="transparency_origins_p3_fr" :value="$cvFr('transparency_origins_p3')" lang="fr" :rows="3" />
+                <label class="block text-xs font-medium text-gray-600 mb-1">Body Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="transparency_origins_body_fr" :value="$cvFr('transparency_origins_body')" lang="fr" :rows="8" />
             </div>
         </div>
 
