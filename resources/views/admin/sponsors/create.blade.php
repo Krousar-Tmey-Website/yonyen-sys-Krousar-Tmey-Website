@@ -10,12 +10,12 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto" x-data="{ logoMethod: 'file', fileName: '', lang: 'en' }">
+<div x-data="{ logoMethod: 'file', fileName: '', lang: 'en' }">
     <form action="{{ route('admin.sponsors.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
         @csrf
 
         {{-- Sponsor Details --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -34,32 +34,36 @@
                 </div>
             </div>
 
-            {{-- Sponsor Name --}}
-            <div class="form-group" x-show="lang === 'en'">
-                <label class="form-label">Sponsor Name <span class="required">*</span></label>
-                <input type="text" name="name" value="{{ old('name') }}"
-                       class="form-control @error('name') error @enderror"
-                       placeholder="e.g. Ministry of Education, Youth and Sport">
-                @error('name')<div class="form-error">{{ $message }}</div>@enderror
-                <div class="form-helper">The official display name of the sponsor.</div>
-            </div>
-            <div class="form-group" x-show="lang === 'fr'" x-cloak>
-                <label class="form-label">Sponsor Name (French) <span class="optional">(optional)</span></label>
-                <input type="text" name="name_fr" value="{{ old('name_fr') }}"
-                       class="form-control @error('name_fr') error @enderror"
-                       placeholder="ex. Ministère de l'Éducation, de la Jeunesse et des Sports">
-                @error('name_fr')<div class="form-error">{{ $message }}</div>@enderror
-                <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English name.</div>
-            </div>
+            <div class="grid lg:grid-cols-2 gap-6">
+                {{-- Sponsor Name --}}
+                <div>
+                    <div class="form-group form-group--no-margin" x-show="lang === 'en'">
+                        <label class="form-label">Sponsor Name <span class="required">*</span></label>
+                        <input type="text" name="name" value="{{ old('name') }}"
+                               class="form-control @error('name') error @enderror"
+                               placeholder="e.g. Ministry of Education, Youth and Sport">
+                        @error('name')<div class="form-error">{{ $message }}</div>@enderror
+                        <div class="form-helper">The official display name of the sponsor.</div>
+                    </div>
+                    <div class="form-group form-group--no-margin" x-show="lang === 'fr'" x-cloak>
+                        <label class="form-label">Sponsor Name (French) <span class="optional">(optional)</span></label>
+                        <input type="text" name="name_fr" value="{{ old('name_fr') }}"
+                               class="form-control @error('name_fr') error @enderror"
+                               placeholder="ex. Ministère de l'Éducation, de la Jeunesse et des Sports">
+                        @error('name_fr')<div class="form-error">{{ $message }}</div>@enderror
+                        <div class="form-helper">Shown to French-language visitors. Leave blank to reuse the English name.</div>
+                    </div>
+                </div>
 
-            {{-- Website URL --}}
-            <div class="form-group">
-                <label class="form-label">Website URL <span class="optional">(optional)</span></label>
-                <input type="url" name="url" value="{{ old('url') }}"
-                       class="form-control @error('url') error @enderror"
-                       placeholder="https://example.com">
-                @error('url')<div class="form-error">{{ $message }}</div>@enderror
-                <div class="form-helper">The destination URL when someone clicks this sponsor's logo.</div>
+                {{-- Website URL --}}
+                <div class="form-group form-group--no-margin">
+                    <label class="form-label">Website URL <span class="optional">(optional)</span></label>
+                    <input type="url" name="url" value="{{ old('url') }}"
+                           class="form-control @error('url') error @enderror"
+                           placeholder="https://example.com">
+                    @error('url')<div class="form-error">{{ $message }}</div>@enderror
+                    <div class="form-helper">The destination URL when someone clicks this sponsor's logo.</div>
+                </div>
             </div>
 
             {{-- Settings Grid --}}
@@ -83,7 +87,7 @@
         </div>
 
         {{-- Logo --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">

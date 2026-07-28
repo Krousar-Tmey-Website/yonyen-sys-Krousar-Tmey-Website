@@ -94,7 +94,7 @@
 
                 {{-- Order Action Buttons --}}
                 <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                    <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org');"
+                    <a href="{{ route('contact') }}"
                        class="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-[#2d6fa3] to-[#1d4e7a] hover:from-[#1d4e7a] hover:to-[#163b5d] text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                         <span>Order Book Now</span>

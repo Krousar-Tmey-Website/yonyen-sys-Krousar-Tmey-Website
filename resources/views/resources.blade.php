@@ -5,19 +5,60 @@
 
 @section('content')
 
-{{-- Page Header --}}
-<div class="bg-[#1a3c6e] pt-16 pb-20 relative overflow-hidden">
+{{-- ========================================================
+     PAGE HEADER / BANNER (managed via Admin → Reports → Resources Banner)
+     ======================================================== --}}
+@php
+    $resBannerImage = $settings['resources_banner_image'] ?? null;
+    $resBannerImageUrl = $resBannerImage ? (str_starts_with($resBannerImage, 'http') ? $resBannerImage : asset('storage/' . $resBannerImage)) : null;
+    $resBannerOverlayColor = $settings['resources_banner_overlay_color'] ?? '#1a3c6e';
+    $resBannerTitle = $settings['resources_banner_title'] ?? 'Resources';
+    $resBannerSubtitle = $settings['resources_banner_subtitle'] ?? 'Annual reports, publications, and media resources from Krousar Thmey.';
+
+    $resBtn1Text = $settings['resources_banner_btn1_text'] ?? '';
+    $resBtn1Url  = $settings['resources_banner_btn1_url'] ?? '';
+    $resBtn2Text = $settings['resources_banner_btn2_text'] ?? '';
+    $resBtn2Url  = $settings['resources_banner_btn2_url'] ?? '';
+    $resBtn3Text = $settings['resources_banner_btn3_text'] ?? '';
+    $resBtn3Url  = $settings['resources_banner_btn3_url'] ?? '';
+@endphp
+<div class="relative pt-16 pb-20 overflow-hidden" style="background-color: {{ $resBannerOverlayColor }};">
+    @if($resBannerImageUrl)
+    <div class="absolute inset-0 bg-cover bg-center opacity-35" style="background-image: url('{{ $resBannerImageUrl }}');"></div>
+    @endif
+    @if(!$resBannerImageUrl)
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
     </div>
+    @endif
     <div class="relative max-w-7xl mx-auto px-6">
         <nav class="flex items-center gap-2 text-sm text-white/60 mb-8">
             <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <span class="text-white">Resources</span>
         </nav>
-        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Resources</h1>
-        <p class="text-white/70 text-lg max-w-2xl">Annual reports, publications, and media resources from Krousar Thmey.</p>
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ $resBannerTitle }}</h1>
+        <p class="text-white/70 text-lg max-w-2xl">{{ $resBannerSubtitle }}</p>
+        @if($resBtn1Text || $resBtn2Text || $resBtn3Text)
+        <div class="flex flex-wrap items-center gap-3 mt-6">
+            @if($resBtn1Text && $resBtn1Url)
+            <a href="{{ $resBtn1Url }}" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold bg-white text-[#2d6fa3] hover:bg-gray-100 hover:shadow-lg transition-all duration-200">
+                {{ $resBtn1Text }}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </a>
+            @endif
+            @if($resBtn2Text && $resBtn2Url)
+            <a href="{{ $resBtn2Url }}" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold border-2 border-white/40 text-white hover:bg-white/10 hover:border-white/60 transition-all duration-200">
+                {{ $resBtn2Text }}
+            </a>
+            @endif
+            @if($resBtn3Text && $resBtn3Url)
+            <a href="{{ $resBtn3Url }}" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold border-2 border-white/40 text-white hover:bg-white/10 hover:border-white/60 transition-all duration-200">
+                {{ $resBtn3Text }}
+            </a>
+            @endif
+        </div>
+        @endif
     </div>
 </div>
 

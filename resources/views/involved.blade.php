@@ -6,7 +6,14 @@
 @section('content')
 
 {{-- Page Header --}}
-<div class="relative bg-gradient-to-br from-[#1d4e7a] via-[#2d6fa3] to-[#153e63] pt-16 pb-28 overflow-hidden">
+@php
+    $involvedBannerImg = !empty($bannerImage) ? (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) : null;
+@endphp
+<div class="relative pt-16 pb-28 overflow-hidden" style="background-color: {{ $bannerOverlayColor }};">
+    @if($involvedBannerImg)
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $involvedBannerImg }}'); opacity: 0.35;"></div>
+    @endif
+    
     {{-- Ambient Glowing Halos & Mesh Effects --}}
     <div class="absolute inset-0 opacity-20 pointer-events-none">
         <div class="absolute top-0 right-0 w-[30rem] h-[30rem] rounded-full bg-gradient-to-bl from-[#8da83a] to-transparent blur-3xl -translate-y-1/3 translate-x-1/3 hero-pulse"></div>
@@ -27,15 +34,21 @@
                 {{-- Glowing Pill Tag --}}
                 <div class="inline-flex items-center gap-2 bg-[#8da83a]/25 border border-[#8da83a]/40 text-[#a3c04a] text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 shadow-inner" data-reveal="up">
                     <span class="w-2 h-2 rounded-full bg-[#8da83a] animate-ping"></span>
-                    Join Our Mission
+                    {{ $bannerBadge }}
                 </div>
                 
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white mb-6 leading-tight" data-reveal="up" style="--reveal-delay: 100">
-                    Get <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#a3c04a]">Involved</span>
+                    {{ $bannerTitle }}
                 </h1>
                 
                 <p class="text-white/80 text-base md:text-lg leading-relaxed max-w-2xl font-light" data-reveal="up" style="--reveal-delay: 200">
-                    There are many meaningful ways to support Krousar Thmey's mission — from partnerships and volunteering, to exploring job opportunities or purchasing our books.
+                    @php
+                        $displaySubtitle = $bannerSubtitle;
+                        if (app()->getLocale() === 'fr' && !empty($settings['involved_banner_subtitle_fr'] ?? null)) {
+                            $displaySubtitle = $settings['involved_banner_subtitle_fr'];
+                        }
+                    @endphp
+                    {{ strip_tags($displaySubtitle) }}
                 </p>
             </div>
             
@@ -49,7 +62,7 @@
                     </div>
                     <h3 class="font-extrabold text-lg text-white mb-1">Make a Difference</h3>
                     <p class="text-xs text-white/70 leading-relaxed mb-4">Together, we build a brighter future for disadvantaged children across Cambodia.</p>
-                    <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#a3c04a] hover:text-white transition-colors">
+                    <a href="{{ route('contact') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#a3c04a] hover:text-white transition-colors">
                         Get in touch
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
@@ -130,7 +143,13 @@
 </section>
 
 {{-- Book for Sales --}}
-<section id="book-for-sales" class="py-24 bg-gradient-to-br from-[#163b5d] via-[#1d4e7a] to-[#2d6fa3] scroll-mt-20 relative overflow-hidden">
+@php
+    $booksBannerImg = !empty($booksBannerImage) ? (str_starts_with($booksBannerImage, 'http') ? $booksBannerImage : asset('storage/' . $booksBannerImage)) : null;
+@endphp
+<section id="book-for-sales" class="py-24 scroll-mt-20 relative overflow-hidden" style="background-color: {{ $booksBannerOverlayColor }};">
+    @if($booksBannerImg)
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $booksBannerImg }}'); opacity: 0.25;"></div>
+    @endif
     {{-- Ambient Lighting Effects --}}
     <div class="absolute inset-0 opacity-15 pointer-events-none">
         <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#8da83a] blur-3xl hero-pulse"></div>
@@ -141,13 +160,13 @@
         <div class="max-w-2xl mb-14" data-reveal="left">
             <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 shadow-sm">
                 <svg class="w-3.5 h-3.5 text-[#e8a020]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                Books for Sale
+                {{ $booksBannerBadge }}
             </span>
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-wide text-white mb-4 leading-tight">
-                Support Through <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#e8a020]">Literature</span>
+                {{ $booksBannerTitle }}
             </h2>
             <p class="text-white/80 leading-relaxed text-sm md:text-base font-light">
-                Browse our collection of publication titles. 100% of proceeds directly fund our educational and social programs for vulnerable children across Cambodia.
+                {{ $booksBannerSubtitle }}
             </p>
         </div>
 
@@ -416,7 +435,7 @@
                         </div>
                         <p class="text-[#1d4e7a] font-bold text-lg md:text-xl mb-2">Interested in becoming a partner?</p>
                         <p class="text-gray-500 text-sm mb-6">Let's build together our future cooperation</p>
-                        <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')"
+                        <a href="{{ route('contact') }}"
                            class="group/btn mt-4 inline-flex items-center gap-2 bg-white text-[#1d4e7a] font-bold text-sm px-7 py-2.5 rounded-xl border-2 border-[#1d4e7a] hover:bg-[#1d4e7a] hover:text-white hover:gap-3 transition-all duration-300 active:scale-[0.97] shadow-sm hover:shadow-md">
                             <span>Contact us</span>
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
@@ -1103,18 +1122,24 @@
 </section>
 
 {{-- CTA Banner --}}
-<section class="bg-[#1d4e7a] py-16 relative overflow-hidden">
+@php
+    $ctaBannerImg = !empty($ctaBannerImage) ? (str_starts_with($ctaBannerImage, 'http') ? $ctaBannerImage : asset('storage/' . $ctaBannerImage)) : null;
+@endphp
+<section class="py-16 relative overflow-hidden" style="background-color: {{ $ctaBannerOverlayColor }};">
+    @if($ctaBannerImg)
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $ctaBannerImg }}'); opacity: 0.25;"></div>
+    @endif
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 right-0 w-72 h-72 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[#2d6fa3] translate-y-1/2 -translate-x-1/3"></div>
     </div>
     <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
-        <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Ready to Help?</p>
-        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">Every Action Counts</h2>
-        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">Whether you buy a book, volunteer, partner with us, or send your application — you are helping build a better future for Cambodia's children.</p>
+        <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">{{ $ctaBannerBadge }}</p>
+        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">{{ $ctaBannerTitle }}</h2>
+        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">{{ $ctaBannerSubtitle }}</p>
         <div class="flex flex-wrap gap-4 justify-center">
             <a href="{{ route('involved') }}#book-for-sales" class="btn-primary text-base">Book for Sales</a>
-            <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="btn-outline text-base">Contact Us</a>
+            <a href="{{ route('contact') }}" class="btn-outline text-base">Contact Us</a>
         </div>
     </div>
 </section>

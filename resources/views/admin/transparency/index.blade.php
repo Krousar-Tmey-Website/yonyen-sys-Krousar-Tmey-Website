@@ -6,10 +6,15 @@
 
 @section('content')
 
-<div class="space-y-8 max-w-3xl mx-auto" x-data="{ tab: 'banner', lang: 'en' }">
+<div class="space-y-8" x-data="{ tab: 'reports', lang: 'en' }">
     {{-- Tab Navigation --}}
     <div class="border-b border-gray-200">
         <nav class="flex space-x-8 overflow-x-auto">
+            <button @click="tab = 'reports'"
+                    :class="tab === 'reports' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
+                    class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
+                Audited Statements (PDFs)
+            </button>
             <button @click="tab = 'banner'"
                     :class="tab === 'banner' ? 'border-[#2d6fa3] text-[#2d6fa3]' : 'border-transparent text-gray-500'"
                     class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap">
@@ -23,7 +28,7 @@
         </nav>
     </div>
 
-    <div class="lang-tabs" title="Toggle editing language (English / French)">
+    <div class="lang-tabs" x-show="tab !== 'reports'" title="Toggle editing language (English / French)">
         <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
         <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
     </div>
@@ -66,9 +71,14 @@
     </div>
 
     {{-- Banner Form (separate — needs multipart for the image upload) --}}
-    <form action="{{ route('admin.transparency.banner.update') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+    <form action="{{ route('admin.transparency.banner.update') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-5">
         @csrf
-        <h3 class="font-bold text-gray-700 text-sm">Page Banner</h3>
+        <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </span>
+            Page Banner
+        </h3>
         <p class="text-xs text-gray-400 -mt-3">Controls the hero banner shown at the top of the public page (image, colors, title and subtitle).</p>
 
         {{-- Background Image --}}
@@ -219,8 +229,13 @@
             $cvFr = fn($key, $default = '') => old($key.'_fr', $settings[$key.'_fr'] ?? $default);
         @endphp
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-            <h3 class="font-bold text-gray-700 text-sm">Financial Transparency</h3>
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </span>
+                Financial Transparency
+            </h3>
             <div x-show="lang === 'en'">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Section Heading</label>
                 <input type="text" name="transparency_financial_heading" value="{{ $cv('transparency_financial_heading', 'Financial Transparency') }}"
@@ -268,6 +283,17 @@
                 <x-admin.rich-text name="transparency_financial_p4_fr" :value="$cvFr('transparency_financial_p4')" lang="fr" :rows="3" />
             </div>
 
+            <div x-show="lang === 'en'">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Line Before Report List</label>
+                <input type="text" name="transparency_financial_list_intro" value="{{ $cv('transparency_financial_list_intro', 'Audited financial statements are available here:') }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                <p class="text-xs text-gray-400 mt-1">The list of PDF links itself is managed in the "Audited Statements (PDFs)" tab.</p>
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Line Before Report List (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <input type="text" name="transparency_financial_list_intro_fr" value="{{ $cvFr('transparency_financial_list_intro') }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            </div>
 
             <div x-show="lang === 'en'">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Closing Line</label>
@@ -279,8 +305,13 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-            <h3 class="font-bold text-gray-700 text-sm">Origins Of The Funds</h3>
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </span>
+                Origins Of The Funds
+            </h3>
             <div x-show="lang === 'en'">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Section Heading</label>
                 <input type="text" name="transparency_origins_heading" value="{{ $cv('transparency_origins_heading', 'Origins Of The Funds') }}"
@@ -320,10 +351,15 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-            <h3 class="font-bold text-gray-700 text-sm">Award Line</h3>
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
+            <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                </span>
+                Award Line
+            </h3>
             <p class="text-xs text-gray-400">Renders as: "{prefix} {link label} {suffix}" — e.g. Krousar Thmey won the <span class="text-[#2d6fa3] underline">label Ideas</span> in 2010.</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" x-show="lang === 'en'">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" x-show="lang === 'en'">
                 <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Prefix</label>
                     <input type="text" name="transparency_award_prefix" value="{{ $cv('transparency_award_prefix', 'Krousar Thmey won the') }}"
@@ -346,7 +382,7 @@
                     <p class="text-xs text-gray-400 mt-1">Same URL used for both languages.</p>
                 </div>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" x-show="lang === 'fr'" x-cloak>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" x-show="lang === 'fr'" x-cloak>
                 <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Prefix (French) <span class="text-gray-400 font-normal">(optional)</span></label>
                     <input type="text" name="transparency_award_prefix_fr" value="{{ $cvFr('transparency_award_prefix') }}"
@@ -369,6 +405,78 @@
             Save Page Text
         </button>
     </form>
+</div>
+
+{{-- ========================================================
+     TAB: AUDITED STATEMENTS (PDFs)
+     ======================================================== --}}
+<div x-show="tab === 'reports'" class="space-y-6">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2.5">
+                <span class="w-9 h-9 rounded-xl bg-[#2d6fa3]/10 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </span>
+                Transparency Reports
+            </h3>
+            <p class="text-sm text-gray-500 mt-1 ml-[46px]">Manage published reports and uploaded PDFs in one place.</p>
+        </div>
+        <a href="{{ route('admin.transparency.create') }}"
+           class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2d6fa3] text-white rounded-full text-sm font-semibold hover:bg-[#1d4e7a] transition-shadow shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Report
+        </a>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        @if($reports->isEmpty())
+            <div class="px-6 py-12 text-center text-gray-400 text-sm">
+                No reports yet. Click "Add New Report" to create the first one.
+            </div>
+        @else
+            <div class="px-5 py-4 bg-gray-50 border-b border-gray-100">
+                <h4 class="font-semibold text-gray-700 text-sm">{{ $reports->count() }} Report(s)</h4>
+            </div>
+            <div class="divide-y divide-gray-100">
+                @foreach($reports as $report)
+                <div class="px-5 py-4 sm:px-6 hover:bg-gray-50 transition">
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="min-w-0">
+                            <p class="font-semibold text-gray-800 truncate">{{ $report->title }}</p>
+                            <p class="text-xs text-gray-500 mt-1">
+                                {{ $report->year }} · {{ $report->description ? Str::limit(strip_tags($report->description), 60) : 'PDF' }}
+                                @if($report->download_url)
+                                    · <a href="{{ $report->download_url }}" target="_blank" class="text-[#2d6fa3] hover:underline">View</a>
+                                @endif
+                                @unless($report->is_active)
+                                    <span class="inline-flex items-center rounded-full bg-orange-50 text-orange-600 px-2 py-0.5 text-[11px] uppercase tracking-[.18em]">Hidden</span>
+                                @endunless
+                                @if($report->file_path && !$report->download_url)
+                                    <span class="inline-flex items-center rounded-full bg-red-50 text-red-600 px-2 py-0.5 text-[11px] uppercase tracking-[.18em]">Missing file — re-upload</span>
+                                @endif
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <a href="{{ route('admin.transparency.edit', $report) }}"
+                               class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#2d6fa3] bg-[#2d6fa3]/10 rounded-full hover:bg-[#2d6fa3]/15 transition">
+                                Edit
+                            </a>
+                            <form action="{{ route('admin.transparency.destroy', $report) }}" method="POST" onsubmit="return confirm('Delete this report?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-full hover:bg-red-100 transition">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
 </div>
 
 </div>

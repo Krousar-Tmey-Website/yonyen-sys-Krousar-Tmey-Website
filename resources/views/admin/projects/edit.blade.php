@@ -5,7 +5,7 @@
 @php use Illuminate\Support\Str; @endphp
 
 @section('content')
-<div class="max-w-3xl mx-auto space-y-6">
+<div class="space-y-6">
 
     {{-- Header bar --}}
     <div class="flex items-center justify-between">
@@ -39,7 +39,7 @@
             $biSrc = $bi ? (str_starts_with($bi, 'http') ? $bi : asset('storage/' . $bi)) : '';
             $biTypeInit = (str_starts_with($bi, 'http') && $bi !== '') ? 'url' : 'upload';
         @endphp
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">
                     <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,7 +101,7 @@
         </div>
 
         {{-- Basic Info --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
                     <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -164,7 +164,7 @@
         </div>
 
         {{-- Detailed Content --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="bilingualForm()">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4" x-data="bilingualForm()">
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
@@ -211,7 +211,7 @@
         </div>
 
         {{-- Project Image --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4"
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4"
              x-data="{ imageMode: '{{ str_starts_with($item->image ?? '', 'http') ? 'url' : 'upload' }}' }">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
@@ -251,7 +251,7 @@
         </div>
 
         {{-- Testimony --}}
-        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4" x-data="bilingualForm()">
+        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 lg:p-8 space-y-4" x-data="bilingualForm()">
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">

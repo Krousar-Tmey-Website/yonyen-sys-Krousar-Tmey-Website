@@ -11,7 +11,7 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto">
+<div>
     <form action="{{ route('admin.donations.store') }}" method="POST">
         @csrf
 

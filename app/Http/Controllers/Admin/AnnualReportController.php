@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnnualReport;
+use App\Models\HomeSetting;
 use App\Services\ReportThumbnailGenerator;
 
 use Illuminate\Http\Request;
@@ -29,7 +30,9 @@ class AnnualReportController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('admin.reports.index', compact('reports', 'search'));
+        $settings = HomeSetting::allKeyed();
+
+        return view('admin.reports.index', compact('reports', 'search', 'settings'));
     }
 
     public function create()
@@ -129,5 +132,69 @@ class AnnualReportController extends Controller
             ->with('success', 'Report deleted successfully.');
     }
 
+    /**
+     * Show the Resources Banner form (GET /admin/resources-banner).
+     * The banner form is embedded within the reports index page,
+     * so we redirect there — no separate view needed.
+     */
+    public function bannerIndex()
+    {
+        return redirect()->route('admin.reports.index');
+    }
+
+    /**
+     * Handle the Resources Banner form submission (POST /admin/resources-banner).
+     */
+    public function updateBanner(Request $request)
+    {
+        $request->validate([
+            'resources_banner_title'         => ['nullable', 'string', 'max:255'],
+            'resources_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
+            'resources_banner_badge'         => ['nullable', 'string', 'max:255'],
+            'resources_banner_overlay_color' => ['nullable', 'string', 'max:20'],
+            'resources_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
+            'resources_banner_image_url'     => ['nullable', 'url', 'max:2048'],
+            'resources_banner_btn1_text'     => ['nullable', 'string', 'max:100'],
+            'resources_banner_btn1_url'      => ['nullable', 'string', 'max:500'],
+            'resources_banner_btn2_text'     => ['nullable', 'string', 'max:100'],
+            'resources_banner_btn2_url'      => ['nullable', 'string', 'max:500'],
+            'resources_banner_btn3_text'     => ['nullable', 'string', 'max:100'],
+            'resources_banner_btn3_url'      => ['nullable', 'string', 'max:500'],
+        ]);
+
+        HomeSetting::setValue('resources_banner_badge', $request->input('resources_banner_badge', ''));
+        HomeSetting::setValue('resources_banner_title', $request->input('resources_banner_title', ''));
+        HomeSetting::setValue('resources_banner_subtitle', $request->input('resources_banner_subtitle', ''));
+        HomeSetting::setValue('resources_banner_overlay_color', $request->input('resources_banner_overlay_color', ''));
+        HomeSetting::setValue('resources_banner_btn1_text', $request->input('resources_banner_btn1_text', ''));
+        HomeSetting::setValue('resources_banner_btn1_url', $request->input('resources_banner_btn1_url', ''));
+        HomeSetting::setValue('resources_banner_btn2_text', $request->input('resources_banner_btn2_text', ''));
+        HomeSetting::setValue('resources_banner_btn2_url', $request->input('resources_banner_btn2_url', ''));
+        HomeSetting::setValue('resources_banner_btn3_text', $request->input('resources_banner_btn3_text', ''));
+        HomeSetting::setValue('resources_banner_btn3_url', $request->input('resources_banner_btn3_url', ''));
+
+        if ($request->hasFile('resources_banner_image')) {
+            $existing = HomeSetting::getValue('resources_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            $path = $request->file('resources_banner_image')->store('resources_banner', 'public');
+            HomeSetting::setValue('resources_banner_image', $path);
+        } elseif ($request->filled('resources_banner_image_url')) {
+            $existing = HomeSetting::getValue('resources_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            HomeSetting::setValue('resources_banner_image', $request->input('resources_banner_image_url'));
+        } elseif ($request->boolean('resources_banner_image_clear')) {
+            $existing = HomeSetting::getValue('resources_banner_image', '');
+            if ($existing && !str_starts_with($existing, 'http')) {
+                Storage::disk('public')->delete($existing);
+            }
+            HomeSetting::setValue('resources_banner_image', '');
+        }
+
+        return redirect()->route('admin.reports.index')->with('success', 'Resources page banner updated.');
+    }
 
 }

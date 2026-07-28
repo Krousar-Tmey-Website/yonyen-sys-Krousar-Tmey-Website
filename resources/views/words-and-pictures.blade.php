@@ -5,6 +5,71 @@
 
 @section('content')
 
+@php
+$settings = \App\Models\HomeSetting::allKeyed();
+$heroImage = $settings['words_pictures_banner_image'] ?? null;
+$heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/cultural.jpg');
+$heroTitle = $settings['words_pictures_banner_title'] ?? 'Words and Pictures Application';
+$heroSubtitle = $settings['words_pictures_banner_subtitle'] ?? 'A free mobile app helping children with hearing and speech impairments practice Cambodian Sign Language.';
+if (app()->getLocale() === 'fr' && !empty($settings['words_pictures_banner_subtitle_fr'] ?? null)) {
+    $heroSubtitle = $settings['words_pictures_banner_subtitle_fr'];
+}
+$heroBadge = $settings['words_pictures_banner_badge'] ?? 'Application';
+$heroOverlayColor = $settings['words_pictures_banner_overlay_color'] ?? '#1a3c6e';
+$btn1Text = $settings['words_pictures_banner_btn1_text'] ?? 'Learn More';
+$btn1Url  = $settings['words_pictures_banner_btn1_url'] ?? '/our-programs';
+$btn2Text = $settings['words_pictures_banner_btn2_text'] ?? 'Donate Now';
+$btn2Url  = $settings['words_pictures_banner_btn2_url'] ?? '/donate';
+$btn3Text = $settings['words_pictures_banner_btn3_text'] ?? '';
+$btn3Url  = $settings['words_pictures_banner_btn3_url'] ?? '';
+@endphp
+
+{{-- ========================================================
+     WORDS AND PICTURES BANNER (hero)
+     ======================================================== --}}
+<section class="relative py-24 overflow-hidden" data-reveal="scale">
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $heroImageUrl }}');"></div>
+    <div class="absolute inset-0" style="background-color: {{ $heroOverlayColor }}; opacity: 0.55;"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+        <span class="inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $heroBadge }}</span>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
+            {{ $heroTitle }}
+        </h1>
+        <div class="rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md">
+            {!! $heroSubtitle !!}
+        </div>
+
+        @if($btn1Text || $btn2Text || $btn3Text)
+        <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
+            @if($btn1Text)
+            <a href="{{ $btn1Url }}" class="btn-primary text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+                {{ $btn1Text }}
+            </a>
+            @endif
+            @if($btn2Text)
+            <a href="{{ $btn2Url }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#8da83a] text-white hover:bg-[#a3c04a] text-sm sm:text-base font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                {{ $btn2Text }}
+            </a>
+            @endif
+            @if($btn3Text)
+            <a href="{{ $btn3Url }}" class="btn-outline text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                {{ $btn3Text }}
+            </a>
+            @endif
+        </div>
+        @endif
+    </div>
+</section>
+
 <section class="py-20 bg-white scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
         @php
@@ -65,8 +130,8 @@
                         {{ $wp('words_pictures_learn_more_text', 'Learn more about the projects of this program') }}
                     </a>
                     <a href="{{ route('donate') }}"
-                       class="inline-flex items-center justify-center gap-1.5 px-5 py-2 border border-[#35a752] text-[#35a752] text-sm font-bold uppercase rounded hover:bg-[#35a752] hover:text-white transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                       class="inline-flex items-center justify-center gap-1.5 px-5 py-2 bg-[#8da83a] text-white text-sm font-bold uppercase rounded hover:bg-[#a3c04a] transition-colors shadow-sm">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                         Donate Now
                     </a>
                 </div>

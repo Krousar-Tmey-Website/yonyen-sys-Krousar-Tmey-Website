@@ -6,8 +6,8 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto">
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6" x-data="bilingualForm()">
+<div>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:p-8" x-data="bilingualForm()">
         {{-- Header --}}
         <div class="flex items-center justify-between mb-1">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">

@@ -23,6 +23,7 @@
         "@alpinejs/collapse": "^3.15.12",
         "@alpinejs/persist": "^3.15.12",
         "@hotwired/turbo": "^8.0.23",
+        "ckeditor": "^4.12.1",
         "ckeditor5": "^48.3.1"
     }
 }

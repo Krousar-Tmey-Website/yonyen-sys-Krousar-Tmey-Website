@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HomeSetting;
 use App\Models\News;
 use App\Models\ResourcePage;
 use Illuminate\Http\Request;
@@ -22,8 +23,9 @@ class NewsController extends Controller
         $articles = $query->paginate(12)->withQueryString();
         $krousarThmeyPage = ResourcePage::active()->where('slug', 'krousar-thmey')->first();
         $topicPagesByTitle = $this->topicPagesByTitle();
+        $settings = HomeSetting::allKeyed();
 
-        return view('news', compact('articles', 'krousarThmeyPage', 'activeTag', 'topicPagesByTitle'));
+        return view('news', compact('articles', 'krousarThmeyPage', 'activeTag', 'topicPagesByTitle', 'settings'));
     }
 
     public function show($slug)

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterController;
@@ -100,8 +102,9 @@ Route::get('/who-we-are/presentation', function () {
 
 Route::get('/who-we-are/transparency', function () {
     $settings = HomeSetting::allKeyed();
+    $reports = AnnualReport::active()->get();
 
-    return view('transparency', compact('settings'));
+    return view('transparency', compact('settings', 'reports'));
 })->name('transparency');
 
 Route::get('/our-programs', function () {
@@ -155,7 +158,28 @@ Route::get('/get-involved', function () {
     $partnerPrinciples = \App\Models\PartnerPrinciple::ordered()->get();
     $worldwidePartners = \App\Models\WorldwidePartner::active()->get();
 
-    return view('involved', compact('settings', 'jobs', 'books', 'partnershipCategories', 'partnerPrinciples', 'worldwidePartners'));
+    // Hero Banner data
+    $bannerImage = $settings['involved_banner_image'] ?? '';
+    $bannerOverlayColor = $settings['involved_banner_overlay_color'] ?? '#1d4e7a';
+    $bannerBadge = $settings['involved_banner_badge'] ?? 'Join Our Mission';
+    $bannerTitle = $settings['involved_banner_title'] ?? 'Get Involved';
+    $bannerSubtitle = $settings['involved_banner_subtitle'] ?? 'There are many meaningful ways to support Krousar Thmey\'s mission — from partnerships and volunteering, to exploring job opportunities or purchasing our books.';
+
+    // Books for Sale Section Banner data
+    $booksBannerImage = $settings['involved_books_banner_image'] ?? '';
+    $booksBannerOverlayColor = $settings['involved_books_banner_overlay_color'] ?? '#163b5d';
+    $booksBannerBadge = $settings['involved_books_banner_badge'] ?? 'Books for Sale';
+    $booksBannerTitle = $settings['involved_books_banner_title'] ?? 'Support Through Literature';
+    $booksBannerSubtitle = $settings['involved_books_banner_subtitle'] ?? 'Browse our collection of publication titles. 100% of proceeds directly fund our educational and social programs for vulnerable children across Cambodia.';
+
+    // CTA Section Banner data
+    $ctaBannerImage = $settings['involved_cta_banner_image'] ?? '';
+    $ctaBannerOverlayColor = $settings['involved_cta_banner_overlay_color'] ?? '#1d4e7a';
+    $ctaBannerBadge = $settings['involved_cta_banner_badge'] ?? 'Ready to Help?';
+    $ctaBannerTitle = $settings['involved_cta_banner_title'] ?? 'Every Action Counts';
+    $ctaBannerSubtitle = $settings['involved_cta_banner_subtitle'] ?? 'Whether you buy a book, volunteer, partner with us, or send your application — you are helping build a better future for Cambodia\'s children.';
+
+    return view('involved', compact('settings', 'jobs', 'books', 'partnershipCategories', 'partnerPrinciples', 'worldwidePartners', 'bannerImage', 'bannerOverlayColor', 'bannerBadge', 'bannerTitle', 'bannerSubtitle', 'booksBannerImage', 'booksBannerOverlayColor', 'booksBannerBadge', 'booksBannerTitle', 'booksBannerSubtitle', 'ctaBannerImage', 'ctaBannerOverlayColor', 'ctaBannerBadge', 'ctaBannerTitle', 'ctaBannerSubtitle'));
 })->name('involved');
 
 // Books for sale (public detail page)
@@ -172,13 +196,18 @@ Route::get('/jobs/{jobOpportunity}', function (JobOpportunity $jobOpportunity) {
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
 
+// Campaigns
+Route::get('/campaigns', [CampaignController::class, 'index'])->name('campaigns.index');
+Route::get('/campaigns/{campaign:slug}', [CampaignController::class, 'show'])->name('campaigns.show');
+
 Route::get('/topics', [ResourcePageController::class, 'index'])->name('resource-pages.index');
 Route::get('/topics/{slug}', [ResourcePageController::class, 'show'])->name('resource-pages.show');
 
 Route::get('/resources', function () {
     $reports = AnnualReport::active()->get();
+    $settings = HomeSetting::allKeyed();
 
-    return view('resources', compact('reports'));
+    return view('resources', compact('reports', 'settings'));
 })->name('resources');
 
 Route::get('/media', function () {
@@ -221,6 +250,13 @@ Route::get('/storage/{path}', function (string $path) {
         'Content-Type' => $disk->mimeType($path) ?: 'application/octet-stream',
     ]);
 })->where('path', '.*')->name('storage.public');
+
+Route::get('/contact', function () {
+    $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
+
+    return view('contact', compact('offices'));
+})->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/partners', function () {
     $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
@@ -269,6 +305,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Dashboard
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
+    // Campaigns
+    Route::post('campaigns/upload-image', [Admin\CampaignController::class, 'uploadImage'])->name('campaigns.upload-image');
+    Route::post('campaigns/banner', [Admin\CampaignController::class, 'updateBanner'])->name('campaigns.banner');
+    Route::resource('campaigns', Admin\CampaignController::class)->except(['show']);
+
     // Donations
     Route::get('/donations/dashboard', [Admin\DonationDashboardController::class, 'index'])->name('donations.dashboard');
     Route::resource('donations', Admin\DonationController::class);
@@ -286,6 +327,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Words and Pictures application (public /words-and-pictures)
     Route::get('words-pictures', [Admin\WordsPicturesController::class, 'index'])->name('words-pictures.index');
     Route::post('words-pictures', [Admin\WordsPicturesController::class, 'update'])->name('words-pictures.update');
+    Route::post('words-pictures/banner', [Admin\WordsPicturesController::class, 'updateBanner'])->name('words-pictures.banner.update');
+
+    // News Banner
+    Route::get('news-banner', [Admin\NewsController::class, 'bannerIndex'])->name('news-banner.index');
+    Route::post('news-banner', [Admin\NewsController::class, 'updateBanner'])->name('news-banner.update');
 
     // Topics (Resource Pages) — the categories News tags link to
     Route::resource('resource-pages', Admin\ResourcePageController::class)
@@ -336,6 +382,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Who We Are
     Route::get('presentation', [Admin\PresentationController::class, 'index'])->name('presentation.index');
     Route::post('presentation', [Admin\PresentationController::class, 'update'])->name('presentation.update');
+    Route::post('presentation/banner', [Admin\PresentationController::class, 'updateBanner'])->name('presentation.banner.update');
     Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show'])->parameters(['presentation-slides' => 'slide']);
     Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show'])->parameters(['principle-slides' => 'slide']);
     Route::resource('partners', Admin\PartnerController::class)->except(['show']);
@@ -355,12 +402,18 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('worldwide-partners/settings', [Admin\WorldwidePartnerController::class, 'updateSettings'])
         ->name('worldwide-partners.settings');
 
-    Route::get('transparency', [Admin\TransparencyController::class, 'index'])->name('transparency.index');
     Route::post('transparency-content', [Admin\TransparencyController::class, 'updateContent'])->name('transparency.content.update');
     Route::post('transparency-banner', [Admin\TransparencyController::class, 'updateBanner'])->name('transparency.banner.update');
+    Route::resource('transparency', Admin\TransparencyController::class)
+        ->except(['show'])
+        ->parameters(['transparency' => 'report']);
 
     // Reports
     Route::resource('reports', Admin\AnnualReportController::class);
+
+    // Resources Banner
+    Route::get('resources-banner', [Admin\AnnualReportController::class, 'bannerIndex'])->name('resources-banner.index');
+    Route::post('resources-banner', [Admin\AnnualReportController::class, 'updateBanner'])->name('resources-banner.update');
 
     // Books for Sale
     Route::resource('books', Admin\BookController::class)->except(['show']);
@@ -370,6 +423,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Donate Page Content (France / Switzerland / Elsewhere sections)
     Route::post('donate-content', [Admin\DonateContentController::class, 'update'])->name('donate-content.update');
+
+    // Involved Banner
+    Route::get('involved-banner', [Admin\InvolvedBannerController::class, 'index'])->name('involved-banner.index');
+    Route::post('involved-banner', [Admin\InvolvedBannerController::class, 'update'])->name('involved-banner.update');
 
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);

@@ -54,7 +54,7 @@ class DashboardController extends Controller
 
         $currentYear = (int) now()->year;
         if (DB::connection()->getDriverName() === 'sqlite') {
-            $yearsFromDb = Donation::selectRaw('strftime("%Y", DonationDate) as year')
+            $yearsFromDb = Donation::selectRaw("strftime('%Y', DonationDate) as year")
                 ->whereNotNull('DonationDate')
                 ->distinct()
                 ->pluck('year')

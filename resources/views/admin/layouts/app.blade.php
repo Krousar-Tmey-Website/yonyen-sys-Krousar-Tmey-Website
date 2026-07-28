@@ -79,6 +79,13 @@
                 'single' => true,
                 'route' => 'admin.dashboard',
                 ],
+                'campaigns' => [
+                'label' => __('Campaigns'),
+                'icon' =>
+                'M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z',
+                'single' => true,
+                'route' => 'admin.campaigns.index',
+                ],
                 'homepage' => [
                 'label' => __('Homepage'),
                 'icon' =>
@@ -122,7 +129,7 @@
                 'icon' =>
                 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z',
                 'children' => [
-                ['route' => 'admin.news.index', 'label' => 'News Articles'],
+                ['route' => 'admin.news.index', 'label' => 'News'],
                 ['route' => 'admin.resource-pages.index', 'label' => 'Topics'],
                 ['route' => 'admin.reports.index', 'label' => 'Annual Reports'],
                 ['route' => 'admin.words-pictures.index', 'label' => 'Words and Pictures'],
@@ -134,6 +141,7 @@
                 'icon' =>
                 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
                 'children' => [
+                ['route' => 'admin.involved-banner.index', 'label' => __('Page Banner')],
                 ['route' => 'admin.volunteers.index', 'label' => __('Volunteer Applications')],
                 ['route' => 'admin.jobs.index', 'label' => __('Job Opportunities')],
                 ['route' => 'admin.books.index', 'label' => __('Book for Sales')],

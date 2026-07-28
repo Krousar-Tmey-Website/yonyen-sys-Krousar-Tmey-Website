@@ -4,7 +4,7 @@
 @section('breadcrumb', 'Add a new sub-page under a program')
 
 @section('content')
-<div class="max-w-3xl mx-auto space-y-5">
+<div class="space-y-5">
     @if($errors->any())
     <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
         <ul class="list-disc list-inside space-y-1">
@@ -17,7 +17,7 @@
         @csrf
 
         {{-- Basic Info --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -79,7 +79,7 @@
         </div>
 
         {{-- Banner Image --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center">
                     <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,7 +111,7 @@
         </div>
 
         {{-- Detailed Content --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="bilingualForm()">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4" x-data="bilingualForm()">
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-orange-50 flex items-center justify-center">
@@ -158,7 +158,7 @@
         </div>
 
         {{-- Project Card Image --}}
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4" x-data="{ imageMode: 'upload' }">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4" x-data="{ imageMode: 'upload' }">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center">
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,7 +182,7 @@
         </div>
 
         {{-- Testimony --}}
-        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 space-y-4" x-data="bilingualForm()">
+        <div class="bg-[#2d6fa3]/5 rounded-2xl border border-[#2d6fa3]/10 p-6 lg:p-8 space-y-4" x-data="bilingualForm()">
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center">

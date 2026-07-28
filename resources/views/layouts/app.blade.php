@@ -80,7 +80,7 @@ function switchLang(lang) {
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-9">
             <span class="text-white/60 text-xs">{{ $settings['site_tagline'] ?? "Cambodia's first organization helping disadvantaged children since 1991" }}</span>
             <div class="flex items-center gap-5">
-                <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="text-white/60 hover:text-white transition-colors text-xs">{{ __('Contact') }}</a>
+                <a href="{{ route('contact') }}" class="text-white/60 hover:text-white transition-colors text-xs">{{ __('Contact') }}</a>
                 <span class="text-white/20">|</span>
                 <div class="flex items-center gap-3">
                     @php
@@ -156,18 +156,20 @@ function switchLang(lang) {
                 @php
                     $isWhoWeAre  = request()->routeIs('about') || request()->routeIs('presentation') || request()->routeIs('transparency') || request()->routeIs('partners') || request()->routeIs('core-values.*');
                     $isPrograms  = request()->routeIs('programs') || request()->routeIs('programs.*') || request()->routeIs('program-page-items.*') || request()->routeIs('projects.*');
+                    $isCampaigns = request()->routeIs('campaigns.*');
                     $isInvolved  = request()->routeIs('involved') || request()->routeIs('jobs.*') || request()->routeIs('volunteer') || request()->routeIs('books.*');
                     $isNews      = request()->routeIs('news') || request()->routeIs('news.*');
                     $isResources = request()->routeIs('resources') || request()->routeIs('reports.*') || request()->routeIs('resource-pages.*') || request()->routeIs('media') || request()->routeIs('words-pictures');
+                    $isContact   = request()->routeIs('contact');
                 @endphp
-                <div class="hidden lg:flex items-center gap-1">
+                <div class="hidden lg:flex items-center gap-0.5 xl:gap-1 text-sm flex-shrink-0">
 
                     {{-- Who We Are --}}
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('about') }}" class="nav-link {{ $isWhoWeAre ? 'active' : '' }} flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                        <a href="{{ route('about') }}" class="nav-link {{ $isWhoWeAre ? 'active' : '' }} flex items-center gap-1 px-2 xl:px-3 py-2 rounded-lg hover:bg-gray-50 whitespace-nowrap">
                             {{ __('Who We Are') }}
-                            <svg class="w-4 h-4 {{ $isWhoWeAre ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                            <svg class="w-4 h-4 flex-shrink-0 {{ $isWhoWeAre ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open" x-cloak
@@ -191,9 +193,9 @@ function switchLang(lang) {
                     {{-- Our Programs --}}
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('programs') }}" class="nav-link {{ $isPrograms ? 'active' : '' }} flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                        <a href="{{ route('programs') }}" class="nav-link {{ $isPrograms ? 'active' : '' }} flex items-center gap-1 px-2 xl:px-3 py-2 rounded-lg hover:bg-gray-50 whitespace-nowrap">
                             {{ __('Our Programs') }}
-                            <svg class="w-4 h-4 {{ $isPrograms ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                            <svg class="w-4 h-4 shrink-0 {{ $isPrograms ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open" x-cloak
@@ -217,12 +219,14 @@ function switchLang(lang) {
                         </div>
                     </div>
 
+                    <a href="{{ route('campaigns.index') }}" class="nav-link {{ $isCampaigns ? 'active' : '' }} px-2 xl:px-3 py-2 rounded-lg hover:bg-gray-50 whitespace-nowrap">{{ __('Campaigns') }}</a>
+
                     {{-- Get Involved --}}
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('involved') }}" class="nav-link {{ $isInvolved ? 'active' : '' }} flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                        <a href="{{ route('involved') }}" class="nav-link {{ $isInvolved ? 'active' : '' }} flex items-center gap-1 px-2 xl:px-3 py-2 rounded-lg hover:bg-gray-50 whitespace-nowrap">
                             {{ __('Get Involved') }}
-                            <svg class="w-4 h-4 {{ $isInvolved ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                            <svg class="w-4 h-4 shrink-0 {{ $isInvolved ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open" x-cloak
@@ -242,14 +246,14 @@ function switchLang(lang) {
                         </div>
                     </div>
 
-                    <a href="{{ route('news') }}" class="nav-link {{ $isNews ? 'active' : '' }} px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('News') }}</a>
+                    <a href="{{ route('news') }}" class="nav-link {{ $isNews ? 'active' : '' }} px-2 xl:px-3 py-2 rounded-lg hover:bg-gray-50 whitespace-nowrap">{{ __('News') }}</a>
                     
                     {{-- Resources --}}
                     <div class="relative" x-data="{ open: false }"
                          @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('resources') }}" class="nav-link {{ $isResources ? 'active' : '' }} flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-gray-50">
+                        <a href="{{ route('resources') }}" class="nav-link {{ $isResources ? 'active' : '' }} flex items-center gap-1 px-2 xl:px-3 py-2 rounded-lg hover:bg-gray-50 whitespace-nowrap">
                             {{ __('Resources') }}
-                            <svg class="w-4 h-4 {{ $isResources ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
+                            <svg class="w-4 h-4 shrink-0 {{ $isResources ? 'text-[#2d6fa3]' : 'text-gray-400' }} transition-transform duration-200" :class="open ? 'rotate-180' : ''"
                                  fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </a>
                         <div x-show="open" x-cloak
@@ -267,15 +271,15 @@ function switchLang(lang) {
                             </div>
                         </div>
                     </div>
-                    <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="nav-link px-3 py-2 rounded-lg hover:bg-gray-50">{{ __('Contact') }}</a>
+                    <a href="{{ route('contact') }}" class="nav-link {{ $isContact ? 'active' : '' }} px-2 xl:px-3 py-2 rounded-lg hover:bg-gray-50 whitespace-nowrap">{{ __('Contact') }}</a>
                 </div>
 
                 {{-- CTA + Mobile toggle --}}
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 xl:gap-4 flex-shrink-0">
                     {{-- Translate Dropdown --}}
-                    <div class="hidden lg:block border-r border-gray-200 pr-4 notranslate" x-data="{ open: false, lang: getCurrentLang() }">
+                    <div class="hidden lg:block border-r border-gray-200 pr-2 xl:pr-4 notranslate" x-data="{ open: false, lang: getCurrentLang() }">
                         <div class="relative">
-                            <button @click="open = !open" @click.away="open = false" class="flex items-center gap-2 text-gray-700 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-3 rounded-lg hover:bg-gray-50 border border-gray-100 shadow-sm bg-white">
+                            <button @click="open = !open" @click.away="open = false" class="flex items-center gap-2 text-gray-700 hover:text-[#2d6fa3] transition-colors text-sm font-medium py-1.5 px-2.5 xl:px-3 rounded-lg hover:bg-gray-50 border border-gray-100 shadow-sm bg-white">
                                 <img :src="lang === 'fr' ? 'https://flagcdn.com/w20/fr.png' : 'https://flagcdn.com/w20/gb.png'" class="w-4 h-auto rounded-sm" alt="Flag">
                                 <span x-text="lang === 'fr' ? 'FR' : 'EN'">EN</span>
                                 <svg class="w-3 h-3 transition-transform duration-200 text-gray-400" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
@@ -300,8 +304,8 @@ function switchLang(lang) {
                         </div>
                     </div>
 
-                    <a href="{{ route('donate') }}" class="btn-primary text-sm hidden sm:inline-flex">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="{{ route('donate') }}" class="btn-primary text-sm px-4 xl:px-6 py-2.5 xl:py-3 hidden sm:inline-flex whitespace-nowrap">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                         Donate
@@ -332,10 +336,11 @@ function switchLang(lang) {
             <div class="max-w-7xl mx-auto px-6 py-4 space-y-1">
                 <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg {{ $isWhoWeAre ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Who We Are') }}</a>
                 <a href="{{ route('programs') }}" class="block px-3 py-2 rounded-lg {{ $isPrograms ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Our Programs') }}</a>
+                <a href="{{ route('campaigns.index') }}" class="block px-3 py-2 rounded-lg {{ $isCampaigns ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Campaigns') }}</a>
                 <a href="{{ route('involved') }}" class="block px-3 py-2 rounded-lg {{ $isInvolved ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Get Involved') }}</a>
                 <a href="{{ route('news') }}" class="block px-3 py-2 rounded-lg {{ $isNews ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('News') }}</a>
                 <a href="{{ route('resources') }}" class="block px-3 py-2 rounded-lg {{ $isResources ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Resources') }}</a>
-                <a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium">{{ __('Contact') }}</a>
+                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg {{ $isContact ? 'bg-blue-50 text-[#2d6fa3] font-semibold' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2d6fa3] font-medium' }}">{{ __('Contact') }}</a>
                 <div class="pt-3 pb-1 border-t border-gray-100 mt-2">
                     <div class="flex items-center gap-2 mb-4 notranslate" x-data="{ lang: getCurrentLang() }">
                         <button @click="switchLang('en')" :class="lang === 'en' ? 'bg-[#2d6fa3] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-gray-200">
@@ -439,9 +444,10 @@ function switchLang(lang) {
                     <ul class="space-y-3">
                         <li><a href="{{ route('about') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Who We Are') }}</a></li>
                         <li><a href="{{ route('programs') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Our Programs') }}</a></li>
+                        <li><a href="{{ route('campaigns.index') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Campaigns') }}</a></li>
                         <li><a href="{{ route('news') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('News') }}</a></li>
                         <li><a href="{{ route('resources') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Resources') }}</a></li>
-                        <li><a href="#" onclick="event.preventDefault(); openEmail('info@krousar-thmey.org')" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Contact') }}</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-white/50 hover:text-white text-sm transition-colors">{{ __('Contact') }}</a></li>
                     </ul>
                 </div>
 
