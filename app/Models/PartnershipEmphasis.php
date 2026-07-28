@@ -6,19 +6,16 @@ use App\Models\Concerns\HasLocalizedFields;
 use App\Models\Concerns\HasPurifiedHtml;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @mixin IdeHelperPartnershipCategory
- */
-class PartnershipCategory extends Model
+class PartnershipEmphasis extends Model
 {
     use HasLocalizedFields, HasPurifiedHtml;
 
     protected array $purifiedHtml = ['description', 'description_fr', 'description_km'];
 
     protected $fillable = [
-        'name',
-        'name_fr',
-        'name_km',
+        'title',
+        'title_fr',
+        'title_km',
         'description',
         'description_fr',
         'description_km',
@@ -37,9 +34,9 @@ class PartnershipCategory extends Model
         return static::orderBy('sort_order');
     }
 
-    public function getLocalizedNameAttribute(): ?string
+    public function getLocalizedTitleAttribute(): ?string
     {
-        return $this->localized('name');
+        return $this->localized('title');
     }
 
     public function getLocalizedDescriptionAttribute(): ?string

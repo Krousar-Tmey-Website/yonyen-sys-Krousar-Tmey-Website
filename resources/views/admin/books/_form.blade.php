@@ -7,6 +7,7 @@
     $bookPrice       = old('price', $book->price ?? '');
     $bookStock       = old('stock', $book->stock ?? '');
     $bookAvailable   = old('is_available', $book->is_available ?? true);
+    $bookCoverBg     = old('cover_background_color', $book->cover_background_color ?? '#f8fafc');
 @endphp
 
 
@@ -102,6 +103,17 @@
     </div>
     @endif
     @error('cover_image')<div class="form-error">{{ $message }}</div>@enderror
+</div>
+
+{{-- Cover Background Color --}}
+<div class="form-group">
+    <label class="form-label">Cover Background Color</label>
+    <div class="flex items-center gap-3">
+        <input type="color" name="cover_background_color" value="{{ $bookCoverBg }}"
+               class="h-10 w-16 rounded-lg border border-gray-200 bg-white p-1 cursor-pointer">
+        <span class="text-xs text-slate-400">The mat/backdrop shown behind the cover image on the Books for Sale listing.</span>
+    </div>
+    @error('cover_background_color')<div class="form-error">{{ $message }}</div>@enderror
 </div>
 
 <script>

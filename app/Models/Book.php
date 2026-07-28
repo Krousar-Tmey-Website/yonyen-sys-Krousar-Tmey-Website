@@ -23,6 +23,7 @@ class Book extends Model
         'price',
         'stock',
         'cover_image',
+        'cover_background_color',
         'is_available',
         'sort_order',
     ];

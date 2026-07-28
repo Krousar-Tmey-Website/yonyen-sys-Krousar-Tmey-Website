@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\HomeSetting;
 use App\Models\JobOpportunity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -12,8 +13,34 @@ class JobOpportunityController extends Controller
     public function index()
     {
         $jobs = JobOpportunity::ordered()->get();
+        $settings = HomeSetting::allKeyed();
 
-        return view('admin.jobs.index', compact('jobs'));
+        return view('admin.jobs.index', compact('jobs', 'settings'));
+    }
+
+    public function updateCta(Request $request)
+    {
+        $data = $request->validate([
+            'jobs_cta_heading' => ['nullable', 'string', 'max:255'],
+            'jobs_cta_heading_fr' => ['nullable', 'string', 'max:255'],
+            'jobs_cta_intro' => ['nullable', 'string'],
+            'jobs_cta_intro_fr' => ['nullable', 'string'],
+            'jobs_cta_phone_label' => ['nullable', 'string', 'max:255'],
+            'jobs_cta_phone_label_fr' => ['nullable', 'string', 'max:255'],
+            'jobs_cta_phone_1' => ['nullable', 'string', 'max:50'],
+            'jobs_cta_phone_2' => ['nullable', 'string', 'max:50'],
+            'jobs_cta_email_label' => ['nullable', 'string', 'max:255'],
+            'jobs_cta_email_label_fr' => ['nullable', 'string', 'max:255'],
+            'jobs_cta_email' => ['nullable', 'email', 'max:255'],
+            'jobs_cta_button_text' => ['nullable', 'string', 'max:255'],
+            'jobs_cta_button_text_fr' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        foreach ($data as $key => $value) {
+            HomeSetting::setValue($key, $value);
+        }
+
+        return redirect()->route('admin.jobs.index')->with('success', "Don't see the right fit? section updated.");
     }
 
     public function store(Request $request)

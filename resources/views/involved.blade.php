@@ -8,19 +8,18 @@
 {{-- Page Header --}}
 @php
     $involvedBannerImg = !empty($bannerImage) ? (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) : null;
+    $heroBgStyle = $involvedBannerImg
+        ? "background-image: linear-gradient(180deg, {$bannerOverlayColor}e6 0%, {$bannerOverlayColor}b3 45%, {$bannerOverlayColor}f2 100%), url('{$involvedBannerImg}'); background-color: {$bannerOverlayColor};"
+        : "background-color: {$bannerOverlayColor};";
 @endphp
-<div class="relative pt-16 pb-28 overflow-hidden" style="background-color: {{ $bannerOverlayColor }};">
-    @if($involvedBannerImg)
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $involvedBannerImg }}'); opacity: 0.35;"></div>
-    @endif
-    
+<div class="relative pt-20 pb-32 md:pb-36 overflow-hidden bg-cover bg-center bg-no-repeat" style="{{ $heroBgStyle }}">
     {{-- Ambient Glowing Halos & Mesh Effects --}}
     <div class="absolute inset-0 opacity-20 pointer-events-none">
         <div class="absolute top-0 right-0 w-[30rem] h-[30rem] rounded-full bg-gradient-to-bl from-[#8da83a] to-transparent blur-3xl -translate-y-1/3 translate-x-1/3 hero-pulse"></div>
         <div class="absolute bottom-0 left-0 w-[24rem] h-[24rem] rounded-full bg-gradient-to-tr from-[#e8a020] to-transparent blur-3xl translate-y-1/3 -translate-x-1/4 hero-pulse" style="animation-delay: 2s;"></div>
         <div class="absolute top-1/2 left-1/3 w-[20rem] h-[20rem] rounded-full bg-white blur-3xl opacity-10"></div>
     </div>
-    
+
     <div class="relative z-10 max-w-7xl mx-auto px-6">
         {{-- Glass Breadcrumbs --}}
         <nav class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-white/80 mb-8 shadow-sm" data-reveal="down">
@@ -28,20 +27,20 @@
             <svg class="w-3.5 h-3.5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <span class="text-white font-semibold">Get Involved</span>
         </nav>
-        
+
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div class="lg:col-span-8">
                 {{-- Glowing Pill Tag --}}
-                <div class="inline-flex items-center gap-2 bg-[#8da83a]/25 border border-[#8da83a]/40 text-[#a3c04a] text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 shadow-inner" data-reveal="up">
+                <div class="inline-flex items-center gap-2 bg-[#8da83a]/25 border border-[#8da83a]/40 text-[#a3c04a] text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 shadow-inner backdrop-blur-sm" data-reveal="up">
                     <span class="w-2 h-2 rounded-full bg-[#8da83a] animate-ping"></span>
                     {{ $bannerBadge }}
                 </div>
-                
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white mb-6 leading-tight" data-reveal="up" style="--reveal-delay: 100">
+
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white mb-6 leading-tight drop-shadow-lg" data-reveal="up" style="--reveal-delay: 100">
                     {{ $bannerTitle }}
                 </h1>
-                
-                <p class="text-white/80 text-base md:text-lg leading-relaxed max-w-2xl font-light" data-reveal="up" style="--reveal-delay: 200">
+
+                <p class="text-white/90 text-base md:text-lg leading-relaxed max-w-2xl font-light drop-shadow-md" data-reveal="up" style="--reveal-delay: 200">
                     @php
                         $displaySubtitle = $bannerSubtitle;
                         if (app()->getLocale() === 'fr' && !empty($settings['involved_banner_subtitle_fr'] ?? null)) {
@@ -51,17 +50,17 @@
                     {{ strip_tags($displaySubtitle) }}
                 </p>
             </div>
-            
+
             {{-- Floating Decorative Glass Badge --}}
             <div class="hidden lg:flex lg:col-span-4 justify-end" data-reveal="scale" style="--reveal-delay: 300">
-                <div class="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 text-white max-w-xs shadow-2xl hover:bg-white/15 transition-all duration-500">
+                <div class="relative bg-white/15 backdrop-blur-xl border border-white/25 rounded-3xl p-6 text-white max-w-xs shadow-2xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-500">
                     <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#8da83a] to-[#a3c04a] flex items-center justify-center mb-4 shadow-md">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                         </svg>
                     </div>
                     <h3 class="font-extrabold text-lg text-white mb-1">Make a Difference</h3>
-                    <p class="text-xs text-white/70 leading-relaxed mb-4">Together, we build a brighter future for disadvantaged children across Cambodia.</p>
+                    <p class="text-xs text-white/80 leading-relaxed mb-4">Together, we build a brighter future for disadvantaged children across Cambodia.</p>
                     <a href="{{ route('contact') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#a3c04a] hover:text-white transition-colors">
                         Get in touch
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -75,64 +74,41 @@
 {{-- Quick-nav cards (Overlapping Floating Grid) --}}
 <section class="py-10 bg-slate-50/50 relative z-20">
     <div class="max-w-7xl mx-auto px-6 -mt-16 md:-mt-20">
+        @php
+            $quickLinkPalette = [
+                ['accent' => '#2d6fa3', 'icon_bg' => '#f0f9ff'],
+                ['accent' => '#8da83a', 'icon_bg' => '#ecfdf5'],
+                ['accent' => '#e8a020', 'icon_bg' => '#fffbeb'],
+                ['accent' => '#d32f2f', 'icon_bg' => '#fef2f2'],
+            ];
+        @endphp
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach([
-                [
-                    'svg' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/></svg>',
-                    'title' => 'Partner',
-                    'desc' => 'Formalize a CSR or institutional partnership to empower Cambodian communities.',
-                    'anchor' => 'partner',
-                    'badgeBg' => 'bg-sky-50 text-[#2d6fa3]',
-                    'borderHover' => 'hover:border-[#2d6fa3]/40 hover:shadow-[#2d6fa3]/10',
-                    'titleHover' => 'group-hover:text-[#2d6fa3]',
-                ],
-                [
-                    'svg' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>',
-                    'title' => 'Volunteer',
-                    'desc' => 'Contribute your expertise, skills, and time for a minimum of 3 months.',
-                    'anchor' => 'volunteer',
-                    'badgeBg' => 'bg-emerald-50 text-[#8da83a]',
-                    'borderHover' => 'hover:border-[#8da83a]/40 hover:shadow-[#8da83a]/10',
-                    'titleHover' => 'group-hover:text-[#8da83a]',
-                ],
-                [
-                    'svg' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>',
-                    'title' => 'Work With Us',
-                    'desc' => 'Join our Cambodian team across social work, education, and communications.',
-                    'anchor' => 'jobs',
-                    'badgeBg' => 'bg-amber-50 text-[#e8a020]',
-                    'borderHover' => 'hover:border-[#e8a020]/40 hover:shadow-[#e8a020]/10',
-                    'titleHover' => 'group-hover:text-[#e8a020]',
-                ],
-                [
-                    'svg' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>',
-                    'title' => 'Book for Sales',
-                    'desc' => 'Browse our curated collection of books and support children directly.',
-                    'anchor' => 'book-for-sales',
-                    'badgeBg' => 'bg-rose-50 text-[#d32f2f]',
-                    'borderHover' => 'hover:border-[#d32f2f]/40 hover:shadow-[#d32f2f]/10',
-                    'titleHover' => 'group-hover:text-[#d32f2f]',
-                ],
-            ] as $index => $way)
-            <a href="#{{ $way['anchor'] }}" 
-               data-reveal="pop" style="--reveal-delay: {{ $index * 120 }}"
-               class="group relative bg-white/90 backdrop-blur-xl rounded-3xl p-7 border border-slate-200/60 {{ $way['borderHover'] }} shadow-lg hover:shadow-2xl hover:-translate-y-2.5 transition-all duration-500 flex flex-col justify-between overflow-hidden">
+            @foreach($quickLinks as $index => $way)
+            @php
+                $wPalette = $quickLinkPalette[$index % count($quickLinkPalette)];
+                $wAccent = $way->accent_color ?: $wPalette['accent'];
+                $wIconBg = $way->icon_background_color ?: $wPalette['icon_bg'];
+                $wCardBg = $way->card_background_color ?: '#ffffff';
+            @endphp
+            <a href="{{ $way->link_url }}"
+               data-reveal="pop" style="--reveal-delay: {{ $index * 120 }}; background-color: {{ $wCardBg }};"
+               class="group relative backdrop-blur-xl rounded-3xl p-7 border border-slate-200/60 shadow-lg hover:shadow-2xl hover:-translate-y-2.5 transition-all duration-500 flex flex-col justify-between overflow-hidden">
                 {{-- Subtle top color gradient bar --}}
-                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="absolute top-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(to right, transparent, {{ $wAccent }}, transparent);"></div>
 
                 <div>
-                    <div class="w-12 h-12 rounded-2xl {{ $way['badgeBg'] }} flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 shadow-sm">
-                        {!! $way['svg'] !!}
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 shadow-sm" style="background-color: {{ $wIconBg }};">
+                        <svg class="w-6 h-6" fill="none" stroke="{{ $wAccent }}" viewBox="0 0 24 24">{!! $way->icon_path !!}</svg>
                     </div>
-                    <h3 class="font-extrabold text-slate-800 text-base md:text-lg uppercase tracking-wide mb-2.5 {{ $way['titleHover'] }} transition-colors duration-300">
-                        {{ $way['title'] }}
+                    <h3 class="font-extrabold text-slate-800 text-base md:text-lg uppercase tracking-wide mb-2.5">
+                        {{ $way->localized_title }}
                     </h3>
-                    <p class="text-slate-500 text-xs leading-relaxed mb-6 font-normal">
-                        {{ $way['desc'] }}
-                    </p>
+                    <div class="rich-text-content text-slate-500 text-xs leading-relaxed mb-6 font-normal">
+                        {!! $way->localized_description !!}
+                    </div>
                 </div>
 
-                <div class="inline-flex items-center gap-1.5 text-[#2d6fa3] text-xs font-bold transition-all duration-300 pt-2 border-t border-slate-100">
+                <div class="inline-flex items-center gap-1.5 text-[#2d6fa3] text-xs font-bold transition-all duration-300 pt-2">
                     Learn more
                     <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </div>
@@ -177,7 +153,7 @@
                class="group bg-white rounded-3xl p-5 border border-slate-100 shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex items-center gap-4 md:gap-5 overflow-hidden relative">
                 
                 {{-- Left Image Container --}}
-                <div class="relative w-24 sm:w-28 md:w-32 h-36 md:h-40 shrink-0 bg-slate-50 rounded-2xl flex items-center justify-center p-2 shadow-inner border border-slate-100/80 overflow-hidden">
+                <div class="relative w-24 sm:w-28 md:w-32 h-36 md:h-40 shrink-0 rounded-2xl flex items-center justify-center p-2 shadow-inner border border-slate-100/80 overflow-hidden" style="background-color: {{ $book->cover_background_color ?: '#f8fafc' }};">
                     @if($book->cover_image_url)
                     <img src="{{ $book->cover_image_url }}" alt="{{ $book->localized_title }}"
                          class="max-h-full max-w-full object-contain rounded-lg shadow-md group-hover:scale-105 transition-transform duration-500">
@@ -244,11 +220,13 @@
 {{-- Partner --}}
 {{--
     ===================================================================
-    STATIC CONTENT — Developer-only changes, no admin/CMS
+    ADMIN-MANAGED CONTENT — see /admin/partner-page
     ===================================================================
-    The entire "Become a Partner" section is hardcoded — heading, intro,
-    principles, approach, CTA, and partner categories. To modify any of
-    this content, edit the HTML directly in this template.
+    Header, intro, principles, dynamic emphasis, CTA, and partner
+    categories are all stored in MySQL (HomeSetting keys + the
+    PartnerPrinciple / PartnershipEmphasis / PartnershipCategory
+    models) and edited through the admin panel. Card colors fall back
+    to a cycling palette when an admin hasn't customized them.
     ===================================================================
 --}}
 <section id="partner" class="py-20 md:py-28 bg-white scroll-mt-20 relative overflow-hidden">
@@ -263,19 +241,28 @@
 
     <div class="relative max-w-5xl mx-auto px-6">
         <div class="space-y-16">
+            @php
+                $partnerCardPalette = [
+                    ['icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>', 'accent' => '#2d6fa3', 'card_bg' => '#eff6ff', 'icon_bg' => '#dbeafe'],
+                    ['icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>', 'accent' => '#8da83a', 'card_bg' => '#ecfdf5', 'icon_bg' => '#d1fae5'],
+                    ['icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>', 'accent' => '#e8a020', 'card_bg' => '#fffbeb', 'icon_bg' => '#fef3c7'],
+                    ['icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>', 'accent' => '#d32f2f', 'card_bg' => '#fef2f2', 'icon_bg' => '#fee2e2'],
+                ];
+            @endphp
+
             {{-- ── Section Header ── --}}
             <div data-reveal="up">
                 <span class="inline-flex items-center gap-2 bg-[#2d6fa3]/10 border border-[#2d6fa3]/15 text-[#2d6fa3] text-[11px] font-bold uppercase tracking-[0.15em] px-4 py-1.5 rounded-full mb-6">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3]"></span>
-                    Institutional Support
+                    {{ $partnerBadge }}
                 </span>
                 <h2 class="text-4xl md:text-5xl lg:text-[3.25rem] font-bold leading-tight text-[#1d4e7a] mb-4">
-                    Become a Partner
+                    {{ $partnerTitle }}
                 </h2>
                 <div class="w-20 h-[3px] bg-gradient-to-r from-[#2d6fa3] via-[#8da83a] to-[#2d6fa3] rounded-full mb-8"></div>
-                <p class="text-gray-600 leading-relaxed text-base md:text-lg max-w-3xl">
-                    The partnership is based on a <span class="font-bold text-[#1d4e7a]">co-construction dynamic</span> built on shared values and mutual respect.
-                </p>
+                <div class="rich-text-content text-gray-600 leading-relaxed text-base md:text-lg max-w-3xl">
+                    {!! $partnerIntro !!}
+                </div>
             </div><br>
 
             {{-- ── Partnership Principles — Icon Cards ── --}}
@@ -285,55 +272,20 @@
                     Our Partnership Principles
                 </h3>
                 <div class="grid sm:grid-cols-2 gap-4">
-                    @php
-                        $principles = [
-                            [
-                                'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
-                                'title' => 'Trust and respect',
-                                'color' => 'from-blue-50 to-indigo-50',
-                                'iconBg' => 'bg-[#2d6fa3]/10 text-[#2d6fa3]',
-                                'hover' => 'group-hover:border-[#2d6fa3]/30 group-hover:shadow-blue-100/50',
-                            ],
-                            [
-                                'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>',
-                                'title' => 'Compliance with commitments',
-                                'subtitle' => 'technical and financial',
-                                'color' => 'from-green-50 to-emerald-50',
-                                'iconBg' => 'bg-[#8da83a]/10 text-[#8da83a]',
-                                'hover' => 'group-hover:border-[#8da83a]/30 group-hover:shadow-green-100/50',
-                            ],
-                            [
-                                'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>',
-                                'title' => 'Reciprocity',
-                                'subtitle' => 'seeking balance in exchange, valorization of talents',
-                                'color' => 'from-amber-50 to-orange-50',
-                                'iconBg' => 'bg-[#e8a020]/10 text-[#e8a020]',
-                                'hover' => 'group-hover:border-[#e8a020]/30 group-hover:shadow-amber-100/50',
-                            ],
-                            [
-                                'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>',
-                                'title' => 'Search for equality of power',
-                                'subtitle' => 'in the relationship',
-                                'color' => 'from-red-50 to-rose-50',
-                                'iconBg' => 'bg-[#d32f2f]/10 text-[#d32f2f]',
-                                'hover' => 'group-hover:border-[#d32f2f]/30 group-hover:shadow-rose-100/50',
-                            ],
-                        ];
-                    @endphp
-                    
                     @foreach($partnerPrinciples as $index => $principle)
                         @php
-                            // Wrap index if there are more principles in DB than hardcoded styles
-                            $styleIndex = $index % count($principles);
-                            $pStyle = $principles[$styleIndex];
+                            $pStyle = $partnerCardPalette[$index % count($partnerCardPalette)];
+                            $pCardBg = $principle->card_background_color ?: $pStyle['card_bg'];
+                            $pIconBg = $principle->icon_background_color ?: $pStyle['icon_bg'];
+                            $pAccent = $principle->accent_color ?: $pStyle['accent'];
                         @endphp
-                        <div class="group p-5 rounded-2xl border-2 border-gray-200 bg-gradient-to-br {{ $pStyle['color'] }} {{ $pStyle['hover'] }} hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-default">
+                        <div class="group p-5 rounded-2xl border-2 border-gray-200 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-default" style="background-color: {{ $pCardBg }};">
                             <div class="flex items-start gap-4">
-                                <div class="w-11 h-11 rounded-xl {{ $pStyle['iconBg'] }} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
+                                <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300" style="background-color: {{ $pIconBg }}; color: {{ $pAccent }};" aria-hidden="true">
                                     {!! $pStyle['icon'] !!}
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <h4 class="font-bold text-[#1d4e7a] text-sm mb-0.5">{{ $principle->content }}</h4>
+                                    <h4 class="font-bold text-[#1d4e7a] text-sm mb-0.5">{{ $principle->localized_content }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -348,32 +300,19 @@
                     This Dynamic Emphasizes
                 </h3>
                 <div class="grid sm:grid-cols-3 gap-8">
-                    @php
-                        $emphases = [
-                            [
-                                'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>',
-                                'title' => 'A close relationship',
-                                'desc' => 'Translated by know-how and postures of listening, understanding and exchange / dialogue',
-                            ],
-                            [
-                                'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>',
-                                'title' => 'Adapted & tailored solutions',
-                                'desc' => 'The search for solutions adapted to the problems / needs of partners and indirectly children',
-                            ],
-                            [
-                                'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
-                                'title' => 'Duration & respect of pace',
-                                'desc' => 'This in the duration and the respect of the rhythm of the partner',
-                            ],
-                        ];
-                    @endphp
-                    @foreach($emphases as $e)
-                        <div class="group p-6 rounded-2xl border border-gray-100 bg-white hover:border-[#2d6fa3]/20 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-                            <div class="w-10 h-10 rounded-lg bg-[#2d6fa3]/5 text-[#2d6fa3] flex items-center justify-center mb-5 group-hover:bg-[#2d6fa3]/10 group-hover:scale-110 transition-all duration-300" aria-hidden="true">
-                                {!! $e['icon'] !!}
+                    @foreach($partnershipEmphases as $index => $emphasis)
+                        @php
+                            $eStyle = $partnerCardPalette[$index % count($partnerCardPalette)];
+                            $eCardBg = $emphasis->card_background_color ?: '#ffffff';
+                            $eIconBg = $emphasis->icon_background_color ?: $eStyle['icon_bg'];
+                            $eAccent = $emphasis->accent_color ?: $eStyle['accent'];
+                        @endphp
+                        <div class="group p-6 rounded-2xl border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300" style="background-color: {{ $eCardBg }};">
+                            <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-all duration-300" style="background-color: {{ $eIconBg }}; color: {{ $eAccent }};" aria-hidden="true">
+                                {!! $eStyle['icon'] !!}
                             </div>
-                            <h4 class="font-bold text-[#1d4e7a] text-sm mb-3">{{ $e['title'] }}</h4>
-                            <p class="text-gray-500 text-xs leading-relaxed">{{ $e['desc'] }}</p>
+                            <h4 class="font-bold text-[#1d4e7a] text-sm mb-3">{{ $emphasis->localized_title }}</h4>
+                            <div class="rich-text-content text-gray-500 text-xs leading-relaxed">{!! $emphasis->localized_description !!}</div>
                         </div>
                     @endforeach
                 </div>
@@ -419,11 +358,15 @@
             @endif
 
             {{-- ── CTA Section — Enhanced with overlays & hover effects ── --}}
+            @php
+                $ctaImageLeftUrl = $partnerCtaImageLeft ? (str_starts_with($partnerCtaImageLeft, 'http') ? $partnerCtaImageLeft : asset('storage/' . $partnerCtaImageLeft)) : asset('images/become_partner01.webp');
+                $ctaImageRightUrl = $partnerCtaImageRight ? (str_starts_with($partnerCtaImageRight, 'http') ? $partnerCtaImageRight : asset('storage/' . $partnerCtaImageRight)) : asset('images/become_partner02.webp');
+            @endphp
             <div data-reveal="up" class="relative group/card">
                 <div class="grid grid-cols-1 md:grid-cols-3 items-stretch bg-gradient-to-br from-[#f8f9fc] to-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500">
                     {{-- Left Image --}}
                     <div class="relative h-56 md:h-full overflow-hidden">
-                        <img src="{{ asset('images/become_partner01.webp') }}" alt="Children in Cambodia"
+                        <img src="{{ $ctaImageLeftUrl }}" alt="Children in Cambodia"
                              class="w-full h-full object-cover object-center group-hover/card:scale-105 transition-transform duration-700 ease-out">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#1d4e7a]/40 to-transparent md:bg-gradient-to-r md:from-[#1d4e7a]/30 md:to-transparent"></div>
                     </div>
@@ -433,17 +376,17 @@
                         <div class="w-14 h-14 rounded-2xl bg-white shadow-lg border border-gray-100 flex items-center justify-center mb-5 group-hover/card:scale-110 transition-all duration-500">
                             <svg class="w-7 h-7 text-[#2d6fa3]" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                         </div>
-                        <p class="text-[#1d4e7a] font-bold text-lg md:text-xl mb-2">Interested in becoming a partner?</p>
-                        <p class="text-gray-500 text-sm mb-6">Let's build together our future cooperation</p>
+                        <p class="text-[#1d4e7a] font-bold text-lg md:text-xl mb-2">{{ $partnerCtaHeading }}</p>
+                        <p class="text-gray-500 text-sm mb-6">{{ $partnerCtaSubtext }}</p>
                         <a href="{{ route('contact') }}"
                            class="group/btn mt-4 inline-flex items-center gap-2 bg-white text-[#1d4e7a] font-bold text-sm px-7 py-2.5 rounded-xl border-2 border-[#1d4e7a] hover:bg-[#1d4e7a] hover:text-white hover:gap-3 transition-all duration-300 active:scale-[0.97] shadow-sm hover:shadow-md">
-                            <span>Contact us</span>
+                            <span>{{ $partnerCtaButtonText }}</span>
                             <svg class="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                         </a>
                     </div>
                     {{-- Right Image --}}
                     <div class="relative h-56 md:h-full overflow-hidden">
-                        <img src="{{ asset('images/become_partner02.webp') }}" alt="Children in Cambodia"
+                        <img src="{{ $ctaImageRightUrl }}" alt="Children in Cambodia"
                              class="w-full h-full object-cover object-center group-hover/card:scale-105 transition-transform duration-700 ease-out">
                         <div class="absolute inset-0 bg-gradient-to-b from-[#1d4e7a]/40 to-transparent md:bg-gradient-to-l md:from-[#1d4e7a]/30 md:to-transparent"></div>
 
@@ -457,65 +400,17 @@
                     <span class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></span>
                     Who Can Partner
                 </h3>
-                <p class="text-gray-500 text-sm leading-relaxed mb-8 max-w-4xl">
-                    Krousar Thmey may work in partnership with a variety of public, private and civil society actors and at different administrative levels: village, district, province, region, country. The following list, although not exhaustive, gives an overview of the type of organizations Krousar Thmey can work with.
-                </p>
+                <div class="rich-text-content text-gray-500 text-sm leading-relaxed mb-8 max-w-4xl">
+                    {!! $partnerWhoIntro !!}
+                </div>
 
                 <div class="space-y-8">
                     @php
-                        $catStyles = [
-                            [
-                                'border' => 'border-[#2d6fa3]',
-                                'bg' => 'from-[#2d6fa3]/[0.02]',
-                                'iconBg' => 'bg-[#2d6fa3]/10 text-[#2d6fa3]',
-                                'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>',
-                            ],
-                            [
-                                'border' => 'border-[#8da83a]',
-                                'bg' => 'from-[#8da83a]/[0.02]',
-                                'iconBg' => 'bg-[#8da83a]/10 text-[#8da83a]',
-                                'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>',
-                            ],
-                            [
-                                'border' => 'border-[#e8a020]',
-                                'bg' => 'from-[#e8a020]/[0.02]',
-                                'iconBg' => 'bg-[#e8a020]/10 text-[#e8a020]',
-                                'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>',
-                            ],
-                            [
-                                'border' => 'border-[#d32f2f]',
-                                'bg' => 'from-[#d32f2f]/[0.02]',
-                                'iconBg' => 'bg-[#d32f2f]/10 text-[#d32f2f]',
-                                'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/></svg>',
-                            ]
-                        ];
-
-                        $staticDescriptions = [
-                            'Organizations from associative sector' =>
-                                '<p class="font-bold text-[#1d4e7a] mb-1">Associations/ local NGOs</p>
-                                <p class="mb-4">Can be of any size, from the small local association benefiting from a local fort, to the professional NGO (basic organizations that have structured and professionalized).</p>
-                                <p class="font-bold text-[#1d4e7a] mb-1">Platforms/ thematic networks (locals)</p>
-                                <p class="mb-4">The thematic platforms or networks are clusters of local and / or international NGOs working on specific fields and / or international and UN agencies. They are places of reflection, exchange of practices and experiences and pooling of the stakes in targeted fields, in order to define strategies and actions to raise awareness and advocate with stakeholders.</p>
-                                <p class="font-bold text-[#1d4e7a] mb-1">NGOs or local branches of international organizations</p>
-                                <p>A partnership with these international organizations and bilateral and multilateral agencies (eg United Nations Agencies or European Union) can be developed from Cambodia or Europe.</p>',
-
-                            'Local education structures' =>
-                                '<p class="font-bold text-[#1d4e7a] mb-1">Research institutes</p>
-                                <p class="mb-4">Les ONG et les chercheurs, du fait de cultures professionnelles très différentes, n’ont a priori ni les mêmes intérêts, ni les mêmes connaissances de la réalité terrain ou de la démarche scientifique. Cependant, il y a, du côté de la recherche comme celui des ONG, une volonté et des intérêts à coopérer pour améliorer de part et d’autre l’efficacité, l’ancrage terrain, la connaissance et le plaidoyer.</p>
-                                <p class="font-bold text-[#1d4e7a] mb-1">Universities / Training institutes</p>
-                                <p>Due to very different professional cultures, NGOs and researchers have neither the same interests nor the same knowledge of the field reality or the scientific approach at first glance. However, there is both willingness and interest on the part of researchers and NGOs to work together to improve effectiveness, anchoring, knowledge and advocacy.</p>',
-
-                            'Public services' =>
-                                '<p class="font-bold text-[#1d4e7a] mb-1">Centralized or decentralized state services</p>
-                                <p class="mb-4">Local services related to Krousar Thmey fields of intervention (inclusive education and child welfare) can be relevant partners in experimenting and disseminating good practice at the local level. Collaboration with the decision-making level (Ministry of Education / Ministry of Social Affairs, for example) should allow scaling up at a provincial or even national level.</p>
-                                <p class="font-bold text-[#1d4e7a] mb-1">Local authorities</p>
-                                <p>Municipalities, districts or provinces have often defined policies of international solidarity cooperation with substantial financing. They also undertake a project selection procedure.</p>',
-
-                            'Companies and foundations from private sector' =>
-                                '<p class="font-bold text-[#1d4e7a] mb-1">Companies</p>
-                                <p class="mb-4">Beside the financial aspect of a partnership with the economic sector, it can also allow empowering the employees of Krousar Thmey. In addition, it can also involve volunteering by the company’s employees, such as Khmer or English classes.</p>
-                                <p class="font-bold text-[#1d4e7a] mb-1">Foundations</p>
-                                <p>The requirement level of some foundations has reached an almost equivalent level of international donors. They are increasingly interested in committing not only financially but also technically to projects with long-term impact.</p>',
+                        $catIcons = [
+                            '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>',
+                            '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>',
+                            '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>',
+                            '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/></svg>',
                         ];
 
                         // Research institutes / Universities & Training institutes are shown as
@@ -528,17 +423,20 @@
 
                     @foreach($visibleCategories as $index => $category)
                         @php
-                            $style = $catStyles[$index % count($catStyles)];
-                            $description = $staticDescriptions[$category->name] ?? $category->description;
+                            $cStyle = $partnerCardPalette[$index % count($partnerCardPalette)];
+                            $cIcon = $catIcons[$index % count($catIcons)];
+                            $cAccent = $category->accent_color ?: $cStyle['accent'];
+                            $cCardBg = $category->card_background_color ?: '#ffffff';
+                            $cIconBg = $category->icon_background_color ?: $cStyle['icon_bg'];
+                            $description = $category->localized_description;
                         @endphp
-                        <div data-reveal-card style="--reveal-card-delay: {{ ($index % 4) * 150 }}" class="group/cat relative bg-white border-l-4 {{ $style['border'] }} rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
-                            <div class="absolute inset-0 rounded-2xl bg-gradient-to-r {{ $style['bg'] }} to-transparent pointer-events-none"></div>
+                        <div data-reveal-card style="--reveal-card-delay: {{ ($index % 4) * 150 }}; border-left-color: {{ $cAccent }}; background-color: {{ $cCardBg }};" class="group/cat relative border-l-4 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 overflow-hidden">
                             <div class="relative">
                                 <div class="flex items-center gap-3 mb-5">
-                                    <div class="w-10 h-10 rounded-xl {{ $style['iconBg'] }} flex items-center justify-center flex-shrink-0 group-hover/cat:scale-110 transition-all duration-300" aria-hidden="true">
-                                        {!! $style['icon'] !!}
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover/cat:scale-110 transition-all duration-300" style="background-color: {{ $cIconBg }}; color: {{ $cAccent }};" aria-hidden="true">
+                                        {!! $cIcon !!}
                                     </div>
-                                    <h4 class="font-black text-[#1d4e7a] text-sm uppercase tracking-wide">{{ $category->name }}</h4>
+                                    <h4 class="font-black text-[#1d4e7a] text-sm uppercase tracking-wide">{{ $category->localized_name }}</h4>
                                 </div>
                                 @if($description)
                                     <div class="space-y-4">
@@ -574,29 +472,37 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-6 relative">
+        @php
+            $volunteerImageUrl = $volunteerImage ? (str_starts_with($volunteerImage, 'http') ? $volunteerImage : asset('storage/' . $volunteerImage)) : asset('images/special-ed.jpg');
+            $trackIcons = [
+                '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>',
+                '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h2.913M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+                '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>',
+            ];
+        @endphp
         {{-- Intro Grid --}}
         <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
             <div data-reveal="left">
                 <span class="inline-flex items-center gap-2 bg-[#e8a020]/15 border border-[#e8a020]/25 text-[#e8a020] text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 shadow-xs">
-                    Give Your Time
+                    {{ $volunteerBadge }}
                 </span>
                 <h2 class="text-3xl md:text-5xl font-black tracking-tight text-[#1d4e7a] uppercase mb-4">
-                    Volunteer <span class="text-[#2d6fa3]">With Us</span>
+                    {{ $volunteerTitle }}
                 </h2>
                 <div class="w-16 h-1.5 bg-[#d32f2f] rounded-full mb-6"></div>
-                <p class="text-gray-600 leading-relaxed text-base max-w-xl">
-                    Volunteering with Krousar Thmey is an opportunity to contribute meaningfully, transfer crucial know-how, or raise resources that directly impact the lives of children in Cambodia. We offer two distinct tracks based on your location and expertise.
-                </p>
+                <div class="rich-text-content text-gray-600 leading-relaxed text-base max-w-xl">
+                    {!! $volunteerIntro !!}
+                </div>
             </div>
             <div class="relative" data-reveal="right">
                 {{-- Modern landscape image frame with background offset decoration --}}
                 <div class="absolute inset-0 rounded-3xl bg-gradient-to-tr from-[#2d6fa3] to-[#8da83a] opacity-80 translate-x-2 translate-y-2 blur-xs"></div>
                 <div class="relative h-[280px] rounded-3xl overflow-hidden shadow-xl border-4 border-white bg-slate-100">
-                    <img src="{{ asset('images/special-ed.jpg') }}" alt="Special education volunteering" class="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105">
+                    <img src="{{ $volunteerImageUrl }}" alt="Special education volunteering" class="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                     <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 shadow-md">
-                        <p class="text-[#2d6fa3] font-bold text-[10px] uppercase tracking-wide">Hands-on Impact</p>
-                        <p class="text-gray-500 text-[9px]">Work directly with children</p>
+                        <p class="text-[#2d6fa3] font-bold text-[10px] uppercase tracking-wide">{{ $volunteerImageCaptionTitle }}</p>
+                        <p class="text-gray-500 text-[9px]">{{ $volunteerImageCaptionSubtitle }}</p>
                     </div>
                 </div>
             </div>
@@ -604,105 +510,80 @@
 
         {{-- Side-by-Side Track Cards --}}
         <div class="grid md:grid-cols-2 gap-8 items-stretch">
-            {{-- Card 1: Cambodia --}}
-            <div class="group/card relative rounded-3xl p-8 border border-slate-200/60 hover:border-slate-300 shadow-md hover:shadow-xl transition-all duration-500 flex flex-col justify-between" data-reveal="left" data-glow-card style="background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(255, 255, 255, 0.85), transparent 80%), #f9fafb;">
-                {{-- Top Border Accent Gradient --}}
-                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#2d6fa3] to-[#8da83a] rounded-t-3xl"></div>
-                
-                <div>
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-[#2d6fa3]/10 flex items-center justify-center text-[#2d6fa3] shadow-inner group-hover/card:scale-110 transition-transform duration-300">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="font-black text-[#1d4e7a] text-lg uppercase tracking-wide">Volunteering in Cambodia</h3>
-                            <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mt-0.5">Locational Track</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
-                        At Krousar Thmey, our priority is for all work to be done by Cambodians. However, the organization welcomes foreign volunteers with a specific project involving knowledge and know-how lacking in Cambodia, that they would be willing to transfer to our Cambodian team.
-                    </p>
-                    
-                    {{-- Requirements & Process details --}}
-                    <div class="space-y-3 mb-8">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Requirements & Process:</h4>
-                        <div class="flex items-start gap-2.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 flex-shrink-0"></span>
-                            <p class="text-gray-500 text-xs">Specific project outline focused on knowledge and skills transfer.</p>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 flex-shrink-0"></span>
-                            <p class="text-gray-500 text-xs">Cooperation with the existing local Cambodian staff.</p>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#2d6fa3] mt-2 flex-shrink-0"></span>
-                            <p class="text-gray-500 text-xs">Direct review and validation by the communications office.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <span class="text-xs text-gray-400 font-medium">To submit a volunteering project:</span>
-                    <a href="mailto:communication@krousar-thmey.org" class="group/mail inline-flex items-center gap-2 px-5 py-3 bg-[#2d6fa3] text-white hover:bg-[#1d4e7a] rounded-2xl text-xs font-bold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L23 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        communication@krousar-thmey.org
-                    </a>
-                </div>
-            </div>
+            @foreach($volunteerTracks as $index => $track)
+                @php
+                    $tIcon = $trackIcons[$index % count($trackIcons)];
+                    $tAccent = $track->accent_color ?: '#2d6fa3';
+                    $tAccentSecondary = $track->accent_color_secondary ?: '#8da83a';
+                    $tIconBg = $track->icon_background_color ?: '#dbeafe';
+                    $tButtonText = $track->localized_cta_button_text ?: match ($track->cta_type) {
+                        'email', 'url' => $track->cta_value,
+                        default => 'Apply to Volunteer',
+                    };
+                    $tButtonColor = $track->button_color ?: $tAccent;
+                    $tButtonTextColor = $track->button_text_color ?: '#ffffff';
+                    $tButtonStyle = "background-color: {$tButtonColor}; color: {$tButtonTextColor};";
+                @endphp
+                <div class="group/card relative rounded-3xl p-8 border border-slate-200/60 hover:border-slate-300 shadow-md hover:shadow-xl transition-all duration-500 flex flex-col justify-between" data-reveal="{{ $index % 2 === 0 ? 'left' : 'right' }}" data-glow-card style="background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(255, 255, 255, 0.85), transparent 80%), #f9fafb; --reveal-delay: {{ $index * 150 }};">
+                    {{-- Top Border Accent Gradient --}}
+                    <div class="absolute top-0 left-0 right-0 h-1.5 rounded-t-3xl" style="background: linear-gradient(to right, {{ $tAccent }}, {{ $tAccentSecondary }});"></div>
 
-            {{-- Card 2: International --}}
-            <div class="group/card relative rounded-3xl p-8 border border-slate-200/60 hover:border-slate-300 shadow-md hover:shadow-xl transition-all duration-500 flex flex-col justify-between" data-reveal="right" data-glow-card style="background: radial-gradient(350px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(255, 255, 255, 0.85), transparent 80%), #f9fafb; --reveal-delay: 150;">
-                {{-- Top Border Accent Gradient --}}
-                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#e8a020] to-[#f8bb86] rounded-t-3xl"></div>
-                
-                <div>
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-[#e8a020]/10 flex items-center justify-center text-[#e8a020] shadow-inner group-hover/card:scale-110 transition-transform duration-300">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h2.913M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                    <div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner group-hover/card:scale-110 transition-transform duration-300" style="background-color: {{ $tIconBg }}; color: {{ $tAccent }};">
+                                {!! $tIcon !!}
+                            </div>
+                            <div>
+                                <h3 class="font-black text-[#1d4e7a] text-lg uppercase tracking-wide">{{ $track->localized_title }}</h3>
+                                @if($track->localized_subtitle)
+                                <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mt-0.5">{{ $track->localized_subtitle }}</p>
+                                @endif
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="font-black text-[#1d4e7a] text-lg uppercase tracking-wide">Volunteering Internationally</h3>
-                            <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mt-0.5">International structures</p>
+                        <div class="rich-text-content text-gray-600 text-sm leading-relaxed mb-6">
+                            {!! $track->localized_description !!}
                         </div>
+
+                        @if($track->localized_extra_content)
+                        <div class="space-y-3 mb-8">
+                            @if($track->localized_extra_heading)
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">{{ $track->localized_extra_heading }}</h4>
+                            @endif
+                            <div class="rich-text-content text-gray-500 text-xs leading-relaxed">
+                                {!! $track->localized_extra_content !!}
+                            </div>
+                        </div>
+                        @endif
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
-                        Krousar Thmey does not hire any employee in Europe or Singapore. Fundraising, which is the main activity of our international entities, is handled by volunteers.
-                    </p>
-                    
-                    {{-- Possibilities details --}}
-                    <div class="space-y-3 mb-8">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Ways to help in our entities:</h4>
-                        <div class="flex gap-2.5 items-start">
-                            <span class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center text-green-600 text-xs font-bold mt-0.5 flex-shrink-0">✓</span>
-                            <p class="text-gray-500 text-xs leading-relaxed">
-                                <strong>Voluntary Actions:</strong> Participate within your available time in internal & external communication, funding, mobilization, or administration.
-                            </p>
-                        </div>
-                        <div class="flex gap-2.5 items-start">
-                            <span class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center text-green-600 text-xs font-bold mt-0.5 flex-shrink-0">✓</span>
-                            <p class="text-gray-500 text-xs leading-relaxed">
-                                <strong>Fundraising Support:</strong> Mobilize people in your company, host presentation meetings, share films, photos & posters.
-                            </p>
-                        </div>
+
+                    <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        @if($track->localized_footer_label)
+                        <span class="text-xs text-gray-400 font-medium">{{ $track->localized_footer_label }}</span>
+                        @endif
+
+                        @if($track->cta_type === 'email')
+                            <a href="mailto:{{ $track->cta_value }}" class="group/mail inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5" style="{{ $tButtonStyle }}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L23 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                {{ $tButtonText }}
+                            </a>
+                        @elseif($track->cta_type === 'modal')
+                            <button type="button" class="open-volunteer-modal py-3 px-6 rounded-2xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 group/btn transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5" style="{{ $tButtonStyle }}">
+                                <span>{{ $tButtonText }}</span>
+                                <svg class="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </button>
+                        @elseif($track->cta_value)
+                            <a href="{{ $track->cta_value }}" class="group/mail inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5" style="{{ $tButtonStyle }}">
+                                {{ $tButtonText }}
+                                <svg class="w-4 h-4 transition-transform duration-300 group-hover/mail:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            </a>
+                        @endif
                     </div>
                 </div>
-                
-                <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <span class="text-xs text-gray-400 font-medium">To learn more and get involved:</span>
-                    <button type="button" id="openVolunteerModal" class="btn-blue py-3 px-6 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 group/btn">
-                        <span>Apply to Volunteer</span>
-                        <svg class="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>
@@ -1072,13 +953,14 @@
                     </svg>
                 </div>
                 
-                <h3 class="text-xl md:text-2xl font-extrabold text-[#2d6fa3] uppercase tracking-wide mb-3">Don't see the right fit?</h3>
-                <p class="text-slate-500 mb-8 max-w-xl mx-auto text-sm leading-relaxed">
-                    We regularly post new positions in social work, education, communications, and administration. Reach out directly to enquire about current opportunities or send your unsolicited application to our HR department.
-                </p>
+                <h3 class="text-xl md:text-2xl font-extrabold text-[#2d6fa3] uppercase tracking-wide mb-3">{{ $jobsCtaHeading }}</h3>
+                <div class="rich-text-content text-slate-500 mb-8 max-w-xl mx-auto text-sm leading-relaxed">
+                    {!! $jobsCtaIntro !!}
+                </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-8">
                     {{-- Phone Contact --}}
+                    @if($jobsCtaPhone1 || $jobsCtaPhone2)
                     <div class="group/contact flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 hover:border-[#2d6fa3]/40 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 text-left">
                         <div class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center text-[#2d6fa3] shrink-0 group-hover/contact:scale-110 group-hover/contact:rotate-6 transition-transform duration-300">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1086,16 +968,24 @@
                             </svg>
                         </div>
                         <div>
-                            <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Call HR Department</span>
+                            <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">{{ $jobsCtaPhoneLabel }}</span>
                             <div class="flex flex-wrap gap-x-2 text-sm font-semibold text-slate-700">
-                                <a href="tel:023880502" class="hover:text-[#2d6fa3] transition-colors">023 880 502</a>
+                                @if($jobsCtaPhone1)
+                                <a href="tel:{{ preg_replace('/\s+/', '', $jobsCtaPhone1) }}" class="hover:text-[#2d6fa3] transition-colors">{{ $jobsCtaPhone1 }}</a>
+                                @endif
+                                @if($jobsCtaPhone1 && $jobsCtaPhone2)
                                 <span class="text-slate-300">/</span>
-                                <a href="tel:023880503" class="hover:text-[#2d6fa3] transition-colors">023 880 503</a>
+                                @endif
+                                @if($jobsCtaPhone2)
+                                <a href="tel:{{ preg_replace('/\s+/', '', $jobsCtaPhone2) }}" class="hover:text-[#2d6fa3] transition-colors">{{ $jobsCtaPhone2 }}</a>
+                                @endif
                             </div>
                         </div>
                     </div>
+                    @endif
 
                     {{-- Email Contact --}}
+                    @if($jobsCtaEmail)
                     <div class="group/contact flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 hover:border-[#8da83a]/40 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 text-left">
                         <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-[#8da83a] shrink-0 group-hover/contact:scale-110 group-hover/contact:-rotate-6 transition-transform duration-300">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1103,19 +993,22 @@
                             </svg>
                         </div>
                         <div>
-                            <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Email Inquiry</span>
-                            <a href="#" onclick="event.preventDefault(); openEmail('hr@krousar-thmey.org')" class="block text-sm font-semibold text-slate-700 hover:text-[#8da83a] transition-colors break-all">
-                                hr@krousar-thmey.org
+                            <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">{{ $jobsCtaEmailLabel }}</span>
+                            <a href="#" onclick="event.preventDefault(); openEmail('{{ $jobsCtaEmail }}')" class="block text-sm font-semibold text-slate-700 hover:text-[#8da83a] transition-colors break-all">
+                                {{ $jobsCtaEmail }}
                             </a>
                         </div>
                     </div>
+                    @endif
                 </div>
 
+                @if($jobsCtaEmail)
                 <div class="flex justify-center gap-3">
-                    <a href="#" onclick="event.preventDefault(); openEmail('hr@krousar-thmey.org')" class="btn-blue text-sm shadow-md hover:shadow-lg transition-all">
-                        Send Your Application
+                    <a href="#" onclick="event.preventDefault(); openEmail('{{ $jobsCtaEmail }}')" class="btn-blue text-sm shadow-md hover:shadow-lg transition-all">
+                        {{ $jobsCtaButtonText }}
                     </a>
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -1151,7 +1044,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const volunteerModal = document.getElementById('volunteerModal');
     const successModal = document.getElementById('volunteerSuccessModal');
-    const openBtn = document.getElementById('openVolunteerModal');
+    // A class rather than a single id — admin-managed volunteer tracks can configure
+    // more than one card to open this modal, so every matching button must bind.
+    const openBtns = document.querySelectorAll('.open-volunteer-modal');
     const body = document.body;
 
     /** Lock/unlock body scroll */
@@ -1178,10 +1073,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ── Open volunteer modal ──
-    if (openBtn && volunteerModal) {
-        openBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            showModal(volunteerModal);
+    if (volunteerModal) {
+        openBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showModal(volunteerModal);
+            });
         });
     }
 

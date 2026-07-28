@@ -8,5 +8,10 @@
         "name": "French",
         "native": "Français",
         "flag": "🇫🇷"
+    },
+    "km": {
+        "name": "Khmer",
+        "native": "ខ្មែរ",
+        "flag": "🇰🇭"
     }
 }

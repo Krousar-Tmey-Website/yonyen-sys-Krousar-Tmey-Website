@@ -23,6 +23,7 @@ class UpdateBookRequest extends FormRequest
             'is_available' => ['nullable', 'boolean'],
             'sort_order'   => ['nullable', 'integer', 'min:0'],
             'cover_image'  => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'cover_background_color' => ['nullable', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}$/'],
             'remove_cover' => ['nullable', 'boolean'],
         ];
     }

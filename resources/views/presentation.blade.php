@@ -695,9 +695,6 @@ $btn3Url  = $settings['presentation_banner_btn3_url'] ?? '';
             @endphp
             <div class="relative bg-white rounded-[28px] border border-gray-100 shadow-sm hover:shadow-[0_20px_45px_-10px_rgba(45,111,163,0.12)] hover:-translate-y-2.5 hover:scale-[1.02] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden group flex flex-col"
                  data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
-                {{-- Top accent bar --}}
-                <div class="h-1.5 w-full transition-all duration-300 group-hover:h-2.5" style="background-color: {{ $hex }}"></div>
-
                 <div class="p-7 md:p-8 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-6">
                         @if($flagSvg)

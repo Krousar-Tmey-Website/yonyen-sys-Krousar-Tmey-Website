@@ -23,6 +23,10 @@
     html { scroll-behavior: smooth; }
     body { @apply font-sans antialiased; }
     [x-cloak] { display: none !important; }
+
+    /* Khmer-locale pages (<html lang="km">) get the Kantumruy Pro webfont everywhere by
+       default — admin-authored Khmer content doesn't need the .font-khmer class by hand. */
+    html[lang="km"] body { @apply font-khmer; }
 }
 
 @layer components {

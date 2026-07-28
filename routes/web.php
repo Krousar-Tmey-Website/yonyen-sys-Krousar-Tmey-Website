@@ -162,7 +162,49 @@ Route::get('/get-involved', function () {
 
     $partnershipCategories = \App\Models\PartnershipCategory::ordered()->get();
     $partnerPrinciples = \App\Models\PartnerPrinciple::ordered()->get();
+    $partnershipEmphases = \App\Models\PartnershipEmphasis::ordered()->get();
     $worldwidePartners = \App\Models\WorldwidePartner::active()->get();
+    $quickLinks = \App\Models\InvolvedQuickLink::ordered()->get();
+
+    // Become a Partner — Header, Intro & CTA text
+    $partnerCtaImageLeft = $settings['partner_cta_image_left'] ?? '';
+    $partnerCtaImageRight = $settings['partner_cta_image_right'] ?? '';
+
+    $localizedSetting = function (string $baseKey) use ($settings) {
+        $locale = app()->getLocale();
+        $fallback = config('app.fallback_locale', 'en');
+        if ($locale !== $fallback && !empty($settings[$baseKey.'_'.$locale] ?? null)) {
+            return $settings[$baseKey.'_'.$locale];
+        }
+        return $settings[$baseKey] ?? null;
+    };
+
+    $partnerBadge = $localizedSetting('partner_badge') ?: 'Institutional Support';
+    $partnerTitle = $localizedSetting('partner_title') ?: 'Become a Partner';
+    $partnerIntro = $localizedSetting('partner_intro') ?: 'The partnership is based on a <strong>co-construction dynamic</strong> built on shared values and mutual respect.';
+    $partnerWhoIntro = $localizedSetting('partner_who_intro') ?: 'Krousar Thmey may work in partnership with a variety of public, private and civil society actors and at different administrative levels: village, district, province, region, country. The following list, although not exhaustive, gives an overview of the type of organizations Krousar Thmey can work with.';
+    $partnerCtaHeading = $localizedSetting('partner_cta_heading') ?: 'Interested in becoming a partner?';
+    $partnerCtaSubtext = $localizedSetting('partner_cta_subtext') ?: "Let's build together our future cooperation";
+    $partnerCtaButtonText = $localizedSetting('partner_cta_button_text') ?: 'Contact us';
+
+    // Volunteer With Us — Header, Intro & Photo
+    $volunteerTracks = \App\Models\VolunteerTrack::ordered()->active()->get();
+    $volunteerImage = $settings['volunteer_image'] ?? '';
+    $volunteerBadge = $localizedSetting('volunteer_badge') ?: 'Give Your Time';
+    $volunteerTitle = $localizedSetting('volunteer_title') ?: 'Volunteer With Us';
+    $volunteerIntro = $localizedSetting('volunteer_intro') ?: 'Volunteering with Krousar Thmey is an opportunity to contribute meaningfully, transfer crucial know-how, or raise resources that directly impact the lives of children in Cambodia. We offer two distinct tracks based on your location and expertise.';
+    $volunteerImageCaptionTitle = $localizedSetting('volunteer_image_caption_title') ?: 'Hands-on Impact';
+    $volunteerImageCaptionSubtitle = $localizedSetting('volunteer_image_caption_subtitle') ?: 'Work directly with children';
+
+    // "Don't See The Right Fit?" Jobs CTA
+    $jobsCtaHeading = $localizedSetting('jobs_cta_heading') ?: "Don't see the right fit?";
+    $jobsCtaIntro = $localizedSetting('jobs_cta_intro') ?: 'We regularly post new positions in social work, education, communications, and administration. Reach out directly to enquire about current opportunities or send your unsolicited application to our HR department.';
+    $jobsCtaPhoneLabel = $localizedSetting('jobs_cta_phone_label') ?: 'Call HR Department';
+    $jobsCtaPhone1 = $settings['jobs_cta_phone_1'] ?? '023 880 502';
+    $jobsCtaPhone2 = $settings['jobs_cta_phone_2'] ?? '023 880 503';
+    $jobsCtaEmailLabel = $localizedSetting('jobs_cta_email_label') ?: 'Email Inquiry';
+    $jobsCtaEmail = $settings['jobs_cta_email'] ?? 'hr@krousar-thmey.org';
+    $jobsCtaButtonText = $localizedSetting('jobs_cta_button_text') ?: 'Send Your Application';
 
     // Hero Banner data
     $bannerImage = $settings['involved_banner_image'] ?? '';
@@ -185,7 +227,7 @@ Route::get('/get-involved', function () {
     $ctaBannerTitle = $settings['involved_cta_banner_title'] ?? 'Every Action Counts';
     $ctaBannerSubtitle = $settings['involved_cta_banner_subtitle'] ?? 'Whether you buy a book, volunteer, partner with us, or send your application — you are helping build a better future for Cambodia\'s children.';
 
-    return view('involved', compact('settings', 'jobs', 'books', 'partnershipCategories', 'partnerPrinciples', 'worldwidePartners', 'bannerImage', 'bannerOverlayColor', 'bannerBadge', 'bannerTitle', 'bannerSubtitle', 'booksBannerImage', 'booksBannerOverlayColor', 'booksBannerBadge', 'booksBannerTitle', 'booksBannerSubtitle', 'ctaBannerImage', 'ctaBannerOverlayColor', 'ctaBannerBadge', 'ctaBannerTitle', 'ctaBannerSubtitle'));
+    return view('involved', compact('settings', 'jobs', 'books', 'partnershipCategories', 'partnerPrinciples', 'partnershipEmphases', 'worldwidePartners', 'quickLinks', 'bannerImage', 'bannerOverlayColor', 'bannerBadge', 'bannerTitle', 'bannerSubtitle', 'booksBannerImage', 'booksBannerOverlayColor', 'booksBannerBadge', 'booksBannerTitle', 'booksBannerSubtitle', 'ctaBannerImage', 'ctaBannerOverlayColor', 'ctaBannerBadge', 'ctaBannerTitle', 'ctaBannerSubtitle', 'partnerBadge', 'partnerTitle', 'partnerIntro', 'partnerWhoIntro', 'partnerCtaHeading', 'partnerCtaSubtext', 'partnerCtaButtonText', 'partnerCtaImageLeft', 'partnerCtaImageRight', 'volunteerTracks', 'volunteerImage', 'volunteerBadge', 'volunteerTitle', 'volunteerIntro', 'volunteerImageCaptionTitle', 'volunteerImageCaptionSubtitle', 'jobsCtaHeading', 'jobsCtaIntro', 'jobsCtaPhoneLabel', 'jobsCtaPhone1', 'jobsCtaPhone2', 'jobsCtaEmailLabel', 'jobsCtaEmail', 'jobsCtaButtonText'));
 })->name('involved');
 
 // Books for sale (public detail page)
@@ -438,6 +480,32 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
+    Route::post('jobs-cta', [Admin\JobOpportunityController::class, 'updateCta'])->name('jobs.cta.update');
+
+    // Get Involved — Quick Links Cards (Partner / Volunteer / Work With Us / Book for Sales)
+    Route::resource('involved-quick-links', Admin\InvolvedQuickLinkController::class)
+        ->except(['show', 'create', 'edit'])
+        ->parameters(['involved-quick-links' => 'involvedQuickLink']);
+
+    // Become a Partner
+    Route::get('partner-page', [Admin\PartnerPageController::class, 'index'])->name('partner-page.index');
+    Route::post('partner-page', [Admin\PartnerPageController::class, 'update'])->name('partner-page.update');
+    Route::resource('partner-principles', Admin\PartnerPrincipleController::class)
+        ->except(['show', 'create', 'edit', 'index'])
+        ->parameters(['partner-principles' => 'partnerPrinciple']);
+    Route::resource('partnership-emphases', Admin\PartnershipEmphasisController::class)
+        ->except(['show', 'create', 'edit', 'index'])
+        ->parameters(['partnership-emphases' => 'partnershipEmphasis']);
+    Route::resource('partnership-categories', Admin\PartnershipCategoryController::class)
+        ->except(['show', 'create', 'edit', 'index'])
+        ->parameters(['partnership-categories' => 'partnershipCategory']);
+
+    // Volunteer Section
+    Route::get('volunteer-section', [Admin\VolunteerSectionController::class, 'index'])->name('volunteer-section.index');
+    Route::post('volunteer-section', [Admin\VolunteerSectionController::class, 'update'])->name('volunteer-section.update');
+    Route::resource('volunteer-tracks', Admin\VolunteerTrackController::class)
+        ->except(['show', 'create', 'edit', 'index'])
+        ->parameters(['volunteer-tracks' => 'volunteerTrack']);
 
     Route::prefix('contacts')->name('contacts.')->group(function () {
         Route::get('/', [Admin\ContactInquiryController::class, 'index'])->name('index');

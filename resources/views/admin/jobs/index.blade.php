@@ -118,6 +118,99 @@
         </div>
     </div>
 
+    {{-- "Don't See The Right Fit?" CTA Settings --}}
+    @php $ctv = fn ($key, $default = '') => old($key, $settings[$key] ?? $default); @endphp
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 mb-6" x-data="bilingualForm()">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="font-bold text-gray-700 text-sm">"Don't See The Right Fit?" CTA</h3>
+                <p class="text-xs text-gray-400 mt-0.5">The callout shown below the job listings on the Get Involved page.</p>
+            </div>
+            <div class="lang-tabs" title="Toggle editing language">
+                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+            </div>
+        </div>
+
+        <form action="{{ route('admin.jobs.cta.update') }}" method="POST" class="space-y-4">
+            @csrf
+
+            <div x-show="lang === 'en'">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Heading</label>
+                <input type="text" name="jobs_cta_heading" value="{{ $ctv('jobs_cta_heading', "Don't see the right fit?") }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Heading (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <input type="text" name="jobs_cta_heading_fr" value="{{ $ctv('jobs_cta_heading_fr') }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            </div>
+
+            <div x-show="lang === 'en'">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Intro Paragraph</label>
+                <x-admin.rich-text name="jobs_cta_intro" :value="$ctv('jobs_cta_intro', 'We regularly post new positions in social work, education, communications, and administration. Reach out directly to enquire about current opportunities or send your unsolicited application to our HR department.')" lang="en" :rows="3" />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Intro Paragraph (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+                <x-admin.rich-text name="jobs_cta_intro_fr" :value="$ctv('jobs_cta_intro_fr')" lang="fr" :rows="3" />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div x-show="lang === 'en'">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Phone Label</label>
+                    <input type="text" name="jobs_cta_phone_label" value="{{ $ctv('jobs_cta_phone_label', 'Call HR Department') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Phone Label (French)</label>
+                    <input type="text" name="jobs_cta_phone_label_fr" value="{{ $ctv('jobs_cta_phone_label_fr') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Phone Number 1</label>
+                    <input type="text" name="jobs_cta_phone_1" value="{{ $ctv('jobs_cta_phone_1', '023 880 502') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Phone Number 2 <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="text" name="jobs_cta_phone_2" value="{{ $ctv('jobs_cta_phone_2', '023 880 503') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div x-show="lang === 'en'">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Email Label</label>
+                    <input type="text" name="jobs_cta_email_label" value="{{ $ctv('jobs_cta_email_label', 'Email Inquiry') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Email Label (French)</label>
+                    <input type="text" name="jobs_cta_email_label_fr" value="{{ $ctv('jobs_cta_email_label_fr') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">HR Email Address</label>
+                    <input type="email" name="jobs_cta_email" value="{{ $ctv('jobs_cta_email', 'hr@krousar-thmey.org') }}"
+                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+            </div>
+
+            <div x-show="lang === 'en'">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Button Text</label>
+                <input type="text" name="jobs_cta_button_text" value="{{ $ctv('jobs_cta_button_text', 'Send Your Application') }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Button Text (French)</label>
+                <input type="text" name="jobs_cta_button_text_fr" value="{{ $ctv('jobs_cta_button_text_fr') }}"
+                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            </div>
+
+            <button type="submit" class="btn-primary text-sm py-2.5">Save CTA</button>
+        </form>
+    </div>
+
     {{-- Jobs list --}}
     <div class="w-full">
         @if($jobs->isEmpty())

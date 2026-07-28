@@ -562,7 +562,7 @@ document.addEventListener('click', (event) => {
 
     const lang = getLanguageTabValue(tab);
 
-    if (!['en', 'fr'].includes(lang)) {
+    if (!['en', 'fr', 'km'].includes(lang)) {
         return;
     }
 

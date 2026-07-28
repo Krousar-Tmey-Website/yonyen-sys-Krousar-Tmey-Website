@@ -314,14 +314,16 @@ function createEditor(textarea) {
     const plugins = uploadUrl
         ? [...PLUGINS, Image, ImageUpload, ImageToolbar, ImageStyle, ImageResize]
         : PLUGINS;
-    const toolbar = uploadUrl
+    const toolbarItems = uploadUrl
         ? [...TOOLBAR.slice(0, -3), 'uploadImage', ...TOOLBAR.slice(-3)]
         : TOOLBAR;
 
     const promise = ClassicEditor.create(textarea, {
         licenseKey: 'GPL',
         plugins,
-        toolbar,
+        // shouldNotGroupWhenFull: wrap onto additional rows in narrow containers (e.g.
+        // a modal) instead of silently hiding buttons behind a "..." overflow dropdown.
+        toolbar: { items: toolbarItems, shouldNotGroupWhenFull: true },
         language: lang,
         translations: [enTranslations, frTranslations],
         placeholder,
