@@ -123,7 +123,11 @@
                     {{-- Left Side: Content --}}
                     <div class="lg:col-span-6 {{ $isEven ? 'lg:order-2' : '' }} flex flex-col justify-center">
                         <div class="flex items-center gap-4 mb-8" data-reveal="{{ $isEven ? 'right' : 'left' }}">
+                            @if($program->accent_color)
+                            <div class="w-2 h-10 rounded-full" style="background-color: {{ $program->accent_color }}"></div>
+                            @else
                             <div class="w-2 h-10 rounded-full bg-gradient-to-b from-[#d32f2f] to-[#e8a020]"></div>
+                            @endif
                             <h2 class="text-3xl lg:text-4xl font-black text-[#1a3c6e] uppercase tracking-wide leading-tight drop-shadow-sm">
                                 {{ $program->localized_title }}
                             </h2>
@@ -131,10 +135,15 @@
 
                         @if($program->localized_description)
                             <div class="mb-10" data-reveal="{{ $isEven ? 'right' : 'left' }}" style="--reveal-delay: 100">
-                                <div class="relative bg-[#fffdf8] border border-[#f2e6c9] rounded-2xl p-7 md:p-8 shadow-sm overflow-hidden">
-                                    <!-- Clean left accent bar -->
+                                <div class="relative border border-[#f2e6c9] rounded-2xl p-7 md:p-8 shadow-sm overflow-hidden {{ $program->card_background_color ? '' : 'bg-[#fffdf8]' }}"
+                                     @if($program->card_background_color) style="background-color: {{ $program->card_background_color }}" @endif>
+                                    {{-- Clean left accent bar --}}
+                                    @if($program->accent_color)
+                                    <div class="absolute top-0 left-0 w-[6px] h-full" style="background-color: {{ $program->accent_color }}"></div>
+                                    @else
                                     <div class="absolute top-0 left-0 w-[6px] h-full bg-gradient-to-b from-[#e8a020] to-[#d32f2f]"></div>
-                                    
+                                    @endif
+
                                     <div class="flex items-center gap-3 mb-4">
                                         <div class="w-9 h-9 rounded-full bg-[#e8a020]/10 flex items-center justify-center">
                                             <svg class="w-4 h-4 text-[#e8a020]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -151,7 +160,8 @@
                         @endif
 
                         @if($program->localized_full_description)
-                            <div class="mb-10 bg-white/50 backdrop-blur rounded-3xl p-6 border border-gray-100 shadow-sm" data-reveal="{{ $isEven ? 'right' : 'left' }}" style="--reveal-delay: 200">
+                            <div class="mb-10 rounded-3xl p-6 border border-gray-100 shadow-sm {{ $program->details_background_color ? '' : 'bg-white/50 backdrop-blur' }}"
+                                 data-reveal="{{ $isEven ? 'right' : 'left' }}" style="--reveal-delay: 200 @if($program->details_background_color); background-color: {{ $program->details_background_color }}@endif">
                                 <h3 class="text-sm font-black text-[#1a3c6e] uppercase tracking-widest mb-4">Program Details</h3>
                                 <div class="rich-text-content text-gray-600 leading-loose">
                                     {!! $program->localized_full_description !!}

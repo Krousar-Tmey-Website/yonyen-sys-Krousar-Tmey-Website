@@ -75,14 +75,14 @@
                 <div class="grid lg:grid-cols-2 gap-8 items-start">
                     <div>
                         <div class="flex items-center gap-4 mb-6">
-                            <div class="w-1.5 h-14 bg-[#d32f2f] rounded-full"></div>
+                            <div id="program-preview-accent" class="w-1.5 h-14 rounded-full" style="background-color: #d32f2f"></div>
                             <h2 class="text-3xl font-black text-[#1a3c6e] uppercase tracking-wide leading-tight" data-program-preview="title" x-text="previewTitle"></h2>
                         </div>
-                        <div class="mb-6">
+                        <div id="program-preview-objective-card" class="mb-6 rounded-2xl border p-5" style="background-color: #fffdf8; border-color: #f2e6c9;">
                             <h3 class="text-xs font-bold text-[#2d6fa3] uppercase tracking-widest mb-2" data-program-preview-label="objectiveLabel" x-text="previewLabels.objectiveLabel">Objective</h3>
                             <div class="text-gray-700 leading-relaxed rich-text-content" data-program-preview="objective" x-html="previewObjective"></div>
                         </div>
-                        <div class="mb-6">
+                        <div id="program-preview-details-card" class="mb-6 rounded-2xl border border-gray-100 p-5" style="background-color: #ffffff;">
                             <h3 class="text-xs font-bold text-[#8da83a] uppercase tracking-widest mb-2" data-program-preview-label="programLabel" x-text="previewLabels.programLabel">Program</h3>
                             <div class="text-gray-700 leading-relaxed rich-text-content" data-program-preview="program" x-html="previewProgramText"></div>
                         </div>
@@ -141,6 +141,45 @@
                                class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         <p class="mt-2 text-xs text-gray-400">Shown to French-language visitors. Leave blank to reuse the English value.</p>
                     </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Accent Color <span class="text-gray-400 font-normal">(title ruler & card border)</span></label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="accent_color_picker" value="{{ old('accent_color', '#d32f2f') }}"
+                               class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                               onchange="document.getElementById('accent_color').value = this.value; document.getElementById('program-preview-accent').style.backgroundColor = this.value;">
+                        <input type="text" id="accent_color" name="accent_color" value="{{ old('accent_color', '#d32f2f') }}" placeholder="#d32f2f"
+                               oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('accent_color_picker').value = this.value; document.getElementById('program-preview-accent').style.backgroundColor = this.value; }"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                    </div>
+                    @error('accent_color')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Card Background <span class="text-gray-400 font-normal">(Objective box)</span></label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="card_background_color_picker" value="{{ old('card_background_color', '#fffdf8') }}"
+                               class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                               onchange="document.getElementById('card_background_color').value = this.value; document.getElementById('program-preview-objective-card').style.backgroundColor = this.value;">
+                        <input type="text" id="card_background_color" name="card_background_color" value="{{ old('card_background_color', '#fffdf8') }}" placeholder="#fffdf8"
+                               oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('card_background_color_picker').value = this.value; document.getElementById('program-preview-objective-card').style.backgroundColor = this.value; }"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                    </div>
+                    @error('card_background_color')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Details Background <span class="text-gray-400 font-normal">(Program Details box)</span></label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="details_background_color_picker" value="{{ old('details_background_color', '#ffffff') }}"
+                               class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                               onchange="document.getElementById('details_background_color').value = this.value; document.getElementById('program-preview-details-card').style.backgroundColor = this.value;">
+                        <input type="text" id="details_background_color" name="details_background_color" value="{{ old('details_background_color', '#ffffff') }}" placeholder="#ffffff"
+                               oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('details_background_color_picker').value = this.value; document.getElementById('program-preview-details-card').style.backgroundColor = this.value; }"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                    </div>
+                    @error('details_background_color')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                 </div>
             </div>
 

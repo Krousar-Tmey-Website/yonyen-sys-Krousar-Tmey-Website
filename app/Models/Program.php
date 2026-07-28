@@ -21,7 +21,7 @@ class Program extends Model
     protected $fillable = [
         'title', 'title_fr', 'slug', 'description', 'description_fr',
         'full_description', 'full_description_fr',
-        'image', 'icon_image', 'is_active', 'Status', 'Status_fr',
+        'image', 'icon_image', 'accent_color', 'card_background_color', 'details_background_color', 'is_active', 'Status', 'Status_fr',
         'testimony_name', 'testimony_name_fr', 'testimony_story', 'testimony_story_fr', 'testimony_image',
         'facebook_url', 'linkedin_url', 'instagram_url', 'telegram_url', 'youtube_url',
     ];

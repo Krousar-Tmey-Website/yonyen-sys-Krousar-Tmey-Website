@@ -48,10 +48,11 @@ class ProgramController extends Controller
             'instagram_url'    => ['nullable', 'url', 'max:2048'],
             'telegram_url'     => ['nullable', 'url', 'max:2048'],
             'youtube_url'      => ['nullable', 'url', 'max:2048'],
-        ]);
+        ] + $this->styleValidationRules());
 
         $data['is_active'] = $request->boolean('is_active');
         $data['slug'] = Str::slug($data['title']);
+        $data = $this->normalizeStyleColors($data);
 
         // Check uniqueness of slug
         if (Program::where('slug', $data['slug'])->exists()) {
@@ -123,10 +124,11 @@ class ProgramController extends Controller
             'instagram_url'    => ['nullable', 'url', 'max:2048'],
             'telegram_url'     => ['nullable', 'url', 'max:2048'],
             'youtube_url'      => ['nullable', 'url', 'max:2048'],
-        ]);
+        ] + $this->styleValidationRules());
 
         $data['is_active'] = $request->boolean('is_active');
         $data['slug'] = Str::slug($data['title']);
+        $data = $this->normalizeStyleColors($data);
 
         // Check uniqueness of slug (exclude current record)
         $existing = Program::where('slug', $data['slug'])->where('id', '!=', $program->id)->exists();
@@ -210,5 +212,40 @@ class ProgramController extends Controller
         $program->delete();
 
         return redirect()->route('admin.programs.index')->with('success', 'Program deleted successfully.');
+    }
+
+    private function styleValidationRules(): array
+    {
+        $hexRule = ['nullable', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}$/'];
+
+        return [
+            'accent_color' => $hexRule,
+            'card_background_color' => $hexRule,
+            'details_background_color' => $hexRule,
+        ];
+    }
+
+    private function normalizeStyleColors(array $data): array
+    {
+        foreach (array_keys($this->styleValidationRules()) as $field) {
+            $data[$field] = $this->normalizeHexColor($data[$field] ?? null);
+        }
+
+        return $data;
+    }
+
+    private function normalizeHexColor(?string $color): ?string
+    {
+        if ($color === null || $color === '') {
+            return null;
+        }
+
+        $color = strtolower($color);
+
+        if (strlen($color) === 4) {
+            return '#' . $color[1] . $color[1] . $color[2] . $color[2] . $color[3] . $color[3];
+        }
+
+        return $color;
     }
 }
