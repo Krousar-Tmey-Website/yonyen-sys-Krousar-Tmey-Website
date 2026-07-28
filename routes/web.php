@@ -57,8 +57,10 @@ Route::get('/', function () {
     $testimonials = Testimonial::where('is_active', true)->take(3)->get();
     $galleries = Gallery::where('is_active', true)->latest()->take(6)->get();
     $programs = Program::active()->take(3)->get();
-    $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get();
-    $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get();
+    $pageSections = PageSection::where('active', true)->with(['images', 'links'])->orderBy('order')->get()
+        ->filter(fn ($s) => filled(app()->getLocale() === 'fr' ? $s->title_fr : $s->title))->values();
+    $impactStatistics = \App\Models\ImpactStatistic::active()->orderBy('sort_order')->get()
+        ->filter(fn ($s) => filled(app()->getLocale() === 'fr' ? $s->label_fr : $s->label))->values();
     $sponsors = \App\Models\Sponsor::active()->orderBy('sort_order')->get();
     $mapProjects = MapProject::getFrontendData();
 
@@ -71,7 +73,8 @@ Route::get('/who-we-are', function () {
     $historyEvents = HistoryEvent::active()->get();
     $reports = AnnualReport::active()->get();
     $settings = HomeSetting::allKeyed();
-    $coreValues = CoreValue::ordered()->get();
+    $coreValues = CoreValue::ordered()->get()
+        ->filter(fn ($v) => filled(app()->getLocale() === 'fr' ? $v->title_fr : $v->title))->values();
 
     $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
 
@@ -93,9 +96,11 @@ Route::get('/who-we-are', function () {
 // Who We Are - Sub-pages
 Route::get('/who-we-are/presentation', function () {
     $settings = HomeSetting::allKeyed();
-    $coreValues = CoreValue::ordered()->get();
+    $coreValues = CoreValue::ordered()->get()
+        ->filter(fn ($v) => filled(app()->getLocale() === 'fr' ? $v->title_fr : $v->title))->values();
     $offices = collect(config('offices'))->reject(fn ($o) => $o['country'] === 'Cambodia')->map(fn ($o) => (object) $o);
-    $impactStatistics = \App\Models\ImpactStatistic::active()->get();
+    $impactStatistics = \App\Models\ImpactStatistic::active()->get()
+        ->filter(fn ($s) => filled(app()->getLocale() === 'fr' ? $s->label_fr : $s->label))->values();
 
     return view('presentation', compact('settings', 'coreValues', 'offices', 'impactStatistics'));
 })->name('presentation');
@@ -114,13 +119,13 @@ Route::get('/our-programs', function () {
     $bannerTitle = HomeSetting::getValue('programs_banner_title', 'Our Programs');
     $bannerSubtitle = HomeSetting::getValue('programs_banner_subtitle', 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.');
     $bannerImage = HomeSetting::getValue('programs_banner_image', '');
-    
+
     $additionalLabel = HomeSetting::getValue('programs_additional_label', 'Cross-cutting Work');
     $additionalTitle = HomeSetting::getValue('programs_additional_title', 'Additional Programs');
-    
+
     $infoLabel = HomeSetting::getValue('programs_info_label', 'Learn More');
     $infoTitle = HomeSetting::getValue('programs_info_title', 'Additional Information');
-    
+
     $ctaLabel = HomeSetting::getValue('programs_cta_label', 'Support Our Mission');
     $ctaTitle = HomeSetting::getValue('programs_cta_title', 'Help Children in Cambodia');
     $ctaSubtitle = HomeSetting::getValue('programs_cta_subtitle', 'Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.');
@@ -151,9 +156,10 @@ Route::get('/projects/{project}', function (Project $project) {
 
 Route::get('/get-involved', function () {
     $settings = HomeSetting::allKeyed();
-    $jobs = JobOpportunity::active()->ordered()->get();
+    $jobs = JobOpportunity::active()->ordered()->get()
+        ->filter(fn ($j) => filled(app()->getLocale() === 'fr' ? $j->title_fr : $j->title))->values();
     $books = Book::available()->orderBy('sort_order')->orderBy('title')->get();
-    
+
     $partnershipCategories = \App\Models\PartnershipCategory::ordered()->get();
     $partnerPrinciples = \App\Models\PartnerPrinciple::ordered()->get();
     $worldwidePartners = \App\Models\WorldwidePartner::active()->get();
@@ -251,16 +257,12 @@ Route::get('/storage/{path}', function (string $path) {
     ]);
 })->where('path', '.*')->name('storage.public');
 
-Route::get('/contact', function () {
-    $offices = collect(config('offices'))->map(fn ($o) => (object) $o);
-
-    return view('contact', compact('offices'));
-})->name('contact');
+Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/partners', function () {
     $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
-    
+
     $financialPartnersBySubcategory = Partner::active()
         ->where('category', PartnerCategory::Financial->value)
         ->get()
@@ -358,7 +360,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('page-sections', Admin\PageSectionController::class)->except(['show']);
     Route::resource('slides', Admin\SlideController::class)->except(['show']);
     Route::resource('impact-statistics', Admin\ImpactStatisticController::class)
-        ->except(['show', 'create', 'edit'])
+        ->except(['show', 'create', 'edit', 'index'])
         ->parameters(['impact-statistics' => 'impactStatistic']);
 
     Route::resource('sponsors', Admin\SponsorController::class)->except(['show']);
@@ -384,11 +386,12 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::post('presentation', [Admin\PresentationController::class, 'update'])->name('presentation.update');
     Route::post('presentation/banner', [Admin\PresentationController::class, 'updateBanner'])->name('presentation.banner.update');
     Route::resource('presentation-slides', Admin\PresentationSlideController::class)->except(['show'])->parameters(['presentation-slides' => 'slide']);
-    Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show'])->parameters(['principle-slides' => 'slide']);
+    Route::resource('principle-slides', Admin\PrincipleSlideController::class)->except(['show', 'create', 'edit'])->parameters(['principle-slides' => 'slide']);
     Route::resource('partners', Admin\PartnerController::class)->except(['show']);
     Route::resource('awards', Admin\AwardController::class)->except(['show', 'create']);
     Route::get('history-banner', [Admin\HistoryBannerController::class, 'index'])->name('history-banner.index');
     Route::post('history-banner', [Admin\HistoryBannerController::class, 'update'])->name('history-banner.update');
+    Route::get('history-page', [Admin\HistoryPageController::class, 'index'])->name('history-page.index');
     Route::resource('history-events', Admin\HistoryEventController::class)
         ->except(['show', 'create'])
         ->parameters(['history-events' => 'historyEvent']);
@@ -428,6 +431,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('involved-banner', [Admin\InvolvedBannerController::class, 'index'])->name('involved-banner.index');
     Route::post('involved-banner', [Admin\InvolvedBannerController::class, 'update'])->name('involved-banner.update');
 
+    // Contact Banner
+    Route::get('contact-banner', [Admin\ContactBannerController::class, 'index'])->name('contact-banner.index');
+    Route::post('contact-banner', [Admin\ContactBannerController::class, 'update'])->name('contact-banner.update');
+    Route::get('contact-page', [Admin\ContactPageController::class, 'index'])->name('contact-page.index');
+
     // Get Involved
     Route::resource('jobs', Admin\JobOpportunityController::class)->except(['show', 'create', 'edit']);
 
@@ -437,6 +445,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::patch('{contactInquiry}/status', [Admin\ContactInquiryController::class, 'updateStatus'])->name('status');
         Route::delete('{contactInquiry}', [Admin\ContactInquiryController::class, 'destroy'])->name('destroy');
     });
+
+    // Offices (Contact page cards + email routing)
+    Route::resource('offices', Admin\OfficeController::class)->except(['show']);
 
     // Newsletter Subscribers
     Route::prefix('newsletter')->name('newsletter.')->group(function () {

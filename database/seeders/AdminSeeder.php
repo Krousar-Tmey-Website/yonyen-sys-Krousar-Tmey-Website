@@ -154,6 +154,16 @@ class AdminSeeder extends Seeder
             ['key' => 'involved_cta_banner_badge',         'label' => 'CTA Section — Badge Text',    'group' => 'involved_banner', 'value' => 'Ready to Help?'],
             ['key' => 'involved_cta_banner_title',         'label' => 'CTA Section — Title',         'group' => 'involved_banner', 'value' => 'Every Action Counts'],
             ['key' => 'involved_cta_banner_subtitle',      'label' => 'CTA Section — Subtitle',      'group' => 'involved_banner', 'value' => 'Whether you buy a book, volunteer, partner with us, or send your application — you are helping build a better future for Cambodia\'s children.'],
+            // Contact Banner group
+            ['key' => 'contact_banner_image',         'label' => 'Banner Background Image (URL or upload path)', 'group' => 'contact_banner', 'value' => ''],
+            ['key' => 'contact_banner_overlay_color', 'label' => 'Banner Overlay Color', 'group' => 'contact_banner', 'value' => '#1d4e7a'],
+            ['key' => 'contact_banner_badge',         'label' => 'Banner Badge Text',    'group' => 'contact_banner', 'value' => 'Support Our Work'],
+            ['key' => 'contact_banner_title',         'label' => 'Banner Title',         'group' => 'contact_banner', 'value' => 'Make a Difference Today'],
+            ['key' => 'contact_banner_subtitle',      'label' => 'Banner Subtitle',      'group' => 'contact_banner', 'value' => 'Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.'],
+            ['key' => 'contact_banner_btn1_text',     'label' => 'Button 1 — Text', 'group' => 'contact_banner', 'value' => 'Donate Now'],
+            ['key' => 'contact_banner_btn1_url',      'label' => 'Button 1 — URL',  'group' => 'contact_banner', 'value' => '/donate'],
+            ['key' => 'contact_banner_btn2_text',     'label' => 'Button 2 — Text', 'group' => 'contact_banner', 'value' => 'Get Involved'],
+            ['key' => 'contact_banner_btn2_url',      'label' => 'Button 2 — URL',  'group' => 'contact_banner', 'value' => '/get-involved'],
             // Project defaults group
             ['key' => 'project_default_area_of_work', 'label' => 'Default Area of Work', 'group' => 'project_defaults', 'value' => 'Child protection'],
             ['key' => 'project_default_duration', 'label' => 'Default Duration', 'group' => 'project_defaults', 'value' => 'Undetermined'],

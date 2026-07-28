@@ -56,7 +56,7 @@
 
     <div class="relative max-w-7xl mx-auto px-6 z-10 w-full">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
+
             {{-- Left Column: Content --}}
             <div class="lg:col-span-7 space-y-6 flex flex-col justify-center">
                 <nav class="flex items-center gap-2 text-sm text-white/50 mb-2" data-reveal="fade">
@@ -64,19 +64,19 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     <span class="text-white">Contact</span>
                 </nav>
-                
+
                 <p class="text-[#8da83a] font-bold text-xs uppercase tracking-[0.2em]" data-reveal="fade">Get in Touch</p>
-                
+
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white" data-reveal="fade">
                     Contact <span class="font-serif italic text-[#8da83a] normal-case">Us</span>
                 </h1>
-                
+
                 @php
                     $linkedinUrl = \App\Models\HomeSetting::getValue('social_linkedin', 'https://www.linkedin.com/company/krousar-thmey/');
                     $instagramUrl = \App\Models\HomeSetting::getValue('social_instagram', 'https://www.instagram.com/krousarthmey/');
                     $facebookUrl = \App\Models\HomeSetting::getValue('social_facebook', 'https://www.facebook.com/KrousarThmey');
                 @endphp
-                
+
                 <p class="text-white/80 text-base max-w-2xl leading-relaxed pr-4" data-reveal="fade">
                     We have offices in Cambodia, France, and Switzerland. Reach out to us for partnerships, donations, or general enquiries.
                 </p>
@@ -109,10 +109,10 @@
                     </a>
                 </div>
             </div>
-            
+
             {{-- Right Column: Staggered Image Cards --}}
             <div class="lg:col-span-5 relative h-[320px] sm:h-[380px] lg:h-[400px] mt-12 lg:mt-0 items-center justify-center hidden lg:flex select-none">
-                
+
                 {{-- Card 1: Cambodia HQ --}}
                 <div class="absolute -translate-x-16 -translate-y-8 sm:-translate-x-20 sm:-translate-y-12">
                     <div class="w-44 h-56 sm:w-48 sm:h-64 rounded-[1.8rem] overflow-hidden border-4 border-white/80 shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group/gallery floating-card-1 relative">
@@ -135,24 +135,32 @@
                 </div>
 
             </div>
-            
+
         </div>
     </div>
 </div>
 
 {{-- Our Offices --}}
+<div x-data="{ selectedOffice: @js($offices->first()->country ?? '') }">
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-14" data-reveal>
             <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Our Offices</span>
             <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-[#2d6fa3]">Find Us Around the World</h2>
             <div class="w-16 h-1 bg-[#d32f2f] rounded-full mx-auto mt-4"></div>
+            <p class="text-gray-400 text-xs mt-3">Click an office to choose where your message from the form below is sent.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             @forelse($offices as $loc)
-            <div class="bg-[#f8f9fc] rounded-3xl border-2 border-slate-200/50 hover:border-[#2d6fa3]/40 hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col h-full hover:-translate-y-0.5"
+            <div class="relative rounded-3xl border-2 hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col h-full hover:-translate-y-0.5 cursor-pointer"
+                 @click="selectedOffice = '{{ $loc->country }}'"
+                 :class="selectedOffice === '{{ $loc->country }}' ? 'bg-[#2d6fa3]/5 border-[#2d6fa3] ring-2 ring-[#2d6fa3]/25 shadow-lg' : 'bg-[#f8f9fc] border-slate-200/50 hover:border-[#2d6fa3]/40'"
                  data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
+                <div class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#2d6fa3] text-white flex items-center justify-center shadow-sm"
+                     x-show="selectedOffice === '{{ $loc->country }}'" x-cloak>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                </div>
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-start justify-between mb-4">
                         <span class="text-3xl font-black text-gray-800">{{ $loc->flag }}</span>
@@ -258,6 +266,14 @@
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 lg:p-10">
                     <form class="space-y-5" method="POST" action="{{ route('contact.store') }}">
                         @csrf
+                        <input type="hidden" name="office" :value="selectedOffice">
+
+                        <div class="flex items-center gap-2.5 bg-[#2d6fa3]/5 border border-[#2d6fa3]/15 rounded-xl px-4 py-3">
+                            <svg class="w-4 h-4 text-[#2d6fa3] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <p class="text-xs text-gray-600">Sending to <strong class="text-[#2d6fa3]" x-text="selectedOffice"></strong> — click a different office above to change this.</p>
+                        </div>
+                        @error('office') <p class="text-red-500 text-xs -mt-2">{{ $message }}</p> @enderror
+
                         <div class="grid md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">First Name <span class="text-[#d32f2f]">*</span></label>
@@ -319,20 +335,27 @@
         </div>
     </div>
 </section>
+</div>
 
 {{-- CTA Banner --}}
-<section class="bg-[#1d4e7a] py-16 relative overflow-hidden">
+@php
+    $ctaBgImgUrl = !empty($contactBannerImage) ? (str_starts_with($contactBannerImage, 'http') ? $contactBannerImage : asset('storage/' . $contactBannerImage)) : null;
+@endphp
+<section class="relative py-16 overflow-hidden" style="background-color: {{ $contactBannerOverlayColor }};">
+    @if($ctaBgImgUrl)
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $ctaBgImgUrl }}'); opacity: 0.25;"></div>
+    @endif
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 right-0 w-72 h-72 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[#2d6fa3] translate-y-1/2 -translate-x-1/3"></div>
     </div>
-    <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
-        <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">Support Our Work</p>
-        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">Make a Difference Today</h2>
-        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.</p>
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
+        <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">{{ $contactBannerBadge }}</p>
+        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">{{ $contactBannerTitle }}</h2>
+        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">{{ $contactBannerSubtitle }}</p>
         <div class="flex flex-wrap gap-4 justify-center">
-            <a href="{{ route('donate') }}" class="btn-primary text-base">Donate Now</a>
-            <a href="{{ route('involved') }}" class="btn-outline text-base">Get Involved</a>
+            <a href="{{ $contactBannerBtn1Url }}" class="btn-primary text-base">{{ $contactBannerBtn1Text }}</a>
+            <a href="{{ $contactBannerBtn2Url }}" class="btn-outline text-base">{{ $contactBannerBtn2Text }}</a>
         </div>
     </div>
 </section>

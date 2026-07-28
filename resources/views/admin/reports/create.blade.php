@@ -5,12 +5,12 @@
 @section('breadcrumb', 'Create a new annual report PDF')
 
 @section('content')
-<div class="max-w-3xl mx-auto">
+<div>
 
     <form action="{{ route('admin.reports.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
         @csrf
 
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
             <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
                     <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,11 +56,12 @@
                 </div>
             </div>
 
-            <div>
-                <label for="year" class="mb-1 block text-sm font-semibold text-gray-700">Year <span class="text-red-500">*</span></label>
-                <input id="year" name="year" type="number" min="1900" max="2100" value="{{ old('year') }}" required class="w-full rounded-xl border {{ $errors->has('year') ? 'border-red-300 focus:ring-red-400' : 'border-gray-200 focus:ring-[#1d4e7a]' }} px-4 py-2.5 text-sm focus:border-[#1d4e7a] focus:outline-none focus:ring-2">
-                @error('year')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
-            </div>
+            <div class="grid lg:grid-cols-2 gap-5">
+                <div>
+                    <label for="year" class="mb-1 block text-sm font-semibold text-gray-700">Year <span class="text-red-500">*</span></label>
+                    <input id="year" name="year" type="number" min="1900" max="2100" value="{{ old('year') }}" required class="w-full rounded-xl border {{ $errors->has('year') ? 'border-red-300 focus:ring-red-400' : 'border-gray-200 focus:ring-[#1d4e7a]' }} px-4 py-2.5 text-sm focus:border-[#1d4e7a] focus:outline-none focus:ring-2">
+                    @error('year')<p class="mt-1 text-sm text-red-500">{{ $message }}</p>@enderror
+                </div>
 
             <div>
                 <label for="file" class="mb-1 block text-sm font-semibold text-gray-700">PDF File <span class="text-red-500">*</span></label>

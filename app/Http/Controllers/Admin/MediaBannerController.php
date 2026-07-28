@@ -11,22 +11,7 @@ class MediaBannerController extends Controller
 {
     public function index()
     {
-        $bannerSettings = HomeSetting::whereIn('key', [
-            'media_banner_image',
-            'media_banner_overlay_color',
-            'media_banner_badge',
-            'media_banner_title',
-            'media_banner_subtitle',
-            'media_banner_subtitle_fr',
-            'media_banner_btn1_text',
-            'media_banner_btn1_url',
-            'media_banner_btn2_text',
-            'media_banner_btn2_url',
-            'media_banner_btn3_text',
-            'media_banner_btn3_url',
-        ])->pluck('value', 'key');
-
-        return view('admin.media_banner.index', compact('bannerSettings'));
+        return redirect()->route('admin.media-page.index');
     }
 
     public function update(Request $request)

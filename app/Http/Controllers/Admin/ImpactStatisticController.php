@@ -9,17 +9,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ImpactStatisticController extends Controller
 {
-    public function index()
-    {
-        $statistics = ImpactStatistic::orderBy('sort_order')->get();
-        return view('admin.impact_statistics.index', compact('statistics'));
-    }
-
     public function store(Request $request)
     {
         $data = $request->validate([
             'value' => 'required|string|max:255',
-            'label' => 'required|string|max:255',
+            'label' => 'nullable|string|max:255',
             'label_fr' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'description_fr' => 'nullable|string',
@@ -43,7 +37,7 @@ class ImpactStatisticController extends Controller
     {
         $data = $request->validate([
             'value' => 'required|string|max:255',
-            'label' => 'required|string|max:255',
+            'label' => 'nullable|string|max:255',
             'label_fr' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'description_fr' => 'nullable|string',

@@ -36,7 +36,7 @@ class PageSectionController extends Controller
     {
         $data = $request->validate([
             'section_name' => ['required', 'string', 'max:100'],
-            'title'        => ['required', 'string', 'max:255'],
+            'title'        => ['nullable', 'string', 'max:255'],
             'title_fr'     => ['nullable', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],
@@ -89,7 +89,7 @@ class PageSectionController extends Controller
     {
         $data = $request->validate([
             'section_name' => ['required', 'string', 'max:100'],
-            'title'        => ['required', 'string', 'max:255'],
+            'title'        => ['nullable', 'string', 'max:255'],
             'title_fr'     => ['nullable', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],

@@ -1,0 +1,54 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('core_values', function (Blueprint $table) {
+            $table->string('title')->nullable()->change();
+        });
+
+        Schema::table('job_opportunities', function (Blueprint $table) {
+            $table->string('title')->nullable()->change();
+        });
+
+        Schema::table('map_projects', function (Blueprint $table) {
+            $table->string('location_name')->nullable()->change();
+        });
+
+        Schema::table('impact_statistics', function (Blueprint $table) {
+            $table->string('label')->nullable()->change();
+        });
+
+        Schema::table('program_page_items', function (Blueprint $table) {
+            $table->string('title')->nullable()->change();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('core_values', function (Blueprint $table) {
+            $table->string('title')->nullable(false)->change();
+        });
+
+        Schema::table('job_opportunities', function (Blueprint $table) {
+            $table->string('title')->nullable(false)->change();
+        });
+
+        Schema::table('map_projects', function (Blueprint $table) {
+            $table->string('location_name')->nullable(false)->change();
+        });
+
+        Schema::table('impact_statistics', function (Blueprint $table) {
+            $table->string('label')->nullable(false)->change();
+        });
+
+        Schema::table('program_page_items', function (Blueprint $table) {
+            $table->string('title')->nullable(false)->change();
+        });
+    }
+};
