@@ -56,7 +56,7 @@
     </div>
 
     {{-- Page Header --}}
-    <div class="payments-header" :class="(tag === 'france' || tag === 'switzerland' || tag === 'elsewhere') ? 'max-w-3xl mx-auto' : ''">
+    <div class="payments-header" x-show="tag !== 'france' && tag !== 'elsewhere' && tag !== 'switzerland'">
         <div class="payments-header-left">
         </div>
         <div class="payments-header-right" style="display: flex; gap: 12px; align-items: center;">
@@ -87,10 +87,16 @@
             $fr = fn($key, $default = '') => old($key, $settings['france_' . $key] ?? $default);
         @endphp
 
-        <div class="max-w-3xl mx-auto space-y-6">
-            <form action="{{ route('admin.donate-content.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('admin.donate-content.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 <input type="hidden" name="redirect_tag" value="france">
+
+                {{-- ── Banner Image Card ── --}}
+                @include('admin.payments._donation_banner_card', [
+                    'tag' => 'france',
+                    'settingsKey' => 'france_donation_image',
+                    'settings' => $settings,
+                ])
 
                 {{-- ── Online Donation (HelloAsso) Card ── --}}
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
@@ -161,40 +167,11 @@
 
                 {{-- ── Check / Bank Transfer Card ── --}}
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                            <span class="text-base">📬</span> Check / Bank Transfer Details
-                        </h3>
-                        @php
-                            $hasCheck = filled($settings['france_check_address'] ?? '');
-                        @endphp
-                        <span class="text-xs px-3 py-1 rounded-full font-semibold {{ $hasCheck ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-slate-100 text-slate-400 border border-slate-200' }}">
-                            {{ $hasCheck ? '✓ Configured' : 'Not set' }}
-                        </span>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Check Recipient <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <input type="text" name="check_recipient"
-                               value="{{ $fr('check_recipient', 'Krousar Thmey France') }}"
-                               placeholder="e.g. Krousar Thmey France"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        <p class="mt-1.5 text-xs text-gray-400">The name the check should be payable to.</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Description <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <x-admin.rich-text name="check_description" :value="$fr('check_description', 'You can also send a check payable to Krousar Thmey France at the following address:')" rows="2" />
-                        <p class="mt-1.5 text-xs text-gray-400">Shown above the mailing address.</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Mailing Address <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <textarea name="check_address" rows="3"
-                                  class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none"
-                                  placeholder="62 rue Greneta&#10;75002 Paris">{{ $fr('check_address', "62 rue Greneta\n75002 Paris") }}</textarea>
-                        <p class="mt-1.5 text-xs text-gray-400">The address where donors can mail a physical check.</p>
-                    </div>
+                    <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="text-base">📬</span> Check / Bank Transfer Details
+                    </h3>
+                    <p class="text-xs text-gray-400">Use the editor below to write all check/bank transfer information — recipient, description, and mailing address in one place.</p>
+                    <x-admin.rich-text name="check_content" :value="$fr('check_content', '<p>You can also send a check payable to <strong>Krousar Thmey France</strong> at the following address:</p><p><strong>Krousar Thmey France</strong><br>62 rue Greneta<br>75002 Paris</p>')" rows="8" />
                 </div>
 
                 {{-- ── Tax Deductions Card ── --}}
@@ -202,28 +179,8 @@
                     <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
                         <span class="text-base">🧾</span> Tax Deductions Content
                     </h3>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Intro text</label>
-                        <x-admin.rich-text name="tax_intro" :value="$fr('tax_intro', 'The Krousar Thmey entities in France and Switzerland are recognized as being of public interest, so you can get tax deductions based on your donation.')" rows="2" />
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">"Association of 1901 general interest" text</label>
-                        <x-admin.rich-text name="tax_association_text" :value="$fr('tax_association_text', 'Deduction of <strong>66% of income tax (IR)</strong> and up to 20% of taxable income. If the limit is exceeded, the excess entitles you to a tax reduction for the next five years.')" rows="3" />
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">"Loi Coluche" text</label>
-                        <x-admin.rich-text name="tax_coluche_text" :value="$fr('tax_coluche_text', 'Deduction of <strong>75% of income tax</strong> capped at <strong>€530</strong>. Beyond that, donations are deductible up to 66% of income tax and up to 20% of taxable income. If the limit is exceeded, the surplus entitles the holder to a tax reduction for the next five years.')" rows="3" />
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Tax receipt note</label>
-                        <input type="text" name="tax_receipt_note"
-                               value="{{ $fr('tax_receipt_note', 'A tax receipt will be sent to you in March of the year following your donation.') }}"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                    </div>
+                    <p class="text-xs text-gray-400">Use the editor below to write all tax deduction information — intro, association details, Coluche, and receipt note in one place.</p>
+                    <x-admin.rich-text name="tax_content" :value="$fr('tax_content', '<p>The Krousar Thmey entities in France and Switzerland are recognized as being of public interest, so you can get tax deductions based on your donation.</p><h4>Under an association of 1901 general interest</h4><p>Deduction of <strong>66% of income tax (IR)</strong> and up to 20% of taxable income. If the limit is exceeded, the excess entitles you to a tax reduction for the next five years.</p><h4>Under the loi Coluche</h4><p>Deduction of <strong>75% of income tax</strong> capped at <strong>€530</strong>. Beyond that, donations are deductible up to 66% of income tax and up to 20% of taxable income. If the limit is exceeded, the surplus entitles the holder to a tax reduction for the next five years.</p><p>A tax receipt will be sent to you in March of the year following your donation.</p>')" rows="10" />
                 </div>
 
                 {{-- ── Legacy Card ── --}}
@@ -231,61 +188,8 @@
                     <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
                         <span class="text-base">🕊️</span> Legacy Content
                     </h3>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Intro text</label>
-                        <x-admin.rich-text name="legacy_intro" :value="$fr('legacy_intro', 'As a recognized association of public utility, Krousar Thmey is entitled to receive bequests and donations.')" rows="2" />
-                    </div>
-
-                    <div class="border-t border-gray-100 pt-4 space-y-4">
-                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Bequest (Wills)</p>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">"What is a bequest?" text</label>
-                            <x-admin.rich-text name="legacy_bequest_what_text" :value="$fr('legacy_bequest_what_text', 'A bequest is a testamentary disposition whereby a person transfers all or part of his or her property to the designated person. You can bequeath your property to an association recognized of public interest such as Krousar Thmey; Whatever the amount, the gift is exempt from all inheritance taxes.')" rows="3" />
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Legacy types note</label>
-                            <x-admin.rich-text name="legacy_bequest_types_note" :value="$fr('legacy_bequest_types_note', 'There are several types of legacies: The universal legacy (all property), the legacy of a part of patrimony, or the particular legacy (bequest of one or more properties identified).')" rows="2" />
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">"How to make a legacy" intro</label>
-                            <input type="text" name="legacy_bequest_how_intro"
-                                   value="{{ $fr('legacy_bequest_how_intro', 'You have to write a will. The most common forms are:') }}"
-                                   class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">"How to make a legacy" list (holograph / authentic will)</label>
-                            <x-admin.rich-text name="legacy_bequest_how_list" :value="$fr('legacy_bequest_how_list', '<ul><li><strong>The holograph will:</strong> document written, dated and signed by the hand of the testator, it is easy and inexpensive. However, it can sometimes be challenged when it is not drafted with the help of a specialized lawyer.</li><li><strong>The authentic testament:</strong> drawn up by a notary in the presence of two witnesses or a second notary, the authentic will must be signed by the testator. The notary writes it himself under the dictation of his client.</li></ul>')" rows="5" />
-                        </div>
-                    </div>
-
-                    <div class="border-t border-gray-100 pt-4 space-y-4">
-                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Donation (Lifetime)</p>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">"What is a donation?" text</label>
-                            <x-admin.rich-text name="legacy_donation_what_text" :value="$fr('legacy_donation_what_text', 'A donation is a contract by which you, as a donor, transfer ownership of a property to a beneficiary. You can give to a recognized public interest association, whatever the amount, this donation is exempt from all rights of succession.')" rows="3" />
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Capped share note</label>
-                            <x-admin.rich-text name="legacy_donation_capped_note" :value="$fr('legacy_donation_capped_note', '<strong>Capped Share:</strong> The share you can transmit is called the amount available and corresponds to 1/2 of your assets if you have only one child, 1/3 if you have two children, and 1/4 if you have three or more children. It can be all or part of the estate if you have no other heirs.')" rows="3" />
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">"How to make a donation" text</label>
-                            <x-admin.rich-text name="legacy_donation_how_text" :value="$fr('legacy_donation_how_text', 'Contrary to the will, which takes effect only at the death of the testator, this transmission takes place during the lifetime of its author. In principle, recourse to the notary is compulsory at the time of a donation. Nevertheless, the donor can hand over goods or money directly (manual donation).')" rows="3" />
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1.5">Contract conditions note</label>
-                            <x-admin.rich-text name="legacy_donation_conditions_note" :value="$fr('legacy_donation_conditions_note', 'Three conditions of any contract must be met for a donation to be valid: the donor must have the capacity to give, the donee must have the capacity to receive, and donor and recipient must agree to the donation.')" rows="3" />
-                        </div>
-                    </div>
+                    <p class="text-xs text-gray-400">Use the editor below to write all legacy/estate planning information — bequests, donations, and related details in one place.</p>
+                    <x-admin.rich-text name="legacy_content" :value="$fr('legacy_content', '<p>As a recognized association of public utility, Krousar Thmey is entitled to receive bequests and donations.</p><h4>What is a bequest?</h4><p>A bequest is a testamentary disposition whereby a person transfers all or part of his or her property to the designated person. You can bequeath your property to an association recognized of public interest such as Krousar Thmey; Whatever the amount, the gift is exempt from all inheritance taxes.</p><p>There are several types of legacies: The universal legacy (all property), the legacy of a part of patrimony, or the particular legacy (bequest of one or more properties identified).</p><h4>How to make a legacy to Krousar Thmey?</h4><p>You have to write a will. The most common forms are:</p><ul><li><strong>The holograph will:</strong> document written, dated and signed by the hand of the testator, it is easy and inexpensive. However, it can sometimes be challenged when it is not drafted with the help of a specialized lawyer.</li><li><strong>The authentic testament:</strong> drawn up by a notary in the presence of two witnesses or a second notary, the authentic will must be signed by the testator. The notary writes it himself under the dictation of his client.</li></ul><h4>What is a donation?</h4><p>A donation is a contract by which you, as a donor, transfer ownership of a property to a beneficiary. You can give to a recognized public interest association, whatever the amount, this donation is exempt from all rights of succession.</p><p><strong>Capped Share:</strong> The share you can transmit is called the amount available and corresponds to 1/2 of your assets if you have only one child, 1/3 if you have two children, and 1/4 if you have three or more children. It can be all or part of the estate if you have no other heirs.</p><h4>How to make a donation to Krousar Thmey?</h4><p>Contrary to the will, which takes effect only at the death of the testator, this transmission takes place during the lifetime of its author. In principle, recourse to the notary is compulsory at the time of a donation. Nevertheless, the donor can hand over goods or money directly (manual donation).</p><p>Three conditions of any contract must be met for a donation to be valid: the donor must have the capacity to give, the donee must have the capacity to receive, and donor and recipient must agree to the donation.</p>')" rows="15" />
                 </div>
 
                 {{-- ── Save Button ── --}}
@@ -310,7 +214,6 @@
                     </div>
                 </div>
             </form>
-        </div>
     </div>
 
     {{-- ════════════════════════════════════════════════
@@ -320,10 +223,16 @@
         @php
             $ch = fn($key, $default = '') => old($key, $settings['switzerland_' . $key] ?? $default);
         @endphp
-        <div class="max-w-3xl mx-auto space-y-6">
-            <form action="{{ route('admin.donate-content.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('admin.donate-content.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 <input type="hidden" name="redirect_tag" value="switzerland">
+
+                {{-- ── Banner Image Card ── --}}
+                @include('admin.payments._donation_banner_card', [
+                    'tag' => 'switzerland',
+                    'settingsKey' => 'switzerland_donation_image',
+                    'settings' => $settings,
+                ])
 
                 {{-- ── Bank Transfer Card ── --}}
                 <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
@@ -465,7 +374,6 @@
                     </div>
                 </div>
             </form>
-        </div>
     </div>
 
     {{-- ════════════════════════════════════════════════
@@ -475,9 +383,16 @@
         @php
             $el = fn($key, $default = '') => old($key, $settings[$key] ?? $default);
         @endphp
-        <form action="{{ route('admin.donate-content.update') }}" method="POST" class="max-w-3xl mx-auto space-y-6">
+        <form action="{{ route('admin.donate-content.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             <input type="hidden" name="redirect_tag" value="elsewhere">
+
+            {{-- ── Banner Image Card ── --}}
+            @include('admin.payments._donation_banner_card', [
+                'tag' => 'elsewhere',
+                'settingsKey' => 'elsewhere_donation_image',
+                'settings' => $settings,
+            ])
 
             <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
                 <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
@@ -513,14 +428,7 @@
                 @endforeach
             </div>
 
-            <div class="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                    <span class="text-base">✅</span> Guarantee Note
-                </h3>
-                <input type="text" name="elsewhere_guarantee_note"
-                       value="{{ $el('elsewhere_guarantee_note', '100% of your funds go directly to supporting the children in Cambodia.') }}"
-                       class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-            </div>
+
 
             <div class="flex items-center justify-end gap-3">
                 <a href="{{ route('donate') }}?residency=elsewhere" target="_blank"
@@ -708,6 +616,45 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+</script>
+
+{{-- Donation banner image upload preview --}}
+<script>
+function handleBannerPreview(input, tag) {
+    const previewContainer = document.getElementById('bannerPreview_' + tag);
+    if (!previewContainer) return;
+    
+    const file = input.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const uploadZone = input.closest('.border-dashed');
+        previewContainer.classList.remove('hidden');
+        if (uploadZone) {
+            uploadZone.classList.add('has-file');
+        }
+        previewContainer.innerHTML = [
+            '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:12px;">',
+            '<img src="' + e.target.result + '" alt="Preview"',
+            '     style="height:120px;width:auto;max-width:220px;object-fit:cover;border-radius:8px;border:2px solid #e2e8f0;">',
+            '<div style="display:flex;align-items:center;gap:8px;">',
+            '    <span style="font-size:11px;color:#94a3b8;">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</span>',
+            '    <button type="button"',
+            '            style="background:#f1f5f9;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px;color:#64748b;font-weight:500;"',
+            '            onclick="event.stopPropagation(); ' + 
+            '              this.closest(\'.border-dashed\').querySelector(\'input[type=file]\').value = \'\'; ' + 
+            '              document.getElementById(\'bannerPreview_' + tag + '\').innerHTML = \'\'; ' + 
+            '              document.getElementById(\'bannerPreview_' + tag + '\').classList.add(\'hidden\'); ' + 
+            '              this.closest(\'.border-dashed\').classList.remove(\'has-file\');">',
+            '        x Remove',
+            '    </button>',
+            '</div>',
+            '</div>'
+        ].join('');
+    };
+    reader.readAsDataURL(file);
+}
 </script>
 
 @endsection

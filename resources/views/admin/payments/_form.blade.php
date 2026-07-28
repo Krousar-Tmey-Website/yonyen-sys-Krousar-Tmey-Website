@@ -311,6 +311,49 @@
 
             @error('qr_code')<div class="payment-form-error">{{ $message }}</div>@enderror
         </div>
+
+        {{-- Donation Banner Image (Only for Cambodia) --}}
+        <div class="payment-form-group" style="margin-top:16px; border-top:1px solid #f1f5f9; padding-top:20px;" x-show="residency === 'cambodia'" x-cloak>
+            <label class="payment-form-label">
+                <span>Donation Banner Image</span>
+                <span class="optional">(optional)</span>
+            </label>
+            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 12px;">Upload a banner image shown at the top of the Cambodia section on the Donate page. Recommended size: 1400×600px.</p>
+
+            {{-- Current file display (edit mode) --}}
+            @if($isEdit && $method?->donation_image)
+            <div class="payment-form-current-file">
+                <img src="{{ $method->donation_image_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}"
+                     alt="Current donation banner" class="current-file-thumb" style="width:160px;height:90px;object-fit:cover;">
+                <div class="current-file-info">
+                    <strong>Current Banner Image</strong>
+                    <span>{{ $method->donation_image }}</span>
+                </div>
+                <label class="current-file-remove">
+                    <input type="checkbox" name="remove_donation_image" value="1" class="rounded border-gray-300 text-red-500 focus:ring-red-400">
+                    <span>Remove</span>
+                </label>
+            </div>
+            @endif
+
+            {{-- Upload dropzone --}}
+            <div class="payment-form-upload" id="donationImageUploadZone"
+                 onclick="document.getElementById('donationImageInput').click()">
+                <input type="file" name="donation_image" id="donationImageInput" accept="image/*" class="hidden">
+                <div id="donationImagePlaceholder" class="upload-placeholder">
+                    <div class="upload-icon-box">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div class="upload-label">Click to upload banner image</div>
+                    <div class="upload-hint">JPG, PNG, GIF or WebP · Max 5MB</div>
+                </div>
+                <div id="donationImagePreview" class="hidden"></div>
+            </div>
+
+            @error('donation_image')<div class="payment-form-error">{{ $message }}</div>@enderror
+        </div>
     </div>
 
 </div>
@@ -578,6 +621,41 @@ document.addEventListener('DOMContentLoaded', function() {
                         '    <button type="button"',
                         '            style="background:#f1f5f9;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px;color:#64748b;font-weight:500;"',
                         '            onclick="document.getElementById(\\'qrInput\\').value=\\'\\'; document.getElementById(\\'qrPreview\\').innerHTML=\\'\\'; document.getElementById(\\'qrPreview\\').classList.add(\\'hidden\\'); document.getElementById(\\'qrPlaceholder\\').classList.remove(\\'hidden\\'); document.getElementById(\\'uploadZone\\').classList.remove(\\'has-file\\');">',
+                        '        × Remove',
+                        '    </button>',
+                        '</div>',
+                        '</div>'
+                    ].join('\\n');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+
+    // Donation banner image upload preview
+    const donationImageInput = document.getElementById('donationImageInput');
+    if (donationImageInput) {
+        donationImageInput.addEventListener('change', function(e) {
+            const preview = document.getElementById('donationImagePreview');
+            const placeholder = document.getElementById('donationImagePlaceholder');
+            const uploadZone = document.getElementById('donationImageUploadZone');
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    placeholder.classList.add('hidden');
+                    preview.classList.remove('hidden');
+                    uploadZone.classList.add('has-file');
+                    preview.innerHTML = [
+                        '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">',
+                        '<img src="' + e.target.result + '" alt="Preview"',
+                        '     style="height:120px;width:auto;max-width:260px;object-fit:cover;border-radius:8px;border:1px solid #e2e8f0;">',
+                        '<div style="display:flex;align-items:center;gap:8px;">',
+                        '    <span style="font-size:11px;color:#94a3b8;">' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)</span>',
+                        '    <button type="button"',
+                        '            style="background:#f1f5f9;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px;color:#64748b;font-weight:500;"',
+                        '            onclick="document.getElementById(\\'donationImageInput\\').value=\\'\\'; document.getElementById(\\'donationImagePreview\\').innerHTML=\\'\\'; document.getElementById(\\'donationImagePreview\\').classList.add(\\'hidden\\'); document.getElementById(\\'donationImagePlaceholder\\').classList.remove(\\'hidden\\'); document.getElementById(\\'donationImageUploadZone\\').classList.remove(\\'has-file\\');">',
                         '        × Remove',
                         '    </button>',
                         '</div>',
