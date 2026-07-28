@@ -83,8 +83,8 @@
                 @php $colors = ['from-[#1a3c6e] to-[#2d6fa3]', 'from-[#e8a020] to-[#f4b642]', 'from-[#2d6fa3] to-[#458bc2]']; @endphp
                 @foreach($programs->take(3) as $index => $prog)
                     <a href="#{{ $prog->slug }}"
-                        class="bg-gradient-to-br {{ $colors[$index % 3] }} rounded-3xl p-8 text-white shadow-xl shadow-[#1a3c6e]/20 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between min-h-[200px] group relative overflow-hidden"
-                        data-reveal="up" style="--reveal-delay: {{ $index * 100 }}">
+                        class="rounded-3xl p-8 text-white shadow-xl shadow-[#1a3c6e]/20 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between min-h-[200px] group relative overflow-hidden {{ $prog->overview_card_color ? '' : 'bg-gradient-to-br ' . $colors[$index % 3] }}"
+                        data-reveal="up" style="--reveal-delay: {{ $index * 100 }} @if($prog->overview_card_color); background-color: {{ $prog->overview_card_color }}@endif">
                         <div class="absolute top-0 right-0 w-40 h-40 rounded-full bg-white/10 -translate-y-1/2 translate-x-1/3 blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
                         <div class="relative flex items-center justify-between">
                             <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center group-hover:bg-white group-hover:text-[#1a3c6e] transition-all duration-300 shadow-inner">

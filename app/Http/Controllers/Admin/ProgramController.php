@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Program;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -87,6 +88,7 @@ class ProgramController extends Controller
         }
 
         Program::create($data);
+        Cache::forget('nav_programs_list');
 
         return redirect()->route('admin.programs.index')->with('success', 'Program created successfully.');
     }
@@ -197,6 +199,7 @@ class ProgramController extends Controller
         }
 
         $program->update($data);
+        Cache::forget('nav_programs_list');
 
         return redirect()->route('admin.programs.index')->with('success', 'Program updated successfully.');
     }
@@ -210,6 +213,7 @@ class ProgramController extends Controller
             }
         }
         $program->delete();
+        Cache::forget('nav_programs_list');
 
         return redirect()->route('admin.programs.index')->with('success', 'Program deleted successfully.');
     }
@@ -220,6 +224,7 @@ class ProgramController extends Controller
 
         return [
             'accent_color' => $hexRule,
+            'overview_card_color' => $hexRule,
             'card_background_color' => $hexRule,
             'details_background_color' => $hexRule,
         ];

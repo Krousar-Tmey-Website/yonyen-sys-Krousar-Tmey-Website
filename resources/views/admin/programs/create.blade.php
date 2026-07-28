@@ -74,6 +74,10 @@
             <div class="p-6 md:p-8">
                 <div class="grid lg:grid-cols-2 gap-8 items-start">
                     <div>
+                        <div id="program-preview-overview-card" class="mb-6 rounded-2xl p-5 text-white shadow-md" style="background-color: #1a3c6e;">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-white/70">Overview Card</p>
+                            <p class="text-sm font-black uppercase tracking-wide mt-1" x-text="previewTitle"></p>
+                        </div>
                         <div class="flex items-center gap-4 mb-6">
                             <div id="program-preview-accent" class="w-1.5 h-14 rounded-full" style="background-color: #d32f2f"></div>
                             <h2 class="text-3xl font-black text-[#1a3c6e] uppercase tracking-wide leading-tight" data-program-preview="title" x-text="previewTitle"></h2>
@@ -144,7 +148,19 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Overview Card Color <span class="text-gray-400 font-normal">(top card)</span></label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="overview_card_color_picker" value="{{ old('overview_card_color', '#1a3c6e') }}"
+                               class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                               onchange="document.getElementById('overview_card_color').value = this.value; document.getElementById('program-preview-overview-card').style.backgroundColor = this.value;">
+                        <input type="text" id="overview_card_color" name="overview_card_color" value="{{ old('overview_card_color', '#1a3c6e') }}" placeholder="#1a3c6e"
+                               oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('overview_card_color_picker').value = this.value; document.getElementById('program-preview-overview-card').style.backgroundColor = this.value; }"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                    </div>
+                    @error('overview_card_color')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Accent Color <span class="text-gray-400 font-normal">(title ruler & card border)</span></label>
                     <div class="flex items-center gap-3">
