@@ -16,22 +16,9 @@ class DonateContentController extends Controller
      */
     private const FRANCE_KEYS = [
         'helloasso_description',
-        'check_recipient',
-        'check_description',
-        'check_address',
-        'tax_intro',
-        'tax_association_text',
-        'tax_coluche_text',
-        'tax_receipt_note',
-        'legacy_intro',
-        'legacy_bequest_what_text',
-        'legacy_bequest_types_note',
-        'legacy_bequest_how_intro',
-        'legacy_bequest_how_list',
-        'legacy_donation_what_text',
-        'legacy_donation_capped_note',
-        'legacy_donation_how_text',
-        'legacy_donation_conditions_note',
+        'check_content',
+        'tax_content',
+        'legacy_content',
     ];
 
     /**
@@ -59,7 +46,17 @@ class DonateContentController extends Controller
         'elsewhere_bullet_2_desc',
         'elsewhere_bullet_3_title',
         'elsewhere_bullet_3_desc',
-        'elsewhere_guarantee_note',
+    ];
+
+    /**
+     * Tag-to-setting-key mapping for donation banner images.
+     * Each tag stores its banner image under a HomeSetting key like 'cambodia_donation_image'.
+     */
+    private const TAG_IMAGE_KEYS = [
+        'cambodia'    => 'cambodia_donation_image',
+        'france'      => 'france_donation_image',
+        'switzerland' => 'switzerland_donation_image',
+        'elsewhere'   => 'elsewhere_donation_image',
     ];
 
     public function update(Request $request)
@@ -71,6 +68,13 @@ class DonateContentController extends Controller
 
         $this->handleLogoUpload($request, 'helloasso_logo', 'france_helloasso_logo', 'remove_helloasso_logo', 'france-donation');
         $this->handleLogoUpload($request, 'paypal_logo', 'switzerland_paypal_logo', 'remove_paypal_logo', 'switzerland-donation');
+
+        // Handle donation banner image uploads for each tag
+        $tag = $request->input('redirect_tag', 'france');
+        $imageSettingKey = self::TAG_IMAGE_KEYS[$tag] ?? null;
+        if ($imageSettingKey) {
+            $this->handleDonationImageUpload($request, $imageSettingKey, 'remove_donation_image');
+        }
 
         HomeSetting::setValue('france_helloasso_url', $data['helloasso_url'] ?? '');
         HomeSetting::setValue('switzerland_paypal_url', $data['paypal_url'] ?? '');
@@ -93,10 +97,38 @@ class DonateContentController extends Controller
             }
         }
 
-        $tag = $request->input('redirect_tag', 'france');
-
         return redirect()->route('admin.payments.index', ['tag' => $tag])
             ->with('success', 'Donate page content saved successfully.');
+    }
+
+    /**
+     * Handle donation banner image upload for a specific tag.
+     */
+    private function handleDonationImageUpload(Request $request, string $settingKey, string $removeField): void
+    {
+        if ($request->hasFile('donation_image')) {
+            $request->validate([
+                'donation_image' => ['image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
+            ]);
+
+            $oldImage = HomeSetting::getValue($settingKey, '');
+            if ($oldImage && !str_starts_with($oldImage, 'http')) {
+                Storage::disk('public')->delete($oldImage);
+            }
+
+            $path = $request->file('donation_image')->store('donation-banners', 'public');
+            HomeSetting::setValue($settingKey, $path);
+
+            return;
+        }
+
+        if ($request->boolean($removeField)) {
+            $oldImage = HomeSetting::getValue($settingKey, '');
+            if ($oldImage && !str_starts_with($oldImage, 'http')) {
+                Storage::disk('public')->delete($oldImage);
+            }
+            HomeSetting::setValue($settingKey, '');
+        }
     }
 
     private function handleLogoUpload(Request $request, string $fileField, string $settingKey, string $removeField, string $storageFolder): void

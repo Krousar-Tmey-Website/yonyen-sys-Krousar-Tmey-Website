@@ -23,6 +23,7 @@ class StorePaymentMethodRequest extends FormRequest
             'currency'         => ['nullable', 'string', 'in:USD,KHR,Both'],
             'brand_color'      => ['nullable', 'string', 'max:10'],
             'qr_code'          => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'],
+            'donation_image'   => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
             'sort_order'       => ['nullable', 'integer', 'min:0'],
             'is_active'        => ['nullable', 'boolean'],
             'tag'              => ['required', 'string', 'in:cambodia,france,switzerland,elsewhere'],
