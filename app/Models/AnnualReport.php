@@ -20,6 +20,7 @@ class AnnualReport extends Model
         'title_fr',
         'year',
         'file_path',
+        'thumbnail_path',
         'original_filename',
         'description',
         'description_fr',
@@ -33,6 +34,19 @@ class AnnualReport extends Model
     public function getHasPdfFileAttribute(): bool
     {
         return !empty($this->file_path) && Storage::disk('public')->exists($this->file_path);
+    }
+
+    public function getHasThumbnailAttribute(): bool
+    {
+        return !empty($this->thumbnail_path) && Storage::disk('public')->exists($this->thumbnail_path);
+    }
+
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        if ($this->has_thumbnail) {
+            return Storage::disk('public')->url($this->thumbnail_path);
+        }
+        return null;
     }
 
     protected function casts(): array
