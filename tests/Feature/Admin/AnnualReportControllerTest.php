@@ -32,6 +32,7 @@ class AnnualReportControllerTest extends TestCase
             $table->string('title');
             $table->integer('year');
             $table->string('file_path')->nullable();
+            $table->string('thumbnail_path')->nullable();
             $table->string('original_filename')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

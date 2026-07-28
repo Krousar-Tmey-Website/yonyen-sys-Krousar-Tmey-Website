@@ -70,6 +70,12 @@ class PaymentMethodController extends Controller
             $data['qr_code'] = null;
         }
 
+        if ($request->hasFile('donation_image')) {
+            $data['donation_image'] = $request->file('donation_image')->store('payment-donation-images', 'public');
+        } else {
+            $data['donation_image'] = null;
+        }
+
         $data['is_active']  = $request->boolean('is_active');
         $data['sort_order'] = $data['sort_order'] ?? 0;
 
@@ -105,6 +111,20 @@ class PaymentMethodController extends Controller
             unset($data['qr_code']);
         }
 
+        if ($request->hasFile('donation_image')) {
+            if ($payment->donation_image) {
+                Storage::disk('public')->delete($payment->donation_image);
+            }
+            $data['donation_image'] = $request->file('donation_image')->store('payment-donation-images', 'public');
+        } elseif ($request->boolean('remove_donation_image')) {
+            if ($payment->donation_image) {
+                Storage::disk('public')->delete($payment->donation_image);
+            }
+            $data['donation_image'] = null;
+        } else {
+            unset($data['donation_image']);
+        }
+
         $data['is_active'] = $request->boolean('is_active');
 
         // Preserve existing code; it's auto-generated on create and not editable
@@ -120,6 +140,9 @@ class PaymentMethodController extends Controller
     {
         if ($payment->qr_code) {
             Storage::disk('public')->delete($payment->qr_code);
+        }
+        if ($payment->donation_image) {
+            Storage::disk('public')->delete($payment->donation_image);
         }
 
         $payment->delete();
