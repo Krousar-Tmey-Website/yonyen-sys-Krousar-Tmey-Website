@@ -47,15 +47,28 @@ class DonationDashboardController extends Controller
         $availableYears = range($minYear, $maxYear);
 
         // ── Monthly donations (filtered by year) ──
-        $rawMonthly = (clone $baseQuery)
-            ->select(
-                DB::raw('MONTH(DonationDate) as month'),
-                DB::raw('COUNT(*) as count'),
-                DB::raw('SUM(COALESCE(DonationAmount, Amount, 0)) as total')
-            )
-            ->whereYear('DonationDate', $year)
-            ->groupBy(DB::raw('MONTH(DonationDate)'))
-            ->get();
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            $rawMonthly = (clone $baseQuery)
+                ->select(
+                    DB::raw("strftime('%m', DonationDate) as month"),
+                    DB::raw('COUNT(*) as count'),
+                    DB::raw('SUM(COALESCE(DonationAmount, Amount, 0)) as total')
+                )
+                ->whereNotNull('DonationDate')
+                ->whereRaw("strftime('%Y', DonationDate) = ?", [(string) $year])
+                ->groupBy(DB::raw("strftime('%m', DonationDate)"))
+                ->get();
+        } else {
+            $rawMonthly = (clone $baseQuery)
+                ->select(
+                    DB::raw('MONTH(DonationDate) as month'),
+                    DB::raw('COUNT(*) as count'),
+                    DB::raw('SUM(COALESCE(DonationAmount, Amount, 0)) as total')
+                )
+                ->whereYear('DonationDate', $year)
+                ->groupBy(DB::raw('MONTH(DonationDate)'))
+                ->get();
+        }
 
         $keyed = $rawMonthly->keyBy('month');
         $donationMonths = collect();

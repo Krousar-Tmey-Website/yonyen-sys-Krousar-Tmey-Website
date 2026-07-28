@@ -119,13 +119,13 @@ Route::get('/our-programs', function () {
     $bannerTitle = HomeSetting::getValue('programs_banner_title', 'Our Programs');
     $bannerSubtitle = HomeSetting::getValue('programs_banner_subtitle', 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.');
     $bannerImage = HomeSetting::getValue('programs_banner_image', '');
-    
+
     $additionalLabel = HomeSetting::getValue('programs_additional_label', 'Cross-cutting Work');
     $additionalTitle = HomeSetting::getValue('programs_additional_title', 'Additional Programs');
-    
+
     $infoLabel = HomeSetting::getValue('programs_info_label', 'Learn More');
     $infoTitle = HomeSetting::getValue('programs_info_title', 'Additional Information');
-    
+
     $ctaLabel = HomeSetting::getValue('programs_cta_label', 'Support Our Mission');
     $ctaTitle = HomeSetting::getValue('programs_cta_title', 'Help Children in Cambodia');
     $ctaSubtitle = HomeSetting::getValue('programs_cta_subtitle', 'Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.');
@@ -159,7 +159,7 @@ Route::get('/get-involved', function () {
     $jobs = JobOpportunity::active()->ordered()->get()
         ->filter(fn ($j) => filled(app()->getLocale() === 'fr' ? $j->title_fr : $j->title))->values();
     $books = Book::available()->orderBy('sort_order')->orderBy('title')->get();
-    
+
     $partnershipCategories = \App\Models\PartnershipCategory::ordered()->get();
     $partnerPrinciples = \App\Models\PartnerPrinciple::ordered()->get();
     $worldwidePartners = \App\Models\WorldwidePartner::active()->get();
@@ -262,7 +262,7 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 
 Route::get('/partners', function () {
     $technicalPartners = Partner::active()->where('category', PartnerCategory::Technical->value)->get();
-    
+
     $financialPartnersBySubcategory = Partner::active()
         ->where('category', PartnerCategory::Financial->value)
         ->get()

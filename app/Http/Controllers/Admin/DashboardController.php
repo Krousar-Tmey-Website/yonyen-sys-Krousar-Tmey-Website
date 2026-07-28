@@ -65,13 +65,24 @@ class DashboardController extends Controller
         $availableYears = range($minYear, $maxYear);
 
         // ── Donation Trends Chart Data (filtered by year) ──
-        $rawDonations = Donation::select(
-            DB::raw('MONTH(DonationDate) as month'),
-            DB::raw('COALESCE(SUM(DonationAmount), 0) + COALESCE(SUM(Amount), 0) as total')
-        )
-            ->whereYear('DonationDate', $year)
-            ->groupBy(DB::raw('MONTH(DonationDate)'))
-            ->get();
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            $rawDonations = Donation::select(
+                DB::raw("strftime('%m', DonationDate) as month"),
+                DB::raw('COALESCE(SUM(DonationAmount), 0) + COALESCE(SUM(Amount), 0) as total')
+            )
+                ->whereNotNull('DonationDate')
+                ->whereRaw("strftime('%Y', DonationDate) = ?", [(string) $year])
+                ->groupBy(DB::raw("strftime('%m', DonationDate)"))
+                ->get();
+        } else {
+            $rawDonations = Donation::select(
+                DB::raw('MONTH(DonationDate) as month'),
+                DB::raw('COALESCE(SUM(DonationAmount), 0) + COALESCE(SUM(Amount), 0) as total')
+            )
+                ->whereYear('DonationDate', $year)
+                ->groupBy(DB::raw('MONTH(DonationDate)'))
+                ->get();
+        }
 
         $keyed = $rawDonations->keyBy('month');
         $donationMonths = collect();

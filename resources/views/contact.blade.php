@@ -56,7 +56,7 @@
 
     <div class="relative max-w-7xl mx-auto px-6 z-10 w-full">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
+
             {{-- Left Column: Content --}}
             <div class="lg:col-span-7 space-y-6 flex flex-col justify-center">
                 <nav class="flex items-center gap-2 text-sm text-white/50 mb-2" data-reveal="fade">
@@ -64,19 +64,19 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     <span class="text-white">Contact</span>
                 </nav>
-                
+
                 <p class="text-[#8da83a] font-bold text-xs uppercase tracking-[0.2em]" data-reveal="fade">Get in Touch</p>
-                
+
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white" data-reveal="fade">
                     Contact <span class="font-serif italic text-[#8da83a] normal-case">Us</span>
                 </h1>
-                
+
                 @php
                     $linkedinUrl = \App\Models\HomeSetting::getValue('social_linkedin', 'https://www.linkedin.com/company/krousar-thmey/');
                     $instagramUrl = \App\Models\HomeSetting::getValue('social_instagram', 'https://www.instagram.com/krousarthmey/');
                     $facebookUrl = \App\Models\HomeSetting::getValue('social_facebook', 'https://www.facebook.com/KrousarThmey');
                 @endphp
-                
+
                 <p class="text-white/80 text-base max-w-2xl leading-relaxed pr-4" data-reveal="fade">
                     We have offices in Cambodia, France, and Switzerland. Reach out to us for partnerships, donations, or general enquiries.
                 </p>
@@ -109,10 +109,10 @@
                     </a>
                 </div>
             </div>
-            
+
             {{-- Right Column: Staggered Image Cards --}}
             <div class="lg:col-span-5 relative h-[320px] sm:h-[380px] lg:h-[400px] mt-12 lg:mt-0 items-center justify-center hidden lg:flex select-none">
-                
+
                 {{-- Card 1: Cambodia HQ --}}
                 <div class="absolute -translate-x-16 -translate-y-8 sm:-translate-x-20 sm:-translate-y-12">
                     <div class="w-44 h-56 sm:w-48 sm:h-64 rounded-[1.8rem] overflow-hidden border-4 border-white/80 shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group/gallery floating-card-1 relative">
@@ -135,7 +135,7 @@
                 </div>
 
             </div>
-            
+
         </div>
     </div>
 </div>
