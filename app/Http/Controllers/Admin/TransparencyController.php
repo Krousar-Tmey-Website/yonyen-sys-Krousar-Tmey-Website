@@ -23,26 +23,16 @@ class TransparencyController extends Controller
         $data = $request->validate([
             'transparency_financial_heading' => ['nullable', 'string', 'max:255'],
             'transparency_financial_heading_fr' => ['nullable', 'string', 'max:255'],
-            'transparency_financial_p1' => ['nullable', 'string'],
-            'transparency_financial_p1_fr' => ['nullable', 'string'],
-            'transparency_financial_p2' => ['nullable', 'string'],
-            'transparency_financial_p2_fr' => ['nullable', 'string'],
-            'transparency_financial_p3' => ['nullable', 'string'],
-            'transparency_financial_p3_fr' => ['nullable', 'string'],
-            'transparency_financial_p4' => ['nullable', 'string'],
-            'transparency_financial_p4_fr' => ['nullable', 'string'],
+            'transparency_financial_body' => ['nullable', 'string'],
+            'transparency_financial_body_fr' => ['nullable', 'string'],
             'transparency_financial_list_intro' => ['nullable', 'string', 'max:255'],
             'transparency_financial_list_intro_fr' => ['nullable', 'string', 'max:255'],
             'transparency_financial_outro' => ['nullable', 'string'],
             'transparency_financial_outro_fr' => ['nullable', 'string'],
             'transparency_origins_heading' => ['nullable', 'string', 'max:255'],
             'transparency_origins_heading_fr' => ['nullable', 'string', 'max:255'],
-            'transparency_origins_p1' => ['nullable', 'string'],
-            'transparency_origins_p1_fr' => ['nullable', 'string'],
-            'transparency_origins_p2' => ['nullable', 'string'],
-            'transparency_origins_p2_fr' => ['nullable', 'string'],
-            'transparency_origins_p3' => ['nullable', 'string'],
-            'transparency_origins_p3_fr' => ['nullable', 'string'],
+            'transparency_origins_body' => ['nullable', 'string'],
+            'transparency_origins_body_fr' => ['nullable', 'string'],
             'transparency_award_prefix' => ['nullable', 'string', 'max:255'],
             'transparency_award_prefix_fr' => ['nullable', 'string', 'max:255'],
             'transparency_award_link_label' => ['nullable', 'string', 'max:255'],
@@ -72,6 +62,12 @@ class TransparencyController extends Controller
             'transparency_banner_blur'          => ['nullable', 'integer', 'min:0', 'max:20'],
             'transparency_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'transparency_banner_image_url'     => ['nullable', 'url', 'max:2048'],
+            'transparency_banner_btn1_text'     => ['nullable', 'string', 'max:100'],
+            'transparency_banner_btn1_url'      => ['nullable', 'string', 'max:500'],
+            'transparency_banner_btn2_text'     => ['nullable', 'string', 'max:100'],
+            'transparency_banner_btn2_url'      => ['nullable', 'string', 'max:500'],
+            'transparency_banner_btn3_text'     => ['nullable', 'string', 'max:100'],
+            'transparency_banner_btn3_url'      => ['nullable', 'string', 'max:500'],
         ]);
 
         HomeSetting::setValue('transparency_title', $request->input('transparency_title', ''));
@@ -82,6 +78,12 @@ class TransparencyController extends Controller
         HomeSetting::setValue('transparency_banner_subtitle_fr', $request->input('transparency_banner_subtitle_fr', ''));
         HomeSetting::setValue('transparency_banner_overlay_color', $request->input('transparency_banner_overlay_color', ''));
         HomeSetting::setValue('transparency_banner_blur', (string) $request->input('transparency_banner_blur', 0));
+        HomeSetting::setValue('transparency_banner_btn1_text', $request->input('transparency_banner_btn1_text', ''));
+        HomeSetting::setValue('transparency_banner_btn1_url', $request->input('transparency_banner_btn1_url', ''));
+        HomeSetting::setValue('transparency_banner_btn2_text', $request->input('transparency_banner_btn2_text', ''));
+        HomeSetting::setValue('transparency_banner_btn2_url', $request->input('transparency_banner_btn2_url', ''));
+        HomeSetting::setValue('transparency_banner_btn3_text', $request->input('transparency_banner_btn3_text', ''));
+        HomeSetting::setValue('transparency_banner_btn3_url', $request->input('transparency_banner_btn3_url', ''));
 
         if ($request->hasFile('transparency_banner_image')) {
             $existing = HomeSetting::getValue('transparency_banner_image', '');
