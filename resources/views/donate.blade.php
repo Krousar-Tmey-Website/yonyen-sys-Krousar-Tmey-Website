@@ -42,7 +42,11 @@
     {{-- Main section --}}
     <section class="pt-16 pb-20 bg-[#f8f9fc]">
         <div class="max-w-[1040px] mx-auto px-4 sm:px-6 2xl:px-0">
-            
+            @php
+                $logoPath = $settings['site_logo'] ?? 'images/logo.png';
+                $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
+            @endphp
+
             {{-- Unified Tabs Switcher --}}
             <div class="bg-white rounded-xl border border-slate-200/80 p-1 shadow-2xs mb-12 flex flex-wrap lg:flex-nowrap justify-between gap-1 max-w-[1040px] mx-auto">
                 
@@ -93,10 +97,6 @@
                     $khMethods = $paymentMethods->where('tag', 'cambodia')->values();
                 @endphp
                 @if($khMethods->isNotEmpty())
-                @php
-                    $logoPath = $settings['site_logo'] ?? 'images/logo.png';
-                    $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
-                @endphp
                 <div class="overflow-hidden rounded-[28px] bg-white shadow-[0_20px_52px_rgba(15,23,42,0.11)]">
                     {{-- Big banner image --}}
                     <div class="relative h-64 sm:h-80 lg:h-[420px]">
@@ -310,7 +310,20 @@
                     @endphp
                     
                     {{-- Ways to Donate (Full Width Card) --}}
-                    <div class="bg-white rounded-2xl border border-slate-200/80 p-10 shadow-sm space-y-10">
+                    <div class="overflow-hidden rounded-[28px] bg-white shadow-[0_20px_52px_rgba(15,23,42,0.11)]">
+                        {{-- Banner image --}}
+                        <div class="relative h-64 sm:h-80 lg:h-[420px]">
+                            <img src="{{ asset('images/img5.png') }}"
+                                 alt="Krousar Thmey France"
+                                 class="absolute inset-0 h-full w-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-black/10"></div>
+                            <div class="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 inline-flex items-center gap-2.5 rounded-full bg-white/95 backdrop-blur-sm pl-2 pr-4 py-2 shadow-md">
+                                <img src="{{ $logoUrl }}" alt="Krousar Thmey" class="w-8 h-8 rounded-full object-contain bg-white border border-gray-100">
+                                <span class="text-xs font-bold text-slate-800">Krousar Thmey <span class="text-slate-400 font-medium">· France</span></span>
+                            </div>
+                        </div>
+
+                        <div class="p-10 space-y-10">
                         @if($hasFranceContent)
 
                             @if($hasHelloAsso)
@@ -393,6 +406,7 @@
                                 </div>
                             </div>
                         @endif
+                        </div>
                     </div>
 
                     {{-- Tax Deductions & Legacy (Under it, Accordions) --}}
@@ -535,7 +549,20 @@
                     @endphp
 
                     {{-- Ways to Donate (Full Width Card) --}}
-                    <div class="bg-white rounded-2xl border border-slate-200/80 p-10 shadow-sm text-center space-y-8">
+                    <div class="overflow-hidden rounded-[28px] bg-white shadow-[0_20px_52px_rgba(15,23,42,0.11)]">
+                        {{-- Banner image --}}
+                        <div class="relative h-64 sm:h-80 lg:h-[420px]">
+                            <img src="{{ asset('images/img3.png') }}"
+                                 alt="Krousar Thmey Switzerland"
+                                 class="absolute inset-0 h-full w-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-black/10"></div>
+                            <div class="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 inline-flex items-center gap-2.5 rounded-full bg-white/95 backdrop-blur-sm pl-2 pr-4 py-2 shadow-md">
+                                <img src="{{ $logoUrl }}" alt="Krousar Thmey" class="w-8 h-8 rounded-full object-contain bg-white border border-gray-100">
+                                <span class="text-xs font-bold text-slate-800">Krousar Thmey <span class="text-slate-400 font-medium">· Switzerland</span></span>
+                            </div>
+                        </div>
+
+                        <div class="p-10 text-center space-y-8">
                         @if($chMethods->isNotEmpty())
                             @foreach($chMethods as $index => $method)
                                 @if($index > 0)
@@ -632,6 +659,7 @@
                                 {{ ($settings['switzerland_tax_receipt_note'] ?? '') ?: 'A donation receipt will be sent in February of the year following your transfer' }}
                             </p>
                         </div>
+                        </div>
                     </div>
                 </div>
 
@@ -639,7 +667,20 @@
                 <div x-show="residency === 'elsewhere'" class="grid md:grid-cols-2 gap-8 items-start" x-cloak>
                     
                     {{-- LEFT COLUMN: Standard Impact Description --}}
-                    <div class="bg-white rounded-2xl border border-slate-200/80 p-8 shadow-sm flex flex-col justify-between min-h-[460px]">
+                    <div class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm flex flex-col justify-between min-h-[460px]">
+                        {{-- Banner image --}}
+                        <div class="relative h-40 sm:h-48">
+                            <img src="{{ asset('images/img4.png') }}"
+                                 alt="Krousar Thmey"
+                                 class="absolute inset-0 h-full w-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-black/10"></div>
+                            <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 inline-flex items-center gap-2 rounded-full bg-white/95 backdrop-blur-sm pl-1.5 pr-3 py-1.5 shadow-md">
+                                <img src="{{ $logoUrl }}" alt="Krousar Thmey" class="w-6 h-6 rounded-full object-contain bg-white border border-gray-100">
+                                <span class="text-[11px] font-bold text-slate-800">Krousar Thmey <span class="text-slate-400 font-medium">· Worldwide</span></span>
+                            </div>
+                        </div>
+
+                        <div class="p-8 flex flex-col justify-between flex-1">
                         <div class="space-y-6">
                             <div class="text-center md:text-left space-y-3">
                                 <span class="text-xs font-bold text-[#2d6fa3] tracking-widest uppercase block">Make a Difference</span>
@@ -699,6 +740,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
                             <span>{{ ($settings['elsewhere_guarantee_note'] ?? '') ?: '100% of your funds go directly to supporting the children in Cambodia.' }}</span>
+                        </div>
                         </div>
                     </div>
 
