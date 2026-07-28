@@ -133,7 +133,6 @@ class AnnualReportController extends Controller
     }
 
     /**
-<<<<<<< HEAD
      * Show the Resources Banner form (GET /admin/resources-banner).
      * The banner form is embedded within the reports index page,
      * so we redirect there — no separate view needed.
@@ -145,36 +144,13 @@ class AnnualReportController extends Controller
 
     /**
      * Handle the Resources Banner form submission (POST /admin/resources-banner).
-=======
-     * Show the Resources (Annual Reports) banner settings page.
-     */
-    public function bannerIndex()
-    {
-        $settings = HomeSetting::allKeyed();
-        $search = '';
-        $reports = AnnualReport::query()
-            ->orderByDesc('year')
-            ->orderByDesc('created_at')
-            ->paginate(15);
-        return view('admin.reports.index', compact('settings', 'reports', 'search'));
-    }
-
-    /**
-     * Handle the Resources banner settings update.
->>>>>>> 698dff53516bce190b40e78b43769fb794d8d522
      */
     public function updateBanner(Request $request)
     {
         $request->validate([
-<<<<<<< HEAD
             'resources_banner_title'         => ['nullable', 'string', 'max:255'],
             'resources_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
             'resources_banner_badge'         => ['nullable', 'string', 'max:255'],
-=======
-            'resources_banner_badge'         => ['nullable', 'string', 'max:255'],
-            'resources_banner_title'         => ['nullable', 'string', 'max:255'],
-            'resources_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
->>>>>>> 698dff53516bce190b40e78b43769fb794d8d522
             'resources_banner_overlay_color' => ['nullable', 'string', 'max:20'],
             'resources_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'resources_banner_image_url'     => ['nullable', 'url', 'max:2048'],
@@ -218,12 +194,7 @@ class AnnualReportController extends Controller
             HomeSetting::setValue('resources_banner_image', '');
         }
 
-<<<<<<< HEAD
         return redirect()->route('admin.reports.index')->with('success', 'Resources page banner updated.');
     }
 
-=======
-        return redirect()->route('admin.resources-banner.index')->with('success', 'Resources banner updated.');
-    }
->>>>>>> 698dff53516bce190b40e78b43769fb794d8d522
 }
