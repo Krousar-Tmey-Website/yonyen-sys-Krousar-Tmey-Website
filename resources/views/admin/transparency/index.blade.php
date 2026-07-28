@@ -356,6 +356,37 @@
                 <label class="block text-xs font-medium text-gray-600 mb-1">Closing Line (French) <span class="text-gray-400 font-normal">(optional)</span></label>
                 <x-admin.rich-text name="transparency_financial_outro_fr" :value="$cvFr('transparency_financial_outro')" lang="fr" :rows="2" />
             </div>
+
+            @php
+                $financialCardColor = $cv('transparency_financial_card_color', '#fffdf8');
+                $financialRulerColor = $cv('transparency_financial_ruler_color', '#e8a020');
+            @endphp
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-gray-100">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Card Background</label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="transparency_financial_card_color_picker" value="{{ $financialCardColor }}"
+                               class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                               onchange="document.getElementById('transparency_financial_card_color').value = this.value;">
+                        <input type="text" id="transparency_financial_card_color" name="transparency_financial_card_color" value="{{ $financialCardColor }}" placeholder="#fffdf8"
+                               oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('transparency_financial_card_color_picker').value = this.value; }"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                    </div>
+                    @error('transparency_financial_card_color')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Ruler Color <span class="text-gray-400 font-normal">(left accent bar)</span></label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="transparency_financial_ruler_color_picker" value="{{ $financialRulerColor }}"
+                               class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                               onchange="document.getElementById('transparency_financial_ruler_color').value = this.value;">
+                        <input type="text" id="transparency_financial_ruler_color" name="transparency_financial_ruler_color" value="{{ $financialRulerColor }}" placeholder="#e8a020"
+                               oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('transparency_financial_ruler_color_picker').value = this.value; }"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                    </div>
+                    @error('transparency_financial_ruler_color')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                </div>
+            </div>
         </div>
 
         <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 space-y-4">
@@ -384,6 +415,37 @@
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Body Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
                 <x-admin.rich-text name="transparency_origins_body_fr" :value="$cvFr('transparency_origins_body')" lang="fr" :rows="8" />
+            </div>
+
+            @php
+                $originsCardColor = $cv('transparency_origins_card_color', '#fffdf8');
+                $originsRulerColor = $cv('transparency_origins_ruler_color', '#e8a020');
+            @endphp
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-gray-100">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Card Background</label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="transparency_origins_card_color_picker" value="{{ $originsCardColor }}"
+                               class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                               onchange="document.getElementById('transparency_origins_card_color').value = this.value;">
+                        <input type="text" id="transparency_origins_card_color" name="transparency_origins_card_color" value="{{ $originsCardColor }}" placeholder="#fffdf8"
+                               oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('transparency_origins_card_color_picker').value = this.value; }"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                    </div>
+                    @error('transparency_origins_card_color')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Ruler Color <span class="text-gray-400 font-normal">(left accent bar)</span></label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="transparency_origins_ruler_color_picker" value="{{ $originsRulerColor }}"
+                               class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                               onchange="document.getElementById('transparency_origins_ruler_color').value = this.value;">
+                        <input type="text" id="transparency_origins_ruler_color" name="transparency_origins_ruler_color" value="{{ $originsRulerColor }}" placeholder="#e8a020"
+                               oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('transparency_origins_ruler_color_picker').value = this.value; }"
+                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                    </div>
+                    @error('transparency_origins_ruler_color')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                </div>
             </div>
         </div>
 

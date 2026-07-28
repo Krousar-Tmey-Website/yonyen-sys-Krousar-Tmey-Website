@@ -94,8 +94,18 @@ html:has(.transparency-immersive) { scroll-snap-type: y proximity; }
             <h2 class="section-title mt-3">{{ $t('transparency_financial_heading', 'Financial Transparency') }}</h2>
         </div>
 
-        <div class="group relative bg-[#fffdf8] border border-[#f2e6c9] rounded-2xl p-7 md:p-10 shadow-sm overflow-hidden space-y-5 text-[#1d4e7a] leading-relaxed transition-all duration-300 hover:shadow-lg" data-reveal="up">
+        @php
+            $financialCardColor = $settings['transparency_financial_card_color'] ?? null;
+            $financialRulerColor = $settings['transparency_financial_ruler_color'] ?? null;
+        @endphp
+        <div class="group relative border border-[#f2e6c9] rounded-2xl p-7 md:p-10 shadow-sm overflow-hidden space-y-5 text-[#1d4e7a] leading-relaxed transition-all duration-300 hover:shadow-lg {{ $financialCardColor ? '' : 'bg-[#fffdf8]' }}"
+             @if($financialCardColor) style="background-color: {{ $financialCardColor }}" @endif
+             data-reveal="up">
+            @if($financialRulerColor)
+            <div class="absolute top-0 left-0 w-[6px] h-full" style="background-color: {{ $financialRulerColor }}"></div>
+            @else
             <div class="absolute top-0 left-0 w-[6px] h-full bg-gradient-to-b from-[#e8a020] to-[#d32f2f]"></div>
+            @endif
 
             <div class="flex items-center gap-3 mb-2">
                 <div class="w-9 h-9 rounded-full bg-[#e8a020]/10 flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110">
@@ -150,8 +160,17 @@ html:has(.transparency-immersive) { scroll-snap-type: y proximity; }
             <h2 class="section-title mt-3">{{ $t('transparency_origins_heading', 'Origins Of The Funds') }}</h2>
         </div>
 
-        <div class="group relative bg-[#fffdf8] border border-[#f2e6c9] rounded-2xl p-7 md:p-10 shadow-sm overflow-hidden space-y-5 text-[#1d4e7a] leading-relaxed transition-all duration-300 hover:shadow-lg" data-reveal="up" style="--reveal-delay: 80">
+        @php
+            $originsCardColor = $settings['transparency_origins_card_color'] ?? null;
+            $originsRulerColor = $settings['transparency_origins_ruler_color'] ?? null;
+        @endphp
+        <div class="group relative border border-[#f2e6c9] rounded-2xl p-7 md:p-10 shadow-sm overflow-hidden space-y-5 text-[#1d4e7a] leading-relaxed transition-all duration-300 hover:shadow-lg {{ $originsCardColor ? '' : 'bg-[#fffdf8]' }}"
+             data-reveal="up" style="--reveal-delay: 80 @if($originsCardColor); background-color: {{ $originsCardColor }}@endif">
+            @if($originsRulerColor)
+            <div class="absolute top-0 left-0 w-[6px] h-full" style="background-color: {{ $originsRulerColor }}"></div>
+            @else
             <div class="absolute top-0 left-0 w-[6px] h-full bg-gradient-to-b from-[#e8a020] to-[#d32f2f]"></div>
+            @endif
 
             <div class="flex items-center gap-3 mb-2">
                 <div class="w-9 h-9 rounded-full bg-[#e8a020]/10 flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110">

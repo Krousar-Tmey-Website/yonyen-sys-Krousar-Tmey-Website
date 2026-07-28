@@ -20,6 +20,8 @@ class TransparencyController extends Controller
 
     public function updateContent(Request $request)
     {
+        $hexRule = ['nullable', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}$/'];
+
         $data = $request->validate([
             'transparency_financial_heading' => ['nullable', 'string', 'max:255'],
             'transparency_financial_heading_fr' => ['nullable', 'string', 'max:255'],
@@ -29,10 +31,14 @@ class TransparencyController extends Controller
             'transparency_financial_list_intro_fr' => ['nullable', 'string', 'max:255'],
             'transparency_financial_outro' => ['nullable', 'string'],
             'transparency_financial_outro_fr' => ['nullable', 'string'],
+            'transparency_financial_card_color' => $hexRule,
+            'transparency_financial_ruler_color' => $hexRule,
             'transparency_origins_heading' => ['nullable', 'string', 'max:255'],
             'transparency_origins_heading_fr' => ['nullable', 'string', 'max:255'],
             'transparency_origins_body' => ['nullable', 'string'],
             'transparency_origins_body_fr' => ['nullable', 'string'],
+            'transparency_origins_card_color' => $hexRule,
+            'transparency_origins_ruler_color' => $hexRule,
             'transparency_award_prefix' => ['nullable', 'string', 'max:255'],
             'transparency_award_prefix_fr' => ['nullable', 'string', 'max:255'],
             'transparency_award_link_label' => ['nullable', 'string', 'max:255'],
