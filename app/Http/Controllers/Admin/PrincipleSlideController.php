@@ -15,11 +15,6 @@ class PrincipleSlideController extends Controller
         return view('admin.principle_slides.index', compact('slides'));
     }
 
-    public function create()
-    {
-        return view('admin.principle_slides.create');
-    }
-
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -39,11 +34,6 @@ class PrincipleSlideController extends Controller
 
         return redirect()->route('admin.principle-slides.index')
             ->with('success', 'Principle slide created successfully.');
-    }
-
-    public function edit(PrincipleSlide $slide)
-    {
-        return view('admin.principle_slides.edit', ['principleSlide' => $slide]);
     }
 
     public function update(Request $request, PrincipleSlide $slide)

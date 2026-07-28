@@ -97,40 +97,61 @@
                     $logoPath = $settings['site_logo'] ?? 'images/logo.png';
                     $logoUrl = str_starts_with($logoPath, 'http') ? $logoPath : (str_starts_with($logoPath, 'logos/') ? asset('storage/' . $logoPath) : asset($logoPath));
                 @endphp
-                <div class="overflow-hidden rounded-[28px] bg-white p-4 shadow-[0_20px_52px_rgba(15,23,42,0.11)] sm:p-6">
-                    <div class="grid items-stretch gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+                <div class="overflow-hidden rounded-[28px] bg-white shadow-[0_20px_52px_rgba(15,23,42,0.11)]">
+                    {{-- Big banner image --}}
+                    <div class="relative h-64 sm:h-80 lg:h-[420px]">
+                        <img src="{{ asset('images/donate-cambodia-classroom.png') }}"
+                             alt="Children supported by Krousar Thmey"
+                             class="absolute inset-0 h-full w-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-black/10"></div>
+                        <div class="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 inline-flex items-center gap-2.5 rounded-full bg-white/95 backdrop-blur-sm pl-2 pr-4 py-2 shadow-md">
+                            <img src="{{ $logoUrl }}" alt="Krousar Thmey" class="w-8 h-8 rounded-full object-contain bg-white border border-gray-100">
+                            <span class="text-xs font-bold text-slate-800">Krousar Thmey <span class="text-slate-400 font-medium">· Cambodia, since 1991</span></span>
+                        </div>
+                    </div>
 
-                        {{-- Left column --}}
-                        <div class="flex flex-col justify-between gap-6 lg:min-h-[560px]">
-                            <img src="https://pbs.twimg.com/media/DSCk7u6XcAA0hrt.jpg"
-                                  alt="Children supported by Krousar Thmey"
-                                  class="h-[230px] w-full rounded-tl-[24px] object-cover sm:h-[300px]">
+                    {{-- Text + QR content below the banner --}}
+                    <div class="grid gap-8 p-6 sm:p-10 lg:grid-cols-[1.05fr_0.95fr]">
 
-                            <div class="w-full mb-0 rounded-[18px] bg-white p-5 shadow-[0_16px_38px_rgba(15,23,42,0.08)]">
-                                <div class="flex items-center gap-3 mb-3.5">
-                                    <img src="{{ $logoUrl }}" alt="Krousar Thmey" class="w-10 h-10 rounded-full object-contain bg-gray-50 border border-gray-100">
-                                    <div class="min-w-0">
-                                        <p class="text-sm font-bold text-slate-900 leading-tight truncate">Krousar Thmey</p>
-                                        <p class="text-xs text-slate-500">Cambodia · Since 1991</p>
-                                    </div>
-                                </div>
-                                <h3 class="text-[18px] font-extrabold text-slate-950 leading-tight mb-2.5">Your gift gives a child a home, a school, a future.</h3>
-                                <p class="text-[13px] leading-relaxed text-slate-500">Every donation goes directly to supporting disadvantaged children across Cambodia — 100% of funds reach the children in our care.</p>
-                                <div class="mt-4 pt-4 border-t border-slate-100">
-                                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">or contact us:</p>
-                                    <div class="text-[12px] leading-relaxed text-slate-650 space-y-1">
-                                        <p class="font-bold text-slate-800">Krousar Thmey Cambodia</p>
-                                        <p>#145 street 132 – PO Box 1393 – Phnom Penh</p>
-                                        <p>Email: <a href="mailto:communication@krousar-thmey.org" class="text-[#2d6fa3] hover:underline font-semibold">communication@krousar-thmey.org</a></p>
-                                        <p>Phone: <a href="tel:+85523880502" class="text-[#2d6fa3] hover:underline font-semibold">+855 (0) 23 880 502</a></p>
-                                    </div>
+                        {{-- Left column: text --}}
+                        <div class="flex flex-col gap-5">
+                            <span class="inline-flex items-center gap-1.5 self-start rounded-full bg-[#8da83a]/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[#8da83a]">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                100% direct to Cambodia
+                            </span>
+                            <h2 class="text-3xl sm:text-[38px] font-black uppercase leading-[1.15] tracking-tight text-[#1c3a5e]">
+                                Your gift gives a child a home, a school, <span class="text-[#8da83a]">a future.</span>
+                            </h2>
+                            <p class="text-sm sm:text-[15px] leading-relaxed text-slate-500 max-w-md">
+                                Every donation goes directly to supporting disadvantaged children across Cambodia — 100% of funds reach the children in our care.
+                            </p>
+                            <div class="pt-4 border-t border-gray-100">
+                                <p class="text-[11px] font-bold text-[#8da83a] uppercase tracking-wider mb-2">Or contact us:</p>
+                                <div class="text-[13px] leading-relaxed text-slate-600 space-y-2">
+                                    <p class="font-bold text-slate-800">Krousar Thmey Cambodia</p>
+                                    <p class="flex items-center gap-2">
+                                        <svg class="w-3.5 h-3.5 text-[#8da83a] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        #145 street 132 – PO Box 1393 – Phnom Penh
+                                    </p>
+                                    <p class="flex items-center gap-2">
+                                        <svg class="w-3.5 h-3.5 text-[#8da83a] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                        <a href="mailto:communication@krousar-thmey.org" class="text-[#2d6fa3] hover:underline font-semibold transition-colors">communication@krousar-thmey.org</a>
+                                    </p>
+                                    <p class="flex items-center gap-2">
+                                        <svg class="w-3.5 h-3.5 text-[#8da83a] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                        <a href="tel:+85523880502" class="text-[#2d6fa3] hover:underline font-semibold transition-colors">+855 (0) 23 880 502</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
                         {{-- Right column --}}
-                        <div class="flex justify-center">
-                            <div class="flex w-full max-w-[420px] flex-col gap-4 rounded-[17px] bg-white p-5 shadow-[0_18px_42px_rgba(15,23,42,0.08)]" x-data="{ active: 0 }">
+                        <div class="flex justify-center lg:justify-end">
+                            <div class="flex w-full max-w-[420px] flex-col gap-4 rounded-[17px] bg-[#f8f9fc] border border-gray-100 p-5 shadow-sm" x-data="{ active: 0 }">
+                                <div class="inline-flex items-center gap-1.5 self-start rounded-full bg-[#1c3a5e]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#1c3a5e]">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                    Official &amp; verified account
+                                </div>
                                 {{-- Bank Tabs --}}
                                 <div class="grid grid-cols-2 gap-2">
                                     @foreach($khMethods as $i => $method)
@@ -146,8 +167,9 @@
                                 @foreach($khMethods as $i => $method)
                                 <div x-show="active === {{ $i }}" x-cloak class="flex flex-col gap-4 flex-1">
                                     {{-- QR / Link Section --}}
-                                    <div class="rounded-[13px] border border-gray-200 bg-[#fbfcfd] px-4 py-5 text-center">
-                                        <div class="w-[140px] h-[140px] mx-auto bg-white rounded-[9px] border border-gray-200 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+                                    <div class="relative rounded-[13px] border border-gray-200 bg-[#fbfcfd] px-4 py-5 text-center">
+                                        <div class="relative w-[140px] h-[140px] mx-auto">
+                                            <div class="w-full h-full bg-white rounded-[9px] border border-gray-200 flex items-center justify-center overflow-hidden shrink-0 shadow-sm transition-transform duration-300 hover:scale-105">
                                             @if($method->qr_code_url)
                                             <a href="{{ $method->redirect_url ?: $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) }}"
                                                target="_blank" rel="noopener"
@@ -174,6 +196,7 @@
                                                 <p class="text-xs text-gray-400">No QR code uploaded</p>
                                             </div>
                                             @endif
+                                            </div>
                                         </div>
                                         <p class="text-center text-[14px] text-gray-600 mt-3 font-medium">
                                             @if($method->redirect_url)
@@ -229,9 +252,11 @@
                                     </div>
 
                                     {{-- Primary CTA --}}
+                                    <div class="relative mt-auto">
+                                    <div class="absolute -inset-1 rounded-[14px] bg-[#e8a020]/50 blur-lg animate-pulse pointer-events-none"></div>
                                     <a href="{{ $method->redirect_url ?: ($method->qr_code_url ? $method->qr_code_url . '?v=' . ($method->updated_at?->timestamp ?? time()) : '#') }}"
                                        target="{{ ($method->redirect_url || $method->qr_code_url) ? '_blank' : '_self' }}" rel="noopener"
-                                       class="mt-auto w-full inline-flex items-center justify-center gap-3 rounded-[10px] bg-[#1c3a5e] px-5 py-[13px] text-[14px] font-extrabold text-white shadow-[0_2px_0_rgba(0,0,0,0.8)] transition-colors hover:bg-[#152d4a] active:bg-[#0f2238]">
+                                       class="relative w-full inline-flex items-center justify-center gap-3 rounded-[10px] bg-[#1c3a5e] px-5 py-[13px] text-[14px] font-extrabold text-white shadow-[0_2px_0_rgba(0,0,0,0.8)] transition-all hover:bg-[#152d4a] hover:scale-[1.02] active:bg-[#0f2238]">
                                         @if($method->redirect_url)
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0"/>
@@ -244,6 +269,7 @@
                                             Scan QR to donate via {{ $method->name }}
                                         @endif
                                     </a>
+                                    </div>
                                 </div>
                                 @endforeach
                             </div>
