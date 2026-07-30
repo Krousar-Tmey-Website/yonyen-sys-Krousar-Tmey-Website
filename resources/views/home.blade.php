@@ -844,30 +844,42 @@
         @endphp
         <div class="grid md:grid-cols-2 {{ $gridCols }} gap-8 justify-center">
             @foreach($programs as $program)
-            <div class="card group flex flex-col card-hover" data-reveal="up" style="--reveal-delay: {{ $loop->index * 120 }}">
-                <div class="relative overflow-hidden h-56">
-                    <img src="{{ $program->image_url }}"
-                        alt="{{ $program->localized_title }}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#0f2448]/70 to-transparent"></div>
+            <div class="card group relative overflow-hidden rounded-[2rem] shadow-xl h-[420px] cursor-pointer text-center text-white" data-reveal="up" style="--reveal-delay: {{ $loop->index * 120 }}">
+                {{-- Background Image --}}
+                <img src="{{ $program->image_url }}"
+                    alt="{{ $program->localized_title }}"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-0">
+                
+                {{-- Default Gradient (Dark at bottom) --}}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-0"></div>
+
+                {{-- Hover Full Overlay --}}
+                <div class="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+
+                {{-- Default Content (Visible only when NOT hovering) --}}
+                <div class="absolute inset-0 z-20 flex flex-col justify-end p-8 pb-10 transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-4">
+                    <h3 class="text-2xl font-bold mb-2">{{ $program->localized_title }}</h3>
                     @if($program->stats && count($program->stats) > 0)
-                    <span class="absolute top-4 left-4 bg-[#e8a020] text-white text-xs font-bold px-3 py-1 rounded-full">{{ $program->stats[0]['value'] }} {{ $program->stats[0]['label'] }}</span>
+                    <p class="text-white/80 text-sm">{{ $program->stats[0]['value'] }} {{ $program->stats[0]['label'] }}</p>
                     @endif
                 </div>
 
-                {{-- Content --}}
-                <div class="p-6 flex flex-col flex-1">
-                    <h3 class="text-xl font-bold text-[#1a3c6e] mb-3">{{ $program->localized_title }}</h3>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-5 line-clamp-3">
+                {{-- Hover Content (Visible only when hovering) --}}
+                <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                    <h3 class="text-2xl font-bold mb-6">{{ $program->localized_title }}</h3>
+                    <p class="text-white/90 text-sm leading-relaxed mb-6 line-clamp-6">
                         {{ strip_tags($program->localized_description) }}
                     </p>
-                    <ul class="space-y-1.5 mb-6">
-                        @if($program->stats && count($program->stats) > 1)
-                        @foreach(array_slice($program->stats, 1, 3) as $stat)
-                        <li class="flex items-center gap-2 text-xs text-gray-500"><span class="w-1.5 h-1.5 rounded-full bg-[#e8a020] flex-shrink-0"></span>{{ $stat['value'] }} {{ strtolower($stat['label']) }}</li>
+                    
+                    @if($program->stats && count($program->stats) > 1)
+                    <div class="space-y-1 mb-6">
+                        @foreach(array_slice($program->stats, 1, 2) as $stat)
+                        <p class="text-white font-bold text-sm">{{ $stat['value'] }} {{ strtolower($stat['label']) }}</p>
                         @endforeach
-                        @endif
-                    </ul>                        <a href="{{ route('programs') }}#{{ $program->slug }}" class="mt-auto text-[#1a3c6e] font-semibold text-sm flex items-center gap-2 hover:text-[#e8a020] transition-colors group-hover:gap-3 duration-300 link-arrow">
+                    </div>
+                    @endif
+
+                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="inline-flex items-center gap-2 text-[#4ade80] font-bold text-sm hover:text-white transition-colors duration-300 group-hover:gap-3 mt-auto">
                         {{ $settings['programs_learn_btn'] ?? 'Learn More' }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -1419,22 +1431,44 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($latestNews as $article)
-            <article class="card group flex flex-col card-hover" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
-                <div class="relative overflow-hidden h-52">
-                    <img src="{{ $article->image_url }}" alt="{{ $article->localized_title }}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#1a3c6e] text-xs font-semibold px-3 py-1 rounded-full capitalize">{{ str_replace('-', ' ', $article->category) }}</span>
-                </div>
-                <div class="p-6 flex flex-col flex-1">
-                    <time class="text-gray-400 text-xs mb-3 flex items-center gap-1.5">
+            <article class="card group relative overflow-hidden rounded-[2rem] shadow-xl h-[420px] cursor-pointer text-center text-white" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
+                {{-- Background Image --}}
+                <img src="{{ $article->image_url }}" alt="{{ $article->localized_title }}"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-0">
+                
+                {{-- Category Badge --}}
+                <span class="absolute top-5 left-5 z-20 bg-[#e8a020] text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg capitalize">{{ str_replace('-', ' ', $article->category) }}</span>
+
+                {{-- Default Gradient (Dark at bottom) --}}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-0"></div>
+
+                {{-- Hover Full Overlay --}}
+                <div class="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+
+                {{-- Default Content (Visible only when NOT hovering) --}}
+                <div class="absolute inset-0 z-20 flex flex-col justify-end p-8 pb-10 transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-4">
+                    <h3 class="text-xl font-bold mb-3 line-clamp-2">{{ $article->localized_title }}</h3>
+                    <time class="text-white/80 text-xs flex items-center justify-center gap-1.5">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         {{ $article->published_at?->format('F Y') ?? $article->created_at->format('F Y') }}
                     </time>
-                    <h3 class="font-bold text-gray-800 text-lg mb-3 leading-snug group-hover:text-[#1a3c6e] transition-colors">{{ $article->localized_title }}</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ Str::limit(strip_tags($article->localized_excerpt ?? ''), 160) }}</p>
-                    <a href="{{ route('news') }}" class="mt-5 text-[#1a3c6e] font-semibold text-sm flex items-center gap-1.5 hover:text-[#e8a020] transition-colors link-arrow">
+                </div>
+
+                {{-- Hover Content (Visible only when hovering) --}}
+                <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                    <h3 class="text-xl font-bold mb-4 line-clamp-3">{{ $article->localized_title }}</h3>
+                    <time class="text-[#e8a020] text-xs font-bold mb-4 flex items-center justify-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {{ $article->published_at?->format('F Y') ?? $article->created_at->format('F Y') }}
+                    </time>
+                    <p class="text-white/90 text-sm leading-relaxed mb-6 line-clamp-4">
+                        {{ Str::limit(strip_tags($article->localized_excerpt ?? ''), 160) }}
+                    </p>
+                    <a href="{{ route('news') }}" class="inline-flex items-center gap-2 text-[#4ade80] font-bold text-sm hover:text-white transition-colors duration-300 group-hover:gap-3 mt-auto">
                         Read More
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />

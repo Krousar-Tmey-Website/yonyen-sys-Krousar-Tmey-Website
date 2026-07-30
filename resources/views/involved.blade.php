@@ -887,71 +887,77 @@
         <div class="mb-12 mt-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($jobs as $job)
-            <div data-reveal="pop" style="--reveal-delay: {{ ($loop->index % 3) * 150 }}" class="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-2xl hover:border-[#2d6fa3]/30 hover:-translate-y-2.5 transition-all duration-500 ease-out overflow-hidden flex flex-col">
-                    {{-- Premium image container (full card image) --}}
-                    <div class="relative h-48 w-full overflow-hidden flex-shrink-0 bg-slate-100">
-                        @if($job->image)
-                        <img src="{{ asset('storage/' . $job->image) }}" alt="{{ $job->localized_title }}"
-                             class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
-                             onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');">
+            <div class="card group relative overflow-hidden rounded-[2rem] shadow-xl h-[420px] cursor-pointer text-center text-white" data-reveal="up" style="--reveal-delay: {{ ($loop->index % 3) * 150 }}">
+                {{-- Background Image or Gradient --}}
+                @if($job->image)
+                    <img src="{{ asset('storage/' . $job->image) }}" alt="{{ $job->localized_title }}"
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-0"
+                         onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');">
+                @endif
+                <div class="{{ $job->image ? 'hidden' : 'flex' }} absolute inset-0 bg-gradient-to-br from-[#1a3c6e] to-[#2d6fa3] z-0 items-center justify-center">
+                    <svg class="w-24 h-24 text-white/10 group-hover:scale-110 transition-transform duration-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+
+                {{-- Status Badge (Always visible, top left) --}}
+                <span class="absolute top-5 left-5 z-20 text-[9px] font-extrabold px-3 py-1.5 rounded-full tracking-wider uppercase shadow-lg transition-transform duration-300 group-hover:scale-105 {{ $job->status === 'open' ? 'bg-green-50 text-green-700 border border-green-200' : ($job->status === 'filled' ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-rose-50 text-rose-700 border border-rose-200') }}">
+                    {{ $job->status === 'filled' ? 'FILLED' : strtoupper($job->status) }}
+                </span>
+
+                {{-- Date (Always visible, top right) --}}
+                @if($job->posted_date)
+                <span class="absolute top-5 right-5 z-20 text-[10px] text-white/90 font-medium bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg">
+                    {{ $job->posted_date->format('M d, Y') }}
+                </span>
+                @endif
+
+                {{-- Default Gradient (Dark at bottom) --}}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-0"></div>
+
+                {{-- Hover Full Overlay --}}
+                <div class="absolute inset-0 bg-black/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+
+                {{-- Default Content (Visible only when NOT hovering) --}}
+                <div class="absolute inset-0 z-20 flex flex-col justify-end p-8 pb-10 transition-all duration-500 group-hover:opacity-0 group-hover:translate-y-4">
+                    <h3 class="text-xl font-bold uppercase tracking-wide leading-snug drop-shadow-md line-clamp-2">{{ $job->localized_title }}</h3>
+                </div>
+
+                {{-- Hover Content (Visible only when hovering) --}}
+                <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                    <h3 class="text-xl font-bold uppercase tracking-wide leading-snug mb-4 line-clamp-2">{{ $job->localized_title }}</h3>
+                    
+                    <div class="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5 text-xs text-white/90 mb-4">
+                        @if($job->type)
+                        <span class="inline-flex items-center gap-1 bg-white/10 px-2 py-0.5 rounded-md font-medium text-[11px] border border-white/20">
+                            <svg class="w-3.5 h-3.5 text-[#e8a020]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/></svg>
+                            {{ $job->type }}
+                        </span>
                         @endif
-                        <div class="{{ $job->image ? 'hidden' : 'flex' }} absolute inset-0 items-center justify-center bg-gradient-to-br from-[#2d6fa3]/15 to-[#8da83a]/15 flex-col gap-2">
-                            <div class="w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#2d6fa3] shadow-sm group-hover:scale-110 transition-transform duration-500">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/>
-                                </svg>
-                            </div>
-                            <span class="text-[10px] font-extrabold text-[#2d6fa3]/60 uppercase tracking-widest">Krousar Thmey</span>
-                        </div>
+                        @if($job->location)
+                        <span class="inline-flex items-center gap-1 bg-white/10 px-2 py-0.5 rounded-md font-medium text-[11px] border border-white/20 max-w-full">
+                            <svg class="w-3.5 h-3.5 text-[#e8a020] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <span class="truncate" title="{{ $job->location }}">{{ $job->location }}</span>
+                        </span>
+                        @endif
                     </div>
 
-                    <div class="flex-1 p-5 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between gap-2 mb-3">
-                                <span class="text-[9px] font-extrabold px-2.5 py-1 rounded-full tracking-wider uppercase transition-transform duration-300 group-hover:scale-105
-                                    {{ $job->status === 'open' ? 'bg-green-50 text-green-700 border border-green-200' : ($job->status === 'filled' ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-rose-50 text-rose-700 border border-rose-200') }}">
-                                    {{ $job->status === 'filled' ? 'FILLED' : strtoupper($job->status) }}
-                                </span>
-                                @if($job->posted_date)
-                                <span class="text-[10px] text-slate-400 font-medium">
-                                    {{ $job->posted_date->format('M d, Y') }}
-                                </span>
-                                @endif
-                            </div>
-
-                            <h3 class="font-extrabold text-slate-800 text-base md:text-lg mb-2 group-hover:text-[#2d6fa3] transition-colors duration-300 line-clamp-2 leading-snug">
-                                {{ $job->localized_title }}
-                            </h3>
-
-                            <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs text-slate-500 mb-4">
-                                @if($job->type)
-                                <span class="inline-flex items-center gap-1 bg-slate-50 group-hover:bg-sky-50/70 group-hover:border-[#2d6fa3]/20 text-slate-600 px-2 py-0.5 rounded-md font-medium text-[11px] border border-slate-100 transition-all duration-300">
-                                    <svg class="w-3.5 h-3.5 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z"/></svg>
-                                    {{ $job->type }}
-                                </span>
-                                @endif
-                                @if($job->location)
-                                <span class="inline-flex items-center gap-1 bg-slate-50 group-hover:bg-emerald-50/70 group-hover:border-[#8da83a]/20 text-slate-600 px-2 py-0.5 rounded-md font-medium text-[11px] border border-slate-100 max-w-full transition-all duration-300">
-                                    <svg class="w-3.5 h-3.5 text-[#8da83a] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                    <span class="truncate" title="{{ $job->location }}">{{ $job->location }}</span>
-                                </span>
-                                @endif
-                            </div>
-
-                            @if($job->description)
-                            <p class="text-slate-500 text-xs leading-relaxed mb-5 line-clamp-3">
-                                {{ strip_tags($job->localized_description) }}
-                            </p>
-                            @endif
-                        </div>
-
-                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-                            <a href="{{ route('jobs.show', $job) }}" class="inline-flex items-center gap-1.5 text-[#2d6fa3] hover:text-[#1d4e7a] text-xs font-bold group/link transition-all duration-300">
-                                View details & apply
-                                <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover/link:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                            </a>
-                        </div>
+                    @if($job->description)
+                        <p class="text-white/80 text-sm leading-relaxed mb-6 line-clamp-4">
+                            {{ strip_tags($job->localized_description) }}
+                        </p>
+                    @endif
+                    
+                    <div class="mt-auto w-full relative z-40 flex justify-center">
+                        <a href="{{ route('jobs.show', $job) }}" class="inline-flex items-center gap-2 text-white font-black uppercase text-xs tracking-widest hover:text-[#e8a020] transition-colors duration-300 group/read">
+                            View details & apply
+                            <svg class="w-4 h-4 transform group-hover/read:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
                     </div>
+                </div>
+                
+                {{-- Main Card Link --}}
+                <a href="{{ route('jobs.show', $job) }}" class="absolute inset-0 z-20" aria-label="View {{ $job->localized_title }}"></a>
             </div>
             @endforeach
             </div>
