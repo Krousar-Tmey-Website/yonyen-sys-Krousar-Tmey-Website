@@ -39,12 +39,19 @@ $btn3Text = $settings['presentation_banner_btn3_text'] ?? '';
 $btn3Url  = $settings['presentation_banner_btn3_url'] ?? '';
 @endphp
 
-<section class="relative py-28 md:py-36 overflow-hidden" id="presentation-banner">
-    {{-- Background image with slow zoom animation --}}
-    <div class="absolute inset-0 bg-cover bg-center animate-banner-zoom" style="background-image: url('{{ $heroImageUrl }}');"></div>
+<section class="relative py-24 md:py-32 overflow-hidden flex flex-col justify-center items-center text-center">
+    <div class="absolute inset-0 bg-cover bg-center hero-media-drift" style="background-image: url('{{ $heroImageUrl }}');"></div>
     <div class="absolute inset-0" style="background-color: {{ $heroOverlayColor }}; opacity: 0.55;"></div>
 
-    {{-- Subtle gradient overlays for depth --}}
+    {{-- Animated decorative orbs --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+        <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+        <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+    </div>
+    
+    {{-- Decorative gradient overlay --}}
     <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
 
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">

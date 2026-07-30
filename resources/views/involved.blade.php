@@ -12,9 +12,17 @@
         ? "background-image: linear-gradient(180deg, {$bannerOverlayColor}e6 0%, {$bannerOverlayColor}b3 45%, {$bannerOverlayColor}f2 100%), url('{$involvedBannerImg}'); background-color: {$bannerOverlayColor};"
         : "background-color: {$bannerOverlayColor};";
 @endphp
-<div class="relative pt-20 pb-32 md:pb-36 overflow-hidden bg-cover bg-center bg-no-repeat" style="{{ $heroBgStyle }}">
+<div class="relative pt-20 pb-32 md:pb-36 overflow-hidden bg-cover bg-center bg-no-repeat hero-media-drift" style="{{ $heroBgStyle }}">
+    {{-- Animated decorative orbs --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+        <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+        <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+    </div>
+    
     {{-- Ambient Glowing Halos & Mesh Effects --}}
-    <div class="absolute inset-0 opacity-20 pointer-events-none">
+    <div class="absolute inset-0 opacity-20 pointer-events-none z-0">
         <div class="absolute top-0 right-0 w-[30rem] h-[30rem] rounded-full bg-gradient-to-bl from-[#8da83a] to-transparent blur-3xl -translate-y-1/3 translate-x-1/3 hero-pulse"></div>
         <div class="absolute bottom-0 left-0 w-[24rem] h-[24rem] rounded-full bg-gradient-to-tr from-[#e8a020] to-transparent blur-3xl translate-y-1/3 -translate-x-1/4 hero-pulse" style="animation-delay: 2s;"></div>
         <div class="absolute top-1/2 left-1/3 w-[20rem] h-[20rem] rounded-full bg-white blur-3xl opacity-10"></div>
@@ -124,10 +132,19 @@
 @endphp
 <section id="book-for-sales" class="py-24 scroll-mt-20 relative overflow-hidden" style="background-color: {{ $booksBannerOverlayColor }};">
     @if($booksBannerImg)
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $booksBannerImg }}'); opacity: 0.25;"></div>
+    <div class="absolute inset-0 bg-cover bg-center hero-media-drift" style="background-image: url('{{ $booksBannerImg }}'); opacity: 0.25;"></div>
     @endif
+
+    {{-- Animated decorative orbs --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+        <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+        <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+    </div>
+    
     {{-- Ambient Lighting Effects --}}
-    <div class="absolute inset-0 opacity-15 pointer-events-none">
+    <div class="absolute inset-0 opacity-15 pointer-events-none z-0">
         <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#8da83a] blur-3xl hero-pulse"></div>
         <div class="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#e8a020] blur-3xl hero-pulse" style="animation-delay: 3s;"></div>
     </div>

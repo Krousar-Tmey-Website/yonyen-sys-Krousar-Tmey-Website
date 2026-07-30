@@ -24,8 +24,16 @@ $heroOverlayColor = $settings['history_banner_overlay_color'] ?? '#1a3c6e';
      HERO BACKGROUND IMAGE
      ======================================================== --}}
 <section class="relative py-24 overflow-hidden" data-reveal="scale">
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $heroImageUrl }}');"></div>
+    <div class="absolute inset-0 bg-cover bg-center hero-media-drift" style="background-image: url('{{ $heroImageUrl }}');"></div>
     <div class="absolute inset-0" style="background-color: {{ $heroOverlayColor }}; opacity: 0.55;"></div>
+
+    {{-- Animated decorative orbs --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+        <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+        <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+    </div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
         <span class="inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $heroBadge }}</span>
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">

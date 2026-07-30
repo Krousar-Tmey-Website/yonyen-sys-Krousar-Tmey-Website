@@ -155,14 +155,14 @@ class CampaignController extends Controller
             'year'           => ['required', 'string', 'max:20'],
             'description'    => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],
-            'image'          => ['nullable', 'image', 'max:4096'],
-            'video'          => ['nullable', 'file', 'mimes:mp4,mov,webm', 'max:20480'],
+            'image'          => ['nullable', 'image', 'max:20480'],
+            'video'          => ['nullable', 'file', 'mimes:mp4,mov,webm', 'max:512000'],
             'video_url'      => ['nullable', 'url', 'max:2048'],
-            'file'           => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx', 'max:20480'],
+            'file'           => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx', 'max:512000'],
             'sort_order'     => ['nullable', 'integer', 'min:0'],
             'is_active'      => ['nullable', 'boolean'],
         ], [
-            'video.max' => 'The video must not be larger than 20 MB.',
+            'video.max' => 'The video must not be larger than 500 MB.',
         ]);
 
         // An untouched <input type="file"> still validates as a present-but-null key,

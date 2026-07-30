@@ -9,10 +9,17 @@
 
     {{-- Hero Banner --}}
     <div class="relative overflow-hidden bg-[#1f3f66] pt-20 pb-24">
-        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80"
-             alt="Children smiling together"
-             class="absolute inset-0 h-full w-full object-cover opacity-70">
+        <div class="absolute inset-0 bg-cover bg-center opacity-70 hero-media-drift" style="background-image: url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&q=80');"></div>
         <div class="absolute inset-0 bg-slate-950/30 backdrop-blur-[2px]"></div>
+
+        {{-- Animated decorative orbs --}}
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+            <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+            <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+        </div>
+
         <div class="absolute inset-0 opacity-30">
             <div class="absolute top-10 left-10 w-72 h-72 rounded-full bg-[#8da83a]/40 blur-3xl"></div>
             <div class="absolute bottom-12 right-8 w-56 h-56 rounded-full bg-white/10 blur-3xl"></div>

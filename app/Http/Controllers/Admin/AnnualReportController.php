@@ -48,7 +48,7 @@ class AnnualReportController extends Controller
             'description' => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],
             'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
-            'file'  => ['required', 'file', 'mimes:pdf', 'max:40960'],
+            'file'  => ['required', 'file', 'mimes:pdf', 'max:512000'],
         ]);
 
         $file = $request->file('file');
@@ -81,7 +81,7 @@ class AnnualReportController extends Controller
             'description' => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],
             'year'  => ['required', 'integer', 'min:1900', 'max:2100'],
-            'file'  => ['nullable', 'file', 'mimes:pdf', 'max:40960'],
+            'file'  => ['nullable', 'file', 'mimes:pdf', 'max:512000'],
         ]);
 
         if ($request->hasFile('file')) {

@@ -40,6 +40,15 @@ html:has(.transparency-immersive) { scroll-snap-type: y proximity; }
 <section class=" pb-20 relative min-h-[calc(100dvh-4rem)] lg:min-h-[calc(100dvh-7.25rem)] flex items-center overflow-hidden text-center scroll-mt-20 [scroll-snap-align:start]">
     <div class="absolute inset-0 bg-cover bg-center hero-media-drift" style="background-image: url('{{ $transparencyBannerImageUrl }}'); filter: blur({{ $transparencyBannerBlur }}px); {{ $transparencyBannerBlur > 0 ? 'transform: scale(1.05);' : '' }}"></div>
     <div class="absolute inset-0" style="background-color: {{ $transparencyBannerOverlayColor }}; opacity: 0.55;"></div>
+
+    {{-- Animated decorative orbs --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+        <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+        <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+    </div>
+
     <div class="relative z-10 max-w-3xl mx-auto px-6">
         <span class="hero-reveal hero-reveal-delay-1 inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $transparencyBannerBadge }}Transparency</span>
         <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-5xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg"> 

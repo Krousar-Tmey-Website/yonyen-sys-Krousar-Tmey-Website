@@ -8,13 +8,17 @@
 {{-- ── Hero banner ────────────────────────────────────────── --}}
 <section class="relative overflow-hidden bg-[#1d4e7a] h-[90vh] min-h-[600px] max-h-[900px]">
     @if($banner['image'])
-    <img src="{{ $banner['image'] }}" alt="" aria-hidden="true"
-         class="absolute inset-0 w-full h-full object-cover object-center">
+    <div class="absolute inset-0 bg-cover bg-center hero-media-drift" style="background-image: url('{{ $banner['image'] }}');"></div>
     <div class="absolute inset-0 bg-gradient-to-r from-[#12324f]/95 via-[#1d4e7a]/85 to-[#1d4e7a]/40"></div>
-    @else
-    <div class="absolute top-0 right-0 w-[28rem] h-[28rem] rounded-full bg-white/5 -translate-y-1/3 translate-x-1/4"></div>
-    <div class="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-[#8da83a]/30 translate-y-1/2 -translate-x-1/4"></div>
     @endif
+
+    {{-- Animated decorative orbs --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+        <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+        <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+    </div>
 
     <div class="relative h-full flex items-center">
         <div class="max-w-7xl mx-auto px-6 w-full">

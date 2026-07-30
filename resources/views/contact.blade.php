@@ -344,17 +344,21 @@
 <section class="relative py-20 overflow-hidden" style="background-color: {{ $contactBannerOverlayColor }};">
     {{-- Background image with slow zoom animation --}}
     @if($ctaBgImgUrl)
-    <div class="absolute inset-0 bg-cover bg-center animate-banner-zoom" style="background-image: url('{{ $ctaBgImgUrl }}');"></div>
+    <div class="absolute inset-0 bg-cover bg-center hero-media-drift" style="background-image: url('{{ $ctaBgImgUrl }}');"></div>
     @endif
     {{-- Color overlay --}}
     <div class="absolute inset-0" style="background-color: {{ $contactBannerOverlayColor }}; opacity: 0.55;"></div>
+
+    {{-- Animated decorative orbs --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+        <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+        <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+    </div>
+    
     {{-- Gradient overlay for depth --}}
     <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
-    {{-- Decorative blobs --}}
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 right-0 w-72 h-72 rounded-full bg-white -translate-y-1/2 translate-x-1/2"></div>
-        <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[#2d6fa3] translate-y-1/2 -translate-x-1/3"></div>
-    </div>
 
     <div class="relative z-10 max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
         <p class="animate-cta-badge-reveal opacity-0">

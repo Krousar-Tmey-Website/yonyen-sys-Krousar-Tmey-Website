@@ -38,6 +38,14 @@
                 <img src="{{ str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage) }}" alt="{{ $bannerTitle }}" class="absolute inset-0 w-full h-full object-cover object-[center_30%] hero-media-drift">
             </div>
         @endif
+        
+        {{-- Animated decorative orbs --}}
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+            <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+            <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+        </div>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,_rgba(255,255,255,0.18),_transparent_0,_transparent_26%),radial-gradient(circle_at_12%_84%,_rgba(141,168,58,0.12),_transparent_0,_transparent_24%),linear-gradient(180deg,_rgba(255,255,255,0.04),_transparent_36%)]"></div>
         <div class="absolute inset-0 bg-[linear-gradient(112deg,rgba(10,29,56,0.96)_0%,rgba(16,40,74,0.92)_32%,rgba(22,55,99,0.72)_56%,rgba(45,111,163,0.18)_100%)]"></div>
         @if(empty($bannerImage))

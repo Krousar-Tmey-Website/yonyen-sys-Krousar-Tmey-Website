@@ -60,7 +60,7 @@ class NewsController extends Controller
             'is_published'      => ['nullable', 'boolean'],
             'image'             => ['nullable', 'image', 'max:2048'],
             'videos'            => ['nullable', 'array'],
-            'videos.*'          => ['file', 'mimes:mp4,mov,webm', 'max:35000'],
+            'videos.*'          => ['file', 'mimes:mp4,mov,webm', 'max:512000'],
             'video_url'         => ['nullable', 'url', 'max:500'],
             'tag_links'         => ['nullable', 'json'],
         ]);
@@ -170,7 +170,7 @@ class NewsController extends Controller
             'is_published'      => ['nullable', 'boolean'],
             'image'             => ['nullable', 'image', 'max:2048'],
             'videos'            => ['nullable', 'array'],
-            'videos.*'          => ['file', 'mimes:mp4,mov,webm', 'max:35000'],
+            'videos.*'          => ['file', 'mimes:mp4,mov,webm', 'max:512000'],
             'video_url'         => ['nullable', 'url', 'max:500'],
             'remove_videos'     => ['nullable', 'array'],
             'remove_videos.*'   => ['string'],

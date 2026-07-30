@@ -58,7 +58,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Upload File</label>
                 <input type="file" name="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip"
                        class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#2d6fa3]/10 file:text-[#2d6fa3] hover:file:bg-[#2d6fa3]/20">
-                <p class="mt-1.5 text-xs text-gray-400">Max 20MB. PDF, Word, Excel, PowerPoint, text, and ZIP files supported.</p>
+                <p class="mt-1.5 text-xs text-gray-400">Max 500MB. PDF, Word, Excel, PowerPoint, text, and ZIP files supported.</p>
             </div>
 
             <div>

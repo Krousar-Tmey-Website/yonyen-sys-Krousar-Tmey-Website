@@ -27,12 +27,16 @@
          style="background-color: {{ $newsBannerOverlay }};">
     {{-- Background image --}}
     @if($newsBannerImageUrl)
-    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ $newsBannerImageUrl }}'); opacity: 0.4;"></div>
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat hero-media-drift" style="background-image: url('{{ $newsBannerImageUrl }}'); opacity: 0.4;"></div>
     @endif
 
-    {{-- Decorative circles --}}
-    <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/3"></div>
-    <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a]/40 translate-y-1/2 -translate-x-1/4"></div>
+    {{-- Animated decorative orbs --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+        <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+        <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+    </div>
 
     <div class="relative max-w-7xl mx-auto px-6">
 <div data-reveal class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-4">

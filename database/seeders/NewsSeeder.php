@@ -64,7 +64,7 @@ class NewsSeeder extends Seeder
       0 => 
       array (
         'url' => '/topics/cambodia',
-        'label' => 'Cambodia',
+        'label' => 'Cambodia', 
       ),
       1 => 
       array (

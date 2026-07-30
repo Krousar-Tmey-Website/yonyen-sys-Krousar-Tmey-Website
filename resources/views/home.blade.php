@@ -32,9 +32,18 @@
     {{-- Slide {{ $loop->iteration }} --}}
     <div class="absolute inset-0 transition-opacity duration-1000"
         :class="current === {{ $loop->index }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
-        <div class="absolute inset-0 bg-gradient-to-r from-[#0f2448]/85 via-[#0f2448]/60 to-transparent z-10"></div>
-        <div class="absolute inset-0 bg-cover bg-center"
+        <div class="absolute inset-0 bg-cover bg-center hero-media-drift"
             style="background-image: url('{{ $slide->image_url }}')"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0f2448]/85 via-[#0f2448]/60 to-transparent z-10"></div>
+
+        {{-- Animated decorative orbs --}}
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-10">
+            <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full hero-float-slow" style="background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);"></div>
+            <div class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] rounded-full hero-float-delayed" style="background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);"></div>
+            <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full hero-pulse" style="background: radial-gradient(circle, rgba(141,168,58,0.20) 0%, transparent 70%);"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
+        </div>
+        
         <div class="relative z-20 h-full flex items-center">
             <div class="max-w-7xl mx-auto px-6 w-full">
                 <div class="max-w-2xl"

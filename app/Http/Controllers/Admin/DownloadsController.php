@@ -24,7 +24,7 @@ class DownloadsController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'file' => 'nullable|file|max:20480',
+            'file' => 'nullable|file|max:512000',
             'external_url' => 'nullable|url|max:2048',
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
@@ -54,7 +54,7 @@ class DownloadsController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'file' => 'nullable|file|max:20480',
+            'file' => 'nullable|file|max:512000',
             'external_url' => 'nullable|url|max:2048',
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
