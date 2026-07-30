@@ -60,6 +60,7 @@ class OfficeController extends Controller
             'address'      => ['required', 'string', 'max:1000'],
             'phone'        => ['nullable', 'string', 'max:50'],
             'email'        => ['nullable', 'email', 'max:255'],
+            'google_maps_link' => ['nullable', 'string', 'max:2000'],
             'sort_order'   => ['nullable', 'integer', 'min:0'],
             'is_active'    => ['nullable', 'boolean'],
         ]);

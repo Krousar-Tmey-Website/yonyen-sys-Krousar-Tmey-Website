@@ -74,6 +74,15 @@
             <p class="text-xs text-gray-400 mt-1.5">Contact form messages addressed to this office are emailed here.</p>
         </div>
     </div>
+
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Google Maps Link or iframe embed code <span class="text-gray-400 font-normal">(optional)</span></label>
+        <textarea name="google_maps_link" rows="3"
+                  class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono"
+                  placeholder='e.g. <iframe src="https://www.google.com/maps/embed?..."></iframe>'>{{ $val('google_maps_link') }}</textarea>
+        @error('google_maps_link')<p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>@enderror
+        <p class="text-xs text-gray-400 mt-1.5">Paste the embed HTML code provided by Google Maps, or a direct link, to show this map on the Contact page.</p>
+    </div>
 </div>
 
 {{-- Card Badge --}}
