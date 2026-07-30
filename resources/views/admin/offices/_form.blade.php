@@ -75,13 +75,25 @@
         </div>
     </div>
 
-    <div>
+    <div x-data="{ mapEmbed: '' }" x-init="mapEmbed = $refs.mapTextarea.value">
         <label class="block text-sm font-medium text-gray-700 mb-1.5">Google Maps Link or iframe embed code <span class="text-gray-400 font-normal">(optional)</span></label>
-        <textarea name="google_maps_link" rows="3"
+        <textarea x-ref="mapTextarea" name="google_maps_link" rows="3" x-model="mapEmbed"
                   class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono"
                   placeholder='e.g. <iframe src="https://www.google.com/maps/embed?..."></iframe>'>{{ $val('google_maps_link') }}</textarea>
         @error('google_maps_link')<p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>@enderror
         <p class="text-xs text-gray-400 mt-1.5">Paste the embed HTML code provided by Google Maps, or a direct link, to show this map on the Contact page.</p>
+        
+        <div x-show="mapEmbed && mapEmbed.includes('<iframe')" style="display: none;" class="mt-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-2">
+                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                Map Preview
+            </label>
+            <div class="rounded-xl border border-gray-200 overflow-hidden bg-gray-50 shadow-sm [&>iframe]:w-full [&>iframe]:h-[300px] [&>iframe]:border-0" x-html="mapEmbed">
+            </div>
+        </div>
     </div>
 </div>
 

@@ -480,8 +480,13 @@ function switchLang(lang) {
                 </div>
             </div>
             <div class="border-t border-white/5">
-                <p class="max-w-7xl mx-auto px-6 py-4 text-center font-khmer text-base tracking-wide text-white/40">
-                    បង្កើតដោយសិស្ស <span class="font-medium text-white/60">Passerelles Numériques Cambodia (PNC)</span> <span class="text-rose-400 align-[-1px]">❤️</span>
+                <p class="max-w-7xl mx-auto px-6 py-4 text-center text-base tracking-wide text-white/60 flex flex-wrap items-center justify-center gap-2 md:gap-3">
+                    <span>Created by</span>
+                    <a href="https://www.passerellesnumeriques.org" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2">
+                        <img src="{{ asset('images/PNC-logo.png') }}" alt="PNC Logo" 
+                             class="h-7 w-7 md:h-8 md:w-8 rounded-full object-cover object-left bg-black border border-white/10 shadow-sm group-hover:scale-105 transition-all duration-300">
+                        <span class="font-medium text-white/90 group-hover:text-white transition-colors duration-300">Passerelles Numériques Cambodia</span>
+                    </a>
                 </p>
             </div>
         </div>
