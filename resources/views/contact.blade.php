@@ -59,15 +59,15 @@
 
             {{-- Left Column: Content --}}
             <div class="lg:col-span-7 space-y-6 flex flex-col justify-center">
-                <nav class="flex items-center gap-2 text-sm text-white/50 mb-2" data-reveal="fade">
+                <nav class="hero-reveal hero-reveal-delay-1 flex items-center gap-2 text-sm text-white/50 mb-2">
                     <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     <span class="text-white">Contact</span>
                 </nav>
 
-                <p class="text-[#8da83a] font-bold text-xs uppercase tracking-[0.2em]" data-reveal="fade">Get in Touch</p>
+                <p class="hero-reveal hero-reveal-delay-2 text-[#8da83a] font-bold text-xs uppercase tracking-[0.2em]">Get in Touch</p>
 
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white" data-reveal="fade">
+                <h1 class="hero-reveal hero-reveal-delay-3 text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white">
                     Contact <span class="font-serif italic text-[#8da83a] normal-case">Us</span>
                 </h1>
 
@@ -77,12 +77,12 @@
                     $facebookUrl = \App\Models\HomeSetting::getValue('social_facebook', 'https://www.facebook.com/KrousarThmey');
                 @endphp
 
-                <p class="text-white/80 text-base max-w-2xl leading-relaxed pr-4" data-reveal="fade">
+                <p class="hero-reveal hero-reveal-delay-4 text-white/80 text-base max-w-2xl leading-relaxed pr-4">
                     We have offices in Cambodia, France, and Switzerland. Reach out to us for partnerships, donations, or general enquiries.
                 </p>
 
                 {{-- Quick contact strip --}}
-                <div class="flex flex-wrap gap-3 pt-2" data-reveal="up" style="--reveal-delay: 200">
+                <div class="hero-reveal hero-reveal-delay-4 flex flex-wrap gap-3 pt-2">
                     <a href="tel:+85523211955" class="flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-md rounded-full px-4.5 py-2.5 text-white text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-[#1a3c6e] hover:scale-105 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(255,255,255,0.12)] group/btn">
                         <svg class="w-3.5 h-3.5 text-current group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                         +855 (0)23 211 955

@@ -55,29 +55,22 @@ $btn3Url  = $settings['presentation_banner_btn3_url'] ?? '';
     <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
 
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
-        {{-- Badge: fade in then slide up --}}
-        <div class="animate-badge-reveal opacity-0">
-            <span class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-5 py-2 rounded-full mb-6 uppercase tracking-wider shadow-lg">{{ $heroBadge }}</span>
+        {{-- Badge --}}
+        <span class="hero-reveal hero-reveal-delay-1 inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-5 py-2 rounded-full mb-6 uppercase tracking-wider shadow-lg">{{ $heroBadge }}</span>
+
+        {{-- Title --}}
+        <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
+            {{ $heroTitle }}
+        </h1>
+
+        {{-- Subtitle --}}
+        <div class="hero-reveal hero-reveal-delay-3 rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md max-w-2xl mx-auto">
+            {!! $heroSubtitle !!}
         </div>
 
-        {{-- Title: fade in then slide up (delayed) --}}
-        <div class="animate-title-reveal opacity-0">
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
-                {{ $heroTitle }}
-            </h1>
-        </div>
-
-        {{-- Subtitle: fade in then slide up (further delayed) --}}
-        <div class="animate-subtitle-reveal opacity-0">
-            <div class="rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md max-w-2xl mx-auto">
-                {!! $heroSubtitle !!}
-            </div>
-        </div>
-
-        {{-- Buttons: staggered entrance (further delayed) --}}
+        {{-- Buttons --}}
         @if($btn1Text || $btn2Text || $btn3Text)
-        <div class="animate-buttons-reveal opacity-0">
-            <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
+        <div class="hero-reveal hero-reveal-delay-4 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
                 @if($btn1Text)
                 <a href="{{ $btn1Url }}" class="btn-primary text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

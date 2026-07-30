@@ -23,14 +23,14 @@
         <div class="absolute bottom-12 right-8 w-56 h-56 rounded-full bg-white/10 blur-3xl"></div>
     </div>
     <div class="relative max-w-6xl mx-auto px-6 text-center">
-        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.26em] text-slate-200 mb-6">
+        <span class="hero-reveal hero-reveal-delay-1 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.26em] text-slate-200 mb-6">
             <svg class="w-4 h-4 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
             </svg>
             International donations
         </span>
-        <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight sm:text-6xl">Support Khmer children with an international donation.</h1>
-        <p class="mt-6 text-base sm:text-lg text-slate-200 max-w-3xl mx-auto leading-8">
+        <h1 class="hero-reveal hero-reveal-delay-2 text-4xl md:text-5xl font-black text-white tracking-tight sm:text-6xl">Support Khmer children with an international donation.</h1>
+        <p class="hero-reveal hero-reveal-delay-3 mt-6 text-base sm:text-lg text-slate-200 max-w-3xl mx-auto leading-8">
             Every gift helps a child access education, shelter, and medical care in Cambodia.
             Set up a secure bank wire transfer to help us build a brighter future.
         </p>

@@ -30,7 +30,7 @@
 
     <div class="relative z-10 max-w-7xl mx-auto px-6">
         {{-- Glass Breadcrumbs --}}
-        <nav class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-white/80 mb-8 shadow-sm" data-reveal="down">
+        <nav class="hero-reveal hero-reveal-delay-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-white/80 mb-8 shadow-sm">
             <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
             <svg class="w-3.5 h-3.5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <span class="text-white font-semibold">Get Involved</span>
@@ -39,16 +39,16 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div class="lg:col-span-8">
                 {{-- Glowing Pill Tag --}}
-                <div class="inline-flex items-center gap-2 bg-[#8da83a]/25 border border-[#8da83a]/40 text-[#a3c04a] text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 shadow-inner backdrop-blur-sm" data-reveal="up">
+                <div class="hero-reveal hero-reveal-delay-2 inline-flex items-center gap-2 bg-[#8da83a]/25 border border-[#8da83a]/40 text-[#a3c04a] text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 shadow-inner backdrop-blur-sm">
                     <span class="w-2 h-2 rounded-full bg-[#8da83a] animate-ping"></span>
                     {{ $bannerBadge }}
                 </div>
 
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white mb-6 leading-tight drop-shadow-lg" data-reveal="up" style="--reveal-delay: 100">
+                <h1 class="hero-reveal hero-reveal-delay-3 text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white mb-6 leading-tight drop-shadow-lg">
                     {{ $bannerTitle }}
                 </h1>
 
-                <p class="text-white/90 text-base md:text-lg leading-relaxed max-w-2xl font-light drop-shadow-md" data-reveal="up" style="--reveal-delay: 200">
+                <p class="hero-reveal hero-reveal-delay-4 text-white/90 text-base md:text-lg leading-relaxed max-w-2xl font-light drop-shadow-md">
                     @php
                         $displaySubtitle = $bannerSubtitle;
                         if (app()->getLocale() === 'fr' && !empty($settings['involved_banner_subtitle_fr'] ?? null)) {

@@ -269,7 +269,7 @@ function initializeRevealAnimations(root = document) {
         }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
     }
 
-    root.querySelectorAll('[data-reveal]').forEach((el) => revealState.revealObserver.observe(el));
+    root.querySelectorAll('[data-reveal], .hero-reveal').forEach((el) => revealState.revealObserver.observe(el));
     root.querySelectorAll('[data-reveal-card]').forEach((el) => revealState.cardRevealObserver.observe(el));
 }
 

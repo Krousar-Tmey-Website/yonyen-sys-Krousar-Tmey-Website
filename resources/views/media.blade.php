@@ -23,7 +23,7 @@ $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
 {{-- ========================================================
      MEDIA BANNER (hero)
      ======================================================== --}}
-<section class="relative py-24 overflow-hidden" data-reveal="scale">
+<section class="relative py-24 overflow-hidden">
     <div class="absolute inset-0 bg-cover bg-center hero-media-drift" style="background-image: url('{{ $heroImageUrl }}');"></div>
     <div class="absolute inset-0" style="background-color: {{ $heroOverlayColor }}; opacity: 0.55;"></div>
 
@@ -35,11 +35,11 @@ $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
         <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full hero-float-slow" style="animation-delay: 4s; background: radial-gradient(circle, rgba(238,169,29,0.15) 0%, transparent 70%);"></div>
     </div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
-        <span class="inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $heroBadge }}</span>
-        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
+        <span class="hero-reveal hero-reveal-delay-1 inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $heroBadge }}</span>
+        <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
             {{ $heroTitle }}
         </h1>
-        <div class="rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md">
+        <div class="hero-reveal hero-reveal-delay-3 rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md">
             {!! $heroSubtitle !!}
         </div>
 
@@ -53,7 +53,7 @@ $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
         @endphp
 
         @if($btn1Text || $btn2Text || $btn3Text)
-        <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
+        <div class="hero-reveal hero-reveal-delay-4 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
             @if($btn1Text)
             <a href="{{ $btn1Url }}" class="btn-primary text-sm sm:text-base btn-micro inline-flex items-center gap-2 px-6 py-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

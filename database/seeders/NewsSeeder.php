@@ -154,7 +154,7 @@ class NewsSeeder extends Seeder
       3 => 
       array (
         'url' => '/topics/health-and-hygiene',
-        'label' => 'Health and hygiene',
+        'label' => 'Health and hygiene'
       ),
       4 => 
       array (

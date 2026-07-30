@@ -39,17 +39,17 @@
     </div>
 
     <div class="relative max-w-7xl mx-auto px-6">
-<div data-reveal class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-4">
+        <div class="hero-reveal hero-reveal-delay-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8a020]/20 border border-[#e8a020]/30 mb-4">
             <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
             <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">{{ $newsBannerBadge }}</span>
         </div>
-        <h1 data-reveal style="--reveal-delay: 60" class="text-3xl md:text-4xl font-black text-white mb-3 uppercase tracking-wide max-w-3xl">{{ $newsBannerTitle }}</h1>
+        <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-4xl font-black text-white mb-3 uppercase tracking-wide max-w-3xl">{{ $newsBannerTitle }}</h1>
         @if($newsBannerSubtitle)
-        <p data-reveal style="--reveal-delay: 120" class="text-white/60 text-base max-w-2xl leading-relaxed">{{ $newsBannerSubtitle }}</p>
+        <p class="hero-reveal hero-reveal-delay-3 text-white/60 text-base max-w-2xl leading-relaxed">{{ $newsBannerSubtitle }}</p>
         @endif
 
         @if($newsBtn1Text)
-        <div data-reveal style="--reveal-delay: 180" class="flex flex-wrap gap-4 mt-8">
+        <div class="hero-reveal hero-reveal-delay-4 flex flex-wrap gap-4 mt-8">
             <a href="{{ $newsBtn1Url ?? route('donate') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#8da83a] text-white hover:bg-[#a3c04a] text-sm font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                 {{ $newsBtn1Text }}
