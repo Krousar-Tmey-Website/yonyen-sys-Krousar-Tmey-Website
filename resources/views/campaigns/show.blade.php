@@ -11,7 +11,7 @@ $isPdf = $campaign->has_file && Str::endsWith(Str::lower($campaign->file), '.pdf
 @endphp
 
 {{-- ── Header ─────────────────────────────────────────────── --}}
-<section class="relative overflow-hidden bg-[#1d4e7a] h-[55vh] min-h-[460px] max-h-[620px]">
+<section class="relative overflow-hidden bg-[#1d4e7a] min-h-[520px]">
     @if($banner['image'])
     <div class="absolute inset-0 bg-cover bg-center hero-media-drift"
         style="background-image: url('{{ $banner['image'] }}');"></div>
@@ -31,8 +31,8 @@ $isPdf = $campaign->has_file && Str::endsWith(Str::lower($campaign->file), '.pdf
         </div>
     </div>
 
-    <div class="relative h-full flex items-center">
-        <div class="max-w-7xl mx-auto px-6 w-full">
+    <div class="relative">
+        <div class="max-w-7xl mx-auto px-6 w-full pt-28 pb-20 lg:pt-32 lg:pb-24">
             <nav data-reveal class="flex items-center flex-wrap gap-2 text-sm text-white/50 mb-8">
                 <a href="{{ route('home') }}" class="hover:text-white transition-colors">{{ __('Home') }}</a>
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
