@@ -31,7 +31,9 @@ class CampaignController extends Controller
             ->take(3)
             ->get();
 
-        return view('campaigns.show', compact('settings', 'campaign', 'relatedCampaigns'));
+        $banner = $this->banner($settings);
+
+        return view('campaigns.show', compact('settings', 'campaign', 'relatedCampaigns', 'banner'));
     }
 
     private function banner(array $settings): array
