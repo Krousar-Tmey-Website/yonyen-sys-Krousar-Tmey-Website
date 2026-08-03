@@ -13,7 +13,7 @@
 <div class="form-container">
 
     {{-- ── Page banner ─────────────────────────────────────── --}}
-    <div class="form-card" x-data="{ open: {{ $errors->hasAny(['campaigns_banner_title', 'campaigns_banner_subtitle', 'campaigns_banner_subtitle_fr', 'campaigns_banner_image', 'campaigns_banner_image_url']) ? 'true' : 'false' }}, preview: '' }">
+    <div class="form-card" x-data="{ open: {{ $errors->hasAny(['campaigns_banner_title', 'campaigns_banner_title_fr', 'campaigns_banner_subtitle', 'campaigns_banner_subtitle_fr', 'campaigns_banner_image', 'campaigns_banner_image_url']) ? 'true' : 'false' }}, preview: '' }">
         <button type="button" @click="open = !open" class="card-header w-full text-left">
             <span class="icon blue">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -33,11 +33,26 @@
             <form action="{{ route('admin.campaigns.banner') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="form-group">
-                    <label class="form-label">Banner Title <span class="required">*</span></label>
-                    <input type="text" name="campaigns_banner_title" value="{{ old('campaigns_banner_title', $banner['title']) }}"
-                           class="form-control @error('campaigns_banner_title') error @enderror" placeholder="Our Campaigns">
-                    @error('campaigns_banner_title')<div class="form-error">{{ $message }}</div>@enderror
+                <div class="form-group" x-data="bilingualForm()">
+                    <div class="flex items-center justify-between gap-3 mb-1.5">
+                        <label class="form-label mb-0">Banner Title <span class="required">*</span></label>
+                        <div class="lang-tabs" title="Toggle editing language (English / French)">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                        </div>
+                    </div>
+
+                    <div x-show="lang === 'en'">
+                        <x-admin.rich-text name="campaigns_banner_title" :value="old('campaigns_banner_title', $banner['title'])" lang="en" :rows="1"
+                                           placeholder="Our Campaigns" />
+                        @error('campaigns_banner_title')<div class="form-error">{{ $message }}</div>@enderror
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <x-admin.rich-text name="campaigns_banner_title_fr" :value="old('campaigns_banner_title_fr', $banner['title_fr'] ?? '')" lang="fr" :rows="1"
+                                           placeholder="Nos Campagnes" />
+                        @error('campaigns_banner_title_fr')<div class="form-error">{{ $message }}</div>@enderror
+                        <div class="form-helper">Leave blank to reuse the English title.</div>
+                    </div>
                 </div>
 
                 <div class="form-group" x-data="bilingualForm()">

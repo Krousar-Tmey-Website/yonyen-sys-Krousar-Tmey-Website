@@ -29,31 +29,23 @@
 
             <div x-show="lang === 'en'">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Title <span class="text-gray-400 font-normal">(optional)</span></label>
-                <input type="text" name="title" value="{{ old('title') }}"
-                       class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                       placeholder="Enter value title">
+                <x-admin.rich-text name="title" :value="old('title')" lang="en" :rows="1" placeholder="Enter value title" />
                 @error('title')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
             </div>
             <div x-show="lang === 'fr'" x-cloak>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                <input type="text" name="title_fr" value="{{ old('title_fr') }}"
-                       class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                       placeholder="Enter value title in French">
+                <x-admin.rich-text name="title_fr" :value="old('title_fr')" lang="fr" :rows="1" placeholder="Enter value title in French" />
             </div>
 
                 <div>
                     <div x-show="lang === 'en'">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Headline <span class="text-gray-400">(optional)</span></label>
-                        <input type="text" name="headline" value="{{ old('headline') }}"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="Short headline shown on the card">
+                        <x-admin.rich-text name="headline" :value="old('headline')" lang="en" :rows="1" placeholder="Short headline shown on the card" />
                         @error('headline')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Headline (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <input type="text" name="headline_fr" value="{{ old('headline_fr') }}"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="Short headline in French">
+                        <x-admin.rich-text name="headline_fr" :value="old('headline_fr')" lang="fr" :rows="1" placeholder="Short headline in French" />
                     </div>
                 </div>
             </div>

@@ -12,6 +12,7 @@ $bannerOverlayColor = $bv('history_banner_overlay_color', '#1a3c6e');
 $bannerImageUrl = $bannerImage ? (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) : null;
 $bannerBadge = $bv('history_banner_badge', 'Our History');
 $bannerTitle = $bv('history_banner_title', 'Help a Child Build Their Future');
+$bannerTitleFr = $bvFr('history_banner_title');
 $bannerSubtitle = $bv('history_banner_subtitle', 'Discover the inspiring journey of Krousar Thmey, from our humble beginnings in 1991 to our ongoing mission supporting children across Cambodia.');
 $bannerSubtitleFr = $bvFr('history_banner_subtitle');
 @endphp
@@ -218,12 +219,21 @@ $bannerSubtitleFr = $bvFr('history_banner_subtitle');
                                        oninput="document.getElementById('preview-badge').textContent = this.value || 'Our History'"
                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                             </div>
-                            <div>
-                                <label for="history_banner_title" class="block text-xs font-medium text-gray-600 mb-1.5">Hero Title</label>
-                                <input type="text" id="history_banner_title" name="history_banner_title"
-                                       value="{{ $bannerTitle }}"
-                                       oninput="document.getElementById('preview-title').textContent = this.value || 'Help a Child Build Their Future'"
-                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <div x-data="bilingualForm()">
+                                <div class="flex items-center justify-between gap-2 mb-1.5">
+                                    <label class="block text-xs font-medium text-gray-600 mb-0">Hero Title</label>
+                                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                                    </div>
+                                </div>
+                                <div x-show="lang === 'en'">
+                                    <x-admin.rich-text id="history_banner_title" name="history_banner_title" :value="$bannerTitle" lang="en" :rows="1" />
+                                </div>
+                                <div x-show="lang === 'fr'" x-cloak>
+                                    <x-admin.rich-text id="history_banner_title_fr" name="history_banner_title_fr" :value="$bannerTitleFr" lang="fr" :rows="1" placeholder="Aidez un enfant à construire son avenir" />
+                                    <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English title.</p>
+                                </div>
                             </div>
                         </div>
                     </div>

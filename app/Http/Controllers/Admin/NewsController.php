@@ -277,7 +277,8 @@ class NewsController extends Controller
     {
         $request->validate([
             'news_banner_badge'         => ['nullable', 'string', 'max:255'],
-            'news_banner_title'         => ['nullable', 'string', 'max:255'],
+            'news_banner_title'         => ['nullable', 'string'],
+            'news_banner_title_fr'      => ['nullable', 'string'],
             'news_banner_subtitle'      => ['nullable', 'string'],
             'news_banner_subtitle_fr'   => ['nullable', 'string'],
             'news_banner_overlay_color' => ['nullable', 'string', 'max:20'],
@@ -293,6 +294,7 @@ class NewsController extends Controller
 
         HomeSetting::setValue('news_banner_badge', $request->input('news_banner_badge', ''));
         HomeSetting::setValue('news_banner_title', $request->input('news_banner_title', ''));
+        HomeSetting::setValue('news_banner_title_fr', $request->input('news_banner_title_fr', ''));
         HomeSetting::setValue('news_banner_subtitle', $request->input('news_banner_subtitle', ''));
         HomeSetting::setValue('news_banner_subtitle_fr', $request->input('news_banner_subtitle_fr', ''));
         HomeSetting::setValue('news_banner_overlay_color', $request->input('news_banner_overlay_color', ''));

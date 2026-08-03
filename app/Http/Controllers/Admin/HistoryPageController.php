@@ -17,6 +17,7 @@ class HistoryPageController extends Controller
             'history_banner_overlay_color',
             'history_banner_badge',
             'history_banner_title',
+            'history_banner_title_fr',
             'history_banner_subtitle',
             'history_banner_subtitle_fr',
         ])->pluck('value', 'key');

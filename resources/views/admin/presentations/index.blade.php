@@ -314,12 +314,23 @@
                            class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                 </div>
 
-                {{-- Title --}}
+                {{-- Title (bilingual) --}}
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
-                    <input type="text" name="presentation_banner_title" value="{{ $pbTitle }}"
-                           oninput="document.querySelector('#banner-preview p.font-bold').textContent=this.value"
-                           class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-medium text-gray-600">Title</label>
+                        <div class="lang-tabs" title="Toggle editing language (English / French)">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                        </div>
+                    </div>
+                    <div x-show="lang === 'en'">
+                        <x-admin.rich-text name="presentation_banner_title" :value="$pbTitle" lang="en" :rows="1" />
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <x-admin.rich-text name="presentation_banner_title_fr" :value="old('presentation_banner_title_fr', $settings['presentation_banner_title_fr'] ?? '')" lang="fr" :rows="1"
+                                           placeholder="Krousar Thmey, la première organisation cambodgienne…" />
+                        <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English title.</p>
+                    </div>
                 </div>
 
                 {{-- Subtitle (bilingual) --}}

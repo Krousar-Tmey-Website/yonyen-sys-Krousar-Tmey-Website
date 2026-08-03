@@ -10,6 +10,9 @@ $settings = \App\Models\HomeSetting::allKeyed();
 $heroImage = $settings['words_pictures_banner_image'] ?? null;
 $heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/cultural.jpg');
 $heroTitle = $settings['words_pictures_banner_title'] ?? 'Words and Pictures Application';
+if (app()->getLocale() === 'fr' && !empty($settings['words_pictures_banner_title_fr'] ?? null)) {
+    $heroTitle = $settings['words_pictures_banner_title_fr'];
+}
 $heroSubtitle = $settings['words_pictures_banner_subtitle'] ?? 'A free mobile app helping children with hearing and speech impairments practice Cambodian Sign Language.';
 if (app()->getLocale() === 'fr' && !empty($settings['words_pictures_banner_subtitle_fr'] ?? null)) {
     $heroSubtitle = $settings['words_pictures_banner_subtitle_fr'];
@@ -33,7 +36,7 @@ $btn3Url  = $settings['words_pictures_banner_btn3_url'] ?? '';
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
         <span class="hero-reveal hero-reveal-delay-1 inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $heroBadge }}</span>
         <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
-            {{ $heroTitle }}
+            {{ strip_tags($heroTitle) }}
         </h1>
         <div class="hero-reveal hero-reveal-delay-3 rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md">
             {!! $heroSubtitle !!}

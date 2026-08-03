@@ -102,7 +102,7 @@
                             <div class="w-8 h-8 rounded-full bg-[#e8a020] flex items-center justify-center text-white shadow-sm">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             </div>
-                            <h3 class="text-lg font-black text-[#1a3c6e] uppercase tracking-widest m-0">{{ $project->effective_make_difference_title ?: 'Make a Difference' }}</h3>
+                            <h3 class="text-lg font-black text-[#1a3c6e] uppercase tracking-widest m-0">{{ strip_tags($project->effective_make_difference_title) ?: 'Make a Difference' }}</h3>
                         </div>
                         <div class="rich-text-content text-gray-700 text-[16px] leading-relaxed relative z-10">{!! $project->effective_make_difference_text !!}</div>
                         

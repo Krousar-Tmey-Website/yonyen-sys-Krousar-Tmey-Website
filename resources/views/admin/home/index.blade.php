@@ -82,7 +82,7 @@ $sections = [
         'fields' => [
             ['key' => 'cta_background_image', 'label' => 'Background Image',                               'type' => 'image'],
             ['key' => 'cta_label',            'label' => 'Badge Text',                                     'type' => 'text', 'placeholder' => 'Support Our Work'],
-            ['key' => 'cta_title',            'label' => 'Title',                                          'type' => 'text', 'placeholder' => 'Help a Child Build Their Future'],
+            ['key' => 'cta_title',            'label' => 'Title',                                          'type' => 'richtext', 'placeholder' => 'Help a Child Build Their Future'],
             ['key' => 'cta_subtitle',         'label' => 'Subtitle',                                       'type' => 'richtext', 'placeholder' => 'We guarantee that 100% of your donation...'],
             ['key' => 'cta_primary_text',     'label' => 'Button 1 — Text (Donate Now)',                   'type' => 'text', 'placeholder' => 'Donate Now'],
             ['key' => 'cta_primary_url',      'label' => 'Button 1 — URL',                                 'type' => 'url', 'placeholder' => '/donate'],

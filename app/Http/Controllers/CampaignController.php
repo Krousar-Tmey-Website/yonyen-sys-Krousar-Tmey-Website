@@ -48,6 +48,12 @@ class CampaignController extends Controller
             $resolvedImage = asset('storage/' . $image);
         }
 
+        $title = $settings['campaigns_banner_title'] ?? 'Our Campaigns';
+
+        if (app()->getLocale() === 'fr' && !empty($settings['campaigns_banner_title_fr'] ?? null)) {
+            $title = $settings['campaigns_banner_title_fr'];
+        }
+
         $subtitle = $settings['campaigns_banner_subtitle'] ?? 'Every campaign is a promise kept to a child in Cambodia. Discover the causes we are championing this year.';
 
         if (app()->getLocale() === 'fr' && !empty($settings['campaigns_banner_subtitle_fr'] ?? null)) {
@@ -55,7 +61,7 @@ class CampaignController extends Controller
         }
 
         return [
-            'title'    => $settings['campaigns_banner_title'] ?? 'Our Campaigns',
+            'title'    => $title,
             'subtitle' => $subtitle,
             'image'    => $resolvedImage,
         ];

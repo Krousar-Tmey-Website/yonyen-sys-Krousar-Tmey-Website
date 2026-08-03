@@ -16,6 +16,7 @@ class HistoryBannerController extends Controller
             'history_banner_overlay_color',
             'history_banner_badge',
             'history_banner_title',
+            'history_banner_title_fr',
             'history_banner_subtitle',
             'history_banner_subtitle_fr',
         ])->pluck('value', 'key');
@@ -27,9 +28,10 @@ class HistoryBannerController extends Controller
     {
         $request->validate([
             'history_banner_badge'         => ['nullable', 'string', 'max:255'],
-            'history_banner_title'         => ['nullable', 'string', 'max:255'],
-            'history_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
-            'history_banner_subtitle_fr'   => ['nullable', 'string', 'max:1000'],
+            'history_banner_title'         => ['nullable', 'string'],
+            'history_banner_title_fr'      => ['nullable', 'string'],
+            'history_banner_subtitle'      => ['nullable', 'string'],
+            'history_banner_subtitle_fr'   => ['nullable', 'string'],
             'history_banner_overlay_color' => ['nullable', 'string', 'max:20'],
             'history_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'history_banner_image_url'     => ['nullable', 'url', 'max:2048'],
@@ -37,6 +39,7 @@ class HistoryBannerController extends Controller
 
         HomeSetting::setValue('history_banner_badge', $request->input('history_banner_badge', ''));
         HomeSetting::setValue('history_banner_title', $request->input('history_banner_title', ''));
+        HomeSetting::setValue('history_banner_title_fr', $request->input('history_banner_title_fr', ''));
         HomeSetting::setValue('history_banner_subtitle', $request->input('history_banner_subtitle', ''));
         HomeSetting::setValue('history_banner_subtitle_fr', $request->input('history_banner_subtitle_fr', ''));
         HomeSetting::setValue('history_banner_overlay_color', $request->input('history_banner_overlay_color', ''));
@@ -62,6 +65,6 @@ class HistoryBannerController extends Controller
             HomeSetting::setValue('history_banner_image', '');
         }
 
-        return redirect()->route('admin.history-banner.index')->with('success', 'History page banner updated.');
+        return redirect()->route('admin.history-page.index')->with('success', 'History page banner updated.');
     }
 }

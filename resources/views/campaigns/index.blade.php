@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($banner['title'] ?: __('Campaigns')) . ' — ' . ($settings['site_name'] ?? 'Krousar Thmey'))
+@section('title', (strip_tags($banner['title']) ?: __('Campaigns')) . ' — ' . ($settings['site_name'] ?? 'Krousar Thmey'))
 @section('description', Str::limit(strip_tags($banner['subtitle']), 160))
 
 @section('content')
@@ -35,7 +35,7 @@
                 </div>
 
                 <h1 data-reveal style="--reveal-delay: 120" class="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] mb-5">
-                    {{ $banner['title'] }}
+                    {{ strip_tags($banner['title']) }}
                 </h1>
 
                 @if($banner['subtitle'])

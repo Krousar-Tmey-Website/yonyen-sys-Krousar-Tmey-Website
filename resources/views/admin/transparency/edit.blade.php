@@ -69,16 +69,12 @@
                 <div>
                     <div x-show="lang === 'en'">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
-                        <input type="text" name="description" value="{{ old('description', $report->description) }}"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="PDF · Full Report">
+                        <x-admin.rich-text name="description" :value="old('description', $report->description)" lang="en" :rows="1" placeholder="PDF · Full Report" />
                         @error('description')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Description (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <input type="text" name="description_fr" value="{{ old('description_fr', $report->description_fr) }}"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="PDF · Rapport complet">
+                        <x-admin.rich-text name="description_fr" :value="old('description_fr', $report->description_fr)" lang="fr" :rows="1" placeholder="PDF · Rapport complet" />
                         @error('description_fr')<p class="text-xs text-red-500 mt-2">{{ $message }}</p>@enderror
                         <p class="text-xs text-gray-400 mt-2">Shown to French-language visitors. Leave blank to reuse the English description.</p>
                     </div>

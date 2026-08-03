@@ -13,7 +13,7 @@ class CoreValue extends Model
 {
     use HasPurifiedHtml;
 
-    protected array $purifiedHtml = ['description', 'description_fr', 'supporting_description', 'supporting_description_fr'];
+    protected array $purifiedHtml = ['title', 'title_fr', 'headline', 'headline_fr', 'description', 'description_fr', 'supporting_description', 'supporting_description_fr'];
 
     protected $appends = ['image_url'];
 

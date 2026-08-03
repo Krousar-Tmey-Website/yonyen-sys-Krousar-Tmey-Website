@@ -12,7 +12,7 @@ class PageSection extends Model
 {
     use HasPurifiedHtml;
 
-    protected array $purifiedHtml = ['description', 'description_fr'];
+    protected array $purifiedHtml = ['title', 'title_fr', 'description', 'description_fr'];
 
     protected $fillable = [
         'section_name',

@@ -16,6 +16,7 @@ class Project extends Model
         'content', 'content_fr',
         'activities', 'activities_fr',
         'testimony_story', 'testimony_story_fr',
+        'make_difference_title', 'make_difference_title_fr',
         'make_difference_text', 'make_difference_text_fr',
     ];
 

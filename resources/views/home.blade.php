@@ -1268,7 +1268,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
                     @if($sectionImage)
                     <img src="{{ str_starts_with($sectionImage->path, 'http') ? $sectionImage->path : asset('storage/' . $sectionImage->path) }}"
-                        alt="{{ $sectionImage->alt ?? $section->localized_title }}"
+                        alt="{{ $sectionImage->alt ?? strip_tags($section->localized_title) }}"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                         class="w-full h-[340px] lg:h-[420px] object-cover rounded-2xl shadow-xl
                                 group-hover:shadow-2xl transition-all duration-700
@@ -1307,7 +1307,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
 
                 {{-- Title --}}
                 <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 leading-tight mb-6">
-                    {{ $section->localized_title }}
+                    {{ strip_tags($section->localized_title) }}
                 </h2>
 
                 {{-- Description --}}
@@ -1529,8 +1529,14 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
     <div class="absolute inset-0 bg-[#1a3c6e]/85"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
         <span class="inline-block bg-[#e8a020] text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $settings['cta_label'] ?? 'Support Our Work' }}</span>
+        @php
+            $ctaTitleText = $settings['cta_title'] ?? 'Help a Child Build Their Future';
+            if (app()->getLocale() === 'fr' && !empty($settings['cta_title_fr'] ?? null)) {
+                $ctaTitleText = $settings['cta_title_fr'];
+            }
+        @endphp
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
-            {{ $settings['cta_title'] ?? 'Help a Child Build Their Future' }}
+            {{ strip_tags($ctaTitleText) }}
         </h2>
         @php
             $ctaSubtitleText = $settings['cta_subtitle'] ?? 'We guarantee that 100% of your donation is used to support children across Cambodia. Every contribution, big or small, changes a life.';

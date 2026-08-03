@@ -14,7 +14,7 @@ $t = function (string $key, string $default = '') use ($settings) {
 };
 $heroImage = $settings['media_banner_image'] ?? null;
 $heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/cultural.jpg');
-$heroTitle = $settings['media_banner_title'] ?? 'Krousar Thmey In The Media';
+$heroTitle = $t('media_banner_title', 'Krousar Thmey In The Media');
 $heroSubtitle = $t('media_banner_subtitle', 'Press coverage and the latest news from Krousar Thmey.');
 $heroBadge = $settings['media_banner_badge'] ?? 'Media';
 $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
@@ -37,7 +37,7 @@ $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
         <span class="hero-reveal hero-reveal-delay-1 inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $heroBadge }}</span>
         <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
-            {{ $heroTitle }}
+            {{ strip_tags($heroTitle) }}
         </h1>
         <div class="hero-reveal hero-reveal-delay-3 rich-text-content text-white/90 text-lg leading-relaxed mb-10 drop-shadow-md">
             {!! $heroSubtitle !!}

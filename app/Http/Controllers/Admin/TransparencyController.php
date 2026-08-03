@@ -58,8 +58,8 @@ class TransparencyController extends Controller
     public function updateBanner(Request $request)
     {
         $request->validate([
-            'transparency_title'                => ['nullable', 'string', 'max:255'],
-            'transparency_title_fr'              => ['nullable', 'string', 'max:255'],
+            'transparency_title'                => ['nullable', 'string'],
+            'transparency_title_fr'              => ['nullable', 'string'],
             'transparency_banner_badge'         => ['nullable', 'string', 'max:255'],
             'transparency_banner_badge_fr'       => ['nullable', 'string', 'max:255'],
             'transparency_banner_subtitle'      => ['nullable', 'string', 'max:1000'],

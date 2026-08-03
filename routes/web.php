@@ -117,6 +117,9 @@ Route::get('/our-programs', function () {
         $q->where('is_active', true)->orderBy('id');
     }])->get();
     $bannerTitle = HomeSetting::getValue('programs_banner_title', 'Our Programs');
+    if (app()->getLocale() === 'fr' && HomeSetting::getValue('programs_banner_title_fr', '') !== '') {
+        $bannerTitle = HomeSetting::getValue('programs_banner_title_fr', '');
+    }
     $bannerSubtitle = HomeSetting::getValue('programs_banner_subtitle', 'Three comprehensive programs across 15 Cambodian provinces, reaching over 4,000 children every year.');
     if (app()->getLocale() === 'fr' && HomeSetting::getValue('programs_banner_subtitle_fr', '') !== '') {
         $bannerSubtitle = HomeSetting::getValue('programs_banner_subtitle_fr', '');
@@ -131,6 +134,9 @@ Route::get('/our-programs', function () {
 
     $ctaLabel = HomeSetting::getValue('programs_cta_label', 'Support Our Mission');
     $ctaTitle = HomeSetting::getValue('programs_cta_title', 'Help Children in Cambodia');
+    if (app()->getLocale() === 'fr' && HomeSetting::getValue('programs_cta_title_fr', '') !== '') {
+        $ctaTitle = HomeSetting::getValue('programs_cta_title_fr', '');
+    }
     $ctaSubtitle = HomeSetting::getValue('programs_cta_subtitle', 'Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.');
     if (app()->getLocale() === 'fr' && HomeSetting::getValue('programs_cta_subtitle_fr', '') !== '') {
         $ctaSubtitle = HomeSetting::getValue('programs_cta_subtitle_fr', '');
@@ -216,21 +222,21 @@ Route::get('/get-involved', function () {
     $bannerImage = $settings['involved_banner_image'] ?? '';
     $bannerOverlayColor = $settings['involved_banner_overlay_color'] ?? '#1d4e7a';
     $bannerBadge = $settings['involved_banner_badge'] ?? 'Join Our Mission';
-    $bannerTitle = $settings['involved_banner_title'] ?? 'Get Involved';
+    $bannerTitle = $localizedSetting('involved_banner_title') ?: 'Get Involved';
     $bannerSubtitle = $localizedSetting('involved_banner_subtitle') ?: 'There are many meaningful ways to support Krousar Thmey\'s mission — from partnerships and volunteering, to exploring job opportunities or purchasing our books.';
 
     // Books for Sale Section Banner data
     $booksBannerImage = $settings['involved_books_banner_image'] ?? '';
     $booksBannerOverlayColor = $settings['involved_books_banner_overlay_color'] ?? '#163b5d';
     $booksBannerBadge = $settings['involved_books_banner_badge'] ?? 'Books for Sale';
-    $booksBannerTitle = $settings['involved_books_banner_title'] ?? 'Support Through Literature';
+    $booksBannerTitle = $localizedSetting('involved_books_banner_title') ?: 'Support Through Literature';
     $booksBannerSubtitle = $localizedSetting('involved_books_banner_subtitle') ?: 'Browse our collection of publication titles. 100% of proceeds directly fund our educational and social programs for vulnerable children across Cambodia.';
 
     // CTA Section Banner data
     $ctaBannerImage = $settings['involved_cta_banner_image'] ?? '';
     $ctaBannerOverlayColor = $settings['involved_cta_banner_overlay_color'] ?? '#1d4e7a';
     $ctaBannerBadge = $settings['involved_cta_banner_badge'] ?? 'Ready to Help?';
-    $ctaBannerTitle = $settings['involved_cta_banner_title'] ?? 'Every Action Counts';
+    $ctaBannerTitle = $localizedSetting('involved_cta_banner_title') ?: 'Every Action Counts';
     $ctaBannerSubtitle = $localizedSetting('involved_cta_banner_subtitle') ?: 'Whether you buy a book, volunteer, partner with us, or send your application — you are helping build a better future for Cambodia\'s children.';
 
     return view('involved', compact('settings', 'jobs', 'books', 'partnershipCategories', 'partnerPrinciples', 'partnershipEmphases', 'worldwidePartners', 'quickLinks', 'bannerImage', 'bannerOverlayColor', 'bannerBadge', 'bannerTitle', 'bannerSubtitle', 'booksBannerImage', 'booksBannerOverlayColor', 'booksBannerBadge', 'booksBannerTitle', 'booksBannerSubtitle', 'ctaBannerImage', 'ctaBannerOverlayColor', 'ctaBannerBadge', 'ctaBannerTitle', 'ctaBannerSubtitle', 'partnerBadge', 'partnerTitle', 'partnerIntro', 'partnerWhoIntro', 'partnerCtaHeading', 'partnerCtaSubtext', 'partnerCtaButtonText', 'partnerCtaImageLeft', 'partnerCtaImageRight', 'volunteerTracks', 'volunteerImage', 'volunteerBadge', 'volunteerTitle', 'volunteerIntro', 'volunteerImageCaptionTitle', 'volunteerImageCaptionSubtitle', 'jobsCtaHeading', 'jobsCtaIntro', 'jobsCtaPhoneLabel', 'jobsCtaPhone1', 'jobsCtaPhone2', 'jobsCtaEmailLabel', 'jobsCtaEmail', 'jobsCtaButtonText'));

@@ -18,7 +18,8 @@ class MediaBannerController extends Controller
     {
         $request->validate([
             'media_banner_badge'         => ['nullable', 'string', 'max:255'],
-            'media_banner_title'         => ['nullable', 'string', 'max:255'],
+            'media_banner_title'         => ['nullable', 'string'],
+            'media_banner_title_fr'      => ['nullable', 'string'],
             'media_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
             'media_banner_subtitle_fr'   => ['nullable', 'string', 'max:1000'],
             'media_banner_overlay_color' => ['nullable', 'string', 'max:20'],
@@ -34,6 +35,7 @@ class MediaBannerController extends Controller
 
         HomeSetting::setValue('media_banner_badge', $request->input('media_banner_badge', ''));
         HomeSetting::setValue('media_banner_title', $request->input('media_banner_title', ''));
+        HomeSetting::setValue('media_banner_title_fr', $request->input('media_banner_title_fr', ''));
         HomeSetting::setValue('media_banner_subtitle', $request->input('media_banner_subtitle', ''));
         HomeSetting::setValue('media_banner_subtitle_fr', $request->input('media_banner_subtitle_fr', ''));
         HomeSetting::setValue('media_banner_overlay_color', $request->input('media_banner_overlay_color', ''));

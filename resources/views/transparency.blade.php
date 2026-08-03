@@ -51,8 +51,8 @@ html:has(.transparency-immersive) { scroll-snap-type: y proximity; }
 
     <div class="relative z-10 max-w-3xl mx-auto px-6">
         <span class="hero-reveal hero-reveal-delay-1 inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $transparencyBannerBadge }}Transparency</span>
-        <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-5xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg"> 
-            {{ $t('transparency_title', 'Transparency and Accountabilitys') }} 
+        <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-5xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
+            {{ strip_tags($t('transparency_title', 'Transparency and Accountabilitys')) }}
         </h1>
         <div class="rich-text-content hero-reveal hero-reveal-delay-3 text-white/90 text-lg leading-relaxed max-w-3xl mx-auto mt-6 drop-shadow-md">
             {!! $transparencyBannerSubtitle !!}

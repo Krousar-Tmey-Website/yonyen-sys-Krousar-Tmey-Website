@@ -36,8 +36,8 @@ class PageSectionController extends Controller
     {
         $data = $request->validate([
             'section_name' => ['required', 'string', 'max:100'],
-            'title'        => ['nullable', 'string', 'max:255'],
-            'title_fr'     => ['nullable', 'string', 'max:255'],
+            'title'        => ['nullable', 'string'],
+            'title_fr'     => ['nullable', 'string'],
             'description'  => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],
             'order'        => ['nullable', 'integer', 'min:0'],
@@ -61,7 +61,7 @@ class PageSectionController extends Controller
             $path = $request->file('image')->store('page-sections', 'public');
             $section->images()->create([
                 'path'  => $path,
-                'alt'   => $data['image_alt'] ?? $section->title,
+                'alt'   => $data['image_alt'] ?? strip_tags((string) $section->title),
                 'order' => 1,
             ]);
         }
@@ -89,8 +89,8 @@ class PageSectionController extends Controller
     {
         $data = $request->validate([
             'section_name' => ['required', 'string', 'max:100'],
-            'title'        => ['nullable', 'string', 'max:255'],
-            'title_fr'     => ['nullable', 'string', 'max:255'],
+            'title'        => ['nullable', 'string'],
+            'title_fr'     => ['nullable', 'string'],
             'description'  => ['nullable', 'string'],
             'description_fr' => ['nullable', 'string'],
             'order'        => ['nullable', 'integer', 'min:0'],
@@ -121,7 +121,7 @@ class PageSectionController extends Controller
             $path = $request->file('image')->store('page-sections', 'public');
             $page_section->images()->create([
                 'path'  => $path,
-                'alt'   => $data['image_alt'] ?? $page_section->title,
+                'alt'   => $data['image_alt'] ?? strip_tags((string) $page_section->title),
                 'order' => 1,
             ]);
         }

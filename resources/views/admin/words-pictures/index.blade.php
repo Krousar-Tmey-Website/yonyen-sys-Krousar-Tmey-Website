@@ -65,6 +65,7 @@
     $bannerImageUrl = $bannerImage ? (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) : null;
     $bannerBadge = $bv('words_pictures_banner_badge', 'Application');
     $bannerTitle = $bv('words_pictures_banner_title', 'Words and Pictures Application');
+    $bannerTitleFr = $bvFr('words_pictures_banner_title');
     $bannerSubtitle = $bv('words_pictures_banner_subtitle', 'A free mobile app helping children with hearing and speech impairments practice Cambodian Sign Language.');
     $bannerSubtitleFr = $bvFr('words_pictures_banner_subtitle');
     $btn1Text = $bv('words_pictures_banner_btn1_text', 'Learn More');
@@ -186,10 +187,12 @@
         {{-- Hero Title --}}
         <div x-show="lang === 'en'">
             <label for="words_pictures_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Title</label>
-            <input type="text" id="words_pictures_banner_title" name="words_pictures_banner_title"
-                   value="{{ $bannerTitle }}"
-                   oninput="document.getElementById('preview-title').textContent = this.value || 'Words and Pictures Application'"
-                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            <x-admin.rich-text id="words_pictures_banner_title" name="words_pictures_banner_title" :value="$bannerTitle" lang="en" :rows="1" />
+        </div>
+        <div x-show="lang === 'fr'" x-cloak>
+            <label for="words_pictures_banner_title_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+            <x-admin.rich-text id="words_pictures_banner_title_fr" name="words_pictures_banner_title_fr" :value="$bannerTitleFr" lang="fr" :rows="1" placeholder="Application Mots et Images" />
+            <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English title.</p>
         </div>
 
         {{-- Hero Subtitle --}}

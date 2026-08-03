@@ -23,10 +23,10 @@ class CoreValueController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'                     => ['nullable', 'string', 'max:255'],
-            'title_fr'                  => ['nullable', 'string', 'max:255'],
-            'headline'                  => ['nullable', 'string', 'max:255'],
-            'headline_fr'               => ['nullable', 'string', 'max:255'],
+            'title'                     => ['nullable', 'string'],
+            'title_fr'                  => ['nullable', 'string'],
+            'headline'                  => ['nullable', 'string'],
+            'headline_fr'               => ['nullable', 'string'],
             'icon'                      => ['nullable', 'string', 'max:10'],
             'image'                     => ['nullable', 'image', 'max:2048'],
             'description'               => ['nullable', 'string'],
@@ -52,10 +52,10 @@ class CoreValueController extends Controller
     public function update(Request $request, CoreValue $coreValue)
     {
         $data = $request->validate([
-            'title'                     => ['nullable', 'string', 'max:255'],
-            'title_fr'                  => ['nullable', 'string', 'max:255'],
-            'headline'                  => ['nullable', 'string', 'max:255'],
-            'headline_fr'               => ['nullable', 'string', 'max:255'],
+            'title'                     => ['nullable', 'string'],
+            'title_fr'                  => ['nullable', 'string'],
+            'headline'                  => ['nullable', 'string'],
+            'headline_fr'               => ['nullable', 'string'],
             'icon'                      => ['nullable', 'string', 'max:10'],
             'image'                     => ['nullable', 'image', 'max:2048'],
             'description'               => ['nullable', 'string'],

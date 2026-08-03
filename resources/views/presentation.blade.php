@@ -25,6 +25,9 @@
 $heroImage = $settings['presentation_banner_image'] ?? null;
 $heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/cultural.jpg');
 $heroTitle = $settings['presentation_banner_title'] ?? 'Krousar Thmey, the first Cambodian organization helping disadvantaged children';
+if (app()->getLocale() === 'fr' && !empty($settings['presentation_banner_title_fr'] ?? null)) {
+    $heroTitle = $settings['presentation_banner_title_fr'];
+}
 $heroSubtitle = $settings['presentation_banner_subtitle'] ?? 'Born in 1991 in the Site II refugee camp in Thailand, Krousar Thmey has been supporting children for over 25 years.';
 if (app()->getLocale() === 'fr' && !empty($settings['presentation_banner_subtitle_fr'] ?? null)) {
     $heroSubtitle = $settings['presentation_banner_subtitle_fr'];
@@ -60,7 +63,7 @@ $btn3Url  = $settings['presentation_banner_btn3_url'] ?? '';
 
         {{-- Title --}}
         <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
-            {{ $heroTitle }}
+            {{ strip_tags($heroTitle) }}
         </h1>
 
         {{-- Subtitle --}}
@@ -546,7 +549,7 @@ $btn3Url  = $settings['presentation_banner_btn3_url'] ?? '';
                     </span>
                     <div class="h-px flex-1 bg-gray-100"></div>
                 </div>
-                <h3 class="text-xl font-black uppercase tracking-wider text-[#1d4e7a] mb-4">{{ $value->localized_title }}</h3>
+                <h3 class="text-xl font-black uppercase tracking-wider text-[#1d4e7a] mb-4">{{ strip_tags($value->localized_title) }}</h3>
                 <div class="rich-text-content text-gray-600 leading-relaxed">
                     {!! $value->localized_description !!}
                 </div>

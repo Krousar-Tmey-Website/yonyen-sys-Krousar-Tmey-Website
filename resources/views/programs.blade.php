@@ -35,7 +35,7 @@
         @if(!empty($bannerImage))
             <div class="absolute inset-0">
                 <img src="{{ str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage) }}" alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover object-[center_30%] scale-110 blur-xl opacity-22 hero-media-drift">
-                <img src="{{ str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage) }}" alt="{{ $bannerTitle }}" class="absolute inset-0 w-full h-full object-cover object-[center_30%] hero-media-drift">
+                <img src="{{ str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage) }}" alt="{{ strip_tags($bannerTitle) }}" class="absolute inset-0 w-full h-full object-cover object-[center_30%] hero-media-drift">
             </div>
         @endif
         
@@ -64,7 +64,7 @@
                 </div>
                 
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 uppercase tracking-wide leading-tight drop-shadow-lg hero-reveal hero-reveal-delay-1">
-                    {{ $bannerTitle }}
+                    {{ strip_tags($bannerTitle) }}
                 </h1>
                 
                 <div class="flex items-center gap-4 mb-8 hero-reveal hero-reveal-delay-2">

@@ -14,6 +14,9 @@
     $newsBannerOverlay = $settings['news_banner_overlay_color'] ?? '#1a3c6e';
     $newsBannerBadge = $settings['news_banner_badge'] ?? 'Krousar Thmey';
     $newsBannerTitle = $settings['news_banner_title'] ?? "Krousar Thmey's news, in Cambodia and around the world";
+    if (app()->getLocale() === 'fr' && !empty($settings['news_banner_title_fr'] ?? null)) {
+        $newsBannerTitle = $settings['news_banner_title_fr'];
+    }
     $newsBannerSubtitle = $settings['news_banner_subtitle'] ?? 'Updates from our programs, success stories from our beneficiaries, and events from Krousar Thmey.';
     if (app()->getLocale() === 'fr' && !empty($settings['news_banner_subtitle_fr'] ?? null)) {
         $newsBannerSubtitle = $settings['news_banner_subtitle_fr'];
@@ -46,7 +49,7 @@
             <div class="w-1.5 h-1.5 rounded-full bg-[#e8a020]"></div>
             <span class="text-[#e8a020] font-semibold text-xs uppercase tracking-widest">{{ $newsBannerBadge }}</span>
         </div>
-        <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-4xl font-black text-white mb-3 uppercase tracking-wide max-w-3xl">{{ $newsBannerTitle }}</h1>
+        <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-4xl font-black text-white mb-3 uppercase tracking-wide max-w-3xl">{{ strip_tags($newsBannerTitle) }}</h1>
         @if($newsBannerSubtitle)
         <div class="hero-reveal hero-reveal-delay-3 text-white/60 text-base max-w-2xl leading-relaxed [&_p]:mb-3 [&_p:last-child]:mb-0">{!! $newsBannerSubtitle !!}</div>
         @endif

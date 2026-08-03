@@ -191,17 +191,11 @@
         {{-- Page Title --}}
         <div x-show="lang === 'en'">
             <label for="transparency_title" class="block text-sm font-medium text-gray-700 mb-1.5">Page Title</label>
-            <input type="text" id="transparency_title" name="transparency_title"
-                   value="{{ $bannerTitle }}"
-                   oninput="document.getElementById('preview-title').textContent = this.value || 'Transparency and Accountability'"
-                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            <x-admin.rich-text id="transparency_title" name="transparency_title" :value="$bannerTitle" lang="en" :rows="1" />
         </div>
         <div x-show="lang === 'fr'" x-cloak>
             <label for="transparency_title_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Page Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-            <input type="text" id="transparency_title_fr" name="transparency_title_fr"
-                   value="{{ $bannerTitleFr }}"
-                   oninput="document.getElementById('preview-title').textContent = this.value || 'Transparency and Accountability'"
-                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            <x-admin.rich-text id="transparency_title_fr" name="transparency_title_fr" :value="$bannerTitleFr" lang="fr" :rows="1" placeholder="Transparence et responsabilité" />
             <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English title.</p>
         </div>
 

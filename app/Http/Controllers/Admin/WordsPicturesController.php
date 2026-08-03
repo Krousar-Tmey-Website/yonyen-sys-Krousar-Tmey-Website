@@ -95,7 +95,8 @@ class WordsPicturesController extends Controller
     {
         $request->validate([
             'words_pictures_banner_badge'         => ['nullable', 'string', 'max:255'],
-            'words_pictures_banner_title'         => ['nullable', 'string', 'max:255'],
+            'words_pictures_banner_title'         => ['nullable', 'string'],
+            'words_pictures_banner_title_fr'      => ['nullable', 'string'],
             'words_pictures_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
             'words_pictures_banner_subtitle_fr'   => ['nullable', 'string', 'max:1000'],
             'words_pictures_banner_overlay_color' => ['nullable', 'string', 'max:20'],
@@ -111,6 +112,7 @@ class WordsPicturesController extends Controller
 
         HomeSetting::setValue('words_pictures_banner_badge', $request->input('words_pictures_banner_badge', ''));
         HomeSetting::setValue('words_pictures_banner_title', $request->input('words_pictures_banner_title', ''));
+        HomeSetting::setValue('words_pictures_banner_title_fr', $request->input('words_pictures_banner_title_fr', ''));
         HomeSetting::setValue('words_pictures_banner_subtitle', $request->input('words_pictures_banner_subtitle', ''));
         HomeSetting::setValue('words_pictures_banner_subtitle_fr', $request->input('words_pictures_banner_subtitle_fr', ''));
         HomeSetting::setValue('words_pictures_banner_overlay_color', $request->input('words_pictures_banner_overlay_color', ''));

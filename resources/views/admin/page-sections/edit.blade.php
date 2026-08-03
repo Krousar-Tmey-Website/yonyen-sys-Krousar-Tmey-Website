@@ -56,8 +56,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
                         Title <span class="text-gray-400 font-normal">(optional)</span>
                     </label>
-                    <input type="text" name="title" value="{{ old('title', $page_section->title) }}"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <x-admin.rich-text name="title" :value="old('title', $page_section->title)" lang="en" :rows="1" />
                     @error('title')
                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -67,8 +66,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
                         Title (French) <span class="text-gray-400 font-normal">(optional)</span>
                     </label>
-                    <input type="text" name="title_fr" value="{{ old('title_fr', $page_section->title_fr) }}"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <x-admin.rich-text name="title_fr" :value="old('title_fr', $page_section->title_fr)" lang="fr" :rows="1" />
                     @error('title_fr')
                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror

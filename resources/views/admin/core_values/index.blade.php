@@ -49,6 +49,10 @@
         },
 
         syncCKEditors() {
+            window.setCKEditorContent?.(document.getElementById('cv-title'), this.form.title);
+            window.setCKEditorContent?.(document.getElementById('cv-title-fr'), this.form.title_fr);
+            window.setCKEditorContent?.(document.getElementById('cv-headline'), this.form.headline);
+            window.setCKEditorContent?.(document.getElementById('cv-headline-fr'), this.form.headline_fr);
             window.setCKEditorContent?.(document.getElementById('cv-description'), this.form.description);
             window.setCKEditorContent?.(document.getElementById('cv-description-fr'), this.form.description_fr);
             window.setCKEditorContent?.(document.getElementById('cv-supporting-description'), this.form.supporting_description);
@@ -134,7 +138,7 @@
                                 @endif
                                 <div class="min-w-0">
                                     <p class="font-semibold text-gray-800">
-                                        {{ $value->title ?: $value->title_fr }}
+                                        {{ strip_tags($value->title ?: $value->title_fr) }}
                                         @if(!$value->title && $value->title_fr)
                                         <span class="text-[10px] font-semibold text-[#2d6fa3] bg-[#2d6fa3]/10 rounded px-1.5 py-0.5 align-middle">FR</span>
                                         @elseif($value->title && !$value->title_fr)
@@ -149,7 +153,7 @@
                         </td>
                         <td class="px-6 py-4 text-gray-500">
                             @if($value->headline || $value->headline_fr)
-                            <span class="text-xs">{{ $value->headline ?: $value->headline_fr }}</span>
+                            <span class="text-xs">{{ strip_tags($value->headline ?: $value->headline_fr) }}</span>
                             @else
                             <span class="text-xs text-gray-300">—</span>
                             @endif
@@ -230,33 +234,33 @@
 
 
                     {{-- Title --}}
-<div x-show="lang === 'en'">
+                    <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">
                             Title <span class="text-gray-400 font-normal">(optional)</span>
                         </label>
-                        <input type="text" name="title" x-model="form.title"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="e.g. Integration">
+                        <x-admin.rich-text id="cv-title" name="title" :value="''" lang="en" :rows="1"
+                            @input="form.title = $event.target.value"
+                            placeholder="e.g. Integration" />
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <input type="text" name="title_fr" x-model="form.title_fr"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="ex. Intégration">
+                        <x-admin.rich-text id="cv-title-fr" name="title_fr" :value="''" lang="fr" :rows="1"
+                            @input="form.title_fr = $event.target.value"
+                            placeholder="ex. Intégration" />
                     </div>
 
                     {{-- Headline --}}
                     <div x-show="lang === 'en'">
                         <label class="block text-xs font-medium text-gray-600 mb-1">Headline (e.g. "Every child belongs.")</label>
-                        <input type="text" name="headline" x-model="form.headline"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="Every child belongs.">
+                        <x-admin.rich-text id="cv-headline" name="headline" :value="''" lang="en" :rows="1"
+                            @input="form.headline = $event.target.value"
+                            placeholder="Every child belongs." />
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
                         <label class="block text-xs font-medium text-gray-600 mb-1">Headline (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <input type="text" name="headline_fr" x-model="form.headline_fr"
-                               class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                               placeholder="Chaque enfant a sa place.">
+                        <x-admin.rich-text id="cv-headline-fr" name="headline_fr" :value="''" lang="fr" :rows="1"
+                            @input="form.headline_fr = $event.target.value"
+                            placeholder="Chaque enfant a sa place." />
                     </div>
 
                     {{-- Description --}}

@@ -15,6 +15,7 @@
     $heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : null;
     $heroBadge = $bv('involved_banner_badge', 'Join Our Mission');
     $heroTitle = $bv('involved_banner_title', 'Get Involved');
+    $heroTitleFr = $bv('involved_banner_title_fr');
     $heroSubtitle = $bv('involved_banner_subtitle', 'There are many meaningful ways to support Krousar Thmey\'s mission — from partnerships and volunteering, to exploring job opportunities or purchasing our books.');
     $heroSubtitleFr = $bv('involved_banner_subtitle_fr');
 
@@ -24,6 +25,7 @@
     $booksImageUrl = $booksImage ? (str_starts_with($booksImage, 'http') ? $booksImage : asset('storage/' . $booksImage)) : null;
     $booksBadge = $bv('involved_books_banner_badge', 'Books for Sale');
     $booksTitle = $bv('involved_books_banner_title', 'Support Through Literature');
+    $booksTitleFr = $bv('involved_books_banner_title_fr');
     $booksSubtitle = $bv('involved_books_banner_subtitle', 'Browse our collection of publication titles. 100% of proceeds directly fund our educational and social programs for vulnerable children across Cambodia.');
     $booksSubtitleFr = $bv('involved_books_banner_subtitle_fr');
 
@@ -33,6 +35,7 @@
     $ctaImageUrl = $ctaImage ? (str_starts_with($ctaImage, 'http') ? $ctaImage : asset('storage/' . $ctaImage)) : null;
     $ctaBadge = $bv('involved_cta_banner_badge', 'Ready to Help?');
     $ctaTitle = $bv('involved_cta_banner_title', 'Every Action Counts');
+    $ctaTitleFr = $bv('involved_cta_banner_title_fr');
     $ctaSubtitle = $bv('involved_cta_banner_subtitle', 'Whether you buy a book, volunteer, partner with us, or send your application - you are helping build a better future for Cambodia\'s children.');
     $ctaSubtitleFr = $bv('involved_cta_banner_subtitle_fr');
 @endphp
@@ -178,12 +181,21 @@
                                    oninput="document.getElementById('preview-hero-badge').textContent = this.value || 'Join Our Mission'"
                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         </div>
-                        <div>
-                            <label for="involved_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Title</label>
-                            <input type="text" id="involved_banner_title" name="involved_banner_title"
-                                   value="{{ $heroTitle }}"
-                                   oninput="document.getElementById('preview-hero-title').textContent = this.value || 'Get Involved'"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <div x-data="bilingualForm()">
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <label class="block text-sm font-medium text-gray-700 mb-0">Hero Title</label>
+                                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                                </div>
+                            </div>
+                            <div x-show="lang === 'en'">
+                                <x-admin.rich-text id="involved_banner_title" name="involved_banner_title" :value="$heroTitle" lang="en" :rows="1" />
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <x-admin.rich-text id="involved_banner_title_fr" name="involved_banner_title_fr" :value="$heroTitleFr" lang="fr" :rows="1" placeholder="Impliquez-vous" />
+                                <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English title.</p>
+                            </div>
                         </div>
                     </div>
 
@@ -311,12 +323,21 @@
                                    oninput="document.getElementById('preview-books-badge').textContent = this.value || 'Books for Sale'"
                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         </div>
-                        <div>
-                            <label for="involved_books_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">Section Title</label>
-                            <input type="text" id="involved_books_banner_title" name="involved_books_banner_title"
-                                   value="{{ $booksTitle }}"
-                                   oninput="document.getElementById('preview-books-title').textContent = this.value || 'Support Through Literature'"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <div x-data="bilingualForm()">
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <label class="block text-sm font-medium text-gray-700 mb-0">Section Title</label>
+                                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                                </div>
+                            </div>
+                            <div x-show="lang === 'en'">
+                                <x-admin.rich-text id="involved_books_banner_title" name="involved_books_banner_title" :value="$booksTitle" lang="en" :rows="1" />
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <x-admin.rich-text id="involved_books_banner_title_fr" name="involved_books_banner_title_fr" :value="$booksTitleFr" lang="fr" :rows="1" placeholder="Soutenez par la littérature" />
+                                <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English title.</p>
+                            </div>
                         </div>
                     </div>
 
@@ -452,12 +473,21 @@
                                    oninput="document.getElementById('preview-cta-badge').textContent = this.value || 'Ready to Help?'"
                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         </div>
-                        <div>
-                            <label for="involved_cta_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">Section Title</label>
-                            <input type="text" id="involved_cta_banner_title" name="involved_cta_banner_title"
-                                   value="{{ $ctaTitle }}"
-                                   oninput="document.getElementById('preview-cta-title').textContent = this.value || 'Every Action Counts'"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <div x-data="bilingualForm()">
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <label class="block text-sm font-medium text-gray-700 mb-0">Section Title</label>
+                                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                                </div>
+                            </div>
+                            <div x-show="lang === 'en'">
+                                <x-admin.rich-text id="involved_cta_banner_title" name="involved_cta_banner_title" :value="$ctaTitle" lang="en" :rows="1" />
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <x-admin.rich-text id="involved_cta_banner_title_fr" name="involved_cta_banner_title_fr" :value="$ctaTitleFr" lang="fr" :rows="1" placeholder="Chaque action compte" />
+                                <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English title.</p>
+                            </div>
                         </div>
                     </div>
 

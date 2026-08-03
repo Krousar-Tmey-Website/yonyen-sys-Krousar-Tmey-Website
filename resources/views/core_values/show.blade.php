@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $value->localized_title . ' — Our Values | Krousar Thmey')
+@section('title', strip_tags($value->localized_title) . ' — Our Values | Krousar Thmey')
 @section('description', $value->localized_description ? \Illuminate\Support\Str::limit(strip_tags($value->localized_description), 155) : 'Learn about Krousar Thmey\'s core values and mission.')
 
 @section('content')
@@ -44,10 +44,10 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
                     x-transition:enter-start="opacity-0 translate-y-8"
                     x-transition:enter-end="opacity-100 translate-y-0">
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-                        {{ $value->localized_title }}
+                        {{ strip_tags($value->localized_title) }}
                     </h1>
                     @if($value->localized_headline)
-                    <p class="text-white/80 text-lg mb-8 leading-relaxed">{{ $value->localized_headline }}</p>
+                    <p class="text-white/80 text-lg mb-8 leading-relaxed">{{ strip_tags($value->localized_headline) }}</p>
                     @endif
                     @if($value->localized_description)
                     <p class="text-white/60 text-sm bg-white/10 px-3 py-1 rounded-full inline-block">
@@ -73,11 +73,11 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
         <div class="relative z-20 h-full flex items-center">
             <div class="max-w-4xl mx-auto px-6 w-full">
                 <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
-                    {{ $value->localized_title }}
+                    {{ strip_tags($value->localized_title) }}
                 </h1>
                 @if($value->localized_headline)
                 <p class="text-2xl md:text-3xl text-white/90 font-medium mb-4">
-                    {{ $value->localized_headline }}
+                    {{ strip_tags($value->localized_headline) }}
                 </p>
                 @endif
                 @if($value->localized_description)
@@ -127,14 +127,14 @@ $heroSlides = \App\Models\PresentationSlide::active()->get();
                     <div class="bg-white rounded-3xl border border-gray-100 p-10 text-center shadow-xl transform hover:-translate-y-1 transition-transform duration-300">
                         @if($value->image_url)
                         <div class="w-44 h-44 mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg">
-                            <img src="{{ $value->image_url }}" alt="{{ $value->localized_title }}" class="w-full h-full object-contain">
+                            <img src="{{ $value->image_url }}" alt="{{ strip_tags($value->localized_title) }}" class="w-full h-full object-contain">
                         </div>
                         @else
                         <div class="w-44 h-44 bg-gradient-to-br from-[#2d6fa3]/10 to-[#8da83a]/10 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                             <span class="text-7xl">{{ $value->icon }}</span>
                         </div>
                         @endif
-                        <h2 class="text-2xl font-bold text-[#1d4e7a] mb-2">{{ $value->localized_title }}</h2>
+                        <h2 class="text-2xl font-bold text-[#1d4e7a] mb-2">{{ strip_tags($value->localized_title) }}</h2>
                         <div class="w-16 h-1 bg-gradient-to-r from-[#2d6fa3] to-[#8da83a] mx-auto rounded-full"></div>
                     </div>
                 </div>

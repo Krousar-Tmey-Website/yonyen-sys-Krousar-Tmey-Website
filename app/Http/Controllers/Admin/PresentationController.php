@@ -76,7 +76,8 @@ class PresentationController extends Controller
     {
         $request->validate([
             'presentation_banner_badge'         => ['nullable', 'string', 'max:255'],
-            'presentation_banner_title'         => ['nullable', 'string', 'max:255'],
+            'presentation_banner_title'         => ['nullable', 'string'],
+            'presentation_banner_title_fr'      => ['nullable', 'string'],
             'presentation_banner_subtitle'      => ['nullable', 'string'],
             'presentation_banner_subtitle_fr'   => ['nullable', 'string'],
             'presentation_banner_overlay_color' => ['nullable', 'string', 'max:20'],
@@ -92,6 +93,7 @@ class PresentationController extends Controller
 
         HomeSetting::setValue('presentation_banner_badge', $request->input('presentation_banner_badge', ''));
         HomeSetting::setValue('presentation_banner_title', $request->input('presentation_banner_title', ''));
+        HomeSetting::setValue('presentation_banner_title_fr', $request->input('presentation_banner_title_fr', ''));
         HomeSetting::setValue('presentation_banner_subtitle', $request->input('presentation_banner_subtitle', ''));
         HomeSetting::setValue('presentation_banner_subtitle_fr', $request->input('presentation_banner_subtitle_fr', ''));
         HomeSetting::setValue('presentation_banner_overlay_color', $request->input('presentation_banner_overlay_color', ''));

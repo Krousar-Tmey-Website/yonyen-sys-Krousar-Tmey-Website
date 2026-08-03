@@ -16,6 +16,7 @@ class ContactBannerController extends Controller
             'contact_banner_overlay_color',
             'contact_banner_badge',
             'contact_banner_title',
+            'contact_banner_title_fr',
             'contact_banner_subtitle',
             'contact_banner_subtitle_fr',
             'contact_banner_btn1_text',
@@ -31,7 +32,8 @@ class ContactBannerController extends Controller
     {
         $request->validate([
             'contact_banner_badge'         => ['nullable', 'string', 'max:255'],
-            'contact_banner_title'         => ['nullable', 'string', 'max:255'],
+            'contact_banner_title'         => ['nullable', 'string'],
+            'contact_banner_title_fr'      => ['nullable', 'string'],
             'contact_banner_subtitle'      => ['nullable', 'string'],
             'contact_banner_subtitle_fr'   => ['nullable', 'string'],
             'contact_banner_overlay_color' => ['nullable', 'string', 'max:20'],
@@ -45,6 +47,7 @@ class ContactBannerController extends Controller
 
         HomeSetting::setValue('contact_banner_badge', $request->input('contact_banner_badge', ''));
         HomeSetting::setValue('contact_banner_title', $request->input('contact_banner_title', ''));
+        HomeSetting::setValue('contact_banner_title_fr', $request->input('contact_banner_title_fr', ''));
         HomeSetting::setValue('contact_banner_subtitle', $request->input('contact_banner_subtitle', ''));
         HomeSetting::setValue('contact_banner_subtitle_fr', $request->input('contact_banner_subtitle_fr', ''));
         HomeSetting::setValue('contact_banner_overlay_color', $request->input('contact_banner_overlay_color', ''));

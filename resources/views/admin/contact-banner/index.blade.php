@@ -13,6 +13,7 @@
     $bannerImageUrl = $bannerImage ? (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) : null;
     $bannerBadge = $bv('contact_banner_badge', 'Support Our Work');
     $bannerTitle = $bv('contact_banner_title', 'Make a Difference Today');
+$bannerTitleFr = $bv('contact_banner_title_fr');
     $bannerSubtitle = $bv('contact_banner_subtitle', 'Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.');
 $bannerSubtitleFr = $bv('contact_banner_subtitle_fr');
     $btn1Text = $bv('contact_banner_btn1_text', 'Donate Now');
@@ -182,11 +183,21 @@ $bannerSubtitleFr = $bv('contact_banner_subtitle_fr');
                                    oninput="document.getElementById('preview-badge').textContent = this.value || 'Support Our Work'"
                                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                         </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Title</label>
-                            <input type="text" name="contact_banner_title" value="{{ $bannerTitle }}"
-                                   oninput="document.getElementById('preview-title').textContent = this.value || 'Make a Difference Today'"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <div x-data="bilingualForm()">
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <label class="block text-xs font-medium text-gray-600 mb-0">Title</label>
+                                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                                </div>
+                            </div>
+                            <div x-show="lang === 'en'">
+                                <x-admin.rich-text name="contact_banner_title" :value="$bannerTitle" lang="en" :rows="1" />
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <x-admin.rich-text name="contact_banner_title_fr" :value="$bannerTitleFr" lang="fr" :rows="1" placeholder="Faites une différence aujourd'hui" />
+                                <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English title.</p>
+                            </div>
                         </div>
                     </div>
                 </div>

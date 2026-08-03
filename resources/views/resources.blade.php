@@ -14,6 +14,9 @@
     $resourcesBannerOverlayColor = $settings['resources_banner_overlay_color'] ?? '#1a3c6e';
     $resourcesBannerBadge = $settings['resources_banner_badge'] ?? 'Accountability';
     $resourcesBannerTitle = $settings['resources_banner_title'] ?? 'Resources & Annual Reports';
+    if (app()->getLocale() === 'fr' && !empty($settings['resources_banner_title_fr'] ?? null)) {
+        $resourcesBannerTitle = $settings['resources_banner_title_fr'];
+    }
     $resourcesBannerSubtitle = $settings['resources_banner_subtitle'] ?? 'Annual reports, publications, and media resources from Krousar Thmey.';
     if (app()->getLocale() === 'fr' && !empty($settings['resources_banner_subtitle_fr'] ?? null)) {
         $resourcesBannerSubtitle = $settings['resources_banner_subtitle_fr'];
@@ -41,7 +44,7 @@
     <div class="relative z-10 max-w-4xl mx-auto px-6">
         <span class="hero-reveal hero-reveal-delay-1 inline-block bg-white text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider shadow-lg">{{ $resourcesBannerBadge }}</span>
         <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-5xl font-extrabold tracking-tight text-white uppercase drop-shadow-lg">
-            {{ $resourcesBannerTitle }}
+            {{ strip_tags($resourcesBannerTitle) }}
         </h1>
         @if($resourcesBannerSubtitle)
         <div class="hero-reveal hero-reveal-delay-3 text-white/90 text-lg leading-relaxed max-w-2xl mx-auto mt-6 drop-shadow-md [&_p]:mb-2 [&_p:last-child]:mb-0">

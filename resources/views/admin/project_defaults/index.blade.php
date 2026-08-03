@@ -96,20 +96,11 @@
             <div class="grid lg:grid-cols-2 gap-5">
                 <div class="lg:col-span-2" x-show="lang === 'en'">
                     <label for="project_default_make_difference_title" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title</label>
-                    <input type="text"
-                           id="project_default_make_difference_title"
-                           name="project_default_make_difference_title"
-                           value="{{ old('project_default_make_difference_title', $settings['project_default_make_difference_title']->value ?? 'Make a Difference') }}"
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <x-admin.rich-text id="project_default_make_difference_title" name="project_default_make_difference_title" :value="old('project_default_make_difference_title', $settings['project_default_make_difference_title']->value ?? 'Make a Difference')" lang="en" :rows="1" />
                 </div>
                 <div class="lg:col-span-2" x-show="lang === 'fr'" x-cloak>
                     <label for="project_default_make_difference_title_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                    <input type="text"
-                           id="project_default_make_difference_title_fr"
-                           name="project_default_make_difference_title_fr"
-                           value="{{ old('project_default_make_difference_title_fr', $settings['project_default_make_difference_title_fr']->value ?? '') }}"
-                           placeholder="Faites la différence"
-                           class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <x-admin.rich-text id="project_default_make_difference_title_fr" name="project_default_make_difference_title_fr" :value="old('project_default_make_difference_title_fr', $settings['project_default_make_difference_title_fr']->value ?? '')" lang="fr" :rows="1" placeholder="Faites la différence" />
                     <p class="mt-1.5 text-xs text-gray-400">Leave blank to reuse the English title.</p>
                 </div>
                 <div class="lg:col-span-2" x-show="lang === 'en'">
@@ -285,18 +276,11 @@
                     </div>
                     <div class="lg:col-span-2" x-show="lang === 'en'">
                         <label for="make_difference_title" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title</label>
-                        <input type="text" id="make_difference_title" name="make_difference_title"
-                               value="{{ old('make_difference_title', $selectedProject->make_difference_title) }}"
-                               :disabled="detailsMode !== 'specific'"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <x-admin.rich-text id="make_difference_title" name="make_difference_title" :value="old('make_difference_title', $selectedProject->make_difference_title)" lang="en" :rows="1" />
                     </div>
                     <div class="lg:col-span-2" x-show="lang === 'fr'" x-cloak>
                         <label for="make_difference_title_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Make a Difference Title (French) <span class="text-gray-400 font-normal">(optional)</span></label>
-                        <input type="text" id="make_difference_title_fr" name="make_difference_title_fr"
-                               value="{{ old('make_difference_title_fr', $selectedProject->make_difference_title_fr) }}"
-                               placeholder="Faites la différence"
-                               :disabled="detailsMode !== 'specific'"
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <x-admin.rich-text id="make_difference_title_fr" name="make_difference_title_fr" :value="old('make_difference_title_fr', $selectedProject->make_difference_title_fr)" lang="fr" :rows="1" placeholder="Faites la différence" />
                         <p class="mt-1.5 text-xs text-gray-400">Leave blank to reuse the English title.</p>
                     </div>
                     <div class="lg:col-span-2" x-show="lang === 'en'">
@@ -367,7 +351,7 @@
 
                 <div class="mt-4 rounded-xl bg-[#f8f9fc] border border-gray-100 p-4">
                     <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Make a Difference Title</p>
-                    <p class="text-sm text-gray-700 leading-relaxed font-semibold">{{ $selectedProject->effective_make_difference_title ?: 'Make a Difference' }}</p>
+                    <p class="text-sm text-gray-700 leading-relaxed font-semibold">{{ strip_tags($selectedProject->effective_make_difference_title) ?: 'Make a Difference' }}</p>
                 </div>
                 <div class="mt-4 rounded-xl bg-[#f8f9fc] border border-gray-100 p-4">
                     <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Make a Difference Text</p>

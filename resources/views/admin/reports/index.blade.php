@@ -140,6 +140,7 @@
     $bannerImageUrl = $bannerImage ? (str_starts_with($bannerImage, 'http') ? $bannerImage : asset('storage/' . $bannerImage)) : null;
     $bannerBadge = $bv('resources_banner_badge', 'Accountability');
     $bannerTitle = $bv('resources_banner_title', 'Resources & Annual Reports');
+    $bannerTitleFr = $bv('resources_banner_title_fr');
     $bannerSubtitle = $bv('resources_banner_subtitle', 'Annual reports, publications, and media resources from Krousar Thmey.');
     $bannerSubtitleFr = $bv('resources_banner_subtitle_fr');
     $btn1Text = $bv('resources_banner_btn1_text', 'Donate Now');
@@ -254,12 +255,21 @@
             </div>
 
             {{-- Hero Title --}}
-            <div>
-                <label for="resources_banner_title" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Title</label>
-                <input type="text" id="resources_banner_title" name="resources_banner_title"
-                       value="{{ $bannerTitle }}"
-                       oninput="document.getElementById('preview-title').textContent = this.value || 'Resources'"
-                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+            <div x-data="bilingualForm()">
+                <div class="flex items-center justify-between gap-3 mb-1.5">
+                    <label class="block text-sm font-medium text-gray-700 mb-0">Hero Title</label>
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
+                <div x-show="lang === 'en'">
+                    <x-admin.rich-text name="resources_banner_title" :value="$bannerTitle" lang="en" :rows="1" />
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <x-admin.rich-text name="resources_banner_title_fr" :value="$bannerTitleFr" lang="fr" :rows="1" placeholder="Ressources et rapports annuels" />
+                    <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English title.</p>
+                </div>
             </div>
 
             {{-- Hero Subtitle --}}

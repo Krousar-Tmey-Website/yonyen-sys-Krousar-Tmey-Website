@@ -17,6 +17,7 @@ class InvolvedBannerController extends Controller
             'involved_banner_overlay_color',
             'involved_banner_badge',
             'involved_banner_title',
+            'involved_banner_title_fr',
             'involved_banner_subtitle',
             'involved_banner_subtitle_fr',
             // Books for Sale Section
@@ -24,6 +25,7 @@ class InvolvedBannerController extends Controller
             'involved_books_banner_overlay_color',
             'involved_books_banner_badge',
             'involved_books_banner_title',
+            'involved_books_banner_title_fr',
             'involved_books_banner_subtitle',
             'involved_books_banner_subtitle_fr',
             // CTA Section
@@ -31,6 +33,7 @@ class InvolvedBannerController extends Controller
             'involved_cta_banner_overlay_color',
             'involved_cta_banner_badge',
             'involved_cta_banner_title',
+            'involved_cta_banner_title_fr',
             'involved_cta_banner_subtitle',
             'involved_cta_banner_subtitle_fr',
         ])->pluck('value', 'key');
@@ -43,7 +46,8 @@ class InvolvedBannerController extends Controller
         $request->validate([
             // Hero Banner
             'involved_banner_badge'         => ['nullable', 'string', 'max:255'],
-            'involved_banner_title'         => ['nullable', 'string', 'max:255'],
+            'involved_banner_title'         => ['nullable', 'string'],
+            'involved_banner_title_fr'      => ['nullable', 'string'],
             'involved_banner_subtitle'      => ['nullable', 'string'],
             'involved_banner_subtitle_fr'   => ['nullable', 'string'],
             'involved_banner_overlay_color' => ['nullable', 'string', 'max:20'],
@@ -52,7 +56,8 @@ class InvolvedBannerController extends Controller
 
             // Books for Sale Section
             'involved_books_banner_badge'         => ['nullable', 'string', 'max:255'],
-            'involved_books_banner_title'         => ['nullable', 'string', 'max:255'],
+            'involved_books_banner_title'         => ['nullable', 'string'],
+            'involved_books_banner_title_fr'      => ['nullable', 'string'],
             'involved_books_banner_subtitle'      => ['nullable', 'string'],
             'involved_books_banner_subtitle_fr'   => ['nullable', 'string'],
             'involved_books_banner_overlay_color' => ['nullable', 'string', 'max:20'],
@@ -61,7 +66,8 @@ class InvolvedBannerController extends Controller
 
             // CTA Section
             'involved_cta_banner_badge'         => ['nullable', 'string', 'max:255'],
-            'involved_cta_banner_title'         => ['nullable', 'string', 'max:255'],
+            'involved_cta_banner_title'         => ['nullable', 'string'],
+            'involved_cta_banner_title_fr'      => ['nullable', 'string'],
             'involved_cta_banner_subtitle'      => ['nullable', 'string'],
             'involved_cta_banner_subtitle_fr'   => ['nullable', 'string'],
             'involved_cta_banner_overlay_color' => ['nullable', 'string', 'max:20'],
@@ -72,6 +78,7 @@ class InvolvedBannerController extends Controller
         // === Hero Banner ===
         HomeSetting::setValue('involved_banner_badge', $request->input('involved_banner_badge', ''));
         HomeSetting::setValue('involved_banner_title', $request->input('involved_banner_title', ''));
+        HomeSetting::setValue('involved_banner_title_fr', $request->input('involved_banner_title_fr', ''));
         HomeSetting::setValue('involved_banner_subtitle', $request->input('involved_banner_subtitle', ''));
         HomeSetting::setValue('involved_banner_subtitle_fr', $request->input('involved_banner_subtitle_fr', ''));
         HomeSetting::setValue('involved_banner_overlay_color', $request->input('involved_banner_overlay_color', ''));
@@ -100,6 +107,7 @@ class InvolvedBannerController extends Controller
         // === Books for Sale Section Banner ===
         HomeSetting::setValue('involved_books_banner_badge', $request->input('involved_books_banner_badge', ''));
         HomeSetting::setValue('involved_books_banner_title', $request->input('involved_books_banner_title', ''));
+        HomeSetting::setValue('involved_books_banner_title_fr', $request->input('involved_books_banner_title_fr', ''));
         HomeSetting::setValue('involved_books_banner_subtitle', $request->input('involved_books_banner_subtitle', ''));
         HomeSetting::setValue('involved_books_banner_subtitle_fr', $request->input('involved_books_banner_subtitle_fr', ''));
         HomeSetting::setValue('involved_books_banner_overlay_color', $request->input('involved_books_banner_overlay_color', ''));
@@ -128,6 +136,7 @@ class InvolvedBannerController extends Controller
         // === CTA Section Banner ===
         HomeSetting::setValue('involved_cta_banner_badge', $request->input('involved_cta_banner_badge', ''));
         HomeSetting::setValue('involved_cta_banner_title', $request->input('involved_cta_banner_title', ''));
+        HomeSetting::setValue('involved_cta_banner_title_fr', $request->input('involved_cta_banner_title_fr', ''));
         HomeSetting::setValue('involved_cta_banner_subtitle', $request->input('involved_cta_banner_subtitle', ''));
         HomeSetting::setValue('involved_cta_banner_subtitle_fr', $request->input('involved_cta_banner_subtitle_fr', ''));
         HomeSetting::setValue('involved_cta_banner_overlay_color', $request->input('involved_cta_banner_overlay_color', ''));

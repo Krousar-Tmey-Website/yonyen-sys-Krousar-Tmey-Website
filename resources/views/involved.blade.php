@@ -45,7 +45,7 @@
                 </div>
 
                 <h1 class="hero-reveal hero-reveal-delay-3 text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-white mb-6 leading-tight drop-shadow-lg">
-                    {{ $bannerTitle }}
+                    {{ strip_tags($bannerTitle) }}
                 </h1>
 
                 <div class="hero-reveal hero-reveal-delay-4 text-white/90 text-base md:text-lg leading-relaxed max-w-2xl font-light drop-shadow-md [&_p]:mb-3 [&_p:last-child]:mb-0">
@@ -150,7 +150,7 @@
                 {{ $booksBannerBadge }}
             </span>
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-wide text-white mb-4 leading-tight">
-                {{ $booksBannerTitle }}
+                {{ strip_tags($booksBannerTitle) }}
             </h2>
             <div class="text-white/80 leading-relaxed text-sm md:text-base font-light [&_p]:mb-2 [&_p:last-child]:mb-0">
                 {!! $booksBannerSubtitle !!}
@@ -1045,7 +1045,7 @@
     </div>
     <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
         <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">{{ $ctaBannerBadge }}</p>
-        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">{{ $ctaBannerTitle }}</h2>
+        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">{{ strip_tags($ctaBannerTitle) }}</h2>
         <div class="text-white/70 text-lg mb-8 max-w-2xl mx-auto [&_p]:mb-2 [&_p:last-child]:mb-0">{!! $ctaBannerSubtitle !!}</div>
         <div class="flex flex-wrap gap-4 justify-center">
             <a href="{{ route('involved') }}#book-for-sales" class="btn-primary text-base">Book for Sales</a>
