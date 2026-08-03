@@ -332,14 +332,12 @@
                         </div>
                     </div>
                     <div x-show="lang === 'en'">
-                        <textarea name="presentation_banner_subtitle" rows="3"
-                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                                  placeholder="Born in 1991 in the Site II refugee camp...">{{ old('presentation_banner_subtitle', $settings['presentation_banner_subtitle'] ?? '') }}</textarea>
+                        <x-admin.rich-text name="presentation_banner_subtitle" :value="old('presentation_banner_subtitle', $settings['presentation_banner_subtitle'] ?? '')" lang="en" :rows="3"
+                                           placeholder="Born in 1991 in the Site II refugee camp..." />
                     </div>
                     <div x-show="lang === 'fr'" x-cloak>
-                        <textarea name="presentation_banner_subtitle_fr" rows="3"
-                                  class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                                  placeholder="French translation (optional)">{{ old('presentation_banner_subtitle_fr', $settings['presentation_banner_subtitle_fr'] ?? '') }}</textarea>
+                        <x-admin.rich-text name="presentation_banner_subtitle_fr" :value="old('presentation_banner_subtitle_fr', $settings['presentation_banner_subtitle_fr'] ?? '')" lang="fr" :rows="3"
+                                           placeholder="French translation (optional)" />
                         <p class="text-xs text-gray-400 mt-1">Shown to French-language visitors. Leave blank to reuse the English text.</p>
                     </div>
                 </div>

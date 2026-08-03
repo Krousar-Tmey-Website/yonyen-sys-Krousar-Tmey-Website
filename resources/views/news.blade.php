@@ -15,6 +15,9 @@
     $newsBannerBadge = $settings['news_banner_badge'] ?? 'Krousar Thmey';
     $newsBannerTitle = $settings['news_banner_title'] ?? "Krousar Thmey's news, in Cambodia and around the world";
     $newsBannerSubtitle = $settings['news_banner_subtitle'] ?? 'Updates from our programs, success stories from our beneficiaries, and events from Krousar Thmey.';
+    if (app()->getLocale() === 'fr' && !empty($settings['news_banner_subtitle_fr'] ?? null)) {
+        $newsBannerSubtitle = $settings['news_banner_subtitle_fr'];
+    }
     $newsBtn1Text = $settings['news_banner_btn1_text'] ?? null;
     $newsBtn1Url  = $settings['news_banner_btn1_url'] ?? null;
     $newsBtn2Text = $settings['news_banner_btn2_text'] ?? null;
@@ -45,7 +48,7 @@
         </div>
         <h1 class="hero-reveal hero-reveal-delay-2 text-3xl md:text-4xl font-black text-white mb-3 uppercase tracking-wide max-w-3xl">{{ $newsBannerTitle }}</h1>
         @if($newsBannerSubtitle)
-        <p class="hero-reveal hero-reveal-delay-3 text-white/60 text-base max-w-2xl leading-relaxed">{{ $newsBannerSubtitle }}</p>
+        <div class="hero-reveal hero-reveal-delay-3 text-white/60 text-base max-w-2xl leading-relaxed [&_p]:mb-3 [&_p:last-child]:mb-0">{!! $newsBannerSubtitle !!}</div>
         @endif
 
         @if($newsBtn1Text)

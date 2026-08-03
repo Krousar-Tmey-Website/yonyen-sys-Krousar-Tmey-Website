@@ -87,10 +87,22 @@
                     <p class="mt-1.5 text-xs text-gray-400">The large heading displayed at the top of the page.</p>
                 </div>
 
-                <div>
-                    <label for="programs_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle / Description</label>
-                    <x-admin.rich-text id="programs_banner_subtitle" name="programs_banner_subtitle" :value="old('programs_banner_subtitle', $settings['programs_banner_subtitle']->value ?? '')" lang="en" :rows="3" placeholder="Short description shown below the title..." />
-                    <p class="mt-1.5 text-xs text-gray-400">One or two sentences summarising the programs section.</p>
+                <div x-data="bilingualForm()">
+                    <div class="flex items-center justify-between gap-3 mb-1.5">
+                        <label class="block text-sm font-medium text-gray-700 mb-0">Subtitle / Description</label>
+                        <div class="lang-tabs" title="Toggle editing language (English / French)">
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                        </div>
+                    </div>
+                    <div x-show="lang === 'en'">
+                        <x-admin.rich-text id="programs_banner_subtitle" name="programs_banner_subtitle" :value="old('programs_banner_subtitle', $settings['programs_banner_subtitle']->value ?? '')" lang="en" :rows="3" placeholder="Short description shown below the title..." />
+                        <p class="mt-1.5 text-xs text-gray-400">One or two sentences summarising the programs section.</p>
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <x-admin.rich-text id="programs_banner_subtitle_fr" name="programs_banner_subtitle_fr" :value="old('programs_banner_subtitle_fr', $settings['programs_banner_subtitle_fr']->value ?? '')" lang="fr" :rows="3" placeholder="Brève description affichée sous le titre…" />
+                        <p class="mt-1.5 text-xs text-gray-400">Leave blank to reuse the English subtitle.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -220,9 +232,21 @@
                     <input type="text" name="programs_cta_title" value="{{ old('programs_cta_title', $settings['programs_cta_title']->value ?? 'Help Children in Cambodia') }}" class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]" placeholder="Help Children in Cambodia">
                 </div>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1.5">Subtitle / Description</label>
-                <x-admin.rich-text name="programs_cta_subtitle" :value="old('programs_cta_subtitle', $settings['programs_cta_subtitle']->value ?? 'Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.')" lang="en" :rows="2" placeholder="Your donation goes directly to one of these programs..." />
+            <div x-data="bilingualForm()">
+                <div class="flex items-center justify-between gap-3 mb-1.5">
+                    <label class="block text-sm font-medium text-gray-700 mb-0">Subtitle / Description</label>
+                    <div class="lang-tabs" title="Toggle editing language (English / French)">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
+                <div x-show="lang === 'en'">
+                    <x-admin.rich-text name="programs_cta_subtitle" :value="old('programs_cta_subtitle', $settings['programs_cta_subtitle']->value ?? 'Your donation goes directly to one of these programs. 100% of funds support children in Cambodia.')" lang="en" :rows="2" placeholder="Your donation goes directly to one of these programs..." />
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <x-admin.rich-text name="programs_cta_subtitle_fr" :value="old('programs_cta_subtitle_fr', $settings['programs_cta_subtitle_fr']->value ?? '')" lang="fr" :rows="2" placeholder="Votre don profite directement à l'un de ces programmes…" />
+                    <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English subtitle.</p>
+                </div>
             </div>
         </div>
 

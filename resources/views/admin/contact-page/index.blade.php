@@ -12,6 +12,7 @@ $bannerImageUrl = $bannerImage ? (str_starts_with($bannerImage, 'http') ? $banne
 $bannerBadge = $bv('contact_banner_badge', 'Support Our Work');
 $bannerTitle = $bv('contact_banner_title', 'Make a Difference Today');
 $bannerSubtitle = $bv('contact_banner_subtitle', 'Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.');
+$bannerSubtitleFr = $bv('contact_banner_subtitle_fr');
 $btn1Text = $bv('contact_banner_btn1_text', 'Donate Now');
 $btn1Url  = $bv('contact_banner_btn1_url', '/donate');
 $btn2Text = $bv('contact_banner_btn2_text', 'Get Involved');
@@ -223,18 +224,29 @@ $btn2Url  = $bv('contact_banner_btn2_url', '/get-involved');
                     </div>
 
                     {{-- Section: Subtitle --}}
-                    <div class="bg-gray-50/60 rounded-xl p-5 border border-gray-100/80">
-                        <div class="flex items-center gap-2.5 mb-4">
-                            <span class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center">
-                                <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
-                                </svg>
-                            </span>
-                            <span class="text-sm font-semibold text-gray-700">Subtitle</span>
+                    <div class="bg-gray-50/60 rounded-xl p-5 border border-gray-100/80" x-data="bilingualForm()">
+                        <div class="flex items-center justify-between gap-3 mb-4">
+                            <div class="flex items-center gap-2.5">
+                                <span class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center">
+                                    <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
+                                    </svg>
+                                </span>
+                                <span class="text-sm font-semibold text-gray-700">Subtitle</span>
+                            </div>
+                            <div class="lang-tabs" title="Toggle editing language (English / French)">
+                                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                            </div>
                         </div>
-                        <textarea name="contact_banner_subtitle" rows="3"
-                                  oninput="document.getElementById('preview-subtitle').textContent = this.value"
-                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $bannerSubtitle }}</textarea>
+                        <div x-show="lang === 'en'">
+                            <x-admin.rich-text name="contact_banner_subtitle" :value="$bannerSubtitle" lang="en" :rows="3" />
+                        </div>
+                        <div x-show="lang === 'fr'" x-cloak>
+                            <x-admin.rich-text name="contact_banner_subtitle_fr" :value="$bannerSubtitleFr" lang="fr" :rows="3"
+                                               placeholder="Chaque contribution soutient directement les enfants du Cambodge…" />
+                            <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English subtitle.</p>
+                        </div>
                     </div>
 
                     {{-- Section: Buttons --}}

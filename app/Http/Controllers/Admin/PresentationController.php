@@ -77,8 +77,8 @@ class PresentationController extends Controller
         $request->validate([
             'presentation_banner_badge'         => ['nullable', 'string', 'max:255'],
             'presentation_banner_title'         => ['nullable', 'string', 'max:255'],
-            'presentation_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
-            'presentation_banner_subtitle_fr'   => ['nullable', 'string', 'max:1000'],
+            'presentation_banner_subtitle'      => ['nullable', 'string'],
+            'presentation_banner_subtitle_fr'   => ['nullable', 'string'],
             'presentation_banner_overlay_color' => ['nullable', 'string', 'max:20'],
             'presentation_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'presentation_banner_image_url'     => ['nullable', 'url', 'max:2048'],

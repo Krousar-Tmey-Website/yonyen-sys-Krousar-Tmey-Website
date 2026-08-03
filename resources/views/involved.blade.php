@@ -48,15 +48,9 @@
                     {{ $bannerTitle }}
                 </h1>
 
-                <p class="hero-reveal hero-reveal-delay-4 text-white/90 text-base md:text-lg leading-relaxed max-w-2xl font-light drop-shadow-md">
-                    @php
-                        $displaySubtitle = $bannerSubtitle;
-                        if (app()->getLocale() === 'fr' && !empty($settings['involved_banner_subtitle_fr'] ?? null)) {
-                            $displaySubtitle = $settings['involved_banner_subtitle_fr'];
-                        }
-                    @endphp
-                    {{ strip_tags($displaySubtitle) }}
-                </p>
+                <div class="hero-reveal hero-reveal-delay-4 text-white/90 text-base md:text-lg leading-relaxed max-w-2xl font-light drop-shadow-md [&_p]:mb-3 [&_p:last-child]:mb-0">
+                    {!! $bannerSubtitle !!}
+                </div>
             </div>
 
             {{-- Floating Decorative Glass Badge --}}
@@ -158,9 +152,9 @@
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-wide text-white mb-4 leading-tight">
                 {{ $booksBannerTitle }}
             </h2>
-            <p class="text-white/80 leading-relaxed text-sm md:text-base font-light">
-                {{ $booksBannerSubtitle }}
-            </p>
+            <div class="text-white/80 leading-relaxed text-sm md:text-base font-light [&_p]:mb-2 [&_p:last-child]:mb-0">
+                {!! $booksBannerSubtitle !!}
+            </div>
         </div>
 
         @if($books->isNotEmpty())
@@ -1052,7 +1046,7 @@
     <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
         <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">{{ $ctaBannerBadge }}</p>
         <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">{{ $ctaBannerTitle }}</h2>
-        <p class="text-white/70 text-lg mb-8 max-w-2xl mx-auto">{{ $ctaBannerSubtitle }}</p>
+        <div class="text-white/70 text-lg mb-8 max-w-2xl mx-auto [&_p]:mb-2 [&_p:last-child]:mb-0">{!! $ctaBannerSubtitle !!}</div>
         <div class="flex flex-wrap gap-4 justify-center">
             <a href="{{ route('involved') }}#book-for-sales" class="btn-primary text-base">Book for Sales</a>
             <a href="{{ route('contact') }}" class="btn-outline text-base">Contact Us</a>

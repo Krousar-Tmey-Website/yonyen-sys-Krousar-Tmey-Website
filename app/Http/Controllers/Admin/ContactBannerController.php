@@ -17,6 +17,7 @@ class ContactBannerController extends Controller
             'contact_banner_badge',
             'contact_banner_title',
             'contact_banner_subtitle',
+            'contact_banner_subtitle_fr',
             'contact_banner_btn1_text',
             'contact_banner_btn1_url',
             'contact_banner_btn2_text',
@@ -31,7 +32,8 @@ class ContactBannerController extends Controller
         $request->validate([
             'contact_banner_badge'         => ['nullable', 'string', 'max:255'],
             'contact_banner_title'         => ['nullable', 'string', 'max:255'],
-            'contact_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
+            'contact_banner_subtitle'      => ['nullable', 'string'],
+            'contact_banner_subtitle_fr'   => ['nullable', 'string'],
             'contact_banner_overlay_color' => ['nullable', 'string', 'max:20'],
             'contact_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'contact_banner_image_url'     => ['nullable', 'url', 'max:2048'],
@@ -44,6 +46,7 @@ class ContactBannerController extends Controller
         HomeSetting::setValue('contact_banner_badge', $request->input('contact_banner_badge', ''));
         HomeSetting::setValue('contact_banner_title', $request->input('contact_banner_title', ''));
         HomeSetting::setValue('contact_banner_subtitle', $request->input('contact_banner_subtitle', ''));
+        HomeSetting::setValue('contact_banner_subtitle_fr', $request->input('contact_banner_subtitle_fr', ''));
         HomeSetting::setValue('contact_banner_overlay_color', $request->input('contact_banner_overlay_color', ''));
         HomeSetting::setValue('contact_banner_btn1_text', $request->input('contact_banner_btn1_text', ''));
         HomeSetting::setValue('contact_banner_btn1_url', $request->input('contact_banner_btn1_url', ''));
@@ -71,6 +74,6 @@ class ContactBannerController extends Controller
             HomeSetting::setValue('contact_banner_image', '');
         }
 
-        return redirect()->route('admin.contact-banner.index')->with('success', 'Contact page banner updated.');
+        return redirect()->route('admin.contact-page.index')->with('success', 'Contact page banner updated.');
     }
 }

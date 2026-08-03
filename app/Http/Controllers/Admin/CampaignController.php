@@ -14,9 +14,10 @@ class CampaignController extends Controller
     {
         $campaigns = Campaign::ordered()->paginate(12);
         $banner = [
-            'title'    => HomeSetting::getValue('campaigns_banner_title', 'Our Campaigns'),
-            'subtitle' => HomeSetting::getValue('campaigns_banner_subtitle', 'Every campaign is a promise kept to a child in Cambodia. Discover the causes we are championing this year.'),
-            'image'    => HomeSetting::getValue('campaigns_banner_image', ''),
+            'title'       => HomeSetting::getValue('campaigns_banner_title', 'Our Campaigns'),
+            'subtitle'    => HomeSetting::getValue('campaigns_banner_subtitle', 'Every campaign is a promise kept to a child in Cambodia. Discover the causes we are championing this year.'),
+            'subtitle_fr' => HomeSetting::getValue('campaigns_banner_subtitle_fr', ''),
+            'image'       => HomeSetting::getValue('campaigns_banner_image', ''),
         ];
 
         return view('admin.campaigns.index', compact('campaigns', 'banner'));
@@ -122,14 +123,16 @@ class CampaignController extends Controller
     public function updateBanner(Request $request)
     {
         $request->validate([
-            'campaigns_banner_title'     => ['required', 'string', 'max:255'],
-            'campaigns_banner_subtitle'  => ['nullable', 'string', 'max:1000'],
-            'campaigns_banner_image'     => ['nullable', 'image', 'max:6144'],
-            'campaigns_banner_image_url' => ['nullable', 'url', 'max:2048'],
+            'campaigns_banner_title'        => ['required', 'string', 'max:255'],
+            'campaigns_banner_subtitle'     => ['nullable', 'string'],
+            'campaigns_banner_subtitle_fr'  => ['nullable', 'string'],
+            'campaigns_banner_image'        => ['nullable', 'image', 'max:6144'],
+            'campaigns_banner_image_url'    => ['nullable', 'url', 'max:2048'],
         ]);
 
         HomeSetting::setValue('campaigns_banner_title', $request->input('campaigns_banner_title'));
         HomeSetting::setValue('campaigns_banner_subtitle', $request->input('campaigns_banner_subtitle', ''));
+        HomeSetting::setValue('campaigns_banner_subtitle_fr', $request->input('campaigns_banner_subtitle_fr', ''));
 
         $existing = HomeSetting::getValue('campaigns_banner_image', '');
 

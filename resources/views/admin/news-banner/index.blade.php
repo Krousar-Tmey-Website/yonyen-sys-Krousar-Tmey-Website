@@ -39,6 +39,7 @@
     $bannerBadge = $bv('news_banner_badge', 'Krousar Thmey');
     $bannerTitle = $bv('news_banner_title', "Krousar Thmey's news, in Cambodia and around the world");
     $bannerSubtitle = $bv('news_banner_subtitle', 'Updates from our programs, success stories from our beneficiaries, and events from Krousar Thmey.');
+    $bannerSubtitleFr = $bv('news_banner_subtitle_fr');
     $btn1Text = $bv('news_banner_btn1_text', 'Donate Now');
     $btn1Url  = $bv('news_banner_btn1_url', '/donate');
     $btn2Text = $bv('news_banner_btn2_text', 'Get Involved');
@@ -158,12 +159,23 @@
         </div>
 
         {{-- Hero Subtitle --}}
-        <div>
-            <label for="news_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Hero Subtitle</label>
-            <textarea id="news_banner_subtitle" name="news_banner_subtitle" rows="2"
-                      oninput="document.getElementById('preview-subtitle').textContent = this.value || ''"
-                      class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]"
-                      placeholder="Updates from our programs, success stories from our beneficiaries...">{{ $bannerSubtitle }}</textarea>
+        <div x-data="bilingualForm()">
+            <div class="flex items-center justify-between gap-3 mb-1.5">
+                <label class="block text-sm font-medium text-gray-700 mb-0">Hero Subtitle</label>
+                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+            </div>
+            <div x-show="lang === 'en'">
+                <x-admin.rich-text name="news_banner_subtitle" :value="$bannerSubtitle" lang="en" :rows="2"
+                                   placeholder="Updates from our programs, success stories from our beneficiaries..." />
+            </div>
+            <div x-show="lang === 'fr'" x-cloak>
+                <x-admin.rich-text name="news_banner_subtitle_fr" :value="$bannerSubtitleFr" lang="fr" :rows="2"
+                                   placeholder="Actualités de nos programmes, réussites de nos bénéficiaires…" />
+                <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English subtitle.</p>
+            </div>
         </div>
 
         {{-- Banner Action Buttons --}}

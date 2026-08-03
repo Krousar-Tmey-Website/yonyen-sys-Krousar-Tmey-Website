@@ -1532,9 +1532,15 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
             {{ $settings['cta_title'] ?? 'Help a Child Build Their Future' }}
         </h2>
-        <p class="text-white/80 text-lg leading-relaxed mb-10">
-            {{ $settings['cta_subtitle'] ?? 'We guarantee that 100% of your donation is used to support children across Cambodia. Every contribution, big or small, changes a life.' }}
-        </p>
+        @php
+            $ctaSubtitleText = $settings['cta_subtitle'] ?? 'We guarantee that 100% of your donation is used to support children across Cambodia. Every contribution, big or small, changes a life.';
+            if (app()->getLocale() === 'fr' && !empty($settings['cta_subtitle_fr'] ?? null)) {
+                $ctaSubtitleText = $settings['cta_subtitle_fr'];
+            }
+        @endphp
+        <div class="text-white/80 text-lg leading-relaxed mb-10 [&_p]:mb-2 [&_p:last-child]:mb-0">
+            {!! $ctaSubtitleText !!}
+        </div>
         <div class="flex flex-col sm:flex-row gap-6 justify-center">
             <a href="{{ $settings['cta_primary_url'] ?? route('donate') }}" class="btn-primary text-base btn-micro">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -25,6 +25,7 @@
     $booksBadge = $bv('involved_books_banner_badge', 'Books for Sale');
     $booksTitle = $bv('involved_books_banner_title', 'Support Through Literature');
     $booksSubtitle = $bv('involved_books_banner_subtitle', 'Browse our collection of publication titles. 100% of proceeds directly fund our educational and social programs for vulnerable children across Cambodia.');
+    $booksSubtitleFr = $bv('involved_books_banner_subtitle_fr');
 
     // CTA Banner
     $ctaImage = $bv('involved_cta_banner_image');
@@ -33,6 +34,7 @@
     $ctaBadge = $bv('involved_cta_banner_badge', 'Ready to Help?');
     $ctaTitle = $bv('involved_cta_banner_title', 'Every Action Counts');
     $ctaSubtitle = $bv('involved_cta_banner_subtitle', 'Whether you buy a book, volunteer, partner with us, or send your application - you are helping build a better future for Cambodia\'s children.');
+    $ctaSubtitleFr = $bv('involved_cta_banner_subtitle_fr');
 @endphp
 
 <div class="space-y-6" x-data="{ tab: 'hero' }">
@@ -319,11 +321,22 @@
                     </div>
 
                     {{-- Books Subtitle --}}
-                    <div>
-                        <label for="involved_books_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Section Subtitle</label>
-                        <textarea id="involved_books_banner_subtitle" name="involved_books_banner_subtitle" rows="3"
-                                  oninput="document.getElementById('preview-books-subtitle').textContent = this.value || 'Browse our collection…'"
-                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $booksSubtitle }}</textarea>
+                    <div x-data="bilingualForm()">
+                        <div class="flex items-center justify-between gap-3 mb-1.5">
+                            <label class="block text-sm font-medium text-gray-700 mb-0">Section Subtitle</label>
+                            <div class="lang-tabs" title="Toggle editing language (English / French)">
+                                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                            </div>
+                        </div>
+                        <div x-show="lang === 'en'">
+                            <x-admin.rich-text name="involved_books_banner_subtitle" :value="$booksSubtitle" lang="en" :rows="3" />
+                        </div>
+                        <div x-show="lang === 'fr'" x-cloak>
+                            <x-admin.rich-text name="involved_books_banner_subtitle_fr" :value="$booksSubtitleFr" lang="fr" :rows="3"
+                                               placeholder="Parcourez notre collection de publications…" />
+                            <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English subtitle.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -449,11 +462,22 @@
                     </div>
 
                     {{-- CTA Subtitle --}}
-                    <div>
-                        <label for="involved_cta_banner_subtitle" class="block text-sm font-medium text-gray-700 mb-1.5">Section Subtitle</label>
-                        <textarea id="involved_cta_banner_subtitle" name="involved_cta_banner_subtitle" rows="3"
-                                  oninput="document.getElementById('preview-cta-subtitle').textContent = this.value || 'Whether you buy a book…'"
-                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">{{ $ctaSubtitle }}</textarea>
+                    <div x-data="bilingualForm()">
+                        <div class="flex items-center justify-between gap-3 mb-1.5">
+                            <label class="block text-sm font-medium text-gray-700 mb-0">Section Subtitle</label>
+                            <div class="lang-tabs" title="Toggle editing language (English / French)">
+                                <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                                <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                            </div>
+                        </div>
+                        <div x-show="lang === 'en'">
+                            <x-admin.rich-text name="involved_cta_banner_subtitle" :value="$ctaSubtitle" lang="en" :rows="3" />
+                        </div>
+                        <div x-show="lang === 'fr'" x-cloak>
+                            <x-admin.rich-text name="involved_cta_banner_subtitle_fr" :value="$ctaSubtitleFr" lang="fr" :rows="3"
+                                               placeholder="Que vous achetiez un livre, fassiez du bénévolat…" />
+                            <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English subtitle.</p>
+                        </div>
                     </div>
                 </div>
             </div>

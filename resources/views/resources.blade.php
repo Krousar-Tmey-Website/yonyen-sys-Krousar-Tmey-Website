@@ -15,6 +15,9 @@
     $resourcesBannerBadge = $settings['resources_banner_badge'] ?? 'Accountability';
     $resourcesBannerTitle = $settings['resources_banner_title'] ?? 'Resources & Annual Reports';
     $resourcesBannerSubtitle = $settings['resources_banner_subtitle'] ?? 'Annual reports, publications, and media resources from Krousar Thmey.';
+    if (app()->getLocale() === 'fr' && !empty($settings['resources_banner_subtitle_fr'] ?? null)) {
+        $resourcesBannerSubtitle = $settings['resources_banner_subtitle_fr'];
+    }
     $resourcesBannerBtn1Text = $settings['resources_banner_btn1_text'] ?? 'Donate Now';
     $resourcesBannerBtn1Url  = $settings['resources_banner_btn1_url'] ?? '/donate';
     $resourcesBannerBtn2Text = $settings['resources_banner_btn2_text'] ?? 'Get Involved';
@@ -41,9 +44,9 @@
             {{ $resourcesBannerTitle }}
         </h1>
         @if($resourcesBannerSubtitle)
-        <p class="hero-reveal hero-reveal-delay-3 text-white/90 text-lg leading-relaxed max-w-2xl mx-auto mt-6 drop-shadow-md">
-            {{ $resourcesBannerSubtitle }}
-        </p>
+        <div class="hero-reveal hero-reveal-delay-3 text-white/90 text-lg leading-relaxed max-w-2xl mx-auto mt-6 drop-shadow-md [&_p]:mb-2 [&_p:last-child]:mb-0">
+            {!! $resourcesBannerSubtitle !!}
+        </div>
         @endif
         @if($resourcesBannerBtn1Text || $resourcesBannerBtn2Text || $resourcesBannerBtn3Text)
         <div class="hero-reveal hero-reveal-delay-4 flex flex-wrap items-center justify-center gap-4 mt-8">

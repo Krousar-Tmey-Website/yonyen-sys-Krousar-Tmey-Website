@@ -83,7 +83,7 @@ $sections = [
             ['key' => 'cta_background_image', 'label' => 'Background Image',                               'type' => 'image'],
             ['key' => 'cta_label',            'label' => 'Badge Text',                                     'type' => 'text', 'placeholder' => 'Support Our Work'],
             ['key' => 'cta_title',            'label' => 'Title',                                          'type' => 'text', 'placeholder' => 'Help a Child Build Their Future'],
-            ['key' => 'cta_subtitle',         'label' => 'Subtitle',                                       'type' => 'textarea', 'placeholder' => 'We guarantee that 100% of your donation...'],
+            ['key' => 'cta_subtitle',         'label' => 'Subtitle',                                       'type' => 'richtext', 'placeholder' => 'We guarantee that 100% of your donation...'],
             ['key' => 'cta_primary_text',     'label' => 'Button 1 — Text (Donate Now)',                   'type' => 'text', 'placeholder' => 'Donate Now'],
             ['key' => 'cta_primary_url',      'label' => 'Button 1 — URL',                                 'type' => 'url', 'placeholder' => '/donate'],
             ['key' => 'cta_secondary_text',   'label' => 'Button 2 — Text (Get Involved)',                  'type' => 'text', 'placeholder' => 'Get Involved'],
@@ -122,14 +122,35 @@ $sections = [
                     $k = $field['key'];
                     $default = $field['default'] ?? '';
                     $currentVal = $val($k, $default);
-                    $isWide = in_array($field['type'], ['textarea', 'image']);
+                    $isWide = in_array($field['type'], ['textarea', 'image', 'richtext']);
                 @endphp
                 <div class="{{ $isWide ? 'lg:col-span-2' : '' }}">
+                    @if($field['type'] !== 'richtext')
                     <label for="settings_{{ $k }}" class="block text-sm font-medium text-gray-700 mb-1.5">
                         {{ $field['label'] }}
                     </label>
+                    @endif
 
-                    @if($field['type'] === 'textarea')
+                    @if($field['type'] === 'richtext')
+                        @php $currentValFr = $val($k.'_fr'); @endphp
+                        <div x-data="bilingualForm()">
+                            <div class="flex items-center justify-between gap-3 mb-1.5">
+                                <label class="block text-sm font-medium text-gray-700 mb-0">{{ $field['label'] }}</label>
+                                <div class="lang-tabs" title="Toggle editing language (English / French)">
+                                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                                </div>
+                            </div>
+                            <div x-show="lang === 'en'">
+                                <x-admin.rich-text id="settings_{{ $k }}" name="settings[{{ $k }}]" :value="$currentVal" lang="en" :rows="2" :placeholder="$field['placeholder'] ?? ''" />
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <x-admin.rich-text id="settings_{{ $k }}_fr" name="settings[{{ $k }}_fr]" :value="$currentValFr" lang="fr" :rows="2" />
+                                <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English text.</p>
+                            </div>
+                        </div>
+
+                    @elseif($field['type'] === 'textarea')
                         <textarea id="settings_{{ $k }}" name="settings[{{ $k }}]" rows="2"
                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] resize-none">{{ $currentVal }}</textarea>
 

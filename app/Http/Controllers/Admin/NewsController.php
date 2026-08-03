@@ -278,7 +278,8 @@ class NewsController extends Controller
         $request->validate([
             'news_banner_badge'         => ['nullable', 'string', 'max:255'],
             'news_banner_title'         => ['nullable', 'string', 'max:255'],
-            'news_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
+            'news_banner_subtitle'      => ['nullable', 'string'],
+            'news_banner_subtitle_fr'   => ['nullable', 'string'],
             'news_banner_overlay_color' => ['nullable', 'string', 'max:20'],
             'news_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'news_banner_image_url'     => ['nullable', 'url', 'max:2048'],
@@ -293,6 +294,7 @@ class NewsController extends Controller
         HomeSetting::setValue('news_banner_badge', $request->input('news_banner_badge', ''));
         HomeSetting::setValue('news_banner_title', $request->input('news_banner_title', ''));
         HomeSetting::setValue('news_banner_subtitle', $request->input('news_banner_subtitle', ''));
+        HomeSetting::setValue('news_banner_subtitle_fr', $request->input('news_banner_subtitle_fr', ''));
         HomeSetting::setValue('news_banner_overlay_color', $request->input('news_banner_overlay_color', ''));
         HomeSetting::setValue('news_banner_btn1_text', $request->input('news_banner_btn1_text', ''));
         HomeSetting::setValue('news_banner_btn1_url', $request->input('news_banner_btn1_url', ''));
@@ -322,6 +324,6 @@ class NewsController extends Controller
             HomeSetting::setValue('news_banner_image', '');
         }
 
-        return redirect()->route('admin.news-banner.index')->with('success', 'News banner updated.');
+        return redirect()->route('admin.news.index', ['tab' => 'banner'])->with('success', 'News banner updated.');
     }
 }
