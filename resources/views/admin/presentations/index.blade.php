@@ -255,7 +255,7 @@
                         @endif
                         <div class="relative z-10 flex flex-col items-center gap-3">
                             <span class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg">{{ $pbBadge }}</span>
-                            <p class="text-white text-lg font-bold max-w-xl">{{ $pbTitle }}</p>
+                            <p class="text-white text-lg font-bold max-w-xl">{!! $pbTitle !!}</p>
                             <div class="flex flex-wrap gap-3 justify-center mt-2">
                                 <span class="px-4 py-2 bg-[#2d6fa3] text-white text-xs rounded-full shadow-md">{{ $pbBtn1 }}</span>
                                 <span class="px-4 py-2 bg-[#8da83a] text-white text-xs rounded-full shadow-md">{{ $pbBtn2 }}</span>

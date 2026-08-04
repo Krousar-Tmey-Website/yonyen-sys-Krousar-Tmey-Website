@@ -33,8 +33,8 @@
             @endif
             <div class="relative">
                 <span id="preview-badge" class="inline-block bg-white text-[#eea91d] text-[10px] font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">{{ $bannerBadge }}</span>
-                <h2 id="preview-title" class="text-xl font-bold text-white mb-2">{{ $bannerTitle }}</h2>
-                <p id="preview-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{{ $bannerSubtitle }}</p>
+                <h2 id="preview-title" class="text-xl font-bold text-white mb-2">{!! $bannerTitle !!}</h2>
+                <p id="preview-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{!! $bannerSubtitle !!}</p>
             </div>
         </div>
     </div>

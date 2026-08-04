@@ -24,6 +24,15 @@ class ContactController extends Controller
         $contactBannerBadge = $settings['contact_banner_badge'] ?? 'Support Our Work';
         $contactBannerTitle = $settings['contact_banner_title'] ?? 'Make a Difference Today';
         $contactBannerSubtitle = $settings['contact_banner_subtitle'] ?? 'Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.';
+
+        if (app()->getLocale() === 'fr') {
+            if (!empty($settings['contact_banner_title_fr'])) {
+                $contactBannerTitle = $settings['contact_banner_title_fr'];
+            }
+            if (!empty($settings['contact_banner_subtitle_fr'])) {
+                $contactBannerSubtitle = $settings['contact_banner_subtitle_fr'];
+            }
+        }
         $contactBannerBtn1Text = $settings['contact_banner_btn1_text'] ?? 'Donate Now';
         $contactBannerBtn1Url = $settings['contact_banner_btn1_url'] ?? '/donate';
         $contactBannerBtn2Text = $settings['contact_banner_btn2_text'] ?? 'Get Involved';

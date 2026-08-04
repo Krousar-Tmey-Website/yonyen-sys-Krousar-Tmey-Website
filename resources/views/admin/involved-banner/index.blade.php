@@ -80,8 +80,8 @@
                     @endif
                     <div class="relative">
                         <span id="preview-hero-badge" class="inline-block bg-white text-[#8da83a] text-[10px] font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">{{ $heroBadge }}</span>
-                        <h2 id="preview-hero-title" class="text-xl font-bold text-white mb-2">{{ $heroTitle }}</h2>
-                        <p id="preview-hero-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{{ $heroSubtitle }}</p>
+                        <h2 id="preview-hero-title" class="text-xl font-bold text-white mb-2">{!! $heroTitle !!}</h2>
+                        <p id="preview-hero-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{!! $heroSubtitle !!}</p>
                     </div>
                 </div>
             </div>
@@ -228,8 +228,8 @@
                     @endif
                     <div class="relative">
                         <span id="preview-books-badge" class="inline-block bg-white text-[#e8a020] text-[10px] font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">{{ $booksBadge }}</span>
-                        <h2 id="preview-books-title" class="text-xl font-bold text-white mb-2">{{ $booksTitle }}</h2>
-                        <p id="preview-books-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{{ $booksSubtitle }}</p>
+                        <h2 id="preview-books-title" class="text-xl font-bold text-white mb-2">{!! $booksTitle !!}</h2>
+                        <p id="preview-books-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{!! $booksSubtitle !!}</p>
                     </div>
                 </div>
             </div>
@@ -378,8 +378,8 @@
                     @endif
                     <div class="relative">
                         <span id="preview-cta-badge" class="inline-block bg-white text-[#8da83a] text-[10px] font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">{{ $ctaBadge }}</span>
-                        <h2 id="preview-cta-title" class="text-xl font-bold text-white mb-2">{{ $ctaTitle }}</h2>
-                        <p id="preview-cta-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{{ $ctaSubtitle }}</p>
+                        <h2 id="preview-cta-title" class="text-xl font-bold text-white mb-2">{!! $ctaTitle !!}</h2>
+                        <p id="preview-cta-subtitle" class="text-white/80 text-xs max-w-md mx-auto">{!! $ctaSubtitle !!}</p>
                     </div>
                 </div>
             </div>

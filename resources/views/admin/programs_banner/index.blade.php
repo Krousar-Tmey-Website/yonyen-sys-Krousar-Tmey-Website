@@ -40,7 +40,7 @@
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     <span class="text-white">Our Programs</span>
                 </nav>
-                <h1 id="preview-title" class="text-2xl font-bold text-white mb-2">{{ $previewTitle }}</h1>
+                <h1 id="preview-title" class="text-2xl font-bold text-white mb-2">{!! $previewTitle !!}</h1>
                 <p id="preview-subtitle" class="text-white/70 text-sm max-w-xl rich-text-content">{!! $previewSubtitle !!}</p>
             </div>
         </div>

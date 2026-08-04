@@ -79,8 +79,8 @@ $bannerSubtitleFr = $bvFr('history_banner_subtitle');
                 <div class="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-black/5"></div>
                 <div class="relative z-10">
                     <span id="preview-badge" class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-[10px] font-semibold px-4 py-1.5 rounded-full mb-4 uppercase tracking-wider shadow-lg">{{ $bannerBadge }}</span>
-                    <h2 id="preview-title" class="text-2xl font-bold text-white mb-3 drop-shadow-lg">{{ $bannerTitle }}</h2>
-                    <p id="preview-subtitle" class="text-white/80 text-sm max-w-lg mx-auto leading-relaxed">{{ $bannerSubtitle }}</p>
+                    <h2 id="preview-title" class="text-2xl font-bold text-white mb-3 drop-shadow-lg">{!! $bannerTitle !!}</h2>
+                    <p id="preview-subtitle" class="text-white/80 text-sm max-w-lg mx-auto leading-relaxed">{!! $bannerSubtitle !!}</p>
                 </div>
             </div>
         </div>

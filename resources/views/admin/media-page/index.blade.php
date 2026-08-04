@@ -102,8 +102,8 @@
             @endif
             <div class="relative">
                 <span id="preview-badge" class="inline-block bg-white text-[#eea91d] text-[10px] font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">{{ $bannerBadge }}</span>
-                <h2 id="preview-title" class="text-xl font-bold text-white mb-2">{{ $bannerTitle }}</h2>
-                <p id="preview-subtitle" class="text-white/80 text-xs max-w-md mx-auto mb-4">{{ $bannerSubtitle }}</p>
+                <h2 id="preview-title" class="text-xl font-bold text-white mb-2">{!! $bannerTitle !!}</h2>
+                <p id="preview-subtitle" class="text-white/80 text-xs max-w-md mx-auto mb-4">{!! $bannerSubtitle !!}</p>
                 <div id="preview-buttons" class="flex flex-wrap items-center justify-center gap-2">
                     <span id="preview-btn1" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-semibold bg-white text-[#2d6fa3] {{ $btn1Text ? '' : 'opacity-30' }}">{{ $btn1Text ?: 'Button 1' }}</span>
                     <span id="preview-btn2" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-semibold border border-white/40 text-white {{ $btn2Text ? '' : 'opacity-30' }}">{{ $btn2Text ?: 'Button 2' }}</span>

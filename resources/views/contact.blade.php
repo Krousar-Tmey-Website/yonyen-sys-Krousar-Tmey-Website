@@ -430,8 +430,8 @@
         <p class="animate-cta-badge-reveal opacity-0">
             <span class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-5 py-2 rounded-full mb-6 uppercase tracking-wider shadow-lg">{{ $contactBannerBadge }}</span>
         </p>
-        <h2 class="animate-cta-title-reveal opacity-0 text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4 drop-shadow-lg">{{ $contactBannerTitle }}</h2>
-        <p class="animate-cta-subtitle-reveal opacity-0 text-white/70 text-lg mb-8 max-w-2xl mx-auto drop-shadow-md">{{ $contactBannerSubtitle }}</p>
+        <h2 class="animate-cta-title-reveal opacity-0 text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4 drop-shadow-lg">{{ strip_tags($contactBannerTitle) }}</h2>
+        <p class="animate-cta-subtitle-reveal opacity-0 text-white/70 text-lg mb-8 max-w-2xl mx-auto drop-shadow-md [&_p]:mb-0">{!! $contactBannerSubtitle !!}</p>
         <div class="animate-cta-buttons-reveal opacity-0 flex flex-wrap gap-4 justify-center">
             <a href="{{ $contactBannerBtn1Url }}" class="btn-primary text-base">{{ $contactBannerBtn1Text }}</a>
             <a href="{{ $contactBannerBtn2Url }}" class="btn-outline text-base">{{ $contactBannerBtn2Text }}</a>

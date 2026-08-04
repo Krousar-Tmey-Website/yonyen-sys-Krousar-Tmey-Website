@@ -81,8 +81,8 @@ $btn2Url  = $bv('contact_banner_btn2_url', '/get-involved');
                 <div class="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-black/5"></div>
                 <div class="relative z-10">
                     <span id="preview-badge" class="inline-block text-[#8da83a] font-bold text-xs uppercase tracking-widest mb-3">{{ $bannerBadge }}</span>
-                    <h2 id="preview-title" class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4 drop-shadow-lg">{{ $bannerTitle }}</h2>
-                    <p id="preview-subtitle" class="text-white/70 text-base mb-6 max-w-2xl mx-auto">{{ $bannerSubtitle }}</p>
+                    <h2 id="preview-title" class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4 drop-shadow-lg">{!! $bannerTitle !!}</h2>
+                    <p id="preview-subtitle" class="text-white/70 text-base mb-6 max-w-2xl mx-auto">{!! $bannerSubtitle !!}</p>
                     <div class="flex flex-wrap gap-3 justify-center">
                         <span id="preview-btn1" class="inline-flex items-center px-5 py-2.5 bg-[#2d6fa3] text-white rounded-full text-sm font-bold shadow-md">{{ $btn1Text }}</span>
                         <span id="preview-btn2" class="inline-flex items-center px-5 py-2.5 border-2 border-white/40 text-white rounded-full text-sm font-bold">{{ $btn2Text }}</span>
