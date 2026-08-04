@@ -143,122 +143,134 @@
 {{-- Our Offices Wrapper --}}
 <div x-data="{ selectedOffice: @js($offices->first()->country ?? '') }">
 
-    {{-- Interactive Maps Section --}}
+    {{-- Locations: Offices + Map side by side --}}
     <section class="py-20 bg-gray-50 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-6 w-full">
-            <div class="text-center mb-10" data-reveal>
+            <div class="text-center mb-14" data-reveal>
                 <span class="inline-flex items-center gap-2 bg-[#2d6fa3]/10 border border-[#2d6fa3]/20 text-[#2d6fa3] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Locations</span>
                 <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-gray-800">Find Us Around the World</h2>
                 <div class="w-16 h-1 bg-[#d32f2f] rounded-full mx-auto mt-4"></div>
+                <p class="text-gray-400 text-xs mt-4">Click an office to choose where your message from the form below is sent.</p>
             </div>
 
-            <div class="flex flex-wrap justify-center gap-3 mb-10" data-reveal="up">
-                @foreach($offices as $loc)
-                    @if($loc->google_maps_link)
-                    <button @click="selectedOffice = '{{ $loc->country }}'"
-                            :class="selectedOffice === '{{ $loc->country }}' ? 'bg-[#2d6fa3] text-white shadow-lg scale-105' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
-                            class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2">
-                        <span>{{ $loc->flag }}</span>
-                        {{ $loc->country }}
-                    </button>
-                    @endif
-                @endforeach
-            </div>
+            <div class="grid lg:grid-cols-5 gap-6 lg:gap-8 items-start">
 
-            <div class="w-full relative h-[420px] md:h-[480px] rounded-3xl overflow-hidden border border-gray-200 shadow-xl bg-gray-100" data-reveal="up">
-                @foreach($offices as $loc)
-                    @if($loc->google_maps_link)
-                    <div x-show="selectedOffice === '{{ $loc->country }}'"
-                         x-transition:enter="transition ease-out duration-700"
-                         x-transition:enter-start="opacity-0"
-                         x-transition:enter-end="opacity-100"
-                         x-transition:leave="transition ease-in duration-500 absolute inset-0 z-10"
-                         x-transition:leave-start="opacity-100"
-                         x-transition:leave-end="opacity-0"
-                         class="absolute inset-0 w-full h-full" x-cloak>
-
-                         <div class="w-full h-full [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0 pointer-events-auto">
-                             {!! $loc->google_maps_link !!}
-                         </div>
+                {{-- Left: Office card --}}
+                <div class="lg:col-span-2 lg:sticky lg:top-24" data-reveal="left">
+                    {{-- Quick switch — jump straight to an office without scrolling the list --}}
+                    @if($offices->count() > 1)
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        @foreach($offices as $loc)
+                        <button type="button" @click="selectedOffice = '{{ $loc->country }}'"
+                                :class="selectedOffice === '{{ $loc->country }}' ? 'bg-[#2d6fa3] text-white border-[#2d6fa3] shadow-sm' : 'bg-white text-gray-500 border-gray-200 hover:border-[#2d6fa3]/40 hover:text-[#2d6fa3]'"
+                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold border transition-all duration-200">
+                            <span class="opacity-70" :class="selectedOffice === '{{ $loc->country }}' ? 'opacity-90' : ''">{{ $loc->flag }}</span>
+                            {{ $loc->country }}
+                        </button>
+                        @endforeach
                     </div>
                     @endif
-                @endforeach
 
-                {{-- Fallback when no map is available for selected office --}}
-                <div x-show="!['{{ $offices->filter(fn($o) => $o->google_maps_link)->pluck('country')->join("','") }}'].includes(selectedOffice)"
-                     class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 bg-gray-100" x-cloak>
-                    <svg class="w-16 h-16 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <p class="text-lg font-medium">Map not available for this location</p>
+                    @forelse($offices as $loc)
+                    <div x-show="selectedOffice === '{{ $loc->country }}'" x-cloak
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 translate-y-2"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         class="rounded-3xl border border-gray-200 bg-white shadow-xl overflow-hidden">
+
+                        {{-- Header band --}}
+                        <div class="relative px-6 py-5 bg-gradient-to-br from-[#1a3c6e] to-[#2d6fa3] overflow-hidden">
+                            <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+                            <div class="relative flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <span class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center text-white text-sm font-black tracking-wide flex-shrink-0 shadow-inner">{{ $loc->flag }}</span>
+                                    <div class="min-w-0">
+                                        <h3 class="text-base font-black uppercase tracking-wide text-white leading-tight truncate">{{ $loc->country }}</h3>
+                                        <p class="text-white/70 text-xs font-semibold">{{ $loc->city }}</p>
+                                    </div>
+                                </div>
+                                @if($loc->badge)
+                                <span class="flex-shrink-0 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full {{ $loc->badge_color }}">{{ $loc->badge }}</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- Body --}}
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <span class="w-8 h-8 rounded-lg bg-[#e8a020]/10 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-3.5 h-3.5 text-[#e8a020]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                    </span>
+                                    <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line pt-1">{{ $loc->address }}</p>
+                                </div>
+                                @if($loc->phone)
+                                <a href="tel:{{ preg_replace('/[^+0-9]/', '', $loc->phone) }}" class="flex items-center gap-3 group/link">
+                                    <span class="w-8 h-8 rounded-lg bg-[#e8a020]/10 flex items-center justify-center flex-shrink-0 group-hover/link:bg-[#e8a020]/20 transition-colors">
+                                        <svg class="w-3.5 h-3.5 text-[#e8a020]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                    </span>
+                                    <span class="text-gray-600 text-sm font-medium group-hover/link:text-[#2d6fa3] transition-colors">{{ $loc->phone }}</span>
+                                </a>
+                                @endif
+                                @if($loc->email)
+                                <a href="#" @click.prevent="openEmail('{{ $loc->email }}')" class="flex items-center gap-3 group/link">
+                                    <span class="w-8 h-8 rounded-lg bg-[#e8a020]/10 flex items-center justify-center flex-shrink-0 group-hover/link:bg-[#e8a020]/20 transition-colors">
+                                        <svg class="w-3.5 h-3.5 text-[#e8a020]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    </span>
+                                    <span class="text-gray-600 text-sm font-medium group-hover/link:text-[#2d6fa3] transition-colors break-all">{{ $loc->email }}</span>
+                                </a>
+                                @endif
+                            </div>
+
+                            @if($loc->email)
+                            <div class="mt-5 pt-5 border-t border-gray-100">
+                                <a href="#" @click.prevent="openEmail('{{ $loc->email }}')" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#2d6fa3] text-white text-sm font-bold hover:bg-[#1a3c6e] shadow-md hover:shadow-lg transition-all duration-200">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    Send Email
+                                </a>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    @empty
+                    <div class="py-12 text-center text-gray-400 text-sm rounded-3xl border border-dashed border-gray-200">No offices configured yet.</div>
+                    @endforelse
+                </div>
+
+                {{-- Right: Map --}}
+                <div class="lg:col-span-3" data-reveal="right">
+                    <div class="w-full relative h-[420px] lg:h-[520px] rounded-3xl overflow-hidden border border-gray-200 shadow-xl bg-gray-100">
+                        @foreach($offices as $loc)
+                            @if($loc->google_maps_link)
+                            <div x-show="selectedOffice === '{{ $loc->country }}'"
+                                 x-transition:enter="transition ease-out duration-700"
+                                 x-transition:enter-start="opacity-0"
+                                 x-transition:enter-end="opacity-100"
+                                 x-transition:leave="transition ease-in duration-500 absolute inset-0 z-10"
+                                 x-transition:leave-start="opacity-100"
+                                 x-transition:leave-end="opacity-0"
+                                 class="absolute inset-0 w-full h-full" x-cloak>
+
+                                 <div class="w-full h-full [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0 pointer-events-auto">
+                                     {!! $loc->google_maps_link !!}
+                                 </div>
+                            </div>
+                            @endif
+                        @endforeach
+
+                        {{-- Fallback when no map is available for selected office --}}
+                        <div x-show="!['{{ $offices->filter(fn($o) => $o->google_maps_link)->pluck('country')->join("','") }}'].includes(selectedOffice)"
+                             class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 bg-gray-100" x-cloak>
+                            <svg class="w-16 h-16 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-lg font-medium">Map not available for this location</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
-<section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-14" data-reveal>
-            <span class="inline-flex items-center gap-2 bg-[#e8a020]/20 border border-[#e8a020]/30 text-[#e8a020] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Our Offices</span>
-            <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-[#2d6fa3]">Office Details</h2>
-            <div class="w-16 h-1 bg-[#d32f2f] rounded-full mx-auto mt-4"></div>
-            <p class="text-gray-400 text-xs mt-3">Click an office to choose where your message from the form below is sent.</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            @forelse($offices as $loc)
-            <div class="relative rounded-3xl border-2 hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col h-full hover:-translate-y-0.5 cursor-pointer"
-                 @click="selectedOffice = '{{ $loc->country }}'"
-                 :class="selectedOffice === '{{ $loc->country }}' ? 'bg-[#2d6fa3]/5 border-[#2d6fa3] ring-2 ring-[#2d6fa3]/25 shadow-lg' : 'bg-[#f8f9fc] border-slate-200/50 hover:border-[#2d6fa3]/40'"
-                 data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
-                <div class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#2d6fa3] text-white flex items-center justify-center shadow-sm"
-                     x-show="selectedOffice === '{{ $loc->country }}'" x-cloak>
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                </div>
-                <div class="p-6 flex-1 flex flex-col">
-                    <div class="flex items-start justify-between mb-4">
-                        <span class="text-3xl font-black text-gray-800">{{ $loc->flag }}</span>
-                        @if($loc->badge)
-                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full {{ $loc->badge_color }}">{{ $loc->badge }}</span>
-                        @endif
-                    </div>
-                    <h3 class="text-lg font-black text-[#2d6fa3] uppercase tracking-wide">{{ $loc->country }}</h3>
-                    <p class="text-[#8da83a] text-xs font-semibold mb-4">{{ $loc->city }}</p>
-
-                    <div class="space-y-3 mt-auto">
-                        <div class="flex items-start gap-2.5">
-                            <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <p class="text-gray-500 text-xs leading-relaxed whitespace-pre-line">{{ $loc->address }}</p>
-                        </div>
-                        @if($loc->phone)
-                        <a href="tel:{{ preg_replace('/[^+0-9]/', '', $loc->phone) }}" class="flex items-center gap-2.5 group/link">
-                            <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                            <span class="text-gray-500 text-xs group-hover/link:text-[#2d6fa3] transition-colors">{{ $loc->phone }}</span>
-                        </a>
-                        @endif
-                        @if($loc->email)
-                        <a href="#" @click.prevent="openEmail('{{ $loc->email }}')" class="flex items-center gap-2.5 group/link">
-                            <svg class="w-3.5 h-3.5 text-[#e8a020] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            <span class="text-gray-500 text-xs group-hover/link:text-[#2d6fa3] transition-colors break-all">{{ $loc->email }}</span>
-                        </a>
-                        @endif
-                    </div>
-                </div>
-                @if($loc->email)
-                <div class="px-6 pb-5 mt-auto">
-                    <a href="#" @click.prevent="openEmail('{{ $loc->email }}')" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[#2d6fa3]/10 text-[#2d6fa3] text-xs font-semibold hover:bg-[#2d6fa3] hover:text-white transition-all duration-200">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                        Send Email
-                    </a>
-                </div>
-                @endif
-            </div>
-            @empty
-            <div class="col-span-3 py-12 text-center text-gray-400 text-sm">No offices configured yet.</div>
-            @endforelse
-        </div>
-    </div>
-</section>
 
 {{-- Contact Form --}}
 <section class="py-20 bg-[#f8f9fc]">
