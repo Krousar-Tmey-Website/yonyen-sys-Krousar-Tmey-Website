@@ -144,7 +144,7 @@
 <div x-data="{ selectedOffice: @js($offices->first()->country ?? '') }">
 
     {{-- Interactive Maps Section --}}
-    <section class="pt-20 bg-gray-50 border-b border-gray-200 flex flex-col">
+    <section class="py-20 bg-gray-50 border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-6 w-full">
             <div class="text-center mb-10" data-reveal>
                 <span class="inline-flex items-center gap-2 bg-[#2d6fa3]/10 border border-[#2d6fa3]/20 text-[#2d6fa3] text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Locations</span>
@@ -164,34 +164,34 @@
                     @endif
                 @endforeach
             </div>
-        </div>
 
-        <div class="w-full relative h-[430px] md:h-[460px] bg-gray-200" data-reveal="up">
-            @foreach($offices as $loc)
-                @if($loc->google_maps_link)
-                <div x-show="selectedOffice === '{{ $loc->country }}'" 
-                     x-transition:enter="transition ease-out duration-700"
-                     x-transition:enter-start="opacity-0"
-                     x-transition:enter-end="opacity-100"
-                     x-transition:leave="transition ease-in duration-500 absolute inset-0 z-10"
-                     x-transition:leave-start="opacity-100"
-                     x-transition:leave-end="opacity-0"
-                     class="absolute inset-0 w-full h-full" x-cloak>
-                     
-                     <div class="w-full h-full [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0 pointer-events-auto">
-                         {!! $loc->google_maps_link !!}
-                     </div>
+            <div class="w-full relative h-[420px] md:h-[480px] rounded-3xl overflow-hidden border border-gray-200 shadow-xl bg-gray-100" data-reveal="up">
+                @foreach($offices as $loc)
+                    @if($loc->google_maps_link)
+                    <div x-show="selectedOffice === '{{ $loc->country }}'"
+                         x-transition:enter="transition ease-out duration-700"
+                         x-transition:enter-start="opacity-0"
+                         x-transition:enter-end="opacity-100"
+                         x-transition:leave="transition ease-in duration-500 absolute inset-0 z-10"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         class="absolute inset-0 w-full h-full" x-cloak>
+
+                         <div class="w-full h-full [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0 pointer-events-auto">
+                             {!! $loc->google_maps_link !!}
+                         </div>
+                    </div>
+                    @endif
+                @endforeach
+
+                {{-- Fallback when no map is available for selected office --}}
+                <div x-show="!['{{ $offices->filter(fn($o) => $o->google_maps_link)->pluck('country')->join("','") }}'].includes(selectedOffice)"
+                     class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 bg-gray-100" x-cloak>
+                    <svg class="w-16 h-16 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-lg font-medium">Map not available for this location</p>
                 </div>
-                @endif
-            @endforeach
-            
-            {{-- Fallback when no map is available for selected office --}}
-            <div x-show="!['{{ $offices->filter(fn($o) => $o->google_maps_link)->pluck('country')->join("','") }}'].includes(selectedOffice)"
-                 class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 bg-gray-100" x-cloak>
-                <svg class="w-16 h-16 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <p class="text-lg font-medium">Map not available for this location</p>
             </div>
         </div>
     </section>
