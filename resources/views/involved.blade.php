@@ -917,8 +917,8 @@
                     <h3 class="text-xl font-bold uppercase tracking-wide leading-snug drop-shadow-md line-clamp-2">{{ $job->localized_title }}</h3>
                 </div>
 
-                {{-- Hover Content (Visible only when hovering) --}}
-                <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                {{-- Hover Content (Visible only when hovering; pointer-events-none so blank areas fall through to the Main Card Link below) --}}
+                <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 pointer-events-none">
                     <h3 class="text-xl font-bold uppercase tracking-wide leading-snug mb-4 line-clamp-2">{{ $job->localized_title }}</h3>
                     
                     <div class="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5 text-xs text-white/90 mb-4">
@@ -942,7 +942,7 @@
                         </p>
                     @endif
                     
-                    <div class="mt-auto w-full relative z-40 flex justify-center">
+                    <div class="mt-auto w-full relative z-40 flex justify-center pointer-events-auto">
                         <a href="{{ route('jobs.show', $job) }}" class="inline-flex items-center gap-2 text-white font-black uppercase text-xs tracking-widest hover:text-[#e8a020] transition-colors duration-300 group/read">
                             View details & apply
                             <svg class="w-4 h-4 transform group-hover/read:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>

@@ -97,18 +97,18 @@
         @else
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($articles as $article)
-            <article data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 80, 480) }}" class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col group hover:-translate-y-1 transition-all duration-300">
+            <article data-reveal="scale" style="--reveal-delay: {{ min($loop->index * 80, 480) }}" class="relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col group hover:-translate-y-1 transition-all duration-300">
                 @if($article->image)
-                <a href="{{ route('news.show', $article->slug) }}" class="relative overflow-hidden h-44 block">
+                <div class="relative overflow-hidden h-44 block">
                     <img src="{{ $article->image_url }}" alt="{{ $article->localized_title }}"
                          class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
-                </a>
+                </div>
                 @endif
                 <div class="p-5 flex flex-col flex-1">
                     <h3 class="font-bold text-gray-800 text-base mb-1.5 leading-snug">
-                        <a href="{{ route('news.show', $article->slug) }}" class="group-hover:text-[#1a3c6e] transition-colors">{{ $article->localized_title }}</a>
+                        {{ $article->localized_title }}
                     </h3>
-                    <p class="text-xs mb-3 leading-relaxed">
+                    <p class="text-xs mb-3 leading-relaxed relative z-10">
                         <span class="text-gray-500">by</span>
                         @if($krousarThmeyPage ?? null)
                         <a href="{{ route('resource-pages.show', $krousarThmeyPage->slug) }}" class="text-[#2d6fa3] font-semibold hover:underline">Krousar Thmey</a>
@@ -128,12 +128,15 @@
                     </p>
                     <p class="text-gray-500 text-sm leading-relaxed mb-4 flex-1">{{ Str::limit(strip_tags($article->localized_excerpt ?? ''), 120) }}</p>
                     <div class="mt-auto pt-3 border-t border-gray-100">
-                        <a href="{{ route('news.show', $article->slug) }}" class="inline-flex items-center gap-1.5 text-[#2d6fa3] text-xs font-bold group-hover:gap-2.5 transition-all">
+                        <a href="{{ route('news.show', $article->slug) }}" class="relative z-10 inline-flex items-center gap-1.5 text-[#2d6fa3] text-xs font-bold group-hover:gap-2.5 transition-all">
                             Read More
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </a>
                     </div>
                 </div>
+
+                {{-- Main Card Link --}}
+                <a href="{{ route('news.show', $article->slug) }}" class="absolute inset-0 z-0" aria-label="View {{ $article->localized_title }}"></a>
             </article>
             @endforeach
         </div>

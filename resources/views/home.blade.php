@@ -864,13 +864,13 @@
                     @endif
                 </div>
 
-                {{-- Hover Content (Visible only when hovering) --}}
-                <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                {{-- Hover Content (Visible only when hovering; pointer-events-none so blank areas fall through to the Main Card Link below) --}}
+                <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 pointer-events-none">
                     <h3 class="text-2xl font-bold mb-6">{{ $program->localized_title }}</h3>
                     <p class="text-white/90 text-sm leading-relaxed mb-6 line-clamp-6">
                         {{ strip_tags($program->localized_description) }}
                     </p>
-                    
+
                     @if($program->stats && count($program->stats) > 1)
                     <div class="space-y-1 mb-6">
                         @foreach(array_slice($program->stats, 1, 2) as $stat)
@@ -879,13 +879,16 @@
                     </div>
                     @endif
 
-                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="inline-flex items-center gap-2 text-[#4ade80] font-bold text-sm hover:text-white transition-colors duration-300 group-hover:gap-3 mt-auto">
+                    <a href="{{ route('programs') }}#{{ $program->slug }}" class="relative z-10 pointer-events-auto inline-flex items-center gap-2 text-[#4ade80] font-bold text-sm hover:text-white transition-colors duration-300 group-hover:gap-3 mt-auto">
                         {{ $settings['programs_learn_btn'] ?? 'Learn More' }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                     </a>
                 </div>
+
+                {{-- Main Card Link --}}
+                <a href="{{ route('programs') }}#{{ $program->slug }}" class="absolute inset-0 z-20" aria-label="View {{ $program->localized_title }}"></a>
             </div>
             @endforeach
         </div>
@@ -1456,8 +1459,8 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                     </time>
                 </div>
 
-                {{-- Hover Content (Visible only when hovering) --}}
-                <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                {{-- Hover Content (Visible only when hovering; pointer-events-none so blank areas fall through to the Main Card Link below) --}}
+                <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 pointer-events-none">
                     <h3 class="text-xl font-bold mb-4 line-clamp-3">{{ $article->localized_title }}</h3>
                     <time class="text-[#e8a020] text-xs font-bold mb-4 flex items-center justify-center gap-1.5">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1468,13 +1471,16 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                     <p class="text-white/90 text-sm leading-relaxed mb-6 line-clamp-4">
                         {{ Str::limit(strip_tags($article->localized_excerpt ?? ''), 160) }}
                     </p>
-                    <a href="{{ route('news') }}" class="inline-flex items-center gap-2 text-[#4ade80] font-bold text-sm hover:text-white transition-colors duration-300 group-hover:gap-3 mt-auto">
+                    <a href="{{ route('news.show', $article->slug) }}" class="relative z-10 pointer-events-auto inline-flex items-center gap-2 text-[#4ade80] font-bold text-sm hover:text-white transition-colors duration-300 group-hover:gap-3 mt-auto">
                         Read More
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                     </a>
                 </div>
+
+                {{-- Main Card Link --}}
+                <a href="{{ route('news.show', $article->slug) }}" class="absolute inset-0 z-20" aria-label="View {{ $article->localized_title }}"></a>
             </article>
             @empty
             <div class="col-span-3 py-12 text-center text-gray-400">

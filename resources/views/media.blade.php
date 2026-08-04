@@ -193,13 +193,13 @@ $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
         @if($latestNews->isNotEmpty())
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($latestNews as $i => $article)
-            <article class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden"
+            <article class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden relative"
                      data-reveal="up" style="--reveal-delay: {{ $i * 100 }}">
                 <div class="h-44 overflow-hidden">
                     <img src="{{ $article->image_url }}" alt="{{ $article->title }}" class="w-full h-full object-cover">
                 </div>
                 <div class="p-6 flex flex-col flex-1">
-                    <p class="text-xs mb-2 leading-relaxed">
+                    <p class="text-xs mb-2 leading-relaxed relative z-10">
                         <span class="text-gray-500">{{ $article->published_at?->format('M j, Y') ?? $article->created_at->format('M j, Y') }}</span>
                         @if(!empty($article->tag_links))
                         <span class="text-gray-300 mx-1">|</span>
@@ -212,10 +212,13 @@ $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
                     </p>
                     <h3 class="font-bold text-[#1d4e7a] uppercase text-sm mb-3 leading-snug">{{ $article->title }}</h3>
                     <p class="text-gray-500 text-sm leading-relaxed flex-1">{{ Str::limit(strip_tags($article->excerpt ?? ''), 160) }}</p>
-                    <a href="{{ route('news.show', $article->slug) }}" class="mt-4 text-[#2d6fa3] font-semibold text-sm hover:underline">
+                    <a href="{{ route('news.show', $article->slug) }}" class="mt-4 text-[#2d6fa3] font-semibold text-sm hover:underline relative z-10">
                         read more
                     </a>
                 </div>
+
+                {{-- Main Card Link --}}
+                <a href="{{ route('news.show', $article->slug) }}" class="absolute inset-0 z-0" aria-label="View {{ $article->title }}"></a>
             </article>
             @endforeach
         </div>

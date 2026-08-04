@@ -65,18 +65,21 @@
         <div data-reveal class="mt-12 pt-8 border-t border-gray-100">
             <div class="divide-y divide-gray-100">
                 @foreach($relatedArticles as $article)
-                <div data-reveal style="--reveal-delay: {{ min($loop->index * 70, 400) }}" class="py-6 first:pt-0">
+                <div data-reveal style="--reveal-delay: {{ min($loop->index * 70, 400) }}" class="relative py-6 first:pt-0 hover:bg-gray-50/60 transition-colors duration-200 rounded-xl px-3 -mx-3">
                     <h3 class="font-bold text-[#1a3c6e] text-sm uppercase tracking-wide mb-2">
-                        <a href="{{ route('news.show', $article->slug) }}" class="hover:underline">{{ $article->title }}</a>
+                        {{ $article->title }}
                     </h3>
                     @if($article->excerpt)
                     <p class="text-gray-600 text-sm leading-relaxed mb-3">{{ Str::limit(strip_tags($article->excerpt), 220) }}</p>
                     @endif
                     <a href="{{ route('news.show', $article->slug) }}"
-                       class="inline-flex items-center gap-1.5 bg-[#2d6fa3] text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-[#1a4a7a] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
+                       class="relative z-10 inline-flex items-center gap-1.5 bg-[#2d6fa3] text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-[#1a4a7a] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
                         Read More
                         <svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
+
+                    {{-- Main Card Link --}}
+                    <a href="{{ route('news.show', $article->slug) }}" class="absolute inset-0 z-0" aria-label="View {{ $article->title }}"></a>
                 </div>
                 @endforeach
             </div>

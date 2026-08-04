@@ -271,14 +271,14 @@
                                         <h4 class="text-xl font-bold uppercase tracking-wide leading-snug drop-shadow-md">{{ $project->localized_title }}</h4>
                                     </div>
 
-                                    {{-- Hover Content (Visible only when hovering) --}}
-                                    <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                                    {{-- Hover Content (Visible only when hovering; pointer-events-none so blank areas fall through to the Main Card Link below) --}}
+                                    <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 pointer-events-none">
                                         <h4 class="text-xl font-bold uppercase tracking-wide leading-snug mb-4">{{ $project->localized_title }}</h4>
                                         <p class="text-white/90 text-sm leading-relaxed mb-6 line-clamp-5">
                                             {{ Str::limit(strip_tags($project->localized_description), 150) }}
                                         </p>
-                                        
-                                        <div class="mt-auto flex items-center justify-between w-full gap-4 relative z-40">
+
+                                        <div class="mt-auto flex items-center justify-between w-full gap-4 relative z-40 pointer-events-auto">
                                             <a href="{{ route('projects.show', $project) }}" class="inline-flex items-center gap-2 text-white font-black uppercase text-xs tracking-widest hover:text-[#e8a020] transition-colors duration-300 group/read">
                                                 Read More
                                                 <svg class="w-4 h-4 transform group-hover/read:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -385,17 +385,17 @@
                                 <h4 class="text-xl font-bold uppercase tracking-wide leading-snug drop-shadow-md">{{ $item->localized_title }}</h4>
                             </div>
 
-                            {{-- Hover Content (Visible only when hovering) --}}
-                            <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                            {{-- Hover Content (Visible only when hovering; pointer-events-none so blank areas fall through to the Main Card Link below) --}}
+                            <div class="absolute inset-0 z-30 flex flex-col justify-center items-center p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 pointer-events-none">
                                 <h4 class="text-xl font-bold uppercase tracking-wide leading-snug mb-4">{{ $item->localized_title }}</h4>
-                                
+
                                 @if($item->short_content)
                                     <p class="text-white/90 text-sm leading-relaxed mb-6 line-clamp-5">
                                         {{ Str::limit(strip_tags($item->localized_short_content), 150) }}
                                     </p>
                                 @endif
-                                
-                                <div class="mt-auto flex items-center justify-between w-full gap-4 relative z-40">
+
+                                <div class="mt-auto flex items-center justify-between w-full gap-4 relative z-40 pointer-events-auto">
                                     <a href="{{ route('program-page-items.show', $item->id) }}" class="inline-flex items-center gap-2 text-white font-black uppercase text-xs tracking-widest hover:text-[#e8a020] transition-colors duration-300 group/read">
                                         Read More
                                         <svg class="w-4 h-4 transform group-hover/read:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
