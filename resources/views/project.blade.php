@@ -280,11 +280,11 @@
             @if($project->localized_testimony_name && $project->localized_testimony_story)
             @php $cleanName = preg_replace('/^testimony\s*:?\s*/i', '', $project->localized_testimony_name); @endphp
             <div class="mt-24" data-reveal="up">
-                <div class="max-w-4xl mx-auto bg-white border border-gray-100 p-8 md:p-14 rounded-[3rem] text-center shadow-lg relative overflow-hidden group">
+                <div class="max-w-5xl mx-auto bg-white border border-gray-100 p-10 md:p-16 rounded-[3rem] text-center shadow-lg relative overflow-hidden group">
                     <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#2d6fa3] via-[#8da83a] to-[#e8a020]"></div>
                     <div class="absolute -top-32 -left-32 w-64 h-64 bg-[#2d6fa3]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
-                    
-                    <div class="relative inline-block mb-8">
+
+                    <div class="relative inline-block mb-6">
                         @if($project->testimony_image)
                         <img src="{{ str_starts_with($project->testimony_image, 'http') ? $project->testimony_image : asset('storage/' . $project->testimony_image) }}"
                              class="w-32 h-32 mx-auto rounded-full object-cover border-[6px] border-white shadow-xl relative z-10" alt="{{ $cleanName }}">
@@ -295,20 +295,24 @@
                             <span class="text-4xl leading-none font-serif mt-2 relative top-0.5">"</span>
                         </div>
                     </div>
-                    
-                    <p class="text-[#2d6fa3] font-bold text-xs tracking-widest uppercase mb-1">Impact Testimony</p>
-                    <p class="text-gray-900 font-bold text-lg md:text-xl mb-8 px-4">{{ $cleanName }}</p>
-                    
-                    <div x-data="{ open: false }" class="bg-gray-50/80 rounded-[2rem] text-left border border-gray-100 relative group-hover:bg-white group-hover:shadow-sm transition-all duration-500 overflow-hidden">
-                        <button @click="open = !open" class="w-full flex items-center justify-between p-8 md:p-10 hover:bg-gray-100/50 transition-colors focus:outline-none">
-                            <span class="text-[#1a3c6e] font-bold text-sm uppercase tracking-widest">Read The Full Story</span>
-                            <svg class="w-6 h-6 text-[#1a3c6e] transform transition-transform duration-500" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                    <p class="text-[#2d6fa3] font-bold text-xs tracking-widest uppercase mb-2">Impact Testimony</p>
+                    <p class="text-gray-900 font-black text-2xl md:text-3xl mb-10 px-4">{{ $cleanName }}</p>
+
+                    @php $testimonyStoryText = strip_tags($project->localized_testimony_story); @endphp
+                    <div x-data="{ open: false }" class="bg-gray-50/80 rounded-[2rem] text-left mx-auto max-w-4xl border border-gray-100 relative group-hover:bg-white group-hover:shadow-sm transition-all duration-500 overflow-hidden">
+                        <button @click="open = !open" class="w-full flex items-center justify-between px-8 py-6 hover:bg-gray-100/50 transition-colors focus:outline-none">
+                            <span class="text-[#1a3c6e] font-bold text-sm uppercase tracking-widest" x-text="open ? 'Show Less' : 'Read The Full Story'"></span>
+                            <svg class="w-6 h-6 text-[#1a3c6e] transform transition-transform duration-500 flex-shrink-0" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
-                        <div x-show="open" style="display: none;" class="px-8 pb-8 md:px-10 md:pb-10 pt-2 border-t border-gray-200/50" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-                            <svg class="absolute -top-5 -left-5 w-16 h-16 text-[#1a3c6e]/5" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                            <div class="rich-text-content text-gray-700 leading-relaxed text-[16px] font-medium relative z-10">{!! $project->localized_testimony_story !!}</div>
+                        <div class="px-8 pb-8 pt-0 border-t border-gray-200/50 relative">
+                            <p x-show="!open" class="text-gray-500 leading-relaxed text-[15px] md:text-base font-medium italic line-clamp-2 pt-6">{{ $testimonyStoryText }}</p>
+                            <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="pt-6">
+                                <svg class="absolute top-2 left-1 w-16 h-16 text-[#1a3c6e]/5" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                                <div class="rich-text-content text-gray-700 leading-relaxed text-[16px] font-medium relative z-10">{!! $project->localized_testimony_story !!}</div>
+                            </div>
                         </div>
                     </div>
                 </div>

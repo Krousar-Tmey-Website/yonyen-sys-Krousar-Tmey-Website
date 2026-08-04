@@ -206,7 +206,7 @@
                     @php $cleanTestimonyName = preg_replace('/^testimony\s*:?\s*/i', '', $program->localized_testimony_name); @endphp
                     <div class="mt-24 max-w-5xl mx-auto bg-gradient-to-br from-[#1a3c6e] to-[#2d6fa3] rounded-[3rem] p-10 md:p-16 text-center shadow-2xl relative overflow-hidden group" data-reveal="up">
                         <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 group-hover:scale-150 transition-transform duration-1000"></div>
-                        
+
                         <div class="relative inline-block mb-6">
                             @if($program->testimony_image)
                                 <img src="{{ str_starts_with($program->testimony_image, 'http') ? $program->testimony_image : asset('storage/' . $program->testimony_image) }}"
@@ -224,15 +224,19 @@
                         <p class="text-white/70 font-bold text-xs tracking-widest uppercase mb-2">Impact Testimony</p>
                         <p class="text-white font-black text-2xl md:text-3xl mb-10 drop-shadow-md">{{ $cleanTestimonyName }}</p>
 
+                        @php $testimonyStoryText = strip_tags($program->localized_testimony_story); @endphp
                         <div x-data="{ open: false }" class="bg-white/10 backdrop-blur rounded-[2rem] text-left mx-auto max-w-4xl border border-white/20 overflow-hidden transition-all duration-500">
                             <button @click="open = !open" class="w-full flex items-center justify-between px-8 py-6 hover:bg-white/5 transition-colors focus:outline-none">
-                                <span class="text-white font-bold text-sm uppercase tracking-widest">Read The Full Story</span>
-                                <svg class="w-6 h-6 text-white transform transition-transform duration-500" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <span class="text-white font-bold text-sm uppercase tracking-widest" x-text="open ? 'Show Less' : 'Read The Full Story'"></span>
+                                <svg class="w-6 h-6 text-white transform transition-transform duration-500 flex-shrink-0" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </button>
-                            <div x-show="open" class="px-8 pb-8 pt-4 border-t border-white/10" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-                                <div class="rich-text-content text-white/90 leading-loose text-lg italic font-medium drop-shadow-sm">{!! $program->localized_testimony_story !!}</div>
+                            <div class="px-8 pb-8 pt-0 border-t border-white/10">
+                                <p x-show="!open" class="text-white/80 leading-relaxed text-base md:text-lg italic font-medium line-clamp-2 pt-6">{{ $testimonyStoryText }}</p>
+                                <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="pt-6">
+                                    <div class="rich-text-content text-white/90 leading-loose text-lg italic font-medium drop-shadow-sm">{!! $program->localized_testimony_story !!}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
