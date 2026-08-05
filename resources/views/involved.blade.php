@@ -1069,12 +1069,12 @@
         <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[#2d6fa3] translate-y-1/2 -translate-x-1/3"></div>
     </div>
     <div class="relative max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
-        <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">{{ $ctaBannerBadge }}</p>
+        <p class="text-[#8da83a] font-bold text-sm uppercase tracking-widest mb-3">{{ __($ctaBannerBadge) }}</p>
         <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4">{{ strip_tags($ctaBannerTitle) }}</h2>
         <div class="text-white/70 text-lg mb-8 max-w-2xl mx-auto [&_p]:mb-2 [&_p:last-child]:mb-0">{!! $ctaBannerSubtitle !!}</div>
         <div class="flex flex-wrap gap-4 justify-center">
-            <a href="{{ route('involved') }}#book-for-sales" class="btn-primary text-base">Book for Sales</a>
-            <a href="{{ route('contact') }}" class="btn-outline text-base">Contact Us</a>
+            <a href="{{ route('involved') }}#book-for-sales" class="btn-primary text-base">{{ __('Book for Sales') }}</a>
+            <a href="{{ route('contact') }}" class="btn-outline text-base">{{ __('Contact Us') }}</a>
         </div>
     </div>
 </section>

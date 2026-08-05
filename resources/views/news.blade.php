@@ -192,12 +192,12 @@
 {{-- Newsletter CTA --}}
 <section class="py-14 bg-white border-t border-gray-100">
     <div data-reveal class="max-w-2xl mx-auto px-6 text-center">
-        <h2 class="text-2xl font-bold text-[#1a3c6e] mb-3">Stay Updated</h2>
-        <p class="text-gray-500 mb-8">Subscribe to our newsletter for the latest stories and updates from Cambodia.</p>
+        <h2 class="text-2xl font-bold text-[#1a3c6e] mb-3">{{ __('Stay Updated') }}</h2>
+        <p class="text-gray-500 mb-8">{{ __('Subscribe to our newsletter for the latest stories and updates from Cambodia.') }}</p>
         <form class="flex gap-3 max-w-md mx-auto" onsubmit="return false;">
-            <input type="email" placeholder="Enter your email address"
+            <input type="email" placeholder="{{ __('Enter your email address') }}"
                    class="flex-1 px-5 py-3 rounded-full border border-gray-200 focus:outline-none focus:border-[#1a3c6e] text-sm transition-colors">
-            <button type="submit" class="btn-blue flex-shrink-0 rounded-full">Subscribe</button>
+            <button type="submit" class="btn-blue flex-shrink-0 rounded-full">{{ __('Subscribe') }}</button>
         </form>
     </div>
 </section>

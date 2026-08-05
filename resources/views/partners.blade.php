@@ -104,7 +104,7 @@
             <p>Donors can financially support a program or project of their choice.</p>
             <p>Technical partners allow us to benefit from specific expertise that Krousar Thmey does not have. Krousar Thmey always ensures that the projects implemented include a transfer of skills to the staff of the Foundation.</p>
             <p>Organizations, universities, institutions&hellip; many partners help Krousar Thmey&rsquo;s Academic and Career Counseling Project support young people in finding their path.</p>
-            <a href="#financial-partners" class="btn btn-kt-outline px-4 py-2 mt-3">See all partners</a>
+            <a href="#financial-partners" class="btn btn-kt-outline px-4 py-2 mt-3">{{ __('See all partners') }}</a>
         </div>
     </section>
 

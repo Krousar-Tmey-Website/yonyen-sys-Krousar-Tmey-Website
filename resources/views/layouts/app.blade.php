@@ -60,17 +60,17 @@ function switchLang(lang) {
             <div class="w-16 h-16 rounded-full bg-[#8da83a]/15 flex items-center justify-center mx-auto mb-5">
                 <svg class="w-8 h-8 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Success!</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">{{ __('Success!') }}</h3>
             <p class="text-gray-500 text-sm leading-relaxed">{{ session('success') }}</p>
             @else
             <div class="w-16 h-16 rounded-full bg-[#2d6fa3]/15 flex items-center justify-center mx-auto mb-5">
                 <svg class="w-8 h-8 text-[#2d6fa3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Heads Up</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">{{ __('Heads Up') }}</h3>
             <p class="text-gray-500 text-sm leading-relaxed">{{ session('info') }}</p>
             @endif
 
-            <button @click="show = false" class="btn-blue w-full justify-center mt-6">Got It</button>
+            <button @click="show = false" class="btn-blue w-full justify-center mt-6">{{ __('Got It') }}</button>
         </div>
     </div>
     @endif
@@ -427,14 +427,14 @@ function switchLang(lang) {
                 {{-- Newsletter --}}
                 <div>
                     <h4 class="font-semibold text-white mb-5 text-xs uppercase tracking-wider">{{ __('Stay Connected') }}</h4>
-                    <p class="text-white/50 text-sm mb-4">Subscribe for updates on our work in Cambodia.</p>
+                    <p class="text-white/50 text-sm mb-4">{{ __('Subscribe for updates on our work in Cambodia.') }}</p>
                     <form class="flex gap-2" method="POST" action="{{ route('newsletter.store') }}">
                         @csrf
-                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Your email" required
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="{{ __('Your email') }}" required
                             class="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#8da83a] transition-colors">
                         <button type="submit"
                             class="px-4 py-2 bg-[#8da83a] rounded-lg text-white text-sm font-medium hover:bg-[#a3c04a] transition-colors flex-shrink-0">
-                            OK
+                            {{ __('OK') }}
                         </button>
                     </form>
                     @error('email') <p class="text-red-300 text-xs mt-2">{{ $message }}</p> @enderror
@@ -463,7 +463,7 @@ function switchLang(lang) {
                                     stroke-linejoin="round"
                                     d="M15.75 9V5.25A3.75 3.75 0 008.25 5.25V9m-.75 0h9a1.5 1.5 0 011.5 1.5v7.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 016 18v-7.5A1.5 1.5 0 017.5 9z" />
                             </svg>
-                            Admin Login
+                            {{ __('Admin Login') }}
                         </a>
                     </div>
                 </div>
