@@ -98,6 +98,7 @@ class BookController extends Controller
 
         $data['is_available'] = $request->boolean('is_available');
         $data['price']        = filled($request->input('price')) ? $request->input('price') : null;
+        $data['stock']        = filled($request->input('stock')) ? $request->input('stock') : 0;
         $data['slug']         = $data['slug'] ?? \Illuminate\Support\Str::slug($data['title']);
 
         $book->update($data);

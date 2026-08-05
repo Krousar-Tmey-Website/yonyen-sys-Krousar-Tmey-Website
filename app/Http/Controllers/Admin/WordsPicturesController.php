@@ -95,6 +95,7 @@ class WordsPicturesController extends Controller
     {
         $request->validate([
             'words_pictures_banner_badge'         => ['nullable', 'string', 'max:255'],
+            'words_pictures_banner_badge_fr'      => ['nullable', 'string', 'max:255'],
             'words_pictures_banner_title'         => ['nullable', 'string'],
             'words_pictures_banner_title_fr'      => ['nullable', 'string'],
             'words_pictures_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
@@ -103,24 +104,31 @@ class WordsPicturesController extends Controller
             'words_pictures_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'words_pictures_banner_image_url'     => ['nullable', 'url', 'max:2048'],
             'words_pictures_banner_btn1_text'     => ['nullable', 'string', 'max:100'],
+            'words_pictures_banner_btn1_text_fr'  => ['nullable', 'string', 'max:100'],
             'words_pictures_banner_btn1_url'      => ['nullable', 'string', 'max:500'],
             'words_pictures_banner_btn2_text'     => ['nullable', 'string', 'max:100'],
+            'words_pictures_banner_btn2_text_fr'  => ['nullable', 'string', 'max:100'],
             'words_pictures_banner_btn2_url'      => ['nullable', 'string', 'max:500'],
             'words_pictures_banner_btn3_text'     => ['nullable', 'string', 'max:100'],
+            'words_pictures_banner_btn3_text_fr'  => ['nullable', 'string', 'max:100'],
             'words_pictures_banner_btn3_url'      => ['nullable', 'string', 'max:500'],
         ]);
 
         HomeSetting::setValue('words_pictures_banner_badge', $request->input('words_pictures_banner_badge', ''));
+        HomeSetting::setValue('words_pictures_banner_badge_fr', $request->input('words_pictures_banner_badge_fr', ''));
         HomeSetting::setValue('words_pictures_banner_title', $request->input('words_pictures_banner_title', ''));
         HomeSetting::setValue('words_pictures_banner_title_fr', $request->input('words_pictures_banner_title_fr', ''));
         HomeSetting::setValue('words_pictures_banner_subtitle', $request->input('words_pictures_banner_subtitle', ''));
         HomeSetting::setValue('words_pictures_banner_subtitle_fr', $request->input('words_pictures_banner_subtitle_fr', ''));
         HomeSetting::setValue('words_pictures_banner_overlay_color', $request->input('words_pictures_banner_overlay_color', ''));
         HomeSetting::setValue('words_pictures_banner_btn1_text', $request->input('words_pictures_banner_btn1_text', ''));
+        HomeSetting::setValue('words_pictures_banner_btn1_text_fr', $request->input('words_pictures_banner_btn1_text_fr', ''));
         HomeSetting::setValue('words_pictures_banner_btn1_url', $request->input('words_pictures_banner_btn1_url', ''));
         HomeSetting::setValue('words_pictures_banner_btn2_text', $request->input('words_pictures_banner_btn2_text', ''));
+        HomeSetting::setValue('words_pictures_banner_btn2_text_fr', $request->input('words_pictures_banner_btn2_text_fr', ''));
         HomeSetting::setValue('words_pictures_banner_btn2_url', $request->input('words_pictures_banner_btn2_url', ''));
         HomeSetting::setValue('words_pictures_banner_btn3_text', $request->input('words_pictures_banner_btn3_text', ''));
+        HomeSetting::setValue('words_pictures_banner_btn3_text_fr', $request->input('words_pictures_banner_btn3_text_fr', ''));
         HomeSetting::setValue('words_pictures_banner_btn3_url', $request->input('words_pictures_banner_btn3_url', ''));
 
         if ($request->hasFile('words_pictures_banner_image')) {

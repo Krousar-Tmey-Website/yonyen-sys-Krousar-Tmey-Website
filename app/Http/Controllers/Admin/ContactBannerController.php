@@ -15,13 +15,16 @@ class ContactBannerController extends Controller
             'contact_banner_image',
             'contact_banner_overlay_color',
             'contact_banner_badge',
+            'contact_banner_badge_fr',
             'contact_banner_title',
             'contact_banner_title_fr',
             'contact_banner_subtitle',
             'contact_banner_subtitle_fr',
             'contact_banner_btn1_text',
+            'contact_banner_btn1_text_fr',
             'contact_banner_btn1_url',
             'contact_banner_btn2_text',
+            'contact_banner_btn2_text_fr',
             'contact_banner_btn2_url',
         ])->pluck('value', 'key');
 
@@ -32,6 +35,7 @@ class ContactBannerController extends Controller
     {
         $request->validate([
             'contact_banner_badge'         => ['nullable', 'string', 'max:255'],
+            'contact_banner_badge_fr'      => ['nullable', 'string', 'max:255'],
             'contact_banner_title'         => ['nullable', 'string'],
             'contact_banner_title_fr'      => ['nullable', 'string'],
             'contact_banner_subtitle'      => ['nullable', 'string'],
@@ -40,20 +44,25 @@ class ContactBannerController extends Controller
             'contact_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'contact_banner_image_url'     => ['nullable', 'url', 'max:2048'],
             'contact_banner_btn1_text'     => ['nullable', 'string', 'max:100'],
+            'contact_banner_btn1_text_fr'  => ['nullable', 'string', 'max:100'],
             'contact_banner_btn1_url'      => ['nullable', 'string', 'max:500'],
             'contact_banner_btn2_text'     => ['nullable', 'string', 'max:100'],
+            'contact_banner_btn2_text_fr'  => ['nullable', 'string', 'max:100'],
             'contact_banner_btn2_url'      => ['nullable', 'string', 'max:500'],
         ]);
 
         HomeSetting::setValue('contact_banner_badge', $request->input('contact_banner_badge', ''));
+        HomeSetting::setValue('contact_banner_badge_fr', $request->input('contact_banner_badge_fr', ''));
         HomeSetting::setValue('contact_banner_title', $request->input('contact_banner_title', ''));
         HomeSetting::setValue('contact_banner_title_fr', $request->input('contact_banner_title_fr', ''));
         HomeSetting::setValue('contact_banner_subtitle', $request->input('contact_banner_subtitle', ''));
         HomeSetting::setValue('contact_banner_subtitle_fr', $request->input('contact_banner_subtitle_fr', ''));
         HomeSetting::setValue('contact_banner_overlay_color', $request->input('contact_banner_overlay_color', ''));
         HomeSetting::setValue('contact_banner_btn1_text', $request->input('contact_banner_btn1_text', ''));
+        HomeSetting::setValue('contact_banner_btn1_text_fr', $request->input('contact_banner_btn1_text_fr', ''));
         HomeSetting::setValue('contact_banner_btn1_url', $request->input('contact_banner_btn1_url', ''));
         HomeSetting::setValue('contact_banner_btn2_text', $request->input('contact_banner_btn2_text', ''));
+        HomeSetting::setValue('contact_banner_btn2_text_fr', $request->input('contact_banner_btn2_text_fr', ''));
         HomeSetting::setValue('contact_banner_btn2_url', $request->input('contact_banner_btn2_url', ''));
 
         if ($request->hasFile('contact_banner_image')) {

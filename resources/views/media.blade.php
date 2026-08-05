@@ -16,7 +16,7 @@ $heroImage = $settings['media_banner_image'] ?? null;
 $heroImageUrl = $heroImage ? (str_starts_with($heroImage, 'http') ? $heroImage : asset('storage/' . $heroImage)) : asset('images/cultural.jpg');
 $heroTitle = $t('media_banner_title', 'Krousar Thmey In The Media');
 $heroSubtitle = $t('media_banner_subtitle', 'Press coverage and the latest news from Krousar Thmey.');
-$heroBadge = $settings['media_banner_badge'] ?? 'Media';
+$heroBadge = $t('media_banner_badge', 'Media');
 $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
 @endphp
 
@@ -44,11 +44,11 @@ $heroOverlayColor = $settings['media_banner_overlay_color'] ?? '#1a3c6e';
         </div>
 
         @php
-            $btn1Text = $settings['media_banner_btn1_text'] ?? 'Donate Now';
+            $btn1Text = $t('media_banner_btn1_text', 'Donate Now');
             $btn1Url  = $settings['media_banner_btn1_url'] ?? '/donate';
-            $btn2Text = $settings['media_banner_btn2_text'] ?? 'Get Involved';
+            $btn2Text = $t('media_banner_btn2_text', 'Get Involved');
             $btn2Url  = $settings['media_banner_btn2_url'] ?? '/get-involved';
-            $btn3Text = $settings['media_banner_btn3_text'] ?? 'Annual Report';
+            $btn3Text = $t('media_banner_btn3_text', 'Annual Report');
             $btn3Url  = $settings['media_banner_btn3_url'] ?? '/resources#annual-reports';
         @endphp
 

@@ -32,13 +32,13 @@ $heroSubtitle = $settings['presentation_banner_subtitle'] ?? 'Born in 1991 in th
 if (app()->getLocale() === 'fr' && !empty($settings['presentation_banner_subtitle_fr'] ?? null)) {
     $heroSubtitle = $settings['presentation_banner_subtitle_fr'];
 }
-$heroBadge = $settings['presentation_banner_badge'] ?? 'Since 1991';
+$heroBadge = $t('presentation_banner_badge', 'Since 1991');
 $heroOverlayColor = $settings['presentation_banner_overlay_color'] ?? '#1a3c6e';
-$btn1Text = $settings['presentation_banner_btn1_text'] ?? 'Learn More';
+$btn1Text = $t('presentation_banner_btn1_text', 'Learn More');
 $btn1Url  = $settings['presentation_banner_btn1_url'] ?? '/our-programs';
-$btn2Text = $settings['presentation_banner_btn2_text'] ?? 'Donate Now';
+$btn2Text = $t('presentation_banner_btn2_text', 'Donate Now');
 $btn2Url  = $settings['presentation_banner_btn2_url'] ?? '/donate';
-$btn3Text = $settings['presentation_banner_btn3_text'] ?? '';
+$btn3Text = $t('presentation_banner_btn3_text', '');
 $btn3Url  = $settings['presentation_banner_btn3_url'] ?? '';
 @endphp
 
@@ -158,7 +158,7 @@ $btn3Url  = $settings['presentation_banner_btn3_url'] ?? '';
         <div class="text-center max-w-2xl mx-auto mb-8" data-reveal>
             <span class="inline-flex items-center gap-2 text-[11px] font-semibold text-[#8da83a] uppercase tracking-[0.2em] mb-3">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#8da83a]"></span>
-                Since 1991
+                {{ __('Since 1991') }}
             </span>
             <h1 class="text-lg md:text-xl font-bold text-[#1d4e7a] leading-snug uppercase tracking-wide">
                 {{ $settings['intro_heading'] ?? 'Krousar Thmey, the first Cambodian organization helping disadvantaged children, born in 1991 in the Site II refugee camp in Thailand.' }}

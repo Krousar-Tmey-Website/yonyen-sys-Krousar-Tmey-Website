@@ -18,6 +18,7 @@ class MediaBannerController extends Controller
     {
         $request->validate([
             'media_banner_badge'         => ['nullable', 'string', 'max:255'],
+            'media_banner_badge_fr'      => ['nullable', 'string', 'max:255'],
             'media_banner_title'         => ['nullable', 'string'],
             'media_banner_title_fr'      => ['nullable', 'string'],
             'media_banner_subtitle'      => ['nullable', 'string', 'max:1000'],
@@ -26,24 +27,31 @@ class MediaBannerController extends Controller
             'media_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'media_banner_image_url'     => ['nullable', 'url', 'max:2048'],
             'media_banner_btn1_text'     => ['nullable', 'string', 'max:100'],
+            'media_banner_btn1_text_fr'  => ['nullable', 'string', 'max:100'],
             'media_banner_btn1_url'      => ['nullable', 'string', 'max:500'],
             'media_banner_btn2_text'     => ['nullable', 'string', 'max:100'],
+            'media_banner_btn2_text_fr'  => ['nullable', 'string', 'max:100'],
             'media_banner_btn2_url'      => ['nullable', 'string', 'max:500'],
             'media_banner_btn3_text'     => ['nullable', 'string', 'max:100'],
+            'media_banner_btn3_text_fr'  => ['nullable', 'string', 'max:100'],
             'media_banner_btn3_url'      => ['nullable', 'string', 'max:500'],
         ]);
 
         HomeSetting::setValue('media_banner_badge', $request->input('media_banner_badge', ''));
+        HomeSetting::setValue('media_banner_badge_fr', $request->input('media_banner_badge_fr', ''));
         HomeSetting::setValue('media_banner_title', $request->input('media_banner_title', ''));
         HomeSetting::setValue('media_banner_title_fr', $request->input('media_banner_title_fr', ''));
         HomeSetting::setValue('media_banner_subtitle', $request->input('media_banner_subtitle', ''));
         HomeSetting::setValue('media_banner_subtitle_fr', $request->input('media_banner_subtitle_fr', ''));
         HomeSetting::setValue('media_banner_overlay_color', $request->input('media_banner_overlay_color', ''));
         HomeSetting::setValue('media_banner_btn1_text', $request->input('media_banner_btn1_text', ''));
+        HomeSetting::setValue('media_banner_btn1_text_fr', $request->input('media_banner_btn1_text_fr', ''));
         HomeSetting::setValue('media_banner_btn1_url', $request->input('media_banner_btn1_url', ''));
         HomeSetting::setValue('media_banner_btn2_text', $request->input('media_banner_btn2_text', ''));
+        HomeSetting::setValue('media_banner_btn2_text_fr', $request->input('media_banner_btn2_text_fr', ''));
         HomeSetting::setValue('media_banner_btn2_url', $request->input('media_banner_btn2_url', ''));
         HomeSetting::setValue('media_banner_btn3_text', $request->input('media_banner_btn3_text', ''));
+        HomeSetting::setValue('media_banner_btn3_text_fr', $request->input('media_banner_btn3_text_fr', ''));
         HomeSetting::setValue('media_banner_btn3_url', $request->input('media_banner_btn3_url', ''));
 
         if ($request->hasFile('media_banner_image')) {

@@ -30,11 +30,11 @@ html:has(.transparency-immersive) { scroll-snap-type: y proximity; }
     $transparencyBannerBlur = (int) ($settings['transparency_banner_blur'] ?? 0);
     $transparencyBannerBadge = $t('transparency_banner_badge', 'Accountability');
     $transparencyBannerSubtitle = $t('transparency_banner_subtitle', 'See how every donation is managed with strict financial discipline and independent oversight.');
-    $transparencyBtn1Text = $settings['transparency_banner_btn1_text'] ?? 'Donate Now';
+    $transparencyBtn1Text = $t('transparency_banner_btn1_text', 'Donate Now');
     $transparencyBtn1Url = $settings['transparency_banner_btn1_url'] ?? route('donate');
-    $transparencyBtn2Text = $settings['transparency_banner_btn2_text'] ?? 'Get Involved';
+    $transparencyBtn2Text = $t('transparency_banner_btn2_text', 'Get Involved');
     $transparencyBtn2Url = $settings['transparency_banner_btn2_url'] ?? route('involved');
-    $transparencyBtn3Text = $settings['transparency_banner_btn3_text'] ?? 'Annual Report';
+    $transparencyBtn3Text = $t('transparency_banner_btn3_text', 'Annual Report');
     $transparencyBtn3Url = $settings['transparency_banner_btn3_url'] ?? (route('resources') . '#annual-reports');
 @endphp
 <section class=" pb-20 relative min-h-[calc(100dvh-4rem)] lg:min-h-[calc(100dvh-7.25rem)] flex items-center overflow-hidden text-center scroll-mt-20 [scroll-snap-align:start]">

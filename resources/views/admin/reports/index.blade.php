@@ -177,11 +177,15 @@
         </div>
 
         {{-- Banner Form --}}
-        <form action="{{ route('admin.resources-banner.update') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
+        <form action="{{ route('admin.resources-banner.update') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl border border-gray-100 p-6 space-y-5" x-data="bilingualForm()">
             @csrf
 
             <div class="flex items-center justify-between gap-3">
                 <h3 class="font-bold text-gray-700 text-sm">Page Banner</h3>
+                <div class="lang-tabs" title="Toggle editing language (English / French) for this banner">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
             </div>
             <p class="text-xs text-gray-400 -mt-3">Controls the hero banner shown at the top of the public Resources page.</p>
 
@@ -247,22 +251,24 @@
 
             {{-- Badge Text --}}
             <div>
-                <label for="resources_banner_badge" class="block text-sm font-medium text-gray-700 mb-1.5">Badge Text</label>
-                <input type="text" id="resources_banner_badge" name="resources_banner_badge"
-                       value="{{ $bannerBadge }}"
-                       oninput="document.getElementById('preview-badge').textContent = this.value || 'Resources'"
-                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Badge Text</label>
+                <div x-show="lang === 'en'">
+                    <input type="text" id="resources_banner_badge" name="resources_banner_badge"
+                           value="{{ $bannerBadge }}"
+                           oninput="document.getElementById('preview-badge').textContent = this.value || 'Resources'"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
+                <div x-show="lang === 'fr'" x-cloak>
+                    <input type="text" id="resources_banner_badge_fr" name="resources_banner_badge_fr"
+                           value="{{ $bv('resources_banner_badge_fr') }}"
+                           placeholder="Leave blank to reuse the English text"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                </div>
             </div>
 
             {{-- Hero Title --}}
-            <div x-data="bilingualForm()">
-                <div class="flex items-center justify-between gap-3 mb-1.5">
-                    <label class="block text-sm font-medium text-gray-700 mb-0">Hero Title</label>
-                    <div class="lang-tabs" title="Toggle editing language (English / French)">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                    </div>
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Hero Title</label>
                 <div x-show="lang === 'en'">
                     <x-admin.rich-text name="resources_banner_title" :value="$bannerTitle" lang="en" :rows="1" />
                 </div>
@@ -273,14 +279,8 @@
             </div>
 
             {{-- Hero Subtitle --}}
-            <div x-data="bilingualForm()">
-                <div class="flex items-center justify-between gap-3 mb-1.5">
-                    <label class="block text-sm font-medium text-gray-700 mb-0">Hero Subtitle</label>
-                    <div class="lang-tabs" title="Toggle editing language (English / French)">
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                    </div>
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Hero Subtitle</label>
                 <div x-show="lang === 'en'">
                     <x-admin.rich-text name="resources_banner_subtitle" :value="$bannerSubtitle" lang="en" :rows="2"
                                        placeholder="Annual reports, publications, and media resources..." />
@@ -305,12 +305,20 @@
                 {{-- Button 1 --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label for="resources_banner_btn1_text" class="block text-xs font-medium text-gray-600 mb-1">Button 1 Text</label>
-                        <input type="text" id="resources_banner_btn1_text" name="resources_banner_btn1_text"
-                               value="{{ $btn1Text }}"
-                               oninput="document.getElementById('preview-btn1').textContent = this.value || 'Button 1'; document.getElementById('preview-btn1').classList.toggle('opacity-30', !this.value)"
-                               placeholder="Donate Now"
-                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Button 1 Text</label>
+                        <div x-show="lang === 'en'">
+                            <input type="text" id="resources_banner_btn1_text" name="resources_banner_btn1_text"
+                                   value="{{ $btn1Text }}"
+                                   oninput="document.getElementById('preview-btn1').textContent = this.value || 'Button 1'; document.getElementById('preview-btn1').classList.toggle('opacity-30', !this.value)"
+                                   placeholder="Donate Now"
+                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
+                        <div x-show="lang === 'fr'" x-cloak>
+                            <input type="text" id="resources_banner_btn1_text_fr" name="resources_banner_btn1_text_fr"
+                                   value="{{ $bv('resources_banner_btn1_text_fr') }}"
+                                   placeholder="Leave blank to reuse the English text"
+                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
                     </div>
                     <div>
                         <label for="resources_banner_btn1_url" class="block text-xs font-medium text-gray-600 mb-1">Button 1 URL</label>
@@ -324,12 +332,20 @@
                 {{-- Button 2 --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label for="resources_banner_btn2_text" class="block text-xs font-medium text-gray-600 mb-1">Button 2 Text</label>
-                        <input type="text" id="resources_banner_btn2_text" name="resources_banner_btn2_text"
-                               value="{{ $btn2Text }}"
-                               oninput="document.getElementById('preview-btn2').textContent = this.value || 'Button 2'; document.getElementById('preview-btn2').classList.toggle('opacity-30', !this.value)"
-                               placeholder="Get Involved"
-                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Button 2 Text</label>
+                        <div x-show="lang === 'en'">
+                            <input type="text" id="resources_banner_btn2_text" name="resources_banner_btn2_text"
+                                   value="{{ $btn2Text }}"
+                                   oninput="document.getElementById('preview-btn2').textContent = this.value || 'Button 2'; document.getElementById('preview-btn2').classList.toggle('opacity-30', !this.value)"
+                                   placeholder="Get Involved"
+                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
+                        <div x-show="lang === 'fr'" x-cloak>
+                            <input type="text" id="resources_banner_btn2_text_fr" name="resources_banner_btn2_text_fr"
+                                   value="{{ $bv('resources_banner_btn2_text_fr') }}"
+                                   placeholder="Leave blank to reuse the English text"
+                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
                     </div>
                     <div>
                         <label for="resources_banner_btn2_url" class="block text-xs font-medium text-gray-600 mb-1">Button 2 URL</label>
@@ -343,12 +359,20 @@
                 {{-- Button 3 --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label for="resources_banner_btn3_text" class="block text-xs font-medium text-gray-600 mb-1">Button 3 Text</label>
-                        <input type="text" id="resources_banner_btn3_text" name="resources_banner_btn3_text"
-                               value="{{ $btn3Text }}"
-                               oninput="document.getElementById('preview-btn3').textContent = this.value || 'Button 3'; document.getElementById('preview-btn3').classList.toggle('opacity-30', !this.value)"
-                               placeholder="Annual Report"
-                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Button 3 Text</label>
+                        <div x-show="lang === 'en'">
+                            <input type="text" id="resources_banner_btn3_text" name="resources_banner_btn3_text"
+                                   value="{{ $btn3Text }}"
+                                   oninput="document.getElementById('preview-btn3').textContent = this.value || 'Button 3'; document.getElementById('preview-btn3').classList.toggle('opacity-30', !this.value)"
+                                   placeholder="Annual Report"
+                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
+                        <div x-show="lang === 'fr'" x-cloak>
+                            <input type="text" id="resources_banner_btn3_text_fr" name="resources_banner_btn3_text_fr"
+                                   value="{{ $bv('resources_banner_btn3_text_fr') }}"
+                                   placeholder="Leave blank to reuse the English text"
+                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
                     </div>
                     <div>
                         <label for="resources_banner_btn3_url" class="block text-xs font-medium text-gray-600 mb-1">Button 3 URL</label>

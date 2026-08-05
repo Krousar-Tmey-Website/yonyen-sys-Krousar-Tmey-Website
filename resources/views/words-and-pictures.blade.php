@@ -17,13 +17,26 @@ $heroSubtitle = $settings['words_pictures_banner_subtitle'] ?? 'A free mobile ap
 if (app()->getLocale() === 'fr' && !empty($settings['words_pictures_banner_subtitle_fr'] ?? null)) {
     $heroSubtitle = $settings['words_pictures_banner_subtitle_fr'];
 }
+$wpIsFr = app()->getLocale() === 'fr';
 $heroBadge = $settings['words_pictures_banner_badge'] ?? 'Application';
+if ($wpIsFr && !empty($settings['words_pictures_banner_badge_fr'] ?? null)) {
+    $heroBadge = $settings['words_pictures_banner_badge_fr'];
+}
 $heroOverlayColor = $settings['words_pictures_banner_overlay_color'] ?? '#1a3c6e';
 $btn1Text = $settings['words_pictures_banner_btn1_text'] ?? 'Learn More';
+if ($wpIsFr && !empty($settings['words_pictures_banner_btn1_text_fr'] ?? null)) {
+    $btn1Text = $settings['words_pictures_banner_btn1_text_fr'];
+}
 $btn1Url  = $settings['words_pictures_banner_btn1_url'] ?? '/our-programs';
 $btn2Text = $settings['words_pictures_banner_btn2_text'] ?? 'Donate Now';
+if ($wpIsFr && !empty($settings['words_pictures_banner_btn2_text_fr'] ?? null)) {
+    $btn2Text = $settings['words_pictures_banner_btn2_text_fr'];
+}
 $btn2Url  = $settings['words_pictures_banner_btn2_url'] ?? '/donate';
 $btn3Text = $settings['words_pictures_banner_btn3_text'] ?? '';
+if ($wpIsFr && !empty($settings['words_pictures_banner_btn3_text_fr'] ?? null)) {
+    $btn3Text = $settings['words_pictures_banner_btn3_text_fr'];
+}
 $btn3Url  = $settings['words_pictures_banner_btn3_url'] ?? '';
 @endphp
 

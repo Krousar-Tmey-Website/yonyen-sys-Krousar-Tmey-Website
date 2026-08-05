@@ -76,6 +76,7 @@ class PresentationController extends Controller
     {
         $request->validate([
             'presentation_banner_badge'         => ['nullable', 'string', 'max:255'],
+            'presentation_banner_badge_fr'      => ['nullable', 'string', 'max:255'],
             'presentation_banner_title'         => ['nullable', 'string'],
             'presentation_banner_title_fr'      => ['nullable', 'string'],
             'presentation_banner_subtitle'      => ['nullable', 'string'],
@@ -84,24 +85,31 @@ class PresentationController extends Controller
             'presentation_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'presentation_banner_image_url'     => ['nullable', 'url', 'max:2048'],
             'presentation_banner_btn1_text'     => ['nullable', 'string', 'max:100'],
+            'presentation_banner_btn1_text_fr'  => ['nullable', 'string', 'max:100'],
             'presentation_banner_btn1_url'      => ['nullable', 'string', 'max:500'],
             'presentation_banner_btn2_text'     => ['nullable', 'string', 'max:100'],
+            'presentation_banner_btn2_text_fr'  => ['nullable', 'string', 'max:100'],
             'presentation_banner_btn2_url'      => ['nullable', 'string', 'max:500'],
             'presentation_banner_btn3_text'     => ['nullable', 'string', 'max:100'],
+            'presentation_banner_btn3_text_fr'  => ['nullable', 'string', 'max:100'],
             'presentation_banner_btn3_url'      => ['nullable', 'string', 'max:500'],
         ]);
 
         HomeSetting::setValue('presentation_banner_badge', $request->input('presentation_banner_badge', ''));
+        HomeSetting::setValue('presentation_banner_badge_fr', $request->input('presentation_banner_badge_fr', ''));
         HomeSetting::setValue('presentation_banner_title', $request->input('presentation_banner_title', ''));
         HomeSetting::setValue('presentation_banner_title_fr', $request->input('presentation_banner_title_fr', ''));
         HomeSetting::setValue('presentation_banner_subtitle', $request->input('presentation_banner_subtitle', ''));
         HomeSetting::setValue('presentation_banner_subtitle_fr', $request->input('presentation_banner_subtitle_fr', ''));
         HomeSetting::setValue('presentation_banner_overlay_color', $request->input('presentation_banner_overlay_color', ''));
         HomeSetting::setValue('presentation_banner_btn1_text', $request->input('presentation_banner_btn1_text', ''));
+        HomeSetting::setValue('presentation_banner_btn1_text_fr', $request->input('presentation_banner_btn1_text_fr', ''));
         HomeSetting::setValue('presentation_banner_btn1_url', $request->input('presentation_banner_btn1_url', ''));
         HomeSetting::setValue('presentation_banner_btn2_text', $request->input('presentation_banner_btn2_text', ''));
+        HomeSetting::setValue('presentation_banner_btn2_text_fr', $request->input('presentation_banner_btn2_text_fr', ''));
         HomeSetting::setValue('presentation_banner_btn2_url', $request->input('presentation_banner_btn2_url', ''));
         HomeSetting::setValue('presentation_banner_btn3_text', $request->input('presentation_banner_btn3_text', ''));
+        HomeSetting::setValue('presentation_banner_btn3_text_fr', $request->input('presentation_banner_btn3_text_fr', ''));
         HomeSetting::setValue('presentation_banner_btn3_url', $request->input('presentation_banner_btn3_url', ''));
 
         if ($request->hasFile('presentation_banner_image')) {

@@ -232,6 +232,10 @@
                             <p class="text-gray-400 text-xs mt-0.5">Customize the hero banner at the top of the Presentation page.</p>
                         </div>
                     </div>
+                    <div class="lang-tabs" title="Toggle editing language (English / French) for this banner">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
                 </div>
 
                 {{-- Live Preview --}}
@@ -351,22 +355,23 @@
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Badge Text</label>
-                            <input type="text" name="presentation_banner_badge" value="{{ $pbBadge }}"
-                                   oninput="document.querySelector('#banner-preview .inline-block').textContent=this.value"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <div x-show="lang === 'en'">
+                                <input type="text" name="presentation_banner_badge" value="{{ $pbBadge }}"
+                                       oninput="document.querySelector('#banner-preview .inline-block').textContent=this.value"
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <input type="text" name="presentation_banner_badge_fr" value="{{ old('presentation_banner_badge_fr', $settings['presentation_banner_badge_fr'] ?? '') }}"
+                                       placeholder="Leave blank to reuse the English text"
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {{-- Title (bilingual) --}}
                 <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <label class="block text-xs font-medium text-gray-600">Title</label>
-                        <div class="lang-tabs" title="Toggle editing language (English / French)">
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                        </div>
-                    </div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
                     <div x-show="lang === 'en'">
                         <x-admin.rich-text name="presentation_banner_title" :value="$pbTitle" lang="en" :rows="1" />
                     </div>
@@ -379,13 +384,7 @@
 
                 {{-- Subtitle (bilingual) --}}
                 <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <label class="block text-xs font-medium text-gray-600">Subtitle</label>
-                        <div class="lang-tabs" title="Toggle editing language (English / French)">
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                        </div>
-                    </div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Subtitle</label>
                     <div x-show="lang === 'en'">
                         <x-admin.rich-text name="presentation_banner_subtitle" :value="old('presentation_banner_subtitle', $settings['presentation_banner_subtitle'] ?? '')" lang="en" :rows="3"
                                            placeholder="Born in 1991 in the Site II refugee camp..." />
@@ -403,9 +402,16 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs text-gray-500 mb-1">Button 1 (Primary) — Text</label>
-                            <input type="text" name="presentation_banner_btn1_text" value="{{ $settings['presentation_banner_btn1_text'] ?? 'Learn More' }}"
-                                   oninput="document.querySelectorAll('#banner-preview .flex-wrap span:first-child').forEach(e=>e.textContent=this.value)"
-                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <div x-show="lang === 'en'">
+                                <input type="text" name="presentation_banner_btn1_text" value="{{ $settings['presentation_banner_btn1_text'] ?? 'Learn More' }}"
+                                       oninput="document.querySelectorAll('#banner-preview .flex-wrap span:first-child').forEach(e=>e.textContent=this.value)"
+                                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <input type="text" name="presentation_banner_btn1_text_fr" value="{{ old('presentation_banner_btn1_text_fr', $settings['presentation_banner_btn1_text_fr'] ?? '') }}"
+                                       placeholder="Leave blank to reuse the English text"
+                                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1">Button 1 — URL</label>
@@ -415,9 +421,16 @@
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1">Button 2 (Secondary) — Text</label>
-                            <input type="text" name="presentation_banner_btn2_text" value="{{ $settings['presentation_banner_btn2_text'] ?? 'Donate Now' }}"
-                                   oninput="document.querySelectorAll('#banner-preview .flex-wrap span:last-child').forEach(e=>e.textContent=this.value)"
-                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <div x-show="lang === 'en'">
+                                <input type="text" name="presentation_banner_btn2_text" value="{{ $settings['presentation_banner_btn2_text'] ?? 'Donate Now' }}"
+                                       oninput="document.querySelectorAll('#banner-preview .flex-wrap span:last-child').forEach(e=>e.textContent=this.value)"
+                                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <input type="text" name="presentation_banner_btn2_text_fr" value="{{ old('presentation_banner_btn2_text_fr', $settings['presentation_banner_btn2_text_fr'] ?? '') }}"
+                                       placeholder="Leave blank to reuse the English text"
+                                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1">Button 2 — URL</label>
@@ -427,8 +440,15 @@
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1">Button 3 — Text <span class="text-gray-400">(optional)</span></label>
-                            <input type="text" name="presentation_banner_btn3_text" value="{{ $settings['presentation_banner_btn3_text'] ?? '' }}"
-                                   class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <div x-show="lang === 'en'">
+                                <input type="text" name="presentation_banner_btn3_text" value="{{ $settings['presentation_banner_btn3_text'] ?? '' }}"
+                                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <input type="text" name="presentation_banner_btn3_text_fr" value="{{ old('presentation_banner_btn3_text_fr', $settings['presentation_banner_btn3_text_fr'] ?? '') }}"
+                                       placeholder="Leave blank to reuse the English text"
+                                       class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1">Button 3 — URL</label>

@@ -183,6 +183,13 @@
                    oninput="document.getElementById('preview-badge').textContent = this.value || 'Application'"
                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
         </div>
+        <div x-show="lang === 'fr'" x-cloak>
+            <label for="words_pictures_banner_badge_fr" class="block text-sm font-medium text-gray-700 mb-1.5">Badge Text (French) <span class="text-gray-400 font-normal">(optional)</span></label>
+            <input type="text" id="words_pictures_banner_badge_fr" name="words_pictures_banner_badge_fr"
+                   value="{{ old('words_pictures_banner_badge_fr', $settings['words_pictures_banner_badge_fr'] ?? '') }}"
+                   placeholder="Leave blank to reuse the English text"
+                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+        </div>
 
         {{-- Hero Title --}}
         <div x-show="lang === 'en'">
@@ -219,12 +226,20 @@
             {{-- Button 1 --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label for="words_pictures_banner_btn1_text" class="block text-xs font-medium text-gray-600 mb-1">Button 1 Text</label>
-                    <input type="text" id="words_pictures_banner_btn1_text" name="words_pictures_banner_btn1_text"
-                           value="{{ $btn1Text }}"
-                           oninput="document.getElementById('preview-btn1').textContent = this.value || 'Button 1'; document.getElementById('preview-btn1').classList.toggle('opacity-30', !this.value)"
-                           placeholder="Learn More"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Button 1 Text</label>
+                    <div x-show="lang === 'en'">
+                        <input type="text" id="words_pictures_banner_btn1_text" name="words_pictures_banner_btn1_text"
+                               value="{{ $btn1Text }}"
+                               oninput="document.getElementById('preview-btn1').textContent = this.value || 'Button 1'; document.getElementById('preview-btn1').classList.toggle('opacity-30', !this.value)"
+                               placeholder="Learn More"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <input type="text" id="words_pictures_banner_btn1_text_fr" name="words_pictures_banner_btn1_text_fr"
+                               value="{{ old('words_pictures_banner_btn1_text_fr', $settings['words_pictures_banner_btn1_text_fr'] ?? '') }}"
+                               placeholder="Leave blank to reuse the English text"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
                 </div>
                 <div>
                     <label for="words_pictures_banner_btn1_url" class="block text-xs font-medium text-gray-600 mb-1">Button 1 URL</label>
@@ -238,12 +253,20 @@
             {{-- Button 2 --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label for="words_pictures_banner_btn2_text" class="block text-xs font-medium text-gray-600 mb-1">Button 2 Text</label>
-                    <input type="text" id="words_pictures_banner_btn2_text" name="words_pictures_banner_btn2_text"
-                           value="{{ $btn2Text }}"
-                           oninput="document.getElementById('preview-btn2').textContent = this.value || 'Button 2'; document.getElementById('preview-btn2').classList.toggle('opacity-30', !this.value)"
-                           placeholder="Donate Now"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Button 2 Text</label>
+                    <div x-show="lang === 'en'">
+                        <input type="text" id="words_pictures_banner_btn2_text" name="words_pictures_banner_btn2_text"
+                               value="{{ $btn2Text }}"
+                               oninput="document.getElementById('preview-btn2').textContent = this.value || 'Button 2'; document.getElementById('preview-btn2').classList.toggle('opacity-30', !this.value)"
+                               placeholder="Donate Now"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <input type="text" id="words_pictures_banner_btn2_text_fr" name="words_pictures_banner_btn2_text_fr"
+                               value="{{ old('words_pictures_banner_btn2_text_fr', $settings['words_pictures_banner_btn2_text_fr'] ?? '') }}"
+                               placeholder="Leave blank to reuse the English text"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
                 </div>
                 <div>
                     <label for="words_pictures_banner_btn2_url" class="block text-xs font-medium text-gray-600 mb-1">Button 2 URL</label>
@@ -257,12 +280,20 @@
             {{-- Button 3 --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label for="words_pictures_banner_btn3_text" class="block text-xs font-medium text-gray-600 mb-1">Button 3 Text</label>
-                    <input type="text" id="words_pictures_banner_btn3_text" name="words_pictures_banner_btn3_text"
-                           value="{{ $btn3Text }}"
-                           oninput="document.getElementById('preview-btn3').textContent = this.value || 'Button 3'; document.getElementById('preview-btn3').classList.toggle('opacity-30', !this.value)"
-                           placeholder="Annual Report"
-                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Button 3 Text</label>
+                    <div x-show="lang === 'en'">
+                        <input type="text" id="words_pictures_banner_btn3_text" name="words_pictures_banner_btn3_text"
+                               value="{{ $btn3Text }}"
+                               oninput="document.getElementById('preview-btn3').textContent = this.value || 'Button 3'; document.getElementById('preview-btn3').classList.toggle('opacity-30', !this.value)"
+                               placeholder="Annual Report"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
+                    <div x-show="lang === 'fr'" x-cloak>
+                        <input type="text" id="words_pictures_banner_btn3_text_fr" name="words_pictures_banner_btn3_text_fr"
+                               value="{{ old('words_pictures_banner_btn3_text_fr', $settings['words_pictures_banner_btn3_text_fr'] ?? '') }}"
+                               placeholder="Leave blank to reuse the English text"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                    </div>
                 </div>
                 <div>
                     <label for="words_pictures_banner_btn3_url" class="block text-xs font-medium text-gray-600 mb-1">Button 3 URL</label>

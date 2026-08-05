@@ -93,7 +93,22 @@
                 @endif
 
                 {{-- Order Action Buttons --}}
-                <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                <div class="flex flex-col sm:flex-row flex-wrap gap-4 pt-2">
+                    @forelse($orderChannels as $index => $channel)
+                        @if($channel->type === 'email')
+                        <a href="#" onclick="event.preventDefault(); openEmail('{{ $channel->value }}');"
+                           class="inline-flex items-center justify-center gap-2.5 px-8 py-4 {{ $index === 0 ? 'bg-gradient-to-r from-[#2d6fa3] to-[#1d4e7a] hover:from-[#1d4e7a] hover:to-[#163b5d] text-white shadow-lg hover:shadow-xl' : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 shadow-sm hover:shadow hover:border-slate-300' }} font-extrabold text-sm uppercase tracking-wider rounded-2xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+                            <svg class="w-5 h-5 {{ $index === 0 ? '' : 'text-[#8da83a]' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $channel->icon_path !!}</svg>
+                            <span>{{ $channel->localized_label }}</span>
+                        </a>
+                        @else
+                        <a href="{{ $channel->href }}" target="_blank" rel="noopener"
+                           class="inline-flex items-center justify-center gap-2.5 px-8 py-4 {{ $index === 0 ? 'bg-gradient-to-r from-[#2d6fa3] to-[#1d4e7a] hover:from-[#1d4e7a] hover:to-[#163b5d] text-white shadow-lg hover:shadow-xl' : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 shadow-sm hover:shadow hover:border-slate-300' }} font-extrabold text-sm uppercase tracking-wider rounded-2xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+                            <svg class="w-5 h-5 {{ $index === 0 ? '' : 'text-[#8da83a]' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $channel->icon_path !!}</svg>
+                            <span>{{ $channel->localized_label }}</span>
+                        </a>
+                        @endif
+                    @empty
                     <a href="{{ route('contact') }}"
                        class="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-[#2d6fa3] to-[#1d4e7a] hover:from-[#1d4e7a] hover:to-[#163b5d] text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
@@ -105,6 +120,7 @@
                         <svg class="w-5 h-5 text-[#8da83a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         <span>Order via Email</span>
                     </a>
+                    @endforelse
                 </div>
 
                 {{-- Proceeds Callout Box --}}

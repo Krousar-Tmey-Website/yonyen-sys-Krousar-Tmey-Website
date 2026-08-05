@@ -81,14 +81,14 @@ $sections = [
         'title'  => 'Call to Action Banner',
         'fields' => [
             ['key' => 'cta_background_image', 'label' => 'Background Image',                               'type' => 'image'],
-            ['key' => 'cta_label',            'label' => 'Badge Text',                                     'type' => 'text', 'placeholder' => 'Support Our Work'],
+            ['key' => 'cta_label',            'label' => 'Badge Text',                                     'type' => 'bilingual_text', 'placeholder' => 'Support Our Work'],
             ['key' => 'cta_title',            'label' => 'Title',                                          'type' => 'richtext', 'placeholder' => 'Help a Child Build Their Future'],
             ['key' => 'cta_subtitle',         'label' => 'Subtitle',                                       'type' => 'richtext', 'placeholder' => 'We guarantee that 100% of your donation...'],
-            ['key' => 'cta_primary_text',     'label' => 'Button 1 — Text (Donate Now)',                   'type' => 'text', 'placeholder' => 'Donate Now'],
+            ['key' => 'cta_primary_text',     'label' => 'Button 1 — Text (Donate Now)',                   'type' => 'bilingual_text', 'placeholder' => 'Donate Now'],
             ['key' => 'cta_primary_url',      'label' => 'Button 1 — URL',                                 'type' => 'url', 'placeholder' => '/donate'],
-            ['key' => 'cta_secondary_text',   'label' => 'Button 2 — Text (Get Involved)',                  'type' => 'text', 'placeholder' => 'Get Involved'],
+            ['key' => 'cta_secondary_text',   'label' => 'Button 2 — Text (Get Involved)',                  'type' => 'bilingual_text', 'placeholder' => 'Get Involved'],
             ['key' => 'cta_secondary_url',    'label' => 'Button 2 — URL',                                 'type' => 'url', 'placeholder' => '/get-involved'],
-            ['key' => 'cta_annual_report_text','label' => 'Button 3 — Text (Annual Report)',                'type' => 'text', 'placeholder' => 'Annual Report'],
+            ['key' => 'cta_annual_report_text','label' => 'Button 3 — Text (Annual Report)',                'type' => 'bilingual_text', 'placeholder' => 'Annual Report'],
             ['key' => 'cta_annual_report_url', 'label' => 'Button 3 — URL',                                'type' => 'url', 'placeholder' => '/resources'],
         ],
     ],
@@ -99,19 +99,30 @@ $sections = [
     @csrf
 
     @foreach($sections as $id => $section)
-    <div x-show="tab === '{{ $id }}'">
+    @php
+        $sectionHasBilingual = collect($section['fields'])->pluck('type')->intersect(['richtext', 'bilingual_text'])->isNotEmpty();
+    @endphp
+    <div x-show="tab === '{{ $id }}'" @if($sectionHasBilingual) x-data="bilingualForm()" @endif>
         <div class="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 shadow-sm">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        @if($id === 'cta')
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
-                        @else
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                        @endif
-                    </svg>
-                </span>
-                <h3 class="font-semibold text-gray-700 text-sm">{{ $section['title'] }}</h3>
+            <div class="flex items-center justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            @if($id === 'cta')
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                            @else
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            @endif
+                        </svg>
+                    </span>
+                    <h3 class="font-semibold text-gray-700 text-sm">{{ $section['title'] }}</h3>
+                </div>
+                @if($sectionHasBilingual)
+                <div class="lang-tabs" title="Toggle editing language (English / French) for this section">
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                </div>
+                @endif
             </div>
 
             <hr class="mb-5 border-gray-100">
@@ -125,29 +136,38 @@ $sections = [
                     $isWide = in_array($field['type'], ['textarea', 'image', 'richtext']);
                 @endphp
                 <div class="{{ $isWide ? 'lg:col-span-2' : '' }}">
-                    @if($field['type'] !== 'richtext')
+                    @if(!in_array($field['type'], ['richtext', 'bilingual_text']))
                     <label for="settings_{{ $k }}" class="block text-sm font-medium text-gray-700 mb-1.5">
                         {{ $field['label'] }}
                     </label>
                     @endif
 
-                    @if($field['type'] === 'richtext')
+                    @if($field['type'] === 'bilingual_text')
                         @php $currentValFr = $val($k.'_fr'); @endphp
-                        <div x-data="bilingualForm()">
-                            <div class="flex items-center justify-between gap-3 mb-1.5">
-                                <label class="block text-sm font-medium text-gray-700 mb-0">{{ $field['label'] }}</label>
-                                <div class="lang-tabs" title="Toggle editing language (English / French)">
-                                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                                </div>
-                            </div>
-                            <div x-show="lang === 'en'">
-                                <x-admin.rich-text id="settings_{{ $k }}" name="settings[{{ $k }}]" :value="$currentVal" lang="en" :rows="2" :placeholder="$field['placeholder'] ?? ''" />
-                            </div>
-                            <div x-show="lang === 'fr'" x-cloak>
-                                <x-admin.rich-text id="settings_{{ $k }}_fr" name="settings[{{ $k }}_fr]" :value="$currentValFr" lang="fr" :rows="2" />
-                                <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English text.</p>
-                            </div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $field['label'] }}</label>
+                        <div x-show="lang === 'en'">
+                            <input type="text" id="settings_{{ $k }}" name="settings[{{ $k }}]"
+                                   value="{{ $currentVal }}"
+                                   placeholder="{{ $field['placeholder'] ?? '' }}"
+                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                        </div>
+                        <div x-show="lang === 'fr'" x-cloak>
+                            <input type="text" id="settings_{{ $k }}_fr" name="settings[{{ $k }}_fr]"
+                                   value="{{ $currentValFr }}"
+                                   placeholder="{{ $field['placeholder'] ?? '' }}"
+                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English text.</p>
+                        </div>
+
+                    @elseif($field['type'] === 'richtext')
+                        @php $currentValFr = $val($k.'_fr'); @endphp
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ $field['label'] }}</label>
+                        <div x-show="lang === 'en'">
+                            <x-admin.rich-text id="settings_{{ $k }}" name="settings[{{ $k }}]" :value="$currentVal" lang="en" :rows="2" :placeholder="$field['placeholder'] ?? ''" />
+                        </div>
+                        <div x-show="lang === 'fr'" x-cloak>
+                            <x-admin.rich-text id="settings_{{ $k }}_fr" name="settings[{{ $k }}_fr]" :value="$currentValFr" lang="fr" :rows="2" />
+                            <p class="text-xs text-gray-400 mt-1">Leave blank to reuse the English text.</p>
                         </div>
 
                     @elseif($field['type'] === 'textarea')

@@ -64,19 +64,27 @@ $bannerSubtitleFr = $bv('contact_banner_subtitle_fr');
         <div class="h-1 bg-gradient-to-r from-[#2d6fa3] via-[#8da83a] to-[#2d6fa3]"></div>
 
         <div class="p-6 lg:p-8">
-            <div class="flex items-center gap-3 mb-1">
-                <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center flex-shrink-0 border border-green-100/50">
-                    <svg class="w-4.5 h-4.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                    </svg>
-                </span>
-                <div>
-                    <h3 class="font-bold text-gray-800 text-sm">Contact Page CTA Banner</h3>
-                    <p class="text-xs text-gray-400 mt-0.5">Controls the \"Support Our Work\" banner at the bottom of the Contact page</p>
+            <div class="flex items-center justify-between gap-3 mb-1">
+                <div class="flex items-center gap-3">
+                    <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center flex-shrink-0 border border-green-100/50">
+                        <svg class="w-4.5 h-4.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                        </svg>
+                    </span>
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-sm">Contact Page CTA Banner</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">Controls the \"Support Our Work\" banner at the bottom of the Contact page</p>
+                    </div>
                 </div>
             </div>
 
-            <form action="{{ route('admin.contact-banner.update') }}" method="POST" enctype="multipart/form-data" class="mt-6 space-y-8">
+            <form action="{{ route('admin.contact-banner.update') }}" method="POST" enctype="multipart/form-data" class="mt-6 space-y-8" x-data="bilingualForm()">
+                <div class="flex justify-end -mt-2">
+                    <div class="lang-tabs" title="Toggle editing language (English / French) for this banner">
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
+                        <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
+                    </div>
+                </div>
                 @csrf
 
                 {{-- Section: Background Image --}}
@@ -179,18 +187,19 @@ $bannerSubtitleFr = $bv('contact_banner_subtitle_fr');
                     <div class="grid lg:grid-cols-2 gap-5">
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Badge Text</label>
-                            <input type="text" name="contact_banner_badge" value="{{ $bannerBadge }}"
-                                   oninput="document.getElementById('preview-badge').textContent = this.value || 'Support Our Work'"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
-                        </div>
-                        <div x-data="bilingualForm()">
-                            <div class="flex items-center justify-between gap-2 mb-1.5">
-                                <label class="block text-xs font-medium text-gray-600 mb-0">Title</label>
-                                <div class="lang-tabs" title="Toggle editing language (English / French)">
-                                    <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                                    <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                                </div>
+                            <div x-show="lang === 'en'">
+                                <input type="text" name="contact_banner_badge" value="{{ $bannerBadge }}"
+                                       oninput="document.getElementById('preview-badge').textContent = this.value || 'Support Our Work'"
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
                             </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <input type="text" name="contact_banner_badge_fr" value="{{ $bv('contact_banner_badge_fr') }}"
+                                       placeholder="Leave blank to reuse the English text"
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Title</label>
                             <div x-show="lang === 'en'">
                                 <x-admin.rich-text name="contact_banner_title" :value="$bannerTitle" lang="en" :rows="1" />
                             </div>
@@ -203,20 +212,14 @@ $bannerSubtitleFr = $bv('contact_banner_subtitle_fr');
                 </div>
 
                 {{-- Section: Subtitle --}}
-                <div class="bg-gray-50/60 rounded-xl p-5 border border-gray-100/80" x-data="bilingualForm()">
-                    <div class="flex items-center justify-between gap-3 mb-4">
-                        <div class="flex items-center gap-2.5">
-                            <span class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center">
-                                <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
-                                </svg>
-                            </span>
-                            <span class="text-sm font-semibold text-gray-700">Subtitle</span>
-                        </div>
-                        <div class="lang-tabs" title="Toggle editing language (English / French)">
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'en' }" @click="lang = 'en'; switchGTLang('en')">EN</button>
-                            <button type="button" class="lang-tab" :class="{ active: lang === 'fr' }" @click="lang = 'fr'; switchGTLang('fr')">FR</button>
-                        </div>
+                <div class="bg-gray-50/60 rounded-xl p-5 border border-gray-100/80">
+                    <div class="flex items-center gap-2.5 mb-4">
+                        <span class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center">
+                            <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
+                            </svg>
+                        </span>
+                        <span class="text-sm font-semibold text-gray-700">Subtitle</span>
                     </div>
                     <div x-show="lang === 'en'">
                         <x-admin.rich-text name="contact_banner_subtitle" :value="$bannerSubtitle" lang="en" :rows="3" />
@@ -241,9 +244,16 @@ $bannerSubtitleFr = $bv('contact_banner_subtitle_fr');
                     <div class="grid lg:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Button 1 (Primary) — Text</label>
-                            <input type="text" name="contact_banner_btn1_text" value="{{ $btn1Text }}"
-                                   oninput="document.getElementById('preview-btn1').textContent = this.value"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <div x-show="lang === 'en'">
+                                <input type="text" name="contact_banner_btn1_text" value="{{ $btn1Text }}"
+                                       oninput="document.getElementById('preview-btn1').textContent = this.value"
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <input type="text" name="contact_banner_btn1_text_fr" value="{{ $bv('contact_banner_btn1_text_fr') }}"
+                                       placeholder="Leave blank to reuse the English text"
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Button 1 — URL</label>
@@ -253,9 +263,16 @@ $bannerSubtitleFr = $bv('contact_banner_subtitle_fr');
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Button 2 (Outline) — Text</label>
-                            <input type="text" name="contact_banner_btn2_text" value="{{ $btn2Text }}"
-                                   oninput="document.getElementById('preview-btn2').textContent = this.value"
-                                   class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            <div x-show="lang === 'en'">
+                                <input type="text" name="contact_banner_btn2_text" value="{{ $btn2Text }}"
+                                       oninput="document.getElementById('preview-btn2').textContent = this.value"
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
+                            <div x-show="lang === 'fr'" x-cloak>
+                                <input type="text" name="contact_banner_btn2_text_fr" value="{{ $bv('contact_banner_btn2_text_fr') }}"
+                                       placeholder="Leave blank to reuse the English text"
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3]">
+                            </div>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Button 2 — URL</label>

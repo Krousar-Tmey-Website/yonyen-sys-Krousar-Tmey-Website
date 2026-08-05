@@ -16,11 +16,16 @@ class ContactPageController extends Controller
             'contact_banner_image',
             'contact_banner_overlay_color',
             'contact_banner_badge',
+            'contact_banner_badge_fr',
             'contact_banner_title',
+            'contact_banner_title_fr',
             'contact_banner_subtitle',
+            'contact_banner_subtitle_fr',
             'contact_banner_btn1_text',
+            'contact_banner_btn1_text_fr',
             'contact_banner_btn1_url',
             'contact_banner_btn2_text',
+            'contact_banner_btn2_text_fr',
             'contact_banner_btn2_url',
         ])->pluck('value', 'key');
 

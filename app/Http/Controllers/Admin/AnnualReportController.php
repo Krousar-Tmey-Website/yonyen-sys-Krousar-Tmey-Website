@@ -153,28 +153,36 @@ class AnnualReportController extends Controller
             'resources_banner_subtitle'      => ['nullable', 'string'],
             'resources_banner_subtitle_fr'   => ['nullable', 'string'],
             'resources_banner_badge'         => ['nullable', 'string', 'max:255'],
+            'resources_banner_badge_fr'      => ['nullable', 'string', 'max:255'],
             'resources_banner_overlay_color' => ['nullable', 'string', 'max:20'],
             'resources_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'resources_banner_image_url'     => ['nullable', 'url', 'max:2048'],
             'resources_banner_btn1_text'     => ['nullable', 'string', 'max:100'],
+            'resources_banner_btn1_text_fr'  => ['nullable', 'string', 'max:100'],
             'resources_banner_btn1_url'      => ['nullable', 'string', 'max:500'],
             'resources_banner_btn2_text'     => ['nullable', 'string', 'max:100'],
+            'resources_banner_btn2_text_fr'  => ['nullable', 'string', 'max:100'],
             'resources_banner_btn2_url'      => ['nullable', 'string', 'max:500'],
             'resources_banner_btn3_text'     => ['nullable', 'string', 'max:100'],
+            'resources_banner_btn3_text_fr'  => ['nullable', 'string', 'max:100'],
             'resources_banner_btn3_url'      => ['nullable', 'string', 'max:500'],
         ]);
 
         HomeSetting::setValue('resources_banner_badge', $request->input('resources_banner_badge', ''));
+        HomeSetting::setValue('resources_banner_badge_fr', $request->input('resources_banner_badge_fr', ''));
         HomeSetting::setValue('resources_banner_title', $request->input('resources_banner_title', ''));
         HomeSetting::setValue('resources_banner_title_fr', $request->input('resources_banner_title_fr', ''));
         HomeSetting::setValue('resources_banner_subtitle', $request->input('resources_banner_subtitle', ''));
         HomeSetting::setValue('resources_banner_subtitle_fr', $request->input('resources_banner_subtitle_fr', ''));
         HomeSetting::setValue('resources_banner_overlay_color', $request->input('resources_banner_overlay_color', ''));
         HomeSetting::setValue('resources_banner_btn1_text', $request->input('resources_banner_btn1_text', ''));
+        HomeSetting::setValue('resources_banner_btn1_text_fr', $request->input('resources_banner_btn1_text_fr', ''));
         HomeSetting::setValue('resources_banner_btn1_url', $request->input('resources_banner_btn1_url', ''));
         HomeSetting::setValue('resources_banner_btn2_text', $request->input('resources_banner_btn2_text', ''));
+        HomeSetting::setValue('resources_banner_btn2_text_fr', $request->input('resources_banner_btn2_text_fr', ''));
         HomeSetting::setValue('resources_banner_btn2_url', $request->input('resources_banner_btn2_url', ''));
         HomeSetting::setValue('resources_banner_btn3_text', $request->input('resources_banner_btn3_text', ''));
+        HomeSetting::setValue('resources_banner_btn3_text_fr', $request->input('resources_banner_btn3_text_fr', ''));
         HomeSetting::setValue('resources_banner_btn3_url', $request->input('resources_banner_btn3_url', ''));
 
         if ($request->hasFile('resources_banner_image')) {

@@ -12,20 +12,33 @@
     $newsBannerImage = $settings['news_banner_image'] ?? null;
     $newsBannerImageUrl = $newsBannerImage ? (str_starts_with($newsBannerImage, 'http') ? $newsBannerImage : asset('storage/' . $newsBannerImage)) : null;
     $newsBannerOverlay = $settings['news_banner_overlay_color'] ?? '#1a3c6e';
+    $newsIsFr = app()->getLocale() === 'fr';
     $newsBannerBadge = $settings['news_banner_badge'] ?? 'Krousar Thmey';
+    if ($newsIsFr && !empty($settings['news_banner_badge_fr'] ?? null)) {
+        $newsBannerBadge = $settings['news_banner_badge_fr'];
+    }
     $newsBannerTitle = $settings['news_banner_title'] ?? "Krousar Thmey's news, in Cambodia and around the world";
-    if (app()->getLocale() === 'fr' && !empty($settings['news_banner_title_fr'] ?? null)) {
+    if ($newsIsFr && !empty($settings['news_banner_title_fr'] ?? null)) {
         $newsBannerTitle = $settings['news_banner_title_fr'];
     }
     $newsBannerSubtitle = $settings['news_banner_subtitle'] ?? 'Updates from our programs, success stories from our beneficiaries, and events from Krousar Thmey.';
-    if (app()->getLocale() === 'fr' && !empty($settings['news_banner_subtitle_fr'] ?? null)) {
+    if ($newsIsFr && !empty($settings['news_banner_subtitle_fr'] ?? null)) {
         $newsBannerSubtitle = $settings['news_banner_subtitle_fr'];
     }
     $newsBtn1Text = $settings['news_banner_btn1_text'] ?? null;
+    if ($newsIsFr && !empty($settings['news_banner_btn1_text_fr'] ?? null)) {
+        $newsBtn1Text = $settings['news_banner_btn1_text_fr'];
+    }
     $newsBtn1Url  = $settings['news_banner_btn1_url'] ?? null;
     $newsBtn2Text = $settings['news_banner_btn2_text'] ?? null;
+    if ($newsIsFr && !empty($settings['news_banner_btn2_text_fr'] ?? null)) {
+        $newsBtn2Text = $settings['news_banner_btn2_text_fr'];
+    }
     $newsBtn2Url  = $settings['news_banner_btn2_url'] ?? null;
     $newsBtn3Text = $settings['news_banner_btn3_text'] ?? null;
+    if ($newsIsFr && !empty($settings['news_banner_btn3_text_fr'] ?? null)) {
+        $newsBtn3Text = $settings['news_banner_btn3_text_fr'];
+    }
     $newsBtn3Url  = $settings['news_banner_btn3_url'] ?? null;
 @endphp
 

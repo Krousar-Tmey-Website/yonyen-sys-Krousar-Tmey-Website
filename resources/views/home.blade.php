@@ -1611,22 +1611,43 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $ctaImageUrl }}');"></div>
     <div class="absolute inset-0 bg-[#1a3c6e]/85"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
-        <span class="inline-block bg-[#e8a020] text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ __($settings['cta_label'] ?? 'Support Our Work') }}</span>
         @php
+            $ctaIsFr = app()->getLocale() === 'fr';
+
+            $ctaLabelText = $settings['cta_label'] ?? 'Support Our Work';
+            if ($ctaIsFr && !empty($settings['cta_label_fr'] ?? null)) {
+                $ctaLabelText = $settings['cta_label_fr'];
+            }
+
             $ctaTitleText = $settings['cta_title'] ?? 'Help a Child Build Their Future';
-            if (app()->getLocale() === 'fr' && !empty($settings['cta_title_fr'] ?? null)) {
+            if ($ctaIsFr && !empty($settings['cta_title_fr'] ?? null)) {
                 $ctaTitleText = $settings['cta_title_fr'];
             }
+
+            $ctaSubtitleText = $settings['cta_subtitle'] ?? 'We guarantee that 100% of your donation is used to support children across Cambodia. Every contribution, big or small, changes a life.';
+            if ($ctaIsFr && !empty($settings['cta_subtitle_fr'] ?? null)) {
+                $ctaSubtitleText = $settings['cta_subtitle_fr'];
+            }
+
+            $ctaPrimaryText = $settings['cta_primary_text'] ?? 'Donate Now';
+            if ($ctaIsFr && !empty($settings['cta_primary_text_fr'] ?? null)) {
+                $ctaPrimaryText = $settings['cta_primary_text_fr'];
+            }
+
+            $ctaSecondaryText = $settings['cta_secondary_text'] ?? null;
+            if ($ctaIsFr && !empty($settings['cta_secondary_text_fr'] ?? null)) {
+                $ctaSecondaryText = $settings['cta_secondary_text_fr'];
+            }
+
+            $ctaAnnualReportText = $settings['cta_annual_report_text'] ?? 'Annual Report';
+            if ($ctaIsFr && !empty($settings['cta_annual_report_text_fr'] ?? null)) {
+                $ctaAnnualReportText = $settings['cta_annual_report_text_fr'];
+            }
         @endphp
+        <span class="inline-block bg-[#e8a020] text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ __($ctaLabelText) }}</span>
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
             {{ strip_tags($ctaTitleText) }}
         </h2>
-        @php
-            $ctaSubtitleText = $settings['cta_subtitle'] ?? 'We guarantee that 100% of your donation is used to support children across Cambodia. Every contribution, big or small, changes a life.';
-            if (app()->getLocale() === 'fr' && !empty($settings['cta_subtitle_fr'] ?? null)) {
-                $ctaSubtitleText = $settings['cta_subtitle_fr'];
-            }
-        @endphp
         <div class="text-white/80 text-lg leading-relaxed mb-10 [&_p]:mb-2 [&_p:last-child]:mb-0">
             {!! $ctaSubtitleText !!}
         </div>
@@ -1635,12 +1656,12 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
-                {{ __($settings['cta_primary_text'] ?? 'Donate Now') }}
+                {{ __($ctaPrimaryText) }}
             </a>
-            @if(!empty($settings['cta_secondary_text']))
-            <a href="{{ $settings['cta_secondary_url'] ?? route('get-involved') }}" class="btn-outline text-base btn-micro">{{ __($settings['cta_secondary_text']) }}</a>
+            @if(!empty($ctaSecondaryText))
+            <a href="{{ $settings['cta_secondary_url'] ?? route('get-involved') }}" class="btn-outline text-base btn-micro">{{ __($ctaSecondaryText) }}</a>
             @endif
-            <a href="{{ $settings['cta_annual_report_url'] ?? route('resources') }}" class="btn-outline text-base btn-micro">{{ __($settings['cta_annual_report_text'] ?? 'Annual Report') }}</a>
+            <a href="{{ $settings['cta_annual_report_url'] ?? route('resources') }}" class="btn-outline text-base btn-micro">{{ __($ctaAnnualReportText) }}</a>
         </div>
     </div>
 </section>

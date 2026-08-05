@@ -69,10 +69,13 @@ class TransparencyController extends Controller
             'transparency_banner_image'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:5120'],
             'transparency_banner_image_url'     => ['nullable', 'url', 'max:2048'],
             'transparency_banner_btn1_text'     => ['nullable', 'string', 'max:100'],
+            'transparency_banner_btn1_text_fr'  => ['nullable', 'string', 'max:100'],
             'transparency_banner_btn1_url'      => ['nullable', 'string', 'max:500'],
             'transparency_banner_btn2_text'     => ['nullable', 'string', 'max:100'],
+            'transparency_banner_btn2_text_fr'  => ['nullable', 'string', 'max:100'],
             'transparency_banner_btn2_url'      => ['nullable', 'string', 'max:500'],
             'transparency_banner_btn3_text'     => ['nullable', 'string', 'max:100'],
+            'transparency_banner_btn3_text_fr'  => ['nullable', 'string', 'max:100'],
             'transparency_banner_btn3_url'      => ['nullable', 'string', 'max:500'],
         ]);
 

@@ -147,6 +147,7 @@
                 ['route' => 'admin.volunteers.index', 'label' => __('Volunteer Applications')],
                 ['route' => 'admin.jobs.index', 'label' => __('Job Opportunities')],
                 ['route' => 'admin.books.index', 'label' => __('Book for Sales')],
+                ['route' => 'admin.book-order-channels.index', 'label' => __('Book Order Channels')],
                 ],
                 ],
                 'donations' => [

@@ -62,6 +62,14 @@
                            placeholder="e.g. 24.99">
                     @error('price')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
+
+                <div class="form-group" x-show="lang === 'en'">
+                    <label class="form-label">Stock</label>
+                    <input type="number" name="stock" value="{{ old('stock', $book->stock) }}" min="0"
+                           class="form-control @error('stock') error @enderror"
+                           placeholder="0">
+                    @error('stock')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
             </div>
         </div>
 
@@ -106,9 +114,13 @@
                     <img src="{{ $book->cover_image_url }}" alt="Current cover">
                     <div class="image-info">
                         <strong>Current cover</strong>
-                        <div class="text-small-info">Replace below if needed</div>
+                        <div class="text-small-info">Replace below, or remove it entirely</div>
                     </div>
                 </div>
+                <label class="flex items-center gap-1.5 text-xs text-gray-500 mt-2">
+                    <input type="checkbox" name="remove_cover" id="removeCoverInput" value="1" class="rounded border-gray-300">
+                    Remove current cover
+                </label>
             </div>
             @endif
 
@@ -169,12 +181,16 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const coverInput = document.getElementById('coverInput');
+    const removeCoverInput = document.getElementById('removeCoverInput');
     if (coverInput) {
         coverInput.addEventListener('change', function(e) {
             const preview = document.getElementById('coverPreview');
             const placeholder = document.getElementById('coverPlaceholder');
             const file = e.target.files[0];
             if (file) {
+                if (removeCoverInput) {
+                    removeCoverInput.checked = false;
+                }
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     placeholder.classList.add('hidden');

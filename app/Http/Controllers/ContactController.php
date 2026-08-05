@@ -25,18 +25,28 @@ class ContactController extends Controller
         $contactBannerTitle = $settings['contact_banner_title'] ?? 'Make a Difference Today';
         $contactBannerSubtitle = $settings['contact_banner_subtitle'] ?? 'Every contribution goes directly to supporting children across Cambodia. 100% of funds reach the children.';
 
+        $contactBannerBtn1Text = $settings['contact_banner_btn1_text'] ?? 'Donate Now';
+        $contactBannerBtn1Url = $settings['contact_banner_btn1_url'] ?? '/donate';
+        $contactBannerBtn2Text = $settings['contact_banner_btn2_text'] ?? 'Get Involved';
+        $contactBannerBtn2Url = $settings['contact_banner_btn2_url'] ?? '/get-involved';
+
         if (app()->getLocale() === 'fr') {
+            if (!empty($settings['contact_banner_badge_fr'])) {
+                $contactBannerBadge = $settings['contact_banner_badge_fr'];
+            }
             if (!empty($settings['contact_banner_title_fr'])) {
                 $contactBannerTitle = $settings['contact_banner_title_fr'];
             }
             if (!empty($settings['contact_banner_subtitle_fr'])) {
                 $contactBannerSubtitle = $settings['contact_banner_subtitle_fr'];
             }
+            if (!empty($settings['contact_banner_btn1_text_fr'])) {
+                $contactBannerBtn1Text = $settings['contact_banner_btn1_text_fr'];
+            }
+            if (!empty($settings['contact_banner_btn2_text_fr'])) {
+                $contactBannerBtn2Text = $settings['contact_banner_btn2_text_fr'];
+            }
         }
-        $contactBannerBtn1Text = $settings['contact_banner_btn1_text'] ?? 'Donate Now';
-        $contactBannerBtn1Url = $settings['contact_banner_btn1_url'] ?? '/donate';
-        $contactBannerBtn2Text = $settings['contact_banner_btn2_text'] ?? 'Get Involved';
-        $contactBannerBtn2Url = $settings['contact_banner_btn2_url'] ?? '/get-involved';
 
         return view('contact', compact(
             'offices',

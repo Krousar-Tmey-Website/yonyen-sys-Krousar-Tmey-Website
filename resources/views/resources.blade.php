@@ -12,20 +12,33 @@
     $resourcesBannerImage = $settings['resources_banner_image'] ?? null;
     $resourcesBannerImageUrl = $resourcesBannerImage ? (str_starts_with($resourcesBannerImage, 'http') ? $resourcesBannerImage : asset('storage/' . $resourcesBannerImage)) : asset('images/children.jpg');
     $resourcesBannerOverlayColor = $settings['resources_banner_overlay_color'] ?? '#1a3c6e';
+    $resourcesIsFr = app()->getLocale() === 'fr';
     $resourcesBannerBadge = $settings['resources_banner_badge'] ?? 'Accountability';
+    if ($resourcesIsFr && !empty($settings['resources_banner_badge_fr'] ?? null)) {
+        $resourcesBannerBadge = $settings['resources_banner_badge_fr'];
+    }
     $resourcesBannerTitle = $settings['resources_banner_title'] ?? 'Resources & Annual Reports';
-    if (app()->getLocale() === 'fr' && !empty($settings['resources_banner_title_fr'] ?? null)) {
+    if ($resourcesIsFr && !empty($settings['resources_banner_title_fr'] ?? null)) {
         $resourcesBannerTitle = $settings['resources_banner_title_fr'];
     }
     $resourcesBannerSubtitle = $settings['resources_banner_subtitle'] ?? 'Annual reports, publications, and media resources from Krousar Thmey.';
-    if (app()->getLocale() === 'fr' && !empty($settings['resources_banner_subtitle_fr'] ?? null)) {
+    if ($resourcesIsFr && !empty($settings['resources_banner_subtitle_fr'] ?? null)) {
         $resourcesBannerSubtitle = $settings['resources_banner_subtitle_fr'];
     }
     $resourcesBannerBtn1Text = $settings['resources_banner_btn1_text'] ?? 'Donate Now';
+    if ($resourcesIsFr && !empty($settings['resources_banner_btn1_text_fr'] ?? null)) {
+        $resourcesBannerBtn1Text = $settings['resources_banner_btn1_text_fr'];
+    }
     $resourcesBannerBtn1Url  = $settings['resources_banner_btn1_url'] ?? '/donate';
     $resourcesBannerBtn2Text = $settings['resources_banner_btn2_text'] ?? 'Get Involved';
+    if ($resourcesIsFr && !empty($settings['resources_banner_btn2_text_fr'] ?? null)) {
+        $resourcesBannerBtn2Text = $settings['resources_banner_btn2_text_fr'];
+    }
     $resourcesBannerBtn2Url  = $settings['resources_banner_btn2_url'] ?? '/get-involved';
     $resourcesBannerBtn3Text = $settings['resources_banner_btn3_text'] ?? 'Annual Report';
+    if ($resourcesIsFr && !empty($settings['resources_banner_btn3_text_fr'] ?? null)) {
+        $resourcesBannerBtn3Text = $settings['resources_banner_btn3_text_fr'];
+    }
     $resourcesBannerBtn3Url  = $settings['resources_banner_btn3_url'] ?? '/resources#annual-reports';
 @endphp
 <section class="pt-20 pb-20 relative py-28 overflow-hidden text-center scroll-mt-20">
