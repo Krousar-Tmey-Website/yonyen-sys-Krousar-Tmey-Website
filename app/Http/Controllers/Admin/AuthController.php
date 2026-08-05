@@ -33,7 +33,10 @@ class AuthController extends Controller
 
             ActivityLogger::log('login', null, 'Admin logged in');
 
-            return redirect()->route('admin.dashboard');
+            // Send the admin back to whatever page they were trying to reach
+            // (e.g. an "Edit Info" link from the public site) instead of always
+            // dropping them on the dashboard.
+            return redirect()->intended(route('admin.dashboard'));
         }
 
         return back()->withErrors(['email' => 'Invalid email or password.'])->withInput();

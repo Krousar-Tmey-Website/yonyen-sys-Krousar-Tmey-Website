@@ -72,12 +72,13 @@
     {{-- Main Card Link --}}
     <a href="{{ route('campaigns.show', $campaign) }}" class="absolute inset-0 z-20" aria-label="View {{ $campaign->localized_title }}"></a>
 
-    @if(auth()->check() && auth()->user()->is_admin)
-    {{-- Admin Quick Actions (visible only to logged-in admins) --}}
+    {{-- More Options (View More Detail / Edit Info). Visible to every viewer;
+         "Edit Info" is protected by AdminMiddleware itself — a logged-out click
+         redirects to admin login and back to this exact edit page afterward. --}}
     <div class="absolute top-16 right-5 z-50 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300">
         <button type="button" @click="adminMenuOpen = !adminMenuOpen"
             class="w-9 h-9 rounded-full bg-black/50 backdrop-blur hover:bg-black/70 text-white flex items-center justify-center transition-colors"
-            aria-label="Admin quick actions" title="Admin quick actions">
+            aria-label="More options" title="More options">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
         </button>
         <div x-show="adminMenuOpen" x-cloak @click.away="adminMenuOpen = false"
@@ -93,5 +94,4 @@
             </a>
         </div>
     </div>
-    @endif
 </article>

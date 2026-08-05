@@ -584,16 +584,24 @@
     }
     $inactiveCss = implode(",\n    ", $inactiveSelectors);
     $inactiveHoverCss = implode(",\n    ", $inactiveHoverSelectors);
+
+    /* ── Map active-province color (admin-configurable) ──── */
+    $mapActiveColor = \App\Models\HomeSetting::colorValue($settings['map_active_color'] ?? null, '#35a752');
+    $mapHex = ltrim($mapActiveColor, '#');
+    $mapR = hexdec(substr($mapHex, 0, 2));
+    $mapG = hexdec(substr($mapHex, 2, 2));
+    $mapB = hexdec(substr($mapHex, 4, 2));
+    $mapHoverColor = sprintf('#%02x%02x%02x', (int) ($mapR * 0.85), (int) ($mapG * 0.85), (int) ($mapB * 0.85));
 @endphp
     /* ── Province fill colors (dynamic from DB) ──────────── */
     .map-svg-cambodia .region {
-        fill: #35a752 !important;
+        fill: {{ $mapActiveColor }} !important;
         cursor: pointer;
         transition: fill 0.25s ease;
     }
 
     .map-svg-cambodia .region:hover {
-        fill: #2d8f45 !important;
+        fill: {{ $mapHoverColor }} !important;
     }
 
     {{-- Provinces WITHOUT projects get light gray --}}
@@ -890,12 +898,13 @@
                 {{-- Main Card Link --}}
                 <a href="{{ route('programs') }}#{{ $program->slug }}" class="absolute inset-0 z-20" aria-label="View {{ $program->localized_title }}"></a>
 
-                @if(auth()->check() && auth()->user()->is_admin)
-                {{-- Admin Quick Actions (visible only to logged-in admins) --}}
+                {{-- More Options (View More Detail / Edit Info). Visible to every viewer;
+                     "Edit Info" is protected by AdminMiddleware itself — a logged-out click
+                     redirects to admin login and back to this exact edit page afterward. --}}
                 <div class="absolute top-4 right-4 z-50 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300">
                     <button type="button" @click="adminMenuOpen = !adminMenuOpen"
                         class="w-9 h-9 rounded-full bg-black/50 backdrop-blur hover:bg-black/70 text-white flex items-center justify-center transition-colors"
-                        aria-label="Admin quick actions" title="Admin quick actions">
+                        aria-label="More options" title="More options">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
                     </button>
                     <div x-show="adminMenuOpen" x-cloak @click.away="adminMenuOpen = false"
@@ -911,7 +920,6 @@
                         </a>
                     </div>
                 </div>
-                @endif
             </div>
             @endforeach
         </div>
@@ -1387,12 +1395,13 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                 {{-- Main Card Link --}}
                 <a href="{{ route('projects.show', $project) }}" class="absolute inset-0 z-10" aria-label="View {{ $project->localized_title }}"></a>
 
-                @if(auth()->check() && auth()->user()->is_admin)
-                {{-- Admin Quick Actions (visible only to logged-in admins) --}}
+                {{-- More Options (View More Detail / Edit Info). Visible to every viewer;
+                     "Edit Info" is protected by AdminMiddleware itself — a logged-out click
+                     redirects to admin login and back to this exact edit page afterward. --}}
                 <div class="absolute top-3 right-3 z-30 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300">
                     <button type="button" @click="adminMenuOpen = !adminMenuOpen"
                         class="w-8 h-8 rounded-full bg-white shadow-md border border-gray-100 hover:bg-gray-50 text-gray-500 flex items-center justify-center transition-colors"
-                        aria-label="Admin quick actions" title="Admin quick actions">
+                        aria-label="More options" title="More options">
                         <svg class="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
                     </button>
                     <div x-show="adminMenuOpen" x-cloak @click.away="adminMenuOpen = false"
@@ -1408,7 +1417,6 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                         </a>
                     </div>
                 </div>
-                @endif
 
                 @if($project->image)
                 <img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset('storage/' . $project->image) }}" class="w-full h-40 object-cover rounded-xl mb-5 group-hover:opacity-90 transition-opacity relative z-0">
@@ -1528,12 +1536,13 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                 {{-- Main Card Link --}}
                 <a href="{{ route('news.show', $article->slug) }}" class="absolute inset-0 z-20" aria-label="View {{ $article->localized_title }}"></a>
 
-                @if(auth()->check() && auth()->user()->is_admin)
-                {{-- Admin Quick Actions (visible only to logged-in admins) --}}
+                {{-- More Options (View More Detail / Edit Info). Visible to every viewer;
+                     "Edit Info" is protected by AdminMiddleware itself — a logged-out click
+                     redirects to admin login and back to this exact edit page afterward. --}}
                 <div class="absolute top-4 right-4 z-50 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300">
                     <button type="button" @click="adminMenuOpen = !adminMenuOpen"
                         class="w-9 h-9 rounded-full bg-black/50 backdrop-blur hover:bg-black/70 text-white flex items-center justify-center transition-colors"
-                        aria-label="Admin quick actions" title="Admin quick actions">
+                        aria-label="More options" title="More options">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
                     </button>
                     <div x-show="adminMenuOpen" x-cloak @click.away="adminMenuOpen = false"
@@ -1549,7 +1558,6 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                         </a>
                     </div>
                 </div>
-                @endif
             </article>
             @empty
             <div class="col-span-3 py-12 text-center text-gray-400">

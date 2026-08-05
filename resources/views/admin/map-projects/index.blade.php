@@ -455,6 +455,31 @@
         <form action="{{ route('admin.map-projects.settings') }}" method="POST" class="p-6 space-y-5" x-data="bilingualForm()">
             @csrf
 
+            {{-- Map Color --}}
+            @php $mapActiveColorValue = \App\Models\HomeSetting::colorValue($settings['map_active_color'] ?? null, '#35a752'); @endphp
+            <div>
+                <div class="flex items-center gap-2.5 mb-2">
+                    <span class="w-6 h-6 rounded-lg bg-green-50 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                        </svg>
+                    </span>
+                    <span class="text-sm font-semibold text-gray-700">Active Province Color</span>
+                </div>
+                <p class="text-xs text-gray-400 mb-2.5">Fill color for provinces with projects on the homepage map. The hover shade is generated automatically from this color.</p>
+                <div class="flex items-center gap-3 max-w-sm">
+                    <input type="color" id="map_active_color_picker"
+                           value="{{ $mapActiveColorValue }}"
+                           class="h-11 w-14 shrink-0 rounded-lg border border-gray-200 cursor-pointer p-1"
+                           onchange="document.getElementById('map_active_color').value = this.value;">
+                    <input type="text" id="map_active_color" name="map_active_color"
+                           value="{{ $mapActiveColorValue }}"
+                           placeholder="#35a752"
+                           oninput="if(/^#[0-9A-Fa-f]{6}$/.test(this.value)) { document.getElementById('map_active_color_picker').value = this.value; }"
+                           class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2d6fa3]/20 focus:border-[#2d6fa3] font-mono text-xs">
+                </div>
+            </div>
+
             {{-- Section Heading --}}
             <div x-show="lang === 'en'">
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Section Heading (Main Title)</label>

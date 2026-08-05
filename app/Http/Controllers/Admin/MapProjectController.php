@@ -121,6 +121,7 @@ class MapProjectController extends Controller
     public function updateSettings(Request $request)
     {
         $data = $request->validate([
+            'map_active_color'          => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'structure_heading'         => ['nullable', 'string', 'max:1000'],
             'structure_heading_fr'      => ['nullable', 'string', 'max:1000'],
             'structure_welfare_title'   => ['nullable', 'string', 'max:1000'],
