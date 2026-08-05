@@ -50,11 +50,34 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($page->items as $item)
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full group hover:-translate-y-1 relative">
-                
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full group hover:-translate-y-1 relative" x-data="{ adminMenuOpen: false }">
+
                 {{-- Main Card Link --}}
                 <a href="{{ route('program-page-items.show', $item->id) }}" class="absolute inset-0 z-10" aria-label="View {{ $item->localized_title }}"></a>
-                
+
+                @if(auth()->check() && auth()->user()->is_admin)
+                {{-- Admin Quick Actions (visible only to logged-in admins) --}}
+                <div class="absolute top-3 right-3 z-30 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300">
+                    <button type="button" @click="adminMenuOpen = !adminMenuOpen"
+                        class="w-8 h-8 rounded-full bg-black/50 backdrop-blur hover:bg-black/70 text-white flex items-center justify-center transition-colors"
+                        aria-label="Admin quick actions" title="Admin quick actions">
+                        <svg class="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                    </button>
+                    <div x-show="adminMenuOpen" x-cloak @click.away="adminMenuOpen = false"
+                        x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                        class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 text-left text-gray-700 text-sm overflow-hidden">
+                        <a href="{{ route('program-page-items.show', $item->id) }}" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                            <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            {{ __('View More Detail') }}
+                        </a>
+                        <a href="{{ route('admin.program-pages.edit', $item) }}" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-gray-50 transition-colors border-t border-gray-100">
+                            <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            {{ __('Edit Info') }}
+                        </a>
+                    </div>
+                </div>
+                @endif
+
                 <div class="h-44 overflow-hidden relative bg-gray-100 relative z-0">
                     <img src="{{ $item->image_url }}" alt="{{ $item->localized_title }}"
                          class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">

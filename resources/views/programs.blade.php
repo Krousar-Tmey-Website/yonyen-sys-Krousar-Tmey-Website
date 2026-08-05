@@ -255,7 +255,7 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             @foreach($program->projects as $project)
-                                <div class="card group relative overflow-hidden rounded-[2rem] shadow-xl h-[420px] cursor-pointer text-center text-white" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}">
+                                <div class="card group relative overflow-hidden rounded-[2rem] shadow-xl h-[420px] cursor-pointer text-center text-white" data-reveal="up" style="--reveal-delay: {{ $loop->index * 100 }}" x-data="{ adminMenuOpen: false }">
                                     {{-- Background Image --}}
                                     <img src="{{ $project->image_url }}" alt="{{ $project->localized_title }}"
                                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-0">
@@ -294,6 +294,29 @@
                                     
                                     {{-- Main Card Link --}}
                                     <a href="{{ route('projects.show', $project) }}" class="absolute inset-0 z-20" aria-label="View {{ $project->localized_title }}"></a>
+
+                                    @if(auth()->check() && auth()->user()->is_admin)
+                                    {{-- Admin Quick Actions (visible only to logged-in admins) --}}
+                                    <div class="absolute top-4 right-4 z-50 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300">
+                                        <button type="button" @click="adminMenuOpen = !adminMenuOpen"
+                                            class="w-9 h-9 rounded-full bg-black/50 backdrop-blur hover:bg-black/70 text-white flex items-center justify-center transition-colors"
+                                            aria-label="Admin quick actions" title="Admin quick actions">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                                        </button>
+                                        <div x-show="adminMenuOpen" x-cloak @click.away="adminMenuOpen = false"
+                                            x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                                            class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 text-left text-gray-700 text-sm overflow-hidden">
+                                            <a href="{{ route('projects.show', $project) }}" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                                                <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                                {{ __('View More Detail') }}
+                                            </a>
+                                            <a href="{{ route('admin.projects.edit', $project) }}" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-gray-50 transition-colors border-t border-gray-100">
+                                                <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                                {{ __('Edit Info') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
@@ -360,8 +383,8 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($additionalItems as $item)
-                        <div class="card group relative overflow-hidden rounded-[2rem] shadow-xl h-[420px] cursor-pointer text-center text-white" data-reveal="up" style="--reveal-delay: {{ min($loop->index * 90, 360) }}">
-                            
+                        <div class="card group relative overflow-hidden rounded-[2rem] shadow-xl h-[420px] cursor-pointer text-center text-white" data-reveal="up" style="--reveal-delay: {{ min($loop->index * 90, 360) }}" x-data="{ adminMenuOpen: false }">
+
                             {{-- Background Image or Gradient --}}
                             @if($item->image)
                                 <img src="{{ $item->image_url }}" alt="{{ $item->localized_title }}"
@@ -411,6 +434,29 @@
                             
                             {{-- Main Card Link --}}
                             <a href="{{ route('program-page-items.show', $item->id) }}" class="absolute inset-0 z-20" aria-label="View {{ $item->localized_title }}"></a>
+
+                            @if(auth()->check() && auth()->user()->is_admin)
+                            {{-- Admin Quick Actions (visible only to logged-in admins) --}}
+                            <div class="absolute top-4 right-4 z-50 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300">
+                                <button type="button" @click="adminMenuOpen = !adminMenuOpen"
+                                    class="w-9 h-9 rounded-full bg-black/50 backdrop-blur hover:bg-black/70 text-white flex items-center justify-center transition-colors"
+                                    aria-label="Admin quick actions" title="Admin quick actions">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                                </button>
+                                <div x-show="adminMenuOpen" x-cloak @click.away="adminMenuOpen = false"
+                                    x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                                    class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 text-left text-gray-700 text-sm overflow-hidden">
+                                    <a href="{{ route('program-page-items.show', $item->id) }}" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                                        <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                        {{ __('View More Detail') }}
+                                    </a>
+                                    <a href="{{ route('admin.program-pages.edit', $item) }}" class="flex items-center gap-2.5 px-4 py-2.5 hover:bg-gray-50 transition-colors border-t border-gray-100">
+                                        <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                        {{ __('Edit Info') }}
+                                    </a>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
