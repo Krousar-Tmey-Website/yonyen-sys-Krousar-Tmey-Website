@@ -60,9 +60,9 @@
             {{-- Left Column: Content --}}
             <div class="lg:col-span-7 space-y-6 flex flex-col justify-center">
                 <nav class="hero-reveal hero-reveal-delay-1 flex items-center gap-2 text-sm text-white/50 mb-2">
-                    <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
+                    <a href="{{ route('home') }}" class="hover:text-white transition-colors">{{ __('Home') }}</a>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    <span class="text-white">Contact</span>
+                    <span class="text-white">{{ __('Contact') }}</span>
                 </nav>
 
                 <p class="hero-reveal hero-reveal-delay-2 text-[#8da83a] font-bold text-xs uppercase tracking-[0.2em]">Get in Touch</p>
@@ -428,13 +428,13 @@
 
     <div class="relative z-10 max-w-4xl mx-auto px-6 text-center" data-reveal="scale">
         <p class="animate-cta-badge-reveal opacity-0">
-            <span class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-5 py-2 rounded-full mb-6 uppercase tracking-wider shadow-lg">{{ $contactBannerBadge }}</span>
+            <span class="inline-block bg-white/95 backdrop-blur-sm text-[#eea91d] text-xs font-semibold px-5 py-2 rounded-full mb-6 uppercase tracking-wider shadow-lg">{{ __($contactBannerBadge) }}</span>
         </p>
         <h2 class="animate-cta-title-reveal opacity-0 text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-4 drop-shadow-lg">{{ strip_tags($contactBannerTitle) }}</h2>
         <p class="animate-cta-subtitle-reveal opacity-0 text-white/70 text-lg mb-8 max-w-2xl mx-auto drop-shadow-md [&_p]:mb-0">{!! $contactBannerSubtitle !!}</p>
         <div class="animate-cta-buttons-reveal opacity-0 flex flex-wrap gap-4 justify-center">
-            <a href="{{ $contactBannerBtn1Url }}" class="btn-primary text-base">{{ $contactBannerBtn1Text }}</a>
-            <a href="{{ $contactBannerBtn2Url }}" class="btn-outline text-base">{{ $contactBannerBtn2Text }}</a>
+            <a href="{{ $contactBannerBtn1Url }}" class="btn-primary text-base">{{ __($contactBannerBtn1Text) }}</a>
+            <a href="{{ $contactBannerBtn2Url }}" class="btn-outline text-base">{{ __($contactBannerBtn2Text) }}</a>
         </div>
     </div>
 </section>

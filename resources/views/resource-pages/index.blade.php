@@ -13,9 +13,9 @@
     <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-[#8da83a]/40 translate-y-1/2 -translate-x-1/4"></div>
     <div class="relative max-w-7xl mx-auto px-6">
         <nav data-reveal class="flex items-center gap-2 text-sm text-white/50 mb-8">
-            <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
+            <a href="{{ route('home') }}" class="hover:text-white transition-colors">{{ __('Home') }}</a>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-white/80">Topics</span>
+            <span class="text-white/80">{{ __('Topics') }}</span>
         </nav>
         <h1 data-reveal style="--reveal-delay: 60" class="text-3xl md:text-4xl font-black text-white mb-3 uppercase tracking-wide">Topics</h1>
         <p data-reveal style="--reveal-delay: 120" class="text-white/60 text-base max-w-2xl leading-relaxed">Explore Krousar Thmey's work across Cambodia and around the world.</p>

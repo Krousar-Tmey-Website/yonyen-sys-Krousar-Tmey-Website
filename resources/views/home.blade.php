@@ -64,10 +64,10 @@
                     @if($slide->localized_cta_primary_text || $slide->localized_cta_secondary_text)
                     <div class="flex flex-wrap gap-6">
                         @if($slide->localized_cta_primary_text)
-                        <a href="{{ $slide->cta_primary_url ?? '#' }}" class="btn-primary btn-micro">{{ $slide->localized_cta_primary_text }}</a>
+                        <a href="{{ $slide->cta_primary_url ?? '#' }}" class="btn-primary btn-micro">{{ __($slide->localized_cta_primary_text) }}</a>
                         @endif
                         @if($slide->localized_cta_secondary_text)
-                        <a href="{{ $slide->cta_secondary_url ?? route('donate') }}" class="btn-outline btn-micro">{{ $slide->localized_cta_secondary_text }}</a>
+                        <a href="{{ $slide->cta_secondary_url ?? route('donate') }}" class="btn-outline btn-micro">{{ __($slide->localized_cta_secondary_text) }}</a>
                         @endif
                     </div>
                     @endif
@@ -1372,7 +1372,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                 
                 <div class="mt-auto flex items-center justify-between border-t border-gray-200/50 pt-5">
                     <span class="inline-flex items-center gap-2 text-[#e8a020] font-bold text-sm group-hover:text-[#1a3c6e] transition-colors group-hover:gap-3 duration-300 pointer-events-none">
-                        {{ $settings['projects_read_more'] ?? 'Read More Detail' }}
+                        {{ __($settings['projects_read_more'] ?? 'Read More Detail') }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
@@ -1381,7 +1381,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                     {{-- Donate Button (Z-20 to sit above stretched link) --}}
                     <a href="{{ route('donate') }}" class="group/btn relative z-20 px-5 py-2.5 text-[#8da83a] bg-transparent hover:text-white hover:bg-[#8da83a] text-[11px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2" title="Donate to {{ $project->localized_title }}">
                         <svg class="w-4 h-4 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                        <span>Donate Now</span>
+                        <span>{{ __('Donate Now') }}</span>
                     </a>
                 </div>
             </div>
@@ -1534,7 +1534,7 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $ctaImageUrl }}');"></div>
     <div class="absolute inset-0 bg-[#1a3c6e]/85"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
-        <span class="inline-block bg-[#e8a020] text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ $settings['cta_label'] ?? 'Support Our Work' }}</span>
+        <span class="inline-block bg-[#e8a020] text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">{{ __($settings['cta_label'] ?? 'Support Our Work') }}</span>
         @php
             $ctaTitleText = $settings['cta_title'] ?? 'Help a Child Build Their Future';
             if (app()->getLocale() === 'fr' && !empty($settings['cta_title_fr'] ?? null)) {
@@ -1558,12 +1558,12 @@ $sectionLinks = $section->links->where('active', true)->sortBy('order');
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
-                {{ $settings['cta_primary_text'] ?? 'Donate Now' }}
+                {{ __($settings['cta_primary_text'] ?? 'Donate Now') }}
             </a>
             @if(!empty($settings['cta_secondary_text']))
-            <a href="{{ $settings['cta_secondary_url'] ?? route('get-involved') }}" class="btn-outline text-base btn-micro">{{ $settings['cta_secondary_text'] }}</a>
+            <a href="{{ $settings['cta_secondary_url'] ?? route('get-involved') }}" class="btn-outline text-base btn-micro">{{ __($settings['cta_secondary_text']) }}</a>
             @endif
-            <a href="{{ $settings['cta_annual_report_url'] ?? route('resources') }}" class="btn-outline text-base btn-micro">{{ $settings['cta_annual_report_text'] ?? 'Annual Report' }}</a>
+            <a href="{{ $settings['cta_annual_report_url'] ?? route('resources') }}" class="btn-outline text-base btn-micro">{{ __($settings['cta_annual_report_text'] ?? 'Annual Report') }}</a>
         </div>
     </div>
 </section>

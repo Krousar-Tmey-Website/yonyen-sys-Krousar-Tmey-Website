@@ -31,9 +31,9 @@
     <div class="relative z-10 max-w-7xl mx-auto px-6">
         {{-- Glass Breadcrumbs --}}
         <nav class="hero-reveal hero-reveal-delay-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-white/80 mb-8 shadow-sm">
-            <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
+            <a href="{{ route('home') }}" class="hover:text-white transition-colors">{{ __('Home') }}</a>
             <svg class="w-3.5 h-3.5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span class="text-white font-semibold">Get Involved</span>
+            <span class="text-white font-semibold">{{ __('Get Involved') }}</span>
         </nav>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">

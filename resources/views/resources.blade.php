@@ -57,21 +57,21 @@
             <a href="{{ $resourcesBannerBtn1Url }}"
                class="group inline-flex items-center gap-2 px-6 py-3 bg-[#8da83a] text-white font-semibold rounded-full hover:bg-[#a3c04a] transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5">
                 <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                <span>{{ $resourcesBannerBtn1Text }}</span>
+                <span>{{ __($resourcesBannerBtn1Text) }}</span>
             </a>
             @endif
             @if($resourcesBannerBtn2Text)
             <a href="{{ $resourcesBannerBtn2Url }}"
                class="group inline-flex items-center gap-2 px-6 py-3 border-2 border-white/50 text-white font-semibold rounded-full hover:bg-white hover:text-[#2d6fa3] transition-all duration-300 hover:-translate-y-0.5">
                 <svg class="w-5 h-5 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                <span>{{ $resourcesBannerBtn2Text }}</span>
+                <span>{{ __($resourcesBannerBtn2Text) }}</span>
             </a>
             @endif
             @if($resourcesBannerBtn3Text)
             <a href="{{ $resourcesBannerBtn3Url }}"
                class="group inline-flex items-center gap-2 px-6 py-3 border-2 border-white/50 text-white font-semibold rounded-full hover:bg-white hover:text-[#2d6fa3] transition-all duration-300 hover:-translate-y-0.5">
                 <svg class="w-5 h-5 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                <span>{{ $resourcesBannerBtn3Text }}</span>
+                <span>{{ __($resourcesBannerBtn3Text) }}</span>
             </a>
             @endif
         </div>
@@ -142,7 +142,7 @@
                                 <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
                                 </svg>
-                                <span class="truncate">Download</span>
+                                <span class="truncate">{{ __('Download') }}</span>
                             </a>
                         @endif
                     </div>

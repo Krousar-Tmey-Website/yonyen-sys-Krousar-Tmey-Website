@@ -58,16 +58,16 @@
         <div class="hero-reveal hero-reveal-delay-4 flex flex-wrap gap-4 mt-8">
             <a href="{{ $newsBtn1Url ?? route('donate') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#8da83a] text-white hover:bg-[#a3c04a] text-sm font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                {{ $newsBtn1Text }}
+                {{ __($newsBtn1Text) }}
             </a>
             @if($newsBtn2Text)
             <a href="{{ $newsBtn2Url ?? route('get-involved') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-white/30 text-white hover:border-white hover:bg-white/10 text-sm font-bold transition-all duration-300">
-                {{ $newsBtn2Text }}
+                {{ __($newsBtn2Text) }}
             </a>
             @endif
             @if($newsBtn3Text)
             <a href="{{ $newsBtn3Url ?? route('resources') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-white/30 text-white hover:border-white hover:bg-white/10 text-sm font-bold transition-all duration-300">
-                {{ $newsBtn3Text }}
+                {{ __($newsBtn3Text) }}
             </a>
             @endif
         </div>

@@ -287,7 +287,7 @@
                                             {{-- Donate Button (Z-50 to sit above stretched link) --}}
                                             <a href="{{ route('donate') }}" class="group/btn relative z-50 px-4 py-2.5 text-[#8da83a] bg-white hover:text-white hover:bg-[#8da83a] text-[10px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-1.5" title="Donate to {{ $project->localized_title }}">
                                                 <svg class="w-3.5 h-3.5 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                                                <span>Donate</span>
+                                                <span>{{ __('Donate') }}</span>
                                             </a>
                                         </div>
                                     </div>
@@ -404,7 +404,7 @@
                                     {{-- Donate Button --}}
                                     <a href="{{ route('donate') }}" class="group/btn relative z-50 px-4 py-2.5 text-[#8da83a] bg-white hover:text-white hover:bg-[#8da83a] text-[10px] font-black uppercase tracking-widest rounded-full hover:shadow-[0_8px_20px_rgba(141,168,58,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-1.5" title="Donate to {{ $item->localized_title }}">
                                         <svg class="w-3.5 h-3.5 group-hover/btn:scale-125 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                                        <span>Donate</span>
+                                        <span>{{ __('Donate') }}</span>
                                     </a>
                                 </div>
                             </div>

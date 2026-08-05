@@ -12,9 +12,9 @@
     </div>
     <div class="relative max-w-7xl mx-auto px-6">
         <nav class="flex items-center gap-2 text-sm text-white/60 mb-8">
-            <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
+            <a href="{{ route('home') }}" class="hover:text-white transition-colors">{{ __('Home') }}</a>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <a href="{{ route('involved') }}" class="hover:text-white transition-colors">Get Involved</a>
+            <a href="{{ route('involved') }}" class="hover:text-white transition-colors">{{ __('Get Involved') }}</a>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <span class="text-white">Volunteer</span>
         </nav>

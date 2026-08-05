@@ -261,7 +261,7 @@ function switchLang(lang) {
                         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
-                        Donate
+                        {{ __('Donate') }}
                     </a>
                     <button @click="open = !open"
                         class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
@@ -326,14 +326,14 @@ function switchLang(lang) {
         <div class="bg-[#8da83a]">
             <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div>
-                    <h3 class="text-white font-bold text-xl">Make a Difference Today</h3>
-                    <p class="text-white/80 mt-1 text-sm">100% of your donation directly supports children in Cambodia.</p>
+                    <h3 class="text-white font-bold text-xl">{{ __('Make a Difference Today') }}</h3>
+                    <p class="text-white/80 mt-1 text-sm">{{ __('100% of your donation directly supports children in Cambodia.') }}</p>
                 </div>
                 <a href="{{ route('donate') }}" class="btn-outline flex-shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
-                    Donate Now
+                    {{ __('Donate Now') }}
                 </a>
             </div>
         </div>
@@ -474,9 +474,9 @@ function switchLang(lang) {
         <div class="border-t border-white/10">
             <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">                        <p class="text-white/30 text-xs">© {{ date('Y') }} {{ $settings['footer_copyright'] ?? 'Krousar Thmey. All rights reserved.' }}</p>
                 <div class="flex items-center gap-4">
-                    <a href="#" class="text-white/30 hover:text-white/60 text-xs transition-colors">Privacy Policy</a>
-                    <a href="#" class="text-white/30 hover:text-white/60 text-xs transition-colors">Terms of Use</a>
-                    <a href="{{ route('resources') }}" class="text-white/30 hover:text-white/60 text-xs transition-colors">Annual Reports</a>
+                    <a href="#" class="text-white/30 hover:text-white/60 text-xs transition-colors">{{ __('Privacy Policy') }}</a>
+                    <a href="#" class="text-white/30 hover:text-white/60 text-xs transition-colors">{{ __('Terms of Use') }}</a>
+                    <a href="{{ route('resources') }}" class="text-white/30 hover:text-white/60 text-xs transition-colors">{{ __('Annual Reports') }}</a>
                 </div>
             </div>
             <div class="border-t border-white/5">
