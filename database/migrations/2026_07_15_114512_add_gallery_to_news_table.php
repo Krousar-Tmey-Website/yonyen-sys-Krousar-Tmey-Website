@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasColumn('news', 'gallery')) {
+            return;
+        }
+
         Schema::table('news', function (Blueprint $table) {
             $table->json('gallery')->nullable()->after('image');
         });

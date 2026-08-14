@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasColumn('core_values', 'image')) {
+            return;
+        }
+
         Schema::table('core_values', function (Blueprint $table) {
             $table->string('image')->nullable()->after('icon');
         });
